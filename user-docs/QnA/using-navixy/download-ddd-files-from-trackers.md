@@ -17,6 +17,10 @@ DDD files are tachograph data files used in commercial transport, mainly in the 
 
 It's important to understand that the platform doesn't process DDD files in any way (no reading or changing the data). The platform just sends DDD files via email to the list of recipients specified in the user account. This is the only available functionality related to DDD files on the platform.
 
+{% hint style="info" %}
+See the structured guide [Tachograph and compliance](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/tachograph-and-compliance), with sections on [DDD download](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/tachograph-and-compliance/ddd-download) and [DDD emails](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/tachograph-and-compliance/ddd-emails).
+{% endhint %}
+
 To download a DDD file, the following conditions must be met:
 
 * Vehicle ignition must be ON.
@@ -63,5 +67,5 @@ Once you have successfully run the application and all conditions above are met,
 
 ## Links
 
-* [Tachograph DDD files block](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/tachograph-ddd-files-block)
+* [DDD files download](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/tachograph-and-compliance/ddd-download)
 * [Device list](https://www.navixy.com/devices/)

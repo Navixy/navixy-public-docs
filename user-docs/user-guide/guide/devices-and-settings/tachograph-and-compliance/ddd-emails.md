@@ -22,6 +22,10 @@ Appears on tachograph-capable devices that support DDD download.
 * DDD files are emailed after a download completes: Configure download separately on the [DDD download](ddd-download.md) page.
 * Navixy only delivers the files. It does not read or process their contents.
 
+## How it works
+
+Navixy emails each DDD file **when the device delivers it**. Navixy never proactively pulls files from the device to send them. For the email to fire, a download must first be requested via [DDD download](ddd-download.md) and the device must successfully push the file back to Navixy. Typical required conditions are listed on that page (ignition ON, company card inserted, Tacho Auth Client connected).
+
 ## See also
 
 * [DDD download](ddd-download.md): request and download DDD files from the device.

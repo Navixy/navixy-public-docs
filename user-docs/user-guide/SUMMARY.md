@@ -208,7 +208,6 @@
     * [Tachograph and compliance](guide/devices-and-settings/tachograph-and-compliance/README.md)
       * [DDD files download](guide/devices-and-settings/tachograph-and-compliance/ddd-download.md)
       * [DDD files recipient email](guide/devices-and-settings/tachograph-and-compliance/ddd-emails.md)
-      * [Remote download settings](guide/devices-and-settings/tachograph-and-compliance/remote-download-settings.md)
     * [Device-specific controls](guide/devices-and-settings/device-specific-controls/README.md)
       * [Anti-theft and security](guide/devices-and-settings/device-specific-controls/anti-theft-and-security/README.md)
         * [Unauthorized movement](guide/devices-and-settings/device-specific-controls/anti-theft-and-security/unauthorized-movement.md)

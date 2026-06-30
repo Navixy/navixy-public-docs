@@ -1,10 +1,10 @@
 ---
-description: Request DDD files from a vehicle's tachograph over the air without a physical connection. Covers on-demand and scheduled download options by device type.
+description: Request DDD files from a vehicle's tachograph over the air without a physical connection. Covers on-demand download options by device type.
 ---
 
 # DDD files download
 
-Lets you remotely request tachograph data from a vehicle as DDD files, without physically connecting to the tachograph. What you can request depends on the device family, from a single **Download** button on simple devices to detailed, multi-type, date-ranged requests on richer ones.
+Lets you remotely request tachograph data from a vehicle as DDD files, without physically connecting to the tachograph. What you can request depends on the device family, from a single download command to detailed requests covering multiple data types and date ranges.
 
 {% hint style="info" %}
 The download controls are **on-demand commands**, not saved settings. Clicking a download button sends a request to the device. It does not store a configuration.
@@ -16,26 +16,44 @@ The download controls are **on-demand commands**, not saved settings. Clicking a
 
 {% stepper %}
 {% step %}
-### Download (extract) data from the company or driver card
+### Connect the company card
 
-Connect a card reader to your computer and use it to download (extract) data from the company or driver card.
+Insert your company tachograph card into a card reader connected to the computer that runs the Tacho Auth Client application. Contact Navixy technical support to obtain the application.
 {% endstep %}
 
 {% step %}
-### Enter the company card number
+### Enter the Company card SN
 
-In the **DDD files download** block, enter the company card number (an internal document of the organization) where prompted, then save. This associates downloaded files with your company. The TachoAuthClient application may be required for downloading. Contact Navixy technical support to obtain it.
+In the **DDD files download** block that contains the **Company card SN** field (separate from the download buttons), enter the card's 16-character serial number, then **Save**. The device uses it to authenticate with the tachograph, so downloads won't work until it's set.
 {% endstep %}
 {% endstepper %}
 
 ## Download options by device family
 
-What appears in the block depends on the device:
+What appears depends on the device family.
 
-* **Simple devices**: A single **Download** button retrieves the available data.
-* **Teltonika**: Choose a **data type**: **card 1 or card 2**, **driver activities** (with a **date range**, up to about 90 days), **detailed speed**, **events and faults**, **technical data**, or **overview**. You can also store a **company card number**.
-* **Galileo / BCE**: A download command (BCE also exposes slot 1 / slot 2 and vehicle-unit activities).
-* **Remote-download variants**: Store a **company-card number** and set **auto-download intervals** for the vehicle unit and the driver card, so data is collected automatically on a schedule.
+### Teltonika
+
+{% hint style="info" %}
+Teltonika devices show **two blocks, both labeled "DDD files download"**: one stores the **Company card SN**, the other sends the download commands below.
+{% endhint %}
+
+* **Company card SN**: enter your company card's 16-character serial number and **Save**. The device uses it to authenticate with the tachograph, and downloads won't work until it's set.
+* **Card 1 / Card 2**: driver card data from tachograph slot 1 and slot 2 (driver and co-driver).
+* **Activities**: driver activity records (driving, rest, work) from the vehicle unit for a selected period. Uses a date range, up to 90 days.
+* **Detailed speed**: speed data recorded by the vehicle unit.
+* **Events and faults**: the vehicle unit's log of events and faults.
+* **Technical data**: vehicle unit technical and calibration data.
+* **Overview**: vehicle unit identification and overview data (always included with a download).
+* **Full vehicle data**: a complete vehicle unit download for a selected period (overview, activities, events and faults, detailed speed, and technical data). Uses a date range, up to 90 days.
+
+### Galileo
+
+A single **Download** command.
+
+### BCE
+
+A download command for **slot 1**, **slot 2**, or **vehicle-unit activities**.
 
 ## Downloading
 
@@ -43,7 +61,7 @@ What appears in the block depends on the device:
 {% step %}
 ### Request the download
 
-Click the **Download** button (or send the relevant data-type command) for the data you need. The download can take several minutes, typically 5 to 10.
+Click the **Download** button (or send the relevant data-type command) for the data you need. The download can take up to 15 minutes.
 {% endstep %}
 
 {% step %}

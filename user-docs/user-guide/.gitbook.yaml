@@ -15,6 +15,8 @@ redirects:
   guide/devices-and-settings/data-forwarding/startrack: guide/devices-and-settings/connectivity/data-forwarding/startrack.md
   guide/devices-and-settings/location-and-movement/harsh-driving-block: guide/devices-and-settings/driver-safety/harsh-driving.md
   guide/devices-and-settings/tachograph-ddd-files-block: guide/devices-and-settings/tachograph-and-compliance/ddd-download.md
+  # Remote download settings page removed (2026-06): feature not exposed in the user UI
+  guide/devices-and-settings/tachograph-and-compliance/remote-download-settings: guide/devices-and-settings/tachograph-and-compliance/README.md
   guide/devices-and-settings/vehicle-sensors/discrete-sensors/engine-hours: guide/devices-and-settings/location-and-movement/engine-hours.md
   guide/devices-and-settings/bluetooth-sensors-block: guide/devices-and-settings/device-specific-controls/external-sensors/bluetooth-sensors.md
   guide/devices-and-settings/auto-geofencing-block: guide/devices-and-settings/device-specific-controls/anti-theft-and-security/unauthorized-movement.md
