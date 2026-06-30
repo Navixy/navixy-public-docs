@@ -1,0 +1,51 @@
+---
+title: Waybill settings
+description: Contains API call to get the last waybill number.
+---
+
+# Waybill settings
+
+Contains API call to get the last waybill number. Waybill number saved when new waybill had downloaded. If it had only digits, then it was incremented before saving.
+
+## API actions
+
+API base path: `track/waybill/settings/`.
+
+### read
+
+Gets last waybill number.
+
+#### Examples
+
+{% tabs %}
+{% tab title="cURL" %}
+```sh
+curl -X POST 'https://api.eu.navixy.com/v2/track/waybill/settings/read' \
+    -H 'Content-Type: application/json' \
+    -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b"}'
+```
+{% endtab %}
+
+{% tab title="HTTP GET" %}
+{% code overflow="wrap" %}
+```http
+https://api.eu.navixy.com/v2/track/waybill/settings/read?hash=a6aa75587e5c59c32d347da438505fc3
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+#### Response
+
+```json
+{
+  "success": true,
+  "value": {
+    "number": "test123"
+  }
+}
+```
+
+#### Errors
+
+* 201 - Not found in the database – if user have never downloaded a waybill.

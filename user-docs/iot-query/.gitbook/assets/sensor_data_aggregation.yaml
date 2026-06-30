@@ -1,0 +1,20 @@
+version: 2
+name: Sensor data aggregation by interval
+description: Aggregates raw sensor data from raw_telematics_data.inputs into time buckets by calling processed_common_data.select_timeperiod_sensor_data(p_interval). The interval value controls both the
+  bucket size and the lookback window. Change the interval literal in the Custom SQL node to adjust the bucket size.
+cte_nodes:
+- id: sensor_aggregation_1
+  type: custom
+  label: sensor_aggregates
+  description: Call select_timeperiod_sensor_data with the desired bucket size
+  position:
+    x: 100.0
+    y: 120.0
+  sources: []
+  params:
+    custom_sql: SELECT * FROM processed_common_data.select_timeperiod_sensor_data('5 minutes')
+edges: []
+viewport:
+  x: 0
+  y: 0
+  zoom: 1.0

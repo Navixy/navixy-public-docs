@@ -1,0 +1,125 @@
+{
+  "title": "IoT Logic Complete Reference – All Node Types and Constraints",
+  "description": "A reference flow covering every node type and structural constraint: data_source, initiate_attributes, logic, action (set_output + send_gprs_command), webhook (with headers and body), output_endpoint (output_default and output_mqtt_client). Demonstrates terminal node fan-out pattern, single output receiving both then/else branches, and parallel edge firing. NOTE: source_ids is left empty — this is equivalent to null and means no devices are assigned. Add actual device IDs before use.",
+  "nodes": [
+
+    {
+      "id": 1,
+      "type": "data_source",
+      "data": {
+        "title": "Devices (add IDs before use)",
+        "source_ids": []
+      },
+      "view": { "position": { "x": 50, "y": 300 } }
+    },
+
+    {
+      "id": 2,
+      "type": "initiate_attributes",
+      "data": {
+        "title": "Enrich Telemetry",
+        "items": [
+          {
+            "name": "engine_temp_fahrenheit",
+            "value": "engine_temp * 1.8 + 32",
+            "generation_time": "genTime(\"engine_temp\", 0, \"valid\")",
+            "server_time": "now()"
+          },
+          {
+            "name": "avg_speed",
+            "value": "(value(\"speed\", 0) + value(\"speed\", 1) + value(\"speed\", 2)) / 3",
+            "generation_time": "genTime(\"speed\", 0, \"valid\")",
+            "server_time": "now()"
+          },
+          {
+            "name": "vehicle_status",
+            "value": "speed > 0 ? \"moving\" : \"stopped\"",
+            "generation_time": "genTime(\"speed\", 0, \"valid\")",
+            "server_time": "now()"
+          }
+        ]
+      },
+      "view": { "position": { "x": 270, "y": 300 } }
+    },
+
+    {
+      "id": 3,
+      "type": "logic",
+      "data": {
+        "title": "Overspeed or High Temp?",
+        "name": "overspeed_or_high_temp",
+        "condition": "avg_speed > 90 || engine_temp > 100"
+      },
+      "view": { "position": { "x": 490, "y": 300 } }
+    },
+
+    {
+      "id": 4,
+      "type": "action",
+      "data": {
+        "title": "Activate In-Cab Buzzer",
+        "actions": [
+          {
+            "type": "set_output",
+            "number": 1,
+            "value": true
+          },
+          {
+            "type": "send_gprs_command",
+            "command": "setdigout 1 1",
+            "reliable": true
+          }
+        ]
+      },
+      "view": { "position": { "x": 710, "y": 100 } }
+    },
+
+    {
+      "id": 5,
+      "type": "webhook",
+      "data": {
+        "title": "Notify External Alert System",
+        "url": "https://alerts.example.com/navixy-hook",
+        "headers": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "X-Api-Key",    "value": "your-api-key-here" }
+        ],
+        "body": "{\"device_id\": \"$source_id\", \"speed\": \"$avg_speed\", \"engine_temp\": \"$engine_temp\", \"status\": \"$vehicle_status\"}"
+      },
+      "view": { "position": { "x": 710, "y": 300 } }
+    },
+
+    {
+      "id": 6,
+      "type": "output_endpoint",
+      "data": {
+        "title": "Send to Navixy",
+        "output_endpoint_type": "output_default"
+      },
+      "view": { "position": { "x": 710, "y": 500 } }
+    },
+
+    {
+      "id": 7,
+      "type": "output_endpoint",
+      "data": {
+        "title": "Send to MQTT Broker",
+        "output_endpoint_type": "output_mqtt_client",
+        "output_endpoint_id": 99999
+      },
+      "view": { "position": { "x": 710, "y": 680 } }
+    }
+
+  ],
+  "edges": [
+    { "from": 1, "to": 2, "type": "simple_edge" },
+    { "from": 2, "to": 3, "type": "simple_edge" },
+
+    { "from": 3, "to": 4, "type": "then_edge" },
+    { "from": 3, "to": 5, "type": "then_edge" },
+    { "from": 3, "to": 6, "type": "then_edge" },
+    { "from": 3, "to": 7, "type": "then_edge" },
+
+    { "from": 3, "to": 6, "type": "else_edge" }
+  ]
+}

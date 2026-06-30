@@ -1,0 +1,456 @@
+version: 2
+workflow_id: 68275ce8-d77c-466d-8be2-fdb42a9a09db
+name: Generate Tracks
+description: Generates vehicle tracks with zone detection — flat CTE chain matching
+  original SQL
+cte_nodes:
+- id: telematics_1
+  type: telematics
+  label: Core Data
+  description: tracking_data_core with all filters at scan level
+  position:
+    x: 90.0
+    y: 105.0
+  sources: []
+  params:
+    columns:
+    - device_id
+    - device_time
+    - platform_time
+    - record_added_at
+    - event_id
+    - latitude
+    - longitude
+    - speed
+    - altitude
+    - satellites
+    - gps_fix_type
+    - hdop
+    table_name: tracking_data_core
+    time_column: device_time
+    filter_condition: event_id IN (2, 802, 803, 804, 811) AND latitude <> 0 AND longitude
+      <> 0 AND (satellites >= 3 OR satellites = -1)
+    time_window_minutes: 720
+- id: telematics_2
+  type: telematics
+  label: States Data
+  description: states with all filters at scan level
+  position:
+    x: 100.0
+    y: 300.0
+  sources: []
+  params:
+    columns:
+    - device_id
+    - device_time
+    - event_id
+    - record_added_at
+    - state_name
+    - value
+    table_name: states
+    time_column: device_time
+    filter_condition: event_id IN (2, 802, 803, 804, 811) AND state_name = 'moving'
+    time_window_minutes: 720
+- id: sql_1
+  type: sql
+  label: Join Core + States
+  description: LEFT JOIN core with states on device_id + device_time
+  position:
+    x: 500.0
+    y: 200.0
+  sources:
+  - telematics_1
+  - telematics_2
+  params:
+    join_spec:
+    - type: left
+      on_condition: telematics_1.device_id = telematics_2.device_id AND telematics_1.device_time
+        = telematics_2.device_time
+    join_type: LEFT
+    join_condition: telematics_1.device_id = telematics_2.device_id AND telematics_1.device_time
+      = telematics_2.device_time
+    select_columns:
+    - telematics_1.device_id
+    - telematics_1.device_time
+    - telematics_1.platform_time
+    - telematics_1.record_added_at
+    - telematics_1.event_id
+    - telematics_1.latitude
+    - telematics_1.longitude
+    - telematics_1.speed
+    - telematics_1.altitude
+    - telematics_1.satellites
+    - telematics_1.gps_fix_type
+    - telematics_1.hdop
+    - telematics_2.value
+  join_spec:
+  - type: left
+    on_condition: telematics_1.device_id = telematics_2.device_id AND telematics_1.device_time
+      = telematics_2.device_time
+- id: arithmetic_1
+  type: arithmetic
+  label: Unit Conversion
+  description: Convert lat/lon/speed/alt, cast is_moving
+  position:
+    x: 900.0
+    y: 195.0
+  sources:
+  - sql_1
+  params:
+    expressions:
+    - column: latitude
+      expression: latitude / 1e7
+      expression_alias: latitude
+    - column: longitude
+      expression: longitude / 1e7
+      expression_alias: longitude
+    - column: speed
+      expression: speed / 1e2
+      expression_alias: speed
+    - column: altitude
+      expression: altitude / 1e7
+      expression_alias: altitude
+    - column: value
+      expression: CAST(value as integer)
+      expression_alias: is_moving
+- id: custom_1
+  type: custom
+  label: Ordered Data
+  description: 'LAG: prev_device_time, prev_speed, time_diff'
+  position:
+    x: 1250.0
+    y: 200.0
+  sources:
+  - arithmetic_1
+  params:
+    custom_sql: "SELECT *,\n    LAG(device_time) OVER (PARTITION BY device_id ORDER\
+      \ BY device_time) AS prev_device_time,\n    LAG(speed) OVER (PARTITION BY device_id\
+      \ ORDER BY device_time) AS prev_speed,\n    EXTRACT(EPOCH FROM device_time -\
+      \ LAG(device_time) OVER (PARTITION BY device_id ORDER BY device_time)) AS time_diff\n\
+      FROM arithmetic_1"
+- id: custom_2
+  type: custom
+  label: With Distance
+  description: PostGIS geom, distance_meters, calculated_speed_kmh
+  position:
+    x: 1550.0
+    y: 200.0
+  sources:
+  - custom_1
+  params:
+    custom_sql: "SELECT *,\n    ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)\
+      \ AS geom,\n    ST_DistanceSphere(\n        ST_SetSRID(ST_MakePoint(longitude,\
+      \ latitude), 4326),\n        ST_SetSRID(ST_MakePoint(\n            LAG(longitude)\
+      \ OVER (PARTITION BY device_id ORDER BY device_time),\n            LAG(latitude)\
+      \ OVER (PARTITION BY device_id ORDER BY device_time)\n        ), 4326)\n   \
+      \ ) AS distance_meters,\n    CASE WHEN time_diff > 0 THEN\n        (ST_DistanceSphere(\n\
+      \            ST_SetSRID(ST_MakePoint(longitude, latitude), 4326),\n        \
+      \    ST_SetSRID(ST_MakePoint(\n                LAG(longitude) OVER (PARTITION\
+      \ BY device_id ORDER BY device_time),\n                LAG(latitude) OVER (PARTITION\
+      \ BY device_id ORDER BY device_time)\n            ), 4326)\n        ) / 1000.0)\
+      \ / (time_diff / 3600.0)\n    ELSE 0 END AS calculated_speed_kmh\nFROM custom_1"
+- id: custom_3
+  type: custom
+  label: LBS Processed
+  description: Classify point_type, distance_status, speed_status
+  position:
+    x: 1850.0
+    y: 200.0
+  sources:
+  - custom_2
+  params:
+    custom_sql: "SELECT *,\n    CASE WHEN satellites = -1 THEN 'LBS' WHEN satellites\
+      \ >= 3 THEN 'GNSS' ELSE 'INVALID' END AS point_type,\n    CASE WHEN 1 != 1 THEN\
+      \ 'EXCLUDED_DISTANCE' ELSE 'VALID' END AS distance_status,\n    CASE WHEN calculated_speed_kmh\
+      \ > 200 THEN 'EXCLUDED_SPEED' ELSE 'VALID' END AS speed_status\nFROM custom_2"
+- id: custom_4
+  type: custom
+  label: Filtered LBS
+  description: LBS single track flag + excluded flag
+  position:
+    x: 2150.0
+    y: 200.0
+  sources:
+  - custom_3
+  params:
+    custom_sql: "SELECT *,\n    CASE WHEN point_type = 'LBS' AND distance_status =\
+      \ 'VALID' AND speed_status = 'VALID'\n         AND LAG(satellites) OVER (PARTITION\
+      \ BY device_id ORDER BY device_time) != -1 THEN 1\n    ELSE 0 END AS lbs_single_track_flag,\n\
+      \    CASE WHEN point_type = 'LBS'\n         AND (distance_status = 'EXCLUDED_DISTANCE'\
+      \ OR speed_status = 'EXCLUDED_SPEED') THEN 1\n    ELSE 0 END AS lbs_excluded_flag\n\
+      FROM custom_3"
+- id: filter_1
+  type: filter
+  label: Filter Invalid
+  description: Exclude filtered LBS points and unrealistic speed
+  position:
+    x: 2450.0
+    y: 200.0
+  sources:
+  - custom_4
+  params:
+    time_column: device_time
+    time_range_end: ''
+    time_range_start: ''
+    dynamic_conditions:
+    - lbs_excluded_flag = 0
+    - speed_status = 'VALID'
+- id: custom_5
+  type: custom
+  label: Moving Status
+  description: Determine moving_status from speed + distance + is_moving
+  position:
+    x: 2750.0
+    y: 200.0
+  sources:
+  - filter_1
+  params:
+    custom_sql: "SELECT *,\n    CASE\n        WHEN speed IS NULL THEN 'parked'\n \
+      \       WHEN speed >= 3 AND (distance_meters > 50 OR is_moving = 1) THEN 'moving'\n\
+      \        ELSE 'stopped'\n    END AS moving_status\nFROM filter_1"
+- id: custom_6
+  type: custom
+  label: Parking Markers
+  description: Mark parking_start_time_raw and track_start_time_raw
+  position:
+    x: 3050.0
+    y: 200.0
+  sources:
+  - custom_5
+  params:
+    custom_sql: "SELECT *,\n    CASE WHEN moving_status != 'moving' AND LAG(moving_status)\
+      \ OVER (PARTITION BY device_id ORDER BY device_time) = 'moving'\n        THEN\
+      \ device_time ELSE NULL END AS parking_start_time_raw,\n    CASE WHEN lbs_single_track_flag\
+      \ = 1 THEN device_time\n         WHEN moving_status = 'moving'\n           \
+      \   AND (LAG(moving_status) OVER (PARTITION BY device_id ORDER BY device_time)\
+      \ != 'moving' OR time_diff >= 1200)\n            THEN device_time\n        \
+      \ ELSE NULL END AS track_start_time_raw\nFROM custom_5"
+- id: custom_7
+  type: custom
+  label: Time Propagated
+  description: Propagate parking_start_time and track_start_time forward
+  position:
+    x: 3350.0
+    y: 200.0
+  sources:
+  - custom_6
+  params:
+    custom_sql: "SELECT *,\n    MAX(parking_start_time_raw) OVER (PARTITION BY device_id\
+      \ ORDER BY device_time ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS\
+      \ parking_start_time,\n    MAX(track_start_time_raw) OVER (PARTITION BY device_id\
+      \ ORDER BY device_time ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS\
+      \ track_start_time\nFROM custom_6"
+- id: custom_8
+  type: custom
+  label: Parking Duration
+  description: Calculate parking duration from propagated start time
+  position:
+    x: 3650.0
+    y: 200.0
+  sources:
+  - custom_7
+  params:
+    custom_sql: "SELECT *,\n    CASE WHEN moving_status != 'moving' AND parking_start_time\
+      \ IS NOT NULL\n        THEN device_time - parking_start_time\n        ELSE INTERVAL\
+      \ '0 seconds' END AS parking_duration\nFROM custom_7"
+- id: custom_9
+  type: custom
+  label: Track Flags
+  description: Detect new_track_flag and track_end_flag
+  position:
+    x: 3950.0
+    y: 200.0
+  sources:
+  - custom_8
+  params:
+    custom_sql: "SELECT *,\n    CASE\n        WHEN prev_device_time IS NULL THEN 1\n\
+      \        WHEN time_diff >= 1200 AND moving_status = 'moving' THEN 1\n      \
+      \  WHEN moving_status = 'moving'\n             AND LAG(moving_status) OVER (PARTITION\
+      \ BY device_id ORDER BY device_time) != 'moving'\n             AND LAG(parking_duration)\
+      \ OVER (PARTITION BY device_id ORDER BY device_time) >= 300 * INTERVAL '1 second'\
+      \ THEN 1\n        ELSE 0\n    END AS new_track_flag,\n    CASE\n        WHEN\
+      \ moving_status != 'moving' AND parking_duration >= 300 * INTERVAL '1 second'\
+      \ THEN 1\n        WHEN time_diff >= 1200 AND moving_status != 'moving' THEN\
+      \ 1\n        ELSE 0\n    END AS track_end_flag\nFROM custom_8"
+- id: custom_10
+  type: custom
+  label: Track IDs
+  description: Assign temp_track_id, is_track_end, is_track_start
+  position:
+    x: 4250.0
+    y: 200.0
+  sources:
+  - custom_9
+  params:
+    custom_sql: "SELECT *,\n    SUM(new_track_flag) OVER (PARTITION BY device_id ORDER\
+      \ BY device_time) AS temp_track_id,\n    CASE WHEN track_end_flag = 1 THEN 1\n\
+      \         WHEN LEAD(new_track_flag) OVER (PARTITION BY device_id ORDER BY device_time)\
+      \ = 1 THEN 1\n         ELSE 0 END AS is_track_end,\n    CASE WHEN new_track_flag\
+      \ = 1 THEN 1 ELSE 0 END AS is_track_start\nFROM custom_9"
+- id: custom_11
+  type: custom
+  label: Track Coordinates
+  description: FIRST/LAST_VALUE start/end coords + track_end_time
+  position:
+    x: 4600.0
+    y: 100.0
+  sources:
+  - custom_10
+  params:
+    custom_sql: "SELECT sub.*,\n    CASE WHEN sub.last_parking_start_time < sub.last_track_start_time\n\
+      \        THEN sub.last_device_time\n        ELSE sub.last_parking_start_time\
+      \ END AS track_end_time\nFROM (\n    SELECT *,\n        FIRST_VALUE(latitude)\
+      \ OVER w AS latitude_start,\n        FIRST_VALUE(longitude) OVER w AS longitude_start,\n\
+      \        FIRST_VALUE(altitude) OVER w AS altitude_start,\n        LAST_VALUE(latitude)\
+      \ OVER w AS latitude_end,\n        LAST_VALUE(longitude) OVER w AS longitude_end,\n\
+      \        LAST_VALUE(altitude) OVER w AS altitude_end,\n        LAST_VALUE(device_time)\
+      \ OVER w AS last_device_time,\n        LAST_VALUE(parking_start_time) OVER w\
+      \ AS last_parking_start_time,\n        LAST_VALUE(track_start_time) OVER w AS\
+      \ last_track_start_time\n    FROM custom_10\n    WINDOW w AS (PARTITION BY device_id,\
+      \ temp_track_id ORDER BY device_time ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED\
+      \ FOLLOWING)\n) sub"
+- id: custom_12
+  type: custom
+  label: Track Geometries
+  description: Build track line geometry with ST_MakeLine
+  position:
+    x: 4600.0
+    y: 350.0
+  sources:
+  - custom_10
+  params:
+    custom_sql: "SELECT device_id, temp_track_id,\n    ST_MakeLine(geom ORDER BY device_time)\
+      \ AS track_geom\nFROM custom_10\nGROUP BY device_id, temp_track_id"
+- id: custom_13
+  type: custom
+  label: Zones Match
+  description: Match track start/end points to zones via ST_DWithin
+  position:
+    x: 5000.0
+    y: 100.0
+  sources:
+  - custom_11
+  params:
+    custom_sql: "SELECT\n    zg.zone_label,\n    w.device_id,\n    w.temp_track_id,\n\
+      \    CASE\n        WHEN ST_DWithin(\n            ST_SetSRID(ST_MakePoint(w.longitude_start,\
+      \ w.latitude_start), 4326)::geography,\n            zg.zone_geom,\n        \
+      \    0\n        ) THEN 'start'\n        WHEN ST_DWithin(\n            ST_SetSRID(ST_MakePoint(w.longitude_end,\
+      \ w.latitude_end), 4326)::geography,\n            zg.zone_geom,\n          \
+      \  0\n        ) THEN 'end'\n    END AS zone_type\nFROM custom_11 w\nLEFT JOIN\
+      \ business_data.zones_geom zg ON (\n    ST_DWithin(\n        ST_SetSRID(ST_MakePoint(w.longitude_start,\
+      \ w.latitude_start), 4326)::geography,\n        zg.zone_geom,\n        0\n \
+      \   ) OR ST_DWithin(\n        ST_SetSRID(ST_MakePoint(w.longitude_end, w.latitude_end),\
+      \ 4326)::geography,\n        zg.zone_geom,\n        0\n    )\n)\nWHERE zg.zone_id\
+      \ IS NOT NULL"
+- id: custom_14
+  type: custom
+  label: Aggregated Tracks
+  description: Aggregate track stats, filter valid tracks
+  position:
+    x: 5000.0
+    y: 350.0
+  sources:
+  - custom_11
+  - custom_12
+  params:
+    custom_sql: "SELECT\n    w.device_id, w.temp_track_id,\n    MIN(w.track_start_time)\
+      \ AS track_start_time,\n    MAX(CASE WHEN w.track_end_flag = 1 THEN w.parking_start_time\
+      \ END) AS track_end_time,\n    ROUND(EXTRACT(EPOCH FROM MAX(CASE WHEN w.track_end_flag\
+      \ = 1 THEN w.parking_start_time END) - MIN(w.track_start_time))) AS track_duration_seconds,\n\
+      \    TO_CHAR(MAX(CASE WHEN w.track_end_flag = 1 THEN w.parking_start_time END)\
+      \ - MIN(w.track_start_time), 'HH24:MI:SS') AS track_duration,\n    ROUND(ST_Length(t.track_geom::geography))\
+      \ AS track_distance_meters,\n    ROUND(AVG(w.speed), 2) AS avg_speed,\n    MAX(w.speed)\
+      \ AS max_speed,\n    MIN(w.speed) AS min_speed,\n    MIN(w.latitude_start) AS\
+      \ latitude_start,\n    MIN(w.longitude_start) AS longitude_start,\n    MIN(w.altitude_start)\
+      \ AS altitude_start,\n    MAX(w.latitude_end) AS latitude_end,\n    MAX(w.longitude_end)\
+      \ AS longitude_end,\n    MAX(w.altitude_end) AS altitude_end,\n    COUNT(*)\
+      \ AS points_in_track\nFROM custom_11 w\nJOIN custom_12 t ON t.device_id = w.device_id\
+      \ AND t.temp_track_id = w.temp_track_id\nGROUP BY w.device_id, w.temp_track_id,\
+      \ t.track_geom\nHAVING COUNT(*) >= 2\n   AND MAX(w.speed) >= 3\n   AND ROUND(ST_Length(t.track_geom::geography))\
+      \ >= 100\n   AND MIN(w.track_start_time) IS NOT NULL\n   AND MAX(CASE WHEN w.track_end_flag\
+      \ = 1 THEN w.parking_start_time END) IS NOT NULL"
+- id: custom_15
+  type: custom
+  label: Final Tracks
+  description: ROW_NUMBER for continuous track_id
+  position:
+    x: 5400.0
+    y: 350.0
+  sources:
+  - custom_14
+  params:
+    custom_sql: "SELECT\n    ROW_NUMBER() OVER (PARTITION BY device_id ORDER BY track_start_time)\
+      \ AS track_number,\n    *\nFROM custom_14"
+- id: custom_16
+  type: custom
+  label: Final Output
+  description: LEFT JOIN with zones, aggregate start_zone/end_zone
+  position:
+    x: 5800.0
+    y: 200.0
+  sources:
+  - custom_15
+  - custom_13
+  params:
+    custom_sql: "SELECT\n    f.device_id, f.track_start_time, f.track_end_time, f.track_duration,\n\
+      \    f.track_distance_meters, f.track_duration_seconds,\n    f.avg_speed, f.max_speed,\
+      \ f.min_speed,\n    f.latitude_start, f.longitude_start, f.altitude_start,\n\
+      \    f.latitude_end, f.longitude_end, f.altitude_end,\n    f.points_in_track,\n\
+      \    MAX(CASE WHEN zm.zone_type = 'start' THEN zm.zone_label END) AS start_zone,\n\
+      \    MAX(CASE WHEN zm.zone_type = 'end' THEN zm.zone_label END) AS end_zone\n\
+      FROM custom_15 f\nLEFT JOIN custom_13 zm ON zm.device_id = f.device_id AND zm.temp_track_id\
+      \ = f.temp_track_id\nGROUP BY f.device_id, f.track_number, f.temp_track_id,\
+      \ f.track_start_time, f.track_end_time,\n         f.track_duration, f.track_distance_meters,\
+      \ f.track_duration_seconds, f.avg_speed, f.max_speed,\n         f.min_speed,\
+      \ f.latitude_start, f.longitude_start, f.altitude_start, f.latitude_end, f.longitude_end,\n\
+      \         f.altitude_end, f.points_in_track\nORDER BY f.device_id, f.track_start_time"
+edges:
+- source: telematics_1
+  target: sql_1
+- source: telematics_2
+  target: sql_1
+- source: sql_1
+  target: arithmetic_1
+- source: arithmetic_1
+  target: custom_1
+- source: custom_1
+  target: custom_2
+- source: custom_2
+  target: custom_3
+- source: custom_3
+  target: custom_4
+- source: custom_4
+  target: filter_1
+- source: filter_1
+  target: custom_5
+- source: custom_5
+  target: custom_6
+- source: custom_6
+  target: custom_7
+- source: custom_7
+  target: custom_8
+- source: custom_8
+  target: custom_9
+- source: custom_9
+  target: custom_10
+- source: custom_10
+  target: custom_11
+- source: custom_10
+  target: custom_12
+- source: custom_11
+  target: custom_13
+- source: custom_11
+  target: custom_14
+- source: custom_12
+  target: custom_14
+- source: custom_14
+  target: custom_15
+- source: custom_15
+  target: custom_16
+- source: custom_13
+  target: custom_16
+output_node_id: custom_16
+viewport:
+  x: 754.9712317079511
+  y: 59.68045661094641
+  zoom: 0.5

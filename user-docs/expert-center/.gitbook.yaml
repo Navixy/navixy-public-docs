@@ -1,0 +1,11 @@
+redirects:
+  # Folder typo fix (2026-06): legistlation -> legislation. Keys are the old
+  # published paths so existing links keep resolving.
+  vehicle-telematics-technology/legistlation: vehicle-telematics-technology/legislation/README.md
+  vehicle-telematics-technology/legistlation/gps-device-certification: vehicle-telematics-technology/legislation/gps-device-certification/README.md
+  vehicle-telematics-technology/legistlation/gps-device-certification/certification-in-canada: vehicle-telematics-technology/legislation/gps-device-certification/certification-in-canada.md
+  vehicle-telematics-technology/legistlation/gps-device-certification/certification-in-mexico-and-latin-america: vehicle-telematics-technology/legislation/gps-device-certification/certification-in-mexico-and-latin-america.md
+  vehicle-telematics-technology/legistlation/gps-device-certification/certification-in-us: vehicle-telematics-technology/legislation/gps-device-certification/certification-in-us.md
+  # Telegram page filename typo fix (..md -> .md). The old URL ended in a trailing
+  # dot; enable this entry only if GitBook accepts a dotted key (verify on preview).
+  # faq-and-troubleshooting/iot-logic/how-to-connect-telegram-with-navixy-iot-logic.: faq-and-troubleshooting/iot-logic/how-to-connect-telegram-with-navixy-iot-logic.md

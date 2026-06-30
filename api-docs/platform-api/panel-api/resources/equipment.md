@@ -1,0 +1,79 @@
+---
+title: Equipment
+description: An API call to get the list of available equipment.
+---
+
+# Equipment
+
+## Equipment object
+
+```json
+{
+  "equip_id": 33,
+  "model_name": "SPT10 SB",
+  "model_code": "pt10",
+  "vendor": "3. NAVIXY S Series (personal)",
+  "name": "NAVIXY S10"
+}
+```
+
+* `equip_id` - int. Equipment ID.
+* `model_name` - string. A model's original name.
+* `model_code` - string. A model code which should be inserted to tracker bundles.
+* `vendor` - string. A vendor's name.
+* `name` - string. A model's name used by a vendor.
+
+## API actions
+
+API path: `panel/equipment`.
+
+### list
+
+Returns list of all equipment which can be assigned to tracker bundles.
+
+_required permissions_: `tracker_bundles: "read"`.
+
+#### Parameters
+
+Only session `hash`.
+
+#### Examples
+
+{% tabs %}
+{% tab title="cURL" %}
+```sh
+curl -X POST 'https://api.eu.navixy.com/v2/panel/equipment/list' \
+    -H 'Content-Type: application/json' \
+    -d '{"hash": "fa7bf873fab9333144e171372a321b06"}'
+```
+{% endtab %}
+
+{% tab title="HTTP GET" %}
+{% code overflow="wrap" %}
+```http
+https://api.eu.navixy.com/v2/panel/equipment/list?hash=fa7bf873fab9333144e171372a321b06
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+#### Response
+
+```json
+{
+  "success": true,
+  "list": [
+    {
+      "equip_id": 33,
+      "model_name": "SPT10 SB",
+      "model_code": "pt10",
+      "vendor": "3. NAVIXY S Series (personal)",
+      "name": "NAVIXY S10"
+    }
+  ]
+}
+```
+
+#### Errors
+
+[General](../../user-api/backend-api/getting-started/errors.md#error-codes) types only.

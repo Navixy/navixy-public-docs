@@ -1,0 +1,248 @@
+---
+description: Cursor-based pagination in Navixy GraphQL APIs
+---
+
+# Pagination
+
+When querying lists of entities (devices, assets, users, etc.), the API returns paginated results. This prevents overwhelming responses when you have thousands of records.
+
+To control which results appear and in what order, see your API's filtering and sorting documentation.
+
+## Where pagination applies
+
+The API has two types of queries for fetching data:
+
+* **Single-entity queries** return one item by ID. They use singular names: `device`, `asset`, `organization`.
+* **List queries** return multiple items matching your criteria. They use plural names: `devices`, `assets`, `organizations`.
+
+Pagination applies to all list queries. They return connection types following a consistent pattern: `devices` returns `DeviceConnection`, `assets` returns `AssetConnection`, `auditEvents` returns `AuditEventConnection`, and so on.
+
+Many nested fields are also paginated — for example, `Organization.devices` or `AssetGroup.items`. You can identify paginated fields by their return type (anything ending in `Connection`) or by the presence of `first`, `after`, `last`, and `before` arguments.
+
+Pagination types are described in separate sections of each entity's page — see [Asset pagination types](assets/types.md#pagination-types) as an example. You can also use [introspection](graphql-basics.md#introspection) to explore them in your GraphQL client.
+
+## The Connection pattern
+
+Navixy GraphQL APIs use [Relay Cursor Connections](https://relay.dev/graphql/connections.htm), a pagination standard from the GraphQL community. Instead of traditional page numbers, they use opaque cursors that point to specific positions in the result set.
+
+Using cursors instead of page numbers enables the following:
+
+* Stable results: If new items are added while you're paginating, you won't see duplicates or miss items.
+* Efficient: The database can resume from exact positions without re-scanning.
+* Flexible: Works well with real-time data that changes frequently.
+
+## Paginated query structure
+
+{% hint style="info" %}
+Examples on this page use Navixy Repository API queries. The same pattern applies to all Navixy GraphQL APIs.
+{% endhint %}
+
+Every paginated query returns a **Connection** type with this structure (we're using `device` entity as an example, but the principle is the same):
+
+```graphql
+type DeviceConnection {
+  edges: [DeviceEdge!]!    # List of results with cursors
+  nodes: [Device!]!        # Direct access to entities (shorthand)
+  pageInfo: PageInfo!      # Pagination metadata
+  total: CountInfo         # Total matching items (may be null)
+}
+
+type DeviceEdge {
+  node: Device!            # The actual entity
+  cursor: String!          # Position marker for this item
+}
+
+type PageInfo {
+  hasNextPage: Boolean!    # More items after this page?
+  hasPreviousPage: Boolean! # More items before this page?
+  startCursor: String      # Cursor of first item in this page
+  endCursor: String        # Cursor of last item in this page
+}
+
+type CountInfo {
+  count: Int!              # The number of matching items
+  precision: CountPrecision! # How the count was determined
+}
+```
+
+## Reading results
+
+You can access entities in two ways:
+
+* `edges[].node`: Includes a cursor for each item (useful when you need cursors)
+* `nodes[]`: Direct array of entities (simpler when you only need the data)
+
+Check `pageInfo.hasNextPage` to determine if more data is available.
+
+## Pagination parameters
+
+Pagination arguments are passed directly to the query:
+
+<table><thead><tr><th width="175.4444580078125">Parameter</th><th width="165.4444580078125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>first</code></td><td>Int</td><td>Number of items to fetch from the start (default: 20, max: 100)</td></tr><tr><td><code>after</code></td><td>String</td><td>Cursor — fetch items after this position</td></tr><tr><td><code>last</code></td><td>Int</td><td>Number of items to fetch from the end</td></tr><tr><td><code>before</code></td><td>String</td><td>Cursor — fetch items before this position</td></tr></tbody></table>
+
+Use `first`/`after` for forward pagination (most common). Use `last`/`before` for backward pagination.
+
+## Forward pagination
+
+Start by requesting the first page, then use `endCursor` to get subsequent pages.
+
+### First page
+
+{% code overflow="wrap" %}
+```graphql
+query {
+  devices(
+    organizationId: "019d48ea-0752-8000-801f-444556437ab1" # your organization id
+    first: 20
+  ) {
+    nodes {
+      id
+      title
+      status { code title }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    total {
+      count
+      precision
+    }
+  }
+}
+```
+{% endcode %}
+
+Response:
+
+{% code overflow="wrap" %}
+```json
+{
+  "data": {
+    "devices": {
+      "nodes": [
+        { "id": "018f1a2b-0000-7000-8000-000000000001", "title": "Truck 01", "status": { "code": "active", "title": "Active" } },
+        { "id": "018f1a2b-0000-7000-8000-000000000002", "title": "Truck 02", "status": { "code": "active", "title": "Active" } },
+        ...
+      ],
+      "pageInfo": {
+        "hasNextPage": true,
+        "endCursor": "YXNzZXRfMTIz"
+      },
+      "total": {
+        "count": 142,
+        "precision": "EXACT"
+      }
+    }
+  }
+}
+```
+{% endcode %}
+
+### Next page
+
+To fetch the next page, pass `endCursor` from the previous response as the `after` argument:
+
+```graphql
+query {
+  devices(
+    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
+    first: 20
+    after: "YXNzZXRfMTIz" # endCursor from the previous response
+  ) {
+    nodes {
+      id
+      title
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+```
+
+Repeat this pattern, using each response's `endCursor` as the next request's `after` until `hasNextPage` is `false`.
+
+## Backward pagination
+
+Use `last` and `before` to paginate from the end of the result set. This is useful for showing the most recent items first.
+
+```graphql
+query {
+  auditEvents(
+    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
+    last: 20
+  ) {
+    nodes {
+      eventType
+      occurredAt
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+```
+
+### Previous page
+
+To get the previous page, use `startCursor` as the `before` argument:
+
+```graphql
+query {
+  auditEvents(
+    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
+    last: 20
+    before: "MXNzZRGfMTIz" # startCursor from the previous response
+  ) {
+    nodes {
+      eventType
+      occurredAt
+    }
+    pageInfo {
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+```
+
+## Understanding total count
+
+The `total` field returns information about how many items match your query. Because counting can be expensive for large datasets, the API provides a `precision` field that indicates how the count was determined:
+
+```graphql
+query {
+  devices(
+    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
+    first: 50
+  ) {
+    nodes {
+      id
+      title
+    }
+    total {
+      count      # e.g., 1523
+      precision  # e.g., EXACT or APPROXIMATE
+    }
+  }
+}
+```
+
+<table><thead><tr><th width="163.20001220703125">Precision</th><th>Meaning</th></tr></thead><tbody><tr><td><code>EXACT</code></td><td>Precise count from a full database scan</td></tr><tr><td><code>APPROXIMATE</code></td><td>Estimate from table statistics (faster but less accurate)</td></tr><tr><td><code>AT_LEAST</code></td><td>Counting stopped early; at least this many items exist</td></tr></tbody></table>
+
+For large datasets, the API may return an approximate count or `null` for the entire `total` field to maintain performance. Design your UI to handle these cases gracefully, such as display "About 10,000 results" or "1,000+ results" instead of requiring an exact number.
+
+## Best practices
+
+**Choose an appropriate page size.** Use 20–50 items for UI lists, up to 100 for background sync. The default is 20 if not specified, and the maximum is 100 per request.
+
+**Keep sort parameters consistent.** Cursors encode the sort position, so changing `orderBy` between requests invalidates existing cursors. Always use the same `orderBy` value when paginating through a result set. If you need a different sort order, start pagination from the beginning.
+
+**Don't store cursors long-term.** Cursors are meant for immediate pagination within a session. They may become invalid after data changes affecting sort order, server updates, or extended time periods.
+
+**Handle empty results.** Always check for empty `nodes` or `edges` arrays before processing results.
+
+**No random page access.** Cursor-based pagination doesn't support "jump to page 50" — you can only navigate sequentially through results. This is a deliberate trade-off for stability and performance. If you need random access to pages, consider limiting the result set with filters first.
