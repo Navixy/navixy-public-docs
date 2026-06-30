@@ -12,8 +12,8 @@ To control which results appear and in what order, see your API's filtering and 
 
 The API has two types of queries for fetching data:
 
-* **Single-entity queries** return one item by ID. They use singular names: `device`, `asset`, `organization`.
-* **List queries** return multiple items matching your criteria. They use plural names: `devices`, `assets`, `organizations`.
+* Single-entity queries return one item by ID. They use singular names: `device`, `asset`, `organization`.
+* List queries return multiple items matching your criteria. They use plural names: `devices`, `assets`, `organizations`.
 
 Pagination applies to all list queries. They return connection types following a consistent pattern: `devices` returns `DeviceConnection`, `assets` returns `AssetConnection`, `auditEvents` returns `AuditEventConnection`, and so on.
 
@@ -237,12 +237,12 @@ For large datasets, the API may return an approximate count or `null` for the en
 
 ## Best practices
 
-**Choose an appropriate page size.** Use 20–50 items for UI lists, up to 100 for background sync. The default is 20 if not specified, and the maximum is 100 per request.
+Choose an appropriate page size. Use 20–50 items for UI lists, up to 100 for background sync. The default is 20 if not specified, and the maximum is 100 per request.
 
-**Keep sort parameters consistent.** Cursors encode the sort position, so changing `orderBy` between requests invalidates existing cursors. Always use the same `orderBy` value when paginating through a result set. If you need a different sort order, start pagination from the beginning.
+Keep sort parameters consistent. Cursors encode the sort position, so changing `orderBy` between requests invalidates existing cursors. Always use the same `orderBy` value when paginating through a result set. If you need a different sort order, start pagination from the beginning.
 
-**Don't store cursors long-term.** Cursors are meant for immediate pagination within a session. They may become invalid after data changes affecting sort order, server updates, or extended time periods.
+Don't store cursors long-term. Cursors are meant for immediate pagination within a session. They may become invalid after data changes affecting sort order, server updates, or extended time periods.
 
-**Handle empty results.** Always check for empty `nodes` or `edges` arrays before processing results.
+Handle empty results. Always check for empty `nodes` or `edges` arrays before processing results.
 
-**No random page access.** Cursor-based pagination doesn't support "jump to page 50" — you can only navigate sequentially through results. This is a deliberate trade-off for stability and performance. If you need random access to pages, consider limiting the result set with filters first.
+No random page access. Cursor-based pagination doesn't support "jump to page 50" — you can only navigate sequentially through results. This is a deliberate trade-off for stability and performance. If you need random access to pages, consider limiting the result set with filters first.

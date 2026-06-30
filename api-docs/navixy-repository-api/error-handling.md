@@ -201,7 +201,7 @@ Returned when you try to create or update an entity with a value that must be un
 
 ## Best practices
 
-1. **Always check for errors.** Inspect the `errors` array in every response, even when the HTTP status is 200 (GraphQL can return partial data with errors).
-2. **Use `code` for logic, `detail` for display.** The `code` field is stable and safe for programmatic handling. The `detail` field is human-readable and suitable for showing to users.
-3. **Log the `traceId`.** When users report issues, `trace ID` helps the support quickly locate the relevant logs. Include it in your bug reports.
-4. **Handle conflicts gracefully.** In collaborative applications, version conflicts are expected. Implement retry logic or prompt users to review changes.
+1. Always check for errors. Inspect the `errors` array in every response, even when the HTTP status is 200 (GraphQL can return partial data with errors).
+2. Use `code` for logic, `detail` for display. The `code` field is stable and safe for programmatic handling. The `detail` field is human-readable and suitable for showing to users.
+3. Log the `traceId`. When users report issues, `trace ID` helps the support quickly locate the relevant logs. Include it in your bug reports.
+4. Handle conflicts gracefully. In collaborative applications, version conflicts are expected. Implement retry logic or prompt users to review changes.

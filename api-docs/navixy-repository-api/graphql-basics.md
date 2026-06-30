@@ -14,7 +14,7 @@ For detailed information, see [the official GraphQL documentation](https://graph
 
 ## What is GraphQL?
 
-GraphQL is a query language for APIs. The key idea behind it is that **you specify exactly what data you need, and the API returns only that data**. This is different from REST APIs, where each endpoint returns a fixed structure, and you often get more data than you need (or have to make multiple requests to get everything you need).
+GraphQL is a query language for APIs. The key idea behind it is that you specify exactly what data you need, and the API returns only that data. This is different from REST APIs, where each endpoint returns a fixed structure, and you often get more data than you need (or have to make multiple requests to get everything you need).
 
 ## How GraphQL differs from REST
 
@@ -215,7 +215,7 @@ mutation {
 
 ### Subscriptions
 
-A **subscription** opens a persistent connection to receive updates as they happen. Instead of polling the API repeatedly, you tell it what events you're interested in, and it pushes data to you.
+A subscription opens a persistent connection to receive updates as they happen. Instead of polling the API repeatedly, you tell it what events you're interested in, and it pushes data to you.
 
 At the moment, Navixy Repository API doesn't support subscriptions.
 
@@ -225,11 +225,11 @@ Fields are the pieces of data you can request from an object. When you write a q
 
 Every object type in the API has a defined set of fields. For example, a `Device` has fields like:
 
-* `id` — the unique identifier
-* `title` — the display name
-* `status` — the current status (which is itself an object with its own fields)
-* `organization` — the organization that owns it
-* `customFields` — custom data specific to your setup
+* `id`: the unique identifier
+* `title`: the display name
+* `status`: the current status (which is itself an object with its own fields)
+* `organization`: the organization that owns it
+* `customFields`: custom data specific to your setup
 
 You only get the fields you ask for. If you don't need `customFields`, don't include it in your query, and it won't be in the response.
 

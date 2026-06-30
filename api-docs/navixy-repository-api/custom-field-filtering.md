@@ -34,38 +34,17 @@ query {
 
 Each condition in the `customFields` array has three parts:
 
-<table><thead><tr><th width="200.39996337890625">Field</th><th>Description</th></tr></thead><tbody><tr><td>code</td><td>The custom field's code, as defined in its CustomFieldDefinition</td></tr><tr><td>operator</td><td>How to compare the value</td></tr><tr><td>value</td><td>The value to compare against, using a typed variant matching the <a href="#value-formats">field's type</a></td></tr></tbody></table>
+<table><thead><tr><th width="200.39996337890625">Field</th><th>Description</th></tr></thead><tbody><tr><td>code</td><td>The custom field's code, as defined in its CustomFieldDefinition</td></tr><tr><td>operator</td><td>How to compare the value</td></tr><tr><td>value</td><td>The value to compare against, using a typed variant matching the <a href="custom-field-filtering.md#value-formats">field's type</a></td></tr></tbody></table>
 
 ### Operators
 
-| Operator      | Description                             |
-| ------------- | --------------------------------------- |
-| EQ            | Equals                                  |
-| NE            | Not equals                              |
-| GT            | Greater than                            |
-| GTE           | Greater than or equal                   |
-| LT            | Less than                               |
-| LTE           | Less than or equal                      |
-| CONTAINS      | String contains (case-insensitive)      |
-| IN            | Matches any value in the provided array |
-| IS\_NULL      | Field has no value                      |
-| IS\_NOT\_NULL | Field has a value                       |
+<table data-search="false"><thead><tr><th>Operator</th><th>Description</th></tr></thead><tbody><tr><td>EQ</td><td>Equals</td></tr><tr><td>NE</td><td>Not equals</td></tr><tr><td>GT</td><td>Greater than</td></tr><tr><td>GTE</td><td>Greater than or equal</td></tr><tr><td>LT</td><td>Less than</td></tr><tr><td>LTE</td><td>Less than or equal</td></tr><tr><td>CONTAINS</td><td>String contains (case-insensitive)</td></tr><tr><td>IN</td><td>Matches any value in the provided array</td></tr><tr><td>IS_NULL</td><td>Field has no value</td></tr><tr><td>IS_NOT_NULL</td><td>Field has a value</td></tr></tbody></table>
 
 ### Value formats
 
 The `value` field uses a typed `@oneOf` input. Provide exactly one variant matching your field's type:
 
-| Variant      | Field types                            | Example                                    |
-| ------------ | -------------------------------------- | ------------------------------------------ |
-| `string`     | STRING, TEXT, OPTIONS, CATALOG, TAG    | `{ string: "diesel" }`                     |
-| `decimal`    | DECIMAL                                | `{ decimal: 42.50 }`                       |
-| `integer`    | INTEGER                                | `{ integer: 42 }`                          |
-| `boolean`    | BOOLEAN                                | `{ boolean: true }`                        |
-| `date`       | DATE                                   | `{ date: "2024-01-15" }`                   |
-| `datetime`   | DATETIME                               | `{ datetime: "2024-01-15T10:30:00Z" }`     |
-| `id`         | DEVICE, REFERENCE                      | `{ id: "019a6a3f-..." }`                   |
-| `stringList` | IN operator on string-based fields     | `{ stringList: ["option_a", "option_b"] }` |
-| `idList`     | IN operator on DEVICE/REFERENCE fields | `{ idList: ["uuid1", "uuid2"] }`           |
+<table data-search="false"><thead><tr><th>Variant</th><th>Field types</th><th>Example</th></tr></thead><tbody><tr><td><code>string</code></td><td>STRING, TEXT, OPTIONS, CATALOG, TAG</td><td><code>{ string: "diesel" }</code></td></tr><tr><td><code>decimal</code></td><td>DECIMAL</td><td><code>{ decimal: 42.50 }</code></td></tr><tr><td><code>integer</code></td><td>INTEGER</td><td><code>{ integer: 42 }</code></td></tr><tr><td><code>boolean</code></td><td>BOOLEAN</td><td><code>{ boolean: true }</code></td></tr><tr><td><code>date</code></td><td>DATE</td><td><code>{ date: "2024-01-15" }</code></td></tr><tr><td><code>datetime</code></td><td>DATETIME</td><td><code>{ datetime: "2024-01-15T10:30:00Z" }</code></td></tr><tr><td><code>id</code></td><td>DEVICE, REFERENCE</td><td><code>{ id: "019a6a3f-..." }</code></td></tr><tr><td><code>stringList</code></td><td>IN operator on string-based fields</td><td><code>{ stringList: ["option_a", "option_b"] }</code></td></tr><tr><td><code>idList</code></td><td>IN operator on DEVICE/REFERENCE fields</td><td><code>{ idList: ["uuid1", "uuid2"] }</code></td></tr></tbody></table>
 
 For `IS_NULL` and `IS_NOT_NULL` operators, omit `value` or set it to `null`.
 

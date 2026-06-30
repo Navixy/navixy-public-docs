@@ -6,7 +6,7 @@ description: Preventing lost updates with version-based concurrency control
 
 {% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-Navixy Repository API uses the optional `version` field for optimistic concurrency control, preventing lost updates when multiple clients simultaneously edit the same entity.
+The API uses the optional `version` field for optimistic concurrency control, preventing lost updates when multiple clients simultaneously edit the same entity.
 
 ### How optimistic locking works
 
@@ -43,7 +43,7 @@ input DeleteDeviceInput {
 
 Optimistic locking applies to:
 
-<table><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/types.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/types.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups/types.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects/types.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory-2">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="organizations/#organization-2">Organization</a></td><td>Organization hierarchy nodes</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="organizations/members.md#member-2">Member</a></td><td>Organization memberships</td></tr><tr><td><a href="actors/integrations.md#integration-2">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, roles, tags, etc.)</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/types.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/types.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups/types.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects/types.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory-2">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="organizations/#organization-2">Organization</a></td><td>Organization hierarchy nodes</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="organizations/members.md#member-2">Member</a></td><td>Organization memberships</td></tr><tr><td><a href="actors/integrations.md#integration-2">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, roles, tags, etc.)</td></tr></tbody></table>
 
 ### Operations by type
 
@@ -135,20 +135,7 @@ User A's update succeeds first. User B's update fails because the version change
 
 Mutations that manage relationships and assignments are called idempotent commands. They don't require or check the `version` field.
 
-| Mutation                                                                  | Purpose                       |
-| ------------------------------------------------------------------------- | ----------------------------- |
-| [deviceInventoryLink](devices/inventory.md#deviceinventorylink)           | Link device to inventory      |
-| [deviceInventoryUnlink](devices/inventory.md#deviceinventoryunlink)       | Unlink device from inventory  |
-| [deviceIdentifierAdd](devices/mutations.md#deviceidentifieradd)           | Add identifier to device      |
-| [deviceIdentifierRemove](devices/mutations.md#deviceidentifierremove)     | Remove identifier from device |
-| [assetGroupItemsAdd](assets/groups/mutations.md#assetgroupitemsadd)       | Add asset to group            |
-| [assetGroupItemsRemove](assets/groups/mutations.md#assetgroupitemsremove) | Remove asset from group       |
-| [roleAssign](access-control/mutations.md#roleassign)                      | Assign role to actor          |
-| [roleRevoke](access-control/mutations.md#rolerevoke)                      | Revoke role from actor        |
-| [permissionGrant](access-control/mutations.md#permissiongrant)            | Grant permission to role      |
-| [permissionRevoke](access-control/mutations.md#permissionrevoke)          | Revoke permission from role   |
-| [userScopeSet](access-control/mutations.md#userscopeset)                  | Set user scope restriction    |
-| [userScopeRemove](access-control/mutations.md#userscoperemove)            | Remove user scope restriction |
+<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="devices/inventory.md#deviceinventorylink">deviceInventoryLink</a></td><td>Link device to inventory</td></tr><tr><td><a href="devices/inventory.md#deviceinventoryunlink">deviceInventoryUnlink</a></td><td>Unlink device from inventory</td></tr><tr><td><a href="devices/mutations.md#deviceidentifieradd">deviceIdentifierAdd</a></td><td>Add identifier to device</td></tr><tr><td><a href="devices/mutations.md#deviceidentifierremove">deviceIdentifierRemove</a></td><td>Remove identifier from device</td></tr><tr><td><a href="assets/groups/mutations.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="assets/groups/mutations.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr><tr><td><a href="access-control/mutations.md#roleassign">roleAssign</a></td><td>Assign role to actor</td></tr><tr><td><a href="access-control/mutations.md#rolerevoke">roleRevoke</a></td><td>Revoke role from actor</td></tr><tr><td><a href="access-control/mutations.md#permissiongrant">permissionGrant</a></td><td>Grant permission to role</td></tr><tr><td><a href="access-control/mutations.md#permissionrevoke">permissionRevoke</a></td><td>Revoke permission from role</td></tr><tr><td><a href="access-control/mutations.md#userscopeset">userScopeSet</a></td><td>Set user scope restriction</td></tr><tr><td><a href="access-control/mutations.md#userscoperemove">userScopeRemove</a></td><td>Remove user scope restriction</td></tr></tbody></table>
 
 These operations behave as follows:
 
@@ -159,8 +146,8 @@ This design simplifies client code. You can safely retry these operations withou
 
 ### Best practices
 
-1. **Always include `version` in your queries.** When fetching entities you plan to modify, request the `version` field so you have it ready for mutations.
-2. **Always include `version` in updates and deletes.** The field is optional, but omitting it removes your protection against overwriting changes made by other users since your last fetch. Omit it only for programmatic bulk operations where stale-read conflicts are not a concern.
-3. **Be especially careful when deleting without `version`.** Unlike unprotected updates, which still write a valid version to the database, unprotected deletes can be irreversible.
-4. **Handle conflicts gracefully.** In collaborative applications, version conflicts are expected. Implement retry logic or prompt users to review changes.
-5. **Don't cache versions long-term.** Versions can change at any time. Always use the version from your most recent fetch of the entity.
+1. Always include `version` in your queries. When fetching entities you plan to modify, request the `version` field so you have it ready for mutations.
+2. Always include `version` in updates and deletes. The field is optional, but omitting it removes your protection against overwriting changes made by other users since your last fetch. Omit it only for programmatic bulk operations where stale-read conflicts are not a concern.
+3. Be especially careful when deleting without `version`. Unlike unprotected updates, which still write a valid version to the database, unprotected deletes can be irreversible.
+4. Handle conflicts gracefully. In collaborative applications, version conflicts are expected. Implement retry logic or prompt users to review changes.
+5. Don't cache versions long-term. Versions can change at any time. Always use the version from your most recent fetch of the entity.
