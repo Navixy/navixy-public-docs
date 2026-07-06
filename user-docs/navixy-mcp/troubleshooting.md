@@ -17,7 +17,7 @@ To resolve this:
 1. Restart Claude Desktop completely via **≡ → Files → Exit**. A window reload is not enough.
 2. If restarting doesn't help, delete the `.mcp-auth\mcp-remote-xxxx` folder in your user directory and reconnect.
 3. If that doesn't help either, reboot your operating system.
-4. If that still fails, it might be a Node.js issue. If you're using the `npx` command in [`claude_desktop_config.json`](navixy-mcp-server/getting-started/configuring-navixy-mcp-in-claude-desktop.md#configuring-mcp-via-configuration-file), try switching to `pnmp`.
+4. If that still fails, it might be a Node.js/npm issue. Try installing [pnpm](https://pnpm.io/) and replacing `npx` in [`claude_desktop_config.json`](navixy-mcp-server/getting-started/configuring-navixy-mcp-in-claude-desktop.md#configuring-mcp-via-configuration-file) with  `pnmp`.
 
 ## Claude Desktop can't find npx on macOS
 

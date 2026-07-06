@@ -68,6 +68,10 @@ You can also copy this URL directly from the **Connect with MCP** option in the 
 
 Use the configuration below for most common tools. MCP works with any client that supports `mcpServers` configuration.
 
+{% hint style="warning" %}
+Navixy Documentation MCP requires Node.js and npm (Node Package Manager) installed on your machine. To install npm, follow the [instructions from the official documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+{% endhint %}
+
 {% tabs %}
 {% tab title="Claude Desktop" %}
 {% hint style="info" %}
@@ -194,4 +198,3 @@ List the pages you found and link each one.
 ```
 
 If the response includes links to specific Navixy doc pages, the connection is working. Once confirmed, you can ask the assistant to fetch any page, find endpoints, or trace a full workflow across multiple doc sections.
-
