@@ -1,6 +1,5 @@
 ---
 description: Use IoT Logic API guides to send device data to MQTT, manage flows and endpoints, configure advanced scenarios, and add calculated attributes to the Navixy UI.
-stoplight-id: pozrbwqv150yy
 ---
 
 # Guides
@@ -11,3 +10,4 @@ Here are gathered detailed step-by-step guides for basic scenarios of creating d
 * [Scenario 2: Managing Your Flows and Endpoints](scenario2.md)
 * [Scenario 3: Advanced configurations](advanced-configurations.md)
 * [Scenario 4: Adding calculated attributes to Navixy UI](adding-calculated-attributes-to-navixy-ui.md)
+* [Merging external system data into a flow](merging-external-data-into-a-flow.md)

@@ -1,6 +1,5 @@
 ---
 description: Build IoT Logic flows from the JSON schema template. Includes the full flow object model with property names, types, and constraints for API-based creation.
-stoplight-id: h8mpgrged6ndl
 ---
 
 # JSON-schema template
@@ -10,7 +9,7 @@ Here's an example of a JSON structure describing a complete flow.
 ### Flow object model
 
 {% openapi-schemas spec="iot-logic" schemas="Flow" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 ## Example schema
@@ -142,6 +141,42 @@ Here's an example of a JSON structure describing a complete flow.
                 "type": "integer",
                 "description": "ID of a source device",
                 "examples": [123458]
+              }
+            },
+            "push_type": {
+              "type": "string",
+              "description": "Connector type for merging data from an external system into a device already listed in source_ids. Currently only 'http'. Omit for a devices-only node",
+              "enum": ["http"],
+              "examples": ["http"]
+            },
+            "url": {
+              "type": "string",
+              "description": "Server-generated push URL for POST /iot/logic/flow/push. Read-only, present only after the flow is saved with push_type set",
+              "examples": ["https://api.eu.navixy.com/iot/logic/flow/push?flow_id=42&node_id=1"]
+            },
+            "primary_key": {
+              "type": "string",
+              "description": "Name of the field that identifies the target device in an inbound push. Required together with mappings",
+              "examples": ["vehicle_id"]
+            },
+            "mappings": {
+              "type": "array",
+              "description": "Maps inbound primary_key values to devices already listed in source_ids. Required together with primary_key",
+              "items": {
+                "type": "object",
+                "required": ["source_id", "primary_key_value"],
+                "properties": {
+                  "source_id": {
+                    "type": "integer",
+                    "description": "Device ID. Must also appear in source_ids",
+                    "examples": [123458]
+                  },
+                  "primary_key_value": {
+                    "type": "string",
+                    "description": "Value that identifies this device in an inbound push. Must be unique within this node's mappings",
+                    "examples": ["truck_12"]
+                  }
+                }
               }
             }
           }

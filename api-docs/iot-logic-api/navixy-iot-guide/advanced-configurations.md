@@ -1,6 +1,5 @@
 ---
 description: Configure IoT Logic flows with multiple output endpoints and nested node schemas. Shows how flow, node, and endpoint API resources relate to each other.
-stoplight-id: cs3amob44lhu6
 ---
 
 # Advanced configurations
@@ -53,7 +52,7 @@ For this example, let's presume that we have already:
 The flow update operation allows you to modify the entire flow structure, including adding new output endpoints and creating the necessary connections. In this example, we're adding two output endpoint nodes that will receive the same processed data from the transformation chain. This creates a branching pattern where data goes through the processing nodes and then splits to multiple destinations simultaneously.
 
 {% openapi-operation spec="iot-logic" path="/iot/logic/flow/update" method="post" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-operation %}
 
 > You can also create a completely new flow with this configuration by using [`POST /iot/logic/flow/create`](https://www.navixy.com/docs/iot-logic-api/resources/api-reference/flow#post-iot-logic-flow-create)

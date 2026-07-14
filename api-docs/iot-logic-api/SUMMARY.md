@@ -12,6 +12,7 @@
   * [Advanced configurations](navixy-iot-guide/advanced-configurations.md)
   * [Adding calculated attributes to Navixy UI](navixy-iot-guide/adding-calculated-attributes-to-navixy-ui.md)
   * [AI flow generation guide](navixy-iot-guide/ai-flow-generation-guide.md)
+  * [Merging external system data into a flow](navixy-iot-guide/merging-external-data-into-a-flow.md)
 * [Websocket access to Data Stream Analyzer](Websocket-access-for-DSA.md)
 
 ## RESOURCES

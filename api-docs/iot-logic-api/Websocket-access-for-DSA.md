@@ -1,6 +1,5 @@
 ---
 description: Subscribe to real-time device events via WebSocket using the iot_monitor stream. Receive location updates, state changes, and telemetry without polling.
-stoplight-id: 09sx1g2wm5gw3
 ---
 
 # Websocket access to Data Stream Analyzer

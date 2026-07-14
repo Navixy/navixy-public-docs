@@ -1,5 +1,5 @@
 ---
-stoplight-id: qc0136ocalnom
+description: API automation tools for the Navixy platform.
 ---
 
 # API automation tools

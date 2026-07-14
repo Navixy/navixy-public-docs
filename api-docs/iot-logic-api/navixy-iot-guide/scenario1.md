@@ -15,7 +15,7 @@ Need HTTP POST instead of MQTT? Use the [Webhook node](../technical-details/node
 The simplest approach is to define both your data sources and MQTT output endpoint directly in your flow creation request. To do it, send a request to the following endpoint:
 
 {% openapi-operation spec="iot-logic" path="/iot/logic/flow/create" method="post" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-operation %}
 
 ### Request example

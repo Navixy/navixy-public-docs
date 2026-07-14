@@ -1,6 +1,5 @@
 ---
 description: Build and manage IoT data flows with the Navixy IoT Logic API. Connect devices, transform data in real time, and route processed telemetry to external systems.
-stoplight-id: ie3rt9xv91kie
 ---
 
 # Navixy IoT Logic API
@@ -45,7 +44,7 @@ Key characteristics of flows:
 
 **Nodes** are the functional elements of a **flow**, with each node handling a specific stage of the data lifecycle. Common node types include:
 
-* [Data Source node](technical-details/nodes.md#data-source-node-data_source): selects which devices send data into the flow
+* [Data Source node](technical-details/nodes.md#data-source-node-data_source): selects which devices send data into the flow, and can merge data from an external system into an existing device's stream through its connector fields
 * [Initiate Attribute node](technical-details/nodes.md#initiate-attribute-node-initiate_attribute): transforms and enriches data using [Navixy IoT Logic Expression Language](technologies/navixy-iot-logic-expression-language/)
 * [Logic node](technical-details/nodes.md#logic-node-logic): routes data based on conditions
 * [Webhook node](technical-details/nodes.md#webhook-node-webhook): sends HTTP POST requests to your external endpoint

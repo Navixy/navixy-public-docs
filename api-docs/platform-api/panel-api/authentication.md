@@ -1,5 +1,5 @@
 ---
-stoplight-id: wup1ss2w62vmw
+description: Authenticate to the Navixy Admin Panel API.
 ---
 
 # Admin Panel authentication

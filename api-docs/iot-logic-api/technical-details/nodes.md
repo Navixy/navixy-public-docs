@@ -6,10 +6,10 @@ description: "Build IoT Logic flows with six node types: data source, attribute,
 
 ## Data Source node (`data_source`)
 
-This node specifies which devices will send data to your flow. It's the entry point of all data flows.
+This node specifies which devices send data to your flow. It's the entry point of all data flows. Its connector fields can also merge data from an external system into the stream of a device that's already in the node, see [Connector configuration](#connector-configuration).
 
 {% openapi-schemas spec="iot-logic" schemas="NodeDataSource" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 #### Data source node structure
@@ -30,12 +30,70 @@ This node specifies which devices will send data to your flow. It's the entry po
 
 #### Key properties
 
-| Property          | Type    | Required | Description                              |
-| ----------------- | ------- | -------- | ---------------------------------------- |
-| `id`              | integer | Yes      | Unique identifier within the flow        |
-| `type`            | string  | Yes      | Must be `"data_source"`                  |
-| `data.title`      | string  | Yes      | Human-readable name for the node         |
-| `data.source_ids` | array   | Yes      | Array of device IDs to collect data from |
+| Property           | Type    | Required | Description                                                                            |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------- |
+| `id`               | integer | Yes      | Unique identifier within the flow                                                        |
+| `type`             | string  | Yes      | Must be `"data_source"`                                                                  |
+| `data.title`       | string  | Yes      | Human-readable name for the node                                                         |
+| `data.source_ids`  | array   | Yes      | Array of device IDs to collect data from                                                 |
+| `data.push_type`   | string  | No       | Connector type. Currently only `"http"`. Omit for a devices-only node                    |
+| `data.primary_key` | string  | No       | Name of the field that identifies the target device in an inbound push                   |
+| `data.url`         | string  | No       | Server-generated push URL. Read-only, present only after the flow is saved                |
+| `data.mappings`    | array   | No       | Maps inbound `data.primary_key` values to devices already listed in `data.source_ids`    |
+
+### Connector configuration
+
+Use the connector fields to merge data from an external system into the stream of a device that's already in your Navixy account. This lets you combine two systems that describe the same physical asset into one flow, for example a GPS device's native telemetry and a separate battery management system's readings for the same vehicle. In the flow builder, these fields appear on the node's Software tab.
+
+The device that receives the pushed data must already be listed in `data.source_ids`. The connector doesn't create devices, it attributes inbound data to a device that's already part of the node.
+
+To configure a connector:
+
+1. List the devices that will receive pushed data in `data.source_ids`, as usual.
+2. Set `data.push_type` to `"http"`.
+3. Set `data.primary_key` to the name of the field the external system uses to identify each device, for example `"vehicle_id"`.
+4. In `data.mappings`, pair each device's `source_id` with the value that identifies it in inbound pushes.
+5. Save the flow, then read it back to get the generated `data.url`.
+6. Configure the external system to send its data to that URL.
+
+Here's an example that connects two GPS devices to a battery management system reporting the state of charge and temperature of the same vehicles:
+
+```json
+{
+  "id": 1,
+  "type": "data_source",
+  "data": {
+    "title": "Fleet vehicles with battery management enrichment",
+    "source_ids": [987654, 987655],
+    "push_type": "http",
+    "primary_key": "vehicle_id",
+    "mappings": [
+      { "source_id": 987654, "primary_key_value": "truck_12" },
+      { "source_id": 987655, "primary_key_value": "truck_07" }
+    ]
+  },
+  "view": {
+    "position": { "x": 50, "y": 50 }
+  }
+}
+```
+
+With this configuration, a request to `POST /iot/logic/flow/push` that includes `"vehicle_id": "truck_12"` merges its other fields into device `987654`'s data stream:
+
+```bash
+curl -X POST "https://api.eu.navixy.com/iot/logic/flow/push" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: NVX your_api_key" \
+  -d '{
+    "flow_id": 42,
+    "node_id": 1,
+    "vehicle_id": "truck_12",
+    "battery_soc": 76,
+    "battery_temp": 34.2
+  }'
+```
+
+`battery_soc` and `battery_temp` become new attributes on device `987654`, alongside its native GPS data, and downstream nodes can reference them like any other attribute. If no mapping matches the pushed `vehicle_id` value, Navixy discards the push without returning an error.
 
 ### Usage notes
 
@@ -43,13 +101,15 @@ This node specifies which devices will send data to your flow. It's the entry po
 * Multiple devices can be specified in the `source_ids` array
 * Each device is identified by its numeric ID in the Navixy system
 * A flow can have multiple data source nodes for different device groups
+* The connector fields (`push_type`, `primary_key`, `mappings`, `url`) are optional, omit them for a devices-only node
+* `POST /iot/logic/flow/push` is rate-limited to 1 request per second per API key, with a burst size of 1
 
 ## Initiate Attribute node (`initiate_attributes`)
 
 This node transforms raw data into meaningful information. It allows for creating new attributes or modifying existing ones through expressions.
 
 {% openapi-schemas spec="iot-logic" schemas="NodeInitiateAttributes" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 #### Initiate Attribute node structure
@@ -140,7 +200,7 @@ Short syntax is also supported for attribute names in formulas. When referencing
 This node creates conditional branching points that route incoming data down different paths based on logical expressions. It evaluates conditions against real-time data and creates boolean attributes for monitoring and decision-making.
 
 {% openapi-schemas spec="iot-logic" schemas="NodeLogic" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 #### Logic node structure
@@ -246,7 +306,7 @@ Here's a quick reference:
 This node sends HTTP POST requests with IoT data to external endpoints, enabling real-time integration with any third-party system or API that accepts HTTP requests.
 
 {% openapi-schemas spec="iot-logic" schemas="NodeWebhook" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 **Webhook node structure:**
@@ -402,7 +462,7 @@ Headers must be explicitly specified, including `Content-Type`. Common authentic
 This node executes automated commands when triggered by incoming data. It transforms data flows into device control actions, enabling automated responses to conditions detected in earlier nodes.
 
 {% openapi-schemas spec="iot-logic" schemas="NodeAction" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 #### Device action node structure
@@ -531,7 +591,7 @@ Action execution depends on individual device capabilities:
 This node defines where your data will be sent. It's the termination point for data flow paths.
 
 {% openapi-schemas spec="iot-logic" schemas="NodeOutputEndpoint" grouped="true" %}
-[OpenAPI iot-logic](https://raw.githubusercontent.com/SquareGPS/iot-logic-api/refs/heads/main/docs/resources/api-reference/IoT_Logic.json)
+[OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-schemas %}
 
 #### Output types

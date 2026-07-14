@@ -1,5 +1,5 @@
 ---
-stoplight-id: o6j0pkj8a6rts
+description: Authenticate to the Navixy user-facing backend API.
 ---
 
 

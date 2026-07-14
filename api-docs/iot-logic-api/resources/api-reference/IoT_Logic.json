@@ -370,6 +370,61 @@
         ]
       }
     },
+    "/iot/logic/flow/push": {
+      "post": {
+        "tags": ["Flow"],
+        "summary": "flowPush",
+        "description": "Send data from an external system into a connector-configured Data Source node. Navixy reads the field name stored in the node's primary_key setting, looks for a field with that name in the request body, and matches its value against the node's mappings. On a match, Navixy merges the remaining fields into the data stream of the mapped device, as additional attributes rather than a location update. If no field matches, or the request contains no fields besides flow_id, node_id, and the primary key, Navixy discards the push without returning an error. Rate limited to 1 request per second per API key, with a burst size of 1.",
+        "operationId": "flowPush",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["flow_id", "node_id"],
+                "properties": {
+                  "flow_id": {
+                    "type": "integer",
+                    "description": "Flow ID",
+                    "example": 42
+                  },
+                  "node_id": {
+                    "type": "integer",
+                    "description": "ID of the connector-configured Data Source node inside the flow",
+                    "example": 1
+                  }
+                },
+                "additionalProperties": {
+                  "type": ["string", "number", "boolean", "null"],
+                  "description": "Additional fields to merge into the mapped device's data stream. One field must have the name configured in the node's primary_key setting, with a value matching one of the node's mappings. Field names match ^[a-zA-Z0-9_-]+$ and are limited to 64 characters. String values match ^[a-zA-Z0-9_-]*$ and are limited to 100 characters. Nested objects and arrays are ignored."
+                },
+                "example": {
+                  "flow_id": 42,
+                  "node_id": 1,
+                  "vehicle_id": "truck_12",
+                  "battery_soc": 76,
+                  "battery_temp": 34.2
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        },
+        "security": [
+          {
+            "api_key": []
+          }
+        ]
+      }
+    },
     "/iot/logic/flow/endpoint/create": {
       "post": {
         "tags": ["Node"],
@@ -1269,6 +1324,33 @@
                 },
                 "description": "Array of device/source IDs. Use null or empty array [] for all sources. Note: API normalizes null to empty array [] in responses.",
                 "example": [123458, 123459]
+              },
+              "push_type": {
+                "$ref": "#/components/schemas/ExternalDataPushType"
+              },
+              "url": {
+                "type": "string",
+                "readOnly": true,
+                "description": "Server-generated HTTPS URL for POST /iot/logic/flow/push. Present only once the flow has been saved with push_type set. Not accepted on create or update, Navixy fills it in on read.",
+                "example": "https://api.eu.navixy.com/iot/logic/flow/push?flow_id=42&node_id=1"
+              },
+              "primary_key": {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z0-9_]+$",
+                "description": "Name of the field that identifies the target device in an inbound push. Required together with mappings.",
+                "example": "vehicle_id"
+              },
+              "mappings": {
+                "type": ["array", "null"],
+                "items": {
+                  "$ref": "#/components/schemas/DataSourcePushMapping"
+                },
+                "description": "Maps values of the primary_key field to devices already listed in source_ids. Each source_id in this list must also appear in source_ids. Required together with primary_key.",
+                "example": [
+                  {"source_id": 123458, "primary_key_value": "truck_12"},
+                  {"source_id": 123459, "primary_key_value": "truck_07"}
+                ]
               }
             }
           },
@@ -1280,6 +1362,31 @@
           "type",
           "data"
         ]
+      },
+      "ExternalDataPushType": {
+        "type": "string",
+        "description": "Connector type for external data pushes into a Data Source node. Currently only http is available, the enum leaves room for future connector types.",
+        "enum": ["unknown", "http"],
+        "example": "http"
+      },
+      "DataSourcePushMapping": {
+        "type": "object",
+        "description": "Maps one inbound primary_key value to a device already listed in the Data Source node's source_ids.",
+        "required": ["source_id", "primary_key_value"],
+        "properties": {
+          "source_id": {
+            "type": "integer",
+            "description": "Device ID. Must also appear in the node's source_ids.",
+            "example": 123458
+          },
+          "primary_key_value": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^[a-zA-Z0-9_]+$",
+            "description": "Value that identifies this device in an inbound push. Must be unique within the node's mappings.",
+            "example": "truck_12"
+          }
+        }
       },
       "NodeInitiateAttributes": {
         "type": "object",
