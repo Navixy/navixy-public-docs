@@ -34,7 +34,7 @@ IoT logic is accessible to account **Owners** in the **Account Settings** sectio
 
 The process is built around three key stages of data interaction: data reception, data enrichment, and data transmitting, each handled by specific nodes. Here are the most common ones:
 
-* [Data Source node](nodes/data-source-node.md) manages data reception by connecting GPS devices to the Navixy platform for seamless input.
+* [Data Source node](nodes/data-source-node.md) manages data reception by connecting GPS devices to the Navixy platform for seamless input. It can also enrich devices already in the flow with data pushed from an external system.
 * [Initiate Attribute node](nodes/initiate-attribute-node/) enables data enrichment by renaming and customizing incoming parameters to meet various application requirements.
 * [IF/THEN Logic node](nodes/logic-node/) enables conditional data routing by creating branching points that direct data flow based on logical expressions and real-time conditions.
 * [Output Endpoint node](nodes/output-endpoint-node.md) handles data transmission by forwarding processed data to third-party servers and applications, ensuring efficient delivery.

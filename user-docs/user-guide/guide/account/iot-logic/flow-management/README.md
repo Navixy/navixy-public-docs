@@ -140,11 +140,12 @@ The following table shows what is included and excluded from flow exports:
 | Node names and descriptions              | :white\_check\_mark: |
 | Flow metadata                            | :white\_check\_mark: |
 | Device selections (Data Source nodes)    |           ❌          |
+| Software-tab push configuration (Data Source nodes) |           ❌          |
 | Authentication headers (Webhook nodes)   |           ❌          |
 | MQTT credentials (Output Endpoint nodes) |           ❌          |
 
 {% hint style="info" %}
-Device selections and authentication data are excluded from exports. Device selections are excluded to avoid conflicts when importing into a different account. Authentication data is excluded to protect sensitive information.
+Device selections, Software-tab push configuration, and authentication data are excluded from exports. Device selections and Software-tab push configuration are excluded to avoid conflicts when importing into a different account. Software-tab mappings reference the node's device selections, so they're excluded along with them. Authentication data is excluded to protect sensitive information.
 
 After importing a flow, you need to manually add the excluded data before you can save the flow.
 {% endhint %}
@@ -158,6 +159,7 @@ To import a flow configuration:
 3. Review the imported flow structure
 4. Configure the excluded elements:
    * Assign devices to Data Source nodes
+   * Reconfigure Software-tab push enrichment on Data Source nodes that used it, since it depends on device selections that aren't exported
    * Add authentication headers to Webhook nodes (if applicable)
    * Enter MQTT credentials for Output Endpoint nodes (if applicable)
 5. Save the flow
