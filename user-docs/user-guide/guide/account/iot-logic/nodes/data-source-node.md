@@ -2,8 +2,7 @@
 description: >-
   Data Source node is the IoT Logic entry point for device telemetry. It
   receives data via TCP, UDP, HTTP, or MQTT, decodes it, and passes it to
-  downstream nodes. It can also enrich an already-connected device with
-  attributes pushed from an external system over HTTP.
+  downstream nodes. It can also enrich an already-connected
 ---
 
 # Data Source
@@ -16,15 +15,15 @@ description: >-
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/image-20250403-162909.png" alt="Data source node in the flow workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20250403-162909 (1).png" alt="Data source node in the flow workspace"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
-Beyond receiving telemetry, a **Data Source** node can also enrich a device you've already added to it. An external system, such as a separate telematics platform that doesn't send data to Navixy by default, pushes extra attributes to the device's stream. Sometimes that external platform is the device manufacturer's own. Rather than migrating the device onto Navixy's native ingestion, the **Software** tab keeps it registered as-is. It continuously enriches the device's stream with data from that other platform, so both streams run in parallel. See [How pushed data is handled](#how-pushed-data-is-handled) for the mechanics, and [Configuration options](#configuration-options) to set it up.
+Beyond receiving telemetry, a **Data Source** node can also enrich a device you've already added to it. An external system, such as a separate telematics platform that doesn't send data to Navixy by default, pushes extra attributes to the device's stream. Sometimes that external platform is the device manufacturer's own. Rather than migrating the device onto Navixy's native ingestion, the **Software** tab keeps it registered as-is. It continuously enriches the device's stream with data from that other platform, so both streams run in parallel. See [How pushed data is handled](data-source-node.md#how-pushed-data-is-handled) for the mechanics, and [Configuration options](data-source-node.md#configuration-options) to set it up.
 
 ### Flow architecture integration
 
-<figure><img src="../../../../../.gitbook/assets/Data-source-in-flow.webp" alt="Data source node included in a flow on workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Data-source-in-flow (1).webp" alt="Data source node included in a flow on workspace"><figcaption></figcaption></figure>
 
 **Data Source node** functions as the entry point for data in an IoT Logic flow. A single flow can contain multiple source nodes, each with independent configurations. This architecture enables:
 
@@ -95,7 +94,7 @@ Click **Apply changes** to complete the node creation.
 {% step %}
 #### Configure HTTP push enrichment (optional)
 
-Switch to the **Software** tab to enrich the devices you selected in Devices with data pushed from an external system. This step is optional. See [Configuring HTTP push enrichment](#configuring-http-push-enrichment) for the full setup.
+Switch to the **Software** tab to enrich the devices you selected in Devices with data pushed from an external system. This step is optional. See [Configuring HTTP push enrichment](data-source-node.md#configuring-http-push-enrichment) for the full setup.
 {% endstep %}
 {% endstepper %}
 
@@ -105,7 +104,7 @@ If you change the manufacturer or model settings after selecting devices, Navixy
 
 ### Configuring HTTP push enrichment
 
-HTTP push enrichment lets an external system add attributes to a device already selected in this node's **Devices** tab, by pushing data to a generated URL. It's optional, and requires at least one device selected under [Configuration steps](#configuration-steps) first.
+HTTP push enrichment lets an external system add attributes to a device already selected in this node's **Devices** tab, by pushing data to a generated URL. It's optional, and requires at least one device selected under [Configuration steps](data-source-node.md#configuration-steps) first.
 
 This is useful when a device already reports to a separate system that doesn't feed Navixy by default, for example a battery management platform tracking the same vehicle's state of charge. Instead of migrating the device onto Navixy's native ingestion, you can keep it registered as-is and have that other platform push its readings here. A push with `vehicle_id: "truck_12"`, `battery_soc: 76`, and `battery_temp: 34.2` adds `battery_soc` and `battery_temp` as new attributes on the mapped device, alongside its native GPS telemetry.
 
@@ -134,6 +133,10 @@ Give the external system a valid [Navixy API key](../../api-keys.md), and config
 Enter a **Primary key**: the name of the field the external system uses to identify which device a pushed record belongs to. It accepts up to 64 characters, letters, digits, and underscores only.
 
 Add one **Mappings** row per device to enrich. For each row, select the **Device name**, limited to devices already selected in Devices, and enter the **Key value** that identifies that device in inbound pushes. This field stores up to 255 characters, but the push endpoint itself accepts only up to 100 characters per field, so keep the value well under 100 characters in practice.
+
+{% hint style="warning" %}
+Both Primary key and Key value accept only letters, digits, and underscores, no hyphens or other punctuation. The push endpoint's general field validation is more permissive and accepts hyphens in any field without complaint, but a hyphenated value can never match a stored Key value, so pushes using one are silently discarded exactly as if the value simply didn't match. If your external system's identifiers use hyphens (for example `truck-12`), translate them, for example to `truck_12`, before pushing.
+{% endhint %}
 {% endstep %}
 
 {% step %}
@@ -158,11 +161,11 @@ This standardization process enables you to build consistent processing flows re
 
 Navixy matches each inbound push by its primary key value against the node's configured **Mappings**, then merges the remaining fields into the mapped device's data stream as new attributes. They don't affect location or other telemetry. A request can end up in one of three states:
 
-| Outcome | HTTP response | Data merged? |
-| --- | --- | --- |
-| Primary key value matches a mapping | 200, `success: true` | Yes. Remaining fields merge as new attributes |
-| Primary key value matches no mapping | 200, `success: true` | No. Discarded silently |
-| Missing or invalid `Authorization` header | 400 error | No. Rejected before Navixy checks the primary key |
+| Outcome                                   | HTTP response        | Data merged?                                      |
+| ----------------------------------------- | -------------------- | ------------------------------------------------- |
+| Primary key value matches a mapping       | 200, `success: true` | Yes. Remaining fields merge as new attributes     |
+| Primary key value matches no mapping      | 200, `success: true` | No. Discarded silently                            |
+| Missing or invalid `Authorization` header | 400 error            | No. Rejected before Navixy checks the primary key |
 
 {% hint style="warning" %}
 A 200 response only confirms Navixy accepted the request, not that the data merged. A mismatched primary key value is discarded silently, with no error to signal it. If you're unsure a push was matched, check the mapped device's attributes in [Data Stream Analyzer](../data-stream-analyzer.md) rather than relying on the response.
@@ -198,7 +201,7 @@ The protocol should match the communication protocol used by your device manufac
 
 Yes, you can connect a **Data Source node** to multiple processing nodes to create parallel processing paths. This allows you to apply different transformations to the same data stream. Here’s an example:
 
-<figure><img src="../../../../../.gitbook/assets/image-20250404-075539.png" alt="Example showing the Data source node in context with multiple outbound connections and outputs"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20250404-075539 (1).png" alt="Example showing the Data source node in context with multiple outbound connections and outputs"><figcaption></figcaption></figure>
 
 #### Can I bring in data from a system that isn't a Navixy device?
 
@@ -213,5 +216,5 @@ No, but a pushed attribute can stop being the current value quickly if the devic
 Check these in order:
 
 1. Confirm the request included a valid `Authorization: NVX <api_key>` header. A missing or invalid header fails loudly with an HTTP 400 error.
-2. Confirm the pushed field name matches the node's **Primary key** setting exactly, and its value matches one of the configured **Mappings** exactly. A mismatch fails silently: the request still returns success, but nothing merges.
+2. Confirm the pushed field name matches the node's **Primary key** setting exactly, and its value matches one of the configured **Mappings** exactly, letters, digits, and underscores only. A hyphenated value is the most common cause: it passes the push endpoint's own validation without error, but can never match a stored Key value, so the request still returns success while nothing merges.
 3. Check the attribute's history in Data Stream Analyzer, not just its current value. A device that reports its own telemetry often can scroll a merged value out of the current slot within seconds, even though the merge succeeded.

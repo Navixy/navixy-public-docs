@@ -8,7 +8,7 @@ description: >-
 
 The **Vehicle sensors report** offers detailed insights into the data received from your vehicle’s instruments through CAN/OBD sensors or [virtual sensors](../../devices-and-settings/vehicle-sensors/virtual-sensors/) over a selected period. This report includes information such as mileage, engine RPMs, speed, fuel consumption, coolant temperature, and other critical metrics, helping fleet managers and vehicle operators monitor and optimize vehicle performance.
 
-<figure><img src="../../../../.gitbook/assets/image (43) (1).png" alt="Vehicle sensors report"><figcaption><p>Vehicle sensors report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (43) (1).png" alt="Vehicle sensors report"><figcaption><p>Vehicle sensors report</p></figcaption></figure>
 
 ## Prerequisites for generating Vehicle sensors report
 
@@ -30,9 +30,9 @@ The report uses several parameters to customize the output:
 
     <div data-gb-custom-block data-tag="hint" data-style="warning" class="hint hint-warning"><p>Smoothing may reduce accuracy when analyzing sudden changes such as fuel refills or drains.</p></div>
 
-![Graph with readings from OBD sensor without smoothing](../../../../.gitbook/assets/image-20240815-010045.png)
+![Graph with readings from OBD sensor without smoothing](<../../../.gitbook/assets/image-20240815-010045 (1).png>)
 
-![Graph with readings from OBD sensor with smoothing](../../../../.gitbook/assets/image-20240815-010100.png)
+![Graph with readings from OBD sensor with smoothing](<../../../.gitbook/assets/image-20240815-010100 (1).png>)
 
 For each device, you need to select the sensor for which to generate a report. Only devices with configured CAN/OBD or virtual sensors appear in the list. If the selected sensor isn't a metering sensor or a virtual sensor (for example, a state sensor), the report displays the message: "The sensor is not a measuring sensor"
 
@@ -46,11 +46,11 @@ When you hover over a point on the graph with the X-axis set to time, you will s
 
 {% columns %}
 {% column %}
-![Example of displaying readings at a point on a graph with time](../../../../.gitbook/assets/image-20240815-005949.png)
+![Example of displaying readings at a point on a graph with time](<../../../.gitbook/assets/image-20240815-005949 (1).png>)
 {% endcolumn %}
 
 {% column %}
-![Example of displaying readings at a point on a graph with mileage](../../../../.gitbook/assets/image-20240815-010008.png)
+![Example of displaying readings at a point on a graph with mileage](<../../../.gitbook/assets/image-20240815-010008 (1).png>)
 {% endcolumn %}
 {% endcolumns %}
 

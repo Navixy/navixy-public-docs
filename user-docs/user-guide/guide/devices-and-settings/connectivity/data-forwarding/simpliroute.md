@@ -5,7 +5,7 @@ description: >-
   America.
 ---
 
-# SimpliRoute
+# Simpliroute
 
 ## SimpliRoute
 
@@ -65,7 +65,7 @@ To set up data forwarding for the SimpliRoute protocol:
 
 ![](https://www.navixy.com/wp-content/uploads/2022/10/pasted-image-0-2-600x115.png)
 
-7. Next, the retranslator will need to be linked to the device on the SimpliRoute side. To do so, select the ![image-20250310-140837.png](../../../../../.gitbook/assets/image-20250310-140837.png) button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below. External ID is not needed for the SimpliRoute protocol.
+7. Next, the retranslator will need to be linked to the device on the SimpliRoute side. To do so, select the ![image-20250310-140837.png](<../../../../.gitbook/assets/image-20250310-140837 (1).png>) button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below. External ID is not needed for the SimpliRoute protocol.
 8. Select **Save** once completed.
 
 #### Managing

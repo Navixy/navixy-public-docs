@@ -61,7 +61,7 @@ Rules in Navixy are predefined conditions that trigger events when met. To set u
 
 To access the notification rules setup in Navixy, go to the left menu and choose **Alerts**. This opens the Notification panel. Click on **Set rules**, and the Alert rules interface appears.
 
-![](../../../.gitbook/assets/image-20240805-214736.png)
+![](<../../.gitbook/assets/image-20240805-214736 (1).png>)
 
 In the **Rules** interface, you can:
 
@@ -126,7 +126,7 @@ Here’s how you can configure the schedule:
 
 To customize the schedule, click on the desired time blocks to toggle between active and inactive states. This flexibility ensures that you receive notifications only during relevant times, reducing the chances of alert fatigue and enhancing the effectiveness of your monitoring efforts.
 
-![](../../../.gitbook/assets/image-20240805-221911.png)
+![](<../../.gitbook/assets/image-20240805-221911 (1).png>)
 
 </details>
 
@@ -331,7 +331,7 @@ These pre-configured rules are fully customizable. You can easily add notificati
 
 You can customize your in-browser event notifications by clicking the gear icon in the event list. To access and customize notification settings, click **Alerts** in the left menu to open Notifications, then click the gear icon.
 
-![](../../../.gitbook/assets/image-20240814-041437.png)
+![](<../../.gitbook/assets/image-20240814-041437 (1).png>)
 
 * **Browser notifications:** Enable this to receive event alerts directly within your operating system's notification center (e.g., Windows Action Center). Your browser will prompt you to allow these notifications.
 * **Display notifications:** New events will appear as pop-up notifications in the upper right corner of the monitoring platform page.

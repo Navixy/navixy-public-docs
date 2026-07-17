@@ -55,12 +55,12 @@ Your device and Navixy account are ready for the integration!
 Before embedding, you need to create an API key for this integration in your Navixy account.
 
 1. In Navixy, go to **Account settings** → **API keys**.
-2. Click <img src="../../../.gitbook/assets/image-20250422-143344.png" alt="" data-size="line"> to add a new key.
+2. Click <img src="../../.gitbook/assets/image-20250422-143344 (1).png" alt="" data-size="line"> to add a new key.
 3. In the **Label** field, enter:\
    `Lightmetrics FleetID = [ID]`\
    \
    Replace **\[ID]** with the actual Fleet ID from Lightmetrics fleet. For example:\
-   ![](<../../../.gitbook/assets/image (23).png>)
+   ![](<../../.gitbook/assets/image (23) (1).png>)
 4. Click **Save** and keep this key available for the next step.
 
 For more details on creating an API key in Navixy, see [API keys](../account/api-keys.md).
@@ -80,7 +80,7 @@ Navixy offers [User applications](../account/user-applications/) functionality t
 {% endhint %}
 
 1. Create new application\
-   Start by clicking the <img src="../../../.gitbook/assets/1ed57d4def9c49d4937b1a90e4678765.jpg" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list.
+   Start by clicking the <img src="../../.gitbook/assets/1ed57d4def9c49d4937b1a90e4678765 (1).jpg" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list.
    1. Configure the new application
    2. Embedding is supported for separate menu elements of Lightmetrics dashboard ([full table of views and redirect paths](lightmetrics-integration-for-video-telematics.md#lightmetrics-views)). Put the link to the selected view of your Lightmetrics dashboard in the **App URL** field, and customize redirect path to define which Lightmetrics page opens after login by adding a `redirect_path` parameter.
       1. EU server - `video-telematics.eu.navixy.com/sso?access_token={session_key}&redirect_path=`<mark style="color:green;">`home`</mark>
@@ -94,7 +94,7 @@ Navixy offers [User applications](../account/user-applications/) functionality t
 {% hint style="success" %}
 Your new Lightmetrics application appears automatically in Navixy's left sidebar. Open it to access your comprehensive video telematics dashboard with AI-powered event detection, real-time driver coaching, multi-channel video feeds, and advanced safety analytics - all integrated with your existing Navixy fleet management tools.
 
-<img src="../../../.gitbook/assets/Lightmetrics-embedded.webp" alt="" data-size="original">
+<img src="../../.gitbook/assets/Lightmetrics-embedded (1).webp" alt="" data-size="original">
 {% endhint %}
 {% endstep %}
 {% endstepper %}

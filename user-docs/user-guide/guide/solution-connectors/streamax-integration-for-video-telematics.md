@@ -24,7 +24,7 @@ To establish the integration, you'll need to obtain API credentials from your St
    2. In the console, select the **Network** tab
    3. Open the **FTCloud** (your Streamax account) and go to **My subscription** page.
    4. In Network tab you will see `query?tenantId=....` - this is your `tenantId` which we will use for getting data via APIs. Copy the numeric value after "=".\
-      ![](../../../.gitbook/assets/TenantID.png)
+      ![](<../../.gitbook/assets/TenantID (1).png>)
 3. **Contact Navixy**: Once you have your API credentials, contact your Customer Success Manager or use [this form](https://www.navixy.com/contact/). Send a request to integrate Streamax with your Navixy account, containing the following information:
    1. Streamax connection details for your account
       1. **Full Streamax account URL**\
@@ -52,7 +52,7 @@ After receiving confirmation from our support team that the integration is ready
 2. Expand the **Device** section and select **Device Management**
 3. Copy the needed **Device ID** value
 
-<figure><img src="../../../.gitbook/assets/Streamax_DeviceID.webp" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Streamax_DeviceID (1).webp" alt=""><figcaption></figcaption></figure>
 
 To activate the device on Navixy's side, follow the usual activation procedure:
 
@@ -84,7 +84,7 @@ Navixy offers [User applications](../account/user-applications/) functionality t
 {% endhint %}
 
 1. Create new application\
-   Start by clicking the <img src="../../../.gitbook/assets/1ed57d4def9c49d4937b1a90e4678765.jpg" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list.
+   Start by clicking the <img src="../../.gitbook/assets/1ed57d4def9c49d4937b1a90e4678765 (1).jpg" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list.
 2. Configure the new application
    1. Put the link to your Streamax account in the **App URL** field, for example: `https://{your_instance}.ifleetvision.com/ftv/ft/dashboard#`.
    2. Enter a **Label** for the application (e.g., Streamax dashboard).
@@ -94,7 +94,7 @@ Navixy offers [User applications](../account/user-applications/) functionality t
 {% hint style="success" %}
 Your new application appears automatically in Navixy's left sidebar. Open it and log in with your Streamax credentials to access your comprehensive video telematics dashboard with 360° monitoring, AI-powered event detection, and multi-channel video feeds - all integrated with your existing Navixy fleet management tools.
 
-<img src="../../../.gitbook/assets/image-20250714-161156.png" alt="image-20250714-161156.png" data-size="original">
+<img src="../../.gitbook/assets/image-20250714-161156 (1).png" alt="image-20250714-161156.png" data-size="original">
 {% endhint %}
 {% endstep %}
 {% endstepper %}

@@ -8,11 +8,11 @@ description: >-
 
 To create a geo link, click **+** at the top of the page.
 
-![New geo link button](../../../.gitbook/assets/image-20250725-133824.png)
+![New geo link button](<../../.gitbook/assets/image-20250725-133824 (1).png>)
 
 The creation dialogue window contains the following options:
 
-![Creating a geo link dialog](../../../.gitbook/assets/image-20250725-120004.png)
+![Creating a geo link dialog](<../../.gitbook/assets/image-20250725-120004 (1).png>)
 
 {% stepper %}
 {% step %}
@@ -26,7 +26,7 @@ An information field that stores additional custom information about the link. T
 
 The list of objects available through the link. Each object has the following list of options to be specified upon adding the object:
 
-**Object:** The object to be tracked.
+**Object:** The object to be tracked. You can add up to 100 objects.
 
 **Label:** The specific label that is displayed in the geo link interface, overwriting the currently set label in the cabinet.
 
@@ -48,7 +48,7 @@ Sensor readings depend on the device’s model. To learn more about sensors and 
 
 Use the copy button to apply the same attribute list to all other objects in the geo link. This function may save a significant amount of time when configuring attributes for multiple objects.
 
-![Copying attributes](../../../.gitbook/assets/image-20250725-123905.png)
+![Copying attributes](<../../.gitbook/assets/image-20250725-123905 (1).png>)
 {% endstep %}
 
 {% step %}

@@ -15,7 +15,7 @@ description: >-
 {% endcolumn %}
 
 {% column width="41.666666666666664%" %}
-<figure><img src="../../../../../.gitbook/assets/Webhook-node.webp" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Webhook-node (1).webp" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -25,7 +25,7 @@ The node extends IoT Logic's capabilities beyond data processing and transmissio
 The webhook nodes are configured separately for each flow in the Navixy platform UI. Webhook nodes serve as terminal points in a flow and require at least one incoming connection to function. They cannot pass data to subsequent nodes.
 {% endhint %}
 
-<figure><img src="../../../../../.gitbook/assets/Webhook-in-flow.webp" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Webhook-in-flow (1).webp" alt=""><figcaption></figcaption></figure>
 
 ### How Webhook nodes work
 
@@ -66,7 +66,7 @@ The Webhook node allows you to define how your flow will communicate with extern
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/Webhook_node_edit.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Webhook_node_edit (1).png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 

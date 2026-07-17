@@ -8,13 +8,13 @@ description: >-
 
 {% columns %}
 {% column %}
-This screen displays all your assets: vehicles, staff, and objects (unassigned GPS devices). To view more information about any of your assets, tap its entry. To find a specific asset, tap <img src="../../../../.gitbook/assets/icon2.png" alt="Search" data-size="line"> and enter its name.
+This screen displays all your assets: vehicles, staff, and objects (unassigned GPS devices). To view more information about any of your assets, tap its entry. To find a specific asset, tap <img src="../../../.gitbook/assets/icon2 (1).png" alt="Search" data-size="line"> and enter its name.
 
 The icon to the right of each asset indicates its movement status, such as moving or parked.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (26).png" alt="Assets list"><figcaption><p>Assets list</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (26) (1).png" alt="Assets list"><figcaption><p>Assets list</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -22,7 +22,7 @@ The icon to the right of each asset indicates its movement status, such as movin
 
 {% columns %}
 {% column %}
-Tap <img src="../../../../.gitbook/assets/icon1.png" alt="Bell" data-size="line"> to view the events.
+Tap <img src="../../../.gitbook/assets/icon1 (1).png" alt="Bell" data-size="line"> to view the events.
 
 This screen shows various events occurring to your assets, such as leaving or entering a geofence, going idle, speeding, completing tasks, and more. To filter by category type, tap **All**, **Vehicles**, **Staff**, or **Objects**.
 
@@ -30,7 +30,7 @@ The second menu shows your current filters, all of which can be configured: time
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (2) (2) (1).png" alt=""><figcaption><p>Events</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2) (2) (1).png" alt=""><figcaption><p>Events</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -38,19 +38,19 @@ The second menu shows your current filters, all of which can be configured: time
 
 {% columns %}
 {% column %}
-Tap <img src="../../../../.gitbook/assets/icon4.png" alt="Map" data-size="line"> to open an interactive map displaying your assets.
+Tap <img src="../../../.gitbook/assets/icon4 (1).png" alt="Map" data-size="line"> to open an interactive map displaying your assets.
 
-You can zoom in and out and center the map on your own GPS coordinates. Tap the vehicle’s icon to follow its route and view its current status and location. Tap <img src="../../../../.gitbook/assets/icon4.png" alt="Map" data-size="line"> again to open the vehicle’s details.
+You can zoom in and out and center the map on your own GPS coordinates. Tap the vehicle’s icon to follow its route and view its current status and location. Tap <img src="../../../.gitbook/assets/icon4 (1).png" alt="Map" data-size="line"> again to open the vehicle’s details.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (3) (2) (1).png" alt=""><figcaption><p>Fullscreen map</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (3) (2) (1).png" alt=""><figcaption><p>Fullscreen map</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
-Tap <img src="../../../../.gitbook/assets/icon5.png" alt="Map options" data-size="line"> to display the map options menu:
+Tap <img src="../../../.gitbook/assets/icon5 (1).png" alt="Map options" data-size="line"> to display the map options menu:
 
-<table data-header-hidden><thead><tr><th valign="top"></th><th valign="top"></th><th valign="top"></th></tr></thead><tbody><tr><td valign="top"><img src="../../../../.gitbook/assets/image (4) (2) (1).png" alt="Places" data-size="original"></td><td valign="top"><img src="../../../../.gitbook/assets/image (5) (2) (1).png" alt="Geofences" data-size="original"></td><td valign="top"><img src="../../../../.gitbook/assets/image (6) (2) (1).png" alt="Map types" data-size="original"></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th valign="top"></th><th valign="top"></th><th valign="top"></th></tr></thead><tbody><tr><td valign="top"><img src="../../../.gitbook/assets/image (4) (2) (1).png" alt="Places" data-size="original"></td><td valign="top"><img src="../../../.gitbook/assets/image (5) (2) (1) (1).png" alt="Geofences" data-size="original"></td><td valign="top"><img src="../../../.gitbook/assets/image (6) (2) (1).png" alt="Map types" data-size="original"></td></tr></tbody></table>
 
 Here, you can select places (such as client locations for delivery), geofences, and map type. Note that map type selection is currently only available on Android devices.
 
@@ -62,10 +62,10 @@ The list has two filtering methods: by category and by status.
 
 To filter by category, tap **All**, **Vehicles**, **Staff**, or **Objects**.
 
-To filter by status (moving, stopped, parked, idling, and offline), tap <img src="../../../../.gitbook/assets/Untitled (4).png" alt="" data-size="line"> to open the **Filter & Sorting** menu. In addition to filtering, this menu also allows sorting assets by name.
+To filter by status (moving, stopped, parked, idling, and offline), tap <img src="../../../.gitbook/assets/Untitled (4) (1).png" alt="" data-size="line"> to open the **Filter & Sorting** menu. In addition to filtering, this menu also allows sorting assets by name.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image-20250404-102956.png" alt="Filter &#x26; sorting"><figcaption><p>Filter &#x26; sorting</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image-20250404-102956 (1).png" alt="Filter &#x26; sorting"><figcaption><p>Filter &#x26; sorting</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}

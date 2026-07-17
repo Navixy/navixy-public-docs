@@ -16,7 +16,7 @@ Without a custom flow, device data travels directly to the Navixy platform witho
 
 With a custom flow, data enters through a **Data Source** node, passes through any processing nodes you have configured, and exits through a **Default Output Endpoint** node to reach the platform. This path lets you enrich, filter, and route data before it arrives. When a device is assigned to a custom flow, both paths run simultaneously: the custom flow handles processing, while Navixy independently ensures the raw data reaches the platform regardless.
 
-<figure><img src="../../../../../.gitbook/assets/data-flow-paths-custom-and-default.png" alt="Diagram showing two parallel data flow paths to the Navixy platform. Without a custom flow, device data goes directly to the Navixy platform with no processing. With a custom flow, device data passes through Data Source, optional Processing nodes, and Output Endpoint before reaching the Navixy platform. Both paths run simultaneously when a device is assigned to a custom flow."><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/data-flow-paths-custom-and-default (1).png" alt="Diagram showing two parallel data flow paths to the Navixy platform. Without a custom flow, device data goes directly to the Navixy platform with no processing. With a custom flow, device data passes through Data Source, optional Processing nodes, and Output Endpoint before reaching the Navixy platform. Both paths run simultaneously when a device is assigned to a custom flow."><figcaption></figcaption></figure>
 
 {% hint style="danger" %}
 Disabling a custom flow stops all data transmission for the devices assigned to it. The automatic system coverage doesn't substitute for a disabled flow. Re-enable the flow to restore data transmission for the affected devices.
@@ -30,7 +30,7 @@ The **Default Output Endpoint** node provides a pre-configured destination for s
 {% endcolumn %}
 
 {% column %}
-<div align="right"><figure><img src="../../../../../.gitbook/assets/image-20250403-151042 (3).png" alt="Navixy Default output endpoint node"><figcaption></figcaption></figure></div>
+<div align="right"><figure><img src="../../../../.gitbook/assets/image-20250403-151042 (3) (1).png" alt="Navixy Default output endpoint node"><figcaption></figcaption></figure></div>
 {% endcolumn %}
 {% endcolumns %}
 

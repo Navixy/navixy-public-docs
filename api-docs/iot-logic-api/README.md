@@ -37,7 +37,7 @@ Key characteristics of flows:
 
 * Flows can be enabled or disabled to control data processing
 * Every flow requires at least one data source and one output endpoint
-* Each device can only be assigned to one flow at a time
+* A device can belong to multiple flows at the same time. Flows that include the same device all process its data simultaneously, results merge rather than one flow excluding another. See [Connector configuration](technical-details/nodes.md#connector-configuration) for a case where this matters: two flows pushing the same attribute name to a shared device can silently overwrite each other
 * Flows process data in real-time as it arrives from devices
 
 #### Nodes

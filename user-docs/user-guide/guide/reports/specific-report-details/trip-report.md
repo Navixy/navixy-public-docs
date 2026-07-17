@@ -10,7 +10,7 @@ The **Trips report** in Navixy provides a comprehensive analysis of your vehicle
 
 It details each journey taken by your vehicles, including start and end times, distances, speeds, and fuel consumption. The report also offers a summary of all trips during the selected period, allowing for an easy overview of vehicle performance.
 
-<figure><img src="../../../../.gitbook/assets/image (45) (1).png" alt="Trips report example"><figcaption><p>Trips report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (45) (1).png" alt="Trips report example"><figcaption><p>Trips report</p></figcaption></figure>
 
 ## Trips report use cases
 

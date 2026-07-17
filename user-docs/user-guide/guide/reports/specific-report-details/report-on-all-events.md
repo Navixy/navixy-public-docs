@@ -10,7 +10,7 @@ The **Report on all events** in Navixy is a comprehensive tool that provides a d
 
 This report is particularly valuable when there is a need to monitor device activity over a specified period, analyze event patterns, and document specific incidents.
 
-<figure><img src="../../../../.gitbook/assets/image (14) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (14) (3).png" alt=""><figcaption></figcaption></figure>
 
 The report on all events includes the following features:
 
@@ -61,7 +61,7 @@ Over 80 event types are available for selection. These examples cover some of th
 
 ### Events table
 
-<figure><img src="../../../../.gitbook/assets/image (13) (3).png" alt="Events table"><figcaption><p>Events table</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (13) (3).png" alt="Events table"><figcaption><p>Events table</p></figcaption></figure>
 
 The **events table** provides a detailed list of all events, including:
 
@@ -77,7 +77,7 @@ If the event's location was determined approximately (e.g., via cell towers rath
 
 ### Event distribution graph
 
-<figure><img src="../../../../.gitbook/assets/image (15) (2).png" alt="Event distribution graph"><figcaption><p>Event distribution graph</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (15) (2).png" alt="Event distribution graph"><figcaption><p>Event distribution graph</p></figcaption></figure>
 
 The event distribution graph plots each individual event as a point on a timeline. Each selected event type is shown as a separate series, making it easy to see clusters of activity and correlations between different event types.
 

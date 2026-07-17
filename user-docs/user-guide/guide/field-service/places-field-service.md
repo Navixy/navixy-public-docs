@@ -11,7 +11,7 @@ description: >-
 
 The page contains the list of all available Places along with their details, including custom fields you've added.
 
-<figure><img src="../../../.gitbook/assets/image-20240816-174653.png" alt="Places page"><figcaption><p>Places page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image-20240816-174653 (1).png" alt="Places page"><figcaption><p>Places page</p></figcaption></figure>
 
 ## How to create a Place
 
@@ -31,7 +31,7 @@ Click **+** to open the place creation dialogue.
 {% step %}
 #### Enter Place details
 
-<figure><img src="../../../.gitbook/assets/image-20240816-175137.png" alt="Creating a Place" width="563"><figcaption><p>Creating a Place</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image-20240816-175137 (1).png" alt="Creating a Place" width="563"><figcaption><p>Creating a Place</p></figcaption></figure>
 
 Enter the Place's label, address, and radius. You can also add a description, tags, and a file.
 {% endstep %}

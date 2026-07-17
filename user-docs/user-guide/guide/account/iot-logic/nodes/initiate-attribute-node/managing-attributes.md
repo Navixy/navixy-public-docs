@@ -66,7 +66,7 @@ When creating calculation formulas, you need to reference existing attribute nam
 
 To use autofill when building formulas:
 
-1. Click ![image-20250605-130755.png](../../../../../../.gitbook/assets/image-20250605-130755.png) in the **Formula** field.
+1. Click ![image-20250605-130755.png](<../../../../../.gitbook/assets/image-20250605-130755 (1).png>) in the **Formula** field.
 2. Select the desired attribute from the appeared list, it supports manual text input for search purposes.
 3. Click on the attribute name to insert it into your formula.
 
@@ -94,7 +94,7 @@ For example, if you need to work with voltage readings from the third analog inp
 
 Autofill handles this scenario for you as well:
 
-* Indexed attributes are marked with ![image-20250606-123725.png](../../../../../../.gitbook/assets/image-20250606-123725.png) icon in the autofill list.
+* Indexed attributes are marked with ![image-20250606-123725.png](<../../../../../.gitbook/assets/image-20250606-123725 (1).png>) icon in the autofill list.
 * These entries display the available index range in square brackets, such as `analog_[1..4]` for attributes supporting five indexed values (indexes 1 through 4).
 * When you select an indexed attribute, the cursor automatically positions at the end of the attribute name within the quotes, allowing you to immediately type the specific index number you need.
 
@@ -176,7 +176,7 @@ When you edit an attribute, the changes will only apply to new data received aft
 To remove an attribute that is no longer needed:
 
 1. Open the node configuration window by hovering your mouse over the node to display quick actions, or double-clicking the node
-2. Find the attribute you wish to remove and click <img src="../../../../../../.gitbook/assets/image (12) (2) (1).png" alt="" data-size="line">
+2. Find the attribute you wish to remove and click <img src="../../../../../.gitbook/assets/image (12) (2) (1).png" alt="" data-size="line">
 3. Click **Apply changes** to confirm the node configuration
 
 {% hint style="info" %}

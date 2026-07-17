@@ -15,13 +15,13 @@ In IoT Logic, **Initiate Attribute** node transforms device readings by creating
 {% endcolumn %}
 
 {% column %}
-![](../../../../../../.gitbook/assets/image-20250404-083140.png)
+![](<../../../../../.gitbook/assets/image-20250404-083140 (1).png>)
 {% endcolumn %}
 {% endcolumns %}
 
 **Initiate Attribute** node is configured for each flow in the Navixy platform UI. For specific syntax options and detailed expression language reference, see [Navixy Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language) in the user documentation.
 
-<figure><img src="../../../../../../.gitbook/assets/Initiate-attribute-in-flow.webp" alt="Initiate attribute node in the flow workspace showing the node connected to other nodes in the flow"><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/Initiate-attribute-in-flow (1).webp" alt="Initiate attribute node in the flow workspace showing the node connected to other nodes in the flow"><figcaption></figcaption></figure>
 
 ### Flow architecture integration
 
@@ -54,7 +54,7 @@ The **Initiate Attribute** node by itself offers:
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../../.gitbook/assets/Initiate_Attribute_node_edit.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/Initiate_Attribute_node_edit (1).png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -84,7 +84,7 @@ Add a distinctive identifier of the attribute.
 Add mathematical expressions to calculate attribute values.
 
 * Use `value('parameter_name' 0, 'valid')` format to reference existing device parameters.\
-  **Note**. Click ![image-20250605-115154.png](../../../../../../.gitbook/assets/image-20250605-115154.png) inside the **Formula** field to open the list of available attributes and select the needed one. It will be added to the field automatically in the ready-to-use format. For details on autofilling attribute names, see [Autofill attribute names](managing-attributes.md#autofill-attribute-names).
+  **Note**. Click ![image-20250605-115154.png](<../../../../../.gitbook/assets/image-20250605-115154 (1).png>) inside the **Formula** field to open the list of available attributes and select the needed one. It will be added to the field automatically in the ready-to-use format. For details on autofilling attribute names, see [Autofill attribute names](managing-attributes.md#autofill-attribute-names).
 * Apply mathematical operations based on [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language) to transform values.
 * Use different depth index values to access historical values (the default is 0).
 {% endstep %}
@@ -114,7 +114,7 @@ Also, you can find a detailed example of using calculated attributes in a flow i
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../../.gitbook/assets/Iitiate_Attribute_example.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/Iitiate_Attribute_example (1).png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -157,7 +157,7 @@ The attribute is no longer calculated for newly received data, but historical da
 
 Yes. Attributes created earlier in the flow can be referenced in subsequent **Initiate Attribute** nodes, allowing for multi-stage calculations. All created attributes are also available using the [autofill feature](managing-attributes.md#autofill-attribute-names) to ensure correct naming.
 
-<figure><img src="../../../../../../.gitbook/assets/image-20250404-084039.png" alt="Example of a complete flow with two Initiate attribute nodes consecutively"><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/image-20250404-084039 (1).png" alt="Example of a complete flow with two Initiate attribute nodes consecutively"><figcaption></figcaption></figure>
 
 ### How do I avoid typos when referencing attribute names in formulas?
 

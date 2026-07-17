@@ -12,7 +12,7 @@ Choose this report type if your primary concern is detecting fuel theft or unexp
 
 For a simpler, configuration-free alternative that focuses on refueling events and uses automated data processing, see the [Fuel volume 2.0 report](fuel-volume-2.0-report.md).
 
-<figure><img src="../../../../.gitbook/assets/image (49) (1).png" alt="Fuel volume report"><figcaption><p>Fuel volume report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (49) (1).png" alt="Fuel volume report"><figcaption><p>Fuel volume report</p></figcaption></figure>
 
 The **Fuel volume report** is composed of the following sections:
 

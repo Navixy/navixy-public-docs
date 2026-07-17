@@ -8,7 +8,7 @@ description: >-
 
 The users of the organization’s account include the **owner** and the **users**. The owner is the main account holder with full control and administrative rights, while users are additional accounts with specific roles and permissions assigned by the owner.
 
-<figure><img src="../../../../.gitbook/assets/image (47) (1).png" alt="User administration page in Account settings. Shows an owner and a user account."><figcaption><p>User administration</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (47) (1).png" alt="User administration page in Account settings. Shows an owner and a user account."><figcaption><p>User administration</p></figcaption></figure>
 
 ## Owner and users
 
@@ -29,7 +29,7 @@ Users are additional accounts granted access by the owner. As a subordinate acco
 
 To add a new user or edit the list of users, navigate to **Account Settings** → **Users** **and Roles** in the main menu.
 
-<figure><img src="../../../../.gitbook/assets/image-20240718-041947.png" alt="New user creation menu in User administration"><figcaption><p>User creation dialogue</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image-20240718-041947 (1).png" alt="New user creation menu in User administration"><figcaption><p>User creation dialogue</p></figcaption></figure>
 
 1. **To add a new user**:
 

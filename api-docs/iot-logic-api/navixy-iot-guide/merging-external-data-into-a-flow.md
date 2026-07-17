@@ -6,6 +6,13 @@ description: Configure the Data Source node's connector fields to merge readings
 
 This guide configures a Data Source node's connector so that data from an external system, one that doesn't use Navixy's native protocols, merges into the stream of a device you already have in your account. The example connects two GPS devices already feeding a flow to a separate battery management system that reports state of charge and temperature for the same vehicles.
 
+This guide walks through the scenario in four steps:
+
+1. [Prerequisites](#prerequisites): confirm which devices already feed the flow, skip this if you already know.
+2. [Adding the connector to your Data Source node](#adding-the-connector-to-your-data-source-node).
+3. [Getting the push URL](#getting-the-push-url) for that node.
+4. [Sending a push](#sending-a-push) and confirming it merged.
+
 For the full field reference, see [Connector configuration](../technical-details/nodes.md#connector-configuration).
 
 ## Prerequisites
@@ -93,7 +100,11 @@ curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/update" \
 
 ## Getting the push URL
 
-Read the flow back to get the URL Navixy generated for this node:
+No endpoint returns this URL directly, not `flow/read` or any other. Assemble it yourself from two pieces: the flow ID and node ID, and a domain to reach the push endpoint through.
+
+### Flow ID and node ID
+
+You already have these from the steps above: flow `42`, Data Source node `1`. If you need to look them up again later, `flow/read` returns them as `value.id` and `value.nodes[].id`, it just never returns a `url` field alongside them:
 
 {% openapi-operation spec="iot-logic" path="/iot/logic/flow/read" method="get" %}
 [OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
@@ -104,8 +115,6 @@ curl -X GET "https://api.eu.navixy.com/v2/iot/logic/flow/read?flow_id=42" \
   -H "Authorization: NVX your_api_key" \
   -H "Content-Type: application/json"
 ```
-
-The Data Source node's `data.url` field now holds the push URL:
 
 ```json
 {
@@ -122,7 +131,6 @@ The Data Source node's `data.url` field now holds the push URL:
           "title": "Fleet vehicles",
           "source_ids": [987654, 987655],
           "push_type": "http",
-          "url": "https://api.eu.navixy.com/iot/logic/flow/push?flow_id=42&node_id=1",
           "primary_key": "vehicle_id",
           "mappings": [
             { "source_id": 987654, "primary_key_value": "truck_12" },
@@ -148,16 +156,50 @@ The Data Source node's `data.url` field now holds the push URL:
 }
 ```
 
-Give this URL to the battery management system, or whatever external system will send the data.
+### Domain: regional API server (recommended)
+
+Reuse the same regional domain every other call in this guide already goes through, `api.eu.navixy.com` or `api.us.navixy.com`. No extra request needed:
+
+`https://api.eu.navixy.com/v2/iot/logic/flow/push?flow_id=<flow_id>&node_id=<node_id>` (or `api.us.navixy.com` on the American platform)
+
+For this example: `https://api.eu.navixy.com/v2/iot/logic/flow/push?flow_id=42&node_id=1`.
+
+### Domain: account web application (alternative)
+
+If you'd rather match the URL the flow builder UI shows on the node's Software tab, use your account's own web application domain instead, for example `demo.navixy.com`, or a custom domain if your organization configured one. This needs one more call: `user/get_info` on the [User API](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/commons/user/index#get_info), same API key as everything else in this guide:
+
+```bash
+curl -X GET "https://api.eu.navixy.com/v2/user/get_info" \
+  -H "Authorization: NVX your_api_key"
+```
+
+```json
+{
+  "success": true,
+  "paas_settings": {
+    "domain": "demo.navixy.com"
+  }
+}
+```
+
+`paas_settings.domain` is your account's web application domain. Note the path prefix is `/api-v2/` here, not `/v2/`:
+
+`https://<paas_settings.domain>/api-v2/iot/logic/flow/push?flow_id=<flow_id>&node_id=<node_id>`
+
+For this example: `https://demo.navixy.com/api-v2/iot/logic/flow/push?flow_id=42&node_id=1`.
+
+Give either URL to the battery management system, or whatever external system will send the data.
 
 ## Sending a push
+
+The URL you built above already carries `flow_id` and `node_id` as query parameters, an external system posting to it doesn't need to repeat them in the request body. If you're sending the request yourself rather than handing the URL to another system, `flow_id` and `node_id` work equally well in the JSON body instead, as shown here, both conventions reach the same endpoint.
 
 {% openapi-operation spec="iot-logic" path="/iot/logic/flow/push" method="post" %}
 [OpenAPI iot-logic](../resources/api-reference/IoT_Logic.json)
 {% endopenapi-operation %}
 
 ```bash
-curl -X POST "https://api.eu.navixy.com/iot/logic/flow/push" \
+curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/push" \
   -H "Authorization: NVX your_api_key" \
   -H "Content-Type: application/json" \
   -d '{

@@ -154,7 +154,7 @@ This ensures that the raw data is sent to Navixy directly from the devices, with
 
 Your final configuration will look like this:
 
-<figure><img src="../../../../../.gitbook/assets/image-20250407-203757.png" alt="Complete flow configuration with all nodes connected in IoT Logic workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20250407-203757 (1).png" alt="Complete flow configuration with all nodes connected in IoT Logic workspace"><figcaption></figcaption></figure>
 
 Click the **Save flow** button on the **Nodes** pane to store your flow configuration.
 {% endstep %}
@@ -166,7 +166,7 @@ Use [Data Stream Analyzer (DSA)](../data-stream-analyzer.md) to monitor incoming
 * Devices are sending data to the flow
 * Calculations are working as expected
 * Data is being forwarded to the destination For example, let’s check that speed conversions are calulated correctly on a truck. To do it in DSA, select the **Volvo** device and attributes **speed** and **speed\_mph**:\
-  <img src="../../../../../.gitbook/assets/image-20250407-204530.png" alt="Speed attributes for one device in Data Stream Analyzer" data-size="original">
+  <img src="../../../../.gitbook/assets/image-20250407-204530 (1).png" alt="Speed attributes for one device in Data Stream Analyzer" data-size="original">
 
 All good! Data is received and converted successfully.
 {% endhint %}

@@ -15,7 +15,7 @@ description: >-
 {% endcolumn %}
 
 {% column %}
-![](../../../../../.gitbook/assets/image-20250407-210332.png)
+![](<../../../../.gitbook/assets/image-20250407-210332 (1).png>)
 {% endcolumn %}
 {% endcolumns %}
 
@@ -23,7 +23,7 @@ For details on the format in which data is transmitted, see [Output data format]
 
 ### Flow architecture integration
 
-<figure><img src="../../../../../.gitbook/assets/Output-endpoint-in-flow.webp" alt="Output Endpoint node in the flow workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Output-endpoint-in-flow (1).webp" alt="Output Endpoint node in the flow workspace"><figcaption></figcaption></figure>
 
 A single IoT Logic flow can contain multiple output nodes, each with independent configurations. This architecture enables:
 
@@ -53,7 +53,7 @@ Setting up an **Output endpoint node** determines how and where data will be del
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/Output_Endpoint_node_edit.png" alt="" width="236"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Output_Endpoint_node_edit (1).png" alt="" width="236"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -141,7 +141,7 @@ The node implements MQTT as the transport protocol for this standardized JSON pa
 
 Yes. The **Output Endpoint** node accepts inputs from multiple **Data Source** nodes simultaneously. All processed data, including location coordinates, device identifiers, telemetry parameters, and calculated attributes, is serialized according to the [Navixy Generic Protocol](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-generic-protocol) specification before transmission.
 
-<figure><img src="../../../../../.gitbook/assets/image-20250404-105858.png" alt="Example flow showing multiple Data Sources connected to a single Output Endpoint"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20250404-105858 (1).png" alt="Example flow showing multiple Data Sources connected to a single Output Endpoint"><figcaption></figcaption></figure>
 
 ### What happens if I modify an endpoint that's used in multiple flows?
 

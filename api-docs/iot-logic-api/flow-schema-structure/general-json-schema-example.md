@@ -149,11 +149,6 @@ Here's an example of a JSON structure describing a complete flow.
               "enum": ["http"],
               "examples": ["http"]
             },
-            "url": {
-              "type": "string",
-              "description": "Server-generated push URL for POST /iot/logic/flow/push. Read-only, present only after the flow is saved with push_type set",
-              "examples": ["https://api.eu.navixy.com/iot/logic/flow/push?flow_id=42&node_id=1"]
-            },
             "primary_key": {
               "type": "string",
               "description": "Name of the field that identifies the target device in an inbound push. Required together with mappings",

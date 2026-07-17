@@ -126,6 +126,10 @@ Response example:
 }
 ```
 
+{% hint style="warning" %}
+Calculated attribute names like `engine_temp_fahrenheit` and `average_speed_kmh` above must be unique across your entire account, not just within this flow. Reusing a name already defined in another flow is rejected at save time with a `292` `IoT Flow Invalid` error that names the conflicting flow. See [Initiate Attribute node](../technical-details/nodes.md#initiate-attribute-node-initiate_attributes) for details.
+{% endhint %}
+
 ### Step 3: Create measurement sensors in Navixy UI
 
 Now create sensors that correspond to your calculated attributes. These sensors will make the calculated data visible in the Navixy platform UI.

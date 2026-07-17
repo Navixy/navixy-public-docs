@@ -58,7 +58,7 @@ For `value()` function details, see [IF/THEN Logic expressions and syntax](logic
 
 ## How to add a geofence condition
 
-The expression field in the **IF/THEN Logic** node configuration panel includes a dedicated geofence selector <img src="../../../../../../.gitbook/assets/geofence-picker.png" alt="" data-size="line">, separate from the standard [attribute autocomplete](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names). It lists all geofences defined in your Navixy account, grouped by name and ID.
+The expression field in the **IF/THEN Logic** node configuration panel includes a dedicated geofence selector <img src="../../../../../.gitbook/assets/geofence-picker (1).png" alt="" data-size="line">, separate from the standard [attribute autocomplete](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names). It lists all geofences defined in your Navixy account, grouped by name and ID.
 
 To add a geofence function to your expression:
 
@@ -74,7 +74,7 @@ Open the **IF/THEN Logic** node by clicking it on the canvas.
 
 In the **Condition expression (JEXL)** field, click the geofence picker icon to open the geofence list.
 
-<figure><img src="../../../../../../.gitbook/assets/geofence-picker-list.png" alt="Geofence picker list example, with all three options (in, enter, leave geofence)"><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/geofence-picker-list (1).png" alt="Geofence picker list example, with all three options (in, enter, leave geofence)"><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}

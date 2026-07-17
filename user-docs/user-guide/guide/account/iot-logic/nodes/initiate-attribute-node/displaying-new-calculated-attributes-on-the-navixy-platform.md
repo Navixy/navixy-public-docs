@@ -30,11 +30,11 @@ To monitor calculated attributes in DSA:
 1. Create an attribute in an **Initiate Attribute** node.\
    For this example, let’s take a simple formula to convert temperature from C° to F° and save it to an attribute with the name _temperatureF_.
 2. Make sure to connect this **Initiate Attribute** to an **Output Endpoint** node.
-3. Click ![DATA\_ANALYZER.png](../../../../../../.gitbook/assets/DATA_ANALYZER.png) to open DSA.
+3. Click ![DATA\_ANALYZER.png](<../../../../../.gitbook/assets/DATA_ANALYZER (1).png>) to open DSA.
 4. Select a device that sends data to the **Initiate Attribute** node containing the attribute of interest from the **Devices** list.
 5. Find the attribute in the table and monitor its values. For our example, it should look like this:
 
-<figure><img src="../../../../../../.gitbook/assets/calculated-attribute-in-DSA.webp" alt="Newly created attribute temperatureF in the Data Stream Analyzer table"><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/calculated-attribute-in-DSA (1).webp" alt="Newly created attribute temperatureF in the Data Stream Analyzer table"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 If your calculated attribute doesn't appear in DSA, verify that:
@@ -64,11 +64,11 @@ To make calculated attributes visible in the [Tracking](../../../../tracking/) m
 A custom sensor must be added individually to each device. To add the same attribute to multiple devices, repeat these steps for each of them.
 {% endhint %}
 
-![](../../../../../../.gitbook/assets/Initiate-attribute-config.png)
+![](<../../../../../.gitbook/assets/Initiate-attribute-config (1).png>)
 
 1. Go to **Devices and Settings** menu in the left sidebar.
 2. Select the device you want to add a new sensor to.
-3. Click <img src="../../../../../../.gitbook/assets/image-20250422-143344.png" alt="image-20250422-143344.png" data-size="line"> In **Sensors and buttons** section, then select one of the options:
+3. Click <img src="../../../../../.gitbook/assets/image-20250422-143344 (1).png" alt="image-20250422-143344.png" data-size="line"> In **Sensors and buttons** section, then select one of the options:
    1. **Measurement/IoT Logic sensor** - for numeric attributes only, like speed, temperature, etc.
    2. **Virtual/IoT Logic sensor** - for any other non-numeric attribute values.
 4. Fill in the following fields in the **Main** tab:
@@ -86,7 +86,7 @@ A custom sensor must be added individually to each device. To add the same attri
 
 {% hint style="success" %}
 After saving, the new custom parameter appears automatically in the **Sensor readings** data block of **Object widget**. For example, we added a custom **TempDelta** parameter:\
-![image-20250702-132535.png](../../../../../../.gitbook/assets/image-20250702-132535.png)
+![image-20250702-132535.png](<../../../../../.gitbook/assets/image-20250702-132535 (1).png>)
 {% endhint %}
 
 ### Adding a custom attribute to object list

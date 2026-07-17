@@ -17,7 +17,7 @@ Follow these steps to learn how to work with X-GPS Mobile.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (1) (1) (1) (1) (3).png" alt="X-GPS Mobile in Google Play"><figcaption><p>Search screen</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1) (1) (1) (3).png" alt="X-GPS Mobile in Google Play"><figcaption><p>Search screen</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -28,11 +28,11 @@ Follow these steps to learn how to work with X-GPS Mobile.
 1. Open the app.
 2. Enter your username and password and tap **Sign in**.
 3. If required, enter your server URL (by default, the Navixy server is used). Alternatively, use a QR code to bypass entering the URL and automatically configure your settings.\
-   To view the QR code, click the <img src="../../../../.gitbook/assets/image (34).png" alt="" data-size="line">button under the Navixy platform's [login form](https://tracking.navixy.com/).
+   To view the QR code, click the <img src="../../../.gitbook/assets/image (34) (1).png" alt="" data-size="line">button under the Navixy platform's [login form](https://tracking.navixy.com/).
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/Untitled (2).jpg" alt="Login screen" width="301"><figcaption><p>Login screen</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Untitled (2) (1).jpg" alt="Login screen" width="301"><figcaption><p>Login screen</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -48,7 +48,7 @@ Allow the app to send you notifications and access the device’s location while
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/allow.jpg" alt="Permission prompt"><figcaption><p>Permission prompt</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/allow (1).jpg" alt="Permission prompt"><figcaption><p>Permission prompt</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -62,19 +62,19 @@ You can filter them by category or status (moving, parked, etc.) and sort them b
 
 To sort or filter the list of assets and access the monitoring tools, tap the icons in the top-right corner:
 
-![](<../../../../.gitbook/assets/Untitled (2).png>) Allows you to enter a search query
+![](<../../../.gitbook/assets/Untitled (2) (1).png>) Allows you to enter a search query
 
-![](<../../../../.gitbook/assets/Untitled (3).png>) Opens the [event log ](https://squaregps.atlassian.net/wiki/spaces/~7120201a6252f8d34242e3bdb7409b5d34d953/pages/3182821465/new+Assets+list#events-list)for all units
+![](<../../../.gitbook/assets/Untitled (3) (1).png>) Opens the [event log ](https://squaregps.atlassian.net/wiki/spaces/~7120201a6252f8d34242e3bdb7409b5d34d953/pages/3182821465/new+Assets+list#events-list)for all units
 
-![](<../../../../.gitbook/assets/Untitled (4).png>) Opens the [filtering and sorting](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#sorting-and-filtering) menu
+![](<../../../.gitbook/assets/Untitled (4) (1).png>) Opens the [filtering and sorting](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#sorting-and-filtering) menu
 
-![](<../../../../.gitbook/assets/Untitled (5).png>) Opens the [map screen](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#map-fullscreen)
+![](<../../../.gitbook/assets/Untitled (5) (1).png>) Opens the [map screen](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#map-fullscreen)
 
 Use the bottom panel to switch between the main screen and your profile.
 {% endcolumn %}
 
 {% column width="50%" %}
-<figure><img src="../../../../.gitbook/assets/image (26).png" alt="Assets list"><figcaption><p>Assets list</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (26) (1).png" alt="Assets list"><figcaption><p>Assets list</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -86,6 +86,6 @@ Tap on an asset to view its location, status, trip and event history, sensors, r
 {% endcolumn %}
 
 {% column width="50%" %}
-<figure><img src="../../../../.gitbook/assets/image (1) (2) (1) (1).png" alt=""><figcaption><p>Asset information</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (2) (1) (1) (1).png" alt=""><figcaption><p>Asset information</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}

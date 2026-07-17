@@ -12,7 +12,7 @@ This rule is specifically designed for the use of measurement sensors and serves
 
 ## Settings
 
-![](../../../../.gitbook/assets/image-20230706-064405.png)
+![](<../../../.gitbook/assets/image-20230706-064405 (1).png>)
 
 **Sensor:**
 
@@ -41,7 +41,7 @@ Case#2, From the **OUT** to the **IN** state:
 
 Whenever the event (the rule) is in the **OUT** range state, this state only changes to the **IN** range when the incoming value hits **in range** (#**1**) but outside the inner buffers (#**2**).
 
-![](../../../../.gitbook/assets/image-20230706-064540.png)
+![](<../../../.gitbook/assets/image-20230706-064540 (1).png>)
 
 If the "Value threshold" parameter isn't specified, it becomes equal to 0.03 (absolute value) by default. So, as for the example above, the buffers' space would be from 9.97 to 10, from 10 to 10.03, from 23.97 to 24, and from 24 to 24.03.
 
@@ -111,8 +111,8 @@ Set a schedule for when the rule runs. If your schedule indicates that the event
 
 To view the dates when the events were received, you can build the **Report on all events** report.
 
-![](../../../../.gitbook/assets/image-20230706-064944.png)
+![](<../../../.gitbook/assets/image-20230706-064944 (1).png>)
 
-![](../../../../.gitbook/assets/image-20230706-065349.png)
+![](<../../../.gitbook/assets/image-20230706-065349 (1).png>)
 
 For a graphical representation of a measurement sensor usage over a period of time, use the **Measuring sensors** report.

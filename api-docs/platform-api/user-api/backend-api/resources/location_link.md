@@ -1,11 +1,11 @@
 ---
 title: Geo Links
-description: API calls for working with Geo Links.
+description: API calls for working with geo links.
 ---
 
-# Geo Links
+# Geo links
 
-API calls for working with Geo Links. These are special sessions to share the location of mobile objects.\
+API calls for working with geo links. These are special sessions to share the location of mobile objects.\
 This is a new API replacing Weblocator.
 
 ## API actions
@@ -14,18 +14,13 @@ API path: `/tracker/location/link`.
 
 ### create
 
-Creates new Geo Link. There may be up to 10000 geo-links per user account.
+Creates a new geo link. You can have up to 10,000 geo links per user account.
 
-**required sub-user rights**: `weblocator_session_create`.
+**Required sub-user rights**: `weblocator_session_create`.
 
 #### Parameters
 
-| name        | description                                           | type                  | restrictions                                |
-| ----------- | ----------------------------------------------------- | --------------------- | ------------------------------------------- |
-| lifetime    | Start and end of the session.                         | JSON object           | Optional.                                   |
-| description | Link's description.                                   | string                | Only printable characters. Max length: 255. |
-| trackers    | List of tracker IDs with parameters for each tracker. | array of JSON objects | Allowed length 1 to 100.                    |
-| params      | Link parameters.                                      | JSON object           |                                             |
+<table><thead><tr><th width="146">name</th><th width="184">description</th><th width="169">type</th><th>restrictions</th></tr></thead><tbody><tr><td>lifetime</td><td>Start and end of the session.</td><td>JSON object</td><td>Optional.</td></tr><tr><td>description</td><td>Link's description.</td><td>string</td><td>Only printable characters. Max length: 255.</td></tr><tr><td>trackers</td><td>List of tracker IDs with parameters for each tracker.</td><td>array of JSON objects</td><td>Allowed length 1 to 100. You can't add more than 100 trackers to a link.</td></tr><tr><td>params</td><td>Link parameters.</td><td>JSON object</td><td></td></tr></tbody></table>
 
 **lifetime object**
 

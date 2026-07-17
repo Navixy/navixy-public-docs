@@ -109,7 +109,7 @@
         * [Geofence point](user-api/backend-api/resources/tracking/zone/zone_point.md)
       * [Asset](user-api/backend-api/resources/tracking/asset/README.md)
         * [Asset groups](user-api/backend-api/resources/tracking/asset/asset-groups.md)
-    * [Geo Links](user-api/backend-api/resources/location_link.md)
+    * [Geo links](user-api/backend-api/resources/location_link.md)
     * [Billing](user-api/backend-api/resources/billing/README.md)
       * [Bill](user-api/backend-api/resources/billing/bill.md)
       * [Payment system](user-api/backend-api/resources/billing/payment_system.md)

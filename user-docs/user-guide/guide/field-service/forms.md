@@ -8,13 +8,13 @@ description: >-
 
 **Forms** are electronic documents that can be attached to tasks, allowing employees to submit task results directly through the [X-GPS Tracker](../x-gps-mobile-apps/x-gps-tracker/) mobile app. These forms can include various types of fields such as text fields for client orders, inspection reports, and media sections for uploading photos and videos.
 
-<figure><img src="../../../.gitbook/assets/image (9) (2) (1).png" alt="Forms page"><figcaption><p>Forms page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (9) (2) (1).png" alt="Forms page"><figcaption><p>Forms page</p></figcaption></figure>
 
 {% embed url="https://youtu.be/FaHJU_EEkUU" %}
 
 ## How to create a form
 
-<figure><img src="../../../.gitbook/assets/image-20240816-160834.png" alt="Form creation dialogue"><figcaption><p>Creating a new form</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image-20240816-160834 (1).png" alt="Form creation dialogue"><figcaption><p>Creating a new form</p></figcaption></figure>
 
 To create a form in Navixy, follow the steps below. This process allows you to create as many forms as needed, ensuring they are tailored to the tasks your employees perform.
 
@@ -49,11 +49,11 @@ Two toggles are available when creating a form:
 
 After saving, the created forms can be accessed through the form list.
 
-![List of created forms](../../../.gitbook/assets/image-20240816-155915.png)
+![List of created forms](<../../.gitbook/assets/image-20240816-155915 (1).png>)
 
 ## How to attach a form to a task
 
-<figure><img src="../../../.gitbook/assets/image (3) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (3) (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 To attach a form to a task, follow these steps:
 
@@ -108,21 +108,21 @@ Open the X-GPS Tracker app on your mobile device. If you don't have it set up, s
 #### Switch to Tasks
 
 Switch to the **Tasks** screen to view the list of assigned tasks:\
-![](../../../.gitbook/assets/Screenshot_20260403_140150.png)
+![](<../../.gitbook/assets/Screenshot_20260403_140150 (1).png>)
 {% endstep %}
 
 {% step %}
 #### Select the task to open it
 
 Tap the task to open its details:\
-![](../../../.gitbook/assets/Screenshot_20260403_140202.png)
+![](<../../.gitbook/assets/Screenshot_20260403_140202 (1).png>)
 {% endstep %}
 
 {% step %}
 #### Open the form
 
 Tap the form attached to the task and fill in all mandatory fields:\
-![](../../../.gitbook/assets/Screenshot_20260403_140803.png)
+![](<../../.gitbook/assets/Screenshot_20260403_140803 (1).png>)
 {% endstep %}
 
 {% step %}
@@ -198,17 +198,17 @@ Open the **Field service** module from the main menu and select the **Forms** ta
 
 Select the form you wish to review and click **Submissions** on the right side or the **Submissions** button on the toolbar.
 
-<figure><img src="../../../.gitbook/assets/image (5) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (5) (3) (1).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
 #### View the submission page
 
-<figure><img src="../../../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 The submission page allows you to review and download the submitted form or forms.
 
-To download the selected form in XLSX or PDF, click <img src="../../../.gitbook/assets/image (7) (1) (1).png" alt="" data-size="line"> next to the form name. <img src="../../../.gitbook/assets/image (8) (1) (1).png" alt="" data-size="line"> locks and unlocks form editing.
+To download the selected form in XLSX or PDF, click <img src="../../.gitbook/assets/image (7) (1) (1).png" alt="" data-size="line"> next to the form name. <img src="../../.gitbook/assets/image (8) (1) (1) (2).png" alt="" data-size="line"> locks and unlocks form editing.
 
 If multiple forms have been submitted, you can download the form list in XLSX, CSV, or PDF format. The forms table supports filtering submissions based on parameters like task creation date or employee name and customization by adding or hiding columns and form fields to focus on the most relevant data.
 {% endstep %}

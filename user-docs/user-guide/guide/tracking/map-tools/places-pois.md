@@ -9,9 +9,9 @@ description: >-
 
 Places, also known as Points of Interest (POI), are an essential feature of fleet management and asset tracking. Organizations can create a detailed list of Places, including key locations like offices and warehouses, as well as numerous sites crucial for logistics operations. Places improve operational efficiency by optimizing route planning and streamlining task assignments for field employees.
 
-To access the **Places** tool, click <img src="../../../../.gitbook/assets/image-20250425-112111.png" alt="Places button" data-size="line"> in the toolbar in the top-right corner of the map.
+To access the **Places** tool, click <img src="../../../.gitbook/assets/image-20250425-112111 (1).png" alt="Places button" data-size="line"> in the toolbar in the top-right corner of the map.
 
-![Places tool](../../../../.gitbook/assets/image-20240807-005501.png)
+![Places tool](<../../../.gitbook/assets/image-20240807-005501 (1).png>)
 
 ## POI use cases
 
@@ -25,8 +25,8 @@ To access the **Places** tool, click <img src="../../../../.gitbook/assets/image
 
 To create a Place, follow these steps:
 
-1. Open the **Place** tool by clicking <img src="../../../../.gitbook/assets/image-20250425-112111.png" alt="Places button" data-size="line"> in the top-right corner of the map.
-2. Click <img src="../../../../.gitbook/assets/Untitled-20250331-082736.png" alt="Pencil icon" data-size="line"> to open the Place creation form.
+1. Open the **Place** tool by clicking <img src="../../../.gitbook/assets/image-20250425-112111 (1).png" alt="Places button" data-size="line"> in the top-right corner of the map.
+2. Click <img src="../../../.gitbook/assets/Untitled-20250331-082736 (1).png" alt="Pencil icon" data-size="line"> to open the Place creation form.
 3. Assign it a name such as "Office" or "Warehouse" in the **Label** field.
 4. In the top-left corner, choose from a library of icons or upload your own.
 5. Manually enter the Place’s address or select it on the map.
@@ -41,19 +41,19 @@ Fields in the Place form can be adjusted in the [Custom Fields](../../account/cu
 
 ### How to edit a Place
 
-To edit a Place, click <img src="../../../../.gitbook/assets/Untitled-20250425-103233.png" alt="Pencil icon" data-size="line"> next to the geofence you want to edit in the **Places** tool. When editing a Place, you can adjust the same fields as during its creation.\
+To edit a Place, click <img src="../../../.gitbook/assets/Untitled-20250425-103233 (1).png" alt="Pencil icon" data-size="line"> next to the geofence you want to edit in the **Places** tool. When editing a Place, you can adjust the same fields as during its creation.\
 For the list of those fields, see [How to create a Place](places-pois.md#how-to-create-a-place).
 
 ## Place details
 
-To view details about the selected Place, click <img src="../../../../.gitbook/assets/Untitled-20250416-090916.png" alt="Untitled-20250416-090916.png" data-size="line"> next to its name. You see the same fields as in [Creating Places](places-pois.md#creating-places) section, as well as any custom fields.
+To view details about the selected Place, click <img src="../../../.gitbook/assets/Untitled-20250416-090916 (1).png" alt="Untitled-20250416-090916.png" data-size="line"> next to its name. You see the same fields as in [Creating Places](places-pois.md#creating-places) section, as well as any custom fields.
 
 ## How to import Places from an Excel file
 
 If you need to add a large number of Places quickly, you can import them from an Excel file. To do it, follow these steps:
 
-1. Open the **Place** tool by clicking <img src="../../../../.gitbook/assets/image-20250425-112111.png" alt="Places button" data-size="line"> in the top-right corner of the map.
-2. Click <img src="../../../../.gitbook/assets/Untitled-20250425-144748.png" alt="Up arrow icon" data-size="line"> in the top-right corner to open the **Import** dialogue.
+1. Open the **Place** tool by clicking <img src="../../../.gitbook/assets/image-20250425-112111 (1).png" alt="Places button" data-size="line"> in the top-right corner of the map.
+2. Click <img src="../../../.gitbook/assets/Untitled-20250425-144748 (1).png" alt="Up arrow icon" data-size="line"> in the top-right corner to open the **Import** dialogue.
 3. Download the provided Excel template and fill it or create a file with the fields listed in the dialogue window (required and optional). Column names in the template change depending on the language settings in your [profile](../../account/profile.md).
 
 {% hint style="info" %}

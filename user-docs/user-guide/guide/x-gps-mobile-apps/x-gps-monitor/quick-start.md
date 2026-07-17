@@ -24,7 +24,7 @@ Select **X-GPS Monitor** and click "Install".
 
 {% columns %}
 {% column %}
-At the first launch, the application will offer to scan a QR code. To receive the QR code, click the <img src="../../../../.gitbook/assets/image (34).png" alt="" data-size="line">button under the Navixy platform's [login form](https://tracking.navixy.com/).
+At the first launch, the application will offer to scan a QR code. To receive the QR code, click the <img src="../../../.gitbook/assets/image (34) (1).png" alt="" data-size="line">button under the Navixy platform's [login form](https://tracking.navixy.com/).
 
 After scanning the QR code, enter your username and password and click the **Log in** button.
 
@@ -53,6 +53,6 @@ The following items are available on the main screen:
 {% endcolumn %}
 
 {% column %}
-![](../../../../.gitbook/assets/x-monitor-interface.png)
+![](<../../../.gitbook/assets/x-monitor-interface (1).png>)
 {% endcolumn %}
 {% endcolumns %}

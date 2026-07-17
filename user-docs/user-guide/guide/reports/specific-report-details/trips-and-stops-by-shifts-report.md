@@ -10,7 +10,7 @@ The **Trips and stops by shifts** **report** provides the same per-trip driving 
 
 This makes it possible to see, for example, how much each shift drove, how long they idled, and how much fuel they consumed, side by side in a single comparison.
 
-<figure><img src="../../../../.gitbook/assets/image (46) (1).png" alt="Time and stops by shifts"><figcaption><p>Time and stops by shifts</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (46) (1).png" alt="Time and stops by shifts"><figcaption><p>Time and stops by shifts</p></figcaption></figure>
 
 ## Trips and stops by shifts report use cases
 

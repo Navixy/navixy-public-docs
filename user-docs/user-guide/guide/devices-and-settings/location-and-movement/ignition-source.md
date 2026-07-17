@@ -8,7 +8,7 @@ description: >-
 
 Tells the Navixy platform how to determine ignition on/off, important when the ignition wire isn't connected. Many devices can derive ignition from a digital input, the vehicle's on-board voltage, or the built-in motion sensor.
 
-![](../../../../.gitbook/assets/image-20240815-213014.png)
+![](<../../../.gitbook/assets/image-20240815-213014 (1).png>)
 
 ## Settings
 

@@ -48,7 +48,7 @@ The employee receives an invitation via text (SMS) or email depending on setup. 
 {% endcolumn %}
 
 {% column %}
-![](../../../.gitbook/assets/image-20240717-190626.png)
+![](<../../.gitbook/assets/image-20240717-190626 (1).png>)
 {% endcolumn %}
 {% endcolumns %}
 

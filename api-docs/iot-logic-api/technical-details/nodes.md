@@ -38,7 +38,6 @@ This node specifies which devices send data to your flow. It's the entry point o
 | `data.source_ids`  | array   | Yes      | Array of device IDs to collect data from                                                 |
 | `data.push_type`   | string  | No       | Connector type. Currently only `"http"`. Omit for a devices-only node                    |
 | `data.primary_key` | string  | No       | Name of the field that identifies the target device in an inbound push                   |
-| `data.url`         | string  | No       | Server-generated push URL. Read-only, present only after the flow is saved                |
 | `data.mappings`    | array   | No       | Maps inbound `data.primary_key` values to devices already listed in `data.source_ids`    |
 
 ### Connector configuration
@@ -47,14 +46,25 @@ Use the connector fields to merge data from an external system into the stream o
 
 The device that receives the pushed data must already be listed in `data.source_ids`. The connector doesn't create devices, it attributes inbound data to a device that's already part of the node.
 
+{% hint style="warning" %}
+If the same device ID appears in `source_ids` on Data Source nodes in more than one flow, connector-pushed attributes merge at the device level, not scoped to the flow that pushed them. They become visible in Data Stream Analyzer through every flow that lists the device, even before a push has gone through that other flow. Use distinct attribute names, or a naming convention like `<flow_title>_<attribute>`, if the same device is enriched by more than one flow's connector, otherwise one connector's pushes can silently overwrite another's.
+{% endhint %}
+
 To configure a connector:
 
 1. List the devices that will receive pushed data in `data.source_ids`, as usual.
 2. Set `data.push_type` to `"http"`.
 3. Set `data.primary_key` to the name of the field the external system uses to identify each device, for example `"vehicle_id"`.
 4. In `data.mappings`, pair each device's `source_id` with the value that identifies it in inbound pushes.
-5. Save the flow, then read it back to get the generated `data.url`.
+
+{% hint style="warning" %}
+`primary_key` and every `mappings[].primary_key_value` accept only letters, digits, and underscores (`^[a-zA-Z0-9_]+$`). This is stricter than the general field-name/value pattern `POST /iot/logic/flow/push` accepts for its other fields (`^[a-zA-Z0-9_-]+$` / `^[a-zA-Z0-9_-]*$`, both of which allow hyphens). A push whose primary-key value contains a hyphen passes that endpoint's own validation and returns `success: true`, but can never match a mapping, since hyphens can't be stored in one. Use underscores in place of hyphens for any identifier you plan to use as a primary-key value.
+{% endhint %}
+
+5. Save the flow. No API endpoint returns the push URL, not even `flow/read`. Assemble it yourself: `flow/read` gives you the flow and node IDs (`value.id`, `value.nodes[].id`). Recommended: combine them with the regional API server domain you're already using, `https://api.eu.navixy.com/v2/iot/logic/flow/push?flow_id=<flow_id>&node_id=<node_id>` (or `api.us.navixy.com`), no extra request needed. Alternative: combine them instead with your account's own web application domain from [`user/get_info`](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/commons/user/index#get_info)'s `paas_settings.domain`, `https://<paas_settings.domain>/api-v2/iot/logic/flow/push?flow_id=<flow_id>&node_id=<node_id>` (note the `/api-v2/` prefix here, not `/v2/`), if you'd rather match what the flow builder UI shows.
 6. Configure the external system to send its data to that URL.
+
+See [Merging external system data into a flow](../navixy-iot-guide/merging-external-data-into-a-flow.md#getting-the-push-url) for a full worked example of assembling this URL.
 
 Here's an example that connects two GPS devices to a battery management system reporting the state of charge and temperature of the same vehicles:
 
@@ -81,7 +91,7 @@ Here's an example that connects two GPS devices to a battery management system r
 With this configuration, a request to `POST /iot/logic/flow/push` that includes `"vehicle_id": "truck_12"` merges its other fields into device `987654`'s data stream:
 
 ```bash
-curl -X POST "https://api.eu.navixy.com/iot/logic/flow/push" \
+curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/push" \
   -H "Content-Type: application/json" \
   -H "Authorization: NVX your_api_key" \
   -d '{
@@ -101,7 +111,8 @@ curl -X POST "https://api.eu.navixy.com/iot/logic/flow/push" \
 * Multiple devices can be specified in the `source_ids` array
 * Each device is identified by its numeric ID in the Navixy system
 * A flow can have multiple data source nodes for different device groups
-* The connector fields (`push_type`, `primary_key`, `mappings`, `url`) are optional, omit them for a devices-only node
+* The connector fields (`push_type`, `primary_key`, `mappings`) are optional, omit them for a devices-only node
+* The push URL isn't part of the node's data payload. It isn't returned by `flow/read` or any other endpoint, assemble it yourself from `flow/read` and `user/get_info`, see step 5 above
 * `POST /iot/logic/flow/push` is rate-limited to 1 request per second per API key, with a burst size of 1
 
 ## Initiate Attribute node (`initiate_attributes`)
@@ -138,10 +149,10 @@ This node transforms raw data into meaningful information. It allows for creatin
 | Property             | Type    | Required | Description                         |
 | -------------------- | ------- | -------- | ----------------------------------- |
 | `id`                 | integer | Yes      | Unique identifier within the flow   |
-| `type`               | string  | Yes      | Must be `"initiate_attributes"data` |
+| `type`               | string  | Yes      | Must be `"initiate_attributes"`     |
 | `data.title`         | string  | Yes      | Human-readable name for the node    |
 | `data.items`         | array   | Yes      | Array of attribute definitions      |
-| `data.items[].name`  | string  | Yes      | The attribute identifier            |
+| `data.items[].name`  | string  | Yes      | The attribute identifier, unique account-wide, not just within this flow |
 | `data.items[].value` | string  | Yes      | Mathematical or logical expression  |
 
 ### Expression language
@@ -194,6 +205,7 @@ Short syntax is also supported for attribute names in formulas. When referencing
 * Historical values are stored in memory for high-performance access
 * Use validation flags strategically: "valid" for accurate calculations, "all" when null values are meaningful
 * Calculated attributes become available in Data Stream Analyzer and can create custom sensors in Navixy Tracking module when connected to Default Output Endpoint
+* Attribute names must be unique across the entire account, not just within the flow that defines them. Reusing a name already used in another flow is rejected at save time (`flowCreate`/`flowUpdate`) with a `292` `IoT Flow Invalid` error naming the conflicting flow, for example: `Duplicate default attribute "speed_plus1" in flows: "Demo flow" (#316)`
 
 ## IF/THEN Logic node (`logic`) <a href="#logic-node-logic" id="logic-node-logic"></a>
 

@@ -27,12 +27,12 @@ Follow these steps to access, navigate, and manage your User applications.
 2. Tap on an app's name to open it. This automatically activates the application, and its title in the list will change color from blue to green to show it's active.
 3. When you open an application, you will see a navigation bar at the top of the screen. It contains the following options:
 
-* <img src="../../../../.gitbook/assets/image (32).png" alt="" data-size="line">: Go to the app's previous page.
-* <img src="../../../../.gitbook/assets/image (29) (1).png" alt="" data-size="line">: Go to the next page.
-* <img src="../../../../.gitbook/assets/image (30) (1).png" alt="" data-size="line">: Reload the current application view.
-* <img src="../../../../.gitbook/assets/image (31) (1).png" alt="" data-size="line">: Open the application in your phone's default web browser.
+* <img src="../../../.gitbook/assets/image (32) (1).png" alt="" data-size="line">: Go to the app's previous page.
+* <img src="../../../.gitbook/assets/image (29) (1).png" alt="" data-size="line">: Go to the next page.
+* <img src="../../../.gitbook/assets/image (30) (1).png" alt="" data-size="line">: Reload the current application view.
+* <img src="../../../.gitbook/assets/image (31) (1).png" alt="" data-size="line">: Open the application in your phone's default web browser.
 
-4. To turn off an active application, return to the **Apps** tab and tap <img src="../../../../.gitbook/assets/image (33).png" alt="" data-size="line"> to the right of its name.
+4. To turn off an active application, return to the **Apps** tab and tap <img src="../../../.gitbook/assets/image (33) (1).png" alt="" data-size="line"> to the right of its name.
 
 {% hint style="info" %}
 User applications automatically deactivate when you exit **X-GPS Mobile**.
@@ -40,6 +40,6 @@ User applications automatically deactivate when you exit **X-GPS Mobile**.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (25).png" alt="User applications"><figcaption><p>User applications list</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (25) (1).png" alt="User applications"><figcaption><p>User applications list</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}

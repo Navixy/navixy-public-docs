@@ -8,7 +8,7 @@ description: >-
 
 Tunes cellular/Wi-Fi-based positioning, used as a fallback when GPS isn't available. It sets how far the Navixy platform trusts a base-station or Wi-Fi fix to pinpoint the device.
 
-![](../../../../.gitbook/assets/image-20240815-180931.png)
+![](<../../../.gitbook/assets/image-20240815-180931 (1).png>)
 
 ## Settings
 

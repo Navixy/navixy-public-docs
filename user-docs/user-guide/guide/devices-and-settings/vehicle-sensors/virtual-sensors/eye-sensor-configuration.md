@@ -50,7 +50,7 @@ The reading of this sensor is fully configurable with virtual sensors with [the 
 4. Define the state names as needed. For example, "Standstill" and "Moves".
 5. Specify the corresponding values: 0 means no movement detected, 1 means movement recorded.
 
-<figure><img src="../../../../../.gitbook/assets/image-20241118-031514.png" alt="Setting up the Virtual Sensor to read the Eye sensor&#x27;s motion status" width="563"><figcaption><p>Setting up the Virtual Sensor to read the Eye sensor's motion status</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20241118-031514 (1).png" alt="Setting up the Virtual Sensor to read the Eye sensor&#x27;s motion status" width="563"><figcaption><p>Setting up the Virtual Sensor to read the Eye sensor's motion status</p></figcaption></figure>
 
 At this point, the current motion state is retrieved. However, keep in mind that information can only be obtained in reports and rules if the motion state is set as ignition.
 
@@ -68,7 +68,7 @@ The humidity is transmitted by the device in %.
 * Specify the unit of measure in %.
 * Other settings are not required.
 
-<figure><img src="../../../../../.gitbook/assets/image-20241118-031634.png" alt="Setting up the BLE humidity sensor"><figcaption><p>Setting up the BLE humidity sensor</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20241118-031634 (1).png" alt="Setting up the BLE humidity sensor"><figcaption><p>Setting up the BLE humidity sensor</p></figcaption></figure>
 
 The temperature is transmitted by the device in °C.
 
@@ -78,7 +78,7 @@ The temperature is transmitted by the device in °C.
 * Specify the unit of measure in °C.
 * Other settings are not required.
 
-<figure><img src="../../../../../.gitbook/assets/image-20241118-031701.png" alt="Setting up the BLE temperature sensor" width="368"><figcaption><p>Setting up the BLE temperature sensor</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20241118-031701 (1).png" alt="Setting up the BLE temperature sensor" width="368"><figcaption><p>Setting up the BLE temperature sensor</p></figcaption></figure>
 
 Using sensor readings, you can generate a Measuring Sensors report that provides useful insights into the data collected by the sensor. Additionally, you can track readings by configuring alerts using the **Parameter in Range** rule, which allows you to receive notifications when specific parameters fall outside of predetermined ranges.
 
@@ -92,4 +92,4 @@ Using virtual sensors with the [Source value calculation method](./#source-value
 
 By configuring the **Status field value** rule, you can track the status fields and receive alerts when specific events occur.
 
-<figure><img src="../../../../../.gitbook/assets/image-20241118-031749.png" alt="Example of setting the magnet state sensor with its values and name" width="563"><figcaption><p>Example of setting the magnet state sensor with its values and name</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image-20241118-031749 (1).png" alt="Example of setting the magnet state sensor with its values and name" width="563"><figcaption><p>Example of setting the magnet state sensor with its values and name</p></figcaption></figure>

@@ -8,7 +8,7 @@ description: >-
 
 The raw data export tool in Navixy allows you to download parsed and decoded data from any GPS device on the Navixy platform in CSV format. Use it for device diagnostics, data analytics, and integrating data with AI and ML programs.
 
-<figure><img src="../../../../.gitbook/assets/{5DEF2F7D-8031-487A-85D7-1EB6ED30317D}.png" alt="Raw data block"><figcaption><p>Raw data block</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/{5DEF2F7D-8031-487A-85D7-1EB6ED30317D} (1).png" alt="Raw data block"><figcaption><p>Raw data block</p></figcaption></figure>
 
 ## Overview
 
@@ -65,7 +65,7 @@ For multiple inputs of the same type, the Navixy platform prioritizes the input 
 
 A count of selected parameters is displayed, and each chosen parameter will add a column to the CSV file.
 
-<figure><img src="../../../../.gitbook/assets/{F149E127-5B1A-4693-AB80-1F895E9CBE14}.png" alt="Raw data export tool file configuration window with chosen parameters" width="563"><figcaption><p>Raw data export tool file configuration window with chosen parameters</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/{F149E127-5B1A-4693-AB80-1F895E9CBE14} (1).png" alt="Raw data export tool file configuration window with chosen parameters" width="563"><figcaption><p>Raw data export tool file configuration window with chosen parameters</p></figcaption></figure>
 
 ## How to read the raw data file
 
@@ -75,4 +75,4 @@ After selecting the necessary parameters, click **Download CSV** to download the
 * The file name includes the device ID, device label, and the specified date and time range.
 * Each row (starting from the second row) represents a message sent from the device to the platform. The first row contains the message time in the chosen timezone, followed by the selected parameters.
 
-<figure><img src="../../../../.gitbook/assets/{7B6F0062-D451-460D-AD1B-054ADB34A6DE}.png" alt="Raw data file columns example" width="563"><figcaption><p>Raw data file columns example</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/{7B6F0062-D451-460D-AD1B-054ADB34A6DE} (1).png" alt="Raw data file columns example" width="563"><figcaption><p>Raw data file columns example</p></figcaption></figure>

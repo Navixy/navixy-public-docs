@@ -31,7 +31,7 @@ To configure Commands for a device, follow these steps:
 2. Select the device you want to configure.
 3. Locate and expand the **Commands** block.
 
-<figure><img src="../../../../.gitbook/assets/output-control-block.png" alt="Commands block showing device and software command options"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/output-control-block (1).png" alt="Commands block showing device and software command options"><figcaption></figcaption></figure>
 
 You can add multiple commands of each type. Each command is saved individually.
 
@@ -39,7 +39,7 @@ You can add multiple commands of each type. Each command is saved individually.
 
 A **device command** sends a protocol-level instruction string directly to the device over its communication channel.
 
-<figure><img src="../../../../.gitbook/assets/output-control-device-vommand.png" alt="Device command form with Command name and Command string fields"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/output-control-device-vommand (1).png" alt="Device command form with Command name and Command string fields"><figcaption></figcaption></figure>
 
 To add a device command, click **Add device command** at the bottom of the block. Configure the following fields:
 
@@ -76,7 +76,7 @@ Configure the following:
 {% endcolumn %}
 
 {% column width="41.666666666666664%" %}
-<figure><img src="../../../../.gitbook/assets/output-control-software-command-general.png" alt="Software command General tab with Title, URL, and Headers fields"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/output-control-software-command-general (1).png" alt="Software command General tab with Title, URL, and Headers fields"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -86,11 +86,11 @@ Configure the following:
 {% column width="58.333333333333336%" %}
 The **Body** field is where you compose the JSON payload. Write valid JSON that matches the format expected by the destination endpoint.
 
-To include live device data in the payload, use the `{{attribute_name}}` syntax. Click the attribute picker button <img src="../../../../.gitbook/assets/image (40) (1).png" alt="" data-size="line"> at the top-right of the body field to open a searchable list of available attributes for the device. Selecting an attribute inserts the corresponding `{{attribute_name}}` placeholder into the body at the cursor position.
+To include live device data in the payload, use the `{{attribute_name}}` syntax. Click the attribute picker button <img src="../../../.gitbook/assets/image (40) (1).png" alt="" data-size="line"> at the top-right of the body field to open a searchable list of available attributes for the device. Selecting an attribute inserts the corresponding `{{attribute_name}}` placeholder into the body at the cursor position.
 {% endcolumn %}
 
 {% column width="41.666666666666664%" %}
-<figure><img src="../../../../.gitbook/assets/output-control-software-command-body.png" alt="Software command Body tab with JSON body field and attribute picker"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/output-control-software-command-body (1).png" alt="Software command Body tab with JSON body field and attribute picker"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -126,7 +126,7 @@ Slack expects a JSON object with a `text` field. The `{{device_id}}`, `{{speed}}
 
 Once commands are saved, they appear in the **Commands** block of the device's [Object widget](../../tracking/objects-list/object-widget.md) in the Tracking module.
 
-<figure><img src="../../../../.gitbook/assets/object-widget-commands.png" alt="Object widget Commands block showing two commands with send buttons"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/object-widget-commands (1).png" alt="Object widget Commands block showing two commands with send buttons"><figcaption></figcaption></figure>
 
 Click the **send** button next to a command name to dispatch it immediately. There is no confirmation dialog and the command is sent as soon as you click. The Commands block shows all device commands and software commands configured for that device.
 

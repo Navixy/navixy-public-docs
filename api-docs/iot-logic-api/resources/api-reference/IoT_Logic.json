@@ -397,7 +397,7 @@
                 },
                 "additionalProperties": {
                   "type": ["string", "number", "boolean", "null"],
-                  "description": "Additional fields to merge into the mapped device's data stream. One field must have the name configured in the node's primary_key setting, with a value matching one of the node's mappings. Field names match ^[a-zA-Z0-9_-]+$ and are limited to 64 characters. String values match ^[a-zA-Z0-9_-]*$ and are limited to 100 characters. Nested objects and arrays are ignored."
+                  "description": "Additional fields to merge into the mapped device's data stream. One field must have the name configured in the node's primary_key setting, with a value matching one of the node's mappings. Field names match ^[a-zA-Z0-9_-]+$ and are limited to 64 characters. String values match ^[a-zA-Z0-9_-]*$ and are limited to 100 characters. Nested objects and arrays are ignored. Exception: the primary-key value must match the stricter ^[a-zA-Z0-9_]+$ (no hyphens, 1-255 characters) required by `mappings[].primary_key_value`, or it silently fails to match. See [Connector configuration](https://www.navixy.com/docs/iot-logic-api/technical-details/nodes#connector-configuration)."
                 },
                 "example": {
                   "flow_id": 42,
@@ -1328,12 +1328,6 @@
               "push_type": {
                 "$ref": "#/components/schemas/ExternalDataPushType"
               },
-              "url": {
-                "type": "string",
-                "readOnly": true,
-                "description": "Server-generated HTTPS URL for POST /iot/logic/flow/push. Present only once the flow has been saved with push_type set. Not accepted on create or update, Navixy fills it in on read.",
-                "example": "https://api.eu.navixy.com/iot/logic/flow/push?flow_id=42&node_id=1"
-              },
               "primary_key": {
                 "type": "string",
                 "maxLength": 64,
@@ -1416,7 +1410,7 @@
                   "properties": {
                     "name": {
                       "type": "string",
-                      "description": "Unique attribute identifier. This name appears in Data Stream Analyzer and can be used to create custom sensors in Navixy tracking interface. If attribute name matches existing device parameter, the calculated value replaces the original in output data packets.",
+                      "description": "Unique attribute identifier, enforced account-wide, not just within this flow. Reusing a name already defined in another flow in the same account is rejected at save time. This name appears in Data Stream Analyzer and can be used to create custom sensors in Navixy tracking interface. If attribute name matches existing device parameter, the calculated value replaces the original in output data packets.",
                       "example": "temperature_fahrenheit"
                     },
                     "value": {

@@ -23,7 +23,7 @@ description: >-
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/Untitled.svg" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Untitled (1).svg" alt=""><figcaption></figcaption></figure>
 
 <p align="center"><strong>Download Links</strong>:</p>
 

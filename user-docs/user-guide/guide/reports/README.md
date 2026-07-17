@@ -8,13 +8,13 @@ description: >-
 
 Navixy offers a powerful reporting feature that allows you to generate detailed reports on various aspects of your fleet's operations. This guide walks you through the steps of creating, scheduling, and managing reports using the Navixy platform, ensuring you can easily access and analyze the data you need.
 
-<figure><img src="../../../.gitbook/assets/Reports module.png" alt="Image of the main page of the Reports module"><figcaption><p>Reports module</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Reports module (1).png" alt="Image of the main page of the Reports module"><figcaption><p>Reports module</p></figcaption></figure>
 
 ## How to create a report
 
 A report is a custom-generated document that provides detailed insights into specific aspects of your fleet's operations, such as vehicle activity, fuel consumption, or driver behavior, based on selected criteria and time frames.
 
-<figure><img src="../../../.gitbook/assets/Creating a report.png" alt="Image of the report creation dialogue"><figcaption><p>Report creation dialogue</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Creating a report (1).png" alt="Image of the report creation dialogue"><figcaption><p>Report creation dialogue</p></figcaption></figure>
 
 Follow these steps to generate a single report:
 
@@ -83,11 +83,11 @@ After configuring all settings, click **Create**. The scheduled report is now au
 The following options are available in the report interface after opening it:
 
 * **Download reports:**\
-  To download a report, select it from the list and choose <img src="../../../.gitbook/assets/image (4) (3).png" alt="Download" data-size="line">. You can save the report in XLSX or PDF.
+  To download a report, select it from the list and choose <img src="../../.gitbook/assets/image (4) (3).png" alt="Download" data-size="line">. You can save the report in XLSX or PDF.
 * **Print reports:**\
-  If you need a hard copy of a report, you can print it directly from the browser without downloading it by clicking <img src="../../../.gitbook/assets/image (5) (2).png" alt="" data-size="line">.
+  If you need a hard copy of a report, you can print it directly from the browser without downloading it by clicking <img src="../../.gitbook/assets/image (5) (2) (1).png" alt="" data-size="line">.
 * **Delete reports:**\
-  To remove a report that is no longer needed, select it from the list and click <img src="../../../.gitbook/assets/image (8) (2).png" alt="Delete" data-size="line">. Confirm the deletion when prompted.
+  To remove a report that is no longer needed, select it from the list and click <img src="../../.gitbook/assets/image (8) (2) (1).png" alt="Delete" data-size="line">. Confirm the deletion when prompted.
 
 ## See also
 

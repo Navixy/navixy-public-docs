@@ -10,7 +10,7 @@ description: >-
 
 To access File Manager, navigate to **Account settings → File Manager**.
 
-<figure><img src="../../../.gitbook/assets/{2D2513ED-7131-473E-84A9-B64AEB01E93B}.png" alt="File manager"><figcaption><p>File Manager</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/{2D2513ED-7131-473E-84A9-B64AEB01E93B} (1).png" alt="File manager"><figcaption><p>File Manager</p></figcaption></figure>
 
 ## Sections
 
@@ -54,10 +54,10 @@ A storage usage diagram in the lower-left corner of the screen displays current 
 {% endcolumn %}
 
 {% column width="33.33333333333334%" valign="middle" %}
-<figure><img src="../../../.gitbook/assets/{D30105C6-C38E-44BA-AE83-C4D0CA9C1F93}.png" alt="Storage diagram"><figcaption><p>Storage diagram</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/{D30105C6-C38E-44BA-AE83-C4D0CA9C1F93} (1).png" alt="Storage diagram"><figcaption><p>Storage diagram</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
 **Automatic deletion:** Enable this option to automatically delete files when the storage limit is reached. This option deletes the oldest files first to maintain storage within limits while preserving the most recent uploads. Configure this setting in [Account settings → Profile](profile.md).
 
-![](../../../.gitbook/assets/image-20241111-225720.png)
+![](<../../.gitbook/assets/image-20241111-225720 (1).png>)

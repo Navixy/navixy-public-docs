@@ -11,7 +11,7 @@ Commands let you define reusable commands for a tracker and execute them on dema
 * **Hardware** — sends a protocol-level command string directly to the device (e.g. to reboot firmware or toggle a relay).
 * **HTTP** — sends an HTTP POST request with a JSON body to any URL, optionally embedding live device attributes in the payload.
 
-Commands are stored per tracker and can be executed at any time from the [Commands block](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/object-management/output-control-block) in the platform UI.
+Commands are stored per tracker and can be executed at any time from the [Commands block](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/object-management/commands) in the platform UI.
 
 {% hint style="info" %}
 Commands is designed for manual, on-demand actions targeting a single tracker. For automated, rule-based command sending across multiple devices, use [IoT Logic](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/tx3J5BxnWyPV0nP2xr0z/) with the **Device action** or **Webhook** nodes.

@@ -15,7 +15,7 @@ If you've forgotten your password and need to recover it, follow these steps:
 
 {% include "https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/~/reusable/cXM93TrDUyPWrNkS4xqQ/" %}
 
-![](../../../.gitbook/assets/image-20240718-181302.png)
+![](<../../.gitbook/assets/image-20240718-181302 (1).png>)
 
 ## FAQs and troubleshooting
 

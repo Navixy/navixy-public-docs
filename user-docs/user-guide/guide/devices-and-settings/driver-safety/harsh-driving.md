@@ -8,7 +8,7 @@ description: >-
 
 Configures device-side detection of harsh acceleration, braking, and cornering. When the device's accelerometer exceeds the configured thresholds, it generates a **Harsh driving** event, which feeds [Notifications](../../events-and-notifications/safety/harsh-driving.md) and [Eco-driving reports](../../fleet-management/eco-driving.md).
 
-![](../../../../.gitbook/assets/image-20240815-214000.png)
+![](<../../../.gitbook/assets/image-20240815-214000 (1).png>)
 
 ## Settings
 
