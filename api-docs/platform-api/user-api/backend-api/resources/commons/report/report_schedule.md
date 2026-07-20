@@ -31,7 +31,9 @@ Contains report schedule object description and API calls to interact with it.
       "plugin": {
         "plugin_id": 4,
         "show_idle_duration": false
-      }
+      },
+      "include_places_in_address": true,
+      "include_zones_in_address": true
     },
     "emails": ["email@example.ru"],
     "email_format": "pdf",
@@ -48,6 +50,7 @@ Contains report schedule object description and API calls to interact with it.
 
 * `id` - int. Schedule id, ignored on create.
 * `enabled` - boolean. `true` if the scheduled report enabled.
+* `report` - object. Report parameters, same as in [`report/tracker/generate`](report_tracker.md#generate). Includes the optional `include_places_in_address` and `include_zones_in_address` flags (both boolean, default `true`) that toggle whether place (POI) and geofence (zone) names are prepended to addresses in the generated report.
 * `period` - string. Report period, "Xm" | "w" | "d" | "y".
 * `emails` - optional string array. List of emails.
 * `email_format` - [enum](../../../#data-types). Can be "pdf" | "xls".
@@ -202,7 +205,9 @@ https://api.eu.navixy.com/v2/report/schedule/list?hash=a6aa75587e5c59c32d347da43
           "plugin": {
             "plugin_id": 4,
             "show_idle_duration": false
-          }
+          },
+          "include_places_in_address": true,
+          "include_zones_in_address": true
         },
         "emails": ["email@example.ru"],
         "email_format": "pdf",

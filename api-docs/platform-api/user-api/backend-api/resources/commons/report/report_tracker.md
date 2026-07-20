@@ -122,6 +122,12 @@ Requests a report generation with the specified parameters.
 | employees    | List of employees' IDs to be included in report (if report is by employees. For example, [plugin ID 82](../plugin/report_plugins.md#eco-driving-report-by-drivers)). | int array   |
 | time\_filter | An object which contains everyday time and weekday limits for processed data, e.g. `{"to":"18:00", "from":"12:00", "weekdays":[1,2,3,4,5]}`.                         | JSON object |
 | plugin       | A plugin object (see below).                                                                                                                                         | JSON object |
+| include\_places\_in\_address | Optional. Default `true`. When `true`, the name of the place (POI) a point falls into is prepended to the address in report columns. Set to `false` to show the geocoded address only.       | boolean     |
+| include\_zones\_in\_address  | Optional. Default `true`. When `true`, the name of the geofence (zone) a point falls into is prepended to the address in report columns. Set to `false` to show the geocoded address only.   | boolean     |
+
+{% hint style="info" %}
+`include_places_in_address` and `include_zones_in_address` both default to `true`, preserving the historical behavior of prefixing an address with the name of the place or geofence that contains the point. They apply to report plugins that render an address column (for example, trips or stops). The values are echoed back in [`list`](#list) under `parameters` and are stored with [scheduled reports](report_schedule.md).
+{% endhint %}
 
 #### Parameter object fields:
 
@@ -237,6 +243,8 @@ https://api.eu.navixy.com/v2/report/tracker/list?hash=a6aa75587e5c59c32d347da438
       "id": 5601797,
       "parameters": {
         "geocoder": "google",
+        "include_places_in_address": true,
+        "include_zones_in_address": true,
         "trackers": [669673],
         "plugins": [
           {
@@ -276,6 +284,8 @@ https://api.eu.navixy.com/v2/report/tracker/list?hash=a6aa75587e5c59c32d347da438
 * `parameters` - object with report parameters.
   * `trackers` - int array. List of tracker IDs used for report.
   * `plugins` - array of objects. List of parameters for all plugins which were used to generate report.
+  * `include_places_in_address` - boolean. Whether place (POI) names are prepended to addresses in this report.
+  * `include_zones_in_address` - boolean. Whether geofence (zone) names are prepended to addresses in this report.
   * `locale_info` - object with information about the locale, timezone, and measurement system used for the report.
 * `percent` - int. Report readiness in percent.
 * `type` - [enum](../../../#data-types). Type of created report.
@@ -769,6 +779,7 @@ https://api.eu.navixy.com/v2/report/tracker/retrieve?hash=a6aa75587e5c59c32d347d
   ],
   "from": "2020-10-06 00:00:00",
   "to": "2020-10-06 23:59:59"
+  }
 }
 ```
 
