@@ -6,7 +6,7 @@ description: >-
 
 # H.264 vs H.265 in fleet telematics: Cracking the codec puzzle
 
-<figure><img src="../../../../.gitbook/assets/image (14) (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (14) (2).png" alt=""><figcaption></figcaption></figure>
 
 Fleet managers today face a dilemma that sounds highly technical but has very real consequences for day-to-day operations: **should your vehicle cameras record with H.264 or H.265?** The debate around these two video codecs has become a bit of a codec conundrum in telematics. On paper, H.265 (also known as HEVC) is the shiny new successor promising up to _50% better compression_ than the trusty H.264 (AVC). In theory, that means half the file size for the same video quality, which is important for fleets dealing with limited bandwidth and storage.
 

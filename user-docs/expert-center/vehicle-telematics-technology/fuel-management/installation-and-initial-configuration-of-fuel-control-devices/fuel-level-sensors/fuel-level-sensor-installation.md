@@ -29,11 +29,11 @@ To get the sensor up and running it takes:
 * Laptop: to calibrate the sensor and the fuel tank
 * USB Connector kit (to connect the sensor and the laptop). Usually sensor manufacturers make their own USB adapters (e.g. UNU-USB by Omnicomm) to fit the sensors.
 
-![Fuel sensor connection](../../../../../.gitbook/assets/omnicomm-sensor-installation.png)
+![Fuel sensor connection](<../../../../.gitbook/assets/omnicomm-sensor-installation (1).png>)
 
 Quite often, technical crews operate an all-in-one mobile calibration station, which has everything from tanks for draining the fuel to a refilling station on one vehicle.
 
-![All-in-one mobile calibration station](../../../../../.gitbook/assets/calibration-station2.png)
+![All-in-one mobile calibration station](<../../../../.gitbook/assets/calibration-station2 (1).png>)
 
 And last but not least, installation of fuel sensors requires knowledge, skill and expertise to deal with all kinds of tanks and situations.
 
@@ -106,7 +106,7 @@ For instance, Teltonika requires different CAN module for cars (LV-CAN 200) and 
 
 The installation will take approximately 30 minutes (considering the diagram is available).
 
-![Sample wiring diagram](../../../../../.gitbook/assets/canlog-wiring-diagram-762x1024-446x600.png)
+![Sample wiring diagram](<../../../../.gitbook/assets/canlog-wiring-diagram-762x1024-446x600 (1).png>)
 
 ## Fuel sensor outputs
 
@@ -135,7 +135,7 @@ As of 2018, the most common outputs to connect to GPS trackers were:
 For instance, 1V stands for an empty tank, 10V stands for a full tank. A tank calibration is required to convert the volts into litres or gallons.
 ```
 
-![Fuel sensor with analogue output, GPS tracker with analogue input](../../../../../.gitbook/assets/tank-calibration-table.png)
+![Fuel sensor with analogue output, GPS tracker with analogue input](<../../../../.gitbook/assets/tank-calibration-table (1).png>)
 
 GPS trackers will transmit the values to the GPS tracking system in volts (e.g. 6.35 V).
 
@@ -219,7 +219,7 @@ Modern fuel sensors can be powered with both analogue and digital outputs. It’
 
 Fuel level indicator is installed directly in the driver’s cabin to show the exact fuel sensor reading. It works both ways: managers will always see the fuel level and the drivers will always know the fuel is being constantly monitored (any fuel thieves will be caught red-handed). Below you can find a fuel indicator by Omnicomm.
 
-![Fuel level indicator](../../../../../.gitbook/assets/fuel-level-indicator.png)
+![Fuel level indicator](<../../../../.gitbook/assets/fuel-level-indicator (1).png>)
 
 **Bent tube design**
 

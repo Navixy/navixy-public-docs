@@ -49,7 +49,7 @@ Tasks that the report addresses:
 You can also build the report using Navixy API. More information could be obtained in [Developers Hub](https://www.navixy.com/docs/developers)
 {% endhint %}
 
-![Fuel report](../../../../../.gitbook/assets/image-20230905-074120.png)
+![Fuel report](<../../../../.gitbook/assets/image-20230905-074120 (1).png>)
 
 ## What affects the readings in the report
 
@@ -120,7 +120,7 @@ The following parameters are used in the report:
 * Smooth graph: this option is recommended for devices without built-in averaging mechanism. If the graph is uneven and the fuel level is constantly jumping up and down by 5-10%: try to enable this function. Please note that smoothing reduces the accuracy of fueling and draining, but allows to get an acceptable picture for inaccurate sensors.
 * Filter emissions: if you observe strong short-term changes in fuel level on the graph, turn this option on. If you want to filter only the largest emissions, move the slider to the left. If you need the weak ones, move it to the right.
 
-![Fuel volume report parameters](../../../../../.gitbook/assets/image-20230905-074250.png)
+![Fuel volume report parameters](<../../../../.gitbook/assets/image-20230905-074250 (1).png>)
 
 After changing the sensor settings, you can build the report for the same period again with different settings and the changes will be applied to the recorded data.
 
@@ -133,7 +133,7 @@ Additionally, the chart provides numerical data for drains and refills, followin
 * When refueling, the number will be displayed in green.
 * When draining, the number will be displayed in red.
 
-![Fuel consumption graph](../../../../../.gitbook/assets/image-20230905-074528.png)
+![Fuel consumption graph](<../../../../.gitbook/assets/image-20230905-074528 (1).png>)
 
 If the platform did not receive any data from the sensor, it will be highlighted on the graph as a shaded area. Additionally, a notification will be displayed when hovering over the area. This indicates that the fuel sensor did not transmit any data during the specified timeframe to the platform.
 
@@ -158,7 +158,7 @@ At 504.95 km from the start of the report period, the fuel level in the tank was
 
 _example of a point on a fuel consumption by mileage graph_
 
-![Point on graph with x-axis mileage](../../../../../.gitbook/assets/image-20230905-075125.png)
+![Point on graph with x-axis mileage](<../../../../.gitbook/assets/image-20230905-075125 (1).png>)
 
 **X-axis = time**
 
@@ -170,7 +170,7 @@ On September 1, 2023 at 21:59, the fuel level was 33.4 liters. The ignition was 
 
 _example of a point on a graph of fuel consumption over time_
 
-![Point on graph with x-axis time](../../../../../.gitbook/assets/image-20230905-075327.png)
+![Point on graph with x-axis time](<../../../../.gitbook/assets/image-20230905-075327 (1).png>)
 
 ## Table Fillings and drains
 
@@ -178,7 +178,7 @@ This table will display information about the recorded drains and refills for th
 
 _example of a refueling and draining table_
 
-![Fillings and drains table](../../../../../.gitbook/assets/image-20230905-074858.png)
+![Fillings and drains table](<../../../../.gitbook/assets/image-20230905-074858 (1).png>)
 
 **Columns**
 
@@ -205,7 +205,7 @@ A date-detailed table will display the calculated information by day, according 
 
 _example of a table detailing fuel consumption by date_
 
-![Table details by dates](../../../../../.gitbook/assets/image-20230905-075915.png)
+![Table details by dates](<../../../../.gitbook/assets/image-20230905-075915 (1).png>)
 
 **Columns**
 
@@ -246,7 +246,7 @@ If the sensor data is missing in the report, the platform will indicate it with 
 
 This table provides statistical information on fuel levels by day and for the period.
 
-![Table statistics data](../../../../../.gitbook/assets/image-20230905-075013.png)
+![Table statistics data](<../../../../.gitbook/assets/image-20230905-075013 (1).png>)
 
 **Columns**
 

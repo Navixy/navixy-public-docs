@@ -29,11 +29,11 @@ Bluetooth Low Energy uses many protocols to transmit data, interact with all par
 
 **Generic Access Profile (GAP)** provides initial data exchange between devices, to determine «who is who».
 
-![BLE architecture](../../../.gitbook/assets/ble-protocols.png)
+![BLE architecture](<../../.gitbook/assets/ble-protocols (1).png>)
 
 Separately, we note the GATT and ATT protocols:
 
-![](../../../.gitbook/assets/imagen-20231019-232843.png)
+![](<../../.gitbook/assets/imagen-20231019-232843 (1).png>)
 
 **GATT** is an acronym for Generic Attribute Profile, which defines the way data is transferred between two low-energy Bluetooth devices using concepts called services and characteristics.
 
@@ -41,7 +41,7 @@ It uses a common data protocol called the **attribute protocol (ATT)**, which is
 
 Profile structure
 
-![](../../../.gitbook/assets/imagen-20231019-232914.png)
+![](<../../.gitbook/assets/imagen-20231019-232914 (1).png>)
 
 * Attribute Handle – table index corresponding to the attribute;
 * Attribute Type – UUID that describes the type;
@@ -84,13 +84,13 @@ At the same time, it is worth noting that wired sensors have higher noise protec
 
 Separately, it is worth considering the [Tire-pressure monitoring system](https://en.wikipedia.org/wiki/Tire-pressure_monitoring_system) (TPMS). The majority of TPMS installations transmit their data via UHF (Ultra High Frequency) radio. TPMS data is typically transmitted in one of two frequency ranges, which depends on the geographical location of the TPMS. TPMS signals are transmitted at about 433MHz in Europe, and at 315MHz in most other parts of the world.
 
-![Tire pressure monitoring system sensor](../../../.gitbook/assets/tire-pressure-monitoring-system-sensor.jpg)
+![Tire pressure monitoring system sensor](<../../.gitbook/assets/tire-pressure-monitoring-system-sensor (1).jpg>)
 
 This TPMS sensor is called a “Direct TPMS” system. It provides more accurate tire pressure values instead of “Indirect TPMS” that does not use physical pressure sensors but measure air pressures using software-based systems, which by evaluating and combining existing sensor signals like wheel speeds, accelerometers, driveline data, etc. estimate and monitor the tire pressure without physical pressure sensors in the wheels.
 
 Each TPMS sensor should be installed into the tire. This sensor establishes the connection with an antenna that is connected to a receiver. This system provides a stable monitoring of pressure in the tires.
 
-![](../../../.gitbook/assets/imagen-20231019-232937.png)
+![](<../../.gitbook/assets/imagen-20231019-232937 (1).png>)
 
 ## Types of BLE sensors
 
@@ -112,7 +112,7 @@ The sensors can also send an additional parameter "BLE: Battery Level", which sh
 1. Configure a sensor according to the user manual
 2. Select needed sensor from the list. Usually BLE sensors have "BLE" in the label, e.g. BLE: Temperature #, BLE: Fuel etc.
 
-<img src="../../../.gitbook/assets/imagen-20231019-233836.png" alt="" width="375">
+<img src="../../.gitbook/assets/imagen-20231019-233836 (1).png" alt="" width="375">
 
 1. Then specify other settings according to your needs.
 2. That’s all! Now the platform will show data from the BLE sensor as soon as data is received on the server.

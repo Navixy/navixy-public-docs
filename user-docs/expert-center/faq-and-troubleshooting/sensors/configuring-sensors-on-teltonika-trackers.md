@@ -5,7 +5,7 @@ description: >-
   Navixy.
 ---
 
-# Configuring sensors on Teltonika GPS devices
+# Configuring Sensors on Teltonika Trackers
 
 This is a common guide for setting up sensors and fields for Teltonika devices. Using this guide, you can set up almost any sensor for Teltonika devices in Navixy.
 
@@ -21,11 +21,11 @@ Here you can find all configurators for all models of Teltonika:
 
 Visit the page → Press CTRL+F → Enter the model you need (in our case, it is "FMB920") → Download the latest version
 
-![](../../../.gitbook/assets/image-20240819-064327.png)
+![](<../../.gitbook/assets/image-20240819-064327 (1).png>)
 
 If it is your first time ever downloading and using a Teltonika configurator, unzip the archive, install additional software that comes with the configurator, and only then open the configurator.
 
-![](../../../.gitbook/assets/image-20240819-065046.png)
+![](<../../.gitbook/assets/image-20240819-065046 (1).png>)
 
 ### 2. Open configurator
 
@@ -33,11 +33,11 @@ If you are already familiar with using the **Teltonika Configurator**, you can s
 
 Before you open the configurator, you can connect the device to the PC or create an empty preset (configuration) without connecting the device to the configurator. If you don't have the device on hand, you can use FOTA and upload the configuration later using FOTA, or in a few steps, you will see how to configure the device remotely using Navixy [Air Console](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/air-console). Either way, you can create a new configuration or open an existing one. The main step at this point is to open the configurator interface as it is needed for whatever plan you have regarding updating the device configuration.
 
-![](../../../.gitbook/assets/image-20240819-070024.png)
+![](<../../.gitbook/assets/image-20240819-070024 (1).png>)
 
-![](../../../.gitbook/assets/image-20240819-070149.png)
+![](<../../.gitbook/assets/image-20240819-070149 (1).png>)
 
-![](../../../.gitbook/assets/image-20240819-070500.png)
+![](<../../.gitbook/assets/image-20240819-070500 (1).png>)
 
 ### 3. Choose the parameter
 
@@ -45,7 +45,7 @@ As we have already discussed Board Voltage will be the example sensor. You can c
 
 Let's find our parameter in the configurator.
 
-![](../../../.gitbook/assets/image-20240819-071454.png)
+![](<../../.gitbook/assets/image-20240819-071454 (1).png>)
 
 As you can see, the parameters may be named slightly differently. The main idea is to find it by the meaning of the chosen parameter, in our case Board Voltage = External Voltage as there is no "Board Voltage" parameter in the configurator of this version.
 
@@ -59,7 +59,7 @@ Using Navixy, the following options have to be set for the parameter to work cor
 
 **Operand**: Select **Monitoring**.
 
-![](../../../.gitbook/assets/image-20240819-082641.png)
+![](<../../.gitbook/assets/image-20240819-082641 (1).png>)
 
 Save the configuration to the device.
 
@@ -71,7 +71,7 @@ If the device can be configured via the configurator or FOTA, you can skip this 
 
 Look up the **Parameter ID** (not to be confused with the AVL ID!) using the configurator. Just hover your mouse over the parameter and see the parameter ID pop up. As the first step, we will look up the priority of the parameter, so hover your mouse over the **Priority** column next to the **External Voltage** field:
 
-![](../../../.gitbook/assets/image-20240819-083631.png)
+![](<../../.gitbook/assets/image-20240819-083631 (1).png>)
 
 As you can see, 50080 is the ID of "**External Voltage — Priority**". Values can be looked up using the following table:
 
@@ -83,7 +83,7 @@ Let's find the parameter possible values.
 
 CTRL+F, enter **Priority** and see the following table:
 
-![](../../../.gitbook/assets/image-20240819-084026.png)
+![](<../../.gitbook/assets/image-20240819-084026 (1).png>)
 
 For **Priority**, there are 4 possible values: 0 — **Disabled**, 1 — **Low**, 2 — **High**, and 3 — **Panic**. As you remember, we set only **Low** for our all parameters as Navixy requires it.
 
@@ -97,7 +97,7 @@ Where 50080 is the parameter ID we just looked up, and 1 is the value for this p
 
 Send it via Air Console:
 
-![](../../../.gitbook/assets/image-20240819-084430.png)
+![](<../../.gitbook/assets/image-20240819-084430 (1).png>)
 
 or using SMS
 
@@ -109,15 +109,15 @@ Note how we add two space symbols for the SMS command. It is mandatory to add th
 
 Here is the reply we should receive from the device:
 
-![](../../../.gitbook/assets/image-20240819-084654.png)
+![](<../../.gitbook/assets/image-20240819-084654 (1).png>)
 
 The same way set up **Event Only**:
 
-![image-20240819-090816.png](../../../.gitbook/assets/image-20240819-090816.png)
+![image-20240819-090816.png](<../../.gitbook/assets/image-20240819-090816 (1).png>)
 
 Parameter ID is 50084. The value we need according to the table is 0.
 
-![image-20240819-090916.png](../../../.gitbook/assets/image-20240819-090916.png)
+![image-20240819-090916.png](<../../.gitbook/assets/image-20240819-090916 (1).png>)
 
 Via Air Console:
 
@@ -125,7 +125,7 @@ Via Air Console:
 setparam 50084:0
 ```
 
-![](../../../.gitbook/assets/image-20240819-091113.png)
+![](<../../.gitbook/assets/image-20240819-091113 (1).png>)
 
 Through SMS:
 
@@ -137,11 +137,11 @@ Through SMS:
 
 Let's find the last parameter ID for Operand and set up it the same way.
 
-![](../../../.gitbook/assets/image-20240819-091443.png)
+![](<../../.gitbook/assets/image-20240819-091443 (1).png>)
 
 **Operand** parameter ID 50081, values - see the following table:
 
-![](../../../.gitbook/assets/image-20240819-090916.png)
+![](<../../.gitbook/assets/image-20240819-090916 (1).png>)
 
 As we mentioned earlier, you need to set the Operand field to "Monitoring", thus, the value should be equal to 3.
 
@@ -151,7 +151,7 @@ Via Air Console:
 setparam 50081:3
 ```
 
-![](../../../.gitbook/assets/image-20240819-091750.png)
+![](<../../.gitbook/assets/image-20240819-091750 (1).png>)
 
 Through SMS:
 
@@ -171,7 +171,7 @@ Each Teltonika tracker model has its own AVL ID list where you can look up the p
 
 Look for "FMB920 AVL ID" in Google. The first link should indicate: "FMB920 Teltonika Data Sending Parameters ID". Substitute the model with the model you need.
 
-![](../../../.gitbook/assets/image-20240819-080145.png)
+![](<../../.gitbook/assets/image-20240819-080145 (1).png>)
 
 The following list contains all AVL IDs (the same as avl\_io in the Air Console). You need to look up the number of the parameter using the table:
 
@@ -179,11 +179,11 @@ The following list contains all AVL IDs (the same as avl\_io in the Air Console)
 
 As in the "1. Download configurator" section, press CTRL+F and search through the page using the part of the configuration parameter name **External** (**External Voltage**).
 
-![](../../../.gitbook/assets/image-20240819-080616.png)
+![](<../../.gitbook/assets/image-20240819-080616 (1).png>)
 
 The AVL ID is 66 for "External Voltage". Let's find this avl\_io in Air Console:
 
-![](../../../.gitbook/assets/image-20240819-075606.png)
+![](<../../.gitbook/assets/image-20240819-075606 (1).png>)
 
 Here is our "External Voltage" coming into the platform as "avl\_io 66" with the current value = 12607 (in mV).
 
@@ -193,20 +193,20 @@ As we confirmed the field is arriving, we can proceed with the configuration of 
 
 Open the user interface → Go to **Devices and settings** menu →
 
-![](../../../.gitbook/assets/image-20240819-081518.png)
+![](<../../.gitbook/assets/image-20240819-081518 (1).png>)
 
 → Select the tracker in the list → Scroll down to the **Sensors and buttons** block.
 
 Add a new measurement sensor.
 
-![](../../../.gitbook/assets/image-20240819-081822.png)
+![](<../../.gitbook/assets/image-20240819-081822 (1).png>)
 
 Specify the Input type as "AVL OI \[N]" and enter the avl\_io ID from the previous section which is equal to 66 based on the list of AVL IDs.
 
-![](../../../.gitbook/assets/image-20240819-082053.png)
+![](<../../.gitbook/assets/image-20240819-082053 (1).png>)
 
 Click **Save**.
 
 That's it, the setup is complete, now once the next data packet arrives on the platform with the specified AVL ID, you will be able to see the updated information in the tracker widget.
 
-![](../../../.gitbook/assets/image-20240819-075728.png)
+![](<../../.gitbook/assets/image-20240819-075728 (1).png>)

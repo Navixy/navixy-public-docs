@@ -16,7 +16,7 @@ This article aims to guide you in achieving high-quality results through effecti
 
 In the upcoming articles of this series, we will explore various challenges encountered throughout the customer journey. These include selecting the ideal fuel management device tailored to your unique requirements, refining the platform, and visualizing information for in-depth analysis. By doing so, you will gain a holistic understanding of organizing, planning, controlling, and optimizing fuel usage. Stay tuned for valuable insights on this intricate process.
 
-<figure><img src="../../../../.gitbook/assets/image (4) (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4) (4).png" alt=""><figcaption></figcaption></figure>
 
 Drawing from our extensive experience, we emphasize several crucial factors to grasp in order to ensure optimal decision-making and achieve exceptional outcomes from the very beginning. When it comes to dealing with fuel, all calculations revolve around two fundamental aspects:
 

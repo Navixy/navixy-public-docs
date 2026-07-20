@@ -4,9 +4,9 @@ description: >-
   Compares budget Novatek and premium Ambarella chips used in fleet cameras.
 ---
 
-# Inside the dashcam: what really powers video telematics
+# Inside the dashcam: What really powers video telematics
 
-<figure><img src="../../../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
 
 Imagine you're comparing two dashcams for your fleet. Both advertise similar video resolution (say 1080p) and storage capacity, yet one costs $100 and the other $200. At first glance they look alike with the same size and same basic features, so why the big price gap? The answer lies in the _intelligence_ inside the device, specifically the **System-on-Chip (SoC)** that acts as the camera's brain. The more expensive camera isn't just a better box: it's a smarter box, packed with on-board processing and AI capabilities. In modern fleet cameras, it's the SoC and its software that make all the difference in performance, not just the lens or memory card.
 

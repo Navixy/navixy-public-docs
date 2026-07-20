@@ -4,7 +4,7 @@ description: >-
   conditions, and notifications for refills and drain events.
 ---
 
-# Fuel level alerts and notifications
+# Fuel alerts and notifications
 
 Before setting up the **Fuel level change** rule, make sure to add and configure the fuel level sensor users intend to monitor. For more comprehensive instructions on how to do this, consult the [Measurement sensor](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/vehicle-sensors/measurement-sensors) article.
 
@@ -16,11 +16,11 @@ The purpose of this rule is to facilitate real-time monitoring of the fuel level
 
 **Sensor:** Specify a previously created fuel level sensor as a source for notifications and analysis.
 
-![](../../../../../.gitbook/assets/fuel-alert-settings-1.png)
+![](<../../../../.gitbook/assets/fuel-alert-settings-1 (1).png>)
 
 The number of fuel changes to be indicated is regulated and filtered by the Accuracy parameter of the fuel level sensor in the **Sensors and buttons** block.
 
-![](../../../../../.gitbook/assets/fuel-alert-settings-2.png)
+![](<../../../../.gitbook/assets/fuel-alert-settings-2 (1).png>)
 
 In the screenshot above, according to the calibration table, the maximum fuel tank is 150 L. This is the value that **Accuracy** calculates the percentage of. If no calibration is provided, then it will be an absolute value of 100 units (in this case, would be 100 Litres). Based on the resulting of accuracy percentage value in selected units, the platform filters the incoming changes from this sensor and compares their sum within 10 minutes with the Accuracy resulting parameter.
 
@@ -33,11 +33,11 @@ Rules for draining and refueling are based on the calibration table and absolute
 
 10% from 150 L = 15 L is resulting, the minimum amount of fuel that can be decreased or filled to the tank before triggering a fuel level change notification. If the fuel level change within a 10-minute period is solely 15L or greater, or if the total fuel level change within that period is equal to or greater than the **Accuracy** value, the user will receive a notification.
 
-![](../../../../../.gitbook/assets/fuel-alert-settings-3.png)
+![](<../../../../.gitbook/assets/fuel-alert-settings-3 (1).png>)
 
 23 L delta will trigger the notification, meaning the 23 L difference between 2 adjacent points is greater than the 15 L in the Accuracy resulting value.
 
-![](../../../../../.gitbook/assets/fuel-alert-settings-4.png)
+![](<../../../../.gitbook/assets/fuel-alert-settings-4 (1).png>)
 
 Total change within 10 minutes. Here is another case when users can receive the notification. In sum, there is approximately 140+ L of fuel change within a 10 minutes period which is much greater than 15 L of the resulting **Accuracy** value.
 
@@ -88,6 +88,6 @@ Set a schedule for when the rule runs. If your schedule indicates that the event
 
 To view the dates when the events were received, you can build a [Report on all events](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/reports/specific-report-details/report-on-all-events).
 
-![](../../../../../.gitbook/assets/fuel-alert-event-report-1.png)
+![](<../../../../.gitbook/assets/fuel-alert-event-report-1 (1).png>)
 
-![](../../../../../.gitbook/assets/fuel-alert-event-report-2.png)
+![](<../../../../.gitbook/assets/fuel-alert-event-report-2 (1).png>)

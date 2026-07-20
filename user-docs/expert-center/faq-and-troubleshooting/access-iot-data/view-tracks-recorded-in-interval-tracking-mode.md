@@ -13,10 +13,10 @@ However, such data does not allow for building accurate tracks on the map, and i
 
 If you need to show the movement of the device as a line on the map in any case, then generate a track
 
-![Displaying tracks in interval mode](../../../.gitbook/assets/image-20231130-084047.png)
+![Displaying tracks in interval mode](<../../.gitbook/assets/image-20231130-084047 (1).png>)
 
 And disable the **Split by stops** option in the **Tracks** settings.
 
-![Displaying tracks in interval mode](../../../.gitbook/assets/image-20231130-084219.png)
+![Displaying tracks in interval mode](<../../.gitbook/assets/image-20231130-084219 (1).png>)
 
 In this case, all points transmitted by the device during the specified time period are shown as one trip.

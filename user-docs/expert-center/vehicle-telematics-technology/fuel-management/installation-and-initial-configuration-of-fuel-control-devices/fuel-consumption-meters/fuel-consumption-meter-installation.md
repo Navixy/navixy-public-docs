@@ -12,7 +12,7 @@ We strongly recommend engaging the services of professional installers for the i
 
 A flow meter is a vital component installed in vehicles or special equipment's fuel system. Let's revisit the typical scheme of the fuel system once more:
 
-![Typical diagram of the diesel engine fuel system](../../../../../.gitbook/assets/fuel-flow-meter-73.png)
+![Typical diagram of the diesel engine fuel system](<../../../../.gitbook/assets/fuel-flow-meter-73 (1).png>)
 
 1. Fuel tank
 2. Rough filter
@@ -41,9 +41,9 @@ To install a flow meter you will need:
 * Pyrometer
 * Pressure gauge
 
-![Mounting bracket for fuel meter installation](../../../../../.gitbook/assets/fuel-flow-meter-12.png)
+![Mounting bracket for fuel meter installation](<../../../../.gitbook/assets/fuel-flow-meter-12 (1).png>)
 
-![Fuel meter mounting kit](../../../../../.gitbook/assets/fuel-flow-meter-13.png)
+![Fuel meter mounting kit](<../../../../.gitbook/assets/fuel-flow-meter-13 (1).png>)
 
 ## Flow meter installation routine
 
@@ -66,7 +66,7 @@ Irrespective of the chosen flow meter and connection scheme, the installation pr
 Drilling into the vehicle frame is strictly prohibited when fitting the mounting plate for the flow meter. In case the use of bolts is not feasible for attaching the mounting plate, spot welding is an acceptable alternative.
 {% endhint %}
 
-![Technoton DFM DA 250 deaerator](../../../../../.gitbook/assets/fuel-flow-meter-141.png)
+![Technoton DFM DA 250 deaerator](<../../../../.gitbook/assets/fuel-flow-meter-141 (1).png>)
 
 8. For proper operation of the modified fuel system, **install a bypass valve** at the high-pressure fuel pump output, which will support the necessary pressure and help to prevent:
 
@@ -84,7 +84,7 @@ Drilling into the vehicle frame is strictly prohibited when fitting the mounting
 11. **To assess the fuel line pressure at various operating modes of the engine, such as idle or maximum speed, utilize a manometer.** This data can then be compared to the previous readings obtained prior to installation. It is essential to ensure that any deviation observed does not exceed 5%.
 12. **Connect the flow meter to the onboard power supply and a laptop through an adapter** (the same as with FLS). Then, configure the sensor with the help of a special application on your laptop.
 
-![Universal Adapter](../../../../../.gitbook/assets/fuel-flow-meter-15.png)
+![Universal Adapter](<../../../../.gitbook/assets/fuel-flow-meter-15 (1).png>)
 
 13. **Disconnect the flow meter from the computer**, then tie an interface cable with a cable route. Connect the opposite side of the cable route to the GPS tracking device.
 
@@ -96,7 +96,7 @@ The installation of a flow meter can vary in time depending on the fuel system, 
 
 Installation of a single-chamber flow meter according to the **On suction side** scheme:
 
-![](../../../../../.gitbook/assets/fuel-flow-meter-161.png)
+![](<../../../../.gitbook/assets/fuel-flow-meter-161 (1).png>)
 
 1. Fuel tank
 2. Rough filter
@@ -130,7 +130,7 @@ The following changes will be made to the standard fuel system:
 
 Installation of a single-chamber flow meter according to **On pressure side** scheme:
 
-![](../../../../../.gitbook/assets/fuel-flow-meter-171.png)
+![](<../../../../.gitbook/assets/fuel-flow-meter-171 (1).png>)
 
 1. Fuel tank
 2. Rough filter
@@ -163,7 +163,7 @@ The following changes will be made to the standard fuel system:
 
 Installation of a differential/two-chamber flow meter according to **On suction side** scheme:
 
-![](../../../../../.gitbook/assets/fuel-flow-meter-181.png)
+![](<../../../../.gitbook/assets/fuel-flow-meter-181 (1).png>)
 
 1. Fuel tank
 2. Rough filter
@@ -195,7 +195,7 @@ The following changes will be made to the standard fuel system
 
 Installation of a differential/two-chamber flow meter according to this scheme is as follows:
 
-![](../../../../../.gitbook/assets/fuel-flow-meter-191.png)
+![](<../../../../.gitbook/assets/fuel-flow-meter-191 (1).png>)
 
 Installation of a differential flow meter as per **On pressure side** scheme:
 
@@ -230,14 +230,14 @@ To establish a connection with a CAN-bus, the first step is to locate it within 
 
 Once you have successfully identified the CAN bus, there are two options to establish a connection: either through a CAN Crocodile contactless reader (recommended for its non-destructive nature) or by directly connecting to it (less preferable).
 
-![Fuel flow meter CAN connection](../../../../../.gitbook/assets/can-bus-diagram-600x348.png)
+![Fuel flow meter CAN connection](<../../../../.gitbook/assets/can-bus-diagram-600x348 (1).png>)
 
 General procedure for connecting to the CAN bus:
 
 1. First, you need to know the brand, model and year of manufacture of the car to which you want to connect a CAN-bus.
 2. Later, by looking at [this table](https://www.navixy.com/wp-content/uploads/2019/07/allcan300_list.pdf), check whether the full fuel consumption parameter is transmitted to the CAN-bus of your car. **If the data is not transmitted, this option is not possible.**
 
-![Fuel flow meter connection to CAN-bus example](../../../../../.gitbook/assets/fuel-flow-meter-21.png)
+![Fuel flow meter connection to CAN-bus example](<../../../../.gitbook/assets/fuel-flow-meter-21 (1).png>)
 
 3. Go to your device manufacturer's website to select a CAN module brand that fits.
 4. For example, when connecting Teltonika devices to passenger cars, the CAN-module LV-CAN 200 is used, and for trucks, it will be ALLCAN 300.

@@ -4,7 +4,7 @@ description: >-
   trip ends. Configure per-device thresholds for accurate stop detection.
 ---
 
-# Parking detection logic
+# Parking Detection Logic
 
 ## Introduction
 
@@ -12,7 +12,7 @@ Parking detection is a core setting that defines trips, stops, idling, and other
 
 Before reviewing reports or alerts, make sure the device sends consistent data and that the configuration matches the fleet’s real operation.
 
-<img src="../../../.gitbook/assets/unknown (10).png" alt="" height="336" width="624">
+<img src="../../.gitbook/assets/unknown (10) (1).png" alt="" height="336" width="624">
 
 Configure this from **Parking Detection**. It directly affects:
 
@@ -22,7 +22,7 @@ Configure this from **Parking Detection**. It directly affects:
 * Stops inside or outside geofences
 * Rules that depend on movement or parking status
 
-<img src="../../../.gitbook/assets/unknown (11).png" alt="" height="519" width="624">
+<img src="../../.gitbook/assets/unknown (11) (1).png" alt="" height="519" width="624">
 
 The platform only interprets the data it receives. Low reporting frequency, GPS noise, incorrect ignition status, or unreliable motion data will affect the result.
 
@@ -30,7 +30,7 @@ The platform only interprets the data it receives. Low reporting frequency, GPS 
 
 In **Parking Detection**, you define when the platform should treat a unit as parked.
 
-<img src="../../../.gitbook/assets/unknown (12).png" alt="" height="404" width="624">
+<img src="../../.gitbook/assets/unknown (12) (1).png" alt="" height="404" width="624">
 
 * **Minimum inactivity detection**: The minimum time the unit must stay idle before the platform marks it as parked. If this is set to 5 minutes, the condition must hold for the full 5 minutes before the status changes. Allowed range: 1 to 1440 minutes.
 * **Maximum idle speed**: The speed threshold used to treat the unit as idle. If this is set to 3 km/h, the platform treats speeds below 3 km/h as idle. If this is set to 0, idle speed detection is disabled.
@@ -39,7 +39,7 @@ In **Parking Detection**, you define when the platform should treat a unit as pa
 
 ## How the logic works without ignition or a motion sensor
 
-<img src="../../../.gitbook/assets/unknown (13).png" alt="" height="405" width="624">
+<img src="../../.gitbook/assets/unknown (13) (1).png" alt="" height="405" width="624">
 
 If these options are disabled, the platform uses only speed and time:
 

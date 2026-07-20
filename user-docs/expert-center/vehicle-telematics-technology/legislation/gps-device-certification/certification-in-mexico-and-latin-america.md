@@ -36,7 +36,7 @@ For more information, contact the relevant organizations.
 
 After certification, a product may need to display certain agencies' markings or certificate ID on the packaging, manual, and device itself. This ensures that any potential buyer knows exactly which certifications a device might have. Users can also access the corresponding databases, if available, and search by ID number for additional product information such as test reports, frequency bands, and applicant details.
 
-![Certification in Latin America and Mexico](../../../../.gitbook/assets/s-l1600-device-600x400.png)
+![Certification in Latin America and Mexico](<../../../.gitbook/assets/s-l1600-device-600x400 (1).png>)
 
 ## Cellular network compliance
 

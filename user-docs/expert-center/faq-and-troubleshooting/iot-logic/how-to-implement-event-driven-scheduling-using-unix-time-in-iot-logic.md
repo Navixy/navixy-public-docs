@@ -5,11 +5,11 @@ description: >-
   enabled.
 ---
 
-# How to implement event-driven scheduling using Unix time in IoT Logic
+# How to Implement Event-Driven Scheduling Using Unix Time in IoT Logic
 
 In this section, configure a timer in IoT Logic to control the activation of outputs on the devices. This functions as a scheduler by using Unix time for time-based control.
 
-<figure><img src="../../../.gitbook/assets/image (16) (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (16) (2).png" alt=""><figcaption></figcaption></figure>
 
 First, the scheduler logic was built based on Unix time, since it is the only reliable and consistent parameter we can always depend on. The second key element is the timestamp of valid packets received by the Navixy platform.\
 It is important to note that this logic requires the device to continuously send valid data packets to the platform. The frequency itself is not critical; however, if no incoming messages are received, it becomes impossible to evaluate time or trigger any scheduled actions.

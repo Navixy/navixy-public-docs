@@ -74,7 +74,7 @@ It is important to note that the flow meter installation process may vary depend
 
 The fuel consumption data received is processed by an electronic sensor, which converts it into a digital signal and transmits it to the instrument panel or control system, where the information can be displayed or used for analysis and control.
 
-<figure><img src="../../../../.gitbook/assets/image (1) (1) (1) (1) (2).png" alt="" width="267"><figcaption><p>Fuel flow meter</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1) (1) (1) (2).png" alt="" width="267"><figcaption><p>Fuel flow meter</p></figcaption></figure>
 
 ### Using a fuel level sensor
 
@@ -98,11 +98,11 @@ Additionally, it should be noted that for vehicles with non-standard fuel system
 
 {% columns %}
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption><p>Digital fuel level sensor</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2) (1) (1) (1).png" alt=""><figcaption><p>Digital fuel level sensor</p></figcaption></figure>
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (3) (1) (2).png" alt=""><figcaption><p>Analog fuel level sensor</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (3) (1) (2).png" alt=""><figcaption><p>Analog fuel level sensor</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 

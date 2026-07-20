@@ -64,6 +64,6 @@ All calibration practices follow more or less the same routine:
 4. If the tank has a complex shape, the pass volume should be divided by two when reaching the “crooked” spot.
 5. Add the entries from the calibration table to the GPS tracking platform (Go to Devices and settings => Sensors and buttons => Add measurement sensor). Some sensors support the option of uploading tank calibration tables from a file (e.g. Fuel sensors by Omnicomm). Otherwise it should be added manually.
 
-![Fuel level sensor calibration table](../../../../.gitbook/assets/image-20231219-113955.png)
+![Fuel level sensor calibration table](<../../../.gitbook/assets/image-20231219-113955 (1).png>)
 
 To delve into the art of creating and configuring sensors, alongside adding calibration data in Navixy, venture into the realm of the Sensors settings section. Discover a world of possibilities waiting to be explored!

@@ -14,7 +14,7 @@ To learn more about installation, powering a dash cam, and how to connect additi
 
 First, address where to place the dash cam. Most often, managers will choose to mount the device on the windshield since this generally allows for recording both the driver and the road ahead. In addition to the windshield, it's also possible to secure cameras to the dashboard, hence the name. In most cases, adhesive tape will secure the device in place, although some manufacturers may instead use suction cups or another method. Just be sure to clean the surface before mounting to ensure it adheres properly.
 
-![Dash cam installation](../../../.gitbook/assets/imagen-20231019-230612.png)
+![Dash cam installation](<../../.gitbook/assets/imagen-20231019-230612 (1).png>)
 
 It's also crucial to choose a spot that won't impair the driver's view of the road. If the dash cam is obstructive, the person behind the wheel won't just be putting themselves at risk of a collision, but also those around them. Moreover, a driver could face a traffic citation depending on local laws and regulations. If unsure what restrictions are in place, check with the division of motor vehicles for the applicable city, state, province, or precinct.
 
@@ -24,7 +24,7 @@ One final item to keep in mind when installing a dash cam is the risk of theft. 
 
 Once the dash cam has been mounted, it's time to connect it to power. In most instances, this requires locating the vehicle's fuse box, removing the cover, and plugging the camera into the proper terminal with ACC wire. This method has the added advantage of powering the camera even when the truck, van, bus, or car is turned off. Other devices, however, may plug into the OBDII input, so be sure to read the installation instructions thoroughly before proceeding.
 
-![Connect a dash cam and other devices to the fuse box](../../../.gitbook/assets/fuse-box-600x338.jpeg)
+![Connect a dash cam and other devices to the fuse box](<../../.gitbook/assets/fuse-box-600x338 (1).jpeg>)
 
 ## Installation: DIY or professional
 
@@ -34,7 +34,7 @@ After locating the fuse box, it might be necessary to pull back the panel with a
 
 Along with connecting a wire to the ignition-based fuse to turn on the camera when the vehicle is turned on, it's necessary to connect to a constant fuse for continuous power when the car is off, in addition to ground wire to prevent electric shocks.
 
-![Example of fuse box diagram](../../../.gitbook/assets/fuse-box-2--600x338.png)
+![Example of fuse box diagram](<../../.gitbook/assets/fuse-box-2--600x338 (1).png>)
 
 Generally, it can take anywhere from 15 minutes to an hour to complete the aforementioned installation steps from start to finish. The specific timeframe will depend on the person's experience with vehicle electronics, how many cameras need to be set up, and how many auxiliary accessories are used.
 

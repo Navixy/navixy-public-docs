@@ -28,9 +28,9 @@ Follow these steps to configure your device on sending BLE beacon data to the pl
 
 1. Download [Teltonika Configurator](https://wiki.teltonika-gps.com/view/Teltonika_Configurator_versions). This application streamlines many settings at once. You can save the preset and use it on the FOTA Web to configure other devices, making the process more convenient.
 2. In the System tab, set the Data Protocol to Codec 8 Extended. This enables the device to work with BLE tags.\
-   ![How to configure your device](../../../.gitbook/assets/image-20230619-101210.png)
+   ![How to configure your device](<../../.gitbook/assets/image-20230619-101210 (1).png>)
 3. Enable Bluetooth in the Bluetooth settings and choose either **Enable (hidden)** or **Enable (visible)**. Otherwise, Bluetooth will be disabled.\
-   ![How to configure your device](../../../.gitbook/assets/browser_ivSpIqPwoh.png)
+   ![How to configure your device](<../../.gitbook/assets/browser_ivSpIqPwoh (1).png>)
 4. In Bluetooth 4.0 settings, disable Non-Stop Scan and configure Update Frequency and Scan Duration as 30 seconds. These settings optimize BLE scanning with the device.
 5. In Bluetooth 4.0 settings Advanced Mode Settings, load the EYE Sensor preset according to packet settings in the EYE app.
 6. Configure the MAC address of the sensor.

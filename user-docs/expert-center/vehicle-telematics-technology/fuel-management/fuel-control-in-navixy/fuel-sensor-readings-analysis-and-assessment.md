@@ -62,7 +62,7 @@ What is important to know about calibration table fulfillment - **the number of 
 
 * **For the OEM fuel level sensors** with data in percentage you have to enter 2 entries: for the lowest level of fuel and for the full tank (100%). Here is an example of calibration
 
-![](../../../../.gitbook/assets/image-20231219-115336.png)
+![](<../../../.gitbook/assets/image-20231219-115336 (1).png>)
 
 * **For the additional fuel level sensors** (Analog and Digital) calibration table should be fulfilled according to the manufacturer recommendation. The number of entries depends on the fuel tank capacity, but we strongly recommend to have at least 10 entries for the tanks with capacity less than 500 litres (see details in the table below):
 
@@ -74,7 +74,7 @@ What is important to know about calibration table fulfillment - **the number of 
 
 Here is the example of the good calibration table
 
-![](../../../../.gitbook/assets/image-20231219-113955.png)
+![](<../../../.gitbook/assets/image-20231219-113955 (1).png>)
 
 {% hint style="info" %}
 There is no need to calibrate OEM sensors that transmit data in liters.

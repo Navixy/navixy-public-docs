@@ -4,7 +4,7 @@ description: >-
   lighting controls, and steering wheel rig to evaluate dashcam performance.
 ---
 
-# Building a video telematics test lab: key components and considerations
+# Building a Video Telematics Test Lab: Key Components and Considerations
 
 When setting up a test lab specifically focused on video telematics, it's important to keep in mind certain limitations. Many cameras rely on speed and movement data as fundamental parameters to capture video correctly. In other words, the camera "expects" a change in coordinates and velocity to understand that the vehicle is in motion. However, some models allow this functionality to be disabled, which makes it possible to run tests in static environments.
 
@@ -25,7 +25,7 @@ With that in mind, here's a proposal for a simple yet effective lab setup, along
 *   Dimmer / lighting control\
     Light management is critical. With a dimmer, you can darken or brighten the room to replicate day, night, or transitional lighting conditions. This is invaluable for checking how cameras react to sudden light changes.\\
 
-    <figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 11-05-19.png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 11-05-19 (1).png" alt=""><figcaption></figcaption></figure>
 
 ## Why it matters
 

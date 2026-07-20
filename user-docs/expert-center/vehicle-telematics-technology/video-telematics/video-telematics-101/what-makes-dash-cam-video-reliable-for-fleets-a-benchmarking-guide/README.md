@@ -4,7 +4,7 @@ description: >-
   HDR performance, and low-light handling under real fleet conditions.
 ---
 
-# What makes dash cam video reliable for fleets? A benchmarking guide
+# What makes Dash Cam video reliable for fleets? A Benchmarking guide
 
 In the world of fleet management and video telematics, not all cameras are created equal. Technical specs like "1080p" or "4K" may look impressive on paper, but what really matters is how those features perform in the field, on busy highways, in dimly lit warehouses, or during sudden light changes. For fleet operators, clarity and reliability can mean the difference between having actionable evidence or blurry footage that raises more questions than answers.
 
@@ -72,9 +72,9 @@ By adjusting the sensitivity settings of the camera, tables were created to show
 | Driver Detection                  | ✅   | <p><br></p> | <p><br></p> | <p><br></p> |
 | Camera Cover                      | ✅   | <p><br></p> | <p><br></p> | <p><br></p> |
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-25-25.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-25-25 (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-25-38.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-25-38 (1).png" alt=""><figcaption></figcaption></figure>
 
 The results clearly show that camera sensitivity directly influences detection performance. At high sensitivity, cameras capture a wider range of events and distances (0.6 m to 2.0 m), but this may also introduce more false positives. In contrast, medium and low sensitivity settings narrow the detection range (down to just 0.6 m to 1.0 m), reducing noise but risking missed events.
 
@@ -94,11 +94,11 @@ By incorporating these benchmarks, fleet managers can differentiate between came
 
 Let's look at an example from two cameras in the laboratory and compare how they respond to a flashlight.<br>
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-53-57.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-53-57 (1).png" alt=""><figcaption></figcaption></figure>
 
 **Camera 1:** The light source is still intense, but surrounding details (hand, ceiling, face outline) remain more visible, indicating better HDR response and lower lux tolerance.
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-53-21.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-53-21 (1).png" alt=""><figcaption></figcaption></figure>
 
 **Camera 2:** The bright light causes strong overexposure, washing out much of the surrounding detail (poor HDR handling).
 
@@ -111,11 +111,11 @@ Let's look at an example from two cameras in the laboratory and compare how they
 
 Camera 2 clearly struggles to execute the necessary contrast adjustments during image processing. However, additional field-testing could determine whether its image sharpness improves under different conditions.<br>
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-54-30.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-54-30 (1).png" alt=""><figcaption></figcaption></figure>
 
 The vehicle was in transit at 8:46 AM on a cloudy day.
 
-<figure><img src="../../../../../.gitbook/assets/Screenshot at Sep 12 10-54-40.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 10-54-40 (1).png" alt=""><figcaption></figcaption></figure>
 
 The vehicle was in transit at 8:11 AM on a bright day.
 
@@ -128,7 +128,7 @@ When fleet vehicles travel through tunnels, cameras face one of the toughest tes
 
 <br>
 
-<figure><img src="../../../../../.gitbook/assets/output (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/output (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ### What this means
 

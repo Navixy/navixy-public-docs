@@ -26,7 +26,7 @@ It should be noted that CAN-based GPS devices transmit more telemetry informatio
 3. Turn on the vehicle and check if the GPS device is working. Wait a while for the device to initialize the connection. It should start receiving data on fuel and other vehicle parameters and transmit them over the Internet.
 4. Check the data you receive from the GPS device in your Navixy account. (Remember to activate the GPS device before use)
 
-<figure><img src="../../../../.gitbook/assets/image (1) (4).png" alt=""><figcaption><p>OBD II connection</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (4).png" alt=""><figcaption><p>OBD II connection</p></figcaption></figure>
 
 ## Connecting the device to analog input
 

@@ -5,7 +5,7 @@ description: >-
   levels.
 ---
 
-# Manage sensors
+# Manage Sensors
 
 First of all, be advised that there is no possibility to affect the sensor from the Navixy platform. The sensor just sends data to the GPS device, then this data is just parsed on the server.
 
@@ -36,26 +36,26 @@ This section is for the cases, when the real units of measure and the units rece
 1. Make sure that sensor is configured correctly and [calibration table is filled](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/vehicle-sensors/measurement-sensors) (if needed)
 2. Follow through the all recommendations from the user manuals. Be advised that some cases require using dividers.
 
-![Sensors management](../../../.gitbook/assets/image-20231130-085310.png)
+![Sensors management](<../../.gitbook/assets/image-20231130-085310 (1).png>)
 
 ## Discrepancies between the real values and sensor values
 
 This sections is for the cases, when the values received from the sensor does not match to the real values. Be informed that when fuel tank is inclined, fuel sensor might send incorrect values
 
-![](../../../.gitbook/assets/fuel-tank-is-inclined.png)
+![](<../../.gitbook/assets/fuel-tank-is-inclined (1).png>)
 
 1. Check that data is parsed and shown in the [air console](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/air-console), if there is no data from the device in the gprs-terminal, it means that currently device is not sending any data
 2. [Calibration table](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/vehicle-sensors/measurement-sensors) should be filled correctly according to the sensor user manual (if needed), also "drains" detection parameters should be specified correctly
 
-![](../../../.gitbook/assets/image-20231130-085604.png)
+![](<../../.gitbook/assets/image-20231130-085604 (1).png>)
 
-![](../../../.gitbook/assets/image-20231130-085700.png)
+![](<../../.gitbook/assets/image-20231130-085700 (1).png>)
 
 ## There is no sensor in sensor list for your device
 
 If the data that was received from the sensor appears in [Air Console](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/air-console), but the appropriate sensor itself isn't available for selection in the sensor list, contact our support team.
 
-![There is no sensor in sensor list for your device](../../../.gitbook/assets/image-20231130-085845.png)
+![There is no sensor in sensor list for your device](<../../.gitbook/assets/image-20231130-085845 (1).png>)
 
 ## Add a fuel sensor
 
@@ -63,18 +63,18 @@ To add a fuel sensor, first make sure it is properly connected and GPS device it
 
 In the Navixy platform, go to the **Devices and settings** module and pick a GPS device that you want to add the fuel sensor to. Select **Sensors and buttons** block, click the plus button, and pick **Measurement sensor**:
 
-![Add a fuel sensor](../../../.gitbook/assets/image-20231130-085932.png)
+![Add a fuel sensor](<../../.gitbook/assets/image-20231130-085932 (1).png>)
 
 A window will pop up where you will be able to set all required parameters. Pick the input to which your fuel sensor is connected: **Sensor type** should be set to **Fuel**. Don't forget to specify units.
 
-![Add a fuel sensor](../../../.gitbook/assets/image-20231130-090131.png)
+![Add a fuel sensor](<../../.gitbook/assets/image-20231130-090131 (1).png>)
 
 ## Calibrate a fuel sensor
 
 Different GPS devices process and report fuel sensor data in different ways. For example, CAN sensors typically require a simpler calibration. If GPS device reports in percentages and you need to see the amount of fuel in liters, record the fuel volume at 0 and 100 percent and enter those values into the table. The rest of calculation will be done automatically.
 
-![Calibrate a fuel sensor](../../../.gitbook/assets/image-20231130-090314.png)
+![Calibrate a fuel sensor](<../../.gitbook/assets/image-20231130-090314 (1).png>)
 
 Other sensors might return voltage instead of percents or direct volume. In such cases, more detailed calibration is required. To fill out a calibration table, you will need to measure sensor's values at different fuel levels in the tank and then input results into the table. In case some unrelevant values may be received by the sensor, you're able to set Ignore values parameter to get them filtered.
 
-![Calibrate a fuel sensor](../../../.gitbook/assets/image-20231130-090712.png)
+![Calibrate a fuel sensor](<../../.gitbook/assets/image-20231130-090712 (1).png>)

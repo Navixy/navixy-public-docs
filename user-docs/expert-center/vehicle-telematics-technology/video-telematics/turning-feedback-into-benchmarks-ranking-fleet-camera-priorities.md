@@ -26,7 +26,7 @@ Identifying the most important features for fleet management is not a simple tas
 | Privacy & compliance                   | 5.5                          |
 | Cost / ROI                             | 5.0                          |
 
-<figure><img src="../../../.gitbook/assets/video_telematics_feature_importance.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/video_telematics_feature_importance (1).png" alt=""><figcaption></figcaption></figure>
 
 As the results show, driver monitoring, incident detection, and real-time alerts rank as the three most critical factors for fleet managers. These three features are closely interconnected and play a critical role in meeting today's fleet management needs, not only for documenting incidents but also for managing driver performance. When a camera falls short on any of these three characteristics, the result is often a surge in false alerts.
 

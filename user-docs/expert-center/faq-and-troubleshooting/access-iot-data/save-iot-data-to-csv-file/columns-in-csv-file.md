@@ -4,7 +4,7 @@ description: >-
   types, event IDs, and how to interpret GPS, sensor, and state fields.
 ---
 
-# Columns in CSV file
+# Columns in CSV File
 
 The data warehouse tool enables you to export a raw data file containing all packets received from your device, without any filtering or calculations made on the platform side. These parameters represent information initially decoded from your device's packet in protocol related format, presented in a human-readable way. You don’t need to know the protocol to read and check the information in these packets.
 
@@ -27,7 +27,7 @@ You can open the raw data file with any text editor, such as WordPad, Notepad++,
 
 The file includes selected parameters in columns, along with one consistent entry, msg\_time.
 
-![](../../../../.gitbook/assets/image-20240209-073506.png)
+![](<../../../.gitbook/assets/image-20240209-073506 (1).png>)
 
 These parameters can be categorized as simple or complex.
 

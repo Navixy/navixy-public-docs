@@ -24,7 +24,7 @@ From our research and development, we've made a new tool. This tool lets TSPs, i
 
 We picked the CSV file format for its simplicity and common use. It's easy to turn into tables or give to programs that use artificial intelligence or machine learning.
 
-<figure><img src="../../../../.gitbook/assets/image (5) (4).png" alt=""><figcaption><p>Raw data export</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (5) (4).png" alt=""><figcaption><p>Raw data export</p></figcaption></figure>
 
 ### Raw data export features
 
@@ -68,19 +68,19 @@ You can create custom solutions for your customers. For instance, a customer oft
 
 First, go to the **Devices and settings** module and look for the device you're interested in in the user interface:
 
-<figure><img src="../../../../.gitbook/assets/image (6) (1) (2).png" alt=""><figcaption><p>Devices and settings tab UI</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (6) (1) (2).png" alt=""><figcaption><p>Devices and settings tab UI</p></figcaption></figure>
 
 Or, find the device settings for a specific device in the admin panel:
 
-<figure><img src="../../../../.gitbook/assets/image (7) (3).png" alt=""><figcaption><p>Tracker settings Admin Panel</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (7) (3).png" alt=""><figcaption><p>Tracker settings Admin Panel</p></figcaption></figure>
 
 Next, click the **Export data** button in the **Raw data** block:
 
-<figure><img src="../../../../.gitbook/assets/image (8) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (8) (3).png" alt=""><figcaption></figcaption></figure>
 
 This opens the **Raw data export** tool. Here, you need to choose the date range, timezone, and parameters that you want to include in a csv file.
 
-<figure><img src="../../../../.gitbook/assets/image (9) (3).png" alt=""><figcaption><p>Raw data export tool window</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (9) (3).png" alt=""><figcaption><p>Raw data export tool window</p></figcaption></figure>
 
 We've made sure that you won't accidentally close the window by clicking outside the **Raw data export** tool. You can only close it by clicking the **X** in the top right corner. Also, if you haven't chosen another device or refreshed the page, the **Raw data export** tool remembers all the settings you previously selected. This makes it easy to check any GPS tracker or sensor settings, go back, and keep working.
 
@@ -96,7 +96,7 @@ Select a date range either by clicking on the calendar or by entering the dates 
 
 When you click on these, the platform automatically picks the right range.
 
-<figure><img src="../../../../.gitbook/assets/image (10) (3).png" alt=""><figcaption><p>Raw data export Data range picker</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (10) (3).png" alt=""><figcaption><p>Raw data export Data range picker</p></figcaption></figure>
 
 To make it easier for you, we added a counter on how many days you've selected. If you try to pick a date that's more than 30 days ago, you get a message. The selection button won't be available.
 
@@ -110,7 +110,7 @@ Here's how you can choose the time zone you want:
 * Enter the name of the time zone.
 * Enter the time zone, for example -8, +2, etc.
 
-<figure><img src="../../../../.gitbook/assets/image (11) (2).png" alt=""><figcaption><p>Raw data export Timezone selector</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (11) (2).png" alt=""><figcaption><p>Raw data export Timezone selector</p></figcaption></figure>
 
 ### Selecting parameters
 
@@ -130,7 +130,7 @@ For all parameters and each indice parameter, you see a count showing how many y
 
 Each parameter you choose will add an extra column to the file.
 
-<figure><img src="../../../../.gitbook/assets/image (12) (1).png" alt=""><figcaption><p>Raw data export Parameters select</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (12) (1).png" alt=""><figcaption><p>Raw data export Parameters select</p></figcaption></figure>
 
 ## Downloading the raw data file
 
@@ -140,7 +140,7 @@ The file name includes the device ID, tracker label, and the date and time range
 
 Each row, starting from the second one, is a message from the device sent to the platform. The first row always shows the message time in the selected time zone and the rest are the parameters you selected.
 
-<figure><img src="../../../../.gitbook/assets/image (13) (2).png" alt=""><figcaption><p>Raw data columns example</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (13) (2).png" alt=""><figcaption><p>Raw data columns example</p></figcaption></figure>
 
 For more information about reading and understanding the raw data file [follow our next article](columns-in-csv-file.md).
 

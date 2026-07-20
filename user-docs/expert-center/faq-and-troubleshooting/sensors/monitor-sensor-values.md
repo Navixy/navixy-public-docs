@@ -4,13 +4,13 @@ description: >-
   and equipment monitoring. Includes use cases and rule configuration examples.
 ---
 
-# Monitor sensor values
+# Monitor Sensor Values
 
 In our swiftly digitizing world, the need to monitor an expanding array of parameters is more crucial than ever. Moreover, just observing current values or analyzing incoming data isn't enough anymore. Many situations demand immediate action for resolution.
 
 That's why we've developed a feature on our platform that allows you to receive alerts based on these parameters. This enables you and your team to quickly step in and tackle the issue, all while keeping an eye on it from various perspectives. We refer to these as "multi-conditional alerts" because they allow you to set different ranges or specific values for multiple parameters, or even a single one. This way, you're always the first to know and can act promptly when needed.
 
-![How to monitor different parameter values](../../../.gitbook/assets/browser_4OfLKr1ZHp.png)
+![How to monitor different parameter values](<../../.gitbook/assets/browser_4OfLKr1ZHp (1).png>)
 
 These rules are designed to oversee scenarios including but not limited to cold chain monitoring, specific transportation, comprehensive vehicle tracking, and other highly specific situations like receiving notifications about unique parameters on your intricate systems.
 
@@ -51,9 +51,9 @@ Follow these steps to configure your device on sending BLE beacon data to the pl
 
 1. Download [Teltonika Configurator](https://wiki.teltonika-gps.com/view/Teltonika_Configurator_versions) [https://wiki.teltonika-gps.com/view/Teltonika\_Configurator\_versions](https://wiki.teltonika-gps.com/view/Teltonika_Configurator_versions) . This application streamlines many settings at once. You can save the preset and use it on the [FOTA Web](https://fota.teltonika.lt/devices) [https://fota.teltonika.lt/devices](https://fota.teltonika.lt/devices) to configure other devices, making the process more convenient.
 2. In the System tab, set the Data Protocol to Codec 8 Extended. This enables the device to work with BLE tags.\
-   ![Codec 8 Extended for BLE data processing](../../../.gitbook/assets/image-20230912-111858.png)
+   ![Codec 8 Extended for BLE data processing](<../../.gitbook/assets/image-20230912-111858 (1).png>)
 3. Enable Bluetooth in the Bluetooth settings and choose either **Enable (hidden)** or **Enable (visible)**. Otherwise, Bluetooth will be disabled.\
-   ![Enabling Bluetooth settings to send BLE data](../../../.gitbook/assets/browser_F6Dzk10j8m-20230912-112138.png)
+   ![Enabling Bluetooth settings to send BLE data](<../../.gitbook/assets/browser_F6Dzk10j8m-20230912-112138 (1).png>)
 4. In Bluetooth 4.0 settings, disable **Non-Stop Scan** and configure Update Frequency and Scan Duration as 30 seconds. These settings optimize BLE scanning with the device.
 5. In Bluetooth 4.0 settings **Advanced Mode Settings**, load the **Eye Sensor** preset according to packet settings in the EYE app.
 6. Configure the MAC address of the sensor.
@@ -65,27 +65,27 @@ The device is now ready to transmit data from this sensor. Make almost the same 
 
 Now, let's dive into the process of establishing the necessary sensors on the platform. Our first priority is the temperature sensor. We'll set this up on the platform side, designating it as a BLE temperature sensor with the corresponding input number that aligns with your Bluetooth sensor configuration.
 
-![](../../../.gitbook/assets/image-20231011-060058.png)
+![](<../../.gitbook/assets/image-20231011-060058 (1).png>)
 
 Next, we'll mirror this setup for the humidity sensor.
 
-![Humidity sensor](../../../.gitbook/assets/image-20231011-060218.png)
+![Humidity sensor](<../../.gitbook/assets/image-20231011-060218 (1).png>)
 
 Excellent, we now have a pair of measurement sensors actively collecting data.
 
 For the door sensor, we recommend establishing [a virtual sensor](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/vehicle-sensors/virtual-sensors). This sensor can be configured to use the 'source value' calculation method. You can determine its state and value based on the provided table. This sensor has just two states, indicating whether the doors are open or closed.
 
-![Doors sesnor](../../../.gitbook/assets/image-20231011-060526.png)
+![Doors sesnor](<../../.gitbook/assets/image-20231011-060526 (1).png>)
 
 Given the likelihood of tracking multiple devices, it's crucial to streamline the process. Once we've established a reference device equipped with the sensors relevant to our needs, we can replicate these settings across other devices. Simply click the 'Copy Sensors' button on the platform. The system will automatically identify devices that can adopt the created sensor settings and present them for selection. From this list, choose the devices you wish to configure.
 
-![Cloning sensors](../../../.gitbook/assets/image-20231011-060652.png)
+![Cloning sensors](<../../.gitbook/assets/image-20231011-060652 (1).png>)
 
 At this point, all necessary devices are set up, complete with their respective sensors. Now, let's move on to rule creation.
 
 For future convenience, consider creating a new group for your devices. This allows for collective management of the devices within the group. For instance, you can generate rules and reports for the entire group simultaneously. Let's name this group "Refrigerators" and include all devices installed on trucks equipped with these types of trailers.
 
-![Adding devices to a new group](../../../.gitbook/assets/image-20231011-060811.png)
+![Adding devices to a new group](<../../.gitbook/assets/image-20231011-060811 (1).png>)
 
 ### Parameter in range multiconditional rule creation
 
@@ -97,7 +97,7 @@ To initiate this process, open the rules menu and create a new rule by clicking 
 
 In the ensuing menu, select the **Parameter in range** rule type. This filters your device list, leaving only those compatible with this rule type. You can also begin by selecting the required devices.
 
-![Choosing alert rule type and devices](../../../.gitbook/assets/image-20231011-061035.png)
+![Choosing alert rule type and devices](<../../.gitbook/assets/image-20231011-061035 (1).png>)
 
 #### Rule settings
 
@@ -105,7 +105,7 @@ The initial device you select for the rule serves as the reference device. The s
 
 Click on the sensor selection field and choose the temperature sensor from the dropdown list. This list encompasses both measurement and virtual sensors.
 
-![Available sensors list](../../../.gitbook/assets/image-20231011-062600.png)
+![Available sensors list](<../../.gitbook/assets/image-20231011-062600 (1).png>)
 
 Upon selecting the sensor, a 'Threshold' field will appear to its right. This field serves as a buffer, which is applied on either side of the **More or equal** and **Less or equal** boundaries for each parameter. The purpose of this value is to help the platform discern between IN and OUT range states, even when dealing with inconsistent data (such as sensor noise or inaccuracies). It accomplishes this by creating a larger range around the set values, thereby permitting more tolerance and minimizing the chance of false alerts. If the 'Value Threshold' parameter is left unspecified, it defaults to 0.03 (absolute value).
 
@@ -118,7 +118,7 @@ Next, we'll establish the permissible temperature limits, defined by the followi
 
 For our frozen food transportation, we know that temperatures below -25 degrees and above -18 degrees can cause damage. Therefore, these are our designated temperature limits for transport. Set the 'More or equal' field to -25 and the 'Less or equal' field to -18. If the temperature drops below or exceeds these values, the quality of the transported products may be compromised, indicating a need to inspect the refrigerator.
 
-![Range for temperature sensor](../../../.gitbook/assets/image-20231011-063519.png)
+![Range for temperature sensor](<../../.gitbook/assets/image-20231011-063519 (1).png>)
 
 Next, add another sensor to your rule by clicking **Add a sensor**, and select the humidity sensor from the dropdown list. You'll notice an 'OR' operator between the sensors; this indicates that the rule will be triggered if any one of the sensors detects values outside their respective ranges. This way, we can ensure that we receive notifications for each sensor, enabling the person in charge to take necessary corrective actions. This is crucial to achieving our ultimate goal of delivering fresh food.
 
@@ -131,11 +131,11 @@ To set these values:
 
 If the humidity falls below 95% or rises above 100%, it could indicate a problem, triggering an alert.
 
-![Range for humidity sensor](../../../.gitbook/assets/image-20231011-063450.png)
+![Range for humidity sensor](<../../.gitbook/assets/image-20231011-063450 (1).png>)
 
 The final sensor to add to our rule is the door status sensor. This sensor sends a value of 1 when the doors are open. In this case, we only need to set one value for the range - 'More or equal' to 1. Click **Add a sensor**, select the door status sensor from the dropdown list, and specify the range as **More or equal** to 1.
 
-![Range for door sensor](../../../.gitbook/assets/image-20231011-064001.png)
+![Range for door sensor](<../../.gitbook/assets/image-20231011-064001 (1).png>)
 
 There are also additional parameters that can be customized:
 
@@ -157,12 +157,12 @@ Notifications also have two additional settings:
 
 Once you've set up your preferred notification settings, the final step is to designate the recipients of these notifications. Notifications in the web version of the app will always be enabled; however, if you need to send additional notifications to a phone number or email address, you can specify those details here. This way, the relevant individuals will be immediately alerted to any potential issues, ensuring swift and effective action.
 
-![Rule notifications](../../../.gitbook/assets/image-20231011-072556.png)
+![Rule notifications](<../../.gitbook/assets/image-20231011-072556 (1).png>)
 
 #### Rule schedule
 
 After setting up the rule and notification settings, there's another crucial feature to consider: the operational hours of the alert. If, for instance, your drivers operate from Monday to Friday between 7 AM and 4 PM, it's unnecessary to receive alerts outside these hours. This can be particularly helpful in preventing false alarms, such as when refrigerator doors are opened for servicing in the garage. By disabling the rule outside of your drivers' shifts, you can focus on alerts that occur during operation hours.
 
-![Rule schedule](../../../.gitbook/assets/image-20231011-072904.png)
+![Rule schedule](<../../.gitbook/assets/image-20231011-072904 (1).png>)
 
 Congratulations! You've successfully set up your first rule for tracking multiconditional alerts. This comprehensive rule will help you manage an entire case without needing to create additional rules.

@@ -28,7 +28,7 @@ If the GPS device transmits data infrequently, corners will be cut and part of t
 
 Configure the GPS device to transmit your location as often as possible (including angle and distance conditions) to minimize possible impact.
 
-![](../../../.gitbook/assets/image-20230728-103318.png)
+![](<../../.gitbook/assets/image-20230728-103318 (1).png>)
 
 {% hint style="info" %}
 In addition, the odometer readings in a car are not always 100% accurate. Manufacturers allow an error of up to 10%, but usually it fluctuates somewhere around 5%. Usually, upwards.
@@ -45,7 +45,7 @@ But first, you need to collect some statistics in order to understand what value
 
 Now all readings will be automatically corrected according to your settings. Most likely, a small difference will still be observed, but it will not be critical and you can simply check the data and update the counter every few months.
 
-![Mileage and odometer](../../../.gitbook/assets/image-20231130-083736.png)
+![Mileage and odometer](<../../.gitbook/assets/image-20231130-083736 (1).png>)
 
 {% hint style="info" %}
 If your GPS device is connected to the car via CAN bus, then you can set up the synchronization of the odometer on the platform with the real car odometer. Just create the corresponding CAN sensor and select it as the odometer source in the settings panel. Note that you will still need to manually enter the current mileage first.

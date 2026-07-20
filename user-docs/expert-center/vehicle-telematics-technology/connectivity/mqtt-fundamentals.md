@@ -47,7 +47,7 @@ Because the MQTT protocol aims to be a protocol for resource-constrained and IoT
 
 MQTT is considered a lightweight protocol because all its messages have a small code footprint. The packet consists of a 2-byte fixed header + a variable header and a payload. In this first 2-byte, the fixed header will be always present in all the packets and the other two, variable header and payload are not always present.
 
-![MQTT message format](../../../.gitbook/assets/imagen-20231019-231143.png)
+![MQTT message format](<../../.gitbook/assets/imagen-20231019-231143 (1).png>)
 
 Out of the two-byte fixed header, the first byte is the control field. This 8-bit control field Is divided into two 4 bit fields. The first 4 MSB bits are the command type field. This type determines the action that will be performed: the client wants to subscribe to the topic, a new message is published for subscribers and others.
 
@@ -69,7 +69,7 @@ The three different QoS levels determine how the content is managed by the MQTT 
 * The second QoS level is acknowledged service. This QoS level uses a PUBLISH/PUBACK packet sequence between the publisher and its broker, as well as between the broker and subscribers. An acknowledgment packet verifies that content has been received, and a retry mechanism will send the original content again if an acknowledgment is not received in a timely manner. This may result in the subscriber receiving multiple copies of the same message. This QoS level may also be referred to as at least once or QoS1.
 * The third QoS level is assured service. This QoS level delivers the message with two pairs of packets. The first pair is called PUBLISH/PUBREC, and the second pair is called PUBREL/PUBCOMP. The two pairs ensure that, regardless of the number of retries, the message will only be delivered once. This QoS level may also be referred to as exactly once or QoS2.
 
-![QoS MQTT](../../../.gitbook/assets/chrome_q1ak4noiok-600x466.png)
+![QoS MQTT](<../../.gitbook/assets/chrome_q1ak4noiok-600x466 (1).png>)
 
 ## Advantages and disadvantages
 
@@ -122,7 +122,7 @@ To configure the Xirgo & BCE device on working with MQTT:
 
 * Inside FMSET: Choose **Connectivity** → **Telemetry server** → **MQTT broker address settings** and specify host: [mqtt.eu.navixy.com](http://mqtt.eu.navixy.com/) for EU server and [mqtt.us.navixy.com](http://mqtt.us.navixy.com/) for US server, port 1883.
 * And add the default user in **MQTT Security** -> **Authorization**\
-  ![MQTT device configuration](../../../.gitbook/assets/imagen-20231019-231034.png)
+  ![MQTT device configuration](<../../.gitbook/assets/imagen-20231019-231034 (1).png>)
 
 ### Globalmatix MQTT device configuration
 

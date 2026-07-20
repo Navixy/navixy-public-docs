@@ -21,6 +21,7 @@
         * [Fuel consumption report](vehicle-telematics-technology/fuel-management/fuel-control-in-navixy/analyzing-fuel-data/fuel-consumption-report.md)
       * [Fuel sensor readings analysis and assessment](vehicle-telematics-technology/fuel-management/fuel-control-in-navixy/fuel-sensor-readings-analysis-and-assessment.md)
       * [Fuel data analysis with Grafana via Navixy API integration](vehicle-telematics-technology/fuel-management/fuel-control-in-navixy/fuel-data-analysis-with-grafana-via-navixy-api-integration.md)
+    * [Understanding Gray Zones in Fuel Level Reports](vehicle-telematics-technology/fuel-management/understanding-gray-zones-in-fuel-level-reports.md)
     * [Installation and initial configuration of fuel control devices](vehicle-telematics-technology/fuel-management/installation-and-initial-configuration-of-fuel-control-devices/README.md)
       * [OEM fuel level sensors](vehicle-telematics-technology/fuel-management/installation-and-initial-configuration-of-fuel-control-devices/oem-fuel-level-sensors.md)
       * [Fuel consumption meters](vehicle-telematics-technology/fuel-management/installation-and-initial-configuration-of-fuel-control-devices/fuel-consumption-meters/README.md)

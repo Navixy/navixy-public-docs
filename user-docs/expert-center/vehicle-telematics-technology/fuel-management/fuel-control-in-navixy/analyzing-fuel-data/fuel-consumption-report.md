@@ -20,7 +20,7 @@ This report provides similar information as the fuel report in the consumption s
 To create a comprehensive report, utilize Navixy API and leverage the capabilities of plugin 78.
 {% endhint %}
 
-![](../../../../../.gitbook/assets/image-20230905-093059.png)
+![](<../../../../.gitbook/assets/image-20230905-093059 (1).png>)
 
 In order to get the information in the report you need to:
 
@@ -38,7 +38,7 @@ The following parameters are used in the report:
 
 Only devices with a sensor with the flow meter type installed will be available for selection.
 
-![](../../../../../.gitbook/assets/image-20230905-085021.png)
+![](<../../../../.gitbook/assets/image-20230905-085021 (1).png>)
 
 ## Table fuel consumption by date for the sensor
 
@@ -77,6 +77,6 @@ The total mileage for the period was 792.68 km. The actual fuel consumption for 
 The tab displays general information on all devices.There is only one column in this tab, which should be noted separately:\
 Fuel saving/overconsumption, l - displays information about the difference between the standard and actual fuel consumption. If the actual consumption is higher, the values will be negative.
 
-![](../../../../../.gitbook/assets/image-20230905-093548.png)
+![](<../../../../.gitbook/assets/image-20230905-093548 (1).png>)
 
 The Total for Period tab displays fuel data only for beacons that have fuel consumption measured in liters or gallons. To add a beacon to the report, change the fuel gauge units to liters or gallons.

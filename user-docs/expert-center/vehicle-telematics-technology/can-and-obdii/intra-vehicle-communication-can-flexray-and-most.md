@@ -26,7 +26,7 @@ CAN was divided into various layers, following the ISO/OSI model to achieve flex
 
 The ISO-11898: 2003 CAN communications protocol explains how information is passed between devices on a network based on an Open Systems Interconnection (OSI) model that is presented as a set of layers on a figure below. The lowest two layers of the seven layer OSI/ISO model are the physical and data link layers. The physical layer defines communication between devices connected by the physical medium.
 
-![CAN and alternatives](../../../.gitbook/assets/can-bus-principles-1.jpg)
+![CAN and alternatives](<../../.gitbook/assets/can-bus-principles-1 (1).jpg>)
 
 The Data-Link Layer among other things also takes care of organizing bits into frames and includes two protocols: classical CAN (first use backdated to 1988) and CAN FD (launched in 2012).
 
@@ -34,7 +34,7 @@ Application layer is essentially an end-user layer and provides access to networ
 
 A standard message structure could be divided on 8 parts as shown on the figure below. Those parts are: Start of Frame (SOF - the start of frame transmission), CAN-ID (frame identifier, message priority identification), Remote Transmission Request (RTR, indicates whether a node requests data from another node or sends data), Control (informs the length of the data in bytes), Data (actual data values than needed to be scaled/converted), The Cyclic Redundancy Check (CRC, ensuring data integrity), ACK (acknowledge, indicates if the data being received correctly) and EOF (End of Frame) that labels the end of CAN message/frame.
 
-![CAN and alternatives](../../../.gitbook/assets/can-bus-principles-2.png)
+![CAN and alternatives](<../../.gitbook/assets/can-bus-principles-2 (1).png>)
 
 CAN bus utilize an inverted form of logic with two states: dominant and recessive. Figure above demonstrates a simplified input-output diagram of a CAN transceiver: bit stream going to/from a CAN controller and/or microcontroller. When the controller sends a stream of bits, these are complemented and placed on the CANH line.
 
@@ -44,7 +44,7 @@ Each end of the link has a termination resistor equal to the characteristic impe
 
 The image below shows a CAN test bus. The nodes could represent sending messages from smart sensing technology and a motor controller. A typical application could be a temperature sensor.
 
-![CAN and alternatives](../../../.gitbook/assets/can-bus-principles-3.png)
+![CAN and alternatives](<../../.gitbook/assets/can-bus-principles-3 (1).png>)
 
 If another sensor node needs to send a message simultaneously, arbitration ensures that the message is sent. For instance, node A finishes sending its message as nodes B and C acknowledge a correct message being received. Nodes B and C on their turn begin arbitration and if node C wins the arbitration then it sends a message. Nodes A and B acknowledge message from node C, and node B then continues on with its message.
 
@@ -52,11 +52,11 @@ The opposite polarity of the driver input and output on the bus should be kept i
 
 For wiring the OBD port to a CAN DB9 device one needs a cable that can be either purchased or made. To get yourself a self-made one, a 9-pin D-sub socket (female) and an OBD plug (male) are required. The DB9 socket should match the plug for the CAN device.
 
-![CAN and alternatives](../../../.gitbook/assets/can-bus-principles-4.png)
+![CAN and alternatives](<../../.gitbook/assets/can-bus-principles-4 (1).png>)
 
 An example of OBD plug to DB9 CAN wiring including optional termination resistor also shown on schematics below.
 
-![CAN and alternatives](../../../.gitbook/assets/can-bus-principles-5.png)
+![CAN and alternatives](<../../.gitbook/assets/can-bus-principles-5 (1).png>)
 
 To build a sensor network, interface to a CAN bus, and view the CAN signals from vehicles there are a plenty of options. Various microcontrollers currently have the CAN protocol support and could be interfaced to CAN via a CAN transceiver chip.
 
@@ -72,7 +72,7 @@ CAN on a twisted pair of copper wires became an ISO standard in 1994. Growing de
 
 In such scenario, CAN data in the transmitter must be converted to the wireless protocol and reset in the receiver. Transparent and real-time transmission in the sense of the CAN network is not possible in this way. The radio connection thus functions as a gateway between two CAN networks.
 
-![CAN and alternatives](../../../.gitbook/assets/wireless-can-diagram.png)
+![CAN and alternatives](<../../.gitbook/assets/wireless-can-diagram (1).png>)
 
 The wireless CAN that based on dual-mode radio enables CAN participants to be integrated wirelessly into a CAN network, increasing security and usability. However, such a system require special antennas that need space and a particular alignment that limiting omnidirectional radiation.
 
@@ -86,11 +86,11 @@ MOST (Media Oriented System Transport) is a serial communication system for tran
 
 FlexRay on its turn is essentially an automotive network standard based on a flexible high data rate deterministic, fault-tolerant and high-speed bus system. It is utilized as a part of the star or line topology with copper or optical fiber. FlexRay featuring a dual-channel configurations offer enhanced fault-tolerance and/or increased bandwidth. The FlexRay communications network features making them favorable for next generation automotive industries.
 
-![CAN and alternatives](../../../.gitbook/assets/flexray_wiring.jpg)
+![CAN and alternatives](<../../.gitbook/assets/flexray_wiring (1).jpg>)
 
 Most first-generation FlexRay networks normally employ a single channel to cut off wiring costs, but further application development and entailed security requirements will lead to increased two channels usage. Limiting factors for FlexRay widespread usage are price, lower operating voltage levels and edges asymmetry, leading to challenges in extending the network length. Some key features of listed protocols as compared to CAN characteristics are presented on the table below.
 
-![CAN and alternatives](../../../.gitbook/assets/most-flexray-diagram.png)
+![CAN and alternatives](<../../.gitbook/assets/most-flexray-diagram (1).png>)
 
 Direct comparison of listed connectivity protocols shows that there is a clear trade-off in bandwidth and fault tolerance versus average costs and system complexity. While CAN and MOST remain some sort of fundamental protocols, FlexRay and Ethernet are more promising solution to satisfy growing market and high load applications demands. In a modern vehicles, those protocols often used as a complementary solutions.
 

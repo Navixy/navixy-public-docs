@@ -17,23 +17,23 @@ The device not only measures the flow rate of fuels, but also of various liquids
 
 A flow meter is a device used to directly measure the volume of fuel consumption. It features a ring-type measuring chamber, enabling accurate measurements.
 
-![Fuel flow meters - unit structure](../../../../../.gitbook/assets/fuel-flow-meter_units.png)
+![Fuel flow meters - unit structure](<../../../../.gitbook/assets/fuel-flow-meter_units (1).png>)
 
 Flow meter operation is primarily founded upon the measurement of fuel volume traversing a designated chamber. This chamber serves as the pivotal component, influencing both accuracy and robustness of the flow meter. Let's explore how all these elements intricately intertwine:
 
-![Fuel flow meter - measurement chamber](../../../../../.gitbook/assets/fuel-flow-meter-2.png)
+![Fuel flow meter - measurement chamber](<../../../../.gitbook/assets/fuel-flow-meter-2 (1).png>)
 
 1. The pressure in the flow meter causes the ring to smoothly slide along the inner surface of the measuring chamber, simultaneously sliding along the web. This seamless movement facilitates accurate measurements.
 
-![Fuel flow meter - ring-type measurement chamber](../../../../../.gitbook/assets/fuel-flow-meter-3.png)
+![Fuel flow meter - ring-type measurement chamber](<../../../../.gitbook/assets/fuel-flow-meter-3 (1).png>)
 
 2. **The ring expels the fluid from inside and outside the chamber through the outlet, directing it towards the outlet nozzle.**
 
-![Fuel flow meter - measuring chamber operating scheme](../../../../../.gitbook/assets/fuel-flow-meter-51.png)
+![Fuel flow meter - measuring chamber operating scheme](<../../../../.gitbook/assets/fuel-flow-meter-51 (1).png>)
 
 3. **One turn of the ring pushes out the volume of fluid equal to the volume of the chamber.** At the same time, the electronic board of the flow meter makes one output impulse. Thus, when fuel passes through a flow meter, an electrical impulse is formed.
 
-![Flow meter electronic board](../../../../../.gitbook/assets/fuel-flow-meter-61.png)
+![Flow meter electronic board](<../../../../.gitbook/assets/fuel-flow-meter-61 (1).png>)
 
 The manufacturer's guidelines typically indicate the number of impulses needed for 1 liter or 0.26 US gallons of fuel to pass through the device. Each impulse corresponds to the fuel consumption equivalent to the volume of the measurement chamber. Therefore, the calculation involves determining the difference between the chamber volume and one liter of fuel. This information allows for a precise understanding of the required fuel flow.
 

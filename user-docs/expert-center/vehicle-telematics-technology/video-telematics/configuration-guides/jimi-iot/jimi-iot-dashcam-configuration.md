@@ -45,7 +45,7 @@ Otherwise, here are step-by-step instructions for configuring your Jimi IoT devi
 1. Find the device’s IMEI number. Then, log in to the Navixy platform and navigate to the user account where you want to add the new device. Click the **Device activation** button.
 2. Enter the device's name, assign it to a group if necessary, and type your device's model into the search line (for example, Jimi JC261).
 
-![Device configuration](../../../../../.gitbook/assets/image-20231023-134921.png)
+![Device configuration](<../../../../.gitbook/assets/image-20231023-134921 (1).png>)
 
 3. Send the following SMS commands to your GPS device (this is why a SIM card with SMS functionality was needed):
 
@@ -88,7 +88,7 @@ Replace with your device’s IMEI and with the server IP, both without <> signs.
 
 7. After setting the timezone, open the devices and settings tab and change the device’s timezone to match the one you've set on your device.
 
-![](../../../../../.gitbook/assets/image-20231030-145358.png)
+![](<../../../../.gitbook/assets/image-20231030-145358 (1).png>)
 
 ## Configuration tips
 

@@ -4,7 +4,7 @@ description: >-
   parameters in the desktop configurator, and map readings in Navixy.
 ---
 
-# Configuring Eye sensor on Teltonika GPS device
+# Configuring Eye Sensor on Teltonika Tracker
 
 The integration of advanced sensors and GPS trackers has become essential for businesses aiming to enhance their operational efficiency and security. Teltonika's Eye Sensor can significantly improve monitoring and data collection capabilities. This article serves as a comprehensive guide for partners who wish to configure these devices for their customers.
 
@@ -20,7 +20,7 @@ Let's get started on configuring your Teltonika Eye Sensors to maximize their po
 
 Download Teltonika's Eye App from the Google Store or App Store.
 
-![](../../../.gitbook/assets/image-20240819-201555.png)
+![](<../../.gitbook/assets/image-20240819-201555 (1).png>)
 
 Get into the **Eye Application** and turn on Bluetooth. Your mobile device will start scanning any Eye sensor device around the cellphone. Every device will show the decibels and the distances from the cellphone to the sensors. Select **Eye sensor**, which shows the active sensors on the screen, then PIN the code, if it is the first time configuring it, the PIN would be 123456.
 
@@ -33,6 +33,8 @@ Click the **Configure** button and change the packet setting to **Sensor** so it
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfmqdUk--23DC7qiVYapJkU-hfAjZISIS06ylcIUC6kVILVPRy983MXLXV0_hxHqUCpJk_rvlKbs5cLZKcJS1kH9np3amHr-ANGntbSpVx97rSYw48Xrn1PNvOZC4l4635w3NJIxUKjMAs716P2mZ4oe5Iq?key=6KHuR2IBwmomxMottXEmGA)
 
 <img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcdlV7i2Y6miCzjVxNShut77230x1_w2jUe8qiVmwsSRVDzsB8mCtkgOHmabquUkdO0FACRk0nmbm-kbaIR5jfTvb0lZzmShRQ5aQOQex5yPhJQAu-QdFkfvugndzNs0Xlqsv9lP979sGjDu_25Alxnxz_3?key=6KHuR2IBwmomxMottXEmGA" alt="" width="375">
+
+&#x20;
 
 <img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXevSXGMbYt5LZoCMLRNEtptpyQzrdbhFxmdCTYmlrQPhdCv40al-na0osyW3OmM-vlH3O3sn9v1FZYRrqe6bYV1Dl-lfLA8Ezg9BBF7FuPBrudUsUT0AJCxZEF9C6LZ8Vivw0ZgPP4q8Ce8kFnCe5lnFBtU?key=6KHuR2IBwmomxMottXEmGA" alt="" width="375">
 

@@ -34,7 +34,7 @@ On the other hand, in fleet management systems, integrators of GPS tracking and 
 
 A float fuel sensor is installed into the tank of a vehicle at the factory.
 
-<figure><img src="../../../../../.gitbook/assets/float-fuel-sensor.png" alt=""><figcaption><p>Float fuel sensor</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/float-fuel-sensor (1).png" alt=""><figcaption><p>Float fuel sensor</p></figcaption></figure>
 
 **Operation concept:** A potentiometer is connected to a float, which is used to measure the fuel level. As the fuel level changes, the position of the float also changes, resulting in a corresponding change in resistance. This change in resistance ultimately leads to a change in the output voltage of the sensor. The data collected by the float sensor is then transmitted to the dashboard of a vehicle via:
 
@@ -47,11 +47,11 @@ Some fleet owners install a Capacitive Sensor to monitor fuel consumption and fu
 
 {% columns %}
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/Capacitive-fuel-sensor-Omnicomm.png" alt=""><figcaption><p>Capacitive fuel sensor by Omnicomm</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Capacitive-fuel-sensor-Omnicomm (1).png" alt=""><figcaption><p>Capacitive fuel sensor by Omnicomm</p></figcaption></figure>
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/Capacitive-fuel-sensor-design-concept.png" alt=""><figcaption><p>Capacitive fuel sensor design concept</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Capacitive-fuel-sensor-design-concept (1).png" alt=""><figcaption><p>Capacitive fuel sensor design concept</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -69,11 +69,11 @@ The sensor measures the height of the fuel column in both the tank and the fuel 
 
 {% columns %}
 {% column valign="middle" %}
-<figure><img src="../../../../../.gitbook/assets/Ultrasonic-fuel-sensor-bottom-mounted.png" alt=""><figcaption><p>Ultrasonic fuel sensor (bottom-mounted)</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Ultrasonic-fuel-sensor-bottom-mounted (1).png" alt=""><figcaption><p>Ultrasonic fuel sensor (bottom-mounted)</p></figcaption></figure>
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../../.gitbook/assets/Ultrasonic-fuel-sensor-top-mounted-probe.png" alt=""><figcaption><p>Ultrasonic fuel sensor (top-mounted probe)</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Ultrasonic-fuel-sensor-top-mounted-probe (1).png" alt=""><figcaption><p>Ultrasonic fuel sensor (top-mounted probe)</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -107,7 +107,7 @@ Tank height and shape play a crucial role for capacitive fuel sensors. Make sure
 
 The measuring part of the sensor must be slightly bigger than the tank height (to make sure the sensor reaches fuel at the bottom of the tank). During installation the measuring tubes will be cut to fit the tank. However, it is important to leave a gap of 1-1.5 inches (3-4 cm) between the sensor and the bottom to prevent a short circuit due to possible dirt or water accumulation at the tank bottom.
 
-<figure><img src="../../../../../.gitbook/assets/capacitive-sensor-tank-dimensions.png" alt=""><figcaption><p>Capacitive fuel sensor installation: sensor length vs. tank height</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/capacitive-sensor-tank-dimensions (1).png" alt=""><figcaption><p>Capacitive fuel sensor installation: sensor length vs. tank height</p></figcaption></figure>
 
 Different manufacturers of fuel sensors can offer different size ranges, however in most cars a sensor of 0.7 m (∼27.6 inch) will be enough.
 
@@ -123,7 +123,7 @@ One might need to consider a few fuel sensors for one vehicle, if it falls into 
 Fuel tankers have 2 or 3 tanks, each of them having at least 3 sections. For maximum accuracy each tank and each section should be equipped with a fuel level sensor. Make sure, that the sensor has an RS-485 output. An RS-232 won’t provide data for multiple sensors to be connected to the same tracker.
 {% endhint %}
 
-<figure><img src="../../../../../.gitbook/assets/multiple-sensors-rs485-wiring.png" alt=""><figcaption><p>Three capacitive fuel sensors connected to a GPS tracker via RS-485 daisy-chain</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/multiple-sensors-rs485-wiring (1).png" alt=""><figcaption><p>Three capacitive fuel sensors connected to a GPS tracker via RS-485 daisy-chain</p></figcaption></figure>
 
 ### Fuel sensor outputs
 
@@ -151,7 +151,7 @@ Currently the most popular fuel sensor developers and manufacturers are:
 The sensor models listed below are legacy and may no longer be available. For the current Omnicomm product lineup, visit the [Omnicomm fuel level sensors page](https://omnicomm-world.com/products/hardware/fuel-level-sensors/).
 {% endhint %}
 
-<table data-header-hidden><thead><tr><th width="250"></th><th width="138"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../../.gitbook/assets/omnicomm-LLS4.png" alt="" data-size="original"></td><td>LLS 4</td><td>Digital fuel sensor<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls_4x-manual/specifications">Omnicomm-sensors</a></td></tr><tr><td><img src="../../../../../.gitbook/assets/omnicomm-LLS-AF-4.png" alt="" data-size="original"></td><td>LLS-AF 4</td><td>Frequency-analogue fuel sensor<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls-af_4-manual/specifications">Omnicomm-sensors</a></td></tr><tr><td><img src="../../../../../.gitbook/assets/omnicomm-LLS-20230.png" alt="" data-size="original"></td><td>LLS 20230</td><td>Digital fuel sensor in an explosion-proof variation<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls20230-instalation-guide">Omnicomm-sensors</a></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="250"></th><th width="138"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../.gitbook/assets/omnicomm-LLS4 (1).png" alt="" data-size="original"></td><td>LLS 4</td><td>Digital fuel sensor<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls_4x-manual/specifications">Omnicomm-sensors</a></td></tr><tr><td><img src="../../../../.gitbook/assets/omnicomm-LLS-AF-4 (1).png" alt="" data-size="original"></td><td>LLS-AF 4</td><td>Frequency-analogue fuel sensor<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls-af_4-manual/specifications">Omnicomm-sensors</a></td></tr><tr><td><img src="../../../../.gitbook/assets/omnicomm-LLS-20230 (1).png" alt="" data-size="original"></td><td>LLS 20230</td><td>Digital fuel sensor in an explosion-proof variation<br>Specification: <a href="https://doc.omnicomm.ltd/en/omnicomm_lls20230-instalation-guide">Omnicomm-sensors</a></td></tr></tbody></table>
 
 ### Technoton
 
@@ -159,7 +159,7 @@ The sensor models listed below are legacy and may no longer be available. For th
 * **Available languages:** English, Spanish [https://www.jv-technoton.com](https://www.jv-technoton.com/)
 * [LinkedIn](https://www.linkedin.com/company/technoton/)
 
-<table data-header-hidden><thead><tr><th width="247"></th><th width="134"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../../.gitbook/assets/Technoton-DUT-E.png" alt="" data-size="original"></td><td>DUT-E</td><td>Digital / Frequency-analogue/CAN-like fuel sensors. Any fuel sensor can come with one of the mentioned outputs<br>Specification: <a href="https://jv-technoton.com/products/dut-e/">Technoton-sensors</a></td></tr><tr><td><img src="../../../../../.gitbook/assets/Technoton-DUT-E-2Bio.png" alt=""></td><td>DUT-E 2Bio</td><td>Fuel sensor with automatic detection of fuel brand change (e.g. summer/ winter diesel fuel)<br>Specification: <a href="https://jv-technoton.com/products/dut-e-2bio/">Technoton-sensors</a></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="247"></th><th width="134"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../.gitbook/assets/Technoton-DUT-E (1).png" alt="" data-size="original"></td><td>DUT-E</td><td>Digital / Frequency-analogue/CAN-like fuel sensors. Any fuel sensor can come with one of the mentioned outputs<br>Specification: <a href="https://jv-technoton.com/products/dut-e/">Technoton-sensors</a></td></tr><tr><td><img src="../../../../.gitbook/assets/Technoton-DUT-E-2Bio (1).png" alt=""></td><td>DUT-E 2Bio</td><td>Fuel sensor with automatic detection of fuel brand change (e.g. summer/ winter diesel fuel)<br>Specification: <a href="https://jv-technoton.com/products/dut-e-2bio/">Technoton-sensors</a></td></tr></tbody></table>
 
 ### Escort
 
@@ -167,4 +167,4 @@ The sensor models listed below are legacy and may no longer be available. For th
 * **Available languages:** English, Spanish [https://escortsensors.com](https://escortsensors.com)
 * [Facebook](https://www.facebook.com/gkeskort/)
 
-<table data-header-hidden><thead><tr><th width="249"></th><th width="135"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../../.gitbook/assets/escort-TD-BLE.png" alt="" data-size="original"></td><td>TD-BLE</td><td>Wireless fuel level sensor<br>Specification: <a href="https://escortsensors.com/product/escort-wireless-fuel-level-sensor-td-ble/">Escort-sensor</a></td></tr><tr><td><img src="../../../../../.gitbook/assets/escort-TD-150.png" alt="" data-size="original"></td><td>TD-150</td><td>Fuel sensor with multiple output signals: RS-485, analogue output, frequency output<br>Specification: <a href="https://escortsensors.com/product/fuel-level-sensor-escort-td-150/">Escort-sensor</a></td></tr></tbody></table>
+<table data-header-hidden><thead><tr><th width="249"></th><th width="135"></th><th></th></tr></thead><tbody><tr><td><img src="../../../../.gitbook/assets/escort-TD-BLE (1).png" alt="" data-size="original"></td><td>TD-BLE</td><td>Wireless fuel level sensor<br>Specification: <a href="https://escortsensors.com/product/escort-wireless-fuel-level-sensor-td-ble/">Escort-sensor</a></td></tr><tr><td><img src="../../../../.gitbook/assets/escort-TD-150 (1).png" alt="" data-size="original"></td><td>TD-150</td><td>Fuel sensor with multiple output signals: RS-485, analogue output, frequency output<br>Specification: <a href="https://escortsensors.com/product/fuel-level-sensor-escort-td-150/">Escort-sensor</a></td></tr></tbody></table>
