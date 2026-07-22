@@ -41,6 +41,7 @@ New data will arrive in real-time in the [event message](https://app.gitbook.com
   "requests": [
     {
       "type": "iot_monitor",
+      "flow_id": 1335,
       "target": {
         "type": "selected",
         "tracker_ids": [
@@ -56,6 +57,7 @@ New data will arrive in real-time in the [event message](https://app.gitbook.com
 Request fields:
 
 * `type` – required, text: _"iot\_monitor"_. Event type.
+* `flow_id` – required, int. The IoT Logic flow whose devices to monitor.
 * `target` – required, [target](Websocket-access-for-DSA.md#Request-targets). Trackers to subscribe. Maximum 10 trackers.
 * `rate_limit` – optional, string. A timespan for batching.
 

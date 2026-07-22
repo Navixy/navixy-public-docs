@@ -599,11 +599,11 @@
         ]
       }
     },
-    "/iot/logic/flow/schema": {
+    "/iot/logic/flow/schema/read": {
       "get": {
         "tags": ["Flow"],
         "summary": "flowSchema",
-        "description": "Return the server-side JSON Schema used to validate flow objects submitted to `flowCreate` and `flowUpdate`. Clients and LLM agents can fetch this schema to validate a flow structure locally before making a write request. The schema is opaque and may change between server versions.",
+        "description": "Return the server-side JSON Schema used to validate flow objects in the Navixy UI form. Clients and LLM agents can fetch this schema to validate a flow structure locally before making a write request. This schema describes the UI form's validation rules, not a guaranteed write-API contract: `flowCreate` and `flowUpdate` don't enforce every constraint listed here (for example, a field marked required here may be silently defaulted instead of rejected). The schema is opaque and may change between server versions.",
         "operationId": "flowSchema",
         "responses": {
           "200": {
@@ -955,7 +955,7 @@
     "securitySchemes": {
       "api_key": {
         "type": "apiKey",
-        "description": "Enter an API key with the \"NVX: \" prefix, e.g. \"NVX 123456abcdefg\"",
+        "description": "Enter an API key with the \"NVX \" prefix, e.g. \"NVX 123456abcdefg\"",
         "name": "Authorization",
         "in": "header"
       }
@@ -1322,7 +1322,7 @@
                   "description": "Source ID",
                   "example": 123458
                 },
-                "description": "Array of device/source IDs. Use null or empty array [] for all sources. Note: API normalizes null to empty array [] in responses.",
+                "description": "Array of device source IDs. Use each device's `source.id` from `tracker/list`, not the tracker object ID (`list[].id`). Submitting a tracker object ID is accepted but silently normalized to an empty array, leaving the node with no device attached and returning no error. Use null or an empty array `[]` for no devices. Note: the API normalizes null to `[]` in responses.",
                 "example": [123458, 123459]
               },
               "push_type": {
@@ -1410,7 +1410,7 @@
                   "properties": {
                     "name": {
                       "type": "string",
-                      "description": "Unique attribute identifier, enforced account-wide, not just within this flow. Reusing a name already defined in another flow in the same account is rejected at save time. This name appears in Data Stream Analyzer and can be used to create custom sensors in Navixy tracking interface. If attribute name matches existing device parameter, the calculated value replaces the original in output data packets.",
+                      "description": "Attribute identifier. This name appears in Data Stream Analyzer and can be used to create custom sensors in Navixy tracking interface. If attribute name matches existing device parameter, the calculated value replaces the original in output data packets. Uniqueness across the account isn't currently enforced at save time. Reusing a name already defined in another flow is accepted, and the flows silently share that name in Data Stream Analyzer, custom sensor bindings, and output data packets.",
                       "example": "temperature_fahrenheit"
                     },
                     "value": {

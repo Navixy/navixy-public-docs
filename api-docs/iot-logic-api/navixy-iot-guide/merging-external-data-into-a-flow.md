@@ -238,7 +238,7 @@ You've now merged an external system's data into an existing device's stream. De
 
 ## Handling errors
 
-Navixy validates the connector fields when you save a flow, on `flowCreate` and `flowUpdate`, not when you send a push. A rejected request returns HTTP 400 with a `294` internal code (`IoT Node Invalid`) and a validation error for the affected node.
+Navixy validates the connector fields when you save a flow, on `flowCreate` and `flowUpdate`, not when you send a push. A rejected request returns HTTP 400 with a `292` internal code (`IoT Flow Invalid`) and a validation error for the affected node.
 
 | Error message | Cause and resolution |
 | --- | --- |
@@ -256,8 +256,8 @@ Navixy validates the connector fields when you save a flow, on `flowCreate` and 
 {
   "success": false,
   "status": {
-    "code": 294,
-    "description": "IoT Node Invalid"
+    "code": 292,
+    "description": "IoT Flow Invalid"
   },
   "errors": [
     {

@@ -81,6 +81,10 @@ YYYY-MM-DDThh:mm:ssZ
 
 Example: `2025-04-08T14:30:00Z` represents April 8, 2025, at 2:30 PM UTC.
 
+{% hint style="warning" %}
+The `modified` field returned by `GET /iot/logic/flow/list` doesn't follow this format. It uses a naive timestamp (`YYYY-MM-DD hh:mm:ss`, no `Z` offset) in an account-local timezone instead of UTC.
+{% endhint %}
+
 ## Response structure
 
 All API responses follow a consistent JSON format.
@@ -145,6 +149,10 @@ Error responses include `success: false` and a `status` object with details, for
 ### Common error codes
 
 <table><thead><tr><th width="132.45458984375">HTTP status</th><th width="132.2728271484375">Internal code</th><th>Description</th><th>Context</th></tr></thead><tbody><tr><td>400</td><td>292</td><td>IoT Flow Invalid</td><td>Flow validation failed</td></tr><tr><td>400</td><td>293</td><td>IoT Endpoint Invalid</td><td>Endpoint validation failed</td></tr><tr><td>400</td><td>294</td><td>IoT Node Invalid</td><td>Node validation failed</td></tr><tr><td>401</td><td>14</td><td>Invalid session</td><td>Authentication required or session expired</td></tr><tr><td>403</td><td>7</td><td>Access denied</td><td>Insufficient permissions</td></tr><tr><td>404</td><td>201</td><td>Not found</td><td>Requested resource doesn't exist</td></tr><tr><td>500</td><td>1</td><td>Database error</td><td>Internal server error</td></tr></tbody></table>
+
+{% hint style="warning" %}
+Node-content and connector-field validation failures on `flowCreate` and `flowUpdate` currently return internal code `292` (`IoT Flow Invalid`), not `294`. Code `294` isn't currently confirmed as reachable through those endpoints.
+{% endhint %}
 
 ### Validation errors (HTTP 400)
 

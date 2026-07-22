@@ -40,7 +40,7 @@ description: Create IoT Logic flows with data source, initiate attribute, and ou
 
 [Flow object model](general-json-schema-example.md#flow-object-model)
 
-[Configured schema example](general-json-schema-example.md#example-schema)
+[Example flow](general-json-schema-example.md#example-flow)
 
 ## Customization for Manufacturers
 

@@ -207,7 +207,7 @@ Response (example):
   * `enabled`: When true, flow begins processing data immediately after creation
 * **Nodes**: Functional components that each handle a specific step in data processing. See [Nodes](technical-details/nodes.md) for full node schemas and options.
   * **Node 1 (`data_source`)**: Entry point for device telemetry.
-    * `source_ids`: Which devices feed messages into this flow.
+    * `source_ids`: Which devices feed messages into this flow. Use each device's `source.id`, not the tracker object ID. See [Source ID vs tracker object ID](technical-details/nodes.md#source-id-vs-tracker-object-id).
   * **Node 2 (`logic`)**: Branching decision based on a boolean expression.
     * `condition: "speed > 90"` routes each message to THEN or ELSE.
   * **Node 3 (`action`)**: Executes device commands on the THEN branch.

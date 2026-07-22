@@ -35,10 +35,14 @@ This node specifies which devices send data to your flow. It's the entry point o
 | `id`               | integer | Yes      | Unique identifier within the flow                                                        |
 | `type`             | string  | Yes      | Must be `"data_source"`                                                                  |
 | `data.title`       | string  | Yes      | Human-readable name for the node                                                         |
-| `data.source_ids`  | array   | Yes      | Array of device IDs to collect data from                                                 |
+| `data.source_ids`  | array   | Yes      | Array of device IDs to collect data from. Use each device's `source.id`, not the tracker object ID. See [Source ID vs tracker object ID](#source-id-vs-tracker-object-id) |
 | `data.push_type`   | string  | No       | Connector type. Currently only `"http"`. Omit for a devices-only node                    |
 | `data.primary_key` | string  | No       | Name of the field that identifies the target device in an inbound push                   |
 | `data.mappings`    | array   | No       | Maps inbound `data.primary_key` values to devices already listed in `data.source_ids`    |
+
+#### Source ID vs tracker object ID <a href="#source-id-vs-tracker-object-id" id="source-id-vs-tracker-object-id"></a>
+
+`data.source_ids` takes each device's `source.id` from `tracker/list` (or `tracker/register`), not the tracker object ID (`list[].id`). Submitting a tracker object ID is accepted but silently normalized to an empty array, leaving the node with no device attached and returning no error. `null` or an empty array `[]` in `source_ids` means no devices, not all devices.
 
 ### Connector configuration
 
@@ -209,7 +213,7 @@ Short syntax is also supported for attribute names in formulas. When referencing
 * Historical values are stored in memory for high-performance access
 * Use validation flags strategically: "valid" for accurate calculations, "all" when null values are meaningful
 * Calculated attributes become available in Data Stream Analyzer and can create custom sensors in Navixy Tracking module when connected to Default Output Endpoint
-* Attribute names must be unique across the entire account, not just within the flow that defines them. Reusing a name already used in another flow is rejected at save time (`flowCreate`/`flowUpdate`) with a `292` `IoT Flow Invalid` error naming the conflicting flow, for example: `Duplicate default attribute "speed_plus1" in flows: "Demo flow" (#316)`
+* Attribute name uniqueness across the account isn't currently enforced at save time. Two unrelated flows can define a calculated attribute with the same name, and the duplicate is accepted without error. The name is shared account-wide in Data Stream Analyzer and custom sensor bindings, and it overwrites a matching device parameter in output data packets. Choose distinctive attribute names to avoid an unintended collision with another flow.
 
 ## IF/THEN Logic node (`logic`) <a href="#logic-node-logic" id="logic-node-logic"></a>
 

@@ -127,7 +127,7 @@ Response example:
 ```
 
 {% hint style="warning" %}
-Calculated attribute names like `engine_temp_fahrenheit` and `average_speed_kmh` above must be unique across your entire account, not just within this flow. Reusing a name already defined in another flow is rejected at save time with a `292` `IoT Flow Invalid` error that names the conflicting flow. See [Initiate Attribute node](../technical-details/nodes.md#initiate-attribute-node-initiate_attributes) for details.
+Navixy doesn't currently enforce unique calculated attribute names across your account. If another flow already defines an attribute named `engine_temp_fahrenheit` or `average_speed_kmh`, IoT Logic accepts the duplicate without error. The two flows then silently share that name in Data Stream Analyzer, in custom sensor bindings, and in output data packets. Choose distinctive attribute names to avoid an unintended collision with another flow. See [Initiate Attribute node](../technical-details/nodes.md#initiate-attribute-node-initiate_attributes) for details.
 {% endhint %}
 
 ### Step 3: Create measurement sensors in Navixy UI
