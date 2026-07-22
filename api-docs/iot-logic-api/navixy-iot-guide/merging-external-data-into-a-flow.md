@@ -6,12 +6,13 @@ description: Configure the Data Source node's connector fields to merge readings
 
 This guide configures a Data Source node's connector so that data from an external system, one that doesn't use Navixy's native protocols, merges into the stream of a device you already have in your account. The example connects two GPS devices already feeding a flow to a separate battery management system that reports state of charge and temperature for the same vehicles.
 
-This guide walks through the scenario in four steps:
+This guide walks through the scenario in five steps:
 
 1. [Prerequisites](#prerequisites): confirm which devices already feed the flow, skip this if you already know.
 2. [Adding the connector to your Data Source node](#adding-the-connector-to-your-data-source-node).
 3. [Getting the push URL](#getting-the-push-url) for that node.
-4. [Sending a push](#sending-a-push) and confirming it merged.
+4. [Naming pushed fields](#naming-pushed-fields) so they don't collide with the device's own attributes.
+5. [Sending a push](#sending-a-push) and confirming it merged.
 
 For the full field reference, see [Connector configuration](../technical-details/nodes.md#connector-configuration).
 
@@ -190,6 +191,14 @@ For this example: `https://demo.navixy.com/api-v2/iot/logic/flow/push?flow_id=42
 
 Give either URL to the battery management system, or whatever external system will send the data.
 
+## Naming pushed fields
+
+Before sending real pushes, pick names for the fields you'll push, `battery_soc` and `battery_temp` in this example. Make sure these names won't collide with the mapped device's own native attributes, or with any other flow's connector enriching the same device.
+
+A collision doesn't fail the push. It silently overwrites the colliding attribute's existing history instead of creating a new one. Downstream nodes, sensors, reports, and alerts then treat the overwritten value as a real reading.
+
+Prefix pushed field names with something specific to the external system, for example `bms_battery_soc`. Alternatively, prefix with the flow's title instead, for example `<flow_title>_battery_soc`. Avoid generic names like `battery_soc`, `fuel_level`, or `board_voltage` that a device might already report natively.
+
 ## Sending a push
 
 The URL you built above already carries `flow_id` and `node_id` as query parameters, an external system posting to it doesn't need to repeat them in the request body. If you're sending the request yourself rather than handing the URL to another system, `flow_id` and `node_id` work equally well in the JSON body instead, as shown here, both conventions reach the same endpoint.
@@ -224,7 +233,7 @@ A `200` response only confirms that Navixy accepted the request. If `vehicle_id`
 {% hint style="success" %}
 **Congratulations!**
 
-You've now merged an external system's data into an existing device's stream. Device `987654` receives `battery_soc` and `battery_temp` as new attributes alongside its native GPS telemetry, and any downstream node in the flow can reference them like any other attribute.
+You've now merged an external system's data into an existing device's stream. Device `987654` receives `battery_soc` and `battery_temp` as new attributes, alongside its native GPS telemetry, since neither name was already in use on this device. Any downstream node in the flow can reference them like any other attribute.
 {% endhint %}
 
 ## Handling errors

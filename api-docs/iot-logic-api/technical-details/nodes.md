@@ -47,7 +47,11 @@ Use the connector fields to merge data from an external system into the stream o
 The device that receives the pushed data must already be listed in `data.source_ids`. The connector doesn't create devices, it attributes inbound data to a device that's already part of the node.
 
 {% hint style="warning" %}
-If the same device ID appears in `source_ids` on Data Source nodes in more than one flow, connector-pushed attributes merge at the device level, not scoped to the flow that pushed them. They become visible in Data Stream Analyzer through every flow that lists the device, even before a push has gone through that other flow. Use distinct attribute names, or a naming convention like `<flow_title>_<attribute>`, if the same device is enriched by more than one flow's connector, otherwise one connector's pushes can silently overwrite another's.
+Pushed field names share one namespace with the device's own native attributes. A pushed field can share a name with an attribute the device already reports, for example `fuel_level`, `board_voltage`, `analog_1`, or `can_*`. When it does, the push writes into that attribute's existing history instead of creating a new one. Downstream nodes, sensors, reports, and alerts then treat the pushed value as a real reading, so a colliding name can inject false data. For example, a push named `fuel_level` can produce a false refuel or drain event in a report. A connector only ever writes attributes, so a push can't alter system message fields (`speed`, `latitude`, `longitude`, `heading`, `satellites`, `hdop`). A pushed field with one of those names still appears under that name in Data Stream Analyzer.
+
+The same risk applies across flows. Connector-pushed attributes merge at the device level, not scoped to the flow that pushed them. This matters if the same device ID appears in `source_ids` on Data Source nodes in more than one flow. Attributes pushed through one flow are visible in Data Stream Analyzer through every flow that lists the device, even before that other flow receives a push.
+
+Use a naming convention that avoids both cases. Prefix every pushed field with the external system's name, for example `bms_battery_soc` instead of `battery_soc`. If the same device is enriched by more than one flow's connector, prefix with the flow's title instead, for example `<flow_title>_<attribute>`. Otherwise, a push can silently overwrite the device's own reading, or a value pushed by another connector.
 {% endhint %}
 
 To configure a connector:
@@ -103,7 +107,7 @@ curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/push" \
   }'
 ```
 
-`battery_soc` and `battery_temp` become new attributes on device `987654`, alongside its native GPS data, and downstream nodes can reference them like any other attribute. If no mapping matches the pushed `vehicle_id` value, Navixy discards the push without returning an error.
+`battery_soc` and `battery_temp` merge into device `987654`'s attributes, alongside its native GPS data, and downstream nodes can reference them like any other attribute. Both names are new here, so Navixy creates new attributes rather than appending to existing ones. `flow_id`, `node_id`, and the field named in `primary_key` are excluded from the merge. Only the remaining fields become attributes. If no mapping matches the pushed `vehicle_id` value, Navixy discards the push without returning an error.
 
 ### Usage notes
 
