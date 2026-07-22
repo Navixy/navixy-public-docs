@@ -137,10 +137,10 @@ superset run -p 8088 --with-threads --reload --debugger
 
 ## Dashboard and chart import
 
-1. Clone the [bi-integratons](https://github.com/SquareGPS/bi-intergrations) repository:
+1. Clone the [bi-integratons](https://github.com/Navixy/bi-integrations) repository:
 
 ```sh
-git clone https://github.com/SquareGPS/bi-intergrations.git
+git clone https://github.com/Navixy/bi-integrations.git
 ```
 
 2. In Superset, go to **Settings → Import/Export**

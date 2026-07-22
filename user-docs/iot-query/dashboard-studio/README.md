@@ -112,7 +112,7 @@ If you need help enabling IoT Query, embedding the dashboard, or configuring cur
 An open-source (self-hosted) approach gives you complete control over the analytics environment. Deploy Dashboard Studio within your own infrastructure, customize authentication integration, and tailor the interface to your operational workflows. This option suits organizations with specific security requirements or custom integration needs.
 
 For details about open-source usage of Dashboard Studio, see [Open-source Studio](open-source-studio.md).\
-The application source code and deployment documentation are available through the project repository at [https://github.com/SquareGPS/navixy-iot-query-dashboard](https://github.com/SquareGPS/navixy-iot-query-dashboard).
+The application source code and deployment documentation are available through the project repository at [https://github.com/Navixy/navixy-iot-query-dashboard](https://github.com/Navixy/navixy-iot-query-dashboard).
 
 {% hint style="info" %}
 Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/user/applications/app-connect) for seamless user authentication!

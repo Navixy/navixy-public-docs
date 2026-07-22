@@ -32,7 +32,7 @@ This guide is part of the **IoT Query** documentation suite and specifically cov
 ### 1. Clone the repository
 
 ```sh
-git clone https://github.com/SquareGPS/bi-intergrations.git
+git clone https://github.com/Navixy/bi-integrations.git
 ```
 
 ### 2. Create a virtual environment

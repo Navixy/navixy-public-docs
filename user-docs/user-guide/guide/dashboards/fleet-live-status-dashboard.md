@@ -6,7 +6,7 @@ The **Fleet Live Status Dashboard** is the first tab of the Dashboard app. Where
 The Fleet Live Status Dashboard is currently in beta (v1.0.1). It's an early version released so we can shape it based on real feedback. If something is missing, confusing, or could be more useful, please tell us through the **Send Feedback** button at the top of the tab. The two dashboards version independently, so the Fleet Live Status and Trips tabs may show different version numbers.
 {% endhint %}
 
-Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [Object Status Dashboard](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/07-object-status-dashboard.md) and [Fleet Reports Dashboard](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/03-fleet-reports-dashboard.md).
+Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [Object Status Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/07-object-status-dashboard.md) and [Fleet Reports Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/03-fleet-reports-dashboard.md).
 
 ## Movement states
 

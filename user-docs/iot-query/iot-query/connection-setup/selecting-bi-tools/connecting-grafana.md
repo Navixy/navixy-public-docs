@@ -59,10 +59,10 @@ Grafana must be installed on your system before you can connect to **IoT Query**
 {% step %}
 #### Download dashboard templates (optional)
 
-Pre-built dashboard templates are available to help you get started quickly without building visualizations from scratch. These templates are maintained the [bi-intergrations repository](https://github.com/SquareGPS/bi-intergrations) under the `grafana` folder. You can clone the repository for access to ready-made dashboards:
+Pre-built dashboard templates are available to help you get started quickly without building visualizations from scratch. These templates are maintained the [bi-intergrations repository](https://github.com/Navixy/bi-integrations) under the `grafana` folder. You can clone the repository for access to ready-made dashboards:
 
 ```bash
-git clone https://github.com/SquareGPS/bi-intergrations.git
+git clone https://github.com/Navixy/bi-integrations.git
 ```
 
 Check the `grafana` folder for available dashboard JSON files.

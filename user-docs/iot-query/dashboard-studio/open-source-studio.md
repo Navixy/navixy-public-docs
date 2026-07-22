@@ -35,13 +35,13 @@ Dashboard Studio's open-source implementation consists of three main components:
 
 ### GitHub repository
 
-**Location:** [https://github.com/SquareGPS/navixy-iot-query-dashboard](https://github.com/SquareGPS/navixy-iot-query-dashboard)
+**Location:** [https://github.com/Navixy/navixy-iot-query-dashboard](https://github.com/Navixy/navixy-iot-query-dashboard)
 
 The repository contains the complete React frontend application, Node.js backend services, configuration files, and comprehensive documentation. Clone the repository for local development or to review the architecture before implementation.
 
 ### npm package
 
-Streamlined distribution for JavaScript project integration. The package mirrors the GitHub codebase with standard npm installation workflow. See the repository [README](https://github.com/SquareGPS/navixy-iot-query-dashboard?tab=readme-ov-file#navixy-iot-query-dashboard) for installation instructions and versioning.
+Streamlined distribution for JavaScript project integration. The package mirrors the GitHub codebase with standard npm installation workflow. See the repository [README](https://github.com/Navixy/navixy-iot-query-dashboard?tab=readme-ov-file#navixy-iot-query-dashboard) for installation instructions and versioning.
 
 ### Authentication gateway
 
@@ -51,11 +51,11 @@ JWT token generation through Navixy authentication gateway. Backend handles sess
 
 **Setup steps:**
 
-1. Review the repository [README](https://github.com/SquareGPS/navixy-iot-query-dashboard)
+1. Review the repository [README](https://github.com/Navixy/navixy-iot-query-dashboard)
 2. Make sureyou have active IoT Query access
 3. Install Node.js 18+ and npm
-4. Follow the repository [Quick Start guide](https://github.com/SquareGPS/navixy-iot-query-dashboard) for local deployment
-5. Review the [architecture documentation](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) before customizing
+4. Follow the repository [Quick Start guide](https://github.com/Navixy/navixy-iot-query-dashboard) for local deployment
+5. Review the [architecture documentation](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) before customizing
 
 ### In-repo documentation
 
@@ -63,12 +63,12 @@ The repository includes comprehensive guides for working with the codebase:
 
 | Document                                                                                                      | Content                                                     |
 | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [**ARCHITECTURE.md**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) | System design, component structure, data flow               |
-| [**DEVELOPMENT.md**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/DEVELOPMENT.md)   | Local setup, coding standards, testing, workflows           |
-| [**API.md**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/API.md)                   | Backend endpoints, request/response formats, authentication |
-| [**DEPLOYMENT.md**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/DEPLOYMENT.md)     | Production hosting for various environments                 |
+| [**ARCHITECTURE.md**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) | System design, component structure, data flow               |
+| [**DEVELOPMENT.md**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/DEVELOPMENT.md)   | Local setup, coding standards, testing, workflows           |
+| [**API.md**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/API.md)                   | Backend endpoints, request/response formats, authentication |
+| [**DEPLOYMENT.md**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/DEPLOYMENT.md)     | Production hosting for various environments                 |
 
-All documentation files are located in the repository's [`/docs`](https://github.com/SquareGPS/navixy-iot-query-dashboard/tree/main/docs) folder. The codebase uses TypeScript throughout for type safety and clear component interfaces.
+All documentation files are located in the repository's [`/docs`](https://github.com/Navixy/navixy-iot-query-dashboard/tree/main/docs) folder. The codebase uses TypeScript throughout for type safety and clear component interfaces.
 
 ### Customization options
 
@@ -104,7 +104,7 @@ The open-source implementation provides full frontend access for modifications:
 {% endcolumn %}
 {% endcolumns %}
 
-Review the [`ARCHITECTURE.md`](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) file in the repository before significant modifications to understand component relationships and required changes.
+Review the [`ARCHITECTURE.md`](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/docs/ARCHITECTURE.md) file in the repository before significant modifications to understand component relationships and required changes.
 
 ### Feature parity with standard version
 

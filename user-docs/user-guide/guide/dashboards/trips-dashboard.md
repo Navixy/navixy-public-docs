@@ -6,7 +6,7 @@ The **Trips Dashboard** is the second tab of the Dashboard app. Where the [Fleet
 The Trips Dashboard is currently in beta (v1.0.0). It's an early version released so we can shape it based on real feedback. If something is missing, confusing, or could be more useful, please tell us through the **Send Feedback** button at the top of the tab. The three dashboards version independently, so the Fleet Live Status, Trips, and Technical Conditions tabs may show different version numbers.
 {% endhint %}
 
-Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [Trip Operations Dashboard](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/04-hm-trip-operations-dashboard.md) and [Trips Dashboard (Yesterday)](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/08-trips-dashboard-yesterday.md).
+Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [Trip Operations Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/04-hm-trip-operations-dashboard.md) and [Trips Dashboard (Yesterday)](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/08-trips-dashboard-yesterday.md).
 
 ## What counts as a trip
 

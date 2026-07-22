@@ -37,10 +37,10 @@ This guide is part of the **IoT Query** documentation suite and specifically cov
 
 ### 2. Download the dashboard file
 
-1.  Download the [moving\_status\_dashboard.pbix](https://raw.githubusercontent.com/SquareGPS/bi-intergrations/main/power_bi/moving_status_dashboard.pbix) file from the [bi-intergrations repository](https://github.com/SquareGPS/bi-intergrations) -> `power_bi`. You can clone the whole repository for further interactions:
+1.  Download the [moving\_status\_dashboard.pbix](https://raw.githubusercontent.com/Navixy/bi-integrations/main/power_bi/moving_status_dashboard.pbix) file from the [bi-intergrations repository](https://github.com/Navixy/bi-integrations) -> `power_bi`. You can clone the whole repository for further interactions:
 
     ```sh
-    git clone https://github.com/SquareGPS/bi-intergrations.git
+    git clone https://github.com/Navixy/bi-integrations.git
     ```
 2. Open the downloaded `moving_status_dashboard.pbix` file by double-clicking or through the Power BI Desktop menu: **File → Open**.
 

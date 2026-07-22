@@ -64,7 +64,7 @@ Follow these steps to set up the connection:
 
 ### Step 5: Importing the Navixy dashboard template
 
-To expedite the setup process, import the Navixy [dashboard template](https://github.com/SquareGPS/bi-intergrations/blob/main/grafana/navixy_fuel_dashboard_demo.json) into Grafana. Access the Grafana dashboard management section, create a new dashboard, and select the option to import the dashboard. Upload the provided Navixy dashboard template file. Review the import settings, including the assigned data source, and complete the import process.
+To expedite the setup process, import the Navixy [dashboard template](https://github.com/Navixy/bi-integrations/blob/main/grafana/navixy_fuel_dashboard_demo.json) into Grafana. Access the Grafana dashboard management section, create a new dashboard, and select the option to import the dashboard. Upload the provided Navixy dashboard template file. Review the import settings, including the assigned data source, and complete the import process.
 
 ## Analyzing telematics data with Grafana
 

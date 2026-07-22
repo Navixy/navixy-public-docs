@@ -156,7 +156,7 @@ Once you have the template, load it into [Transformation Builder](../transformat
 * [**Sensor data aggregation**](sensor-data-aggregation.md): A sibling transformation that aggregates sensor readings into time buckets.
 * [**Raw data layer**](../../bronze-layer.md): Explore `tracking_data_core`, `states`, and `inputs`, the source tables that feed Driver performance events.
 * [**Transformation Builder**](../transformation-builder/): Learn how to build a customized version of this transformation.
-* [**Driving Score Dashboard**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/12-driver-performance-dashboard.md): Uses Driver performance events for fleet-wide driving safety scoring.
-* [**Behavior Impact Dashboard**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/13-behavior-impact-dashboard.md): Uses Driver performance events to track behavior trends over time.
-* [**Safety & Security Dashboard**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/10-premium-safety-security-dashboard.md): Uses Driver performance events alongside geofence and trip data.
-* [**Leasing Dashboard**](https://github.com/SquareGPS/navixy-iot-query-dashboard/blob/main/schemas/06-leasing-dashboard.md): Uses harsh driving and idle detection queries, currently based on raw telematics rather than Driver performance events.
+* [**Driving Score Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/12-driver-performance-dashboard.md): Uses Driver performance events for fleet-wide driving safety scoring.
+* [**Behavior Impact Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/13-behavior-impact-dashboard.md): Uses Driver performance events to track behavior trends over time.
+* [**Safety & Security Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/10-premium-safety-security-dashboard.md): Uses Driver performance events alongside geofence and trip data.
+* [**Leasing Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/06-leasing-dashboard.md): Uses harsh driving and idle detection queries, currently based on raw telematics rather than Driver performance events.
