@@ -14,30 +14,22 @@ When a device isn't included in any custom flow, Navixy still processes its data
 
 Without a custom flow, device data travels directly to the Navixy platform without any processing or transformation. Navixy receives the raw device data and delivers it as-is, ensuring the device is visible and monitored in the platform.
 
-With a custom flow, data enters through a **Data Source** node, passes through any processing nodes you have configured, and exits through a **Default Output Endpoint** node to reach the platform. This path lets you enrich, filter, and route data before it arrives. When a device is assigned to a custom flow, both paths run simultaneously: the custom flow handles processing, while Navixy independently ensures the raw data reaches the platform regardless.
+With a custom flow, data enters through a **Data Source** node, passes through any processing nodes you have configured, and exits through an **Output Endpoint** node set to **Default endpoint** mode to reach the platform. This path lets you enrich, filter, and route data before it arrives. When a device is assigned to a custom flow, both paths run simultaneously: the custom flow handles processing, while Navixy independently ensures the raw data reaches the platform regardless.
 
-<figure><img src="../../../../.gitbook/assets/data-flow-paths-custom-and-default (1).png" alt="Diagram showing two parallel data flow paths to the Navixy platform. Without a custom flow, device data goes directly to the Navixy platform with no processing. With a custom flow, device data passes through Data Source, optional Processing nodes, and Output Endpoint before reaching the Navixy platform. Both paths run simultaneously when a device is assigned to a custom flow."><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/data-flow-paths-custom-and-default.png" alt="Diagram showing two parallel data flow paths to the Navixy platform. Without a custom flow, device data goes directly to the Navixy platform with no processing. With a custom flow, device data passes through Data Source, optional Processing nodes, and Output Endpoint before reaching the Navixy platform. Both paths run simultaneously when a device is assigned to a custom flow."><figcaption></figcaption></figure>
 
 {% hint style="danger" %}
 Disabling a custom flow stops all data transmission for the devices assigned to it. The automatic system coverage doesn't substitute for a disabled flow. Re-enable the flow to restore data transmission for the affected devices.
 {% endhint %}
 
-## Default Output Endpoint
+## Sending data to the Navixy platform
 
-{% columns %}
-{% column %}
-The **Default Output Endpoint** node provides a pre-configured destination for sending device data to the Navixy platform. This node is pre-configured with optimal settings for direct transmission to Navixy's servers.
-{% endcolumn %}
+Sending data to the Navixy platform from a custom flow doesn't require a dedicated node type. It's the same **Output Endpoint** node used for any other destination, configured with **Mode** set to **Default endpoint**: a pre-configured, non-editable option that transmits directly to Navixy's servers. Unless you give it a custom name, this node appears on the canvas labeled **Default Output Endpoint**. See [Output Endpoint node](../nodes/output-endpoint-node.md#configuration-options) for the full configuration steps.
 
-{% column %}
-<div align="right"><figure><img src="../../../../.gitbook/assets/image-20250403-151042 (3) (1).png" alt="Navixy Default output endpoint node"><figcaption></figcaption></figure></div>
-{% endcolumn %}
-{% endcolumns %}
-
-The endpoint ensures that data processed by a custom flow is properly formatted and transmitted to the Navixy platform, enabling full visibility of your devices in the main Navixy interface.
+This ensures that data processed by a custom flow is properly formatted and transmitted to the Navixy platform, enabling full visibility of your devices in the main Navixy interface.
 
 {% hint style="info" %}
-The **Default Output Endpoint** node is available for use in custom flows. Each custom flow should maintain a connection to this output node to ensure device data is sent to the platform, enabling monitoring capabilities using Navixy tools. If the Navixy output is removed from a custom flow, data from the devices involved in that flow no longer reaches the platform.
+Each custom flow should maintain a connection to an **Output Endpoint** node in **Default endpoint** mode to ensure device data is sent to the platform, enabling monitoring capabilities using Navixy tools. If this connection is removed from a custom flow, data from the devices involved in that flow no longer reaches the platform.
 {% endhint %}
 
 ## Flow and device relationships

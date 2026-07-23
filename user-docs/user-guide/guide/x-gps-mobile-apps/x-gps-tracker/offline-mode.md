@@ -13,7 +13,7 @@ Employees can finish their tasks without having to worry about a good GSM connec
 
 To enable the offline mode, go to the application settings, open the **Advanced settings** tab, and toggle the **Offline mode** switch (disabled by default).
 
-![](<../../../.gitbook/assets/image-20250304-170633 (1).png>)
+![](../../../.gitbook/assets/image-20250304-170633.png)
 
 ### Offline mode performance details
 

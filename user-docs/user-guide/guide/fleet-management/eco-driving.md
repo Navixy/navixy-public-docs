@@ -10,7 +10,7 @@ The **Eco Driving** report scores how safely and efficiently your drivers behave
 
 To open the report, go to the **Fleet Management** app and select the **Eco Driving** tab.
 
-<figure><img src="../../.gitbook/assets/image (20) (1).png" alt="Eco Driving page"><figcaption><p>Eco Driving page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image.png" alt="Eco Driving page"><figcaption><p>Eco Driving page</p></figcaption></figure>
 
 ## Eco Driving report use cases
 
@@ -136,7 +136,7 @@ Select the reporting period, with optional filters for specific days of the week
 
 Open **Penalty settings** to customize the report.
 
-<figure><img src="../../.gitbook/assets/image (1) (3).png" alt="Violation rigidity settings"><figcaption><p>Penalty settings</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (1).png" alt="Violation rigidity settings"><figcaption><p>Penalty settings</p></figcaption></figure>
 
 The following settings can be configured:
 

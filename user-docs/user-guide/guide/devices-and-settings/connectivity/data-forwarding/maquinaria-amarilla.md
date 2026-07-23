@@ -59,19 +59,19 @@ Open **Postman**
 {% step %}
 Click **Import** and upload the previously downloaded XML file
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/image (2) (1) (2).png" alt=""><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure></div>
 {% endstep %}
 
 {% step %}
 Select the call for token generation and go to the **ValIngreso** section
 
-<div align="left"><figure><img src="../../../../.gitbook/assets/image (3) (1) (3).png" alt=""><figcaption></figcaption></figure></div>
+<div align="left"><figure><img src="../../../../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure></div>
 {% endstep %}
 
 {% step %}
 Go to the **Body** tab and select **Raw**
 
-<figure><img src="../../../../.gitbook/assets/image (3) (3) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (3) (3).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -81,7 +81,7 @@ Change the following three values:
 * **Password**: The password of the company registered with the Colombian police
 * **Valid number**: The number in the example format `4.1234567890`
 
-<figure><img src="../../../../.gitbook/assets/image (11) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (11) (1).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -160,7 +160,7 @@ Enter the following parameters:
 * **Login**: Enter the login provided by the Colombian Police
 * **Password**: Enter the password provided by the Colombian Police
 
-<figure><img src="../../../../.gitbook/assets/image (3) (3) (1).png" alt="" width="270"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (3) (3).png" alt="" width="270"><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}

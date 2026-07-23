@@ -8,7 +8,7 @@ description: >-
 
 The **User preferences** section located in the **Account settings → Profile** allows you to customize a few options to match your individual needs. This includes options for language, measurement system, time zone, date format, and file storage management.
 
-![](<../../.gitbook/assets/image-20240718-180427 (1).png>)
+![](../../.gitbook/assets/image-20240718-180427.png)
 
 ## General settings
 

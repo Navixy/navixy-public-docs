@@ -58,7 +58,7 @@ For `value()` function details, see [IF/THEN Logic expressions and syntax](logic
 
 ## How to add a geofence condition
 
-The expression field in the **IF/THEN Logic** node configuration panel includes a dedicated geofence selector <img src="../../../../../.gitbook/assets/geofence-picker (1).png" alt="" data-size="line">, separate from the standard [attribute autocomplete](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names). It lists all geofences defined in your Navixy account, grouped by name and ID.
+The expression field in the **IF/THEN Logic** node configuration panel includes a dedicated geofence selector <img src="../../../../../.gitbook/assets/geofence-picker.png" alt="" data-size="line">, separate from the standard [attribute autocomplete](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names). It lists all geofences defined in your Navixy account, grouped by name and ID.
 
 To add a geofence function to your expression:
 
@@ -74,7 +74,7 @@ Open the **IF/THEN Logic** node by clicking it on the canvas.
 
 In the **Condition expression (JEXL)** field, click the geofence picker icon to open the geofence list.
 
-<figure><img src="../../../../../.gitbook/assets/geofence-picker-list (1).png" alt="Geofence picker list example, with all three options (in, enter, leave geofence)"><figcaption></figcaption></figure>
+<figure><img src="../../../../../.gitbook/assets/geofence-picker-list.png" alt="Geofence picker list example, with all three options (in, enter, leave geofence)"><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -199,22 +199,22 @@ This expression returns `true` only on the first packet after a device enters th
 
 ## Frequently asked questions
 
-### Where do I find the geofence ID?
+#### Where do I find the geofence ID?
 
 The geofence picker displays each geofence's name and numeric ID in the list. You can also find the ID in the Navixy geofences interface. When you select a geofence from the picker, the ID is inserted into the expression automatically.
 
-### Can I use geofence functions in the Initiate Attribute node?
+#### Can I use geofence functions in the Initiate Attribute node?
 
 No. Geofence functions are available only in **IF/THEN Logic** nodes. They are designed to evaluate logical conditions, which is the specific purpose of the **IF/THEN Logic** node. The **Initiate Attribute** node uses a different expression context for calculating attribute values.
 
-### What happens if the referenced geofence is deleted?
+#### What happens if the referenced geofence is deleted?
 
 If a geofence referenced in an expression is deleted from your Navixy account, the function cannot be evaluated. The result is treated as `false`, and data flows through the ELSE connection. Update or remove the expression to avoid unintended routing.
 
-### Does inGeofence evaluate the current GPS position of the device?
+#### Does inGeofence evaluate the current GPS position of the device?
 
 Yes. `inGeofence()` checks the position reported in the current data packet against the geofence boundaries. Each packet is evaluated independently, so the result reflects the device's reported position at the time that packet was received.
 
-### What is the difference between inGeofence and enterGeofence?
+#### What is the difference between inGeofence and enterGeofence?
 
 `inGeofence()` returns `true` for every packet received while the device is inside the geofence. `enterGeofence()` returns `true` only for the packet that records the moment the device crossed into the geofence. Use `inGeofence` when you need to apply logic to all data from inside the area; use `enterGeofence` when you need to react specifically to the boundary crossing event.

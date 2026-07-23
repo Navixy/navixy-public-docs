@@ -11,7 +11,7 @@ description: >-
 
 The Task performance rule is designed to help companies track and manage the progress and completion of tasks assigned to field employees. Whether you're overseeing a large remote workforce or a smaller team, this rule ensures you stay informed about critical task-related events, such as task completion, delays, failures, and form submissions.
 
-![](<../../../.gitbook/assets/image-20240808-235145 (1).png>)
+![](../../../.gitbook/assets/image-20240808-235145.png)
 
 The Navixy platform provides timely notifications via SMS, email, push notifications, or directly within the web user interface. By using this functionality, businesses can maintain control over the task completion process, leading to improved efficiency and decision-making.
 

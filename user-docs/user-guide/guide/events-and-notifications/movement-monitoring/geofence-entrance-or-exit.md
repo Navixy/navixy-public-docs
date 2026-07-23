@@ -9,7 +9,7 @@ description: >-
 
 A geofence is a designated area on a map that acts as a virtual boundary. This rule tracks when GPS devices enter or exit the specified geofence area. Users receive notifications whenever their objects cross these geofence borders. For example, if a piece of building machinery leaves the designated zone, a company employee can be notified through the user interface, email, or SMS if configured in the rule.
 
-![](<../../../.gitbook/assets/image-20240805-231934 (1).png>)
+![](../../../.gitbook/assets/image-20240805-231934.png)
 
 This functionality provides valuable insights and control over the movement of objects, ensuring adherence to predefined boundaries. It enhances security by alerting users to any unauthorized movement or potential theft outside the specified geofence area. Additionally, it enables efficient asset management by allowing users to track and optimize the utilization of their equipment within designated zones.
 

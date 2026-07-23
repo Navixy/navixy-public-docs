@@ -19,7 +19,7 @@ By assigning roles, the owner can ensure that users have the appropriate access 
 
 To add a new role, navigate to **Account Settings → Users** and roles and select the **Role management** tab. Click the **Add role** button (the button with the **+** sign).
 
-![](<../../../.gitbook/assets/image-20240718-043236 (1).png>)
+![](../../../.gitbook/assets/image-20240718-043236.png)
 
 2. **Create a new role**:
 

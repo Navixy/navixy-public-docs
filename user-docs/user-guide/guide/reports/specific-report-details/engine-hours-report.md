@@ -47,13 +47,13 @@ The **Engine hours report** includes several configurable parameters that allow 
 
 ### Overall activity diagram
 
-![Overall engine activity diagram](<../../../.gitbook/assets/image-20240815-010415 (1).png>)
+![Overall engine activity diagram](../../../.gitbook/assets/image-20240815-010415.png)
 
 This diagram provides a comprehensive view of the total time the engine was on during the selected period. It distinguishes between the time the engine was off, time spent in motion, and time spent idling.
 
 ### Daily activity histogram
 
-<figure><img src="../../../.gitbook/assets/image (44) (1).png" alt="Daily activity histogram"><figcaption><p>Daily activity histogram</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (44).png" alt="Daily activity histogram"><figcaption><p>Daily activity histogram</p></figcaption></figure>
 
 The histogram breaks down engine hours into daily segments, showing both motion and idle times. Hovering over each day provides a more detailed view of that day's engine activity.
 

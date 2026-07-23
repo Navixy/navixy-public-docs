@@ -11,7 +11,7 @@ The **Measuring sensors report** is designed to provide detailed data from confi
 
 This report allows users to view both graphical and statistical information from their devices' sensors, aiding in effective monitoring and decision-making.
 
-<figure><img src="../../../.gitbook/assets/image (42) (1).png" alt="Measuring sensors report"><figcaption><p>Measuring sensors report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (42).png" alt="Measuring sensors report"><figcaption><p>Measuring sensors report</p></figcaption></figure>
 
 ## Prerequisites for generating mMeasuring sensors report
 

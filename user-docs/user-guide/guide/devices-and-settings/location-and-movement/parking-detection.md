@@ -8,7 +8,7 @@ description: >-
 
 **Parking detection** defines when a vehicle counts as **parked** versus **in a trip**, the basis for trips, stops, and parking in reports. It identifies when an object has been stationary long enough, below a speed threshold, optionally confirmed by ignition or a motion sensor.
 
-![](<../../../.gitbook/assets/image-20240815-183001 (1).png>)
+![](../../../.gitbook/assets/image-20240815-183001.png)
 
 ## Settings
 

@@ -10,7 +10,7 @@ The **Speed violation** **report** detects and lists every episode where a vehic
 
 Unlike alerts, which notify you in real time, the **Speed violation** **report** is a retrospective analysis tool. It works by scanning the recorded track data for consecutive data points above the threshold, which means it can catch episodes that may have been missed by rules or notifications.
 
-<figure><img src="../../../.gitbook/assets/image (11) (3).png" alt="Speed violations report"><figcaption><p>Speed violations report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (11).png" alt="Speed violations report"><figcaption><p>Speed violations report</p></figcaption></figure>
 
 ### Speed violation report use cases
 

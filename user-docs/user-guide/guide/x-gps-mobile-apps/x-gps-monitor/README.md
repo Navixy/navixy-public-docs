@@ -21,7 +21,7 @@ X-GPS Monitor helps you to stay aware of what’s happening with your objects: e
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../.gitbook/assets/image-20250304-161523 (1).png" alt="X-GPS Monitor Logo"><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image-20250304-161523.png" alt="X-GPS Monitor Logo"><figcaption></figcaption></figure>
 
 <p align="center"><strong>Download Links</strong>:</p>
 

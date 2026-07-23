@@ -74,7 +74,7 @@ Claude's free plan allows only one custom connector at a time. [Configuring MCP 
 
 {% tabs %}
 {% tab title="For Free, Pro, and Max plans" %}
-1. Go to **Customize > Connectors** (or click **Connectors** on the left sidebar if it's available).
+1. Go to **Customize → Connectors** (or click **Connectors** on the left sidebar if it's available).
 2. Click **+**, then **Add custom connector**.
 3. Enter the Navixy MCP Server URL: `https://platform.mcp.navixy.com/user/mcp`
 4. Click **Add**.
@@ -85,7 +85,7 @@ After setup, enable the connector for a conversation by clicking **+** at the bo
 {% tab title="For Team and Enterprise plans" %}
 An Owner must first add the connector to the organization:
 
-1. Go to **Organization settings > Connectors**.
+1. Go to **Organization settings → Connectors**.
 2. Click **Add**, hover over **Custom**, then select **Web**.
 3. Enter the Navixy MCP Server URL: `https://platform.mcp.navixy.com/user/mcp`
 4. Click **Add**.

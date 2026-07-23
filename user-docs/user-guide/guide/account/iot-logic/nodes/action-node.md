@@ -15,7 +15,7 @@ description: >-
 {% endcolumn %}
 
 {% column width="50%" %}
-<figure><img src="../../../../.gitbook/assets/action-node (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-action-node-tile.png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -25,7 +25,7 @@ While Device action nodes can receive data from any node type, they are most com
 The **Device action** nodes are configured separately for each flow in the Navixy platform UI. Each node can contain multiple actions that execute sequentially when triggered by incoming data.
 {% endhint %}
 
-<figure><img src="../../../../.gitbook/assets/Action-node-in-flow (1).webp" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-action-node-in-flow.png" alt=""><figcaption></figcaption></figure>
 
 ### How Device action nodes work
 
@@ -57,7 +57,7 @@ The configuration dialog is organized into two tabs:
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/action-node-edit (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/action-node-edit.png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -93,7 +93,7 @@ Set up the specific details based on your selected action type:
 
 <summary>Switch Output configuration</summary>
 
-<figure><img src="../../../../.gitbook/assets/action-node-switch-output (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/action-node-switch-output.png" alt=""><figcaption></figcaption></figure>
 
 When configuring Switch Output actions:
 
@@ -109,7 +109,7 @@ When configuring Switch Output actions:
 
 <summary>Send GPRS Command configuration</summary>
 
-<figure><img src="../../../../.gitbook/assets/action-node-gprs (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/action-node-gprs.png" alt=""><figcaption></figcaption></figure>
 
 When configuring GPRS Command actions:
 
@@ -139,7 +139,7 @@ Click **Add action** to create multiple actions within the same node.
 
 Open the **Advanced** tab to define which additional devices receive the same commands when the node is triggered.
 
-<figure><img src="../../../../.gitbook/assets/action-node-advanced-tab (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/action-node-advanced-tab.png" alt=""><figcaption></figcaption></figure>
 
 1. Use the **Source device** dropdown to select the device whose incoming data triggers the node. This must be a device present in the flow's **Data Source node**.
 2. Use the **Target devices** dropdown to select one or more devices that will receive the same commands.
@@ -188,14 +188,14 @@ When triggered, the **Device action** node follows this execution pattern:
 
 ## Frequently asked questions
 
-### How do I know if my actions were executed successfully?
+#### How do I know if my actions were executed successfully?
 
 Currently, action execution feedback is limited. Commands are sent to devices that are confirmed online (those providing recent data) without execution time gap, which eliminates the possibility of the device going offline between trigger and execution. You can monitor device behavior during test stage, or use separate test flows to verify action results in a controllable environment.
 
-### Can I connect multiple nodes to the same Device action node?
+#### Can I connect multiple nodes to the same Device action node?
 
 Yes. Device action nodes can receive triggers from multiple upstream nodes, but be aware that actions will execute for any device that triggers any connected node. When designing complex flows, consider the cumulative effect of multiple trigger sources to ensure actions execute only for intended scenarios.
 
-### What happens if I connect a Device action node directly to a Data Source?
+#### What happens if I connect a Device action node directly to a Data Source?
 
 The Device action node will execute its configured actions every time any device in the Data Source sends data. This creates continuous action execution rather than conditional responses. For most use cases, connecting Device action nodes to [IF/THEN Logic](logic-node/) nodes provides better control over when actions should execute.

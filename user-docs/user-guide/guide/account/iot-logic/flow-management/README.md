@@ -18,7 +18,7 @@ You create flows from the IoT Logic start page using the **Create Flow** button.
 3. Enter a name and description for the flow and set its initial enabled state.
 4. Click **Confirm**. The canvas opens and the new flow is ready to edit.
 
-<figure><img src="../../../../.gitbook/assets/new-flow (1).png" alt="Create Flow dialog with name, description, and enabled state fields"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/new-flow.png" alt="Create Flow dialog with name, description, and enabled state fields"><figcaption></figcaption></figure>
 
 {% hint style="danger" %}
 Disabled flows don't send any data! The readings from the devices involved in a disabled flow don't reach any destination, including the Navixy platform. This means that disabling a flow can interrupt your monitoring capabilities and data collection for the affected devices. Only disable flows when you deliberately want to stop data transmission completely.
@@ -33,10 +33,12 @@ This modular architecture supports both simple data forwarding and complex multi
 For complete node reference and configuration instructions, see [Nodes](../nodes/).
 
 {% hint style="info" %}
-Your flow should include a **Default Output Endpoint** to send data to the platform. Maintaining this connection ensures your device data remains available for visualization and management in the Navixy interface.
+Your flow should include an **Output Endpoint** node set to **Default endpoint** mode to send data to the platform. Maintaining this connection ensures your device data remains available for visualization and management in the Navixy interface.
 {% endhint %}
 
 ## Building your flow
+
+The **Nodes** pane on the left groups available node types into four labeled sections: **Start with** and **End with** (both required), and **Process** and **Action** (both optional). For the full list of nodes in each group, see [Nodes](../nodes/).
 
 To assemble your data processing sequence:
 
@@ -44,7 +46,7 @@ To assemble your data processing sequence:
 2. Click on each node to open its configuration panel and set up the required parameters.
 3. Connect nodes by clicking on a node's output connector and dragging it to the input connector of the destination node.
 
-<figure><img src="../../../../.gitbook/assets/image-20250403-161201 (1).png" alt="Flow workspace showing connected nodes with visible connectors between them"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-canvas-connected-nodes.jpg" alt="Flow workspace showing connected nodes with visible connectors between them"><figcaption></figcaption></figure>
 
 Your flow must begin with at least one **Data Source** node and end with one or more **Output Endpoint** nodes. Between these, you can add transformation nodes to manipulate the data according to your requirements.
 
@@ -75,12 +77,12 @@ When you need to restructure your flow, you can remove nodes or connections:
 
 **Deleting a node:**
 
-1. Hover your cursor over the node you want to remove
-2. Click the delete icon that appears in the top right corner of the node
+1. Click the node you want to remove to display its quick actions
+2. Click **Delete** in the action bar that appears above the node
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image-20250403-161554 (1).png" alt="Node with delete icon"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/node-delete.png" alt="Node showing Edit and Delete quick actions"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -97,7 +99,7 @@ When you delete a node, all of its connections will also be removed.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image-20250403-161949 (1).png" alt="Selected connection highlighted for deletion"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/node-connection-delete.png" alt="Selected connection highlighted for deletion"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -109,13 +111,33 @@ Each row provides a status toggle to enable or disable the flow without opening 
 
 To open a flow on the canvas, click its name in the table or select **Edit** from its **...** menu.
 
+### Mapping Table
+
+Next to the page title on the IoT Logic start page, the **Mapping Table** button opens the **Devices mapping** dialog, a searchable, account-wide table listing every device and where its data goes.
+
+<figure><img src="../../../../.gitbook/assets/iot-logic-devices-mapping-dialog.png" alt="Devices mapping dialog listing devices with their model, device ID, connected flows, and data source"><figcaption></figcaption></figure>
+
+For each device, the dialog shows:
+
+* **Object label**: the device's name
+* **Model**: the device model
+* **Device ID**: the device's unique identifier
+* **Connected flows**: the flow(s) the device is assigned to, as clickable links that open each flow
+* **Data source**: the Data Source node feeding the device
+
+Use the search field above the table to filter it by device.
+
+{% hint style="info" %}
+The same device-to-flow assignments are also available programmatically. See [Navixy User MCP](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/navixy-mcp-server/navixy-user-mcp) for the equivalent MCP tool.
+{% endhint %}
+
 ## Importing and exporting flows
 
 IoT Logic allows you to export flow configurations for backup purposes or to share them with other accounts. You can also import previously exported configurations to quickly set up new flows.
 
 Here's an example of an exported/ready-to-import flow JSON file:
 
-{% file src="../../../../.gitbook/assets/iot-logic-full-example-exported-flow (1).json" %}
+{% file src="../../../../.gitbook/assets/iot-logic-full-example-exported-flow.json" %}
 
 ### Exporting a flow
 
@@ -126,23 +148,14 @@ To export your flow configuration:
 3. The flow configuration downloads as a JSON file
 
 {% hint style="info" %}
-You can also export a flow from canvas. To do it, open the **...** menu near the flow name and select **Download**.
+You can also export a flow from canvas. To do it, open the "**..."** menu near the flow name and select **Download**.
 {% endhint %}
 
 #### What gets exported
 
 The following table shows what is included and excluded from flow exports:
 
-| Component                                           |       Exported       |
-| --------------------------------------------------- | :------------------: |
-| Node structure and connections                      | :white\_check\_mark: |
-| Attribute calculations and expressions              | :white\_check\_mark: |
-| Node names and descriptions                         | :white\_check\_mark: |
-| Flow metadata                                       | :white\_check\_mark: |
-| Device selections (Data Source nodes)               |           ❌          |
-| Software-tab push configuration (Data Source nodes) |           ❌          |
-| Authentication headers (Webhook nodes)              |           ❌          |
-| MQTT credentials (Output Endpoint nodes)            |           ❌          |
+<table data-search="false"><thead><tr><th>Component</th><th align="center">Exported</th></tr></thead><tbody><tr><td>Node structure and connections</td><td align="center"><span data-gb-custom-inline data-tag="emoji" data-code="2705">✅</span></td></tr><tr><td>Attribute calculations and expressions</td><td align="center"><span data-gb-custom-inline data-tag="emoji" data-code="2705">✅</span></td></tr><tr><td>Node names and descriptions</td><td align="center"><span data-gb-custom-inline data-tag="emoji" data-code="2705">✅</span></td></tr><tr><td>Flow metadata</td><td align="center"><span data-gb-custom-inline data-tag="emoji" data-code="2705">✅</span></td></tr><tr><td>Device selections (Data Source nodes)</td><td align="center">❌</td></tr><tr><td>Software-tab push configuration (Data Source nodes)</td><td align="center">❌</td></tr><tr><td>Authentication headers (Webhook nodes)</td><td align="center">❌</td></tr><tr><td>MQTT credentials (Output Endpoint nodes)</td><td align="center">❌</td></tr></tbody></table>
 
 {% hint style="info" %}
 Device selections, Software-tab push configuration, and authentication data are excluded from exports. Device selections and Software-tab push configuration are excluded to avoid conflicts when importing into a different account. Software-tab mappings reference the node's device selections, so they're excluded along with them. Authentication data is excluded to protect sensitive information.

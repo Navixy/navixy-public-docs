@@ -10,7 +10,7 @@ The **Driver journal** feature in Navixy is a powerful tool for fleet management
 
 This feature allows fleet managers to monitor and classify trips, providing valuable insights into vehicle usage, trip purposes, and driver behavior. By accurately categorizing trips, organizations can improve reporting accuracy, optimize fleet operations, and ensure compliance with various regulations. This makes it possible to more easily identify when a device is used for business purposes or private.
 
-![](<../../.gitbook/assets/image-20240814-181444 (1).png>)
+![](../../.gitbook/assets/image-20240814-181444.png)
 
 ## How to use the Driver journal
 

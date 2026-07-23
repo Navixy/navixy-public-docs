@@ -23,7 +23,7 @@ Messages can be sent in two modes:
 
 In chat mode, the dispatcher and field employee exchange one-on-one messages. Both the dispatcher and the worker can start a chat. At the same time, the dispatcher uses the **Messages** module for correspondence in the web interface.
 
-![](<../../../.gitbook/assets/image-20250304-165342 (1).png>)
+![](../../../.gitbook/assets/image-20250304-165342.png)
 
 The field employee uses the **Chat** tab in the **X-GPS Tracker** mobile application:
 
@@ -37,15 +37,15 @@ Mass texting allows the dispatcher to simultaneously send the same message to mu
 
 Messages can be sent only by the dispatcher from the web interface. To do this, select the mailing list recipients on the list and write one or more messages.
 
-![](<../../../.gitbook/assets/image-20250304-165854 (1).png>)
+![](../../../.gitbook/assets/image-20250304-165854.png)
 
 A field employee can reply to a message in the **Chat** tab of the **X-GPS Tracker** application.
 
-![](<../../../.gitbook/assets/image-20250304-170049 (1).png>)
+![](../../../.gitbook/assets/image-20250304-170049.png)
 
 In this case, only the dispatcher will see the answer in a separate chat with the employee.
 
-![](<../../../.gitbook/assets/image-20250304-170251 (1).png>)
+![](../../../.gitbook/assets/image-20250304-170251.png)
 
 Due to this, the remaining field employees will not be distracted by the dialogue that has begun, and the discussion will be held constructively.
 
@@ -53,6 +53,6 @@ Due to this, the remaining field employees will not be distracted by the dialogu
 
 Chat and mailing are available to the dispatcher in the main menu, in the **Messages** section.
 
-![](<../../../.gitbook/assets/image-20250304-170359 (1).png>)
+![](../../../.gitbook/assets/image-20250304-170359.png)
 
 This will allow the dispatcher to correspond with mobile personnel in real-time and quickly switch between **Chat** and **Mass** **texting**. As a result, office staff and field staff will act as a single team that solves common tasks.

@@ -8,7 +8,7 @@ description: >-
 
 When setting up a new **User application**, you'll work with several key configurations that determine how your external application integrates with the Navixy platform. Let's explore each essential component.
 
-Start by clicking the <img src="../../../.gitbook/assets/chrome_py0qhiu5p8 (1).webp" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list. In the appeared configuration form, proceed with the following steps:
+Start by clicking the <img src="../../../.gitbook/assets/chrome_py0qhiu5p8.webp" alt="chrome_py0qhiu5p8.webp" data-size="line"> button in the **User applications** list. In the appeared configuration form, proceed with the following steps:
 
 {% stepper %}
 {% step %}
@@ -52,10 +52,10 @@ You can edit the suggested parameter name or specify a certain value for it.
 
 </details>
 
-![Application URL example with parameters](<../../../.gitbook/assets/URL_with_Params (1).png>)
+![Application URL example with parameters](../../../.gitbook/assets/URL_with_Params.png)
 
 {% hint style="info" %}
-Test your configuration to make sure the application loads correctly. Click <img src="../../../.gitbook/assets/image-20241217-083119 (1).png" alt="image-20241217-083119.png" data-size="line"> to display a preview.
+Test your configuration to make sure the application loads correctly. Click <img src="../../../.gitbook/assets/image-20241217-083119.png" alt="image-20241217-083119.png" data-size="line"> to display a preview.
 {% endhint %}
 {% endstep %}
 
@@ -115,7 +115,7 @@ Click the **Save** button. Your application appears in the **User applications**
 {% endstep %}
 {% endstepper %}
 
-<figure><img src="../../../.gitbook/assets/image (1) (1) (1) (1) (1) (2).png" alt=""><figcaption><p>Embedded User application view example</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1) (1) (1) (1).png" alt=""><figcaption><p>Embedded User application view example</p></figcaption></figure>
 
 <details>
 

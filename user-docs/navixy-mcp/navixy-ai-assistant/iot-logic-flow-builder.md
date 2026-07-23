@@ -46,7 +46,7 @@ Once you're in the assistant, start a build by describing the automation you wan
 
 From there, the assistant asks one question at a time, so the interview stays focused. It usually takes around four exchanges. As you answer, a **Confirmed requirements** checklist tracks what's locked in and what's still pending, so you can always see where you are.
 
-<figure><img src="../../.gitbook/assets/iot-logic-flow-builder-interview.png" alt="IoT Logic flow builder interview step in the Navixy AI Assistant, showing a Confirmed requirements checklist with locked and pending items above a reporting-interval question with preset options"><figcaption><p>An interview question, with the Confirmed requirements checklist above it.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/iot-logic-flow-builder-interview (1).png" alt="IoT Logic flow builder interview step in the Navixy AI Assistant, showing a Confirmed requirements checklist with locked and pending items above a reporting-interval question with preset options"><figcaption><p>An interview question, with the Confirmed requirements checklist above it.</p></figcaption></figure>
 
 Most questions appear as a clickable widget with sensible presets, and you can type your own value when the presets don't fit. Over the interview, the assistant settles these details:
 
@@ -76,7 +76,7 @@ Goal: notify by email when any truck idles for more than 15 minutes.
 
 </details>
 
-<figure><img src="../../.gitbook/assets/iot-logic-flow-builder-summary.png" alt="Flow summary in the Navixy AI Assistant listing trigger, action, frequency, devices, and reporting interval, with Build the flow and Let me adjust first options"><figcaption><p>The flow summary, with the Build the flow and Let me adjust first options.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/iot-logic-flow-builder-summary (1).png" alt="Flow summary in the Navixy AI Assistant listing trigger, action, frequency, devices, and reporting interval, with Build the flow and Let me adjust first options"><figcaption><p>The flow summary, with the Build the flow and Let me adjust first options.</p></figcaption></figure>
 
 Nothing is built until you click **Build the flow**. If the summary isn't right, click **Let me adjust first** to change a specific detail before generating.
 
@@ -84,7 +84,7 @@ Nothing is built until you click **Build the flow**. If the summary isn't right,
 
 When the build finishes, the assistant returns a download link for `flow_design.json`, available for 7 days. Importing the file is a manual step that keeps you in control: you review the generated flow on the canvas before it goes live.
 
-<figure><img src="../../.gitbook/assets/iot-logic-flow-builder-result.png" alt="Navixy AI Assistant success message reading Flow built successfully, with a flow_design.json download link, a flow summary, and a list of assumptions"><figcaption><p>The build result: a flow_design.json download link with the flow summary and assumptions.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/iot-logic-flow-builder-result (1).png" alt="Navixy AI Assistant success message reading Flow built successfully, with a flow_design.json download link, a flow summary, and a list of assumptions"><figcaption><p>The build result: a flow_design.json download link with the flow summary and assumptions.</p></figcaption></figure>
 
 To import the flow into your account, follow these steps:
 

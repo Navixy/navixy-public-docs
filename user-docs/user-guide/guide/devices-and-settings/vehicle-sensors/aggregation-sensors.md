@@ -8,7 +8,7 @@ description: >-
 
 The **Aggregation sensor** block in Navixy allows you to combine data from multiple sensors and process it using an aggregation function. This functionality is particularly useful in scenarios where multiple sensors are used to monitor similar parameters, such as fuel levels in a vehicle.
 
-![](<../../../.gitbook/assets/image-20240815-205846 (1).png>)
+![](../../../.gitbook/assets/image-20240815-205846.png)
 
 ## Aggregation function options
 

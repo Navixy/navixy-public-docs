@@ -10,7 +10,7 @@ The **Fuel volume 2.0 report** tracks refueling events and fuel consumption over
 
 This report is a good starting point: there are no parameters to configure before building the report, and the graph is always processed and smoothed automatically. However, **Fuel volume 2.0** only detects refueling events and can't identify fuel drains or theft. If you need drain detection, use the standard [Fuel volume report](fuel-volume-report.md) instead.
 
-<figure><img src="../../../.gitbook/assets/image (48) (1).png" alt="Fuel volume 2.0 report"><figcaption><p>Fuel volume 2.0 report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (48).png" alt="Fuel volume 2.0 report"><figcaption><p>Fuel volume 2.0 report</p></figcaption></figure>
 
 The **Fuel volume 2.0 report** is composed of several sections:
 

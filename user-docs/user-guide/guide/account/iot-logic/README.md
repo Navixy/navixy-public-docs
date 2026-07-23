@@ -13,7 +13,7 @@ It can work with GPS devices, dash cams, IoT sensors, or third-party telematics 
 
 Inside the flow, you can transform and route data based on real-time conditions, trigger automated actions on devices, and deliver results to the Navixy platform, third-party systems, or both. Continuous data streams, targeted event-driven notifications, and parallel outputs to multiple destinations are all supported within a single flow.
 
-![](<../../../.gitbook/assets/IoT_Logic_schema (1).jpg>)
+<figure><img src="../../../.gitbook/assets/iot-logic-dataflow-overview.png" alt="Diagram of the IoT Logic data flow. On the left, telematics devices and sensors, and OEM and third-party servers, send data into the IoT Logic cloud. Inside the cloud, data passes through three stages: receive data, enrich data, and route results. From there it fans out to three destinations on the right: the Navixy platform, business apps and services, and third-party systems. A separate dashed path labeled &quot;Commands&quot; runs from the routing stage back to the devices, showing that IoT Logic can also send commands to devices."><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 **Navigation**

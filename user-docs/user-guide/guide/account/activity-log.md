@@ -10,7 +10,7 @@ Using the **Activity log**, the account owner can track the activity of all [use
 
 Navigate to **Account settings → Activity log**.
 
-![](<../../.gitbook/assets/image-20241108-172817 (1).png>)
+![](../../.gitbook/assets/image-20241108-172817.png)
 
 ## Type of actions
 

@@ -29,7 +29,7 @@ This rule leverages GPS data to continuously track the distance between a design
 * **Moving away:** Set alerts for when secondary objects are increasing their distance from the primary vehicle. This is particularly useful for detecting when vehicles are straying from a convoy or when trailers are detaching from their lead vehicle.
 * **Distance range:** Define a specific permissible distance range between the primary and secondary objects, ranging from 5 to 200,000 meters. The system generates notifications whenever the distance falls within or outside this predefined range, allowing for proactive management of fleet operations.
 
-![](<../../../.gitbook/assets/image-20240813-220927 (1).png>)
+![](../../../.gitbook/assets/image-20240813-220927.png)
 
 For common settings, see [Rules and alerts](../).
 

@@ -8,7 +8,7 @@ description: >-
 
 Custom fields allow you to add personalized information to the description of places. Custom fields operate in the same way as standard fields, allowing you to store valuable data that can be used for filtering and improving operational efficiency.
 
-![](<../../.gitbook/assets/image-20240718-172504 (1).png>)
+![](../../.gitbook/assets/image-20240718-172504.png)
 
 **Examples:**
 

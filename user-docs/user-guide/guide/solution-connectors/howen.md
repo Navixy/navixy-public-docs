@@ -70,7 +70,7 @@ Navixy offers [User applications](../account/user-applications/) functionality t
 {% hint style="success" %}
 Your new application appears automatically in Navixy's left sidebar. Open it and log in with your Howen credentials to access your comprehensive AI-powered video telematics dashboard with advanced driver monitoring, intelligent event detection, multi-channel video feeds, and seamless fleet surveillance - all integrated with your existing Navixy fleet management tools.
 
-<img src="../../.gitbook/assets/image (8) (1) (1) (1).png" alt="" data-size="original">
+<img src="../../.gitbook/assets/image (8) (1) (1).png" alt="" data-size="original">
 {% endhint %}
 {% endstep %}
 {% endstepper %}

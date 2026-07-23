@@ -16,7 +16,7 @@ Users can generate event reports that summarize the occurrences of specific stat
 
 ## Settings
 
-![](<../../../.gitbook/assets/image-20230707-073455 (1).png>)
+![](../../../.gitbook/assets/image-20230707-073455.png)
 
 For a quick setup of the state change notification:
 
@@ -83,15 +83,15 @@ The state field rule allows the selection of not only state fields but also virt
 
 {% columns %}
 {% column %}
-![](<../../../.gitbook/assets/image-20230726-125407 (1).png>)
+![](../../../.gitbook/assets/image-20230726-125407.png)
 {% endcolumn %}
 
 {% column %}
-![](<../../../.gitbook/assets/image-20230726-125535 (1).png>)
+![](../../../.gitbook/assets/image-20230726-125535.png)
 {% endcolumn %}
 {% endcolumns %}
 
-![](<../../../.gitbook/assets/image-20230726-125722 (1).png>)
+![](../../../.gitbook/assets/image-20230726-125722.png)
 
 ### Notifications
 

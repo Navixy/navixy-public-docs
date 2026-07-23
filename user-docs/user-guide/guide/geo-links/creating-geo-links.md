@@ -8,11 +8,11 @@ description: >-
 
 To create a geo link, click **+** at the top of the page.
 
-![New geo link button](<../../.gitbook/assets/image-20250725-133824 (1).png>)
+![New geo link button](../../.gitbook/assets/image-20250725-133824.png)
 
 The creation dialogue window contains the following options:
 
-![Creating a geo link dialog](<../../.gitbook/assets/image-20250725-120004 (1).png>)
+![Creating a geo link dialog](../../.gitbook/assets/image-20250725-120004.png)
 
 {% stepper %}
 {% step %}
@@ -48,7 +48,7 @@ Sensor readings depend on the device’s model. To learn more about sensors and 
 
 Use the copy button to apply the same attribute list to all other objects in the geo link. This function may save a significant amount of time when configuring attributes for multiple objects.
 
-![Copying attributes](<../../.gitbook/assets/image-20250725-123905 (1).png>)
+![Copying attributes](../../.gitbook/assets/image-20250725-123905.png)
 {% endstep %}
 
 {% step %}

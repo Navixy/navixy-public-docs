@@ -9,7 +9,7 @@ description: >-
 
 The **Fleet management** section in the Navixy platform gives you detailed insight into and control over your organization's vehicles, from fuel consumption to vehicle specifications, to help improve operational efficiency.
 
-![](<../../.gitbook/assets/image-20240814-173711 (1).png>)
+![](../../.gitbook/assets/image-20240814-173711.png)
 
 All information about your organization's vehicles lives in **Fleet management**. For example, you enter fuel consumption per 100 km (or miles), and the Navixy platform uses this rate to estimate fuel usage and compare it with the actual readings.
 

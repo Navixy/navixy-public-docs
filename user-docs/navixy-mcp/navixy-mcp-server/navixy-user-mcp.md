@@ -114,7 +114,7 @@ Example prompt:
 Show me my trackers on a map.
 ```
 
-<figure><img src="../../.gitbook/assets/image (2) (3).png" alt="Navixy Tracker Map rendered in Claude Desktop, showing moving, parked, and offline trackers across Europe. The map updates automatically every five seconds and groups trackers by movement status" width="563"><figcaption><p>Navixy tracker map</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (3).png" alt="Navixy Tracker Map rendered in Claude Desktop, showing moving, parked, and offline trackers across Europe. The map updates automatically every five seconds and groups trackers by movement status" width="563"><figcaption><p>Navixy tracker map</p></figcaption></figure>
 
 ## Tools reference
 

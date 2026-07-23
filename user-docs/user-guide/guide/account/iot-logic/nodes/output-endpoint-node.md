@@ -15,7 +15,7 @@ description: >-
 {% endcolumn %}
 
 {% column %}
-![](<../../../../.gitbook/assets/image-20250407-210332 (1).png>)
+![](../../../../.gitbook/assets/iot-logic-output-endpoint-tile.png)
 {% endcolumn %}
 {% endcolumns %}
 
@@ -23,7 +23,7 @@ For details on the format in which data is transmitted, see [Output data format]
 
 ### Flow architecture integration
 
-<figure><img src="../../../../.gitbook/assets/Output-endpoint-in-flow (1).webp" alt="Output Endpoint node in the flow workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-output-endpoint-in-flow.png" alt="Output Endpoint node in the flow workspace"><figcaption></figcaption></figure>
 
 A single IoT Logic flow can contain multiple output nodes, each with independent configurations. This architecture enables:
 
@@ -32,7 +32,7 @@ A single IoT Logic flow can contain multiple output nodes, each with independent
 * Selective data routing that enables flexible data flow scenarios
 
 {% hint style="info" %}
-Each flow should include a **Default Output Endpoint** node to send data to the Navixy platform. Maintain connections between your **Data Source** nodes and this output. The connection ensures device data is sent to the platform, enabling monitoring capabilities using Navixy tools. If the Navixy output is removed, data from the devices involved in the flow will no longer reach the platform.
+Each flow should include an **Output Endpoint** node set to **Default endpoint** mode to send data to the Navixy platform. Maintain connections between your **Data Source** nodes and this output. The connection ensures device data is sent to the platform, enabling monitoring capabilities using Navixy tools. If the Navixy output is removed, data from the devices involved in the flow will no longer reach the platform.
 {% endhint %}
 
 ### Node capabilities
@@ -53,7 +53,7 @@ Setting up an **Output endpoint node** determines how and where data will be del
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/Output_Endpoint_node_edit (1).png" alt="" width="236"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/Output_Endpoint_node_edit.png" alt="" width="236"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -78,6 +78,8 @@ Choose what type of transmitting to use for this endpoint
 
 * **Default endpoint**: standard configuration for sending flow data to the Navixy platform that can't be edited
 * **MQTT endpoint**: custom configuration that uses MQTT as transport for sending flow data to 3rd-party systems. For te specific configuration parameters of this mode, see [MQTT](output-endpoint-node.md#mqtt).
+
+The endpoint **Name** stays whatever you entered in the previous step. If you leave it uncustomized while **Mode** is set to **Default endpoint**, it appears on the canvas as **Default Output Endpoint**.
 {% endstep %}
 
 {% step %}
@@ -137,16 +139,16 @@ The node implements MQTT as the transport protocol for this standardized JSON pa
 
 ## Frequently asked questions
 
-### Can I connect multiple data sources to a single Output Endpoint node?
+#### Can I connect multiple data sources to a single Output Endpoint node?
 
 Yes. The **Output Endpoint** node accepts inputs from multiple **Data Source** nodes simultaneously. All processed data, including location coordinates, device identifiers, telemetry parameters, and calculated attributes, is serialized according to the [Navixy Generic Protocol](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-generic-protocol) specification before transmission.
 
-<figure><img src="../../../../.gitbook/assets/image-20250404-105858 (1).png" alt="Example flow showing multiple Data Sources connected to a single Output Endpoint"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-output-endpoint-multi-source.png" alt="Example flow showing multiple Data Sources connected to a single Output Endpoint"><figcaption></figcaption></figure>
 
-### What happens if I modify an endpoint that's used in multiple flows?
+#### What happens if I modify an endpoint that's used in multiple flows?
 
 Endpoint configurations are stored as reusable resources across the entire client account. Modifications to an existing endpoint configuration affect all nodes referencing that endpoint across all flows. This behavior facilitates configuration standardization but requires careful change management when updating endpoint parameters.
 
-### What security practices are recommended for production deployments?
+#### What security practices are recommended for production deployments?
 
 For implementations requiring high security standards (healthcare, financial, etc.), enable SSL and implement MQTT authentication. While this increases protocol overhead slightly, it provides necessary data protection during transmission. Standard implementations should use at minimum QoS level 1 to ensure delivery confirmation.

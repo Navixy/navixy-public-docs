@@ -6,7 +6,7 @@ Navixy AI Assistant is a chat interface built into the Navixy platform and websi
 {% endcolumn %}
 
 {% column width="16.666666666666657%" %}
-<figure><img src="../../.gitbook/assets/AI assistant-icon.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/AI assistant-icon (1).png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -40,7 +40,7 @@ When you open the assistant from the Navixy interface or Admin Panel, it automat
 
 ### From the Navixy interface
 
-The assistant is available widget-style in the lower-right corner of the interface. Click <img src="../../.gitbook/assets/AI assistant-icon.png" alt="" data-size="line"> to open the chat window.
+The assistant is available widget-style in the lower-right corner of the interface. Click <img src="../.gitbook/assets/AI assistant-icon (1).png" alt="" data-size="line"> to open the chat window.
 
 With an active Navixy session, the assistant can access:
 

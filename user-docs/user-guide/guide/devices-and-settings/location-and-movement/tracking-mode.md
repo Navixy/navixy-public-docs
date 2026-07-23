@@ -8,7 +8,7 @@ description: >-
 
 Controls how often and on what basis the device reports its position, balancing live-tracking detail against data and battery usage. Every device has a reporting configuration, but the exact fields are chosen by the device model, so this page describes the underlying concepts rather than a fixed form.
 
-<figure><img src="../../../.gitbook/assets/image-20240815-182719 (1).png" alt="Tracking mode settings block example" width="310"><figcaption><p>Tracking mode settings block example</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image-20240815-182719.png" alt="Tracking mode settings block example" width="310"><figcaption><p>Tracking mode settings block example</p></figcaption></figure>
 
 {% hint style="info" %}
 The controls below are the canonical building blocks. Your device shows the subset it supports, sometimes with different labels. The device reports when **at least one** of the enabled conditions is met.

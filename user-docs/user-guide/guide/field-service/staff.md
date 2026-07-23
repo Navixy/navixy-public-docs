@@ -8,7 +8,7 @@ description: >-
 
 The **Staff** page in the **Field service** module is designed to manage and organize information about your field staff. This tool ensures that you have everything you need to efficiently coordinate your mobile workforce.
 
-<figure><img src="../../.gitbook/assets/image-20240816-171918 (1).png" alt="Staff page"><figcaption><p>Staff page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image-20240816-171918.png" alt="Staff page"><figcaption><p>Staff page</p></figcaption></figure>
 
 To access the **Staff** page, log in to the Navixy platform and click **Field service** in the main menu. From there, click the **Staff** tab. This section provides an overview of all employees in your organization, displaying their essential information in a list format.
 

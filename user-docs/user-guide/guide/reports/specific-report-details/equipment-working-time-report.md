@@ -8,7 +8,7 @@ description: >-
 
 The **Equipment working time** report provides essential data on the uptime of any equipment connected to your vehicles via discrete or virtual inputs. This report is crucial for fleet managers who need to monitor the operational efficiency of equipment, analyze idle times, and ensure optimal usage of assets. This guide describes how this report works, the parameters involved, and how to interpret the data effectively.
 
-<figure><img src="../../../.gitbook/assets/image (12) (2) (2).png" alt="Equipment working time report"><figcaption><p>Equipment working time report</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (12).png" alt="Equipment working time report"><figcaption><p>Equipment working time report</p></figcaption></figure>
 
 ## Equipment working time report use cases
 
@@ -63,13 +63,13 @@ By default, the "off" state is shown in gray and the "on" state in red. When **S
 
 ### Daily activity histogram
 
-![Daily activity histogram example with showing idle percentage](<../../../.gitbook/assets/image-20240815-010538 (1).png>)
+![Daily activity histogram example with showing idle percentage](../../../.gitbook/assets/image-20240815-010538.png)
 
 The histogram breaks down the equipment's working time into daily segments. If idle percentage is tracked, it also shows the division between motion and idle time. Hovering over each day provides a more detailed view of that day’s activity.
 
 ### Daily sensor operation time table
 
-![Daily operation time on sensor with showing idle percentage](<../../../.gitbook/assets/image-20240815-010619 (1).png>)
+![Daily operation time on sensor with showing idle percentage](../../../.gitbook/assets/image-20240815-010619.png)
 
 This table presents daily statistics on equipment operation, including:
 

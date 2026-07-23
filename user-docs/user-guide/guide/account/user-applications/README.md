@@ -37,7 +37,7 @@ The **User applications** space is available to account **Owners** in the **Acco
 
 You'll see a comprehensive list displaying all your existing add-ons, along with options to create new ones.
 
-![UI path to User applications](<../../../.gitbook/assets/User_Apps_Navigation (1).gif>)
+![UI path to User applications](../../../.gitbook/assets/User_Apps_Navigation.gif)
 
 ## Section content
 

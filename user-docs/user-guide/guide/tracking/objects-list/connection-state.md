@@ -9,7 +9,7 @@ description: >-
 
 Every GPS device in Navixy has a status that indicates its current connection state to the server. These statuses are color-coded and visible in the [Objects list](./). This state doesn't necessarily mean the device is broken. It’s merely a visualization of the timing of data the Navixy platform receives from a device.
 
-![Connection state in Object list](<../../../.gitbook/assets/Connection_state_list (1).png>)
+![Connection state in Object list](../../../.gitbook/assets/Connection_state_list.png)
 
 Color-coded indicators provide a quick and easy way for users to assess the status of their GPS devices at a glance.
 
@@ -21,7 +21,7 @@ The following table outlines the possible statuses for GPS devices, providing a 
 
 The diagram below illustrates the sequence of connection statuses for a successfully activated GPS device on the platform, showing the transitions between different states based on the data received and the time elapsed.
 
-![image-20240718-214738.png](<../../../.gitbook/assets/image-20240718-214730 (1).png>)
+![image-20240718-214738.png](../../../.gitbook/assets/image-20240718-214730.png)
 
 Here’s a detailed explanation:
 

@@ -12,8 +12,7 @@ This tutorial walks you through connecting Navixy MCP Server's User API to Claud
 
 * [Navixy MCP in Claude Desktop](configuring-navixy-mcp-in-claude-desktop.md): Details on configuring Navixy MCP Server in Claude Desktop
 * [Navixy MCP in Cursor](configuring-navixy-mcp-in-cursor.md): Details on configuring Navixy MCP Server in Cursor
-* [Navixy MCP in ChatGPT](configuring-navixy-mcp-in-chatgpt.md): Details on configuring Navixy MCP Server in ChatGPT
-* [Navixy MCP in Codex](configuring-navixy-mcp-in-codex.md): Details on configuring Navixy MCP Server in Codex
+* [Navixy MCP in ChatGPT](configuring-navixy-mcp-in-chatgpt.md): Details on configuring Navixy MCP Server in ChatGPT (browser and desktop versions)
 * [Connecting other AI tools](connecting-other-ai-tools.md): Information on connecting other AI clients
 
 ## Quick start for installing Navixy User MCP

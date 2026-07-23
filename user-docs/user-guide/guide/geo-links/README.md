@@ -17,7 +17,7 @@ A geo link can be associated with multiple objects, which are displayed on the m
 Here is an example of a generated geo link URL: `https://tracking.example/ls/#ecdd8c083d52a396ecdd8c083d52a396`
 {% endhint %}
 
-![List of geo links](<../../.gitbook/assets/{EB395344-78FF-4FD6-857B-72B0F0F621D3}-20250728-083324 (1).png>)
+![List of geo links](../../.gitbook/assets/{EB395344-78FF-4FD6-857B-72B0F0F621D3}-20250728-083324.png)
 
 ## Working with geo links
 

@@ -15,7 +15,7 @@ description: >-
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image-20250403-162909 (1).png" alt="Data source node in the flow workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-data-source-tile.png" alt="Data source node in the flow workspace"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -23,7 +23,7 @@ Beyond receiving telemetry, a **Data Source** node can also enrich a device you'
 
 ### Flow architecture integration
 
-<figure><img src="../../../../.gitbook/assets/Data-source-in-flow (1).webp" alt="Data source node included in a flow on workspace"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-data-source-in-flow.png" alt="Data source node included in a flow on workspace"><figcaption></figcaption></figure>
 
 **Data Source node** functions as the entry point for data in an IoT Logic flow. A single flow can contain multiple source nodes, each with independent configurations. This architecture enables:
 
@@ -62,7 +62,7 @@ The configuration dialog is organized into two tabs:
 {% endcolumns %}
 
 {% hint style="info" %}
-The **Software** tab depends on the **Devices** tab. Its **Device name** picker only lists devices already selected in **Devices**, and shows no data available until you select at least one there.
+The **Software** tab depends on the **Devices** tab. Its **Source device** picker only lists devices already selected in **Devices**, and shows no data available until you select at least one there.
 {% endhint %}
 
 Let's see what elements this node uses and what you can configure when working with it:
@@ -132,7 +132,7 @@ Give the external system a valid [Navixy API key](../../api-keys.md), and config
 
 Enter a **Primary key**: the name of the field the external system uses to identify which device a pushed record belongs to. It accepts up to 64 characters, letters, digits, and underscores only.
 
-Add one **Mappings** row per device to enrich. For each row, select the **Device name**, limited to devices already selected in Devices, and enter the **Key value** that identifies that device in inbound pushes. This field stores up to 255 characters, but the push endpoint itself accepts only up to 100 characters per field, so keep the value well under 100 characters in practice.
+Add one **Mappings** row per device to enrich. For each row, select the **Source device**, limited to devices already selected in Devices, and enter the **Key value** that identifies that device in inbound pushes. This field stores up to 255 characters, but the push endpoint itself accepts only up to 100 characters per field, so keep the value well under 100 characters in practice.
 
 {% hint style="warning" %}
 Both Primary key and Key value accept only letters, digits, and underscores, no hyphens or other punctuation. The push endpoint's general field validation is more permissive and accepts hyphens in any field without complaint, but a hyphenated value can never match a stored Key value, so pushes using one are silently discarded exactly as if the value didn't match. If your external system's identifiers use hyphens (for example `truck-12`), translate them, for example to `truck_12`, before pushing.
@@ -161,13 +161,13 @@ This standardization process enables you to build consistent processing flows re
 
 Navixy matches each inbound push by its primary key value against the node's configured **Mappings**, then merges the remaining fields into the mapped device's data stream as attributes: new if the field name is new, or written into that attribute's existing history if the name matches one that already exists, whether reported natively by the device or pushed by another flow's connector. They don't affect location or other telemetry. The field named in **Primary key**, along with `flow_id` and `node_id`, is used for routing and never becomes an attribute itself. A request can end up in one of three states:
 
-| Outcome                                   | HTTP response        | Data merged?                                                             |
-| ----------------------------------------- | -------------------- | ------------------------------------------------------------------------- |
+| Outcome                                   | HTTP response        | Data merged?                                                                                                         |
+| ----------------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Primary key value matches a mapping       | 200, `success: true` | Yes. Remaining fields merge as attributes, new if the name is new, existing history if it matches one already in use |
-| Primary key value matches no mapping      | 200, `success: true` | No. Discarded silently                            |
-| Missing or invalid `Authorization` header | 400 error            | No. Rejected before Navixy checks the primary key |
+| Primary key value matches no mapping      | 200, `success: true` | No. Discarded silently                                                                                               |
+| Missing or invalid `Authorization` header | 400 error            | No. Rejected before Navixy checks the primary key                                                                    |
 
-{% hint style="warning" %}
+{% hint style="info" %}
 A 200 response only confirms Navixy accepted the request, not that the data merged. A mismatched primary key value is discarded silently, with no error to signal it. If you're unsure a push was matched, check the mapped device's attributes in [Data Stream Analyzer](../data-stream-analyzer.md) rather than relying on the response.
 {% endhint %}
 
@@ -211,7 +211,7 @@ The protocol should match the communication protocol used by your device manufac
 
 Yes, you can connect a **Data Source node** to multiple processing nodes to create parallel processing paths. This allows you to apply different transformations to the same data stream. Here’s an example:
 
-<figure><img src="../../../../.gitbook/assets/image-20250404-075539 (1).png" alt="Example showing the Data source node in context with multiple outbound connections and outputs"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-data-source-multi-output.png" alt="Example showing the Data source node in context with multiple outbound connections and outputs"><figcaption></figcaption></figure>
 
 #### Can I bring in data from a system that isn't a Navixy device?
 

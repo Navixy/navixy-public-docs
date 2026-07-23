@@ -35,7 +35,7 @@ Now, let’s break down the basic flow configuration process step by step.
 
 In the main menu, navigate to **IoT Logic**. The start page opens with two sections: **Flow templates**, a gallery of pre-configured flow structures, and **Created flows**, a table listing all existing flows in your account.
 
-<figure><img src="../../../../.gitbook/assets/iot-logic-start (1).png" alt="IoT Logic start page showing Flow templates gallery and Created flows table"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/iot-logic-start.png" alt="IoT Logic start page showing Flow templates gallery and Created flows table"><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -44,7 +44,7 @@ In the main menu, navigate to **IoT Logic**. The start page opens with two secti
 1. Click **Create Flow**. In the dialog that opens, enter a name and description for your flow and set its enabled state.
 2. Click **Confirm** to open the canvas and begin building the flow.
 
-<figure><img src="../../../../.gitbook/assets/new-flow (1).png" alt="Create Flow dialog with name, description, and enabled state fields"><figcaption></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/new-flow.png" alt="Create Flow dialog with name, description, and enabled state fields"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 If you prefer to start from a pre-configured structure, you can use a template instead of building a flow from scratch. Templates are pre-configured flows for common data processing scenarios. See [Templates](templates.md) for the full list and setup instructions.
@@ -56,7 +56,7 @@ If you prefer to start from a pre-configured structure, you can use a template i
 
 This step defines what devices will send their readings to this flow. It is essential to provide the pipeline with actual data.
 
-1. From the **Nodes** pane, drag a **Data Source** node onto the canvas
+1. From the **Nodes** pane, which groups available nodes into **Start with**, **Process**, **Action**, and **End with** sections, drag a **Data Source** node onto the canvas
 2. Click the node to display quick actions, or double-click to open its configuration panel right away
 3. Configure the following settings:
    1. **Node name**: Enter a descriptive name, specifying the sent data origin (e.g., _Staff vehicles_)

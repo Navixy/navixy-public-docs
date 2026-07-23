@@ -12,7 +12,7 @@ Every page in the Navixy docs includes built-in shortcuts for working with AI as
 {% endcolumn %}
 
 {% column width="58.33333333333333%" %}
-<figure><img src="../.gitbook/assets/image.png" alt="" width="269"><figcaption></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt="" width="269"><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 

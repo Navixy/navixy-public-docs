@@ -12,7 +12,7 @@ Depending on which endpoint you connect, you can ask questions like:
 
 Your AI client looks up the answer from your Navixy account on the spot.
 
-<figure><img src="../.gitbook/assets/{CA2D77B3-FC02-48D1-B1FF-C52F3B25E34A}.png" alt="Screenshot of Navixy User MCP used in Claude Desktop" width="563"><figcaption><p>Navixy MCP in Claude Desktop</p></figcaption></figure>
+<figure><img src=".gitbook/assets/{CA2D77B3-FC02-48D1-B1FF-C52F3B25E34A} (1).png" alt="Screenshot of Navixy User MCP used in Claude Desktop" width="563"><figcaption><p>Navixy MCP in Claude Desktop</p></figcaption></figure>
 
 ## How MCP works
 
