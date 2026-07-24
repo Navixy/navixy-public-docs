@@ -119,7 +119,7 @@ Terminal nodes (`action`, `webhook`, `output_endpoint`) must never have outgoing
 
 ### Required fields per node
 
-Every node must include `data.title`. Every node must include a `view.position` object with `x` and `y` integer coordinates.
+Every node must include `data.title`. Every node must include a `view.position` object with `x` and `y` integer coordinates. Do not include `data.trackable_node_id` on `action` or `webhook` nodes: the server assigns it automatically and it is read-only.
 
 **data\_source**
 

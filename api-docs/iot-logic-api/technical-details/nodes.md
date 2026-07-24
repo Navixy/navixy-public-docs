@@ -337,6 +337,7 @@ This node sends HTTP POST requests with IoT data to external endpoints, enabling
   "type": "webhook",
   "data": {
     "title": "External API Integration",
+    "trackable_node_id": "webhook_3b7a9aa3",
     "url": "https://api.example.com/iot/data",
     "headers": [
       {
@@ -363,6 +364,7 @@ This node sends HTTP POST requests with IoT data to external endpoints, enabling
 | `id`           | integer | Yes      | Unique identifier within the flow                                          |
 | `type`         | string  | Yes      | Must be "webhook"                                                          |
 | `data.title`   | string  | Yes      | Human-readable name for the node (max 255 characters)                      |
+| `data.trackable_node_id` | string | No (read-only) | Auto-generated identifier, max 64 characters; also used as this node's attribute name in Data Stream Analyzer |
 | `data.url`     | string  | Yes      | Target endpoint URL with http:// or https:// protocol (max 255 characters) |
 | `data.headers` | array   | No       | HTTP headers for POST requests (max 10 items)                              |
 | `data.body`    | string  | No       | Request body template with attribute references (max 4000 characters)      |
@@ -476,6 +478,7 @@ Headers must be explicitly specified, including `Content-Type`. Common authentic
   * Attribute name mismatches (ensure referenced attributes exist in upstream nodes)
 * The Webhook node enables integration with RESTful APIs, webhook platforms (Zapier, Make, n8n), ticketing systems, CRM platforms, and custom internal systems
 * For more information on webhook configuration, see [Webhook node user guide](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/webhook-node)
+* `data.trackable_node_id` is generated automatically when the node is created and can't be changed. Its value (e.g. `webhook_1a2b3c4d`) also appears as an attribute name in Data Stream Analyzer, showing `0` when the node hasn't fired and `1` when it has. This lets you distinguish results when a flow has multiple Webhook nodes.
 
 ## Device action node (`action`)
 
@@ -493,6 +496,7 @@ This node executes automated commands when triggered by incoming data. It transf
   "type": "action",
   "data": {
     "title": "Engine Control on Overspeed",
+    "trackable_node_id": "action_50fb2abc",
     "actions": [
       {
         "type": "set_output",
@@ -519,6 +523,7 @@ This node executes automated commands when triggered by incoming data. It transf
 | `id`           | integer | Yes      | Unique identifier within the flow          |
 | `type`         | string  | Yes      | Must be "action"                           |
 | `data.title`   | string  | Yes      | Human-readable name for the node           |
+| `data.trackable_node_id` | string | No (read-only) | Auto-generated identifier, max 64 characters; also used as this node's attribute name in Data Stream Analyzer |
 | `data.actions` | array   | Yes      | Array of action definitions (max 10 items) |
 
 ### Action types
@@ -565,6 +570,7 @@ Transmits custom GPRS commands directly to devices.
 * Each node can contain **up to 10 actions** of mixed types
 * When connected to Logic nodes, actions execute only for devices where the condition evaluated to `true`
 * Device compatibility varies - ensure your devices support the specific outputs or commands being configured
+* `data.trackable_node_id` is generated automatically when the node is created and can't be changed. Its value (e.g. `action_1a2b3c4d`) also appears as an attribute name in Data Stream Analyzer, showing `0` when the node hasn't been triggered and `1` when it has. This lets you distinguish results when a flow has multiple Device action nodes.
 
 #### Action execution behavior
 

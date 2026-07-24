@@ -1511,6 +1511,13 @@
                 "type": "string",
                 "example": "Actions"
               },
+              "trackable_node_id": {
+                "type": "string",
+                "readOnly": true,
+                "maxLength": 64,
+                "description": "Auto-generated identifier for this node. Read-only; cannot be set through the API. Also appears as this node's attribute name in Data Stream Analyzer.",
+                "example": "action_1a2b3c4d"
+              },
               "actions": {
                 "type": ["array", "null"],
                 "description": "List of actions to execute sequentially when node is triggered. Actions execute in order from first to last. Maximum 10 actions per node. Commands are sent to the trigger device by default, or to target devices specified in device_mapping.",
@@ -1628,6 +1635,13 @@
                 "description": "Webhook node title.",
                 "maxLength": 255,
                 "example": "External API Integration"
+              },
+              "trackable_node_id": {
+                "type": "string",
+                "readOnly": true,
+                "maxLength": 64,
+                "description": "Auto-generated identifier for this node. Read-only; cannot be set through the API. Also appears as this node's attribute name in Data Stream Analyzer.",
+                "example": "webhook_1a2b3c4d"
               },
               "url": {
                 "type": "string",
