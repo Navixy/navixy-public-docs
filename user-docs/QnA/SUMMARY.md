@@ -144,3 +144,4 @@
   * [FMC150 (QJIBO/QKIBO) Input and Output Capabilities](device-related-questions/fmc150-qjibo-qkibo-input-and-output-capabilities.md)
   * [Slight difference between GPS CAN mileage and physical odometer](device-related-questions/slight-difference-between-gps-can-mileage-and-physical-odometer.md)
   * [Coban Devices SMS and GPRS differences](device-related-questions/coban-devices-sms-and-gprs-differences.md)
+  * [How to Control and Read Digital Inputs/Outputs on Starlink Devices](device-related-questions/how-to-control-and-read-digital-inputs-outputs-on-starlink-devices.md)
