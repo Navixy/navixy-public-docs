@@ -17,6 +17,6 @@ No, a subuser can only view the vehicles that have devices assigned within their
 
 For example:
 
-![](<../../.gitbook/assets/Unknown image (131)>)
+![](<../.gitbook/assets/Unknown image (131) (1)>)
 
-![](<../../.gitbook/assets/Unknown image (45)>)
+![](<../.gitbook/assets/Unknown image (45) (1)>)

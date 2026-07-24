@@ -29,11 +29,11 @@ Download the correct configurator version for your model:
 
 Find your model (Ctrl+F), then download the latest version.
 
-![](<../../.gitbook/assets/Unknown image (147)>)
+![](<../.gitbook/assets/Unknown image (147) (1)>)
 
 If it is your first time downloading and using a Teltonika configurator, unzip the archive, install the additional software that comes with the configurator, and only then open the configurator.
 
-![](<../../.gitbook/assets/Unknown image (148)>)
+![](<../.gitbook/assets/Unknown image (148) (1)>)
 {% endstep %}
 
 {% step %}
@@ -43,11 +43,11 @@ Connect the device to the PC or create an offline preset.
 
 If you don't have the device on hand, you can upload the configuration later using FOTA. Or you can configure the device remotely via SMS/GPRS using Air Console (see the optional step below).
 
-![](<../../.gitbook/assets/Unknown image (149)>)
+![](<../.gitbook/assets/Unknown image (149) (1)>)
 
-![](<../../.gitbook/assets/Unknown image (150)>)
+![](<../.gitbook/assets/Unknown image (150) (1)>)
 
-![](<../../.gitbook/assets/Unknown image (151)>)
+![](<../.gitbook/assets/Unknown image (151) (1)>)
 {% endstep %}
 
 {% step %}
@@ -57,7 +57,7 @@ Find the parameter by meaning.
 
 Example: Board Voltage may be named **External Voltage**.
 
-![](<../../.gitbook/assets/Unknown image (152)>)
+![](<../.gitbook/assets/Unknown image (152) (1)>)
 {% endstep %}
 
 {% step %}
@@ -69,7 +69,7 @@ To work well with Navixy:
 * Event Only: **No**
 * Operand: **Monitoring**
 
-![](<../../.gitbook/assets/Unknown image (153)>)
+![](<../.gitbook/assets/Unknown image (153) (1)>)
 
 Save the configuration to the device.
 
@@ -114,7 +114,7 @@ Teltonika AVL list example:
 
 In Air Console, verify `avl_io 66` appears.
 
-![](<../../.gitbook/assets/Unknown image (165)>)
+![](<../.gitbook/assets/Unknown image (165) (1)>)
 {% endstep %}
 
 {% step %}
@@ -126,7 +126,7 @@ In Air Console, verify `avl_io 66` appears.
 4. Choose input type **AVL IO \[N]**.
 5. Enter the AVL IO number (`66` in this example).
 
-![](<../../.gitbook/assets/Unknown image (168)>)
+![](<../.gitbook/assets/Unknown image (168) (1)>)
 {% endstep %}
 
 {% step %}

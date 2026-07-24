@@ -17,7 +17,7 @@ If a user account has assets under different plans, maps and options not include
 
 If the device count in a user's account doesn't match the Admin Panel, verify the pricing plan settings. Note that when an account contains devices on different plans, the system automatically applies the restrictions of the most limited plan to the entire account.
 
-<figure><img src="../../.gitbook/assets/image (4).png" alt="Maximum devices"><figcaption><p>Maximum devices</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (1).png" alt="Maximum devices"><figcaption><p>Maximum devices</p></figcaption></figure>
 
 If you have devices with pricing plans that allow 100 and devices with pricing plans that allow 30 devices, only 30 devices are shown in the user account.
 
@@ -25,21 +25,21 @@ If you have devices with pricing plans that allow 100 and devices with pricing p
 
 The **Store history for** option in plan settings determines how history works for the plan:
 
-<figure><img src="../../.gitbook/assets/image (1) (1).png" alt="Store history"><figcaption><p>Store history</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt="Store history"><figcaption><p>Store history</p></figcaption></figure>
 
 This option defines the time period during which tracking points will be stored. If you try to get tracks made earlier, you get the error below:
 
-<figure><img src="../../.gitbook/assets/tracks-history-is-limited-20230811-205552.webp" alt="Tracking error"><figcaption><p>Tracking error</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/tracks-history-is-limited-20230811-205552 (1).webp" alt="Tracking error"><figcaption><p>Tracking error</p></figcaption></figure>
 
 ## User can't create or edit roles and sub-users
 
 Users can create and manage sub-accounts and custom roles, provided their pricing plan supports it. If any device within an account is assigned a plan where the **Users and roles** feature is disabled, this functionality is restricted for the entire account.
 
-<figure><img src="../../.gitbook/assets/image (2) (1).png" alt="Users and roles checkbox"><figcaption><p>Users and roles checkbox</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt="Users and roles checkbox"><figcaption><p>Users and roles checkbox</p></figcaption></figure>
 
 The corresponding section is also removed from the menu:
 
-<figure><img src="../../.gitbook/assets/access-rights-20230811-205616.png" alt="Access rights"><figcaption><p>Access rights</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/access-rights-20230811-205616 (1).png" alt="Access rights"><figcaption><p>Access rights</p></figcaption></figure>
 
 Make sure to pay attention and triple-check all pricing plans parameters.
 
@@ -47,6 +47,6 @@ Make sure to pay attention and triple-check all pricing plans parameters.
 
 If some maps can't be selected in the user account, check which tariff plan is used. The unavailable maps might be disabled:
 
-<figure><img src="../../.gitbook/assets/image (3) (1).png" alt="Map checkboxes"><figcaption><p>Map checkboxes</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt="Map checkboxes"><figcaption><p>Map checkboxes</p></figcaption></figure>
 
 Select the available maps in the user's plan settings.

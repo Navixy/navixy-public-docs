@@ -15,11 +15,11 @@ How can I troubleshoot trip history issues? What should I do if a device's trip 
 
 If you find that part of a device's trip history (or the entire trip) is missing on the platform, try displaying the trip without any processing or filters. To do this, uncheck the **Smart filter** and **Split by stops** options in the trip history settings:
 
-![](<../../.gitbook/assets/Unknown image (39)>)
+![](<../.gitbook/assets/Unknown image (39) (1)>)
 
 If the issue still persists, the device likely didn't send necessary GPS points to the platform. To confirm this fact, the user can export data using the Raw Data feature. Once exported, find the time interval when the trip has gaps.
 
-![](<../../.gitbook/assets/Unknown image (40)>)
+![](<../.gitbook/assets/Unknown image (40) (1)>)
 
 In the example above, points are missing for **one hour on December 10, 2025**, from **04:11:57 to 05:13:20**. This confirms that the tracker did not transmit any data to the platform during the reviewed time interval.
 
@@ -27,11 +27,11 @@ Additionally, there are cases where trip history is repeatedly interrupted, resu
 
 Try starting from adjusting the **Tracking mode** settings (if it's available for the tracker in the **Devices and settings** menu):
 
-<figure><img src="../../.gitbook/assets/image (6) (1).png" alt="" width="287"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (6) (1).png" alt="" width="287"><figcaption></figcaption></figure>
 
 Configure the **On moving** and **On idle** parameters to make the tracker record and send data more frequently. If you use Teltonika, you can adjust more parameters directly in the device configuration:
 
-![](<../../.gitbook/assets/Unknown image (42)>)
+![](<../.gitbook/assets/Unknown image (42) (1)>)
 
 Here is an example above of how such settings may look. You can try to apply the same configuration as specified in the screenshot above.
 

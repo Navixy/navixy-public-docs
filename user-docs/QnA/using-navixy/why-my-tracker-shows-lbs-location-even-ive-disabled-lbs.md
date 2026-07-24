@@ -11,7 +11,7 @@ description: >-
 
 Why does my tracker show LBS location even though I've disabled LBS?
 
-![](<../../.gitbook/assets/Unknown image (16)>)
+![](<../.gitbook/assets/Unknown image (16) (1)>)
 
 ## Answer
 

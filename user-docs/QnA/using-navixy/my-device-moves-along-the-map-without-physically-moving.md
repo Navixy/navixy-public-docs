@@ -15,7 +15,7 @@ Why does my device move along the map if it is physically parked?
 
 GPS drift refers to the phenomenon where a GPS device displays an inaccurate location, showing a position that deviates from the actual location. Essentially, it's when your GPS seems to "wander" or "drift" even when you're stationary. This could be caused by a malfunctioning device or a physical disturbance to the device.
 
-![](<../../.gitbook/assets/Unknown image (15)>)
+![](<../.gitbook/assets/Unknown image (15) (1)>)
 
 ## Links
 

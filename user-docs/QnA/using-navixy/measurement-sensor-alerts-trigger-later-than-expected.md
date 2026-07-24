@@ -19,10 +19,10 @@ The reason why this may happen is that all measurement sensors are optimised in 
 
 1.  Create a virtual sensor and specify the same source parameter for data as in your old measurement sensor. Select 'Calculation method' as Value in range.
 
-    ![](<../../.gitbook/assets/Unknown image (25)>)
+    ![](<../.gitbook/assets/Unknown image (25) (1)>)
 2.  Create a 'State field value' rule and specify the virtual sensor for state source data:
 
-    ![](<../../.gitbook/assets/Unknown image (113)>)
+    ![](<../.gitbook/assets/Unknown image (113) (1)>)
 
 ## Links
 

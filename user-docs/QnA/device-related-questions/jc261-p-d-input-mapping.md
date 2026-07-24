@@ -20,6 +20,6 @@ As a result, the input mapping is represented as follows:
 
 However, Input 1 will not display an “active” status when the SOS button is pressed. This is because the input is intended only for event detection purposes and not for monitoring a closed/open electrical circuit state.
 
-<p align="center"><img src="../../.gitbook/assets/image (10).png" alt="" data-size="original"><br></p>
+<p align="center"><img src="../.gitbook/assets/image (10) (1).png" alt="" data-size="original"><br></p>
 
 Links: [Event Configuration on JC events](https://navixy.com/docs/expert-center/vehicle-telematics-technology/video-telematics/configuration-guides/jimi-iot/event-configuration-on-jimi-jc-series)

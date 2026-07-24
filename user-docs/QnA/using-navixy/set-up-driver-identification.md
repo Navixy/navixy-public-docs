@@ -17,7 +17,7 @@ The first step in setting up the driver identification system is to configure th
 
 Once the tracker is configured, you can proceed with setting up the platform. The main task is to populate the list of drivers in the Field Service section and specify the hardware keys in the drivers' records:
 
-![](<../../.gitbook/assets/Unknown image (115)>)
+![](<../.gitbook/assets/Unknown image (115) (1)>)
 
 A hardware key is usually a HEX code text string. Enter a hardware key for each driver in the list.
 

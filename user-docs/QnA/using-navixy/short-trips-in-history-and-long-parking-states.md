@@ -11,7 +11,7 @@ description: >-
 
 Why does trip history show very short trips along with long parking durations?
 
-![](<../../.gitbook/assets/Unknown image (22)>)
+![](<../.gitbook/assets/Unknown image (22) (1)>)
 
 ## Answer
 
@@ -26,7 +26,7 @@ Since it is enough for the device to send OFF ignition state for a trip end, man
 
 To make sure that the ignition is the root cause, you can prepare a raw data spreadsheet with the discrete\_inputs columns selected:
 
-![](<../../.gitbook/assets/Unknown image (24)>)
+![](<../.gitbook/assets/Unknown image (24) (1)>)
 
 To resolve the situation, you can either fix ignition detection from the device side so it detects ignition consistently without unexpected drops, or switch off the **Consider ignition state** option in the **Parking detection** block. The old track durations will not change after the fix.
 

@@ -38,7 +38,7 @@ The second thing to keep in mind is Smart Filter. It filters (drops) points from
 
 To summarize:
 
-At the first step, the **Split by stops** option is used to form trips. Then, if both options are selected in the widget (see the screenshot below), the **Smart Filter** logic is applied to the resulting trips. ![](<../../.gitbook/assets/Unknown image (17)>)
+At the first step, the **Split by stops** option is used to form trips. Then, if both options are selected in the widget (see the screenshot below), the **Smart Filter** logic is applied to the resulting trips. ![](<../.gitbook/assets/Unknown image (17) (1)>)
 
 Disable both options to see raw trip data.
 

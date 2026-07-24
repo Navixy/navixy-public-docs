@@ -11,7 +11,7 @@ description: >-
 
 Why is my device showing "GPS not updated" even though it's reporting every 5 minutes?
 
-![](<../../.gitbook/assets/Unknown image (5)>)
+![](<../.gitbook/assets/Unknown image (5) (1)>)
 
 ## Answer
 

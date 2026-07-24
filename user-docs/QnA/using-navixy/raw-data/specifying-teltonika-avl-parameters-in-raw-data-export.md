@@ -19,7 +19,7 @@ Let's break down all possible variations of specifying an AVL in the Raw Data ex
 
 First, select an AVL input you need from the list:
 
-![](<../../../.gitbook/assets/Unknown image (9)>)
+![](<../../.gitbook/assets/Unknown image (9) (1)>)
 
 ### 1. A range
 
@@ -27,27 +27,27 @@ You can specify a range of numbers for a given AVL ID parameter in the following
 
 e.g. `37-453`
 
-![](<../../../.gitbook/assets/Unknown image (10)>)
+![](<../../.gitbook/assets/Unknown image (10) (1)>)
 
 In this case, all AVLs between `avl_io_37` "¦ and "¦ `avl_io_453` will be included in the Raw Data spreadsheet:
 
-![](<../../../.gitbook/assets/Unknown image (11)>)
+![](<../../.gitbook/assets/Unknown image (11) (1)>)
 
 ### 2. A set of AVL input numbers
 
 To specify a set of numbers for AVL inputs, use the following format: `37,38,45,599`
 
-![](<../../../.gitbook/assets/Unknown image (12)>)
+![](<../../.gitbook/assets/Unknown image (12) (1)>)
 
 This results in the spreadsheet containing `avl_io_37`, `avl_io_38`, `avl_io_45`, and `avl_io_599` columns:
 
-![](<../../../.gitbook/assets/Unknown image (13)>)
+![](<../../.gitbook/assets/Unknown image (13) (1)>)
 
 ### 3. A single number
 
 In this case, just one column for `avl_io_37` will be included in the Raw Data spreadsheet export:
 
-![](<../../../.gitbook/assets/Unknown image (14)>)
+![](<../../.gitbook/assets/Unknown image (14) (1)>)
 
 The same format rules apply to all other numbered parameters and inputs available in the Raw Data export window.
 

@@ -17,7 +17,7 @@ To activate the alert, you must set the duration after which idling will be cons
 
 Customers often assume that the ignition input is created on the platform by default, but this is not the case. The platform doesn't know where the ignition is connected unless the manufacturer has clearly documented that input.
 
-![](<../../.gitbook/assets/Unknown image (30)>)
+![](<../.gitbook/assets/Unknown image (30) (1)>)
 
 ## Links
 

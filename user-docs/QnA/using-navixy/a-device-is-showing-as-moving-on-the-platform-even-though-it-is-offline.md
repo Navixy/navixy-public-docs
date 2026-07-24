@@ -11,7 +11,7 @@ description: >-
 
 Why does my device appear to be moving on the platform when it's offline?
 
-![](<../../.gitbook/assets/Unknown image>)
+![](<../.gitbook/assets/Unknown image (4)>)
 
 ## Answer
 

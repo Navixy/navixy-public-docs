@@ -26,10 +26,8 @@ To change sensitivity, log in to the camera via Howen iTools, select either DMS 
 * buzzer
 * other event-related parameters
 
-![](<../../.gitbook/assets/Unknown image (84)>)
+![](<../.gitbook/assets/Unknown image (84) (1)>)
 
-<img src="../../.gitbook/assets/Unknown image (85)" alt="" width="375">
+<img src="../.gitbook/assets/Unknown image (85) (1)" alt="" width="375">
 
-&#x20;
-
-<img src="../../.gitbook/assets/Unknown image (86)" alt="" width="375">
+<img src="../.gitbook/assets/Unknown image (86) (1)" alt="" width="375">

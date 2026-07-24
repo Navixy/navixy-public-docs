@@ -23,7 +23,7 @@ To verify the Device ID, please follow these steps:
 
 Please make sure that the Device ID configured in the device matches the Device ID requested during the activation process in Navixy.
 
-<figure><img src="../../.gitbook/assets/image (9).png" alt="" width="375"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9) (1).png" alt="" width="375"><figcaption></figcaption></figure>
 
 **Links**
 

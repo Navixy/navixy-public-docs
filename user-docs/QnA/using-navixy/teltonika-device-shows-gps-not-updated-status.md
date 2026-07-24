@@ -11,7 +11,7 @@ description: >-
 
 Why is my Teltonika device showing "GPS not updated" and 0 satellites in last messages in the Air Console, even though it has GSM coverage?
 
-![](<../../.gitbook/assets/Unknown image (1)>)
+![](<../.gitbook/assets/Unknown image (1) (1)>)
 
 ## Answer
 
@@ -53,10 +53,10 @@ Here's how to diagnose the issue:
 4. Review your device's voltage history:
    *   Check when the last valid GPS position was received in the location widget.
 
-       ![](<../../.gitbook/assets/Unknown image (2)>)
+       ![](<../.gitbook/assets/Unknown image (2) (1)>)
    *   Look at the board voltage sensor measurements within the measuring sensors report.
 
-       ![](<../../.gitbook/assets/Unknown image (3)>)
+       ![](<../.gitbook/assets/Unknown image (3) (1)>)
    * Compare the timestamps of the last GPS update with the last time voltage was above the minimum threshold.
 
 Current situation: The device is in static navigation mode because the power voltage is below 13V. The device interprets this as the vehicle being off, so it stops updating GPS positions. The last GPS update was at 10:39 PM, which matches the last time the voltage was above 13V.

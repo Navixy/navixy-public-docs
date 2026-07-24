@@ -13,7 +13,7 @@ When we download a forms report from the Submitted Form tab, we notice that for 
 
 We would expect the creation date to always be earlier than the submission date, so this behavior is unexpected. Why does it happen?
 
-![](<../../.gitbook/assets/Unknown image (29)>)
+![](<../.gitbook/assets/Unknown image (29) (1)>)
 
 ## Answer
 

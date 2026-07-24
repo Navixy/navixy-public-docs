@@ -34,4 +34,4 @@ In this case, the user will only see **5 trackers**, because the plan with the 5
 ## Links
 
 * [Object list](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/tracking/objects-list)
-* [Maximum device count for a user](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/maximum-device-count-for-a-user)
+* [Maximum device count for a user](maximum-device-count-for-a-user.md)
