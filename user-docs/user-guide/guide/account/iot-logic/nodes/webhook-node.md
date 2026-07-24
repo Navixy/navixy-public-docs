@@ -39,6 +39,8 @@ When data reaches a Webhook node through an incoming connection, it immediately 
 
 The webhook fires once for each message that reaches it. If multiple parallel branches send data to the webhook, it fires separately for each incoming message. This execution happens independently without blocking other nodes in the flow, ensuring continuous data processing regardless of external system response times.
 
+Each **Webhook** node's trigger result appears in [Data Stream Analyzer](../data-stream-analyzer.md) as an attribute named after the node's **Node ID** (shown in the node's configuration dialog, for example `webhook_1a2b3c4d`). The value is `0` when the node hasn't fired and `1` when it has, letting you confirm delivery and tell multiple Webhook nodes apart in the same flow.
+
 ### Flow architecture integration
 
 Webhook nodes function as termination points that convert processed device data into external API calls. Rather than continuously streaming all device data like Output Endpoint nodes, webhooks execute targeted API requests with precisely configured payloads. This architecture enables:
@@ -82,6 +84,15 @@ Enter a descriptive name that identifies the webhook's purpose.
 
 * Use names that indicate the target service or action (e.g., "Slack Speed Alerts" or "CRM Ticket Creation")
 * This name appears in the flow diagram for easy identification
+{% endstep %}
+
+{% step %}
+#### Node ID (automatically generated)
+
+Below the Name field, the dialog displays a **Node ID** (for example, `webhook_1a2b3c4d`). This field is read-only — you can't edit or set its value.
+
+* The ID is generated automatically when the node is created and stays the same for the life of the node
+* Use it to tell this node's results apart from other Webhook nodes in [Data Stream Analyzer](../data-stream-analyzer.md), where it appears as an attribute showing `0` (not fired) or `1` (fired)
 {% endstep %}
 
 {% step %}
@@ -218,4 +229,6 @@ The body must be valid JSON. If a referenced attribute doesn't exist or contains
 
 #### How can I test my webhook configuration?
 
-Currently, testing requires deploying the flow and verifying results at the destination endpoint. Configure your webhook, save the flow, and send test data through to verify the external system receives the expected payload. Consider using webhook testing services like webhook.site or RequestBin during development to inspect the exact requests being sent.
+Open [Data Stream Analyzer](../data-stream-analyzer.md) for the flow and select the triggering device. Look for the attribute matching this node's Node ID: its value switches to `1` each time the webhook fires, `0` otherwise. This confirms the webhook fired without needing access to the destination endpoint.
+
+To verify the destination actually received the expected payload, consider using webhook testing services like webhook.site or RequestBin during development to inspect the exact requests being sent.

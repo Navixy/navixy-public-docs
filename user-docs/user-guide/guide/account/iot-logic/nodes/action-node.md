@@ -35,6 +35,8 @@ When data reaches a **Device action** node, the system identifies which devices 
 **Device connectivity requirement**: Actions are sent only to devices that are confirmed online (those providing recent data), ensuring reliable command delivery.
 {% endhint %}
 
+Each **Device action** node's trigger result appears in [Data Stream Analyzer](../data-stream-analyzer.md) as an attribute named after the node's **Node ID** (shown in the node's configuration dialog, for example `action_1a2b3c4d`). The value is `0` when the node hasn't been triggered and `1` when it has, letting you confirm execution and tell multiple Device action nodes apart in the same flow.
+
 ### Flow architecture integration
 
 **Device action** nodes function as terminal nodes within the flow architecture, receiving triggers from upstream nodes without passing data forward. The automation capabilities integrate with Navixy's broader device management system through:
@@ -73,6 +75,15 @@ Enter a descriptive name that identifies the automated actions this node will pe
 
 1. Use names like "Emergency Cooling Response" or "Security Alert Actions" for clarity
 2. This name appears in the flow diagram for easy identification
+{% endstep %}
+
+{% step %}
+#### Node ID (automatically generated)
+
+Below the Name field, the dialog displays a **Node ID** (for example, `action_1a2b3c4d`). This field is read-only — you can't edit or set its value.
+
+1. The ID is generated automatically when the node is created and stays the same for the life of the node
+2. Use it to tell this node's results apart from other Device action nodes in [Data Stream Analyzer](../data-stream-analyzer.md), where it appears as an attribute showing `0` (not triggered) or `1` (triggered)
 {% endstep %}
 
 {% step %}
@@ -190,11 +201,13 @@ When triggered, the **Device action** node follows this execution pattern:
 
 #### How do I know if my actions were executed successfully?
 
-Currently, action execution feedback is limited. Commands are sent to devices that are confirmed online (those providing recent data) without execution time gap, which eliminates the possibility of the device going offline between trigger and execution. You can monitor device behavior during test stage, or use separate test flows to verify action results in a controllable environment.
+Check [Data Stream Analyzer](../data-stream-analyzer.md): select the triggering device and look for the attribute matching this node's Node ID. See [How Device action nodes work](action-node.md#how-device-action-nodes-work) for details.
+
+Commands are sent to devices that are confirmed online (those providing recent data), with no execution time gap between trigger and delivery. This eliminates the possibility of the device going offline between trigger and execution.
 
 #### Can I connect multiple nodes to the same Device action node?
 
-Yes. Device action nodes can receive triggers from multiple upstream nodes, but be aware that actions will execute for any device that triggers any connected node. When designing complex flows, consider the cumulative effect of multiple trigger sources to ensure actions execute only for intended scenarios.
+Yes. Device action nodes can receive triggers from multiple upstream nodes, but be aware that actions will execute for any device that triggers any connected node. When designing complex flows, consider the cumulative effect of multiple trigger sources to ensure actions execute only for intended scenarios. To confirm the node fires only in the scenarios you intend, watch its Node ID attribute in [Data Stream Analyzer](../data-stream-analyzer.md): it shows `1` on each trigger and `0` otherwise.
 
 #### What happens if I connect a Device action node directly to a Data Source?
 
