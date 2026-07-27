@@ -1685,9 +1685,9 @@
               },
               "body": {
                 "type": ["string", "null"],
-                "description": "Optional request body template. Use \"attribute_name\" syntax to reference attributes from upstream nodes. Supports nested paths (e.g., \"location.latitude\"). Direct attribute references only; expressions not supported. Null attributes send null values.",
+                "description": "Optional request body template. Use {{attribute_name}} syntax to reference attributes from upstream nodes. Supports nested paths (e.g., {{location.latitude}}). Direct attribute references only; expressions not supported. Null attributes send null values.",
                 "maxLength": 4000,
-                "example": "{\"device_id\": $\"device_id\", \"temperature\": $\"temperature\", \"location\": {\"lat\": $\"latitude\", \"lng\": $\"longitude\"}, \"timestamp\": $\"message_time\"}"
+                "example": "{\"device_id\": \"{{device_id}}\", \"temperature\": \"{{temperature}}\", \"location\": {\"lat\": \"{{latitude}}\", \"lng\": \"{{longitude}}\"}, \"timestamp\": \"{{message_time}}\"}"
               }
             },
             "required": ["title", "url"]

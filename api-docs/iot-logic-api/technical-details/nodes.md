@@ -349,7 +349,7 @@ This node sends HTTP POST requests with IoT data to external endpoints, enabling
         "value": "Bearer token123"
       }
     ],
-    "body": "{\"device_id\": $\"device_id\", \"temperature\": $\"temperature\", \"location\": {\"lat\": $\"latitude\", \"lng\": $\"longitude\"}, \"timestamp\": $\"message_time\"}"
+    "body": "{\"device_id\": \"{{device_id}}\", \"temperature\": \"{{temperature}}\", \"location\": {\"lat\": \"{{latitude}}\", \"lng\": \"{{longitude}}\"}, \"timestamp\": \"{{message_time}}\"}"
   },
   "view": {
     "position": { "x": 550, "y": 100 }
@@ -371,25 +371,25 @@ This node sends HTTP POST requests with IoT data to external endpoints, enabling
 
 ### Body template syntax
 
-The webhook body supports attribute references using `"attribute_name"` syntax:
+The webhook body supports attribute references using `{{attribute_name}}` syntax:
 
 **Syntax rules:**
 
-* Reference attributes from upstream nodes: `"device_id"`, `"temperature"`
-* Create nested JSON structures: `"location.latitude"`
+* Reference attributes from upstream nodes: `{{device_id}}`, `{{temperature}}`
+* Create nested JSON structures: `{{location.latitude}}`
 * Null attributes output as JSON null: `"attribute": null`
 
 {% tabs %}
 {% tab title="Example body template" %}
 ```
 {
-  "device_id": "device_id",
-  "temperature": "temperature",
+  "device_id": "{{device_id}}",
+  "temperature": "{{temperature}}",
   "location": {
-    "lat": "latitude",
-    "lng": "longitude"
+    "lat": "{{latitude}}",
+    "lng": "{{longitude}}"
   },
-  "timestamp": "message_time"
+  "timestamp": "{{message_time}}"
 }
 ```
 {% endtab %}
@@ -398,11 +398,11 @@ The webhook body supports attribute references using `"attribute_name"` syntax:
 ```
 {
   "properties": {
-    "subject": "Device maintenance \"device_id\"",
+    "subject": "Device maintenance {{device_id}}",
     "content": "Device communication failure. Diagnostic required.",
     "priority": "HIGH",
     "category": "Maintenance",
-    "device_id": "\"device_id\""
+    "device_id": "{{device_id}}"
   }
 }
 ```
