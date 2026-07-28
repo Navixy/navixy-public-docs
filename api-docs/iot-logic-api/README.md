@@ -31,7 +31,7 @@ While you build, look things up in [Technical reference](technical-details/) (ra
 ### For AI agents and LLMs
 
 * **[OpenAPI specification](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/iot-logic-api/resources/api-reference/IoT_Logic.json)**: the raw JSON specification for every endpoint, parameter, and schema. Treat this as the technical source of truth.
-* **[Navixy docs via MCP](https://navixy.com/docs/navixy-mcp/using-navixy-documentation-with-ai)**: connect to query this documentation interactively instead of parsing static pages.
+* **[Navixy docs via MCP](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/using-navixy-documentation-with-ai)**: connect to query this documentation interactively instead of parsing static pages.
 * **[AI flow generation guide](navixy-iot-guide/ai-flow-generation-guide.md)**: authoritative rules and canonical examples for generating IoT Logic flow JSON.
 
 ### Underlying technologies
