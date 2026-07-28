@@ -160,12 +160,12 @@ This node transforms raw data into meaningful information. It allows for creatin
 | `type`               | string  | Yes      | Must be `"initiate_attributes"`     |
 | `data.title`         | string  | Yes      | Human-readable name for the node    |
 | `data.items`         | array   | Yes      | Array of attribute definitions      |
-| `data.items[].name`  | string  | Yes      | The attribute identifier, unique account-wide, not just within this flow |
+| `data.items[].name`  | string  | Yes      | The attribute identifier, shared account-wide rather than scoped to this flow. Uniqueness isn't enforced, see Usage notes |
 | `data.items[].value` | string  | Yes      | Mathematical or logical expression  |
 
 ### Expression language
 
-For calculations IoT Logic API uses [Navixy IoT Logic Expression Language](../technologies/navixy-iot-logic-expression-language/).\
+For calculations IoT Logic API uses [Navixy IoT Logic Expression Language](../Technologies/navixy-iot-logic-expression-language/).\
 Here's a quick reference:
 
 | Feature                | Operators/Examples                  | Description                    |
@@ -294,7 +294,7 @@ Do not attempt to chain Action → Output Endpoint or Webhook → Output Endpoin
 
 ### Expression language
 
-For logical conditions IoT Logic API uses [Navixy IoT Logic Expression Language](../technologies/navixy-iot-logic-expression-language/).
+For logical conditions IoT Logic API uses [Navixy IoT Logic Expression Language](../Technologies/navixy-iot-logic-expression-language/).
 
 Here's a quick reference:
 

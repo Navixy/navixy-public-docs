@@ -69,7 +69,6 @@ curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/update" \
       "title": "Temperature Monitoring Flow",
       "description": null,
       "enabled": true,
-      "default_flow": false,
       "nodes": [
         {
           "id": 1,
@@ -199,7 +198,6 @@ curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/update" \
       "title": "Sensor Data Processing Flow",
       "description": null,
       "enabled": true,
-      "default_flow": false,
       "nodes": [
         {
           "id": 1,

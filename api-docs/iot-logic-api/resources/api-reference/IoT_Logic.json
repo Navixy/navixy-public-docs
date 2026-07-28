@@ -169,7 +169,7 @@
       "post": {
         "tags": ["Flow"],
         "summary": "flowDelete",
-        "description": "Permanently delete a flow and stop its data processing pipeline. Devices assigned to this flow will automatically revert to the default flow in your account. This action cannot be undone. To temporarily stop processing without reassigning devices, disable the flow using the update endpoint instead.",
+        "description": "Permanently delete a flow and stop its custom data processing pipeline. Devices assigned to this flow keep receiving Navixy's automatic baseline data delivery, which runs independently of custom flow assignment and is unaffected by this change. This action cannot be undone. To temporarily stop processing without deleting the flow, disable it using the update endpoint instead.",
         "operationId": "flowDelete",
         "requestBody": {
           "content": {
@@ -209,7 +209,7 @@
       "get": {
         "tags": ["Flow"],
         "summary": "flowList",
-        "description": "List all flows in the user account. Returns summary metadata for each flow (id, title, description, enabled status, default_flow flag, last modified timestamp, and device count). Use the read endpoint to retrieve complete flow details including nodes and configuration.",
+        "description": "List all flows in the user account. Returns summary metadata for each flow (id, title, description, enabled status, last modified timestamp, and device count). Use the read endpoint to retrieve complete flow details including nodes and configuration.",
         "operationId": "flowList",
         "responses": {
           "200": {
@@ -253,7 +253,7 @@
       "get": {
         "tags": ["Flow"],
         "summary": "flowExport",
-        "description": "Export a flow as a reusable template without instance-specific metadata. Unlike the read endpoint which retrieves the complete operational state of a flow, export returns only the flow structure (nodes, edges, title, description) suitable for creating duplicate flows or transferring configurations between accounts. The exported template excludes flow ID, enabled status, and default flow designation, making it ready for use with the create endpoint.",
+        "description": "Export a flow as a reusable template without instance-specific metadata. Unlike the read endpoint which retrieves the complete operational state of a flow, export returns only the flow structure (nodes, edges, title, description) suitable for creating duplicate flows or transferring configurations between accounts. The exported template excludes flow ID and enabled status, making it ready for use with the create endpoint.",
         "operationId": "flowExport",
         "parameters": [
           {
@@ -768,7 +768,7 @@
       "get": {
         "tags": ["Flow"],
         "summary": "flowSourcesList",
-        "description": "Return the device source IDs currently feeding a specific flow. Pass `flow_id=0` to query the default flow — returns all trackers in the account not explicitly assigned to any custom flow. Pass a specific flow ID to get only the device IDs explicitly linked to that flow. Use this to determine which devices a flow processes before modifying source assignments.",
+        "description": "Return the device source IDs currently feeding a specific flow. Pass the flow's ID to get the device IDs explicitly linked to it. Use this to determine which devices a flow processes before modifying source assignments.",
         "operationId": "flowSourcesList",
         "parameters": [
           {
@@ -778,7 +778,7 @@
             "schema": {
               "type": "integer",
               "minimum": 0,
-              "description": "Flow ID. Use 0 to query the default flow.",
+              "description": "Flow ID.",
               "example": 0
             }
           }
@@ -1054,7 +1054,7 @@
       },
       "FlowDraft": {
         "type": "object",
-        "description": "Flow object used with the create and update API endpoints. When calling these endpoints, this object must be nested inside a \"flow\" envelope key: {\"flow\": <FlowDraft>}. Includes runtime settings (enabled, default_flow). For a portable export/import format that omits runtime fields and is passed directly without an envelope, see FlowExport.",
+        "description": "Flow object used with the create and update API endpoints. When calling these endpoints, this object must be nested inside a \"flow\" envelope key: {\"flow\": <FlowDraft>}. Includes the runtime setting `enabled`. For a portable export/import format that omits runtime fields and is passed directly without an envelope, see FlowExport.",
         "properties": {
           "title": {
             "type": "string",
@@ -1070,11 +1070,6 @@
             "type": "boolean",
             "description": "Enable/disable flag",
             "example": true
-          },
-          "default_flow": {
-            "type": "boolean",
-            "description": "Whether this is the default flow",
-            "example": false
           },
           "nodes": {
             "type": "array",
@@ -1161,12 +1156,6 @@
             "description": "Whether the flow is currently enabled",
             "readOnly": true,
             "example": true
-          },
-          "default_flow": {
-            "type": "boolean",
-            "description": "Whether this is the account's default flow",
-            "readOnly": true,
-            "example": false
           },
           "modified": {
             "type": "string",

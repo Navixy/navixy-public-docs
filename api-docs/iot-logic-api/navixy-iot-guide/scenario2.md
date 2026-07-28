@@ -75,7 +75,6 @@ You will receive the complete structure of the flow in the response:
     "title": "Fleet Data to External System",
     "description": null,
     "enabled": true,
-    "default_flow": false,
     "nodes": [
       {
         "id": 1,
@@ -165,7 +164,6 @@ curl -X POST "https://api.eu.navixy.com/v2/iot/logic/flow/update" \
       "title": "Fleet Data to External System",
       "description": null,
       "enabled": true,
-      "default_flow": false,
       "nodes": [
         {
           "id": 1,

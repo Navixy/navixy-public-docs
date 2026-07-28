@@ -16,6 +16,8 @@ description: Create IoT Logic flows with data source, initiate attribute, and ou
 
 ## Node Types in Detail
 
+This template uses three of the six available node types. For the full list, including Logic, Webhook, and Device action nodes, see [Nodes](../technical-details/nodes.md).
+
 ### Data Source Node
 
 * Acts as the entry point for data from devices

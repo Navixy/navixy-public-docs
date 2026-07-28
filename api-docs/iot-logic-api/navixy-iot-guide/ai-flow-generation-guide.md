@@ -18,6 +18,8 @@ This guide covers structure rules and JSON format. It does not document every no
 4. **Ask the user** — using the pre-generation checklist below as a guide.
 5. **Validate edge completeness before finalizing** — for every Logic node in the flow, confirm that both a `then_edge` and an `else_edge` are present, and that every possible data path terminates at a terminal node. Trace each branch from `data_source` to its terminal node to verify no path dead-ends.
 
+If you fetch `/iot/logic/flow/schema/read` directly, treat its result as a description of the Navixy UI form's validation rules, not a guaranteed contract for `flow/create` or `flow/update`: those endpoints don't enforce every constraint the schema lists. Where this guide's rules and a live schema fetch disagree, follow this guide.
+
 For user-specific values (bot tokens, chat IDs, API keys, device IDs), always ask the user directly. If they may not know where to get a value, include a brief note explaining how.
 
 ***
@@ -48,9 +50,9 @@ Do not ask for information that can be safely assumed or substituted with a plac
 
 Before generating any flow JSON, confirm you can answer all of the following. If you cannot, use the lookup order above — or ask the user.
 
-<table><thead><tr><th width="58">#</th><th>Question</th><th>Why it matters</th></tr></thead><tbody><tr><td>1</td><td>What device make and model?</td><td>Required to look up exact attribute names</td></tr><tr><td>2</td><td>What attribute name does the device use for the relevant data? (e.g. how is ignition reported — <code>din1</code>, <code>avl_2</code>, <code>input_status</code> bitmask?)</td><td>Device-specific — never assume a generic name</td></tr><tr><td>3</td><td>What is the exact triggering condition, including any required duration?</td><td>Core of the Logic node and counter setup</td></tr><tr><td>4</td><td>If duration matters — what is the device's reporting interval in seconds?</td><td>Required to calculate the message count threshold</td></tr><tr><td>5</td><td>Where should data go — Navixy, MQTT, or external webhook? And what should happen on the THEN branch?</td><td>Determines terminal node types and wiring</td></tr><tr><td>6</td><td>How will you use this flow — import via the UI, or create it through the API?</td><td>Determines JSON format (import shape vs. <code>"flow"</code> envelope) and how the result is delivered</td></tr><tr><td>7</td><td>If webhook — what is the target service? Do you have the connection details (URL, token, chat ID, etc.)?</td><td>URL and payload must be verified from official docs; credentials must come from the user</td></tr></tbody></table>
+<table><thead><tr><th width="58">#</th><th>Question</th><th>Why it matters</th></tr></thead><tbody><tr><td>1</td><td>What device make and model?</td><td>Required to look up exact attribute names</td></tr><tr><td>2</td><td>What attribute name does the device use for the relevant data? (e.g. how is ignition reported — <code>din1</code>, <code>avl_2</code>, <code>input_status</code> bitmask?)</td><td>Device-specific — never assume a generic name</td></tr><tr><td>3</td><td>What is the exact triggering condition, including any required duration?</td><td>Core of the Logic node and counter setup</td></tr><tr><td>4</td><td>If duration matters — what is the device's reporting interval in seconds?</td><td>Required to calculate the message count threshold</td></tr><tr><td>5</td><td>Where should data go — Navixy, MQTT, or external webhook? And what should happen on the THEN branch?</td><td>Determines terminal node types and wiring</td></tr><tr><td>6</td><td>How will you use this flow — import via the UI, or create it through the API?</td><td>Determines JSON format (import shape vs. <code>"flow"</code> envelope) and how the result is delivered</td></tr><tr><td>7</td><td>If webhook — what is the target service? Do you have the connection details (URL, token, chat ID, etc.)?</td><td>URL and payload must be verified from official docs; credentials must come from the user</td></tr><tr><td>8</td><td>Does this flow need to accept pushed data from an external system (e.g. a separate battery-management or telematics platform) for a device it already includes?</td><td>Determines whether the <code>data_source</code> node needs <code>push_type</code>, <code>primary_key</code>, and <code>mappings</code> — see Reference links for the full walkthrough</td></tr></tbody></table>
 
-Do not ask all seven at once. Ask only what is genuinely missing, one or two questions at a time. Use `source_ids: []` and placeholder URLs rather than blocking on minor unknowns — but state assumptions explicitly.
+Do not ask all eight at once. Ask only what is genuinely missing, one or two questions at a time. Use `source_ids: []` and placeholder URLs rather than blocking on minor unknowns — but state assumptions explicitly.
 
 ***
 
@@ -125,7 +127,41 @@ Every node must include `data.title`. Every node must include a `view.position` 
 
 * `type`: `"data_source"`
 * `data.title`: string
-* `data.source_ids`: array of integer device IDs. Use `[]` as placeholder when devices are not specified.
+* `data.source_ids`: array of integer device IDs. Use each device's `source.id`, not the tracker object ID: submitting a tracker object ID is accepted but silently normalized to an empty array, leaving the node with no device attached and no error. Use `[]` as placeholder when devices are not specified. A device can belong to multiple flows at once, so adding it here does not remove it from any other flow: each flow processes the device independently and the results merge.
+* `data.push_type`: string, optional. Set to `"http"` to enable the connector. Omit entirely for a devices-only node.
+* `data.primary_key`: string, optional, required together with `data.mappings`. Matches `^[a-zA-Z0-9_]+$` (no hyphens), max 64 characters.
+* `data.mappings`: array of `{"source_id": <integer>, "primary_key_value": "<string>"}`, optional, required together with `data.primary_key`. Every `source_id` must also appear in the node's own `source_ids`. `primary_key_value` matches `^[a-zA-Z0-9_]+$` (no hyphens), max 255 characters, and must be unique within the node's mappings.
+
+The connector fields merge data pushed by an external system into an **existing** device's data stream. They never create a virtual device: the receiving device must already be listed in `source_ids`. Set `push_type` to `"http"` and include `primary_key` and `mappings` together to enable the connector, or omit all three for a devices-only node.
+
+```json
+{
+  "id": 1, "type": "data_source",
+  "data": {
+    "title": "Fleet vehicles with battery management enrichment",
+    "source_ids": [987654, 987655],
+    "push_type": "http",
+    "primary_key": "vehicle_id",
+    "mappings": [
+      { "source_id": 987654, "primary_key_value": "truck_12" },
+      { "source_id": 987655, "primary_key_value": "truck_07" }
+    ]
+  },
+  "view": { "position": { "x": 80, "y": 120 } }
+}
+```
+
+The node itself is created or updated as part of the flow, but the external data it receives is submitted to `POST /iot/logic/flow/push`, a separate endpoint from `flow/create` and `flow/update`. Its body carries `flow_id`, `node_id`, the primary-key field, and the fields to merge:
+
+```json
+{ "flow_id": 42, "node_id": 1, "vehicle_id": "truck_12", "battery_soc": 76 }
+```
+
+For the full procedure, including how to assemble the push URL and confirm the data merged, see [Merging external system data into a flow](merging-external-data-into-a-flow.md). Link to that page rather than reproducing its walkthrough.
+
+**Watch for hyphens:** the general `flow/push` body allows hyphens in field names and string values (`^[a-zA-Z0-9_-]+$` and `^[a-zA-Z0-9_-]*$`), but `primary_key` and `mappings[].primary_key_value` do not (`^[a-zA-Z0-9_]+$`). A hyphenated primary-key value passes push validation and returns `success: true`, yet never matches a mapping, so the push is silently discarded. Always generate underscores, never hyphens, for primary-key values.
+
+**Watch for name collisions:** a pushed field name that matches one of the device's own native attribute names, `fuel_level` for example, silently overwrites that attribute's existing history. No error is returned. A push can never alter the system message fields (`speed`, `latitude`, `longitude`, `heading`, `satellites`, `hdop`); those are the only attribute names safe from this risk. The same risk crosses flows: when the same device ID appears in `source_ids` on more than one flow, attributes pushed through one flow are visible in Data Stream Analyzer through every flow that lists that device, even before that other flow receives a push. Prefix pushed field names with the external system's name, for example `bms_battery_soc`, or with the flow's title if more than one flow enriches the same device.
 
 **initiate\_attributes**
 
@@ -140,6 +176,8 @@ value('attribute_name', index, 'any')
 ```
 
 Where `index` is the historical depth (0 = current message, 1 = previous, up to 12). Use `'any'` to include nulls or `'valid'` to skip them. This is the only mechanism for accumulating state across messages — counters, running totals, change detection.
+
+**Account-wide attribute name uniqueness isn't currently enforced:** `data.items[].name` values aren't checked for uniqueness across the account at save time. Two unrelated flows can define a calculated attribute with the same name, and the platform silently accepts the duplicate: no error, no `292` code. The name is shared account-wide in Data Stream Analyzer and custom sensor bindings, and overwrites a matching device parameter in output data packets. Choose distinctive, scoped attribute names as a best practice, not because a duplicate will be rejected. It currently isn't.
 
 See [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes) for full examples.
 
@@ -311,6 +349,7 @@ Before finalizing any generated flow, verify all of the following:
 8. All JEXL expressions use valid syntax (operators: `&&`, `||`, `!`, `<`, `>`, `<=`, `>=`, `==`, `!=`)
 9. All edge `type` values are explicit in import-format flows
 10. Every node has a `view.position` with integer `x` and `y`
+11. If any `data_source` node uses connector fields: `primary_key` and `mappings` must both be present together or both absent; every `mappings[].source_id` must also appear in that node's own `source_ids`; no `source_id` or `primary_key_value` repeats within the node's `mappings`. `flow/create`/`flow/update` validate these at save time and reject violations with HTTP 400, internal code `292` (`IoT Flow Invalid`).
 
 Before submitting, trace every possible path through the flow from `data_source` to a terminal node. Every path must terminate. No path may dead-end at a non-terminal node.
 
@@ -385,9 +424,10 @@ Node 4 receives two edges total: `then_edge` from node 2, `else_edge` from node 
 
 Use these when the guide doesn't cover the detail you need.
 
-* [Expression language overview](../technologies/navixy-iot-logic-expression-language/) — JEXL operators, `value()` function, expression syntax
+* [Expression language overview](../Technologies/navixy-iot-logic-expression-language/) — JEXL operators, `value()` function, expression syntax
 * [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes) — `value()` examples, indexed attributes, historical lookups
-* [Nodes reference](../technical-details/nodes.md) — full field schemas for all node types
+* [Nodes reference](../technical-details/nodes.md) — full field schemas for all node types, including [connector configuration](../technical-details/nodes.md#connector-configuration) for `data_source`
+* [Merging external system data into a flow](merging-external-data-into-a-flow.md) — full walkthrough for configuring a `data_source` connector, assembling the push URL, and sending a push
 * [Logic node expressions and syntax](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/logic-node/logic-node-expressions-and-syntax) — condition expression reference
 * [Webhook node](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/webhook-node) — body/header schema, dynamic attribute syntax
 * [Device catalog](https://www.navixy.com/devices/) — find your device and check the Inputs and outputs section for device-specific attribute names
