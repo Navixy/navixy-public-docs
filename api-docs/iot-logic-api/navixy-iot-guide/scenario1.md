@@ -34,8 +34,8 @@ curl -X POST "https://api.{region}.navixy.com/v2/iot/logic/flow/create" \
         "type": "data_source",
         "enabled": true,
         "data": {
-          "title": "Fleet vehicles",            // Title must be in the data object
-          "sources": [12345, 12346, 12347]      // Your actual vehicle IDs
+          "title": "Fleet vehicles",
+          "source_ids": [12345, 12346, 12347]
         },
         "view": {
           "position": { "x": 50, "y": 50 }
@@ -46,20 +46,20 @@ curl -X POST "https://api.{region}.navixy.com/v2/iot/logic/flow/create" \
         "type": "output_endpoint",
         "enabled": true,
         "data": {
-          "title": "External MQTT System",       // Title must be located in the data object
-          "output_endpoint_type": "output_mqtt_client",  // Defines this as an MQTT output
-          "output_endpoint_id": 45678,           // Required ID (can be any unique number)
+          "title": "External MQTT System",
+          "output_endpoint_type": "output_mqtt_client",
+          "output_endpoint_id": 45678,
           "properties": {
-            "protocol": "Navixy Generic Protocol (NGP)", // Navixy Generic Protocol
-            "domain": "mqtt.mycompany.com",      // Your MQTT broker address
-            "port": 1883,                        // Standard MQTT port
-            "client_id": "navixy-integration",   // Identifier for this client
-            "qos": 1,                            // Quality of Service level
-            "topics": ["fleet/vehicles/data"],   // Topics to publish to
-            "version": "5.0",                    // MQTT protocol version
-            "use_ssl": true,                     // Secure connection
-            "mqtt_auth": true,                   // Authentication required
-            "user_name": "mqtt_username",        // Your MQTT credentials
+            "protocol": "Navixy Generic Protocol (NGP)",
+            "domain": "mqtt.mycompany.com",
+            "port": 1883,
+            "client_id": "navixy-integration",
+            "qos": 1,
+            "topics": ["fleet/vehicles/data"],
+            "version": "5.0",
+            "use_ssl": true,
+            "mqtt_auth": true,
+            "user_name": "mqtt_username",
             "user_password": "mqtt_password"
           }
         },
@@ -70,8 +70,8 @@ curl -X POST "https://api.{region}.navixy.com/v2/iot/logic/flow/create" \
     ],
     "edges": [
       {
-        "from": 1,  // Connect the data source node (id: 1)
-        "to": 2     // to the MQTT output node (id: 2)
+        "from": 1,
+        "to": 2
       }
     ]
   }
@@ -86,6 +86,24 @@ The response will include the flow ID:
   "id": 1234
 }
 ```
+
+### Parameters explained
+
+* **Node 1 (`data_source`)**: Collects data from your fleet vehicles.
+  * `data.title`: Name of the node. Must be inside the `data` object.
+  * `data.source_ids`: Your vehicle IDs. Use each device's `source.id`, not the tracker object ID. See [Source ID vs tracker object ID](../technical-details/nodes.md#source-id-vs-tracker-object-id).
+* **Node 2 (`output_endpoint`)**: Sends data to your external MQTT broker.
+  * `data.output_endpoint_type: "output_mqtt_client"`: Marks this as an MQTT output endpoint.
+  * `data.output_endpoint_id`: A unique identifier you choose for this endpoint.
+  * `data.properties.protocol`: The message format, [Navixy Generic Protocol](../Technologies/navixy-generic-protocol/navixy-generic-protocol.md) (NGP).
+  * `data.properties.domain` and `port`: Your MQTT broker's address and port. `1883` is the standard MQTT port.
+  * `data.properties.client_id`: An identifier for this client connection.
+  * `data.properties.qos`: The MQTT quality of service level.
+  * `data.properties.topics`: The topics to publish messages to.
+  * `data.properties.version`: The MQTT protocol version.
+  * `data.properties.use_ssl`: Set to `true` for a secure connection.
+  * `data.properties.mqtt_auth`, `user_name`, `user_password`: Set `mqtt_auth` to `true` and provide your broker credentials if the broker requires authentication.
+* **Edges**: `{ "from": 1, "to": 2 }` connects the data source node to the MQTT output node.
 
 {% hint style="success" %}
 **Congratulations!**

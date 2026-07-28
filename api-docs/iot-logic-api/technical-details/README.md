@@ -4,7 +4,7 @@ description: "IoT Logic API technical reference: environments, authentication, r
 
 # Technical reference
 
-API environments
+## API environments
 
 The Navixy IoT Logic API is available on multiple regional platforms to optimize performance and comply with data residency requirements.
 
@@ -148,7 +148,7 @@ Error responses include `success: false` and a `status` object with details, for
 
 ### Common error codes
 
-<table><thead><tr><th width="132.45458984375">HTTP status</th><th width="132.2728271484375">Internal code</th><th>Description</th><th>Context</th></tr></thead><tbody><tr><td>400</td><td>292</td><td>IoT Flow Invalid</td><td>Flow validation failed</td></tr><tr><td>400</td><td>293</td><td>IoT Endpoint Invalid</td><td>Endpoint validation failed</td></tr><tr><td>400</td><td>294</td><td>IoT Node Invalid</td><td>Node validation failed</td></tr><tr><td>401</td><td>14</td><td>Invalid session</td><td>Authentication required or session expired</td></tr><tr><td>403</td><td>7</td><td>Access denied</td><td>Insufficient permissions</td></tr><tr><td>404</td><td>201</td><td>Not found</td><td>Requested resource doesn't exist</td></tr><tr><td>500</td><td>1</td><td>Database error</td><td>Internal server error</td></tr></tbody></table>
+<table><thead><tr><th width="132.45458984375">HTTP status</th><th width="132.2728271484375">Internal code</th><th>Description</th><th>Context</th></tr></thead><tbody><tr><td>400</td><td>292</td><td>IoT Flow Invalid</td><td>Flow validation failed</td></tr><tr><td>400</td><td>293</td><td>IoT Endpoint Invalid</td><td>Endpoint validation failed</td></tr><tr><td>400</td><td>294</td><td>IoT Node Invalid</td><td>Node validation failed</td></tr><tr><td>400</td><td>7</td><td>Invalid parameters</td><td>Request parameters are incorrect</td></tr><tr><td>401</td><td>4</td><td>User or API key not found or session ended</td><td>Authentication required or session expired</td></tr><tr><td>403</td><td>11</td><td>Access denied</td><td>Insufficient permissions</td></tr><tr><td>404</td><td>201</td><td>Not found</td><td>Requested resource doesn't exist</td></tr><tr><td>500</td><td>1</td><td>Database error</td><td>Internal server error</td></tr></tbody></table>
 
 {% hint style="warning" %}
 Node-content and connector-field validation failures on `flowCreate` and `flowUpdate` currently return internal code `292` (`IoT Flow Invalid`), not `294`. Code `294` isn't currently confirmed as reachable through those endpoints.
@@ -217,18 +217,18 @@ While optional for API functionality, including this data helps maintain visual 
 
 ## Node reference
 
-Nodes are actual building bricks for your IoT Logic data flows. Each node has its destinctive purpose and capabilities. Now the following nodes are available:
+Nodes are actual building bricks for your IoT Logic data flows. Each node has its distinctive purpose and capabilities. Now the following nodes are available:
 
 * [Data Source node](nodes.md#data-source-node-data_source) - defines where data comes from.
-* [Initiate Attribute node](nodes.md#initiate-attribute-node-initiate_attribute) - allows custom calculations to enrich ar standardize data.
-* [Logic node](nodes.md#logic-node-logic) - allows validating logical conditins and routing data based on the outcome.
+* [Initiate Attribute node](nodes.md#initiate-attribute-node-initiate_attributes) - allows custom calculations to enrich or standardize data.
+* [Logic node](nodes.md#logic-node-logic) - allows validating logical conditions and routing data based on the outcome.
 * [Webhook node](nodes.md#webhook-node-webhook) - sends data to external systems via HTTP POST requests.
 * [Device action node](nodes.md#device-action-node-action) - enables the automation of sending commands to devices based on the context.
-* [Output endpoint node](nodes.md#output-endpoint-node-output_endpoint) - Defines the destination of data running trough the flow.
+* [Output endpoint node](nodes.md#output-endpoint-node-output_endpoint) - Defines the destination of data running through the flow.
 
 For detailed Node reference with object schemas and parameters, see [Nodes](nodes.md).
 
-## API rendpoint reference
+## API endpoint reference
 
 See OpenAPI specification in [API reference](../resources/api-reference/).
 

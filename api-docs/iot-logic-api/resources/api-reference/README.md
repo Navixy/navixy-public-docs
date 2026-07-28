@@ -23,7 +23,7 @@ The API is organized around two main resource types:
 Looking for node schemas and examples? See [Nodes](../../technical-details/nodes.md) (includes the [Webhook node](../../technical-details/nodes.md#webhook-node-webhook) for HTTP integrations).
 {% endhint %}
 
-For a complete walkthrough of creating your first flow, see our [step-by-step tutorial](../../#quick-start-for-iot-logic-api).
+For a complete walkthrough, see [Quick start: create your first flow](../../navixy-iot-guide/quick-start-create-your-first-flow.md).
 
 ### Authentication
 

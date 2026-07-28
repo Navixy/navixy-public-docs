@@ -30,7 +30,7 @@ Use session hashes for:
 
 ### Obtaining a session hash
 
-To get a session hash, send a POST request to the user authentication endpoint `{baseURL}/v2/user/auth` providing your account's login and passord as parameters:
+To get a session hash, send a POST request to the user authentication endpoint `{baseURL}/v2/user/auth` providing your account's login and password as parameters:
 
 ```bash
 curl -X POST "https://your.server.com/v2/user/auth" \
@@ -207,7 +207,7 @@ Understanding authentication errors helps you troubleshoot issues and implement 
   "success": false,
   "status": {
     "code": 3,
-    "description": "Access denied"
+    "description": "Wrong hash"
   }
 }
 ```

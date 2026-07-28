@@ -4,32 +4,45 @@ description: Build and manage IoT data flows with the Navixy IoT Logic API. Conn
 
 # Navixy IoT Logic API
 
-## Introduction
+IoT Logic is the data processing layer of the Navixy platform. It receives messages from connected devices, decodes and transforms them in real time, and delivers the results to Navixy or to an external system. Flows are normally built in a visual editor. The IoT Logic API exposes the same functionality programmatically, so flow configuration can live in your own code and deployment pipeline instead.
 
-**Navixy IoT Logic** is a no-code/low-code tool that enables seamless IoT data processing and integration. Its API provides programmatic access to create, manage, and optimize data flows between IoT devices and destination systems without requiring extensive development resources.
+Use the API to:
 
-### Purpose and core capabilities
+* Create, read, update, and delete flows, the pipelines that define how device data is processed.
+* Choose which devices feed each flow, and merge data from an external system into a device's stream.
+* Calculate new attributes from raw readings with [Navixy IoT Logic Expression Language](Technologies/navixy-iot-logic-expression-language/).
+* Route messages conditionally and send commands back to devices.
+* Deliver processed data to the Navixy platform, to an MQTT broker, or to an HTTP endpoint, standardized as [Navixy Generic Protocol](Technologies/navixy-generic-protocol/navixy-generic-protocol.md) messages.
 
-**Navixy IoT Logic** functions as a data flow manager that:
+The API is built for developers and system integrators who manage device data at scale, who need transformations that standard platform features don't cover, or who want the same flows reproduced across several accounts.
 
-* Receives information from devices connected to the platform
-* Decodes and converts data in real-time
-* Sends processed data to other platforms and services
-* Enables building complex flows with nodes responsible for specific data processing tasks
-* Standardizes telematics data through the [Navixy Generic Protocol](Technologies/navixy-generic-protocol/navixy-generic-protocol.md)
+## How to use this documentation
 
-The **IoT Logic API** allows developers and system integrators to programmatically implement these capabilities, making it effective for organizations that need to:
+This space documents the IoT Logic API in full. Choose the path below depending on who, or what, is reading.
 
-* Work efficiently with decoded device data
-* Apply flexible data transformation to match specific business needs
-* Monitor and troubleshoot data streams
-* Create consistent data flows across multiple devices and protocols
+### For developers
 
-### Key concepts
+Start with [Key concepts](#key-concepts) below to see how flows and nodes fit together, then get access: [Authentication](authentication.md) covers obtaining a session hash or an API key.
 
-**Navixy IoT Logic** operates based on two fundamental components that work together to process device data:
+Once you're authenticated, build something. [Quick start: create your first flow](navixy-iot-guide/quick-start-create-your-first-flow.md) creates a working flow with one request, with every parameter explained. From there, [Guides](navixy-iot-guide/) walks through other common integrations, like sending data to an external MQTT broker or adding calculated attributes to the Navixy UI.
 
-#### Flow
+While you build, look things up in [Technical reference](technical-details/) (rate limits, error codes, validation rules), [Flow object structure](flow-schema-structure/) (the JSON shape of a flow), or the interactive [API reference](resources/api-reference/) with its "Try it out" tool. Once a flow is running, [WebSocket access to Data Stream Analyzer](Websocket-access-for-DSA.md) lets you watch the data it actually produces in real time.
+
+### For AI agents and LLMs
+
+* **[OpenAPI specification](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/iot-logic-api/resources/api-reference/IoT_Logic.json)**: the raw JSON specification for every endpoint, parameter, and schema. Treat this as the technical source of truth.
+* **[Navixy docs via MCP](https://navixy.com/docs/navixy-mcp/using-navixy-documentation-with-ai)**: connect to query this documentation interactively instead of parsing static pages.
+* **[AI flow generation guide](navixy-iot-guide/ai-flow-generation-guide.md)**: authoritative rules and canonical examples for generating IoT Logic flow JSON.
+
+### Underlying technologies
+
+Both paths eventually touch the protocols IoT Logic is built on: [Navixy Generic Protocol](Technologies/navixy-generic-protocol/navixy-generic-protocol.md), the message format flows use, and [Navixy IoT Logic Expression Language](Technologies/navixy-iot-logic-expression-language/), the syntax for calculated attributes and conditions.
+
+## Key concepts
+
+Navixy IoT Logic operates based on two fundamental components that work together to process device data:
+
+### Flows
 
 A **Flow** is the foundation for all data logic in the product. It defines how data moves through stages of reception, enrichment, and transmission. Each flow consists of connected nodes that determine what happens to the data at each processing stage.
 
@@ -40,12 +53,12 @@ Key characteristics of flows:
 * A device can belong to multiple flows at the same time. Flows that include the same device all process its data simultaneously, results merge rather than one flow excluding another. See [Connector configuration](technical-details/nodes.md#connector-configuration) for a case where this matters: two flows pushing the same attribute name to a shared device can silently overwrite each other
 * Flows process data in real-time as it arrives from devices
 
-#### Nodes
+### Nodes
 
 **Nodes** are the functional elements of a **flow**, with each node handling a specific stage of the data lifecycle. Common node types include:
 
 * [Data Source node](technical-details/nodes.md#data-source-node-data_source): selects which devices send data into the flow, and can merge data from an external system into an existing device's stream through its connector fields
-* [Initiate Attribute node](technical-details/nodes.md#initiate-attribute-node-initiate_attribute): transforms and enriches data using [Navixy IoT Logic Expression Language](technologies/navixy-iot-logic-expression-language/)
+* [Initiate Attribute node](technical-details/nodes.md#initiate-attribute-node-initiate_attributes): transforms and enriches data using [Navixy IoT Logic Expression Language](Technologies/navixy-iot-logic-expression-language/)
 * [Logic node](technical-details/nodes.md#logic-node-logic): routes data based on conditions
 * [Webhook node](technical-details/nodes.md#webhook-node-webhook): sends HTTP POST requests to your external endpoint
 * [Device action node](technical-details/nodes.md#device-action-node-action): sends commands to devices
@@ -55,181 +68,21 @@ Key characteristics of flows:
 
 Nodes are connected through transitions (`edges`) that define the path data follows through the flow.
 
-### Data flow architecture
+### How data moves through a flow
 
-The following screenshot from IoT Logic UI illustrates the basic architecture of a flow in IoT Logic:
+A single flow can stream data continuously to one destination while also branching conditionally to trigger side effects elsewhere. The diagram below shows both patterns together: a Data Source feeding an MQTT Output Endpoint directly, and the same source, through an Initiate Attribute node, feeding a Logic node that evaluates each message.
 
-![Flow example](<.gitbook/assets/Flow-example (1).png>)
+<figure><img src=".gitbook/assets/iot-logic-flow-architecture.png" alt="A Data Source node feeding an MQTT Output Endpoint directly, and also feeding an Initiate Attribute node that leads into a Logic node. The Logic node's true branch reaches a Device action node, a Webhook node, and a Default Output Endpoint. Its false branch reaches the same Default Output Endpoint."><figcaption>A Logic node's true and false branches can each fan out to multiple destinations at once, so one condition can trigger a device command, notify an external system through a webhook, and keep streaming to Navixy, all from a single evaluation.</figcaption></figure>
 
-This represents a simple linear flow where:
+Because the Logic node evaluates every message independently, each branch can run several destinations in parallel instead of following one fixed path. Terminal nodes like Action and Webhook always run alongside an Output Endpoint, so triggering a side effect never costs you visibility into the underlying data in [Data Stream Analyzer](Websocket-access-for-DSA.md).
 
-1. The **Data Source** node collects telemetry from selected devices
-2. The **Initiate Attribute** node processes and enriches this data
-3. The **Default Output Endpoint** node delivers the transformed data to its destination - Navixy platform
+See [Nodes](technical-details/nodes.md) for the full schema and options for every node type.
 
-More complex architectures can be created by:
+## Next steps
 
-* Adding multiple data source nodes to process different device types
-* Chaining multiple attribute nodes for multi-stage data processing
-* Including several output endpoints to deliver data to multiple destinations outside Navixy simultaneously
+* To build a working flow in one request, see [Quick start: create your first flow](navixy-iot-guide/quick-start-create-your-first-flow.md).
+* To send processed data to your own MQTT broker, see [Sending device data to an external system](navixy-iot-guide/scenario1.md).
+* To look up the fields of a specific node type, see [Nodes](technical-details/nodes.md).
+* To understand a formula error, see [Formula error reference](Technologies/navixy-iot-logic-expression-language/formula-errors.md).
 
-## Quick start for IoT Logic API
-
-To ensure a clear picture of the basic IoT Logic API capabilities, let's create your first flow.
-
-The following example demonstrates how to create a complete flow with **4 nodes** that sends data to Navixy. This flow will:
-
-1. Collect data from specified devices
-2. Detect a speed violation with `speed > 90`
-3. Trigger a device action (`send_gprs_command`) on violation
-4. Send messages to Navixy via `output_default`
-
-### Step 1: Authentication
-
-First, authenticate to obtain a session token. To do it, send a POST request to the user authentication endpoint `{baseURL}/v2/user/auth` providing your account's login and password as parameters:
-
-```bash
-curl -X POST "https://your.server.com/v2/user/auth" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "login": "your_email_or_username",
-    "password": "your_password"
-  }'
-```
-
-Response (example):
-
-```jsonresponse
-{
-  "success": true,
-  "hash": "22eac1c27af4be7b9d04da2ce1af111b"
-}
-```
-
-Copy the `hash` value from the response.
-
-{% hint style="info" %}
-For more details on how to authenticate your requests, see [Authentication](authentication.md).
-{% endhint %}
-
-### Step 2: Create a complete flow with nodes and connections
-
-Create a flow with all nodes and connections in a single request:
-
-Use either the session `hash` from Step 1 or an API key in the `Authorization` header.
-
-{% code expandable="true" %}
-```bash
-curl -X POST "https://api.{server}.navixy.com/v2/iot/logic/flow/create" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: NVX your_hash_or_api_key" \
-  -d '{
-    "flow": {
-      "title": "Speed Violation Alert",
-      "enabled": true,
-      "nodes": [
-        {
-          "id": 1,
-          "type": "data_source",
-          "data": {
-            "title": "Fleet Vehicles",
-            "source_ids": [111111, 222222, 333333]
-          },
-          "view": {
-            "position": { "x": 50, "y": 250 }
-          }
-        },
-        {
-          "id": 2,
-          "type": "logic",
-          "data": {
-            "title": "Speed > 90 km/h?",
-            "name": "speed_violation",
-            "condition": "speed > 90"
-          },
-          "view": {
-            "position": { "x": 320, "y": 250 }
-          }
-        },
-        {
-          "id": 3,
-          "type": "action",
-          "data": {
-            "title": "Trigger In-Cab Buzzer",
-            "actions": [
-              {
-                "type": "send_gprs_command",
-                "command": "setdigout 1 1",
-                "reliable": true
-              }
-            ]
-          },
-          "view": {
-            "position": { "x": 590, "y": 100 }
-          }
-        },
-        {
-          "id": 4,
-          "type": "output_endpoint",
-          "data": {
-            "title": "Send to Navixy",
-            "output_endpoint_type": "output_default"
-          },
-          "view": {
-            "position": { "x": 590, "y": 400 }
-          }
-        }
-      ],
-      "edges": [
-        { "from": 1, "to": 2, "type": "simple_edge" },
-        { "from": 2, "to": 3, "type": "then_edge" },
-        { "from": 2, "to": 4, "type": "then_edge" },
-        { "from": 2, "to": 4, "type": "else_edge" }
-      ]
-    }
-  }'
-```
-{% endcode %}
-
-Response (example):
-
-```json
-{
-  "success": true,
-  "id": 123
-}
-```
-
-### Parameters explained
-
-* **Flow entity**: The main container defining a complete data processing pipeline
-  * `title`: Names your flow for easier identification
-  * `enabled`: When true, flow begins processing data immediately after creation
-* **Nodes**: Functional components that each handle a specific step in data processing. See [Nodes](technical-details/nodes.md) for full node schemas and options.
-  * **Node 1 (`data_source`)**: Entry point for device telemetry.
-    * `source_ids`: Which devices feed messages into this flow. Use each device's `source.id`, not the tracker object ID. See [Source ID vs tracker object ID](technical-details/nodes.md#source-id-vs-tracker-object-id).
-  * **Node 2 (`logic`)**: Branching decision based on a boolean expression.
-    * `condition: "speed > 90"` routes each message to THEN or ELSE.
-  * **Node 3 (`action`)**: Executes device commands on the THEN branch.
-    * `actions[].type: "send_gprs_command"` sends the command to the triggering device (by default).
-  * **Node 4 (`output_endpoint`)**: Terminates the flow and defines the destination.
-    * `output_endpoint_type: "output_default"` sends messages to Navixy.
-* **Edges**: Define connections between nodes (the data path).
-  * `{ "from": 1, "to": 2 }`: data source → logic.
-  * `{ "from": 2, "to": 3, "type": "then_edge" }`: violation → action.
-  * `{ "from": 2, "to": 4, "type": "then_edge" }`: violation → output.
-  * `{ "from": 2, "to": 4, "type": "else_edge" }`: no violation (or condition can’t be evaluated) → output.
-  * Both Logic branches resolve to an output endpoint (required for a valid flow).
-
-{% hint style="success" %}
-This single request creates a complete flow that:
-
-* Collects data from `source_ids: [111111, 222222, 333333]`
-* Routes messages by speed condition `speed > 90`
-* Triggers `send_gprs_command` on the THEN branch
-* Outputs messages via `output_default`
-
-The success response includes the ID of the newly created flow, which you can use for future operations like updating the flow or adding additional nodes.
-
-You can expand this example by adding more devices, creating additional calculated attributes, or configuring MQTT endpoints to send data to external systems.
-{% endhint %}
+For questions and support, contact [support@navixy.com](mailto:support@navixy.com).
