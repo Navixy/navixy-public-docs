@@ -12,7 +12,7 @@ NGP is designed to be the single, standardized data format between devices and t
 
 Typical senders include: GPS trackers, IoT sensors, telematics terminals, and gateways that aggregate data from multiple sub-devices.
 
-![NGP-purpose.jpg](<../../.gitbook/assets/NGP-purpose (1).jpg>)
+![Navixy Generic Protocol data flow from devices to the platform](../../.gitbook/assets/NGP-purpose.jpg)
 
 ## Protocol versions
 

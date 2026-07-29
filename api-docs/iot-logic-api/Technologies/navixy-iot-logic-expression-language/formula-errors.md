@@ -10,6 +10,33 @@ Formula error messages are always shown in English, regardless of the user's loc
 
 This page maps each raw error message to its cause and shows how to correct the formula. For the full list of functions and operators available, see the [Expression syntax reference](expression-syntax-reference.md).
 
+## How formula errors are returned
+
+Formulas are validated when you save the flow, on `flowCreate` and `flowUpdate`, not when a message is processed. A formula the parser rejects fails the whole save: the flow is not stored, and no partial update is applied.
+
+A rejected request returns HTTP 400 with internal code `292` (`IoT Flow Invalid`). The formula error appears in the `errors` array, with the node it came from and the field inside that node:
+
+```json
+{
+  "success": false,
+  "status": {
+    "code": 292,
+    "description": "IoT Flow Invalid"
+  },
+  "errors": [
+    {
+      "node_ids": [2],
+      "parameters": ["data.condition"],
+      "message": "The formula is invalid: [1:7 parsing error in '>']"
+    }
+  ]
+}
+```
+
+`parameters` points at the field holding the bad formula: `data.condition` for a Logic node, `data.items[0].value` for the first calculated attribute of an Initiate Attribute node. The `1:7` prefix is the line and column where parsing failed, so a formula rejected at `1:7` failed at its seventh character.
+
+For the full error code list, see [Common error codes](../../technical-details/#common-error-codes).
+
 ## Quick reference
 
 | Error pattern | Meaning | Section |
@@ -107,7 +134,8 @@ The following keywords are not part of the expression language and produce a par
 | `(1 + 2` | `parsing error in '2'` | Missing closing parenthesis |
 | `1 2 3` | `parsing error in '2'` | Values with no operator between them |
 | `* 5` | `parsing error in '*'` | Expression starts with an operator |
-| `speed >` | `parsing error in '>'` | Operator with no right-hand operand |
+| `speed >` | `parsing error in '>'` | Comparison operator with no right-hand operand |
+| `1 +` | `parsing error in '+'` | Arithmetic operator with no right-hand operand |
 | `speed > 60 and` | `parsing error in 'and'` | Condition without right-hand side |
 | `speed =< 5` | `parsing error in '<'` | Invalid operator; use `<=` |
 | `temperature > 30 AND humidity > 50` | `parsing error in 'AND'` | Operator keywords are lowercase: use `and` or `&&` |

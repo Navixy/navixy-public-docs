@@ -1455,6 +1455,17 @@ Possible values are:
   pass 7-digit number, for example "1234567".
 * **n,m** – n-digit generated ID starting with M. This means that device has configurable ID and our platform generates\
   and configures it automatically. You don't need to pass any identifier during device registration in this case.
+* **ascii,min,max** – means device uses a text identifier made up of latin letters, digits, and hyphens,\
+  for example "fleet-sensor-0042". The two numbers are the minimum and maximum accepted length in characters,\
+  so "ascii,12,17" means the identifier must be 12 to 17 characters long. Punctuation, underscores, spaces,\
+  and non-latin characters are rejected.
+
+{% hint style="warning" %}
+Models reporting `ascii,6,64`, `navixy_ngp` among them, reject any identifier longer than 32 characters. The declared\
+maximum of 64 is not applied. Registration errors always name the range that is enforced, for example\
+`must consist of 6-32 alphanumeric symbols or hyphens`, so treat the error message as authoritative when it\
+disagrees with the model metadata.
+{% endhint %}
 
 #### Errors
 
@@ -1575,7 +1586,7 @@ Common parameters are:
 | group\_id                | Tracker group ID, 0 if tracker does not belong to any group. The specified group must exist. See [group/list](group.md#list).                                                              | int     | 0               |
 | model                    | A code of one of the supported models. See [tracker/list\_models](./#list_models).                                                                                                         | string  | "pt10"          |
 | plugin\_id               | An ID of a registration plugin which will be used to register the device. See [Registration plugins](../../commons/plugin/index.md).                                                       | int     | 37              |
-| device\_id               | **Must** be specified if device model uses fixed device ID. See [tracker/list\_models](./#list_models).                                                                                    | string  | "4568005588562" |
+| device\_id               | **Must** be specified if device model uses fixed device ID. Accepted format and length depend on the model's `id_type`, see [ID type](./#id-type).                                         | string  | "4568005588562" |
 | send\_register\_commands | Indicates send or not to send activation commands to device (via SMS or GPRS channel). If parameter is not specified or equals `null` will be used the platform settings. Default: `null`. | boolean | true or false   |
 
 #### Examples
@@ -1636,6 +1647,8 @@ For `tracker` object structure, see [tracker/](./#tracker-object-structure).
 
 #### Errors
 
+* 7 – Invalid parameters - if `device_id` does not match the format required by the model's [id\_type](./#id-type).\
+  The `errors` array names the offending parameter and the rule it broke.
 * 13 – Operation not permitted – if user has insufficient rights.
 * 204 – Entity not found - if specified group does not exist. See [group/list](group.md#list).
 * 220 – Unknown device model - if specified device model does not exist.
@@ -1647,6 +1660,32 @@ For `tracker` object structure, see [tracker/](./#tracker-object-structure).
 * 226 – Wrong ICCID. Plugin specific: if specified ICCID was not found.
 * 227 – Wrong activation code. Plugin specific: if specified activation code not found or is already activated.
 * 258 – Bundle not found. Plugin specific: if bundle not found for specified device ID.
+
+**Example response for a rejected device ID:**
+
+```json
+{
+  "success": false,
+  "status": {
+    "code": 7,
+    "description": "Invalid parameters"
+  },
+  "errors": [
+    {
+      "parameter": "device_id",
+      "error": "must consist of 6-32 alphanumeric symbols or hyphens"
+    }
+  ]
+}
+```
+
+`device_id` is checked in two stages, and both stages return code 7:
+
+1. A general character and length check, reported as `must match "^[0-9a-zA-Z\-]{1,64}$"`. This rejects underscores,\
+   spaces, punctuation, non-latin characters, and anything longer than 64 characters.
+2. The length range required by the model's `id_type`. The message names the range that is enforced, for example\
+   `must consist of 6-32 alphanumeric symbols or hyphens`. Read the range from this message rather than from the\
+   model metadata, which can be wider. See [ID type](./#id-type).
 
 ### register\_retry
 

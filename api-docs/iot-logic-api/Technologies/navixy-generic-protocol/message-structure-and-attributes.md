@@ -28,7 +28,7 @@ Fields with no availability tag work in all versions. Fields with restricted ava
 
 ### Minimum message to be stored by the platform
 
-The platform requires a valid location with at least 3 satellites before saving a data point. The `device_id` must already be registered on the platform.
+The platform requires a valid location with at least 3 satellites before saving a data point. The `device_id` must already be registered on the platform. Registration under the `navixy_ngp` model accepts 6 to 32 characters, latin letters, digits, and hyphens only, so generate identifiers within that range even though the message field itself allows up to 64 characters. See [ID type](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker#id-type) in the Platform API reference.
 
 ```json
 {
