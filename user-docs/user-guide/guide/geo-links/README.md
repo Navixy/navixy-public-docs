@@ -19,9 +19,13 @@ Here is an example of a generated geo link URL: `https://tracking.example/ls/#ec
 
 ![List of geo links](../../.gitbook/assets/{EB395344-78FF-4FD6-857B-72B0F0F621D3}-20250728-083324.png)
 
-## Working with geo links
+## How to use geo links in X-GPS Mobile
 
-The following sections provide step-by-step guides to the actions you can perform with geo links on the Navixy platform. Explore their functionality in detail and find your way to use them.
+Geo links can also be created and managed in the X-GPS Mobile app. User accounts share all created geo links. For more information, see [Geo links in X-GPS](../x-gps-mobile-apps/x-gps-mobile/geo-links-in-x-gps-mobile.md) Mobile.
+
+## Section contents
+
+The following pages provide step-by-step guides to the actions you can perform with geo links on the Navixy platform. Explore their functionality in detail and find your way to use them.
 
 * [Creating geo links](creating-geo-links.md)
 * [Updating and sharing geo links](updating-and-sharing-geo-links.md)

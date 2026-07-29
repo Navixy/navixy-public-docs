@@ -11,13 +11,13 @@ description: >-
 
 While these applications are managed and configured in the [Navixy platform](https://tracking.navixy.com/), you can now easily access and use them in **X-GPS Mobile**.
 
-### Configuration and management
+## Configuration and management
 
 All User applications must be created and configured in the web version of the platform under **Account** → **User applications**. They are tied to the user account.
 
-For detailed instructions on creating, editing, and managing applications, refer to the full User applications[ documentation](../../account/user-applications/).
+For detailed instructions on creating, editing, and managing applications, refer to the full [User applications documentation](../../account/user-applications/).
 
-### User applications in X-GPS Mobile
+## User applications in X-GPS Mobile
 
 {% columns %}
 {% column %}

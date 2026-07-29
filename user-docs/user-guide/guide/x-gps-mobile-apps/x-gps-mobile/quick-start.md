@@ -4,9 +4,9 @@ description: >-
   Navixy credentials to start monitoring your fleet from a mobile device.
 ---
 
-# Quick start
+# X-GPS Mobile quick start
 
-Follow these steps to learn how to work with X-GPS Mobile.
+Follow these steps to learn how to work with X-GPS Mobile:
 
 ### Step 1. Download the app
 
@@ -48,33 +48,33 @@ Allow the app to send you notifications and access the device’s location while
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../.gitbook/assets/allow.jpg" alt="Permission prompt"><figcaption><p>Permission prompt</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/allow.jpg" alt="Permission prompt" width="245"><figcaption><p>Permission prompt</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
-### Step 4. Open the main screen
+### Step 4. Open the tracking screen
 
 {% columns fullWidth="true" %}
 {% column width="50%" %}
-The main screen displays your assets: vehicles, staff, and objects (units representing GPS devices) with icons indicating their movement status.
+The tracking screen displays your assets: vehicles, staff, and objects (units representing GPS devices) with icons indicating their movement status.
 
 You can filter them by category or status (moving, parked, etc.) and sort them by name or status.
 
 To sort or filter the list of assets and access the monitoring tools, tap the icons in the top-right corner:
 
-![](<../../../.gitbook/assets/Untitled (2).png>) Allows you to enter a search query
+![Alarm bell icon](<../../../.gitbook/assets/Untitled (2).png>) Allows you to enter a search query
 
-![](<../../../.gitbook/assets/Untitled (3).png>) Opens the [event log ](https://squaregps.atlassian.net/wiki/spaces/~7120201a6252f8d34242e3bdb7409b5d34d953/pages/3182821465/new+Assets+list#events-list)for all units
+![Magnifying glass icon](<../../../.gitbook/assets/Untitled (3).png>) Opens the [event log](https://squaregps.atlassian.net/wiki/spaces/~7120201a6252f8d34242e3bdb7409b5d34d953/pages/3182821465/new+Assets+list#events-list) for all units
 
-![](<../../../.gitbook/assets/Untitled (4).png>) Opens the [filtering and sorting](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#sorting-and-filtering) menu
+![Filter icon](<../../../.gitbook/assets/Untitled (4).png>) Opens the [filtering and sorting](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#sorting-and-filtering) menu
 
-![](<../../../.gitbook/assets/Untitled (5).png>) Opens the [map screen](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#map-fullscreen)
+![Map icon](<../../../.gitbook/assets/Untitled (5).png>) Opens the [map screen](https://squaregps.atlassian.net/wiki/spaces/USERDOCSOLD/pages/3235676161/Assets+list#map-fullscreen)
 
 Use the bottom panel to switch between the main screen and your profile.
 {% endcolumn %}
 
 {% column width="50%" %}
-<figure><img src="../../../.gitbook/assets/image (26).png" alt="Assets list"><figcaption><p>Assets list</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2).png" alt="Tracking screen in X-GPS Mobile" width="375"><figcaption><p>Tracking screen</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -86,6 +86,6 @@ Tap on an asset to view its location, status, trip and event history, sensors, r
 {% endcolumn %}
 
 {% column width="50%" %}
-<figure><img src="../../../.gitbook/assets/image (1) (2) (1).png" alt=""><figcaption><p>Asset information</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (3).png" alt="Asset information in X-GPS Mobile" width="375"><figcaption><p>Asset information</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
