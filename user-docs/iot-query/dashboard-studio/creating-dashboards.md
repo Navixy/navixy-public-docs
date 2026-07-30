@@ -22,7 +22,7 @@ Dashboard Studio app interface, built-in dashboard templates, custom dashboard c
 
 ## What are dashboards
 
-Dashboards contain panels that display data visualizations. Each panel runs a SQL query against your IoT Query database, the same Raw data and Transformation layers you access through SQL clients. You arrange panels on a canvas, configure their appearance, and save the complete report to your menu. Dashboard Studio updates panels continuously to reflect current IoT Query data.
+Dashboards contain panels that display data visualizations. Each panel runs a SQL query against your IoT Query database, the same Raw data, Transformation, and Insight layers you access through SQL clients. You arrange panels on a canvas, configure their appearance, and save the complete report to your menu. Dashboard Studio updates panels continuously to reflect current IoT Query data.
 
 {% hint style="info" %}
 #### Before you start
@@ -43,23 +43,26 @@ Dashboard Studio provides two ways to build analytics from IoT Query data. Choos
 
 Use dashboards when you need multiple independent visualizations on a single canvas, for example: combining a trip summary stat tile, a fuel consumption chart, and a zone visit table in one view. Use reports when a single dataset needs to be explored as a table, visualized as a chart, and mapped simultaneously, or when the output needs to be exported and shared outside Dashboard Studio.
 
-For details on how to configure reports, see [Creating reports](https://claude.ai/docs/analytics/dashboard-studio/creating-reports).
+For details on how to configure reports, see [Creating reports](creating-reports.md).
 
 ## What can you build?
 
-Dashboard Studio provides five visualization types. Each works best for specific analytical questions.
+Dashboard Studio provides six visualization types. Each works best for specific analytical questions.
 
 * **Stat tiles** display single key metrics like total distance or vehicle count. Use them to highlight critical numbers at the top of your report.
 * **Bar charts** compare values across categories or show trends over time. They work well for comparing fleet utilization across regions or tracking trips per day.
 * **Pie charts** show how a total breaks into parts. Use them to display fuel consumption by vehicle type or alert distribution by severity.
 * **Tables** present detailed records with multiple attributes. They suit scenarios where users need to see individual records, such as recent alerts with timestamps, vehicle IDs, and messages.
 * **Text panels** add explanatory content without querying data. Use them for instructions, section headers, or context using Markdown formatting.
+* **Maps** plot location data as points on an interactive map. Use them to show current vehicle positions or geofence activity.
 
-Each visualization type serves specific analytical purposes. Stat tiles work well for KPIs like total fleet size or average utilization. Bar charts help you compare performance across regions or track metrics over time. Pie charts show how totals divide into categories, such as fuel consumption by vehicle type. Tables present detailed records when users need to see multiple attributes together. Text panels add context, instructions, or section headers to your reports.
+Each visualization type serves specific analytical purposes. Stat tiles work well for KPIs like total fleet size or average utilization. Bar charts help you compare performance across regions or track metrics over time. Pie charts show how totals divide into categories, such as fuel consumption by vehicle type. Tables present detailed records when users need to see multiple attributes together. Text panels add context, instructions, or section headers to your reports. Maps show where your fleet is or where events happened.
+
+Imported dashboards can also contain additional panel types, such as time series charts, that render correctly but can't be added from the panel gallery.
 
 <figure><img src="../.gitbook/assets/dashboard_example.webp" alt=""><figcaption></figcaption></figure>
 
-Query requirements vary by visualization type. Stat tiles need one numeric value. Bar and pie charts require exactly two columns: categories and values. Tables accept any number of columns. Text panels don't query data at all. For complete query requirements and examples, see [Writing SQL queries.](writing-sql-queries.md#how-to-write-sql-for-visualizations)
+Query requirements vary by visualization type. Stat tiles need one numeric value. Bar and pie charts require exactly two columns: categories and values. Tables accept any number of columns. Text panels don't query data at all. Maps need latitude and longitude columns. For complete query requirements and examples, see [Writing SQL queries.](writing-sql-queries.md#how-to-write-sql-for-visualizations)
 
 ## Creating dashboards
 
@@ -111,7 +114,7 @@ Now it's time to add the diagram settings:
 
 ### How to write effective SQL queries
 
-Now that you understand the basic workflow, let's explore SQL queries in detail. Write PostgreSQL queries that reference IoT Query tables in the SQL Query tab. All Raw data and Transformation layer tables are available. Test queries before applying them to verify results match your visualization requirements.
+Now that you understand the basic workflow, let's explore SQL queries in detail. Write PostgreSQL queries that reference IoT Query tables in the SQL Query tab. All Raw data, Transformation, and Insight layer tables are available. Test queries before applying them to verify results match your visualization requirements.
 
 <figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 

@@ -27,13 +27,14 @@ Dashboard Studio provides two SQL environments for different purposes. Understan
 
 Visualization SQL must return specific column counts and data types. Dashboard Studio cannot render a bar chart from three columns or a stat tile from text data. Check the Dataset Requirements section in the SQL Query tab to see exactly what your chosen visualization expects before writing the statement. The table below contains supported visualization types:
 
-| Visualization                                  | Query requirement            | Example                                                           |
-| ---------------------------------------------- | ---------------------------- | ----------------------------------------------------------------- |
-| [Stat tile](writing-sql-queries.md#stat-tiles) | Single numeric value         | `SELECT COUNT(*) FROM schema.table`                               |
-| [Bar chart](writing-sql-queries.md#bar-charts) | Two columns: category, value | `SELECT column1, COUNT(*) FROM schema.table GROUP BY column1`     |
-| [Pie chart](writing-sql-queries.md#pie-charts) | Two columns: label, value    | `SELECT category, SUM(value) FROM schema.table GROUP BY category` |
-| [Table](writing-sql-queries.md#tables)         | Any columns                  | `SELECT column1, column2, column3 FROM schema.table`              |
-| [Text](writing-sql-queries.md#text-panels)     | No query required            | Markdown content only                                             |
+| Visualization                                  | Query requirement              | Example                                                           |
+| ---------------------------------------------- | ------------------------------ | ----------------------------------------------------------------- |
+| [Stat tile](writing-sql-queries.md#stat-tiles) | Single numeric value           | `SELECT COUNT(*) FROM schema.table`                               |
+| [Bar chart](writing-sql-queries.md#bar-charts) | Two columns: category, value   | `SELECT column1, COUNT(*) FROM schema.table GROUP BY column1`     |
+| [Pie chart](writing-sql-queries.md#pie-charts) | Two columns: label, value      | `SELECT category, SUM(value) FROM schema.table GROUP BY category` |
+| [Table](writing-sql-queries.md#tables)         | Any columns                    | `SELECT column1, column2, column3 FROM schema.table`              |
+| [Text](writing-sql-queries.md#text-panels)     | No query required              | Markdown content only                                             |
+| [Maps](writing-sql-queries.md#maps)            | Latitude and longitude columns | `SELECT latitude, longitude FROM schema.table`                    |
 
 <details>
 
@@ -157,6 +158,29 @@ SELECT
 FROM bronze.tracking_data_core;
 ```
 {% endcode %}
+
+</details>
+
+<details>
+
+<summary>Maps</summary>
+
+Map panels plot one marker per row. Statements must return a latitude column and a longitude column:
+
+{% code title="Latest vehicle positions" overflow="wrap" %}
+```sql
+SELECT
+  object_label,
+  latitude / 1e7 AS latitude,
+  longitude / 1e7 AS longitude
+FROM bronze.tracking_data_core
+WHERE latitude <> 0 AND longitude <> 0;
+```
+{% endcode %}
+
+Dashboard Studio detects coordinate columns automatically when they use common names such as `latitude`, `lat`, or `gps_lat` for latitude and `longitude`, `lon`, or `lng` for longitude. If your columns use different names, select them manually in Visualization Settings.
+
+Coordinates must be in decimal degrees. Where a table stores them as scaled integers, divide by `1e7` as shown above. Any other columns the statement returns appear in the marker popup.
 
 </details>
 

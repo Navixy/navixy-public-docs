@@ -21,6 +21,7 @@
         * [Templates](iot-query/schema-overview/transformation-layer/transformation-builder/templates.md)
 * [Dashboard Studio](dashboard-studio/README.md)
   * [Creating dashboards](dashboard-studio/creating-dashboards.md)
+  * [Built-in dashboards](dashboard-studio/built-in-dashboards.md)
   * [Creating reports](dashboard-studio/creating-reports.md)
   * [Writing SQL queries](dashboard-studio/writing-sql-queries.md)
   * [Open-source Studio](dashboard-studio/open-source-studio.md)

@@ -26,20 +26,24 @@ You can test the Dashboard Studio's functionality on mock data yourselves, <a hr
 Dashboard Studio addresses common analytics challenges faced by fleet operations. The platform combines direct database access with visual simplicity, creating an analytics environment that serves both technical and operational users.
 
 * **Self-service analytics:** Build and modify dashboards with minimal SQL knowledge using LLMs and examples from our [Recipe Book](../example-queries/)
-* **Fleet-optimized visualizations:** Four chart types designed for telematics and operational workflows
+* **Fleet-optimized visualizations:** Six chart types designed for telematics and operational workflows
 * **Integrated with your data architecture:** Query across Raw data, Transformation, and Insight layers based on your analysis needs, from detailed exploration to pre-aggregated metrics
 * **No external BI investment:** Analytics layer that uses your existing IoT Query access without a separate BI platform infrastructure
 
 ## Core capabilities
 
-Dashboard Studio provides four visualization types designed for fleet analytics workflows:
+Dashboard Studio provides six visualization types designed for fleet analytics workflows:
 
-| Visualization  | Purpose                                            | Key configuration options                                      |
-| -------------- | -------------------------------------------------- | -------------------------------------------------------------- |
-| **Bar charts** | Categorical comparisons and time-series trends     | Orientation (vertical/horizontal), stacking, grouping, sorting |
-| **Pie charts** | Proportional distributions and category breakdowns | Donut style, legend position, colors, labels                   |
-| **Tables**     | Detailed data views with full result sets          | Column configuration, pagination, sorting                      |
-| **Stat tiles** | Single metric displays for KPIs                    | Number formatting, units, thresholds, color indicators         |
+| Visualization   | Purpose                                                             | Key configuration options                                           |
+| --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Bar charts**  | Categorical comparisons and time-series trends                      | Orientation (vertical/horizontal), stacking, grouping, sorting      |
+| **Pie charts**  | Proportional distributions and category breakdowns                  | Donut style, legend position, colors, labels                        |
+| **Tables**      | Detailed data views with full result sets                           | Column configuration, pagination, sorting                           |
+| **Stat tiles**  | Single metric displays for KPIs                                     | Number formatting, units, thresholds, color indicators              |
+| **Text panels** | Explanatory content, instructions, or section headers               | Markdown formatting, no SQL query                                   |
+| **Maps**        | Geographic location of data points, plotted from coordinate columns | Auto-detected or manually selected coordinate columns, zoom and pan |
+
+Imported dashboards can also contain additional panel types, such as time series charts, that render correctly but can't be added from the panel gallery.
 
 The dashboard editor lets you position panels by dragging them into place. Panels snap to a grid automatically, keeping everything aligned. Group related panels into rows that you can collapse when you need to focus on other parts of your dashboard. Each panel runs its own SQL query against your IoT Query database.
 
@@ -115,7 +119,7 @@ For details about open-source usage of Dashboard Studio, see [Open-source Studio
 The application source code and deployment documentation are available through the project repository at [https://github.com/Navixy/navixy-iot-query-dashboard](https://github.com/Navixy/navixy-iot-query-dashboard).
 
 {% hint style="info" %}
-Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/user/applications/app-connect) for seamless user authentication!
+Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/user/applications/app-connect) for user authentication.
 {% endhint %}
 
 ## Next steps
@@ -126,4 +130,6 @@ Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-a
 
 [Writing SQL queries](writing-sql-queries.md) - Review query patterns that work effectively with Dashboard Studio visualizations. Learn query requirements for each visualization type and common data transformations.
 
-[**SQL Recipe Book**](https://claude.ai/chat/764f0b9a-f0fd-4935-b36e-4631e28d74dd) - Explore comprehensive query examples covering frequent fleet analytics tasks, including trips, geofences, events, and vehicle metrics.
+[**Built-in dashboards**](built-in-dashboards.md) - Browse the 14 ready-made dashboards that ship with Dashboard Studio and import them directly into your instance.
+
+[**SQL Recipe Book**](../example-queries/) - Explore comprehensive query examples covering frequent fleet analytics tasks, including trips, geofences, events, and vehicle metrics.
