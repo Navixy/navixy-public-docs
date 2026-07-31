@@ -25,7 +25,7 @@ With that in mind, here's a proposal for a simple yet effective lab setup, along
 *   Dimmer / lighting control\
     Light management is critical. With a dimmer, you can darken or brighten the room to replicate day, night, or transitional lighting conditions. This is invaluable for checking how cameras react to sudden light changes.\\
 
-    <figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 11-05-19 (1).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="../../../../.gitbook/assets/Screenshot at Sep 12 11-05-19.png" alt=""><figcaption></figcaption></figure>
 
 ## Why it matters
 

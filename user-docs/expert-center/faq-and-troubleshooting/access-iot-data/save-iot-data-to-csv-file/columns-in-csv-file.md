@@ -27,7 +27,7 @@ You can open the raw data file with any text editor, such as WordPad, Notepad++,
 
 The file includes selected parameters in columns, along with one consistent entry, msg\_time.
 
-![](<../../../.gitbook/assets/image-20240209-073506 (1).png>)
+![](../../../.gitbook/assets/image-20240209-073506.png)
 
 These parameters can be categorized as simple or complex.
 

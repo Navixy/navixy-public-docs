@@ -23,7 +23,7 @@ Common ways to do this:
 * If it's a group, the chat\_id is usually a negative number.
 * Make sure the bot has received at least one message so it appears in getUpdates.
 
-<figure><img src="../../.gitbook/assets/unknown (6) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/unknown (6).png" alt=""><figcaption></figcaption></figure>
 
 3. Send the message (REST call)
 
@@ -31,7 +31,7 @@ Common ways to do this:
 * In the request body, include the chat\_id and the message text.
 * The request should be sent in JSON format with the header Content-Type: application/json.
 
-<figure><img src="../../.gitbook/assets/unknown (7) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/unknown (7).png" alt=""><figcaption></figcaption></figure>
 
 4. Create the IoT Flow in Navixy
 
@@ -53,6 +53,6 @@ https://api.telegram.org/bot\<BOT\_TOKEN>/sendMessage
 
 }
 
-![](<../../.gitbook/assets/unknown (8) (1).png>) ![](<../../.gitbook/assets/unknown (9) (1).png>)
+![](<../../.gitbook/assets/unknown (8).png>) ![](<../../.gitbook/assets/unknown (9).png>)
 
 With these steps, your bot will be able to receive messages successfully, including automated telemetry data from Navixy.

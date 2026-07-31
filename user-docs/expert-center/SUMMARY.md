@@ -64,6 +64,7 @@
       * [Device Connection Status](faq-and-troubleshooting/gps-devices/add-and-manage-devices/device-connection-status.md)
       * [Troubleshoot Device Activation](faq-and-troubleshooting/gps-devices/add-and-manage-devices/troubleshoot-device-activation.md)
       * [Activate Your MQTT Device on Navixy](faq-and-troubleshooting/gps-devices/add-and-manage-devices/activate-your-mqtt-device-on-navixy.md)
+      * [Why Does a Black Screen Appear During Live Streaming on Jimi JC Cameras?](faq-and-troubleshooting/gps-devices/add-and-manage-devices/why-does-a-black-screen-appear-during-live-streaming-on-jimi-jc-cameras.md)
       * [Integrate IoT Data from Servers and Gateways](faq-and-troubleshooting/gps-devices/add-and-manage-devices/integrate-iot-data-from-servers-and-gateways/README.md)
         * [Wialon Protocols for Data Ingestion](faq-and-troubleshooting/gps-devices/add-and-manage-devices/integrate-iot-data-from-servers-and-gateways/wialon-protocols-for-data-ingestion.md)
     * [Outputs Control](faq-and-troubleshooting/gps-devices/outputs-control.md)
