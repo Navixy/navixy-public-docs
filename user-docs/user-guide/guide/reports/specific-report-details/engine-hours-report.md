@@ -38,6 +38,8 @@ The **Engine hours report** includes several configurable parameters that allow 
 
 * **Hide empty tabs:** Hides tabs for devices with no engine-hours data in the selected period instead of showing **Not found** placeholders.
 * **Shows seconds:** Controls whether durations include seconds (e.g., "4:32:15") or just hours and minutes (e.g., "4:32").
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Show details:** Provides detailed information about the specific location and time when the engine was on.
 * **Display summary:** Shows an overview of all devices. You can enable or disable this feature depending on whether you need a summary page.
 * **Display only summary:** Aggregates data for multiple GPS devices into a single summary. This option requires at least two devices.

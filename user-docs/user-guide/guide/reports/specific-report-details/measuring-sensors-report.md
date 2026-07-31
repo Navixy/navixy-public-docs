@@ -26,7 +26,10 @@ To successfully generate the **Measuring sensors report**, the following conditi
 
 The report uses several parameters to tailor the output to your needs:
 
-* **Hide empty tabs:** Omits tabs for devices that have no data for certain tabs.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
+* **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Details time range:** Displays the received readings in increments of 5, 30 minutes, 1, 3, or 6 hours in the data detail table.
 * **X-axis on the graph:** Choose whether to display the information by time or mileage.
 * **Smooth data:** Apply smoothing to average sensor readings on the graph, providing a cleaner view of trends.

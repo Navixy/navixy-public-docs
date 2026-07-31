@@ -28,8 +28,10 @@ Each day in the report period can display a maximum of 10,000 events. If a devic
 
 In addition to standard report parameters, the report on all events includes:
 
-* **Hide empty tabs:** Omits tabs for devices that have no data for certain tabs.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
 * **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Group by event type:** Organizes events into tables based on their type. When grouping is enabled, sections appear in the platform's predefined order, not in the order you selected the event types.
 * **Event type selection:** Allows filtering the report by specific event types. A quick search feature helps you find the events you need.
 

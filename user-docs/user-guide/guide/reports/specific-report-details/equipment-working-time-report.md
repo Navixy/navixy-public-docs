@@ -47,8 +47,10 @@ If a single on-period lasts less than the minimum working period duration before
 The **Equipment working time report** includes several configurable parameters that allow you to tailor the output to meet your specific needs:
 
 * **Sensor selection (required)**: for each selected device, choose one discrete input or virtual sensor to analyze. Devices with no discrete input or two-state virtual sensor configured can't be used in this report.
-* **Hide empty tabs:** Omits tabs for devices that have no data for certain tabs.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
 * **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Minimum working period duration:** The minimum number of seconds a discrete input or virtual sensor must remain in the "on" state for that period to be included in the report. Default: 60 seconds. Minimum: 1 second.
 * **Show idle percent:** Tracks the parking status and distributes the equipment operating time between motion and idling.
 * **Use smart filter:** Excludes short or invalid trips from the report. A regular trip is excluded if it has fewer than 3 data points, covers less than 100 meters, or stays within a 200-meter diameter. Additionally, individual track points with suspicious mileage patterns (e.g. implausibly high or low speeds) are removed.

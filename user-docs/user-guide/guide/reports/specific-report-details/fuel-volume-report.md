@@ -41,7 +41,11 @@ For the report to produce accurate data, the following must be configured:
 
 ## Fuel volume report parameters
 
-* **X-axis:** Determines what the horizontal axis of the fuel graph represents. **Mileage** builds the graph against distance traveled and average consumption is shown in l/100 km. Time **builds** the graph against the clock and average consumption is shown in l/h.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
+* **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
+* **X-axis:** Determines what the horizontal axis of the fuel graph represents. Mileage builds the graph against distance traveled and average consumption is shown in l/100 km. Time builds the graph against the clock and average consumption is shown in l/h.
 * **Detailed info (by dates)**: Adds a daily breakdown table showing initial and final fuel volumes, consumption, and refueling and drain totals for each day of the report period.
 * **Display summary:** Toggles the visibility of a summary page showing aggregate data across all selected devices.
 * **Display only summary**: Shows only the aggregate summary page without individual device sheets. Requires at least two devices to be selected.

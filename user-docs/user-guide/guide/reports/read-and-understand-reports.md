@@ -1,5 +1,7 @@
 ---
-description: Interpret Navixy report graphs and tables, apply common parameters like date range and object filters, and export or share generated reports.
+description: >-
+  Interpret Navixy report graphs and tables, apply common parameters like date
+  range and object filters, and export or share generated reports.
 ---
 
 # How to read reports
@@ -17,6 +19,8 @@ When generating a report, several common parameters allow you to tailor the outp
 * **Control time:** Focus on specific times of day, such as daytime or nighttime, to filter out irrelevant data.
 * **Hide empty tabs:** If a GPS device has no data during the specified period, the corresponding tab isn’t generated.
 * **Show seconds:** Displays time in hours:minutes:seconds format for greater precision.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Smart filter**: When enabled, the report filters GPS data before calculating trips, mileage, and stops. At the point level, the filter discards readings that form physically impossible sharp-angle jumps (GPS bounces) and low-precision duplicate readings within 30 meters of the previous point, both of which would otherwise add phantom distance to mileage. These checks only apply to consecutive points within 5 minutes of each other. At the track level, the filter also removes micro-tracks shorter than 100 meters or with a bounding diameter under 200 meters. Disable this option if you need the raw, unfiltered GPS data exactly as recorded by the device.
 
 Each report may also include specific parameters tailored to its purpose, which are explained in the documentation for each report type.

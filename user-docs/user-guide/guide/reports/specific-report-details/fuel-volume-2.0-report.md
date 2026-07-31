@@ -48,6 +48,13 @@ To generate an accurate **Fuel volume 2.0 report**, ensure that the following co
 * **Automated smoothing:**\
   The process of smoothing the graph is fully automated, with all smoothing and filtering settings applied automatically to produce a user-friendly, readable chart.
 
+## Fuel volume report 2.0 parameters
+
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
+* **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
+
 ## How to read Fuel volume 2.0 report
 
 The report contains the following columns:

@@ -27,6 +27,8 @@ The **Trips report** offers several configurable parameters:
 
 * **Hide empty tabs:** Omits tabs for devices that have no data for certain tabs.
 * **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Display summary:** Toggles the visibility of a summary page that provides an overview of all devices.
 * **Display only summary:** Generates a summary sheet for all selected devices without detailed trip information. Requires at least two devices to be selected.
 * **Divide by stops:** Separates trips based on parking intervals. If not selected, the report considers the first recorded point of the day as the trip start and the last recorded point as the trip end.

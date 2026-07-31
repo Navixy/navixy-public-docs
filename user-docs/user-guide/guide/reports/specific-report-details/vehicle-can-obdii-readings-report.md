@@ -23,7 +23,10 @@ To generate the **Vehicle readings report**, the following prerequisites must be
 
 The report uses several parameters to customize the output:
 
-* **Hide empty tabs:** Omits tabs for devices that have no data for certain tabs.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
+* **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Details time range:** Displays the received readings in the data detail table in increments of 30 minutes, 1 hour, 3 hours, or 6 hours. The graph displays all points received from the sensor.
 * **X-axis:** Choose whether to display the information on the graph relative to time or mileage.
 *   **Smooth data:** Apply smoothing to average sensor readings on the graph, providing a cleaner view of trends.

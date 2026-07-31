@@ -22,8 +22,10 @@ Unlike alerts, which notify you in real time, the **Speed violation** **report**
 
 ### Speed violation report parameters
 
-* **Hide empty tabs:** When enabled, tabs for devices (or drivers) with no violations are omitted from the report entirely instead of showing a "no violations found" message.
-* **Show seconds:** Controls whether durations appear as `hh:mm:ss` or `hh:mm`.
+* **Hide empty tabs:** Omits tabs for devices that have no trips in any configured shift during the selected period.
+* **Show seconds:** Shows durations with second precision (`hh:mm:ss`) instead of `hh:mm`.
+* **Include POI in location address:** If the address in the report matches a POI, displays the POI's name in front of the address.
+* **Include geofence in location address:** If the address in the report matches a geofence, displays the gefence's name in front of the address.
 * **Violation duration (required)**: the minimum time in minutes a speeding episode must last to appear in the report. Episodes shorter than this are silently discarded. Set to 0 to include even the briefest spikes. Valid range: 0–1440 (24 hours).
 * **Permitted speed (required)**: the speed limit in km/h (or mph, depending on your measurement system). Any continuous period above this value is detected as a violation. Valid range: 1–400.
 * **Group by driver:** when enabled, the report is organized into separate sections per driver based on driver assignment history. If a driver wasn't assigned during part of the period, those intervals are attributed to an unidentified driver.
