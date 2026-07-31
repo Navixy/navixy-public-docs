@@ -90,6 +90,7 @@
       * [Columns in CSV File](faq-and-troubleshooting/access-iot-data/save-iot-data-to-csv-file/columns-in-csv-file.md)
   * [Mobile apps](faq-and-troubleshooting/mobile-apps/README.md)
     * [X-GPS Tracker mobile app](faq-and-troubleshooting/mobile-apps/x-gps-tracker-mobile-app.md)
+    * [Troubleshooting Guide: X-GPS Tracker](faq-and-troubleshooting/mobile-apps/troubleshooting-guide-x-gps-tracker.md)
 
 ## Platform essentials
 
