@@ -53,7 +53,7 @@ Dashboard Studio provides six visualization types. Each works best for specific 
 * **Bar charts** compare values across categories or show trends over time. They work well for comparing fleet utilization across regions or tracking trips per day.
 * **Pie charts** show how a total breaks into parts. Use them to display fuel consumption by vehicle type or alert distribution by severity.
 * **Tables** present detailed records with multiple attributes. They suit scenarios where users need to see individual records, such as recent alerts with timestamps, vehicle IDs, and messages.
-* **Text panels** add explanatory content without querying data. Use them for instructions, section headers, or context using Markdown formatting.
+* **Text panels** add explanatory content without querying data. Use them for instructions, section headers, or context using Markdown, HTML, or plain text formatting.
 * **Maps** plot location data as points on an interactive map. Use them to show current vehicle positions or geofence activity.
 
 Each visualization type serves specific analytical purposes. Stat tiles work well for KPIs like total fleet size or average utilization. Bar charts help you compare performance across regions or track metrics over time. Pie charts show how totals divide into categories, such as fuel consumption by vehicle type. Tables present detailed records when users need to see multiple attributes together. Text panels add context, instructions, or section headers to your reports. Maps show where your fleet is or where events happened.

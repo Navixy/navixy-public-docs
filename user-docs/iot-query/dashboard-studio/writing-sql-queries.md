@@ -33,7 +33,7 @@ Visualization SQL must return specific column counts and data types. Dashboard S
 | [Bar chart](writing-sql-queries.md#bar-charts) | Two columns: category, value   | `SELECT column1, COUNT(*) FROM schema.table GROUP BY column1`     |
 | [Pie chart](writing-sql-queries.md#pie-charts) | Two columns: label, value      | `SELECT category, SUM(value) FROM schema.table GROUP BY category` |
 | [Table](writing-sql-queries.md#tables)         | Any columns                    | `SELECT column1, column2, column3 FROM schema.table`              |
-| [Text](writing-sql-queries.md#text-panels)     | No query required              | Markdown content only                                             |
+| [Text](writing-sql-queries.md#text-panels)     | No query required              | Markdown, HTML, or plain text                                     |
 | [Maps](writing-sql-queries.md#maps)            | Latitude and longitude columns | `SELECT latitude, longitude FROM schema.table`                    |
 
 <details>
@@ -149,15 +149,15 @@ Column names become table headers. Use aliases with spaces for readable headers:
 
 <summary>Text panels</summary>
 
-Text panels display single text values or formatted strings. Statements must return one text column:
+Text panels display Markdown, HTML, or plain text content. They don't run a SQL query.
 
-{% code title="Last data update timestamp" %}
-```sql
-SELECT 
-  'Last updated: ' || MAX(record_added_at)::text as value
-FROM bronze.tracking_data_core;
-```
-{% endcode %}
+On the **Content** tab, select an option under **Content Mode**:
+
+* **Markdown** (default) supports formatting such as headings and links.
+* **HTML** renders raw markup.
+* **Plain Text** displays the content exactly as you entered it and doesn't interpret any markup.
+
+Use text panels for section headers, instructions, or context alongside your data visualizations.
 
 </details>
 

@@ -40,7 +40,7 @@ Dashboard Studio provides six visualization types designed for fleet analytics w
 | **Pie charts**  | Proportional distributions and category breakdowns                  | Donut style, legend position, colors, labels                        |
 | **Tables**      | Detailed data views with full result sets                           | Column configuration, pagination, sorting                           |
 | **Stat tiles**  | Single metric displays for KPIs                                     | Number formatting, units, thresholds, color indicators              |
-| **Text panels** | Explanatory content, instructions, or section headers               | Markdown formatting, no SQL query                                   |
+| **Text panels** | Explanatory content, instructions, or section headers               | Markdown, HTML, or plain text formatting, no SQL query               |
 | **Maps**        | Geographic location of data points, plotted from coordinate columns | Auto-detected or manually selected coordinate columns, zoom and pan |
 
 Imported dashboards can also contain additional panel types, such as time series charts, that render correctly but can't be added from the panel gallery.
