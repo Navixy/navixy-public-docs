@@ -205,7 +205,7 @@ https://api.eu.navixy.com/v2/panel/account/get_permissions?hash=fa7bf873fab93331
 
 #### Errors
 
-[General](../../user-api/backend-api/getting-started/errors.md#error-codes) types only.
+[General](../../user-api/backend-api/errors.md#error-codes) types only.
 
 ### logout
 
@@ -245,4 +245,4 @@ https://api.eu.navixy.com/v2/panel/account/logout?hash=fa7bf873fab9333144e171372
 
 #### Errors
 
-[General](../../user-api/backend-api/getting-started/errors.md#error-codes) types only.
+[General](../../user-api/backend-api/errors.md#error-codes) types only.

@@ -45,7 +45,7 @@ $ curl -d 'login=admin&password=admin' \
 ```sh
 //This method is not recommended and provided just for example:
 
-$ curl http://api.domain.com/panel/v2/account/auth/?login=admin&password=admin
+$ curl http://api.domain.com/v2/panel/account/auth/?login=admin&password=admin
 ```
 
 **Response**

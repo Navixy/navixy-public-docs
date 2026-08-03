@@ -21,7 +21,7 @@ _required permissions_: `users: "update"`.
 | target   | Target of the update.      | [Update target](mfa-settings.md#update-target) |
 | settings | MFA settings for the user. | [MFA settings](mfa-settings.md#mfa-settings)   |
 
-**Update target**
+#### Update target
 
 | name | description                                                                | type                       |
 | ---- | -------------------------------------------------------------------------- | -------------------------- |

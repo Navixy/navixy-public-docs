@@ -240,9 +240,9 @@ cURL
 
 {% code overflow="wrap" %}
 ```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/subpaas/create' \
+curl -X POST 'https://api.eu.navixy.com/v2/panel/subpaas/update' \
     -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "password": "D9#YoBaQd@RMjMSb", "title": "Company", "email": "email@company.com", "jur_name": "Company", "jur_country": "Finland", "link_monitoring": "company.com", "contact_fio": "fio", "contact_post": "CEO", "contact_phone": "79999902190", "block_type": "NOT_BLOCKED"}'
+    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "subpaas_id": 97834, "password": "D9#YoBaQd@RMjMSb", "title": "Company", "email": "email@company.com", "jur_name": "Company", "jur_country": "Finland", "link_monitoring": "company.com", "contact_fio": "fio", "contact_post": "CEO", "contact_phone": "79999902190", "block_type": "NOT_BLOCKED"}'
 ```
 {% endcode %}
 

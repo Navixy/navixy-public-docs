@@ -76,4 +76,4 @@ https://api.eu.navixy.com/v2/panel/equipment/list?hash=fa7bf873fab9333144e171372
 
 #### Errors
 
-[General](../../user-api/backend-api/getting-started/errors.md#error-codes) types only.
+[General](../../user-api/backend-api/errors.md#error-codes) types only.

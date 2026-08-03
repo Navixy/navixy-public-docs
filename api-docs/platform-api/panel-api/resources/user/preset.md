@@ -369,8 +369,10 @@ Deletes the menu preset.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/delete?preset_id=2' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b'
+curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/delete' \
+    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
+    -H 'Content-Type: application/json' \
+    -d '{ "preset_id": 2 }'
 ```
 {% endcode %}
 

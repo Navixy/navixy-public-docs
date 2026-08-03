@@ -133,50 +133,50 @@ If `user.verified` not passed then it set equal to `user.activated`.
 
 {% code title="cURL" %}
 ```sh
-    curl -X POST '{{ extra.api_example_url }}/panel/user/create' \
-        -H 'Content-Type: application/json' \
-        -d '{
-              "hash": "22eac1c27af4be7b9d04da2ce1af111b",
-              "user": {
-                "activated": true,
-                "verified": true,
-                "login": "user@test.com",
-                "first_name": "John",
-                "middle_name": "William",
-                "last_name": "Smith",
-                "legal_name": "ABC Inc.",
-                "legal_type": "legal_entity",
-                "phone": "2135551234",
-                "post_country": "United States",
-                "post_index": "90001",
-                "post_region": "California",
-                "post_city": "Los Angeles",
-                "post_street_address": "123 Main Street",
-                "registered_country": "United States",
-                "registered_index": "90001",
-                "registered_region": "California",
-                "registered_city": "Los Angeles",
-                "registered_street_address": "123 Main Street",
-                "state_reg_num": "12-3456789",
-                "tin": "1131145180",
-                "okpo_code": "93281776",
-                "iec": "773101001",
-                "dealer_mfa_settings": {
-                  "type": "allowed",
-                  "factor_types": [ "email" ]
-                }
-              },
-              "time_zone": "America/Los_Angeles",
-              "locale": "en_US",
-              "password": "Hh6FXTt%E!Rx*%f3",
-              "discount": {
-                "value": 5.5,
-                "min_trackers": 10,
-                "end_date": null,
-                "strategy": "sum_with_progressive"
-              },
-              "comment": "about user"
-            }'
+curl -X POST 'https://api.eu.navixy.com/v2/panel/user/create' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "hash": "22eac1c27af4be7b9d04da2ce1af111b",
+        "user": {
+            "activated": true,
+            "verified": true,
+            "login": "user@test.com",
+            "first_name": "John",
+            "middle_name": "William",
+            "last_name": "Smith",
+            "legal_name": "ABC Inc.",
+            "legal_type": "legal_entity",
+            "phone": "2135551234",
+            "post_country": "United States",
+            "post_index": "90001",
+            "post_region": "California",
+            "post_city": "Los Angeles",
+            "post_street_address": "123 Main Street",
+            "registered_country": "United States",
+            "registered_index": "90001",
+            "registered_region": "California",
+            "registered_city": "Los Angeles",
+            "registered_street_address": "123 Main Street",
+            "state_reg_num": "12-3456789",
+            "tin": "1131145180",
+            "okpo_code": "93281776",
+            "iec": "773101001",
+            "dealer_mfa_settings": {
+                "type": "allowed",
+                "factor_types": [ "email" ]
+            }
+        },
+        "time_zone": "America/Los_Angeles",
+        "locale": "en_US",
+        "password": "Hh6FXTt%E!Rx*%f3",
+        "discount": {
+            "value": 5.5,
+            "min_trackers": 10,
+            "end_date": null,
+            "strategy": "sum_with_progressive"
+        },
+        "comment": "about user"
+    }'
 ```
 {% endcode %}
 
