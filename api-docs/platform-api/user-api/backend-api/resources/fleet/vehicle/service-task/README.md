@@ -406,6 +406,26 @@ Downloads report of service works.
 | add\_filename\_header | Optional. Option to include header. Default is `false`. If `true`, Content-Disposition header will be appended to the response.                        | boolean                                                                  |
 | format                | Optional. Default is "pdf". Report format. Possible values are "pdf", "xls","xlsx".                                                                    | [enum](../../../../#data-types)                                          |
 | group\_by             | Optional. Group by option. Possible values are "vehicle", "status".                                                                                    | [enum](../../../../#data-types)                                          |
+| columns               | Optional. Set of report columns to include, listed below. Duplicates are not allowed. If not specified, the report contains all columns except `creation_date`. | [enum](../../../../#data-types) array                          |
+
+**columns**
+
+The parameter only selects the set of columns – the order of columns in the report is fixed and does not depend on the order of the passed values. The **Type** column is not controlled by this parameter and is always included.
+
+| Name              | Description                                                                                                                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| vehicle\_label    | Vehicle label.                                                                                                                                                                         |
+| description       | Name of a service work (`description` field of the service task).                                                                                                                       |
+| creation\_date    | Task creation date (`start.date`). Not included in the default set of columns.                                                                                                          |
+| status            | Task [status](./#task-status).                                                                                                                                                          |
+| conditions        | "Target values" group of three columns: target date, target odometer value and target engine hours.                                                                                      |
+| mileage\_remains  | Remaining mileage until the target odometer value, in the mileage units of the user. Negative for overdue tasks. Empty for tasks with `done` status and for tasks without mileage condition. |
+| hours\_remains    | Remaining engine hours until the target value. Negative for overdue tasks. Empty for tasks with `done` status and for tasks without engine hours condition.                                |
+| days\_remains     | Remaining days until the task end date. Negative for overdue tasks. Empty for tasks with `done` status and for tasks without date condition.                                               |
+| cost              | Cost of a service work in the currency of the user.                                                                                                                                     |
+| completed         | "Completed" group of three columns: completion date, odometer value and engine hours at the moment the task was marked as done.                                                          |
+| files             | Links to files attached to a service work.                                                                                                                                              |
+| comment           | Comment for a task.                                                                                                                                                                     |
 
 #### Examples
 
