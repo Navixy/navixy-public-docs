@@ -14,7 +14,7 @@ description: >-
 
 As the service operator, you can define which gateway handles these deliveries and customize the sender address.
 
-<figure><img src="../../../.gitbook/assets/image (58).png" alt="Email gateway page" width="563"><figcaption><p>Email gateway page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (58) (1).png" alt="Email gateway page" width="563"><figcaption><p>Email gateway page</p></figcaption></figure>
 
 The **Email gateway** page consists of two sections:
 

@@ -8,7 +8,7 @@ description: >-
 
 This page allows you to configure your main UI settings. Access it via **Settings** → **Service preferences.**
 
-<figure><img src="../../../.gitbook/assets/image (13) (1).png" alt="Service preferences page"><figcaption><p>Service preferences page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (13) (1).png" alt="Service preferences page"><figcaption><p>Service preferences page</p></figcaption></figure>
 
 The page consists of the following sections:
 

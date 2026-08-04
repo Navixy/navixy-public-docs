@@ -8,7 +8,7 @@ description: >-
 
 This page describes the **Maps preferences** page of Admin panel settings. It consists of two parts: [Available maps](./#how-to-select-maps) and [Map default settings](./#default-map-view).
 
-<figure><img src="../../../.gitbook/assets/image (38).png" alt="Map preferences page"><figcaption><p>Map preferences page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (38) (1).png" alt="Map preferences page"><figcaption><p>Map preferences page</p></figcaption></figure>
 
 ## Cartography in Navixy
 

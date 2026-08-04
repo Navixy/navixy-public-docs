@@ -9,7 +9,7 @@ description: >-
 
 The **Plans** page is used to view, create, and edit new pricing plans for your Navixy account. The pricing plans allow you to manage features available to your end users and set up billing. You can create any number of pricing plans.
 
-<figure><img src="../../.gitbook/assets/image (98).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (98) (1).png" alt=""><figcaption></figcaption></figure>
 
 It consists of three main sections:
 
@@ -29,9 +29,9 @@ When a user creates an account, Navixy server automatically creates a test Demo 
 
 ## How to create a plan
 
-Click <img src="../../.gitbook/assets/image (87).png" alt="" data-size="line"> to create a new plan. This opens the **New plan** window:
+Click <img src="../.gitbook/assets/image (87).png" alt="" data-size="line"> to create a new plan. This opens the **New plan** window:
 
-<figure><img src="../../.gitbook/assets/image (91).png" alt="New plan window"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (91) (1).png" alt="New plan window"><figcaption></figcaption></figure>
 
 This window contains the following settings:
 
@@ -53,12 +53,12 @@ This window contains the following settings:
 
 ## How to edit a plan
 
-To edit an existing plan, double-click its entry in the list, select it and click <img src="../../.gitbook/assets/image (92).png" alt="" data-size="line"> on the toolbar, or click **Edit plan** in the right sidebar. This opens the **Edit plan** window, which is identical to the **New plan** window. You can change all the settings except for the billing cycle.
+To edit an existing plan, double-click its entry in the list, select it and click <img src="../.gitbook/assets/image (92) (1).png" alt="" data-size="line"> on the toolbar, or click **Edit plan** in the right sidebar. This opens the **Edit plan** window, which is identical to the **New plan** window. You can change all the settings except for the billing cycle.
 
 ## Trackers on plan
 
 To learn which trackers are listed under the selected plan, select the plan and click **Trackers on plan** in the right sidebar. This opens the **Trackers on plan** window describing all trackers under the selected plan:
 
-<figure><img src="../../.gitbook/assets/image (99).png" alt="Trackers on plan"><figcaption><p>Trackers on plan</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (99) (1).png" alt="Trackers on plan"><figcaption><p>Trackers on plan</p></figcaption></figure>
 
-To learn more about a tracker, select it in the list and click <img src="../../.gitbook/assets/image (95).png" alt="Information" data-size="line">.
+To learn more about a tracker, select it in the list and click <img src="../.gitbook/assets/image (95) (1).png" alt="Information" data-size="line">.

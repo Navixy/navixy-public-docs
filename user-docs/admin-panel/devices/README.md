@@ -8,7 +8,7 @@ description: >-
 
 The **Trackers** page of the Admin Panel provides comprehensive information on GPS device setup with a specific focus on configuring devices for optimal performance. Whether it's setting up new trackers or managing existing ones, the Admin Panel equips you with the necessary tools to efficiently handle device configurations.
 
-<figure><img src="../../.gitbook/assets/image (4) (2).png" alt="Trackers page"><figcaption><p>Trackers page</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4) (2).png" alt="Trackers page"><figcaption><p>Trackers page</p></figcaption></figure>
 
 The page consists of three main sections:
 

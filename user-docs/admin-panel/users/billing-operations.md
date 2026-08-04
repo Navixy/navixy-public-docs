@@ -10,17 +10,17 @@ description: >-
 
 The list of transactions allows you to check operations that affect a user's balance. To view it, select a user and click **User's transactions** in the right side panel. This window shows all of the user's billing operations, along with a short description of each transaction.
 
-<figure><img src="../../.gitbook/assets/image (88).png" alt="User&#x27;s transactions window"><figcaption><p>User's transactions window</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (88) (1).png" alt="User&#x27;s transactions window"><figcaption><p>User's transactions window</p></figcaption></figure>
 
-To access detailed information about a transaction, select it and click <img src="../../.gitbook/assets/image (95).png" alt="" data-size="line"> in the rightmost column. This opens the **Transaction** window:
+To access detailed information about a transaction, select it and click <img src="../.gitbook/assets/image (95) (1).png" alt="" data-size="line"> in the rightmost column. This opens the **Transaction** window:
 
-<figure><img src="../../.gitbook/assets/{5E363FC7-C9C5-483A-A3D4-9A8FF5C91EB7}.png" alt="Transaction details window" width="269"><figcaption><p>Transaction details</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/{5E363FC7-C9C5-483A-A3D4-9A8FF5C91EB7} (1).png" alt="Transaction details window" width="269"><figcaption><p>Transaction details</p></figcaption></figure>
 
 ## Changing user balance
 
 To manually update the balance of a specific user, click **Change balance** located in [User details](user-details.md).
 
-<figure><img src="../../.gitbook/assets/{6E1075EB-FA83-4D59-90B5-C780FF71F568}.png" alt="Change balance window" width="322"><figcaption><p>Change balance window</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/{6E1075EB-FA83-4D59-90B5-C780FF71F568} (1).png" alt="Change balance window" width="322"><figcaption><p>Change balance window</p></figcaption></figure>
 
 You'll be redirected to a new page where you can view the current balance of the selected user and enter the following transaction details:
 

@@ -8,7 +8,7 @@ description: >-
 
 The **SMS gateway** is a messaging gateway that enables your platform to send and receive SMS messages within Navixy.
 
-<figure><img src="../../../.gitbook/assets/image (59).png" alt="SMS gateway page" width="563"><figcaption><p>SMS gateway page</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (59) (1).png" alt="SMS gateway page" width="563"><figcaption><p>SMS gateway page</p></figcaption></figure>
 
 The page consists of two sections:
 

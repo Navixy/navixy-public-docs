@@ -18,7 +18,7 @@ Follow these steps to create and configure a demo user account:
 
 Navixy recommends creating a specific demo user and cloning devices from other accounts into it. This allows for full operation with original devices. To create a demo user, enter a random email address. A real address isn't required.
 
-<figure><img src="../../../.gitbook/assets/{1108F3FB-5F1C-454E-AC55-09F891489F49}.png" alt="Creating a demo user" width="438"><figcaption><p>Creating a demo user</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/{1108F3FB-5F1C-454E-AC55-09F891489F49} (1).png" alt="Creating a demo user" width="438"><figcaption><p>Creating a demo user</p></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -28,7 +28,7 @@ Navixy recommends cloning devices from existing accounts for the demo user accou
 
 Alternatively, if only one tracker is selected, you can click **Create clone** in the right side panel.
 
-<figure><img src="../../../.gitbook/assets/image (72).png" alt="Cloning trackers"><figcaption><p>Cloning trackers</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (72) (1).png" alt="Cloning trackers"><figcaption><p>Cloning trackers</p></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -36,11 +36,11 @@ Alternatively, if only one tracker is selected, you can click **Create clone** i
 
 Select your demo account as a destination:
 
-<figure><img src="../../../.gitbook/assets/{87C98CFF-2DDE-4F60-A4BF-F98F93399982}.png" alt="Selecting owner of multiple clones" width="375"><figcaption><p>Selecting owner of multiple clones</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/{87C98CFF-2DDE-4F60-A4BF-F98F93399982} (1).png" alt="Selecting owner of multiple clones" width="375"><figcaption><p>Selecting owner of multiple clones</p></figcaption></figure>
 
 If you're cloning a single tracker with the Create clone option on the right side panel, the window contains the tracker's information:
 
-<figure><img src="../../../.gitbook/assets/{A8964258-E357-4B35-82BA-54607900D9EE} (2).png" alt="Selecting owner of a single clone" width="518"><figcaption><p>Selecting owner of a single clone</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/{A8964258-E357-4B35-82BA-54607900D9EE} (2) (2).png" alt="Selecting owner of a single clone" width="518"><figcaption><p>Selecting owner of a single clone</p></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -48,7 +48,7 @@ If you're cloning a single tracker with the Create clone option on the right sid
 
 To indicate that the specified account is used for the demo purposes, navigate to **Settings** **→** **Service preferences** and enter the credentials you used for creating the demo account into the corresponding fields:
 
-<figure><img src="../../../.gitbook/assets/image (73).png" alt="Entering demo account credentials"><figcaption><p>Entering demo account credentials</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (73) (1).png" alt="Entering demo account credentials"><figcaption><p>Entering demo account credentials</p></figcaption></figure>
 {% endstep %}
 {% endstepper %}
 
@@ -60,7 +60,7 @@ After creating the demo account, your potential customers can access it from the
 
 You can find the link to the demo version of your service on the login page. Anyone can access this link to explore all the available features of the platform and get familiar with its functionality.
 
-<img src="../../../.gitbook/assets/demo-login-20230811-204813.webp" alt="Demo login" width="563">
+<img src="../../.gitbook/assets/demo-login-20230811-204813 (1).webp" alt="Demo login" width="563">
 
 ### **Shareable link**
 

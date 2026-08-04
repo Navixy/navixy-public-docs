@@ -10,7 +10,7 @@ With Navixy, you can customize and white-label the service to make it truly your
 
 To access the branding options, log into the **Admin Panel** and navigate to **Settings** → **Branding**. You will find a range of customizable settings that you can use to reflect your company's branding and marketing attributes.
 
-<figure><img src="../../.gitbook/assets/image (40).png" alt="Branding page"><figcaption><p>Branding page</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (40) (1).png" alt="Branding page"><figcaption><p>Branding page</p></figcaption></figure>
 
 The page consists of the following sections:
 
@@ -35,7 +35,7 @@ The following image categories are available for customization:
 * **Favicon**\
   Upload an icon to be displayed in the browser tab. Must be in ICO format up to 1 Mb in size.
 
-<figure><img src="../../.gitbook/assets/image (41).png" alt="Custom images" width="486"><figcaption><p>Custom images and logos</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (41) (1).png" alt="Custom images" width="486"><figcaption><p>Custom images and logos</p></figcaption></figure>
 
 ## Color theme
 

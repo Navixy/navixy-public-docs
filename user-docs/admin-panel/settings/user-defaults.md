@@ -8,7 +8,7 @@ description: >-
 
 The **User defaults** page contains user profile settings applied to every new user account. Later, users can change their account settings. It consists of two sections: **Regional settings** and **UI settings**.
 
-<figure><img src="../../.gitbook/assets/image (55).png" alt="User defaults page"><figcaption><p>User defaults page</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (55) (1).png" alt="User defaults page"><figcaption><p>User defaults page</p></figcaption></figure>
 
 ## Regional settings
 

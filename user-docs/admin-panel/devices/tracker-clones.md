@@ -42,7 +42,7 @@ Select the tracker or trackers that you want to clone.
 
 Click **Clone tracker** on the right side panel to open the **Create clone** window.
 
-<figure><img src="../../.gitbook/assets/{78B9BB33-6DC8-4647-BF65-52AD66866069}.png" alt="" width="563"><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/{78B9BB33-6DC8-4647-BF65-52AD66866069} (1).png" alt="" width="563"><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}

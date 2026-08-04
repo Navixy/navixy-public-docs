@@ -76,4 +76,4 @@ Your payment system needs to process the parameter `/?id={id}`.
 
 Once you have specified the **Payment system URL** in the **Domain & URLs** section of **Service preferences**, an **Add money** option is enabled in the [Profile](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/profile) section of the web platform:
 
-<figure><img src="../../.gitbook/assets/image (74).png" alt="Add money link" width="375"><figcaption><p>Add money option</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (74) (1).png" alt="Add money link" width="375"><figcaption><p>Add money option</p></figcaption></figure>

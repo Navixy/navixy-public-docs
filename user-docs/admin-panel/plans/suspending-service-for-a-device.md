@@ -24,9 +24,9 @@ Open the Admin Panel and navigate to the **Plans** page.
 {% step %}
 ## Create a new plan
 
-Click <img src="../../.gitbook/assets/image (7) (1).png" alt="Add plan" data-size="line"> to create a new pricing plan and give it a name (e.g., "Suspended Plan").
+Click <img src="../.gitbook/assets/image (7) (1).png" alt="Add plan" data-size="line"> to create a new pricing plan and give it a name (e.g., "Suspended Plan").
 
-<figure><img src="../../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (9) (1) (1).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -34,7 +34,7 @@ Click <img src="../../.gitbook/assets/image (7) (1).png" alt="Add plan" data-siz
 
 Select **Monthly (daily debit)** as the billing cycle and set the monthly fee to a very high value, such as $999,999. This prevents the customer from being charged during the suspension period.<br>
 
-<figure><img src="../../.gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (10) (1).png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 
 {% step %}
@@ -58,4 +58,4 @@ Assign the new pricing plan to the device that you want to suspend service for. 
 
 You should check **Repay remainder of current pricing plan payment** and **Charge user now (according to the new plan)** when changing the pricing plan.
 
-<figure><img src="../../.gitbook/assets/image (11).png" alt="Payment options when changing plan" width="365"><figcaption><p>Payment options when changing plan</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11) (1).png" alt="Payment options when changing plan" width="365"><figcaption><p>Payment options when changing plan</p></figcaption></figure>

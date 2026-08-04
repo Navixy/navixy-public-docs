@@ -8,7 +8,7 @@ description: >-
 
 The **Overview** page serves as the central command center for the health and growth of your tracking system. It provides a real-time snapshot of hardware deployment and user engagement through a combination of high-level KPI cards and detailed trend visualizations.
 
-<figure><img src="../.gitbook/assets/image (19).png" alt="Overview"><figcaption><p>Overview page</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (19) (1).png" alt="Overview"><figcaption><p>Overview page</p></figcaption></figure>
 
 ## Key performance indicators (KPIs)
 
@@ -27,7 +27,7 @@ These bar charts illustrate monthly totals for the last six months.
 * Trend line: The red dashed line indicates the general trajectory of growth over time.
 * Interactive tooltips: Hovering over any individual bar reveals the specific numerical value for that month.
 
-<figure><img src="../.gitbook/assets/{894B0B79-FC23-4129-8166-CF3EFE48706E}.png" alt="Monthly active trackers chart" width="346"><figcaption><p>Monthly active trackers chart</p></figcaption></figure>
+<figure><img src=".gitbook/assets/{894B0B79-FC23-4129-8166-CF3EFE48706E} (1).png" alt="Monthly active trackers chart" width="346"><figcaption><p>Monthly active trackers chart</p></figcaption></figure>
 
 ### **Trackers vs. users (trend chart)**
 
@@ -37,7 +37,7 @@ This dual-axis line chart provides a comparative view of hardware scaling versus
 * Secondary axis (right): Measures the number of unique users.
 * Detailed analytics: Hovering over the chart displays a synchronized tooltip showing both metrics for the selected month and dashed horizontal lines indicating the precise value points on each axis. This allows you to quickly assess if hardware growth is keeping pace with user growth.
 
-<figure><img src="../.gitbook/assets/{B3E3B4EF-A2F4-40D5-87BD-B50618D09DE1}.png" alt="Trackers vs users chart" width="343"><figcaption><p>Trackers vs users chart</p></figcaption></figure>
+<figure><img src=".gitbook/assets/{B3E3B4EF-A2F4-40D5-87BD-B50618D09DE1} (1).png" alt="Trackers vs users chart" width="343"><figcaption><p>Trackers vs users chart</p></figcaption></figure>
 
 ### Trackers vs users (ranking)
 
@@ -49,4 +49,4 @@ This leaderboard provides a granular breakdown of your top-performing accounts.
 
 Click the user in the ranking table to open their details window.
 
-<figure><img src="../.gitbook/assets/image (21).png" alt="User details in rankings" width="375"><figcaption><p>User details in ranking table</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (21) (1).png" alt="User details in rankings" width="375"><figcaption><p>User details in ranking table</p></figcaption></figure>

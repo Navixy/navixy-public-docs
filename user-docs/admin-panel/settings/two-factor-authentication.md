@@ -18,11 +18,11 @@ Two-factor authentication can be enabled either for all users in your system or 
 2FA settings don't apply to demo users
 {% endhint %}
 
-<figure><img src="../../.gitbook/assets/image (53).png" alt="Two-factor authentication settings" width="378"><figcaption><p>Two-factor authentication settings</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (53) (1).png" alt="Two-factor authentication settings" width="378"><figcaption><p>Two-factor authentication settings</p></figcaption></figure>
 
 * **For specific users**: For individual accounts that require personalized security, you can enable 2FA in **Admin Panel → Users → Edit user → Two-factor authentication.** All sub-users created in that account also inherit the 2FA settings.
 
-<figure><img src="../../.gitbook/assets/image (54).png" alt="Two-factor authentication for a specific user" width="563"><figcaption><p>Two-factor authentication for a specific user</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (54) (1).png" alt="Two-factor authentication for a specific user" width="563"><figcaption><p>Two-factor authentication for a specific user</p></figcaption></figure>
 
 {% hint style="info" %}
 Note that the current implementation only allows enabling two-factor authentication for all account users, including sub-users created in the main account.
