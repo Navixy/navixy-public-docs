@@ -1,3 +1,9 @@
+---
+description: >-
+  Add Navixy MCP Server to Claude Desktop through the configuration file or a
+  custom connector, then authorize your Navixy account.
+---
+
 # Configuring Navixy MCP in Claude Desktop
 
 This page covers all available methods for connecting Navixy MCP Server to Claude Desktop. If you haven't connected before and want a quick walkthrough, visit [Getting started](./) instead.

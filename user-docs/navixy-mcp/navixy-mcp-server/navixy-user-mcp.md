@@ -1,3 +1,10 @@
+---
+description: >-
+  Monitor your fleet, check sensor readings, review track history, and inspect
+  IoT Logic flows from your AI client, with a full reference of the tools
+  available through Navixy User MCP.
+---
+
 # Navixy User MCP (navixy-user)
 
 Navixy User MCP connects your AI client to your Navixy user account. Use it to monitor your fleet, check sensor readings, review track history, inspect IoT Logic flows, and visualize live tracker positions — all from the AI client you already work in.

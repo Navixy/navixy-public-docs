@@ -1,3 +1,9 @@
+---
+description: >-
+  Fix common Navixy MCP Server problems across AI clients, including
+  disconnected servers, missing tools, 401 errors, and account switching.
+---
+
 # Troubleshooting
 
 This page covers known issues and solutions for Navixy MCP Server across all supported AI clients.
@@ -6,7 +12,8 @@ This page covers known issues and solutions for Navixy MCP Server across all sup
 
 * **Claude Desktop:** Delete the `.mcp-auth\mcp-remote-xxxx` folder in your user directory. This logs out all MCP servers simultaneously.
 * **Cursor:** Go to ⚙️ **Cursor Settings → Tools** and click **Logout** next to the Navixy server.
-* **ChatGPT:** Go to ⚙️ **Settings → Apps**, click on your MCP server, click **…**, and select **Reconnect**.
+* **ChatGPT web:** Go to **Settings → Plugins**, select the Navixy plugin, click **…**, and select **Reconnect**.
+* **Codex:** Run `codex mcp logout navixy-user`, then run `codex mcp login navixy-user`.
 
 ## "MCP {name}: Server disconnected" in Claude Desktop
 
@@ -31,28 +38,92 @@ brew install node
 
 ## "I don't see any connected Navixy resources or tools available" in ChatGPT
 
-This error appears in ChatGPT even when the MCP server has not been disconnected. The most common cause is Developer Mode being turned off.
+This error appears in ChatGPT even when the MCP server has not been disconnected. The most common cause is that **Developer mode** is turned off.
 
 To resolve this:
 
-1. Click your username in the bottom-left corner.
-2. Open ⚙️ **Settings → Apps → Advanced settings**.
-3. Confirm that **Developer mode** is enabled. If it is off, turn it on.
-4. Start a new conversation and enable the Navixy connector again.
+1. Open **Settings → Security and login**.
+2. Confirm that **Developer mode** is enabled. If it is off, turn it on.
+3. Start a new conversation.
+4. Select the Navixy plugin from the **Developer mode** tool in the composer.
 
-## Codex shows MCP server as connected but only some tools are available
+## Navixy MCP returns a 401 error in Codex
 
-This is a known issue in Codex as of May 2026. In some sessions, Codex reports the MCP server as connected but only exposes a subset of the available tools. There is no workaround at this time. Starting a new conversation may restore access to the full tool set.
+A 401 error means that the MCP server on your computer doesn't have valid sign-in information. Try to authenticate in the ChatGPT desktop app first.
 
-## Codex MCP server UI does not work correctly
+1. Open **Settings → MCP servers**. In some versions, open **Settings → Plugins → MCPs**.
+2. Find `navixy-user` or `navixy-panel` in the MCP server list.
+3. Click **Authenticate** and enter your Navixy credentials.
+4. Restart the ChatGPT desktop app.
+5. Open a Codex conversation and enter `/mcp`.
 
-Adding an MCP server via the Codex settings UI (**Settings → MCP Servers → + Add server**) is not working correctly as of May 2026. Use the conversation-based setup method instead:
+The server is ready when `/mcp` shows it as connected.
 
+### Use the command-line fallback
+
+Use this fallback only if **Authenticate** doesn't appear or the 401 error continues.
+
+1. Open **Terminal** on macOS or **PowerShell** on Windows.
+2. Run `codex --version` to check whether Codex CLI is available.
+3. Run the login command for your connection.
+
+For Navixy User MCP, run the following command:
+
+```bash
+codex mcp login navixy-user
 ```
-Connect an MCP server https://platform.mcp.navixy.com/user/mcp
+
+For Navixy Panel MCP, run the following command:
+
+```bash
+codex mcp login navixy-panel
 ```
 
-See [Configuring Navixy MCP in Codex](https://claude.ai/mcp-test/navixy-mcp-server/configuring-navixy-mcp-in-codex.md) for details.
+Enter your Navixy credentials in the browser, then restart the ChatGPT desktop app. Enter `/mcp` in a Codex conversation to confirm the connection.
+
+If the terminal reports that the server doesn't exist, add and authenticate it with the matching commands:
+
+{% tabs %}
+{% tab title="Navixy user account" %}
+```bash
+codex mcp add navixy-user --url https://platform.mcp.navixy.com/user/mcp
+codex mcp login navixy-user
+```
+{% endtab %}
+
+{% tab title="Navixy Admin Panel" %}
+```bash
+codex mcp add navixy-panel --url https://platform.mcp.navixy.com/panel/mcp
+codex mcp login navixy-panel
+```
+{% endtab %}
+{% endtabs %}
+
+### If the codex command isn't available
+
+On macOS, the ChatGPT desktop app includes Codex CLI inside the app. Use the following path in place of `codex`:
+
+```bash
+/Applications/ChatGPT.app/Contents/Resources/codex
+```
+
+Some upgraded installations use `/Applications/Codex.app/Contents/Resources/codex` instead.
+
+On macOS or Windows, you can also install [Node.js](https://nodejs.org/) and then install Codex CLI:
+
+```bash
+npm install -g @openai/codex
+```
+
+See [Configuring Navixy MCP in ChatGPT and Codex](navixy-mcp-server/getting-started/configuring-navixy-mcp-in-chatgpt.md#how-to-connect-navixy-mcp-as-an-mcp-server-in-codex) for the complete setup.
+
+## Codex shows an unsupported model error
+
+The ChatGPT desktop app and Codex CLI share the model setting in `~/.codex/config.toml`. An unavailable model can prevent a Codex conversation from starting.
+
+Use the model control below the desktop composer to select an available model. In Codex CLI, enter `/model` and select an available model.
+
+If the error continues, open `~/.codex/config.toml`. Remove or update the `model` value. For example, `gpt-5.2-codex` may not be available with ChatGPT authentication.
 
 ## The assistant answers but does not cite sources
 

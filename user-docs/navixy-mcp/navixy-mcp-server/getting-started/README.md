@@ -1,3 +1,9 @@
+---
+description: >-
+  Connect Navixy MCP Server's User API to Claude Desktop in about five minutes
+  and ask your first question about your fleet.
+---
+
 # Getting started
 
 This tutorial walks you through connecting Navixy MCP Server's User API to Claude Desktop and asking your first question. The whole process takes about five minutes.
@@ -12,7 +18,7 @@ This tutorial walks you through connecting Navixy MCP Server's User API to Claud
 
 * [Navixy MCP in Claude Desktop](configuring-navixy-mcp-in-claude-desktop.md): Details on configuring Navixy MCP Server in Claude Desktop
 * [Navixy MCP in Cursor](configuring-navixy-mcp-in-cursor.md): Details on configuring Navixy MCP Server in Cursor
-* [Navixy MCP in ChatGPT](configuring-navixy-mcp-in-chatgpt.md): Details on configuring Navixy MCP Server in ChatGPT (browser and desktop versions)
+* [Navixy MCP in ChatGPT and Codex](configuring-navixy-mcp-in-chatgpt.md): Details on configuring Navixy MCP Server in ChatGPT web, the ChatGPT desktop app, and Codex
 * [Connecting other AI tools](connecting-other-ai-tools.md): Information on connecting other AI clients
 
 ## Quick start for installing Navixy User MCP

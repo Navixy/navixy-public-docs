@@ -1,3 +1,9 @@
+---
+description: >-
+  Ask Navixy AI Assistant about the Navixy platform or your live account data
+  from the website, the platform, or the standalone assistant page.
+---
+
 # Navixy AI Assistant
 
 {% columns %}

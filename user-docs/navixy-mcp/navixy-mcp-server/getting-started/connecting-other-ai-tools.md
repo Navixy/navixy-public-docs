@@ -1,6 +1,12 @@
+---
+description: >-
+  Connect any MCP client that supports Streamable HTTP or SSE transport to
+  Navixy MCP Server, with endpoint addresses and authentication requirements.
+---
+
 # Connecting other AI tools
 
-This page provides generic connection instructions for MCP clients not covered by the dedicated setup guides. If you are using Claude Desktop, Cursor, ChatGPT, or Codex, see the dedicated pages for those clients instead.
+This page provides generic connection instructions for MCP clients that don't have a dedicated setup guide. Use the dedicated guides for [Claude Desktop](configuring-navixy-mcp-in-claude-desktop.md), [Cursor](configuring-navixy-mcp-in-cursor.md), and [ChatGPT and Codex](configuring-navixy-mcp-in-chatgpt.md).
 
 ## Compatibility requirements
 
@@ -27,7 +33,7 @@ If the conversational approach doesn't work, the sections below cover the two st
 
 ## How to authenticate
 
-If your MCP client supports OAuth, add the endpoint URL. Your client will open the Navixy login page automatically to complete authentication. No additional configuration is required.
+If your MCP client supports OAuth, add the endpoint URL and start its authentication action. Some clients open the Navixy login page automatically. Other clients require a separate action, such as **Authenticate** or `codex mcp login`.
 
 
 

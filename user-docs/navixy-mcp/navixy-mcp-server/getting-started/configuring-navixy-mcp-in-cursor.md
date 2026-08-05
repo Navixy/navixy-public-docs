@@ -1,3 +1,9 @@
+---
+description: >-
+  Add Navixy MCP Server to Cursor by editing mcp.json or by asking the agent,
+  then authorize your Navixy account and validate the connection.
+---
+
 # Configuring Navixy MCP in Cursor
 
 This page covers how to connect Navixy MCP Server to Cursor. If you haven't connected before and want a quick walkthrough, visit [Getting started](./) instead.

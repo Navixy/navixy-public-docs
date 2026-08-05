@@ -1,18 +1,25 @@
+---
+description: >-
+  Manage users, monitor devices across your dealer account, check billing
+  transactions, and review tariff plans from your AI client, with a full
+  reference of the tools available through Navixy Panel MCP.
+---
+
 # Navixy Panel MCP (navixy-panel)
 
 Navixy Panel MCP connects your AI client to the Navixy Admin Panel. Use it to manage users, monitor devices across your dealer account, check billing transactions, and review tariff plans right in your AI client.
 
-This page describes what Navixy Panel MCP can do and provides a full reference for all available tools (operations your AI client can perform), including parameter names and example prompts for developers building integrations. If you haven't set up the connection yet, refer to [Getting started](https://claude.ai/mcp-test/navixy-mcp-server/getting-started.md).
+This page describes what Navixy Panel MCP can do and provides a full reference for all available tools (operations your AI client can perform), including parameter names and example prompts for developers building integrations. If you haven't set up the connection yet, refer to [Getting started](getting-started/).
 
 {% hint style="info" %}
-Navixy Panel MCP is intended for telematics providers who manage a Navixy dealer account. If you are an end user, see [Navixy User MCP](https://claude.ai/mcp-test/navixy-mcp-server/navixy-user-mcp.md) instead.
+Navixy Panel MCP is intended for telematics providers who manage a Navixy dealer account. If you are an end user, see [Navixy User MCP](navixy-user-mcp.md) instead.
 {% endhint %}
 
 **Endpoint:** `https://platform.mcp.navixy.com/panel/mcp`
 
 **See also:**
 
-* [Navixy User MCP](https://claude.ai/mcp-test/navixy-mcp-server/navixy-user-mcp.md)
+* [Navixy User MCP](navixy-user-mcp.md)
 * [Troubleshooting](../troubleshooting.md)
 
 ## What you can do with Navixy Admin MCP

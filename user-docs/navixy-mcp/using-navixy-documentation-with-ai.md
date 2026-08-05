@@ -126,7 +126,7 @@ See the [official Cursor documentation](https://cursor.com/docs/mcp) for the lat
 
 {% tab title="VS Code" %}
 {% hint style="info" %}
-See the [official VS Code documentation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) for the latest information on using MCPs with VS Code.
+See the [official VS Code documentation](https://code.visualstudio.com/docs/agent-customization/mcp-servers) for the latest information on using MCPs with VS Code.
 {% endhint %}
 
 If you use VS Code, this is the fastest setup path. Select **Connect to VSCode** from the page shortcuts menu. This opens a prompt to install the MCP server directly into your VS Code environment without manual configuration.

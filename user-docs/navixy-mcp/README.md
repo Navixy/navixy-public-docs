@@ -1,3 +1,9 @@
+---
+description: >-
+  Connect your AI client to your Navixy account with Navixy MCP Server and ask
+  about your fleet or your business in plain language.
+---
+
 # Overview
 
 Navixy MCP Server connects your AI client to your Navixy account. Once connected, you can ask questions about your fleet or your business in plain language and get live answers pulled directly from your data, without opening Navixy or switching between tools.
