@@ -60,6 +60,7 @@
     * [Fleet live status dashboard](guide/dashboards/fleet-live-status-dashboard.md "Fleet live status")
     * [Trips dashboard](guide/dashboards/trips-dashboard.md "Trips")
     * [Technical conditions dashboard](guide/dashboards/technical-conditions-dashboard.md "Technical conditions")
+    * [IoT Logic dashboard](guide/dashboards/iot-logic-dashboard.md "IoT Logic")
   * [Geo links](guide/geo-links/README.md)
     * [Creating geo links](guide/geo-links/creating-geo-links.md)
     * [Updating and sharing geo links](guide/geo-links/updating-and-sharing-geo-links.md)
