@@ -16,7 +16,11 @@ You can monitor the [Connection state](../../tracking/objects-list/connection-st
 
 ## Settings
 
-* **Time interval**: The duration without data after which the device is considered disconnected. Choose minutes, hours, or days. Default **10 minutes**. You can set it from 1 minute up to about 3,000 days. A **Reset to defaults** button restores the default.
+* **Time interval**: The duration without data after which the device is considered disconnected. Choose minutes, hours, or days. You can set it from 1 minute up to about 3,000 days.
+
+{% hint style="warning" %}
+This field shows **10 minutes** until you save a different value. That number is only a placeholder, not a real default. If you leave the field untouched and never save a value, the Navixy platform falls back to a built-in timeout instead. This built-in timeout varies by device and connection type, and it can be shorter or longer than 10 minutes. The **Reset to defaults** button doesn't clear this setting. The button only refills the field with 10 minutes, and saving then stores 10 minutes as an explicit value for this device. Set an explicit time interval here if you need predictable, consistent **Offline** timing for this device.
+{% endhint %}
 
 ## Availability
 
