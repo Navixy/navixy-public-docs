@@ -26,10 +26,10 @@ When a user starts Live View, the platform sends commands instructing the camera
 
 When the user closes the video, the platform sends another command instructing the camera to stop streaming.
 
-| User Action       | Command Sent to Camera     |
-| ----------------- | -------------------------- |
-| Open Live Stream  | StartVideoStream + RTMP,ON |
-| Close Live Stream | StopVideoStream + RTMP,OFF |
+| User Action       | Command Sent to Camera |
+| ----------------- | ---------------------- |
+| Open Live Stream  | RTMP,ON                |
+| Close Live Stream | RTMP,OFF               |
 
 When several users repeatedly open and close the same camera within a short period, multiple RTMP ON/OFF commands are sent almost simultaneously.
 
@@ -75,8 +75,6 @@ When multiple streaming requests are issued simultaneously, the device must repe
 
 To ensure the most stable live streaming experience, we recommend the following operational guidelines:
 
-* Only one operator should view the livestream for a camera at any given time.
-* Always close the current livestream session before opening it from another workstation.
 * Wait approximately 10–15 seconds after closing a livestream before starting a new one.
 * Avoid repeatedly clicking the Live View or Calendar buttons, as this may generate multiple consecutive RTMP commands.
 * Ensure the camera has a stable cellular connection with sufficient bandwidth before initiating a livestream.
