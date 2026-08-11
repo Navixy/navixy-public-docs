@@ -986,9 +986,12 @@ https://api.eu.navixy.com/v2/panel/tracker/move?hash=fa7bf873fab9333144e171372a3
 
 ```json
 {
-  "success": true
+  "success": true,
+  "id": "1245678"
 }
 ```
+
+* `id` - tracker id sent in the query.
 
 #### Errors
 
