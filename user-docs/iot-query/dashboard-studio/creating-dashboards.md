@@ -7,6 +7,10 @@ description: Add visualization panels to a canvas, configure SQL queries, and ar
 
 Dashboard Studio transforms IoT Query data into interactive visual reports. You build reports by adding panels to a canvas, writing SQL queries, and organizing the results into a navigable menu structure.
 
+{% hint style="info" %}
+**Prefer to describe the dashboard instead of building it?** See [Building dashboards with AI](ai-dashboards.md): the AI Assistant generates the panels and SQL from a plain-language description, and you preview the result before saving it.
+{% endhint %}
+
 Custom Dashboards provide real-time operational visibility by consolidating key metrics, KPIs, and live data streams into a single, unified workspace.<br>
 
 * **Instant situational awareness** is achieved through live widgets that automatically refresh, helping teams monitor fleet performance, assets, and operations without running manual reports.

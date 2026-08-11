@@ -126,6 +126,8 @@ Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-a
 
 [Creating dashboards](creating-dashboards.md) - Understand the dashboard editor interface and panel configuration workflow. Learn how to add panels, configure visualizations, and arrange dashboard layouts.
 
+[Building dashboards with AI](ai-dashboards.md) - Describe what you want to monitor in plain language and let the assistant generate the panels and SQL. Preview the result against your own data before saving it.
+
 [Creating reports](creating-reports.md): Learn how to build a report from a single SQL query with coordinated data table, chart, and location map views. Export results to HTML, Excel, or PDF.
 
 [Writing SQL queries](writing-sql-queries.md) - Review query patterns that work effectively with Dashboard Studio visualizations. Learn query requirements for each visualization type and common data transformations.
