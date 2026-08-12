@@ -1068,7 +1068,8 @@
           },
           "enabled": {
             "type": "boolean",
-            "description": "Enable/disable flag",
+            "default": false,
+            "description": "Enable/disable flag. When omitted on creation, defaults to false: the flow is saved but does not process data until enabled.",
             "example": true
           },
           "nodes": {
