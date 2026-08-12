@@ -172,10 +172,10 @@ For the full procedure, including how to assemble the push URL and confirm the d
 To access a previously calculated or historical attribute value, use the `value()` function:
 
 ```
-value('attribute_name', index, 'any')
+value('attribute_name', index, 'all')
 ```
 
-Where `index` is the historical depth (0 = current message, 1 = previous, up to 12). Use `'any'` to include nulls or `'valid'` to skip them. This is the only mechanism for accumulating state across messages — counters, running totals, change detection.
+Where `index` is the historical depth (0 = current message, 1 = previous, up to 11). Use `'all'` to include nulls or `'valid'` to skip them. This is the only mechanism for accumulating state across messages — counters, running totals, change detection.
 
 **Account-wide attribute name uniqueness isn't currently enforced:** `data.items[].name` values aren't checked for uniqueness across the account at save time. Two unrelated flows can define a calculated attribute with the same name, and the platform silently accepts the duplicate: no error, no `292` code. The name is shared account-wide in Data Stream Analyzer and custom sensor bindings, and overwrites a matching device parameter in output data packets. Choose distinctive, scoped attribute names as a best practice, not because a duplicate will be rejected. It currently isn't.
 
@@ -305,7 +305,7 @@ Example: 15 minutes at 30-second intervals = 900 ÷ 30 = **30 messages**.
 ```json
 {
   "name": "idle_count",
-  "value": "speed < 2 && ignition_attribute == true ? value('idle_count', 1, 'any') + 1 : 0"
+  "value": "speed < 2 && ignition_attribute == true ? value('idle_count', 1, 'all') + 1 : 0"
 }
 ```
 
@@ -319,7 +319,7 @@ Replace `ignition_attribute` with the actual attribute name from your device's I
 
 This fires exactly once when the threshold is reached, then resets when the condition breaks. If you want it to continue firing every message while the condition holds, use `>= 30` instead.
 
-**Important constraint:** `value()` can access up to 12 historical readings. This pattern therefore supports durations up to 12 × reporting interval. For longer durations or more complex state tracking, ask the user to consider alternative approaches.
+**Important constraint:** a single `value()` call reads at most 11 messages back, since IoT Logic keeps 12 values per attribute at indices 0 to 11. The counter pattern above is not limited by that depth: each message reads only index 1 of its own counter, so the count can grow past 12, as in the 30-message example. The 11-message ceiling applies to direct lookback formulas such as `value('speed', 11, 'valid')`. For state that must survive longer than the counter can hold, or for more complex state tracking, ask the user to consider alternative approaches.
 
 For full `value()` syntax, see [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes).
 

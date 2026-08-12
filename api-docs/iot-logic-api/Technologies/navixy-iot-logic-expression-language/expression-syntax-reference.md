@@ -71,7 +71,7 @@ The explicit `value()` function unlocks historical data access and precise contr
 | Parameter        | Values               | Description                                 |
 | ---------------- | -------------------- | ------------------------------------------- |
 | `attribute_name` | String               | Attribute name from device                  |
-| `index`          | 0-12                 | 0=current, 1=previous, 12=oldest            |
+| `index`          | 0-11                 | 0=current, 1=previous, 11=oldest            |
 | `validation`     | `'all'` \| `'valid'` | `'all'`=include nulls, `'valid'`=skip nulls |
 
 #### **Parameter behavior explained:**
@@ -161,9 +161,13 @@ Use parentheses to override precedence or clarify complex expressions.
 
 | Function                                     | Parameters                                                                                                                                                              | Description                                                                           |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `value(attribute_name, index, validation)`   | <p><code>attribute_name</code> (String)</p><p><code>index</code> (Integer, 0-12)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p> | Attribute value at specified historical position                                      |
-| `genTime(attribute_name, index, validation)` | <p><code>attribute_name</code> (String</p><p><code>index</code> (Integer, 0-12)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p>  | Device-side generation timestamp (milliseconds) for attribute value. Default: `now()` |
-| `srvTime(attribute_name, index, validation)` | <p><code>attribute_name</code> (String</p><p><code>index</code> (Integer, 0-12</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p>   | Server-side reception timestamp (milliseconds) for attribute value. Default: `now()`  |
+| `value(attribute_name, index, validation)`   | <p><code>attribute_name</code> (String)</p><p><code>index</code> (Integer, 0-11)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p> | Attribute value at specified historical position                                      |
+| `genTime(attribute_name, index, validation)` | <p><code>attribute_name</code> (String)</p><p><code>index</code> (Integer, 0-11)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p> | Device-side generation timestamp (milliseconds) for attribute value. Default: `now()` |
+| `srvTime(attribute_name, index, validation)` | <p><code>attribute_name</code> (String)</p><p><code>index</code> (Integer, 0-11)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p> | Server-side reception timestamp (milliseconds) for attribute value. Default: `now()`  |
+
+{% hint style="warning" %}
+All three functions read the same 12 stored values, so 0-11 is the whole usable range. `value()` enforces it and rejects a higher index when you save the flow. `genTime()` and `srvTime()` do not: they accept any index, save without complaint, and then return null for every message, leaving the attribute permanently empty with no error anywhere. See [Invalid value() arguments](formula-errors.md#invalid-value-arguments).
+{% endhint %}
 
 **Usage examples:**
 

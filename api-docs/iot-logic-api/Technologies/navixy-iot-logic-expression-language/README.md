@@ -51,7 +51,7 @@ For comprehensive details on node configuration and flow architecture, see the [
 Within IoT Logic, Navixy Expression Language allows calculations on actual data attributes that come from data sources. There are two options to access the readings:
 
 * **Current values:** Reference attributes by name directly in expressions. This provides clean, readable syntax for accessing real-time device data. [Short syntax](expression-syntax-reference.md#short-syntax-current-values) is supported in this case (e.g., `temperature` = `value('temperature', 0, 'all')`).
-* **Historical values:** Access previous readings using the `value()` function with parameters for historical depth and validation mode. The system maintains the last 12 values per attribute for trend analysis and change detection. [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) is needed.
+* **Historical values:** Access previous readings using the `value()` function with parameters for historical depth and validation mode. The system maintains the last 12 values per attribute, addressed by index 0 to 11, for trend analysis and change detection. [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) is needed.
 
 {% hint style="warning" %}
 Attribute names in expressions must exactly match device-transmitted names (case-sensitive). Mismatched names prevent calculation execution.
@@ -172,7 +172,7 @@ For function signatures and usage examples, see [Core functions](expression-synt
 
 ### Data access functions
 
-The `value()` function accesses historical attribute values with control over validation mode (include or exclude null values) and historical depth (up to 12 previous readings).
+The `value()` function accesses historical attribute values with control over validation mode (include or exclude null values) and historical depth (the current value plus up to 11 previous readings).
 
 For parameter details and historical data access patterns, see [Full syntax](expression-syntax-reference.md#full-syntax) in the Expression syntax reference.
 

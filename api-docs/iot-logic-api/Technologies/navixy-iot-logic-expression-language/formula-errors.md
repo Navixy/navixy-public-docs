@@ -50,6 +50,7 @@ For the full error code list, see [Common error codes](../../technical-details/#
 | `JEXL error : no such function namespace X` | Unknown function namespace | [Unknown or misused functions](#unknown-or-misused-functions) |
 | `undefined property 'X'` | Array index or dot-property access on an attribute | [Property access errors](#property-access-errors) |
 | `JEXL error : value` | Invalid arguments passed to `value()` | [Invalid value() arguments](#invalid-value-arguments) |
+| `JEXL error : genTime` / `JEXL error : srvTime` | Invalid validation mode passed to `genTime()` or `srvTime()` | [Invalid value() arguments](#invalid-value-arguments) |
 
 ## Assignment errors
 
@@ -206,7 +207,8 @@ This error comes from the platform's own validation of the `value()` function, n
 
 | What was typed | Error | Problem |
 | --- | --- | --- |
-| `value('speed', -1, 'valid')` | `JEXL error : value` | Index `-1` is not valid; must be 0-12 |
+| `value('speed', -1, 'valid')` | `JEXL error : value` | Index `-1` is not valid; must be 0-11 |
+| `value('speed', 12, 'valid')` | `JEXL error : value` | Index `12` is out of range; 11 is the highest index (12 values, 0 to 11) |
 | `value('speed', 0, 'bad')` | `JEXL error : value` | `'bad'` is not a recognised validation mode |
 | `value('fuel_level', 0, 'last')` | `JEXL error : value` | `'last'` is not a recognised validation mode |
 
@@ -219,8 +221,16 @@ value(attribute_name, index, validation)
 | Parameter | Valid values |
 | --- | --- |
 | `attribute_name` | String matching the device attribute name (case-sensitive) |
-| `index` | Integer 0 to 12 (0 = current reading, 12 = oldest stored) |
+| `index` | Integer 0 to 11 (0 = current reading, 11 = oldest stored) |
 | `validation` | `'all'` or `'valid'` |
+
+`genTime()` and `srvTime()` take the same three arguments and reject an unrecognised validation mode the same way, reporting `JEXL error : genTime` or `JEXL error : srvTime`.
+
+{% hint style="warning" %}
+**Only `value()` range-checks its index.** `genTime()` and `srvTime()` accept any index, including one past the 12 values that are retained. The flow saves without an error, and the formula then returns null for every message: the attribute is created but never receives a value, and nothing reports a problem at save time or at runtime.
+
+`genTime('speed', 100, 'valid')` saves and stays empty forever. `genTime('speed', 11, 'valid')` returns a timestamp. Keep the index within 0-11 for all three functions, and if an attribute stays empty for no visible reason, check its index first.
+{% endhint %}
 
 For details on how each parameter behaves, see [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) in the Expression syntax reference.
 

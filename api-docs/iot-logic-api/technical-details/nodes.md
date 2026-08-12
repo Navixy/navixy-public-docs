@@ -191,16 +191,18 @@ To find more examples of formulas, see [Calculation examples](https://app.gitboo
 **`value(parameter, index, validation_flag)`**
 
 * `parameter` (string): Device parameter or calculated attribute name
-* `index` (integer, 0-12, optional): Historical depth (0 = newest). Default: 0
+* `index` (integer, 0-11, optional): Historical depth (0 = newest). Default: 0
 * `validation_flag` (string, optional): `"valid"` excludes nulls, "all" includes nulls. Default: `"all"`
 
 #### Historical data access (`index` )
 
-IoT Logic maintains up to 12 historical values per parameter:
+IoT Logic maintains 12 values per parameter, addressed by index 0 to 11:
 
-* Index 0: Current value
-* Index 1-11: Previous values
-* Index 12: Oldest available value
+* Index 0: current value
+* Index 1-10: previous values
+* Index 11: oldest available value
+
+Index 12 or higher is out of range. A formula that uses it fails validation with a `JEXL error : value` message and cannot be saved.
 
 {% hint style="info" %}
 Short syntax is also supported for attribute names in formulas. When referencing only the latest value of an attribute, you can omit the full `value()` function syntax and quotation marks. For example, the temperature conversion formula can be written as `temperature*1.8 + 32` instead of `value('temperature', 0, 'all')*1.8 + 32`.
