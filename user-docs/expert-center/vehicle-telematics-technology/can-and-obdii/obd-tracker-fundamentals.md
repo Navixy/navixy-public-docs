@@ -5,7 +5,7 @@ description: >-
   cases.
 ---
 
-# OBD Tracker Fundamentals
+# OBD device fundamentals
 
 In this guide, you’ll learn what an OBD device is, how these devices work, and what makes them suitable for fleets, small businesses, and others.
 
@@ -143,7 +143,7 @@ Fleets of all sizes often choose to secure their vehicles by requiring drivers t
 
 ### Bluetooth
 
-[Bluetooth](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/x7UNE8YpXIFqBL3Yfz85) support connects OBD devices with a multitude of auxiliary devices. In addition to driver ID, BLE beacons can include temperature sensors, door open/close status, and tire pressure monitors, to name a few. Combining these wireless devices with the convenience of an OBD2 device means having a robust telematics system without costly or complicated installation.
+[Bluetooth](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/device-specific-controls/external-sensors/bluetooth-sensors) support connects OBD devices with a multitude of auxiliary devices. In addition to driver ID, BLE beacons can include temperature sensors, door open/close status, and tire pressure monitors, to name a few. Combining these wireless devices with the convenience of an OBD2 device means having a robust telematics system without costly or complicated installation.
 
 ### Voice monitoring
 
@@ -153,7 +153,7 @@ Even basic OBD tracking devices often provide voice monitoring technology via SM
 
 OBD devices are used in a considerable variety of ways in different industries, so we’ll focus on a few of the most popular applications.
 
-### Live tracking/Asset location
+### Live tracking / asset location
 
 For many users, being able to reliably track a car’s location is a must. With the help of an OBD device, it’s easy to know exactly where your vehicles are at any time. As a result, they can be used for business and personal purposes.
 

@@ -12,8 +12,8 @@ A device goes online once it establishes a connection with the server where the 
 
 There are three main components involved in the activation and operation of almost all devices on the platform:
 
-* GPS Device - refers to the device itself, which needs to transmit data in a specific format according to the model's protocol.
-* SIM Card - the device requires a SIM card for connectivity. Without it, the device will not be able to establish a connection.
+* GPS device - refers to the device itself, which needs to transmit data in a specific format according to the model's protocol.
+* SIM card - the device requires a SIM card for connectivity. Without it, the device will not be able to establish a connection.
 * Platform - it sends automatic commands to your devices if there is an SMS gateway installed.
 
 We have listed these components in a specific order for a reason. If the device fails to connect to the platform for the first time, it is important to check the device and SIM card first, as approximately 99.9% of all issues are resolved by addressing these two items. Only in 0.1% of cases, the problem may lie with the platform itself.
@@ -81,11 +81,11 @@ To resolve this, it is necessary to reinstall the device in the correct orientat
 
 <summary>A device is discharged</summary>
 
-Sometimes, a device can become discharged, particularly with personal and cargo trackers. It may seem like the user has already attempted to power on the device using the button, but there is no response.
+Sometimes, a device can become discharged, particularly with personal and cargo GPS devices. It may seem like the user has already attempted to power on the device using the button, but there is no response.
 
 In such cases, the recommended course of action is to try charging the device and then attempt to turn it on again after a period of time.
 
-For vehicle trackers specifically, it is essential to ensure that it is correctly connected to the car battery. Double-checking the wiring is crucial in this situation.
+For vehicle-mounted devices specifically, it is essential to ensure that it is correctly connected to the car battery. Double-checking the wiring is crucial in this situation.
 
 </details>
 
@@ -120,7 +120,7 @@ If you haven't yet installed the device, it's recommended to take a short walk o
 
 <summary>Device's timezone is not UTC+0</summary>
 
-While it may seem logical for the tracker to transmit data based on your current time zone, it actually doesn't. The platform follows a standardized format to receive data from devices and then translates the received time into your specified time zone in the user settings. If the device sends packets with timestamps different from UTC+0, it will not be able to activate properly on the platform.
+While it may seem logical for the device to transmit data based on your current time zone, it actually doesn't. The platform follows a standardized format to receive data from devices and then translates the received time into your specified time zone in the user settings. If the device sends packets with timestamps different from UTC+0, it will not be able to activate properly on the platform.
 
 To resolve this issue, ensure that the time zone of the device is set to UTC+0. This will ensure accurate synchronization between the device and the platform.
 
@@ -142,7 +142,7 @@ However, if using a password is not required, it is advised to remove the custom
 
 <summary>Mistakes in manually sent commands</summary>
 
-Makes in manually sent commands are quite common and can cause issues. When manually activating a device, commands often contain multiple parameters. Even a single mistake in a comma or sign can render the entire command incorrect. Additionally, not every device model or SIM card can notify you of these errors. It is crucial to carefully check the commands you send to your device or the settings you have configured.
+Mistakes in manually sent commands are quite common and can cause issues. When manually activating a device, commands often contain multiple parameters. Even a single mistake in a comma or sign can render the entire command incorrect. Additionally, not every device model or SIM card can notify you of these errors. It is crucial to carefully check the commands you send to your device or the settings you have configured.
 
 Among the important settings for establishing the initial connection of the device are the IP address, port, and APN settings.
 

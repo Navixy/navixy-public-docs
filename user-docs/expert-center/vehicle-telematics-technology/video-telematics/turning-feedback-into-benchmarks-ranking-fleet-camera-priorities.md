@@ -4,11 +4,11 @@ description: >-
   camera priorities. Analysis includes ROI data and cost-benefit breakdowns.
 ---
 
-# Turning Feedback Into Benchmarks: Ranking Fleet Camera Priorities
+# Turning feedback into benchmarks: ranking fleet camera priorities
 
 Fleet managers today face mounting pressure to cut costs, improve safety, and keep operations running smoothly. Traditional GPS tracking tells you where your vehicles are, but it doesn't explain how your drivers are behaving, or why accidents happen. That's where video telematics is changing the game.
 
-The numbers speak for themselves. Based on [Cambridge Mobile Telematic (CMT)](https://www.cmtelematics.com/research/new-research-from-cambridge-mobile-telematics-connects-telematics-program-engagement-to-crash-reductions/?utm_source=chatgpt.com) studies, fleets that adopt video telematics have seen accidents reduced by up to 60% and accident-related costs cut by over 80%. Insurance carriers reward this lower risk: many fleets report 15–60% savings on premiums, with nearly half achieving full ROI in less than a year. Driver performance also improves quickly. Studies show distracted driving behaviors like mobile phone use can drop by 61% and food-and-drink distractions by 86% once video monitoring and coaching are in place.
+The numbers speak for themselves. Based on [Cambridge Mobile Telematics (CMT)](https://www.cmtelematics.com/research/new-research-from-cambridge-mobile-telematics-connects-telematics-program-engagement-to-crash-reductions/) studies, fleets that adopt video telematics have seen accidents reduced by up to 60% and accident-related costs cut by over 80%. Insurance carriers reward this lower risk: many fleets report 15–60% savings on premiums, with nearly half achieving full ROI in less than a year. Driver performance also improves quickly. Studies show distracted driving behaviors like mobile phone use can drop by 61% and food-and-drink distractions by 86% once video monitoring and coaching are in place.
 
 With proven results in safety, cost savings, and operational visibility, video telematics isn't just a nice-to-have technology. It's becoming an essential tool for building safer, more efficient fleets.
 

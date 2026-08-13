@@ -8,7 +8,7 @@ description: >-
 
 There are a large number of GPS devices that work in interval mode. They send points once in a certain period of time.
 
-To save the device battery and traffic, this period can be large (some devices can transmit data once a day, for example, asset trackers for cargo transportation).\
+To save the device battery and traffic, this period can be large (some devices can transmit data once a day, for example, asset devices for cargo transportation).\
 However, such data does not allow for building accurate tracks on the map, and if the data transmission interval will exceed the idle time of the "parking" state, tracks will not be displayed at all and the device will always have the **Parked** status.
 
 If you need to show the movement of the device as a line on the map in any case, then generate a track

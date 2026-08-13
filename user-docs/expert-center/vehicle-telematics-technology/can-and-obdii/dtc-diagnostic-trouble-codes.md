@@ -42,7 +42,7 @@ So, when you see your check engine light turn on, it's typically not a random ev
 
 Lastly, keep in mind that your OBD-II system can detect multiple DTCs simultaneously. This means that sometimes, a lit-up check engine light could indicate several messages waiting for you in your OBD scan tool (but we'll delve deeper into this later).
 
-## **Decoding the DTC Characters**
+## Decoding the DTC characters
 
 DTC codes are neatly organized into four main categories, each designated by the first character of the code.
 
@@ -68,7 +68,7 @@ When the code’s second character (see above) is a 0 — meaning your DTC code 
 
 The final two characters in the DTC are a two-digit fault index number, pinpointing the specific issue within the subsystem. These numbers range from 0 to 99.
 
-## **DTC Code examples in action**
+## DTC code examples in action
 
 Powertrain (P) codes are quite common, so let's break down two of these: P0420 and P0430. Both codes flag an issue with the vehicle's catalytic converter. Here's how to read them:
 
@@ -79,19 +79,19 @@ Powertrain (P) codes are quite common, so let's break down two of these: P0420 a
 
 The bank number refers to the engine side where the fault was detected. Both codes imply that the catalytic converter isn't optimally converting harmful emission gases into acceptable ones. While this won't cause your vehicle to implode on the spot, you'll need to address this issue to pass a vehicle emissions inspection.
 
-## **Extracting DTC Codes**
+## Extracting DTC codes
 
 There are two primary ways to tap into your vehicle's communication system:
 
 * **OBD Scanners**: A go-to tool for mechanics, OBD scanners are a straightforward way to access DTC codes. Simply plug the scanner into your vehicle’s OBD-II connector (usually located under the steering wheel), and voila — you'll have direct access to DTC information from the onboard computer. Not the most modern way.
-* **Telematics Systems**: Many newer vehicles may be equipped with telematics systems also known as [OBD trackers](https://www.navixy.com/blog/top-obd-trackers-2023/). You can install it easily into the vehicle’s OBD-II connector. With OBD-II trackers, we bring DTC codes and their interpretations right to your fingertips on the Navixy platform.
+* **Telematics Systems**: Many newer vehicles may be equipped with telematics systems also known as [OBD devices](https://www.navixy.com/blog/top-obd-trackers-2023/). You can install it easily into the vehicle’s OBD-II connector. With OBD-II devices, we bring DTC codes and their interpretations right to your fingertips on the Navixy platform.
 
 ## How to get DTC codes reading on Navixy
 
 To get the full potential of Navixy's DTC code reading capabilities, you'll need to ensure two things:
 
-* Your GPS tracker supports sending DTC codes.
-* Your vehicle is compatible with the GPS tracker in question.
+* Your GPS device supports sending DTC codes.
+* Your vehicle is compatible with the GPS device in question.
 * The platform supports reading of DTC codes from this device. You can check on our website with [supported devices](https://www.navixy.com/devices/).
 
 Once these conditions are met, configure your device to send DTC codes to the Navixy platform. You won't need to add specific sensors or engage in complicated configurations for DTC codes. They will automatically appear in widgets once the platform starts receiving them.

@@ -4,7 +4,7 @@ description: >-
   Compares budget Novatek and premium Ambarella chips used in fleet cameras.
 ---
 
-# Inside the dashcam: What really powers video telematics
+# Inside the dashcam: what really powers video telematics
 
 <figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
@@ -14,7 +14,7 @@ Fleet managers and telematics professionals often focus on specs like resolution
 
 To put it simply: not all fleet cameras are created equal, even if they look similar on the outside. Differences in internal design, like the SoC, image sensor, modem, memory, etc., directly affect the camera's image quality, responsiveness, AI capabilities, network performance, and overall reliability. A lower-cost camera might do the basics (recording video and uploading it), but a higher-end model with a more powerful SoC can do a lot more: think real-time driver monitoring, lane departure warnings, forward collision alerts, and other ADAS features. A device-agnostic platform like Navixy lets mixed vendors and SoC families live in one environment, normalizing video and metadata so ops teams pick the right hardware for each route or role without locking into a single roadmap.
 
-#### Inside a smart dashcam: how video gets from lens to cloud <a href="#ember4376" id="ember4376"></a>
+#### Inside a smart dashcam: how video gets from lens to cloud
 
 To appreciate the role of the SoC (the camera's "brain"), it helps to know how a fleet camera processes video step by step. From the moment light hits the camera's sensor to the moment an alert shows up on your dashboard, a lot happens behind the scenes. Below is a simplified walk-through of the video processing pipeline inside a typical telematics camera, and most of these steps are orchestrated by the SoC:
 
@@ -30,7 +30,7 @@ In this whole pipeline, the SoC is the star of the show for steps 1 through 4. I
 
 If we think of a telematics camera as a mini-computer: the SoC is the CPU/GPU/NPU that does the heavy computation, the image sensor is like the eyes, the modem is the communication link, and storage is the memory. A balanced system is important, but without a capable SoC "brain," even the best sensor or modem won't make a smart camera.
 
-#### Basic vs. advanced cameras: how SoC choice shapes features <a href="#ember4382" id="ember4382"></a>
+#### Basic vs. advanced cameras: how SoC choice shapes features
 
 Now that we've seen what happens inside a camera, let's talk about the differences between a basic fleet camera and an advanced one. In many cases, the _biggest_ difference is how powerful the SoC is, especially in terms of AI capability. A simpler (and cheaper) dashcam might perform all the same basic pipeline steps, such as capture, encode, store, and transmit, but it might not have the on-board smarts to do Step 2 (AI analysis) in any meaningful way. It essentially acts as an electronic eye, recording what it sees and sending it along, but leaving the "thinking" to either the cloud or to not being done at all. In contrast, a high-end camera with a beefy SoC will do a lot of "thinking" on the device: it can detect events, filter footage, and even make real-time decisions (like alerting the driver) without waiting for the cloud.
 
@@ -51,7 +51,7 @@ The trade-off, of course, is cost. The high-end camera with the AI powerhouse ch
 
 Whichever tier you deploy, outcomes stay consistent when the back end is device-agnostic. Navixy shows basic MDVRs and premium ADAS/DMS cameras side-by-side in the same dashboards, reports, and APIs, so upgrades don't force workflow changes.
 
-#### Under the hood: comparing two SoC examples (budget vs. premium) <a href="#ember4392" id="ember4392"></a>
+#### Under the hood: comparing two SoC examples (budget vs. premium)
 
 To make this all more concrete, let's compare two real-world SoC platforms often found in dashcams and fleet cameras. On the budget side, we have the **Novatek NT98321**, a chip commonly used in cost-effective mobile DVRs and dashcams. On the high-end side, there's the **Ambarella CV2**, part of Ambarella's CVflow series, used in premium automotive cameras. These two are good representatives of their tiers: Novatek is known for affordable, high-volume processors (many off-the-shelf dashcams use Novatek SoCs), while Ambarella is renowned for higher-end, AI-centric chips used in advanced driver-assist cameras and even autonomous vehicle systems.
 
@@ -70,7 +70,7 @@ As the table illustrates, an Ambarella CV2 offers far more headroom than a Novat
 
 When proactive safety is the priority, like with fatigue detection, lane/forward collision warnings, or plate-level detail, a CV2-class unit shines and Navixy carries its richer events into the same workflows you use for the rest of the fleet.
 
-#### Making the right choice for your fleet <a href="#ember4401" id="ember4401"></a>
+#### Making the right choice for your fleet
 
 When choosing a video telematics camera, it's tempting to compare obvious specs like megapixels, field of view, storage size, etc. Those are certainly important, but as we've discussed, the less-obvious specs such as the **SoC and its capabilities** are what truly differentiate a "smart" camera from a basic one. Here are some key considerations and takeaways for fleet managers and telematics solution providers:
 

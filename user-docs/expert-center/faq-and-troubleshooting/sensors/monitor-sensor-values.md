@@ -4,7 +4,7 @@ description: >-
   and equipment monitoring. Includes use cases and rule configuration examples.
 ---
 
-# Monitor Sensor Values
+# Monitor sensor values
 
 In our swiftly digitizing world, the need to monitor an expanding array of parameters is more crucial than ever. Moreover, just observing current values or analyzing incoming data isn't enough anymore. Many situations demand immediate action for resolution.
 
@@ -22,7 +22,7 @@ We've categorized these rules into different types for your convenience:
 * Specific:
   * Rules specifically designed for monitoring drains and refills.
 
-To effectively track any data, each rule necessitates specific types of sensors. The data from these sensors is then relayed to the platform via GPS trackers. As such, the initial step for implementing multi-conditional rules involves connecting the sensors to the device and configuring them to transmit their data to the platform.
+To effectively track any data, each rule necessitates specific types of sensors. The data from these sensors is then relayed to the platform via GPS devices. As such, the initial step for implementing multi-conditional rules involves connecting the sensors to the device and configuring them to transmit their data to the platform.
 
 ## Use cases
 

@@ -1,4 +1,10 @@
-# Why Does a Black Screen Appear During Live Streaming on Jimi JC Cameras?
+---
+description: >-
+  A black screen during live streaming from Jimi JC cameras is expected
+  behavior, not a fault. Covers the single-session RTMP limit and best practices.
+---
+
+# Why does a black screen appear during live streaming on Jimi JC cameras?
 
 ### Overview
 
@@ -8,17 +14,17 @@ In these situations, users may occasionally experience a black screen instead of
 
 <img src="../../../.gitbook/assets/unknown (14).png" alt="" height="370.7054802958599" width="624">
 
-### Is This an Integration Issue? No.
+### Is this an integration issue? No
 
 The JC261 and JC400 cameras use Navixy's native Jimi IoT integration. Live video is established directly between the platform and the camera using Jimi commands (SMS/RTMP), not through third-party video integrations.
 
 Since these cameras communicate directly with Navixy, the black screen is not caused by the integration itself, but rather by the streaming architecture implemented by the device.
 
-### Why Does the Black Screen Occur?
+### Why does the black screen occur?
 
 The behavior is the result of three different factors working together.
 
-#### 1. Camera Limitation (Primary Cause)
+#### 1. Camera limitation (primary cause)
 
 The JC cameras are designed to maintain only one active RTMP streaming session at a time.
 
@@ -42,7 +48,7 @@ This may leave the camera in an inconsistent streaming state where:
 
 In previous investigations, Jimi confirmed through device logs that the camera correctly responds with RTMP:OK, but rapid consecutive streaming requests can still cause the stream to stop unexpectedly.
 
-#### 2. Navixy Streaming Architecture
+#### 2. Navixy streaming architecture
 
 Unlike traditional video streaming platforms or CDNs (Content Deliverable/Distribution Network), Navixy does not receive a single stream and redistribute it to multiple viewers.
 
@@ -58,7 +64,7 @@ Therefore, the video session is directly linked to each user's interaction.
 
 If multiple operators request the same livestream simultaneously, concurrent streaming commands may be issued to the camera.
 
-#### 3. Cellular Network Limitations
+#### 3. Cellular network limitations
 
 Live video transmission also depends on:
 
@@ -71,7 +77,7 @@ Even under normal conditions, live streaming requires a stable mobile connection
 
 When multiple streaming requests are issued simultaneously, the device must repeatedly establish and terminate RTMP sessions while also transmitting video over the cellular network, increasing the probability of interruptions or temporary black screens.
 
-### Recommended Best Practices
+### Recommended best practices
 
 To ensure the most stable live streaming experience, we recommend the following operational guidelines:
 

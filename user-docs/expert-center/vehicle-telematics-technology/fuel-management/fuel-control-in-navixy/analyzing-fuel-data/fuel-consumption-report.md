@@ -27,7 +27,7 @@ In order to get the information in the report you need to:
 * The device for which the reading of the flow meter sensor on the platform is supported. You can specify whether reading of fuel level from a particular type of sensor is supported in the [list of supported inputs for any model.](https://www.navixy.com/devices)
 * Data from the device and the flow meter sensor. In order to provide the most accurate fuel consumption information, data must flow without interruption.
 
-## Report Parameters
+## Report parameters
 
 The following parameters are used in the report:
 
@@ -52,7 +52,7 @@ The information is organized in the following columns:
 * GPS and flow rate data
   * Mileage, km - total mileage for the day or for the whole period for the total.
   * Normal consumption, l - how many liters the vehicle would consume if it consumed fuel as specified by the factory.
-  * consumption rate, l/100 km - vehicle consumption rate specified by the factory. It is taken by the platform from the [vehicle](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/fleet-management/vehicles) card.
+  * Consumption rate, l/100 km - vehicle consumption rate specified by the factory. It is taken by the platform from the [vehicle](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/fleet-management/vehicles) card.
 * Flow meter data
   * Initial reading, l - total fuel consumption according to the sensor at the beginning of the day.
   * End reading, l - total fuel consumption according to the sensor at the end of the day.
@@ -68,7 +68,7 @@ The information from the first line can be read like this:
 
 **Total**
 
-Totals displays the total data for the period for the beacon. The initial reading is taken from the first day's data and the final reading from the last day's data. The total consumption is the sum of all expenses for the period, and the consumption per 100 km is calculated from the total mileage and total consumption.
+Totals displays the total data for the period for the GPS device. The initial reading is taken from the first day's data and the final reading from the last day's data. The total consumption is the sum of all expenses for the period, and the consumption per 100 km is calculated from the total mileage and total consumption.
 
 The total mileage for the period was 792.68 km. The actual fuel consumption for the period was 311.4 liters and the fuel consumption rate for the period was kept at 39.28 l/100 km.
 
@@ -79,4 +79,4 @@ Fuel saving/overconsumption, l - displays information about the difference betwe
 
 ![](../../../../.gitbook/assets/image-20230905-093548.png)
 
-The Total for Period tab displays fuel data only for beacons that have fuel consumption measured in liters or gallons. To add a beacon to the report, change the fuel gauge units to liters or gallons.
+The Total for Period tab displays fuel data only for GPS devices that have fuel consumption measured in liters or gallons. To add a GPS device to the report, change the fuel gauge units to liters or gallons.

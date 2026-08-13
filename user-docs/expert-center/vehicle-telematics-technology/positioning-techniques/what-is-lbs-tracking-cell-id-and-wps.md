@@ -20,7 +20,7 @@ Requiring less battery power than GPS, LBS allows you to trade precision for ext
 
 ### GSM based tracking
 
-GPS trackers and mobile phones most commonly use a GSM network to transmit the data. Because of that, service provider’s network infrastructure can be used to determine the device’s location.
+GPS devices and mobile phones most commonly use a GSM network to transmit the data. Because of that, service provider’s network infrastructure can be used to determine the device’s location.
 
 This tracking method operates on the principle that any powered GMS module always communicates wirelessly with one of the closest base stations, switching between them as the device moves. If the device can transmit data of the base station it is connected to (Cell ID, MCC, MNC, LAC), this data can be looked up in external databases to obtain the location of the base station.
 
@@ -92,7 +92,7 @@ If you are not sure whether your devices support LBS on Navixy, check integratio
 
 Navixy provides our own [Mobile tracking solution](https://www.navixy.com/features/mobile-apps/) with LBS support included.
 
-Unlike hardware trackers, Navixy mobile apps transmit already processed LBS data. Apps rely on native OS services like Apple Core Location or Google Fused Location depending on which OS is used.
+Unlike hardware devices, Navixy mobile apps transmit already processed LBS data. Apps rely on native OS services like Apple Core Location or Google Fused Location depending on which OS is used.
 
 Please note that a network connection is required for services to process data.
 

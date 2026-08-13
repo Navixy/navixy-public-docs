@@ -39,7 +39,7 @@ Single-chamber flow meter measures the amount of fuel flowing through the fuel s
 Single-chamber flow meters are divided into the following types:
 
 * **Autonomous flow meter** - its measurement results are displayed on the upper part of the flow meter. Such devices are powered by a built-in battery and are best used to control unauthorized fuel draining on stationary tanks, etc.
-* **With interface cable** - such meters are used to transfer data to a monitoring platform. To do this, it is enough to connect to the GPS tracker using one of the following interfaces:
+* **With interface cable** - such meters are used to transfer data to a monitoring platform. To do this, it is enough to connect to the GPS device using one of the following interfaces:
   * Impulse interface
   * RS-232
   * RS-485
@@ -60,7 +60,7 @@ A flow meter that features two measurement chambers is commonly referred to as "
 Differential flow meters are:
 
 * **Autonomous flow meter** - its measurement results are displayed on the upper part of the flow meter. Such devices are powered by a built-in battery and used for fuel monitoring in vehicles (data transmission to a monitoring platform is not allowed).
-* **With interface cable** - it can transfer data to a monitoring platform. To do this, connect to a GPS tracker with one of the following interfaces:
+* **With interface cable** - it can transfer data to a monitoring platform. To do this, connect to a GPS device with one of the following interfaces:
   * Impulse interface
   * RS-232
   * RS-485
@@ -108,12 +108,12 @@ Flow meter selection depending on the engine power:
 In the absence of data on engine power, we recommend to search for fuel consumption value for each transport category separately.
 
 * **Whether you have a car or special equipment under warranty**, it is better to use differential flow meters. They work well and the installation process does not require making changes to the fuel system.
-* **Connection interfaces**: the following types of interfaces are used to connect flow meters to GPS trackers:
+* **Connection interfaces**: the following types of interfaces are used to connect flow meters to GPS devices:
   * Impulse inputs
   * Serial interfaces:
     * RS-232
     * RS-485
-    * CAN-likeThe interface for connecting a flow meter to a GPS tracker is selected when ordering the meter from a manufacturer. **Note that a flow meter can have only one interface and it should correspond with that of the tracker.** Hence, before ordering it is worth checking what interfaces are available on your GPS tracking unit.
+    * CAN-likeThe interface for connecting a flow meter to a GPS device is selected when ordering the meter from a manufacturer. **Note that a flow meter can have only one interface and it should correspond with that of the device.** Hence, before ordering it is worth checking what interfaces are available on your GPS tracking unit.
 
 ## Leading flow meters manufacturers
 

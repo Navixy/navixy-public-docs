@@ -20,7 +20,7 @@ While Electric Vehicles are widely known, not everyone is aware of the various t
 
 An EV fleet comprises electric vehicles owned or leased by businesses, governments, or organizations. Unlike traditional fleets fueled by gasoline or diesel, EV fleets rely on high-capacity, rechargeable batteries. The primary emphasis lies on batteries and their significance in this context.
 
-## Practical Experience Matters
+## Practical experience matters
 
 When transitioning from internal combustion engine (ICE) vehicles to electric vehicles for a fleet, careful consideration of the advantages and disadvantages is crucial. Online materials provide a comprehensive list of pros and cons, such as lower running costs versus higher initial costs, decreased maintenance time and costs versus longer recharging time or range limitations. However, it is crucial to highlight the practical aspects that need to be taken into account.
 
@@ -68,11 +68,11 @@ Battery SoH gradually declines due to multiple factors over time:
 
 ## Electric vehicles tracking
 
-When it comes to tracking electric vehicles, you might wonder if there's a difference compared to tracking traditional internal combustion engine vehicles. There are indeed some variations in GPS trackers for each type.
+When it comes to tracking electric vehicles, you might wonder if there's a difference compared to tracking traditional internal combustion engine vehicles. There are indeed some variations in GPS devices for each type.
 
-For ICE vehicles, GPS trackers tend to focus on features like monitoring fuel consumption, diagnosing engine issues, and reminding you about maintenance schedules. These trackers help optimize fuel efficiency, keep track of mileage, and notify you when your vehicle needs servicing. On the other hand, GPS trackers for EVs are used for monitoring the battery charge and health status, and estimating the vehicle's range, etc. These trackers help EV owners keep an eye on their battery levels, find convenient charging spots, and plan routes accordingly.
+For ICE vehicles, GPS devices tend to focus on features like monitoring fuel consumption, diagnosing engine issues, and reminding you about maintenance schedules. These devices help optimize fuel efficiency, keep track of mileage, and notify you when your vehicle needs servicing. On the other hand, GPS devices for EVs are used for monitoring the battery charge and health status, and estimating the vehicle's range, etc. These devices help EV owners keep an eye on their battery levels, find convenient charging spots, and plan routes accordingly.
 
-Some GPS trackers designed specifically for EVs can even integrate with the vehicle's telematics system. This means they provide real-time information on energy usage, regenerative braking, and analyze driver behavior. Remember that the features and capabilities of GPS trackers can vary between brands and models. But the majority of the modern GPS Trackers supports EV having related fields and parameters.
+Some GPS devices designed specifically for EVs can even integrate with the vehicle's telematics system. This means they provide real-time information on energy usage, regenerative braking, and analyze driver behavior. Remember that the features and capabilities of GPS devices can vary between brands and models. But the majority of the modern GPS devices supports EV having related fields and parameters.
 
 GPS tracking for EVs offers benefits beyond vehicle security. It provides valuable features such as energy consumption analysis and maintenance optimization, which are crucial for sustainable transportation planning. Let's explore the key challenges faced in EV management and how Navixy can help address them effectively.
 
@@ -108,7 +108,7 @@ Telematics parameters can play a significant role in facilitating effective main
 * **Battery health monitoring:** Telematics parameters can provide detailed information about the State of health (SoH) and overall performance. By monitoring these parameters, maintenance professionals can identify any anomalies or degradation in the battery's performance. This helps in scheduling timely maintenance, optimizing charging practices, and ensuring the longevity and efficiency of the battery.
 * **Motor performance analysis**: Telematics parameters can provide comprehensive data on the motor's operating conditions, including temperature, voltage, current, and power consumption. By analyzing this data, maintenance professionals can assess the motor's performance and detect any potential issues or deviations. Proactive maintenance and troubleshooting can then be conducted to prevent motor failures and optimize its efficiency.
 
-<figure><img src="../../.gitbook/assets/image (6).png" alt="" width="250"><figcaption><p>Teltonika GPS tracker AVL 1151 to monitor State of Health</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (6).png" alt="" width="250"><figcaption><p>Teltonika GPS device AVL 1151 to monitor State of Health</p></figcaption></figure>
 
 ## Wrapping up
 

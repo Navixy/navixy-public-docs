@@ -30,11 +30,11 @@ The initial window is the **Startup** menu. Here, you can adjust power mode, sel
 While there are several options like device ID, plate number, state, language, and position mode, two are primary:
 
 * **Dev ID**. This is the device ID. You can input any identifier you prefer, for instance, 123456. This ID is used during the activation process on Navixy, so remember this ID.
-* **Position Mode**. Set it to GPS so your device can provide precise GPS information like other GPS trackers.
+* **Position Mode**. Set it to GPS so your device can provide precise GPS information like other GPS devices.
 
 ### 3G/4G settings
 
-As a GPS tracker installed in a vehicle, Wi-Fi operation is not possible. Therefore, configure the necessary options:
+As a GPS device installed in a vehicle, Wi-Fi operation is not possible. Therefore, configure the necessary options:
 
 * **Enable** must be turned on to activate data transmission.
 * **NetType**. Configure the type supported by your SIM

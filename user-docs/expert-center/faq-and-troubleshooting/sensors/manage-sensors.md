@@ -5,7 +5,7 @@ description: >-
   levels.
 ---
 
-# Manage Sensors
+# Manage sensors
 
 First of all, be advised that there is no possibility to affect the sensor from the Navixy platform. The sensor just sends data to the GPS device, then this data is just parsed on the server.
 

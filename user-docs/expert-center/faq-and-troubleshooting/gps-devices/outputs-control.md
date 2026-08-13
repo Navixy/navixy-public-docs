@@ -4,7 +4,7 @@ description: >-
   cutoff. Covers safety logic, command methods, and device troubleshooting.
 ---
 
-# Outputs Control
+# Outputs control
 
 Several device models come equipped with the capability to control the state of connected devices or engines. This feature can be applied to a variety of components, including locks, buzzers, immobilizers, oil/engine cutoff systems, and automatic engine warming systems like Webasto. It can even extend to smart home applications, such as smart sockets and smart bulbs, among others. It may be used, for instance, in your mobile home that is better to track and control via GPS device. The primary concept here is the ability to turn on or off a specific function or device remotely through a command transmitted over the air. Of course, the actual scope of this control depends on what is connected to the device’s output.
 
@@ -34,8 +34,8 @@ Then the customer selects the desired output and alters its state. For instance,
 
 Confirming is equivalent to sending an API request:
 
-* It will be an API call [/tracker/output/set\_all](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/output#set_all) if the device supports commands listing all states simultaneously. For example, enabling output 1 on a Teltonika device with 3 outputs where all outputs are off at the moment, would use a command like 'setdigout 1,0,0'.
-* It will be an API call [/tracker/output/set](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/output#set) if the device supports sending commands to each output individually.
+* It will be an API call [/tracker/output/set\_all](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/output#set_all) if the device supports commands listing all states simultaneously. For example, enabling output 1 on a Teltonika device with 3 outputs where all outputs are off at the moment, would use a command like 'setdigout 1,0,0'.
+* It will be an API call [/tracker/output/set](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/output#set) if the device supports sending commands to each output individually.
 
 By using APIs, you can [automate output control on your device](https://www.navixy.com/blog/cloud-functions-for-tailored-vehicle-telematics-solutions/?utm-source=slack), linking it to specific event types or received values.
 
@@ -77,7 +77,7 @@ There are several potential reasons why output control might not function as exp
 
 * Device offline, SMS unsupported: The device could be offline, and for this particular model, SMS management may not be supported. Wait when your device will become online and try again.
 * Device online, only SMS supported, but panel doesn’t have SMS gateway connected: The device might be online, but it only supports SMS for output control, and the SMS gateway is not connected to the panel. In this case, you can request your SMS gateway installation. Check [requirements for SMS gateway installation](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/settings/messaging-gateways#sms-gateway).
-* Insufficient funds for SMS: The user may not have enough credit to send SMS messages, as required by the tracker plan. Please check the user’s balance and the [tracker plan options](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/plans).
+* Insufficient funds for SMS: The user may not have enough credit to send SMS messages, as required by the device plan. Please check the user’s balance and the [device plan options](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/plans).
 * Specific output control logic: The device may have specialized output control logic that affects its operation. For example, safety or scenario logic described above.
 * Non-default password for output control: The device might be set up with a password for output control that is not the default. In this case, check the device’s settings and enable the default password.
 * Device not configured for internet output control: The device might not be properly set up to receive internet-based output control commands. Check the device’s settings and enable output control.

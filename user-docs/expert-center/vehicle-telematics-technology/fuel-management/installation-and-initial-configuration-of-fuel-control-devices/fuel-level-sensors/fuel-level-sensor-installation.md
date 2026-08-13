@@ -51,7 +51,7 @@ Now let’s take it step by step:
 4. Press the glued sensor hard to the tank and fasten it with a metal band, wrapped around the tank.
 5. Connect the sensor to the dashboard and to the laptop using a special adapter. Download the software for sensor calibration.
 6. Calibrate the tank.
-7. Disconnect the sensor from the laptop and connect it to the tracker.
+7. Disconnect the sensor from the laptop and connect it to the device.
 
 {% hint style="info" %}
 For rectangular tanks, the center of the bottom can be found by drawing diagonals and where they meet in the middle will be the center.
@@ -74,7 +74,7 @@ Now let’s review each step more in-depth.
 7. Install the sensor, so the measuring tubes will be inside the tank, while the electronics + PCB and cables - outside the tank.
 8. Fasten the sensor using self-tapping screws
 9. Calibrate the tank
-10. Disconnect the sensor from the laptop and connect it to the tracker.
+10. Disconnect the sensor from the laptop and connect it to the device.
 
 _The installation will take approximately 4 hours._ For more information watch [OMNICOMM installation training video](https://www.youtube.com/watch?v=XJof-eRuRd8) (10 min).
 
@@ -90,7 +90,7 @@ Once it is located, you can connect to it via a CAN Crocodile contactless reader
 
 1. Find out the vehicle brand, model and year of manufacture before connecting to its CAN bus.
 2. Check the vehicle manuals to make sure that the CAN bus monitors fuel level data. Unless it does, the other steps will make no sense.
-3. Go to the tracker manufacturer’s website to select a CAN module brand that fits.
+3. Go to the device manufacturer’s website to select a CAN module brand that fits.
 4. Choose the CAN module type/model based on your vehicle or heavy equipment type.
 
 ```
@@ -101,7 +101,7 @@ For instance, Teltonika requires different CAN module for cars (LV-CAN 200) and 
 6. Connect the CAN module the way it is shown in the diagram.
 7. Use a a mini-USB to USB cable to connect the CAN module to the dashboard and the laptop with pre-downloaded setup software.
 8. Insert the number given in the diagram to set up the CAN module.
-9. Disconnect the CAN module from the laptop and connect it to the GPS tracker.
+9. Disconnect the CAN module from the laptop and connect it to the GPS device.
 10. Perform a lite tank calibration.
 
 The installation will take approximately 30 minutes (considering the diagram is available).
@@ -110,12 +110,12 @@ The installation will take approximately 30 minutes (considering the diagram is 
 
 ## Fuel sensor outputs
 
-As of 2018, the most common outputs to connect to GPS trackers were:
+As of 2018, the most common outputs to connect to GPS devices were:
 
-* For factory installed trackers:
+* For factory installed devices:
   * analogue output
   * CAN interface
-* For additionally installed trackers:
+* For additionally installed devices:
   * analogue output
   * frequency output
   * digital output:
@@ -127,29 +127,29 @@ As of 2018, the most common outputs to connect to GPS trackers were:
 
 ### Analogue signal
 
-**Equipment:** Fuel sensor with analogue output, GPS tracker with analogue input
+**Equipment:** Fuel sensor with analogue output, GPS device with analogue input
 
-**Specifications:** in this case fuel level data is transmitted to the GPS tracker as voltage (potential difference between the sensor output and the ground, DC). The higher the fuel level, the higher the potential difference is.
+**Specifications:** in this case fuel level data is transmitted to the GPS device as voltage (potential difference between the sensor output and the ground, DC). The higher the fuel level, the higher the potential difference is.
 
 ```
 For instance, 1V stands for an empty tank, 10V stands for a full tank. A tank calibration is required to convert the volts into litres or gallons.
 ```
 
-![Fuel sensor with analogue output, GPS tracker with analogue input](../../../../.gitbook/assets/tank-calibration-table.png)
+![Fuel sensor with analogue output, GPS device with analogue input](../../../../.gitbook/assets/tank-calibration-table.png)
 
-GPS trackers will transmit the values to the GPS tracking system in volts (e.g. 6.35 V).
+GPS devices will transmit the values to the GPS tracking system in volts (e.g. 6.35 V).
 
-**Advantages:** you can use a cheap and simple GPS tracker with basic outputs only.
+**Advantages:** you can use a cheap and simple GPS device with basic outputs only.
 
 **Disadvantages:** readings accuracy is affected by voltage fluctuations, wiring condition and age, as well as other factors contributing to error.
 
-**Application:** you can recommend analogue fuel sensors if your clients’ GPS trackers have no digital inputs (analogue inputs only) or if the client is looking for a cheapest solution.
+**Application:** you can recommend analogue fuel sensors if your clients’ GPS devices have no digital inputs (analogue inputs only) or if the client is looking for a cheapest solution.
 
 ### Frequency signal
 
-**Equipment:** fuel sensor with frequency output, GPS tracker with frequency input (e.g. [BCE Blue](https://www.navixy.com/devices/bce/bce-fm-500-blue/)).
+**Equipment:** fuel sensor with frequency output, GPS device with frequency input (e.g. [BCE Blue](https://www.navixy.com/devices/bce/bce-fm-500-blue/)).
 
-**Specifications:** in this case fuel level data is transmitted to the GPS tracker as an impulse frequency (for instance, in the range from 30 Hz to 2000 Hz). The higher the fuel level, the higher the frequency is.
+**Specifications:** in this case fuel level data is transmitted to the GPS device as an impulse frequency (for instance, in the range from 30 Hz to 2000 Hz). The higher the fuel level, the higher the frequency is.
 
 {% hint style="info" %}
 For instance, 30 Hz stands for an empty tank, 2000 Hz stands for a full tank. A tank calibration is required to convert frequency into liters or gallons.
@@ -159,7 +159,7 @@ Data modulation techniques work just like the well-known FM radio. In this case 
 
 **Advantages:** less error than in analogue signals. Frequency signals are quite often used as auxiliary ones for analogue sensors. In this case they are called frequency-analog sensors.
 
-**Disadvantages:** cost-effective GPS trackers rarely have frequency signal options
+**Disadvantages:** cost-effective GPS devices rarely have frequency signal options
 
 **Advantages:** fuel sensors with frequency signals are much less widespread than analogue or digital solutions. However, you can recommend these sensors to your clients if the other options are not available.
 
@@ -169,19 +169,19 @@ Data modulation techniques work just like the well-known FM radio. In this case 
 
 **Specifications:** fuel level data is transmitted as digital signals (conventional numbers without units of measurement) over the copper wires. A GPS tracking platform will get these readings as positive integers, usually the 2byte characters from 0 to 65535. A tank calibration is required to convert the numbers into liters or gallons.
 
-**Advantages:** ultimate noise immunity during signal transmission (compared to analogue signals). It also provides more accurate readings than analogue fuel sensors. Ability to connect more than one sensor on one tracker (through RS-485 interface, RS-232 allows to connect only one sensor). Check the GPS tracker manufacturer’s website to see the number of fuel sensors to be connected via RS-485.
+**Advantages:** ultimate noise immunity during signal transmission (compared to analogue signals). It also provides more accurate readings than analogue fuel sensors. Ability to connect more than one sensor on one device (through RS-485 interface, RS-232 allows to connect only one sensor). Check the GPS device manufacturer’s website to see the number of fuel sensors to be connected via RS-485.
 
-**Disadvantages:** GPS trackers with digital signals are usually more pricey than similar trackers without digital inputs.
+**Disadvantages:** GPS devices with digital signals are usually more pricey than similar devices without digital inputs.
 
-**Application:** If a client wants to monitor fuel level for their vehicles, then a digital interface should be a go-to solution. Make sure you consider whether the GPS tracker has RS-232 or RS-485 input.
+**Application:** If a client wants to monitor fuel level for their vehicles, then a digital interface should be a go-to solution. Make sure you consider whether the GPS device has RS-232 or RS-485 input.
 
 ### CAN bus
 
-**Equipment:** CAN module for CAN data reading, CAN module-compatible GPS tracker or OBD2 GPS tracker supporting OBD data reading.
+**Equipment:** CAN module for CAN data reading, CAN module-compatible GPS device or OBD2 GPS device supporting OBD data reading.
 
-**Specifications:** the GPS tracker will use fuel level data from the factory-installed fuel sensor. These readings will be transmitted as a % of the total tank volume. A lite tank calibration is required to convert % into gallons or liters.
+**Specifications:** the GPS device will use fuel level data from the factory-installed fuel sensor. These readings will be transmitted as a % of the total tank volume. A lite tank calibration is required to convert % into gallons or liters.
 
-**Advantages:** fast non invasive installation or DIY installation in case of OBD2 tracker. No extra money spent on sensor setup.
+**Advantages:** fast non invasive installation or DIY installation in case of OBD2 device. No extra money spent on sensor setup.
 
 **Disadvantages:** less accurate than a capacitive sensor. Some vehicles (usually the older ones) don’t transmit fuel level data via a CAN bus.
 
@@ -189,23 +189,23 @@ Data modulation techniques work just like the well-known FM radio. In this case 
 
 ### Bluetooth
 
-**Equipment:** Bluetooth fuel sensor, GPS tracker with Bluetooth connectivity, compatible with the fuel sensor. For instance [ESCORT TD-BLE](https://www.fmeter.ru/en/produktsiya/besprovodnoy-datchik-urovnya-topliva/eskort-td-ble/)
+**Equipment:** Bluetooth fuel sensor, GPS device with Bluetooth connectivity, compatible with the fuel sensor. For instance [ESCORT TD-BLE](https://www.fmeter.ru/en/produktsiya/besprovodnoy-datchik-urovnya-topliva/eskort-td-ble/)
 
 **Specifications:** fuel level data is transmitted as digital signals over the wireless bluetooth channel. A tank calibration is required to convert the characters into gallons or liters.
 
 **Advantages:** wireless sensors require easy and cheaper installation. The latest models have no wires at all, not even for the power supply. They are already equipped with a battery for the whole life span of the device thanks to Bluetooth Low Energy (BLE). [Some say](https://www.navixy.com/blog/interview-with-escort-ceo/) that wireless fuel sensors are the future.
 
-**Disadvantages:** every wireless fuel sensor manufacturer has their own data transmission protocol (a unified or simply a market-leader protocol is not yet acquired). Thus every GPS tracker manufacturer should consider compatibility with fuel sensors of every make. Besides, as any emerging technology, the wireless options cost more than their wired alternatives.
+**Disadvantages:** every wireless fuel sensor manufacturer has their own data transmission protocol (a unified or simply a market-leader protocol is not yet acquired). Thus every GPS device manufacturer should consider compatibility with fuel sensors of every make. Besides, as any emerging technology, the wireless options cost more than their wired alternatives.
 
-**Application:** if the client’s GPS tracker has a Bluetooth connection, then a wireless fuel sensor can be the right choice.
+**Application:** if the client’s GPS device has a Bluetooth connection, then a wireless fuel sensor can be the right choice.
 
-## Fuel sensor design: Unorthodox solutions
+## Fuel sensor design: unorthodox solutions
 
 Many fuel sensor manufacturers provide their devices with additional features. Some of them can be quite cutting-edge and useful.
 
 **Remote power monitoring**
 
-If a fuel sensor suddenly goes offline, the first thing to do will be to check if it is connected to any power supply. Some sensors, e.g. manufactured by Siensor, allow for remote power monitoring. These fuel sensors have one extra wire connected to an analogue or discrete input of the tracker. Add a new discrete or measuring sensor on the platform and stay aware.
+If a fuel sensor suddenly goes offline, the first thing to do will be to check if it is connected to any power supply. Some sensors, e.g. manufactured by Siensor, allow for remote power monitoring. These fuel sensors have one extra wire connected to an analogue or discrete input of the device. Add a new discrete or measuring sensor on the platform and stay aware.
 
 **Fuel temperature monitoring**
 
@@ -213,7 +213,7 @@ Do your clients really need fuel temperature monitoring on a daily basis? Hard t
 
 **Universal outputs**
 
-Modern fuel sensors can be powered with both analogue and digital outputs. It’s a great solution for the customers who already have GPS trackers on board. Sometimes clients don’t know what inputs are already taken, so it’s good to have an alternative. Universal fuel sensors are provided by a few manufacturers, for example, Escort.
+Modern fuel sensors can be powered with both analogue and digital outputs. It’s a great solution for the customers who already have GPS devices on board. Sometimes clients don’t know what inputs are already taken, so it’s good to have an alternative. Universal fuel sensors are provided by a few manufacturers, for example, Escort.
 
 **Fuel level indicator**
 
@@ -229,12 +229,14 @@ Should the fuel tank have a complex shape, the sensor tubes can be bent with the
 
 Technoton, a world-famous Belarus-based manufacturer, promotes the idea of a single interface for factory-installed and additional sensors (including fuel sensors). Technoton offers CAN 2.0 for this purpose. Their fuel and other sensors are connected to the vehicle CAN bus, just like factory-installed devices, to transmit the fuel level data.
 
-This approach yields a few benefits. Mainly it removes any limitations on the number of devices to be connected to one tracker. However, fuel sensors operating on CAN interface will cost more compared to similar solutions with other outputs. That’s why this technology hasn’t become widespread.
+This approach yields a few benefits. Mainly it removes any limitations on the number of devices to be connected to one device. However, fuel sensors operating on CAN interface will cost more compared to similar solutions with other outputs. That’s why this technology hasn’t become widespread.
 
 **Explosion-proof version**
 
-Some Safety rules and regulations require fuel sensors to be explosion-proof (e.g. if the sensor is installed inside fuel tankers). These sensors have a specific design to provide enhanced explosion and fire safety confirmed with a test certificate.
+Some safety rules and regulations require fuel sensors to be explosion-proof (e.g. if the sensor is installed inside fuel tankers). These sensors have a specific design to provide enhanced explosion and fire safety confirmed with a test certificate.
 
-### GPS tracker meets fuel sensor
+### GPS device meets fuel sensor
 
-In 2016 some fuel manufacturers came up with the idea to install a GPS tracking module on a fuel sensor directly (like in [DUT-E GSM by Technoton](https://www.jv-technoton.com/products/dut-e-gsm/)). So if your clients only need to track and trace the location and to monitor the fuel level, then they will need to install just one single device, which is a big plus. However it limits (but doesn’t eliminate completely) any other devices to be connected to such a tracker+sensor set. Besides, any compound solution is always a compromise, which will take its toll on the commonly used GPS tracking features.
+In 2016, some fuel sensor manufacturers started building the GPS module into the sensor itself, as in [DUT-E GSM by Technoton](https://www.jv-technoton.com/products/dut-e-gsm/). If your clients only need location tracking and fuel level monitoring, this is a real advantage: they install one device instead of two.
+
+The trade-off is expandability. A combined unit has fewer inputs and interfaces than a standalone GPS device, so it accepts fewer additional sensors — it does not rule them out, but it limits how many you can connect. Like any all-in-one product, it is also a compromise: the GPS side is usually weaker than that of a dedicated GPS device.

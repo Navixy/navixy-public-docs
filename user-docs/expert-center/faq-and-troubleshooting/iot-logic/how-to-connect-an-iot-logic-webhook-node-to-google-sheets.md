@@ -1,10 +1,16 @@
-# How to Connect an IoT Logic Webhook Node to Google Sheets
+---
+description: >-
+  Send telematics parameters from an IoT Logic flow to Google Sheets using the
+  Webhook node. Covers node setup, Apps Script, and deployment access levels.
+---
+
+# How to connect an IoT Logic Webhook node to Google Sheets
 
 In this guide, you will learn how to send telematics parameters or external data source values from Navixy IoT Logic flow to Google Sheets using the Webhook node.
 
 <img src="../../.gitbook/assets/unknown (22).png" alt="" height="236" width="624">
 
-## Step 1. Add the Webhook Node
+## Step 1. Add the Webhook node
 
 Once your IoT Logic flow has been created, add a Webhook node and connect it to the trigger that will initiate the data transmission.
 
@@ -48,7 +54,7 @@ Note: The "key" field is required if your Google Apps Script uses a shared secre
 
 <img src="../../.gitbook/assets/unknown (23).png" alt="" height="497" width="309">
 
-## Step 2. Google Sheet Set up
+## Step 2. Set up the Google Sheet
 
 Open your Google Sheet, click Extensions, and then select Apps Script.
 
@@ -145,7 +151,7 @@ Select New Deployment, and then choose Web App from the deployment type menu. Th
 
 <img src="../../.gitbook/assets/unknown (28).png" alt="" height="492" width="624">
 
-#### **Updating the Apps Script**
+#### Updating the Apps Script
 
 If you need to modify the Apps Script later, you do not need to create a new deployment.
 

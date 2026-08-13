@@ -1,22 +1,22 @@
 ---
 description: >-
-  Set up the Teltonika Eye Sensor in three steps: configure the mobile app, set
+  Set up the Teltonika Eye sensor in three steps: configure the mobile app, set
   parameters in the desktop configurator, and map readings in Navixy.
 ---
 
-# Configuring Eye Sensor on Teltonika Tracker
+# Configuring the Eye sensor on a Teltonika device
 
-The integration of advanced sensors and GPS trackers has become essential for businesses aiming to enhance their operational efficiency and security. Teltonika's Eye Sensor can significantly improve monitoring and data collection capabilities. This article serves as a comprehensive guide for partners who wish to configure these devices for their customers.
+The integration of advanced sensors and GPS devices has become essential for businesses aiming to enhance their operational efficiency and security. Teltonika's Eye sensor can significantly improve monitoring and data collection capabilities. This article serves as a comprehensive guide for partners who wish to configure these devices for their customers.
 
-By following the step-by-step instructions provided, you will learn how to download and use the **Teltonika Eye** app, configure the Eye Sensor, and integrate it with Teltonika's GPS devices and Navixy data retrieval system. Whether you are a seasoned professional or new to these technologies, this guide will ensure a smooth and efficient setup process.
+By following the step-by-step instructions provided, you will learn how to download and use the **Teltonika Eye** app, configure the Eye sensor, and integrate it with Teltonika's GPS devices and Navixy data retrieval system. Whether you are a seasoned professional or new to these technologies, this guide will ensure a smooth and efficient setup process.
 
-Let's get started on configuring your Teltonika Eye Sensors to maximize their potential for your business needs in 3 steps.
+Let's get started on configuring your Teltonika Eye sensors to maximize their potential for your business needs in 3 steps.
 
-* [1. Configuration with Mobile app: Teltonika's Eye app](configuring-eye-sensor-on-teltonika-tracker.md#1-configuration-with-mobile-app-teltonikas-eye-app)
-* [2. Conficugation with Teltonika device configuration for desktop](configuring-eye-sensor-on-teltonika-tracker.md#2-conficugation-with-teltonika-device-configuration-for-desktop)
-* [3. Setting up an Eye Sensor on Navixy](configuring-eye-sensor-on-teltonika-tracker.md#3-setting-up-an-eye-sensor-on-navixy)
+* [1. Configuration with the mobile app: Teltonika's Eye app](configuring-eye-sensor-on-teltonika-tracker.md#1-configuration-with-the-mobile-app-teltonikas-eye-app)
+* [2. Configuration with Teltonika device configuration for desktop](configuring-eye-sensor-on-teltonika-tracker.md#2-configuration-with-teltonika-device-configuration-for-desktop)
+* [3. Setting up an Eye sensor on Navixy](configuring-eye-sensor-on-teltonika-tracker.md#3-setting-up-an-eye-sensor-on-navixy)
 
-## 1. Configuration with Mobile app: Teltonika's Eye app
+## 1. Configuration with the mobile app: Teltonika's Eye app
 
 Download Teltonika's Eye App from the Google Store or App Store.
 
@@ -28,7 +28,7 @@ Get into the **Eye Application** and turn on Bluetooth. Your mobile device will 
 
 It is important to update the firmware of the device. In this case, the most updated firmware is 1.2.10.
 
-Click the **Configure** button and change the packet setting to **Sensor** so it will display **Eye Sensor**, and click **Save**.
+Click the **Configure** button and change the packet setting to **Sensor** so it will display **Eye sensor**, and click **Save**.
 
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfmqdUk--23DC7qiVYapJkU-hfAjZISIS06ylcIUC6kVILVPRy983MXLXV0_hxHqUCpJk_rvlKbs5cLZKcJS1kH9np3amHr-ANGntbSpVx97rSYw48Xrn1PNvOZC4l4635w3NJIxUKjMAs716P2mZ4oe5Iq?key=6KHuR2IBwmomxMottXEmGA)
 
@@ -36,13 +36,13 @@ Click the **Configure** button and change the packet setting to **Sensor** so it
 
 <img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXevSXGMbYt5LZoCMLRNEtptpyQzrdbhFxmdCTYmlrQPhdCv40al-na0osyW3OmM-vlH3O3sn9v1FZYRrqe6bYV1Dl-lfLA8Ezg9BBF7FuPBrudUsUT0AJCxZEF9C6LZ8Vivw0ZgPP4q8Ce8kFnCe5lnFBtU?key=6KHuR2IBwmomxMottXEmGA" alt="" width="375">
 
-After setting up the **Eye sensor**, click the upper right button to disconnect. Otherwise, it will not send data to the GPS tracker.
+After setting up the **Eye sensor**, click the upper right button to disconnect. Otherwise, it will not send data to the GPS device.
 
-## 2. Conficugation with Teltonika device configuration for desktop
+## 2. Configuration with Teltonika device configuration for desktop
 
-Before configuring the **Eye sensor**, check out how to install the **Teltonika Configurator**, open the tracker file, and understand the [full operation of the sensors with Teltonika's trackers and Navixy data retrieval](configuring-sensors-on-teltonika-trackers.md).
+Before configuring the **Eye sensor**, check out how to install the **Teltonika Configurator**, open the device file, and understand the [full operation of the sensors with Teltonika's GPS devices and Navixy data retrieval](configuring-sensors-on-teltonika-trackers.md).
 
-Click on Bluetooth 4.0 in the left menu. Enable the connection setting and increase the length of the radios. On the sensor settings, click **Eye Sensor**, which will be configured with the MAC number. The **Eye sensor** connection functionalities will be displayed.
+Click on Bluetooth 4.0 in the left menu. Enable the connection setting and increase the length of the radios. On the sensor settings, click **Eye sensor**, which will be configured with the MAC number. The **Eye sensor** connection functionalities will be displayed.
 
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeFVcAbvbHZHlG2CmS2dIggXgCLq3v-7kN4dkpG2Pgd_JbQjRPn6TCuDUnG2bUwph_j3Akz3dLDkHdhKNaNqGs12sw_RSTBPvMnOjl6-f_guX-n1bIcGL9J70ora3TmjUB0sKl77FoVY3SU0T8Ga9NvYSK9?key=6KHuR2IBwmomxMottXEmGA)
 

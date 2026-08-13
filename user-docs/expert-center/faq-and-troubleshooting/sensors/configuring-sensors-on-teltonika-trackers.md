@@ -1,11 +1,11 @@
 ---
 description: >-
-  Configure Teltonika tracker sensors by selecting parameters in the
+  Configure Teltonika device sensors by selecting parameters in the
   configurator, applying settings remotely, and creating sensor entries in
   Navixy.
 ---
 
-# Configuring Sensors on Teltonika Trackers
+# Configuring sensors on Teltonika devices
 
 This is a common guide for setting up sensors and fields for Teltonika devices. Using this guide, you can set up almost any sensor for Teltonika devices in Navixy.
 
@@ -167,7 +167,7 @@ Using the Air Console connect to the device and check whether the parameter is c
 
 How to find the parameter? The answer is: You need to know the avl\_io number of the parameter.
 
-Each Teltonika tracker model has its own AVL ID list where you can look up the parameter IDs.
+Each Teltonika device model has its own AVL ID list where you can look up the parameter IDs.
 
 Look for "FMB920 AVL ID" in Google. The first link should indicate: "FMB920 Teltonika Data Sending Parameters ID". Substitute the model with the model you need.
 
@@ -195,7 +195,7 @@ Open the user interface → Go to **Devices and settings** menu →
 
 ![](../../.gitbook/assets/image-20240819-081518.png)
 
-→ Select the tracker in the list → Scroll down to the **Sensors and buttons** block.
+→ Select the device in the list → Scroll down to the **Sensors and buttons** block.
 
 Add a new measurement sensor.
 
@@ -207,6 +207,6 @@ Specify the Input type as "AVL OI \[N]" and enter the avl\_io ID from the previo
 
 Click **Save**.
 
-That's it, the setup is complete, now once the next data packet arrives on the platform with the specified AVL ID, you will be able to see the updated information in the tracker widget.
+That's it, the setup is complete, now once the next data packet arrives on the platform with the specified AVL ID, you will be able to see the updated information in the device widget.
 
 ![](../../.gitbook/assets/image-20240819-075728.png)

@@ -4,7 +4,7 @@ description: >-
   notifications. Set up the bot, configure the chat ID, and connect the webhook.
 ---
 
-# How to connect Telegram with Navixy-IoT Logic
+# How to connect Telegram with Navixy IoT Logic
 
 This is a quick guide of the steps that might be followed to create the connection between IoT Logic and Telegram.
 

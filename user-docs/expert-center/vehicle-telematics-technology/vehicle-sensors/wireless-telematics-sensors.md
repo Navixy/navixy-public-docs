@@ -1,10 +1,10 @@
 ---
 description: >-
   BLE and UHF sensors transmit TPMS, temperature, and environmental data to GPS
-  trackers using GATT/ATT protocols for wireless fleet monitoring.
+  devices using GATT/ATT protocols for wireless fleet monitoring.
 ---
 
-# Wireless Telematics Sensors
+# Wireless telematics sensors
 
 Wireless technologies allow the transmission of values from different sensors to GPS tracking units without wiring. There are 2 types of wireless technologies that use their own frequencies:
 
@@ -50,7 +50,7 @@ Profile structure
 
 GATT profile contains services. Services are used to break data down into logic entities, and contain specific chunks of data called characteristics. A service can have one or more characteristics, and each service distinguishes itself from other services by means of a unique numeric ID called a UUID, which can be either 16-bit (for officially adopted BLE Services) or 128-bit (for custom services).
 
-The most important thing to keep in mind with GATT and connections is that connections are exclusive. What is meant by that is that a BLE peripheral can only be connected to one central device (a mobile phone, GPS tracker, etc.) at a time.
+The most important thing to keep in mind with GATT and connections is that connections are exclusive. What is meant by that is that a BLE peripheral can only be connected to one central device (a mobile phone, GPS device, etc.) at a time.
 
 As soon as a peripheral connects to a central device, it will stop advertising itself and other devices will no longer be able to see it or connect to it until the [existing connection is broken](https://learn.adafruit.com/introduction-to-bluetooth-low-energy/gatt).
 
@@ -58,9 +58,9 @@ Imagine that the profile is a bookcase. Each shelf is a Service where the book i
 
 ### Client and server
 
-To understand the distinction between GATT server and GATT client, imagine that you have a GPS tracker and a fuel sensor that is a BLE device. The GPS tracker supports the central role; the sensor supports the peripheral role (to establish a BLE connection _you need one of each_—two things that only support peripheral couldn't talk to each other, nor could two things that only support central).
+To understand the distinction between GATT server and GATT client, imagine that you have a GPS device and a fuel sensor that is a BLE device. The GPS device supports the central role; the sensor supports the peripheral role (to establish a BLE connection _you need one of each_—two things that only support peripheral couldn't talk to each other, nor could two things that only support central).
 
-Once the tracker and the sensor have established a connection, they start transferring GATT metadata to one another. If the sensor wants to report sensor data to the GPS device, it might make sense for the sensor to [act as the server.](https://developer.android.com/guide/topics/connectivity/bluetooth-le)
+Once the device and the sensor have established a connection, they start transferring GATT metadata to one another. If the sensor wants to report sensor data to the GPS device, it might make sense for the sensor to [act as the server.](https://developer.android.com/guide/topics/connectivity/bluetooth-le)
 
 The GATT client sends requests to a server and receives responses (and server-initiated updates) from it. The GATT client does not know anything in advance about the server’s attributes, so it must first inquire about the presence and nature of those attributes by performing service discovery. After completing service discovery, it can then start reading attributes found in the server.
 

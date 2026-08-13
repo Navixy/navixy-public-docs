@@ -82,7 +82,7 @@ This opens the **Raw data export** tool. Here, you need to choose the date range
 
 <figure><img src="../../../.gitbook/assets/image (9).png" alt=""><figcaption><p>Raw data export tool window</p></figcaption></figure>
 
-We've made sure that you won't accidentally close the window by clicking outside the **Raw data export** tool. You can only close it by clicking the **X** in the top right corner. Also, if you haven't chosen another device or refreshed the page, the **Raw data export** tool remembers all the settings you previously selected. This makes it easy to check any GPS tracker or sensor settings, go back, and keep working.
+We've made sure that you won't accidentally close the window by clicking outside the **Raw data export** tool. You can only close it by clicking the **X** in the top right corner. Also, if you haven't chosen another device or refreshed the page, the **Raw data export** tool remembers all the settings you previously selected. This makes it easy to check any GPS device or sensor settings, go back, and keep working.
 
 ### Choosing the date range
 
@@ -136,7 +136,7 @@ Each parameter you choose will add an extra column to the file.
 
 Once you've chosen all the parameters, click the **Download CSV** button to start the download. You can open the file with any text editor or table viewer. This CSV file uses a comma to separate the data.
 
-The file name includes the device ID, tracker label, and the date and time range within the timezone.
+The file name includes the device ID, device label, and the date and time range within the timezone.
 
 Each row, starting from the second one, is a message from the device sent to the platform. The first row always shows the message time in the selected time zone and the rest are the parameters you selected.
 

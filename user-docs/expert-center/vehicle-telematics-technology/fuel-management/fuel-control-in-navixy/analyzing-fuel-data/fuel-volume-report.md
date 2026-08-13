@@ -12,7 +12,7 @@ description: >-
 Please make sure the platform is configured properly before you create a fuel report, so events could be recognized properly:
 
 * Check [sensor settings](../sensors-setup-and-configuration.md)
-* Check [parking detection settings](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/kuQsXSvRlmWewB0IVXgM)
+* Check [parking detection settings](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/location-and-movement/parking-detection)
 {% endhint %}
 
 ### Refills and drains in reports
@@ -33,7 +33,7 @@ Once you have enabled one or both options for ignoring - the next algorithm will
 
 ## Creating a fuel volume report in Navixy
 
-Fuel level report displays detailed information on all fuel sensors installed in the vehicle and connected to the GPS tracker. The report will contain data on drains, refueling, initial and final fuel volume for a certain period and days, total fuel consumption and fuel consumption per 100 km or per hour.
+Fuel level report displays detailed information on all fuel sensors installed in the vehicle and connected to the GPS device. The report will contain data on drains, refueling, initial and final fuel volume for a certain period and days, total fuel consumption and fuel consumption per 100 km or per hour.
 
 Tasks that the report addresses:
 
@@ -46,7 +46,7 @@ Tasks that the report addresses:
 * To determine which machines need repair if their fuel consumption is consistently high.
 
 {% hint style="info" %}
-You can also build the report using Navixy API. More information could be obtained in [Developers Hub](https://www.navixy.com/docs/developers)
+You can also build the report using Navixy API. More information could be obtained in [Developers Hub](https://app.gitbook.com/s/y4jjF0toO75WHDuJCFA1/)
 {% endhint %}
 
 ![Fuel report](../../../../.gitbook/assets/image-20230905-074120.png)
@@ -103,7 +103,7 @@ The platform starts checking the speed of fuel level change:
 For time: 8.88 L / 10 minutes = 0.888 per minute or 8.88 in 10 minutes - below the threshold, drain is not determined.\
 For mileage: 8.88 L / 6.37 km = 1.39 per kilometer or 139 per 100 kilometers, which is above the threshold, that's why the drain is determined.
 
-## Report Parameters
+## Report parameters
 
 The following parameters are used in the report:
 
@@ -140,7 +140,7 @@ If the platform did not receive any data from the sensor, it will be highlighted
 {% hint style="info" %}
 There are various factors that may contribute to this phenomenon:
 
-* The device did not send data from the fuel sensor during this period. For example, the sensor wire is not securely fastened or data from the sensor was not sent according to the beacon setting.
+* The device did not send data from the fuel sensor during this period. For example, the sensor wire is not securely fastened or data from the sensor was not sent according to the GPS device setting.
 * The device did not send any data at all during this period. For example, it was turned off or removed from the monitored object.
 {% endhint %}
 
@@ -172,7 +172,7 @@ _example of a point on a graph of fuel consumption over time_
 
 ![Point on graph with x-axis time](../../../../.gitbook/assets/image-20230905-075327.png)
 
-## Table Fillings and drains
+## Fills and drains table
 
 This table will display information about the recorded drains and refills for the period.
 
@@ -213,10 +213,10 @@ The information in the table is organized in the following columns:
 
 * Date: reporting day
 * GPS and flow rate data
-  * Mileage, km: information about the mileage calculated by GPS on the beacon side.
+  * Mileage, km: information about the mileage calculated by GPS on the GPS device side.
   * Normal consumption, l: how many liters the vehicle would consume if it consumed fuel as specified by the factory.
-  * consumption rate, l/100 km: vehicle consumption rate specified by the factory. It is taken by the platform from the [vehicle](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/fleet-management/vehicles) card.
-* Fuel level sensor data": data that the platform has received from the fuel level sensor.
+  * Consumption rate, l/100 km: vehicle consumption rate specified by the factory. It is taken by the platform from the [vehicle](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/fleet-management/vehicles) card.
+* Fuel level sensor data: data that the platform has received from the fuel level sensor.
   * Initial volume, l: initial fuel level for the day.
   * Final volume, l: final fuel level for the day.
   * Consumption, l: actual fuel level consumption for the day. Calculated by the formula
@@ -226,7 +226,7 @@ The information in the table is organized in the following columns:
 * Gas stations: information on the number and total volume of registered gas stations.
 * Drains: information on the number and total volume of registered drains.
 
-**Raws**
+**Rows**
 
 The information in the first row can be analyzed as follows:
 
@@ -257,7 +257,7 @@ The data are categorized into the following columns:
 * Maximum, l: maximum fuel level for the period.
 * Average, l: average value of fuel level for the period. It is based on all received sensor values.
 
-**Raws**
+**Rows**
 
 The data from the string can be read like this:
 
@@ -280,7 +280,7 @@ If there is insufficient data for calculation, for example, if the sensor has be
 
 Also, the fuel level sensor data quality report provides recommendations. This information allows the customer to carry out the initial analysis of the equipment performance. The information provided will be useful to customers when making decisions, especially if the results of calculations do not meet their expectations.
 
-Another section is reated to the **Quality of the calibration table.**
+Another section is related to the **Quality of the calibration table**.
 
 A calibration table is a tabular representation that provides information regarding the correlation between the unprocessed sensor data obtained from a fuel level sensor and the genuine fuel level present in the tank.
 

@@ -27,23 +27,24 @@ Howen devices use two distinct state fields for different types of events:
 1. Navigate to the alert configuration section
 2. Select **State field value** as the alert type
 3. In the settings:
+   * Choose the appropriate state field (`sub_event_code` or `event_code`)
+   * Enter the corresponding code as the expected value
+   * Configure additional notification preferences as needed
 
-* Choose the appropriate state field (`sub_event_code` or `event_code`)
-* Enter the corresponding code as the expected value
-* Configure additional notification preferences as needed
-
-## Example use case: Lane departure warning
+## Example use case: lane departure warning
 
 Let's walk through setting up an alert for lane departure warnings:
 
 1. Create a new alert
-2. Select **State field value** as the alert type\
+2. Select **State field value** as the alert type
+
    ![Live example: State field value alert rule type](../../../../.gitbook/assets/image-20240417-091335.png)
-3. In the settings tab:\
+3. In the settings tab:
+
    ![Live example: State field and expected value settings](../../../../.gitbook/assets/image-20240417-091116.png)
 
-* State Field: `sub_event_code`
-* Expected Value: `30_2` (lane departure warning code)
+   * State field: `sub_event_code`
+   * Expected value: `30_2` (lane departure warning code)
 
 When the device sends a packet with sub\_event\_code 30\_2, the platform triggers the alert and notifies you or your driver.
 

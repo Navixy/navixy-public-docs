@@ -4,13 +4,13 @@ description: Set up Suntech ST4410G master-slave redundancy in Navixy. Covers sl
 
 # Configuring Suntech ST4410G master-slave in Navixy
 
-The Suntech ST4410G is a compact, battery-powered GPS tracker built for tough conditions. Running on CAT M1 with 2G fallback and equipped with a long-lasting lithium battery, it's made for high-risk environments where flexibility and stealth matter. Navixy users can easily benefit from this device's capabilities, the ST4410G is fully integrated into the Navixy platform, ensuring stable data flow and comprehensive management capabilities for users.
+The Suntech ST4410G is a compact, battery-powered GPS device built for tough conditions. Running on CAT M1 with 2G fallback and equipped with a long-lasting lithium battery, it's made for high-risk environments where flexibility and stealth matter. Navixy users can easily benefit from this device's capabilities, the ST4410G is fully integrated into the Navixy platform, ensuring stable data flow and comprehensive management capabilities for users.
 
 The most outstanding feature of the ST4410G is its master-slave redundancy, combined with Navixy's robust alert system, provides an unparalleled layer of security and operational continuity.
 
 In this document, you'll learn the main concept of the master-slave feature and how to set up alerts for it within the Navixy platform.
 
-## Configuring master-slave system for reports and alerts: Key parameters in Syntrack and Navixy
+## Configuring master-slave system for reports and alerts: key parameters in Syntrack and Navixy
 
 To ensure the effectiveness of the master-slave configuration, it's important to set up several key parameters. These settings help control the timing of device interactions and alert generation.
 
@@ -42,7 +42,7 @@ However, several factors may affect performance, such as when a slave device is 
 
 Now when the device is configured properly, it's time to provide additional value to it with the help of Navixy. The platform provides several software alerts that can be of great help in boosting the performance of the device.
 
-### Additional alerts in Navixy: Distance monitoring between master devices
+### Additional alerts in Navixy: distance monitoring between master devices
 
 An additional feature offered through Navixy is the ability to create alerts based on the distance between two or more master devices. If multiple master devices are tracking the same set of assets, businesses can set up alerts to notify them if the devices move beyond a predefined distance from each other.
 
@@ -75,7 +75,7 @@ With that in place, you'll be notified as soon as anything unexpected happens, w
 
 Managing alerts in a growing fleet shouldn't mean more manual work. Whether you're switching out devices often or dealing with complex conditions in the field, Navixy gives you two powerful ways to stay ahead:
 
-- [Navixy API tools](https://www.navixy.com/docs/developers) help you automate at scale.
+- [Navixy API tools](https://app.gitbook.com/s/y4jjF0toO75WHDuJCFA1/) help you automate at scale.
 - [IoT Logic](https://www.navixy.com/iot-logic/) offers flexibility for complex scenarios.
 
 ## Final thoughts## 

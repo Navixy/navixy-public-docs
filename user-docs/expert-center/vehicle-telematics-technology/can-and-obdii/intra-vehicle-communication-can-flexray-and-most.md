@@ -16,7 +16,7 @@ CAN, FlexRay, and MOST are all automotive communication protocols used to connec
 * **MOST**\
   A bus standard for vehicle multimedia networks that allows for the transfer of high-quality audio, video, and data. MOST is available in three transmission speeds: MOST25, MOST50, and MOST150.
 
-CAN (Controller Area Network) is currently the most widely used in-vehicle network. However, with continuous development in autonomous vehicles and related technology, there is a high demand for greater bandwidth and connectivity. In this document, we briefly describe CAN and other vehicular connectivity options, including wireless CAN, MOST, FlexRay, and Automotive Ethernet.
+CAN (Controller Area Network) is currently the most widely used in-vehicle network. However, with continuous development in autonomous vehicles and related technology, there is a high demand for greater bandwidth and connectivity. In this document, we briefly describe CAN and other vehicular connectivity options, including wireless CAN, MOST, FlexRay, and automotive ethernet.
 
 ## CAN bus: some principles behind
 
@@ -64,8 +64,6 @@ Also solutions like Raspberry Pi, Texas Instruments Launchpad and Arduino are ar
 
 Enabling CAN bus data provides fleet owners various opportunities to access various information including fuel consumption, odometer readings, revolutions per minute, throttle position, engine load/torque, engine temperature and fuel level.
 
-CAN is currently the most widely used in-vehicle network. However, with continuous development in autonomous vehicles and [related technology](https://www.navixy.com/), there is a high demand for greater bandwith and connectivity. Further we briefly describe some other vehicular connectivity options, including wireless CAN, MOST, FlexRay and Automotive Ethernet.
-
 ## Wireless CAN
 
 CAN on a twisted pair of copper wires became an ISO standard in 1994. Growing demand on increased connectivity gives a rise to development of alternative and complementary technologies. For instance, some options for wireless CAN transmission rely on protocol-based radio standards such as WLAN or Bluetooth.
@@ -76,11 +74,11 @@ In such scenario, CAN data in the transmitter must be converted to the wireless 
 
 The wireless CAN that based on dual-mode radio enables CAN participants to be integrated wirelessly into a CAN network, increasing security and usability. However, such a system require special antennas that need space and a particular alignment that limiting omnidirectional radiation.
 
-## MOST, FlexRay and Automotive Ethernet in brief
+## MOST, FlexRay and automotive ethernet in brief
 
 A promising alternative to CAN is automotive ethernet. Some estimations expect the automotive ethernet market to grow more than 21.6% over the forecast period 2019-2026.
 
-Key ethernet benefits for vehicle connectivity are high bandwith and cost efficiency. Ethernet employ Carrier Sense Multiple Access with Collision Detection (CSMA/CD) strategy. Collision can be ignored through division in the in-vehicle networks. Some challenges of automotive ethernet are significant amount of RF noise, inability to provide latency down to the low microsecond range and lacking the way of synchronizing time between devices.
+Key ethernet benefits for vehicle connectivity are high bandwidth and cost efficiency. Ethernet employ Carrier Sense Multiple Access with Collision Detection (CSMA/CD) strategy. Collision can be ignored through division in the in-vehicle networks. Some challenges of automotive ethernet are significant amount of RF noise, inability to provide latency down to the low microsecond range and lacking the way of synchronizing time between devices.
 
 MOST (Media Oriented System Transport) is a serial communication system for transmitting control data, video and audio by means of fiber-optic [http://cables.It](http://cables.it) provides a point to point sound and video information exchange with 24.8 Mbps speed rates. MOST created by MOST association and defines the protocol, software and hardware layers necessary to allow for the efficient and low-cost transport of control, real-time and packet data using a single medium / physical layer. A MOST network could be schematically presented in a form of ring that may include up to 64 MOST devices. Thanks to to its plug\&play functionality, adding or removing MOST device should be pretty straightforward.
 

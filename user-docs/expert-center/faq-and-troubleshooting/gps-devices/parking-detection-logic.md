@@ -4,7 +4,7 @@ description: >-
   trip ends. Configure per-device thresholds for accurate stop detection.
 ---
 
-# Parking Detection Logic
+# Parking detection logic
 
 ## Introduction
 

@@ -92,7 +92,7 @@ The installation of a flow meter can vary in time depending on the fuel system, 
 
 [Video](https://www.youtube.com/watch?v=YYeqzt2hK7I) on flow meter installation on a tractor (20 minutes).
 
-### Single-chamber flow meter installation — On suction side
+### Single-chamber flow meter installation — on suction side
 
 Installation of a single-chamber flow meter according to the **On suction side** scheme:
 
@@ -126,7 +126,7 @@ The following changes will be made to the standard fuel system:
 * additional load on the low pressure fuel pump;
 * fuel in the tank is not heated by a return flow line (fuel heater is sometimes required).
 
-### Single-chamber flow meter installation — On pressure side
+### Single-chamber flow meter installation — on pressure side
 
 Installation of a single-chamber flow meter according to **On pressure side** scheme:
 
@@ -159,7 +159,7 @@ The following changes will be made to the standard fuel system:
 * High-pressure fuel pump is slightly deteriorated;
 * return flow fuel is lower than with a regular fuel system.
 
-### Differential flow meter installation — On suction side
+### Differential flow meter installation — on suction side
 
 Installation of a differential/two-chamber flow meter according to **On suction side** scheme:
 
@@ -191,7 +191,7 @@ The following changes will be made to the standard fuel system
 * higher fuel consumption measurement error (up to 3%);
 * additional fine filter and meter increase load on the low-pressure fuel pump.
 
-### Differential flow meter installation: **On pressure side**
+### Differential flow meter installation — on pressure side
 
 Installation of a differential/two-chamber flow meter according to this scheme is as follows:
 
@@ -296,7 +296,7 @@ To convert the received values to liters, it is necessary to enter a special coe
 
 **Application:** It is easier to find a GPS device with a digital interface. In practice, only one interface is required to be connected to a flow meter. Just make sure you consider whether the GPS device has RS-232 or RS-485 input.
 
-### CAN-like bus / S6 Interface
+### CAN-like bus / S6 interface
 
 **Equipment:** A flow meter with a CAN-like interface, a CAN module for reading data from a CAN bus, a device compatible with a CAN module.
 
@@ -322,7 +322,7 @@ In order to convert the received raw data to liters, it is necessary to enter a 
 
 **Application:** The simplicity of obtaining data is positively perceived by end users and can help to organize a better accounting of fuel consumption.
 
-## Flow meter vs Fuel level sensor
+## Flow meter vs. fuel level sensor
 
 To solve tasks related to fuel control, your end customers or partners can choose between a flow meter (FM) and [a fuel level sensor (FLS)](../fuel-level-sensors/). To help them choose, we recommend first looking at the key features:
 

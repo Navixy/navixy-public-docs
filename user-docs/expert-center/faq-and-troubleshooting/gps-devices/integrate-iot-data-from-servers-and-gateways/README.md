@@ -8,6 +8,6 @@ Navixy can receive telematics data not only directly from devices but also throu
 
 Navixy supports multiple protocols:
 
-* [Wialon](wialon-protocols-for-data-ingestion.md)**:** Wialon Retranslator, Wialon Combine, and Wialon IPS.
+* [Wialon protocols for data ingestion](wialon-protocols-for-data-ingestion.md)**:** Wialon Retranslator, Wialon Combine, and Wialon IPS.
 
 Each protocol has its unique capabilities, allowing users to transmit a wide range of data and telemetry to the Navixy platform.

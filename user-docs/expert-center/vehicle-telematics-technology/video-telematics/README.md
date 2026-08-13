@@ -8,5 +8,5 @@ Video telematics is revolutionizing fleet management and driver safety. By integ
 
 > For example, the [JIMI JC400](https://www.navixy.com/devices/jimi-iot-concox/jimi-jc400/) device, recognized for its reliability and advanced features, captures high-quality video footage inside and outside the vehicle, offering crucial insights into driver performance and road incidents. This data can be analyzed in real-time, enabling fleet managers to identify risky behaviors, refine driver training programs, and boost overall operational efficiency. [Read more](https://www.navixy.com/blog/video-telematics-with-navixy-and-jc400/).
 
-- [Dash cam installation](dash-cam-installation.md)
+- [Dashcam installation](dash-cam-installation.md)
 - [Configuration guides](configuration-guides/README.md)

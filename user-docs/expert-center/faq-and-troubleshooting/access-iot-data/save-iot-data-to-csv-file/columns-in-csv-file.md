@@ -4,7 +4,7 @@ description: >-
   types, event IDs, and how to interpret GPS, sensor, and state fields.
 ---
 
-# Columns in CSV File
+# Columns in the CSV file
 
 The data warehouse tool enables you to export a raw data file containing all packets received from your device, without any filtering or calculations made on the platform side. These parameters represent information initially decoded from your device's packet in protocol related format, presented in a human-readable way. You don’t need to know the protocol to read and check the information in these packets.
 

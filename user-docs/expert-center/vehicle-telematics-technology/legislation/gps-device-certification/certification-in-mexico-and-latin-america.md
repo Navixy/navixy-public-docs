@@ -6,7 +6,7 @@ description: >-
 
 # Certification in Mexico and Latin America
 
-Several international entities conduct standardization tests for GPS device certification to ensure that trackers meet safety and operation standards. These organizations give their approval and grant certified devices their distinctive seal as a guarantee of quality and durability.
+Several international entities conduct standardization tests for GPS device certification to ensure that devices meet safety and operation standards. These organizations give their approval and grant certified devices their distinctive seal as a guarantee of quality and durability.
 
 Although most countries approve equivalents or use the international standards established by the United States, Canada, and the European Union, each country may require mandatory or voluntary standards depending on the type of device to be imported and marketed.
 
@@ -44,7 +44,7 @@ In addition to the various national and international bodies that issue certific
 
 ## SIM/operators
 
-Since most trackers use a universal SIM card, certification isn't an issue. Many of the businesses that provide universal SIMs also have deals to access cell towers owned by carriers for roaming and additional capacity. However, if a device has a SIM card from a specific carrier, like AT\&T or T-Mobile, then the tracker needs to be certified to operate on its network.
+Since most devices use a universal SIM card, certification isn't an issue. Many of the businesses that provide universal SIMs also have deals to access cell towers owned by carriers for roaming and additional capacity. However, if a device has a SIM card from a specific carrier, like AT\&T or T-Mobile, then the device needs to be certified to operate on its network.
 
 Some alliances between manufacturers and carriers "lock" the devices to only operate with their SIM. If you want to use this equipment with another operator, you would have to consult the corresponding process to "unlock" it.
 

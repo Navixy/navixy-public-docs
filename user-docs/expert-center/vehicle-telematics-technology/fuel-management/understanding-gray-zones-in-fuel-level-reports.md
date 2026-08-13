@@ -1,4 +1,10 @@
-# Understanding Gray Zones in Fuel Level Reports
+---
+description: >-
+  Gray zones in fuel level reports come from data continuity logic, not missing
+  readings. Covers GPS versus sensor validity and how to reduce reporting gaps.
+---
+
+# Understanding gray zones in fuel level reports
 
 ### Overview
 
@@ -12,7 +18,7 @@ This document explains how the platform processes sensor data, why discontinuous
 
 <br>
 
-### Valid Sensor Data vs. Invalid GPS Data
+### Valid sensor data vs. invalid GPS data
 
 The first concept to understand is that GPS validity and sensor validity are independent.
 
@@ -40,13 +46,13 @@ In other words, invalid GPS data does not invalidate sensor data.
 
 
 
-### Continuity of Sensor Data
+### Continuity of sensor data
 
 One of the most common questions regarding Fuel Level reports is why the graph displays discontinuous segments, even though the individual sensor readings are present in the report.
 
 From the customer's perspective, this behavior may appear incorrect because the sensor values are visible, yet the graph is not rendered as a single continuous line. In many cases, customers interpret these interruptions as missing data or incorrect processing, when in reality they are the result of the platform's continuity logic.
 
-#### Continuity Logic
+#### Continuity logic
 
 The platform groups sensor readings into continuous intervals based on the time difference between consecutive records.
 
@@ -60,7 +66,7 @@ As a result, individual sensor readings continue to be stored, processed, and in
 
 
 
-#### Why Doesn't the Platform Connect the Segments?
+#### Why doesn't the platform connect the segments?
 
 The primary objective of the reporting engine is to represent only information that has actually been reported by the device.
 
@@ -90,7 +96,7 @@ This design guarantees that every line displayed in the report represents a sequ
 
 
 
-### Reducing Communication Gaps
+### Reducing communication gaps
 
 In most situations, discontinuous intervals originate from the device configuration rather than from the reporting engine itself.
 
@@ -98,9 +104,9 @@ The first aspect that should be reviewed is the sensor reporting strategy. Many 
 
 Another important factor is the device reporting frequency. Increasing the reporting interval frequency generally results in more continuous datasets and therefore smoother report visualization.
 
-Power management should also be considered. Depending on the device configuration, the tracker may enter Sleep, Deep Sleep, or another power-saving mode when the ignition is turned off. In these states, the device may continue communicating with the server through heartbeat packets while temporarily suspending sensor transmissions. Although the server still recognizes the device as connected, no new sensor values are received, which eventually creates new continuity intervals.
+Power management should also be considered. Depending on the device configuration, the device may enter Sleep, Deep Sleep, or another power-saving mode when the ignition is turned off. In these states, the device may continue communicating with the server through heartbeat packets while temporarily suspending sensor transmissions. Although the server still recognizes the device as connected, no new sensor values are received, which eventually creates new continuity intervals.
 
-For this reason, the most effective way to reduce gray zones is to review the tracker configuration, including:
+For this reason, the most effective way to reduce gray zones is to review the device configuration, including:
 
 * Sensor reporting frequency.
 * Sensor transmission priority.

@@ -1,6 +1,6 @@
 ---
 description: >-
-  Canadian GPS tracker certification requires ISED wireless approval, RoHS
+  Canadian GPS device certification requires ISED wireless approval, RoHS
   compliance, and PTCRB and carrier certifications from Rogers, Telus, and Bell.
 ---
 
@@ -16,9 +16,9 @@ Note: cellular certifications are generally optional in Canada, so contact your 
 
 ## Required certification labels in Canada
 
-Products need to display all relevant markings from each agency that issues a certification. In Canada, the device may bear the former IC label or simply the newer ISED ID number, depending on when the tracker was certified. The latter allows you to search the ISED database for additional details about the tests, product documentation, and more.
+Products need to display all relevant markings from each agency that issues a certification. In Canada, the device may bear the former IC label or simply the newer ISED ID number, depending on when the device was certified. The latter allows you to search the ISED database for additional details about the tests, product documentation, and more.
 
-![GPS Trackers Certification in Canada](../../../.gitbook/assets/ic-zoomin-callout-v3-1-600x416.png)
+![GPS devices certification in Canada](../../../.gitbook/assets/ic-zoomin-callout-v3-1-600x416.png)
 
 <table data-full-width="true"><thead><tr><th width="99.81817626953125">Program</th><th width="149.81817626953125">Label</th><th width="99.09088134765625">Safety</th><th width="102.818115234375">Wireless</th><th>Meaning</th></tr></thead><tbody><tr><td>Canada</td><td></td><td></td><td></td><td></td></tr><tr><td>ISED<sup>1</sup></td><td><img src="../../../.gitbook/assets/ised-canada-logo-canada.png" alt="Certification in Canada"></td><td></td><td>✓</td><td>ISED Canada (Innovation, Science and Economic Development, formerly IC, or Industry Canada) approves communication devices for sale in Canada. The country's Radio Standards Specifications define the standards for approval, while Foreign Certification Bodies (FCBs) certify products outside of Canada and issue Technical Acceptance Certificates for all approved devices. This certificate is required to enter the Canadian market.<br><br>Note: Prior FCC approval can help expedite ISED certification.</td></tr></tbody></table>
 
@@ -28,7 +28,7 @@ Products need to display all relevant markings from each agency that issues a ce
 
 <table data-full-width="true"><thead><tr><th width="105.27276611328125">Program</th><th width="143.27276611328125">Label</th><th width="98.272705078125">Safety</th><th width="105.6363525390625">Wireless</th><th>Meaning</th></tr></thead><tbody><tr><td>Canada</td><td></td><td></td><td></td><td></td></tr><tr><td>CSA</td><td><img src="../../../.gitbook/assets/csa-canada-logo-canada.png" alt="Certification in Canada"></td><td>✓</td><td></td><td>CSA (Canadian Standards Association) certifies devices for both North American and international markets. Many of its standards and testing protocols are similar to those implemented by the FCC and UL. Like UL certification, CSA testing is optional for entry into the Canadian market.</td></tr></tbody></table>
 
-## How to check if a GPS tracker is certified by cellular operators?
+## How to check if a GPS device is certified by cellular operators?
 
 Visit the sites below to explore each cellular operator's database of certified devices or reach to them for more details. Since cellular certification isn't a requirement, some companies may not provide information regarding this process.
 

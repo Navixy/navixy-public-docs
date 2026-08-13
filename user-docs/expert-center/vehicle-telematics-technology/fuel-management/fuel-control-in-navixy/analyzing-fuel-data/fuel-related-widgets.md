@@ -18,6 +18,6 @@ Lastly, the "gear" button opens a list of available widgets. You can deselect un
 
 ![Device info and widgets](../../../../.gitbook/assets/general_view_600-1.png)
 
-If the tracker is connected to the CAN bus or OBD2 connector, the widget will display all available information from the vehicle. Fuel level and consumption, engine speed, coolant temperature, malfunction lamp (MIL), error codes (DTC), engine load, axle load, etc. To display the sensors, they [must be added](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings) to in the device settings menu.
+If the device is connected to the CAN bus or OBD2 connector, the widget will display all available information from the vehicle. Fuel level and consumption, engine speed, coolant temperature, malfunction lamp (MIL), error codes (DTC), engine load, axle load, etc. To display the sensors, they [must be added](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings) to in the device settings menu.
 
 ![OBDII and CAN information](../../../../.gitbook/assets/obdwidgeten.png)

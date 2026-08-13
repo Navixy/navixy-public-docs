@@ -16,11 +16,11 @@ Grafana is an open-source data visualization tool that offers a wide range of cu
 
 By following this step-by-step guide, you can seamlessly integrate Navixy with Grafana, enabling you to visualize and analyze your telematics data effectively.
 
-### Step 1: Obtaining the Navixy API key
+### Step 1: obtaining the Navixy API key
 
 Start by logging into your Navixy account and navigating to **Account settings**. Locate the **API keys** section and generate a unique API key. This key, such as `"8f6a4353bc5114d97e2068b4e398"`, will be used to authenticate the connection between Navixy and Grafana.
 
-### Step 2: Launching Grafana
+### Step 2: launching Grafana
 
 Grafana provides 2 types of access: cloud or deployed. Cloud access could be obtained on their official website [https://grafana.com/](https://grafana.com/). Below we are going to explore how to install the package on your own server or local computer.
 
@@ -34,11 +34,11 @@ To deploy Grafana on a local Windows machine, follow these simple steps:
 
 For Linux/Mac installations or if you prefer to use the Docker version of Grafana, refer to the official Grafana documentation for detailed instructions tailored to your specific setup.
 
-### Step 3: Installing the JSON API data source plugin
+### Step 3: installing the JSON API data source plugin
 
 Once Grafana is launched, proceed to the **Connections** or **Plugins** menu in the Grafana interface. Search for the **JSON API** data source plugin and select it. Install the plugin following the provided instructions. This plugin is crucial for establishing communication between Grafana and the Navixy API.
 
-### Step 4: Setting up the JSON API data source connection
+### Step 4: setting up the JSON API data source connection
 
 After installing the **JSON API** plugin, your Grafana instance is ready to connect with the Navixy API using the API key.
 
@@ -62,7 +62,7 @@ Follow these steps to set up the connection:
 
 ![Grafana and Navixy API - data source setting up](../../../.gitbook/assets/image-20231017-080330.png)
 
-### Step 5: Importing the Navixy dashboard template
+### Step 5: importing the Navixy dashboard template
 
 To expedite the setup process, import the Navixy [dashboard template](https://github.com/Navixy/bi-integrations/blob/main/grafana/navixy_fuel_dashboard_demo.json) into Grafana. Access the Grafana dashboard management section, create a new dashboard, and select the option to import the dashboard. Upload the provided Navixy dashboard template file. Review the import settings, including the assigned data source, and complete the import process.
 
@@ -72,7 +72,7 @@ Grafana provides a complete set of visualization objects and tools, enabling tel
 
 ![](../../../.gitbook/assets/image-20231017-083157.png)
 
-### Trackers and sensors to analyze
+### Devices and sensors to analyze
 
 To begin, on the demo dashboard, select the desired device using the **Tracker** selector. Once selected, you can create multiple line charts on the same canvas by choosing the desired sensors in the resulting and resulting selectors. Select resulting in **Raw Data 1** / **Raw data 2** drop-down menus if you want to analyze sensors raw data.
 

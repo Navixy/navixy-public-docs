@@ -5,7 +5,7 @@ description: >-
   enabled.
 ---
 
-# How to Implement Event-Driven Scheduling Using Unix Time in IoT Logic
+# How to implement event-driven scheduling using Unix time in IoT Logic
 
 In this section, configure a timer in IoT Logic to control the activation of outputs on the devices. This functions as a scheduler by using Unix time for time-based control.
 
