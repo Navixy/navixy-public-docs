@@ -33,6 +33,7 @@ All requests require authentication using an API key with the `NVX ` prefix in t
 
 * **European platform**: `https://api.eu.navixy.com/v2`
 * **American platform**: `https://api.us.navixy.com/v2`
+* **Middle East platform**: `https://api.me.navixy.com/v2`
 
 ### OpenAPI spec <a href="#openapi-spec" id="openapi-spec"></a>
 

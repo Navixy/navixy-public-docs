@@ -21,6 +21,7 @@ Raw IoT Data API resides in the `dwh` subsection of the API URL and does not bel
 
 * `https://api.eu.navixy.com/dwh/v1` for the European Navixy ServerMate platform.
 * `https://api.us.navixy.com/dwh/v1` for the American Navixy ServerMate platform.
+* `https://api.me.navixy.com/dwh/v1` for the Middle East Navixy ServerMate platform.
 
 For example, to make raw data readings API request in the European Navixy ServerMate, you need to use this URL:
 

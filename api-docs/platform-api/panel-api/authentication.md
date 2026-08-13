@@ -26,6 +26,7 @@ Depending on the deployment method (regional web server or on-premise installati
 
 * **European server**: `https://api.eu.navixy.com/v2/panel/account/auth/`
 * **American server**: `https://api.us.navixy.com/v2/panel/account/auth/`
+* **Middle East server**: `https://api.me.navixy.com/v2/panel/account/auth/`
 * **On-premise installations**: `https://api.your-domain.com/v2/panel/account/auth/`
 
 ## Obtaining a session hash

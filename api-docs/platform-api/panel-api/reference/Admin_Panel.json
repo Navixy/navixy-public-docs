@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "version": "1.1.1",
+    "version": "1.2.0",
     "title": "Navixy Admin Panel API",
     "summary": "API calls for dealer, reseller, and account administration",
     "description": "This is an API reference for the Navixy Admin Panel API. Use these endpoints to authenticate a dealer session, read dealer information, manage activation codes, and read or update panel service, notification, and branding settings.\n\nThis specification covers every documented Admin Panel API resource family.\n\n**Parameters.** All parameters are documented in the JSON request body. The API also accepts the same parameters as form-encoded body fields or as query-string parameters, but those forms are not documented per operation. See the authentication guide for details.\n\n**Errors.** Detect an error by checking the HTTP status code: anything other than `200 OK` carries an error body with `success: false` and a `status.code` giving the API-level error code. The default error status is `400`, with some codes mapping to `402`, `403`, `404`, `409`, or `500`. Validation failures also include an `errors` array naming the offending parameter.",
@@ -23,6 +23,10 @@
     {
       "url": "https://api.us.navixy.com/v2",
       "description": "Navixy production server on American platform"
+    },
+    {
+      "url": "https://api.me.navixy.com/v2",
+      "description": "Navixy production server on Middle East platform"
     }
   ],
   "tags": [

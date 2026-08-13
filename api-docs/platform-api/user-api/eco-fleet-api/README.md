@@ -15,6 +15,7 @@ Eco Fleet API resides in `eco_fleet` subsection of API URL. So you can determine
 
 * `https://api.eu.navixy.com/eco_fleet` for European Navixy ServerMate platform.
 * `https://api.us.navixy.com/eco_fleet` for American Navixy ServerMate platform.
+* `https://api.me.navixy.com/eco_fleet` for Middle East Navixy ServerMate platform.
 
 For example, to make a sensor quality API call in European Navixy ServerMate, you should use the URL:
 

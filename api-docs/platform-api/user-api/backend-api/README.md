@@ -21,7 +21,8 @@ To give you a clear idea of how to work with the Navixy API, let's go through a 
 1. **Determine the URL to API calls**:
    * Depending on the physical location of the platform, the base URL will be:
      * `https://api.eu.navixy.com/v2` for European Navixy platform;
-     * `https://api.us.navixy.com/v2` for North American Navixy Splatform;
+     * `https://api.us.navixy.com/v2` for North American Navixy platform;
+     * `https://api.me.navixy.com/v2` for Middle East Navixy platform;
      * `https://api.your_domain` for self-hosted (On-Premise) installations.
 2. [**Obtain hash of an API key**](../authentication.md#id-1.-user-session-hash-basic-authentication):
    * Authenticate and obtain a user key via the authentication call.
@@ -67,6 +68,7 @@ Depending on the physical location of the platform, use one of the following bas
 
 * **European Navixy platform**:`https://api.eu.navixy.com/v2`
 * **North American Navixy platform**:`https://api.us.navixy.com/v2`
+* **Middle East Navixy platform**:`https://api.me.navixy.com/v2`
 * **Self-hosted (On-Premise) installations**:`https://api.your_domain`
 
 For example, to make a `user/auth` API call on the European Navixy ServerMate platform, you should use the URL`https://api.eu.navixy.com/v2/user/auth`
