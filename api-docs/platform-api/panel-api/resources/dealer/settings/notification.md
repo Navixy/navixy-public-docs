@@ -9,115 +9,42 @@ Notification settings in the Navixy Admin Panel are used to manage and configure
 
 ## Notification Settings Object
 
-Let's explore the Notification Setting object using the following example:
+{% openapi-schemas spec="admin-panel" schemas="NotificationSettings" grouped="true" %}
+[OpenAPI admin-panel](../../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-```json
-{
-  "email_from": "Navixy <no-reply@navixy.com>",
-  "email_footer": "\n\n—-nSincerely, Navixy",
-  "email_special": "no-reply@navixy.com",
-  "sms_originator": "demo.navixy.com",
-  "caller_id": "491761234543"
-}
-```
-
-* `email_from` - string. The email address from which notification messages will be sent. This can be a simple email address ("no-reply@navixy.com") or an email address with a name ("Navixy [no-reply@navixy.com](mailto:no-reply@navixy.com)").
-* `email_footer` - string. A footer added to all notification emails. This can be any text up to 600 characters.
-* `email_special` - string. A special email address used for PaaS reports.
-* `sms_originator` - string. The originator for SMS notifications. The maximum length is 20 characters and must match the regex pattern `(p{L}|d|[-'" .,:/])*`, e.g., "demo.navixy.com" or "491761234567".
-* `caller_id` - string. The originator for voice messages. The maximum length is 20 characters and must match the regex pattern `(p{L}|d|[-'" .,:/])*`, e.g., "491761234543".
+`email_special` is the same underlying value as `email_special` in the [service settings](service.md#service-settings-object). Writing it through either endpoint is visible in the other.
 
 ## API actions
 
 API path: `panel/dealer/settings/notification`.
 
-### read
-
-Gets current monitoring notification settings.
+***
 
 _required permissions_: `notification_settings: "read"`.
 
-#### Parameters
-
-Only session `hash`.
-
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/dealer/settings/notification/read' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06"}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/dealer/settings/notification/read?hash=fa7bf873fab9333144e171372a321b06
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "value": {
-    "email_from": "NAVIXY <no-reply@navixy.com>",
-    "email_footer": "\n\n---nSincerely, Navixy",
-    "email_special": "no-reply@navixy.com",
-    "sms_originator": "demo.navixy.com",
-    "caller_id": "491761234543"
-  }
-}
-```
-
-* `value` - [Notification settings object](notification.md#notification-settings-object) described above.
+{% openapi-operation spec="admin-panel" path="/panel/dealer/settings/notification/read" method="post" %}
+[OpenAPI admin-panel](../../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
 [General](../../../../user-api/backend-api/errors.md#error-codes) types only.
 
-### update
-
-Updates notification settings for the current dealer.
+***
 
 _required permissions_: `notification_settings: "update"`.
 
-#### Parameters
+{% hint style="warning" %}
+This is a full replacement, not a partial update. Any writable field you omit is reset to its default rather than left alone: omitting `email_special` clears it. Read the current settings first, change what you need, and send the complete object back.
+{% endhint %}
 
-| name            | description                                                                                     | type   |
-| --------------- | ----------------------------------------------------------------------------------------------- | ------ |
-| email\_from     | Email from which notification messages will be sent. Can be email address or email with a name. | string |
-| email\_footer   | Footer which is added to all notification emails. Arbitrary text up to 600 characters.          | string |
-| email\_special  | Optional. Special email address for PaaS reports.                                               | string |
-| sms\_originator | SMS originator. Max length is 20.                                                               | string |
-| caller\_id      | Voice messages originator. Max length is 20.                                                    | string |
-
-#### Example
-
-cURL
-
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/dealer/settings/notification/update' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "email_from": "NAVIXY <no-reply@navixy.com>", "email_footer": "\n\n---nSincerely, Navixy", "sms_originator": "demo.navixy.com", "caller_id": "491761234543"}'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/dealer/settings/notification/update" method="post" %}
+[OpenAPI admin-panel](../../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
 [General](../../../../user-api/backend-api/errors.md#error-codes) types only.
+
+Omitting any of `email_from`, `email_footer`, `sms_originator`, or `caller_id` returns error code 7 with an `errors` array naming the missing field.

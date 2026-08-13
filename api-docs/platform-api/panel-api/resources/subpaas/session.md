@@ -9,44 +9,17 @@ description: API call to create a subpaas session.
 
 API base path: `panel/subpaas/session`.
 
-### create
+***
 
-Creates a SubPaaS session.
+_required permissions_: `subpaas: "create"`.
 
-#### Parameters
+{% hint style="warning" %}
+The returned `hash` grants access to the sub-dealer's panel. Treat it as a credential and handle it exactly as you would a hash from [authentication](../../authentication.md).
+{% endhint %}
 
-| name        | description  | type |
-| ----------- | ------------ | ---- |
-| subpaas\_id | Subpaas' ID. | int  |
-
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/subpaas/session/create' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "subpaas_id": 97834}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/subpaas/session/create?hash=fa7bf873fab9333144e171372a321b06&subpaas_id=97834
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "hash": "600d4a5400000000600d4a5400000000"
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/subpaas/session/create" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 

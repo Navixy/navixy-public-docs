@@ -5,94 +5,43 @@ description: API calls for interaction with images that used for branding of the
 
 # Branding Customization
 
-The Navixy platform can be branded through the Admin Panel by customizing various elements to reflect your company’s identity. You can upload your company’s logo and favicon to be displayed on the platform, wallpaper and logos in documents such as PDF and Excel reports.
+The Navixy platform can be branded through the Admin Panel by customizing various elements to reflect your company's identity. You can upload your company's logo and favicon to be displayed on the platform, wallpaper and logos in documents such as PDF and Excel reports.
 
 ## API actions
 
 API path: `panel/dealer/settings/image`.
 
-### upload
-
-Uploads image of specified `type`.
-
-**MUST** be a POST multipart request (multipart/form-data), with one of the parts being an image file upload (with the name "file").
-
-File part **mime** type must be one of:
-
-* `image/jpeg`
-* `image/pjpeg`
-* `image/png`
-* `image/gif`
-* `image/webp`
-* `image/x-icon` (for favicon type)
+***
 
 _required permissions_: `service_settings: "update"`.
 
-#### Parameters
+{% hint style="info" %}
+This is the only Admin Panel operation that uses `multipart/form-data`. Send `type` as a form part: supplying it as a query parameter fails with error code 234. The session credential still travels in the `Authorization` header, exactly as on the JSON operations.
+{% endhint %}
 
-| name             | description                                                                                                     | type   |
-| ---------------- | --------------------------------------------------------------------------------------------------------------- | ------ |
-| type             | Image type to delete. Can be one of `logo`, `favicon`, `login_wallpaper`, `desktop_wallpaper`, `document_logo`. | string |
-| file             | Image file.                                                                                                     | string |
-| redirect\_target | Optional. A URL to redirect.                                                                                    | string |
+{% openapi-operation spec="admin-panel" path="/panel/dealer/settings/image/upload" method="post" %}
+[OpenAPI admin-panel](../../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-If `redirect_target` passed a return redirect to `response=<urlencoded response json>`.
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+Uploaded files are stored under `static/paas/<dealer_id>/<type>_<timestamp>.png` and the resulting path is returned by [settings/service/read](service.md#post-panel-dealer-settings-service-read).
 
 #### Errors
 
 * 201 - Not found in the database - when there are no settings for dealer in the db.
 * 233 - No data file - if `file` part not passed.
-* 234 - Invalid data format - if passed `file` with unexpected `mime` type.
+* 234 - Invalid data format - if passed `file` with unexpected `mime` type, or if `type` was not sent as a form part.
 * 236 - Feature unavailable due to tariff restrictions - if branding feature disabled for this dealer.
 * 254 - Cannot save file - on some file system errors.
 
-### delete
-
-Deletes an image of specified `type`.
+***
 
 _required permissions_: `service_settings: "update"`.
 
-#### Parameters
+{% openapi-operation spec="admin-panel" path="/panel/dealer/settings/image/delete" method="post" %}
+[OpenAPI admin-panel](../../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-| name | description                                                                                                     | type   |
-| ---- | --------------------------------------------------------------------------------------------------------------- | ------ |
-| type | Image type to delete. Can be one of `logo`, `favicon`, `login_wallpaper`, `desktop_wallpaper`, `document_logo`. | string |
-
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/dealer/settings/image/delete' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "type": "logo"}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/dealer/settings/image/delete?hash=fa7bf873fab9333144e171372a321b06&type=logo
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+The image reverts to the platform default for that element.
 
 #### Errors
 

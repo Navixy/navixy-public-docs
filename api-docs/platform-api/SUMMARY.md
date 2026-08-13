@@ -251,7 +251,6 @@
 * [Admin Panel authentication](panel-api/authentication.md)
 * [Resources](panel-api/resources/README.md)
   * [Account](panel-api/resources/account.md)
-  * [Equipment](panel-api/resources/equipment.md)
   * [Gateways](panel-api/resources/gateways.md)
   * [Order](panel-api/resources/order.md)
   * [Plans](panel-api/resources/tariff.md)

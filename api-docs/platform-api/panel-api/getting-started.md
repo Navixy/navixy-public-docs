@@ -1,162 +1,75 @@
 ---
-title: Getting Started
-description: Overview of Navixy Admin Panel API
+title: Getting started
+description: What the Admin Panel API manages, its core concepts, and how to use this documentation.
 ---
 
 # Navixy Admin Panel API
 
-The Admin Panel API (or Panel API for short) allows developers to manage various entities within the Navixy Admin Panel. This documentation provides detailed information on how to interact with the API, including the methods and parameters required for effective management of your Navixy environment.
+The Admin Panel API (or Panel API for short) lets developers manage the Navixy platform at the dealer or reseller level: end-user accounts, devices, plans, and dealer-wide settings. Use it to build integrations and internal tools that automate administrative work instead of using the Admin Panel interface by hand.
 
-## Introduction
+The structure of the Admin Panel API mirrors that of the [Backend API](../user-api/backend-api/), so it helps to read that page first. The main differences are the authorization scheme and the request paths. Requests and responses use JSON over HTTPS.
 
-The Admin Panel API is designed to help administrators and developers manage the Navixy platform more efficiently. Whether you are managing users, devices, or settings, this API provides the necessary tools to automate and streamline these tasks.
+Every operation is documented from a single OpenAPI specification, so each resource page under [Resources](resources/) carries the full parameter and response schema for its operations, along with a panel for sending a test request. Use those pages as the reference; this page orients you to the API as a whole.
 
-The structure of the Admin Panel API mirrors that of the Backend API, making it advantageous to read [Backend API: Getting Started](../user-api/backend-api/). The only differences lie in the authorization system and request paths.
+Use the API to:
 
-### Base URL
+* Provision and manage end-user accounts and their balances.
+* Register and clone devices, and move them between users.
+* Define and price service plans.
+* Issue activation codes so users can register devices themselves.
+* Brand the platform and configure service and notification settings.
+* Run sub-dealers that resell independently.
 
-The Admin Panel API is accessible via the `panel/` subsection of the API URL. The URLs for different Navixy platforms are as follows:
+The API is built for developers and system integrators who manage a Navixy reseller deployment: automating dealer-level operations, building custom admin tooling, or provisioning users and devices at a scale the Admin Panel interface doesn't handle well by hand.
 
-* European Navixy ServerMate platform: `https://api.eu.navixy.com/v2/panel/`
-* American Navixy ServerMate platform: `https://api.us.navixy.com/v2/panel/`
-* Self-hosted (On-Premise) installations: `https://api.your_domain/panel/`
+## How to use this documentation
 
-For example, to make an `account/auth` API call on the Navixy ServerMate platform, you would use the following URL:
+This section documents the Admin Panel API in full. Choose the path below depending on who, or what, is reading.
 
-`https://api.eu.navixy.com/v2/panel/account/auth`
+### For developers
 
-### Authorization
+Start with [Key concepts](#key-concepts) below to see how dealers, users, trackers, and plans fit together, then get access: [Admin Panel authentication](authentication.md) covers obtaining a session hash and, for shared or automated access, a technical service account.
 
-To authorize, make a GET or POST request to `/account/auth/` with your `login` (your administration panel login) and `password`. This will return a JSON object containing a `hash` (a unique hexadecimal string) for the newly created Admin Panel API session. Use this session hash in other Panel API calls.
+Once you are authenticated, look up the operation you need in [Resources](resources/). Each resource family page carries the full parameter and response schema, plus a panel for sending a test request. [Errors](../user-api/backend-api/errors.md) covers the error code table shared with the Platform API.
 
-Please note that you cannot use the Admin Panel API session hash in the user API, and vice versa.
+### For AI agents and LLMs
 
-Keep in mind that any string containing symbols outside ASCII codes 32 to 127 must be [URL encoded](https://en.wikipedia.org/wiki/Percent-encoding) before transfer.
+* **OpenAPI specification**: a single OpenAPI 3.1 specification describes every Admin Panel operation, parameter, and schema. Each resource page renders it directly, so the parameter tables, response schemas, and status codes you see are generated from it rather than written by hand.
+* **[Navixy docs via MCP](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/using-navixy-documentation-with-ai)**: connect to query this documentation interactively instead of parsing static pages.
 
-#### Example Authorization
+## Key concepts
 
-In on-premise installations, there is a default user with login `admin` and password `admin`. You can authorize with these credentials as follows (all HTTP request examples are made using the [curl](https://curl.haxx.se/) \*nix utility):
+A dealer owns users directly, or indirectly through sub-dealers that resell on the dealer's behalf. Each user owns trackers, the devices registered to their account. Tariffs price a tracker's service, and orders record the equipment the dealer has purchased to supply those devices.
 
-```sh
-$ curl -d 'login=admin&password=admin' \
-       -X POST http://api.domain.com/v2/panel/account/auth/
-```
+| Term | What it is |
+| --- | --- |
+| Dealer | A reseller or distributor of the Navixy platform, with access to the Admin Panel to manage its users, devices, and service plans. |
+| Sub-dealer (Sub PaaS) | A dealer operating underneath another dealer, called Sub PaaS in the interface and `subpaas` in API paths, with its own users, devices, and settings. |
+| User | An end-user account that belongs to a dealer, either an organization or an individual, and can have sub-users that grant access to multiple employees. |
+| Tracker | A device as presented to one owning user. |
+| Clone | A second tracker sharing the same underlying device, so two users can see the same device independently. |
+| Source | The underlying device behind a tracker and its clones. Several operations act on the source instead of on the tracker. |
+| Order | An equipment order placed by the dealer. |
+| Tariff | A service plan a dealer offers to its users, called a plan in the interface and returned as a `Plan` object in the API. |
+| Tariff defaults | A dealer-level setting that determines which tariff a newly registered device lands on and what bonus and free period it receives. It is keyed by device type and separate from any individual tariff. |
+| Activation code | A code tied to a specific tariff that lets a user register a device with the tariff, balance bonus, and free period already configured. |
+| Session | A hash returned by authenticating, valid for 24 hours. Admin Panel sessions are separate from Platform API sessions, so a hash from one can't be used with the other. |
+| Technical service account | A reduced-privilege account created by Navixy support, used instead of personal credentials for shared or automated access. |
 
-```sh
-//This method is not recommended and provided just for example:
+See [Admin Panel authentication](authentication.md) for how to obtain and use a session hash, and [Technical service accounts](authentication.md#technical-service-accounts) for the full comparison with full admin accounts.
 
-$ curl http://api.domain.com/v2/panel/account/auth/?login=admin&password=admin
-```
+## Admin Panel API permissions
 
-**Response**
+A permission is a pair of a category, for example `trackers`, and an operation, for example `read`. The API compares this pair against what the requested operation requires, and returns an "Operation not permitted" error on a mismatch.
 
-You will receive a response like this:
+Most Admin Panel API calls require a permission, but not all of them do: `panel/account/auth` and `panel/timezone/list` need no authentication and no permissions, and a few operations, such as `account/get_permissions` and `account/logout`, need only a valid session.
 
-```json
-{
-  "hash": "1dc2b813769d846c2c15030884948117",
-  "success": true,
-  "permissions": { ... }
-}
-```
+See [Admin Panel permissions](authentication.md#admin-panel-permissions) for the full list of categories and operations, and the [`get_permissions`](resources/account.md#post-panel-account-get_permissions) operation to check what a live session is allowed to do.
 
-The value returned in the `hash` field (in this example, `1dc2b813769d846c2c15030884948117`) should be saved for further use.
+## Next steps
 
-### Error Handling
+* To authenticate and get a session hash, see [Admin Panel authentication](authentication.md).
+* To look up a specific operation's parameters and response, see [Resources](resources/).
+* To look up an error code, see [Errors](../user-api/backend-api/errors.md).
 
-When an API call completes successfully, the HTTP response code will be `200 OK`, and the `success` field in the returned JSON will be `true`.
-
-In case of an error, such as incorrect credentials, the HTTP response code will differ from 200, the `success` field will be `false`, and the `status` field will contain a description of the error.
-
-#### Example Error Response
-
-```json
-{
-  "success": false,
-  "status": {
-    "code": 12,
-    "description": "Dealer not found"
-  }
-}
-```
-
-The `description` field provides a human-readable hint and should not be used programmatically as it may change in the future.
-
-For more information, please refer to `account/auth`.
-
-### Using Session Hash
-
-After successful authorization, you can make other Admin Panel API calls. Always pass the session hash you obtained earlier as the `hash` parameter. This parameter is required by default, even though it is not listed in the parameter list of every API call.
-
-#### Example
-
-To list the first ten users belonging to your system account, use the following Admin Panel API call (using the hash from the previous example):
-
-```bash
-$ curl -X POST 'http://api.domain.com/v2/panel/user/list/' \
-       -d 'hash=1dc2b813769d846c2c15030884948117&limit=10'
-```
-
-### Session Expiration
-
-Each session, along with its associated hash key, has a default lifespan of 24 hours. You need to periodically obtain a new hash key.
-
-If you attempt to make a Admin Panel API call with an expired session hash, you will receive an error:
-
-```json
-{
-  "success": false,
-  "status": {
-    "code": 4,
-    "description": "User not found or session ended"
-  }
-}
-```
-
-To resolve this, simply obtain a new hash using `account/auth`.
-
-### How to Securely Share Panel's Credentials
-
-To securely share access to the admin panel, we recommend creating supplemental technical (service) accounts. At this time it can be done by [contacting the Navixy support team](../general/contacts.md) and providing the email address for the technical account. You will then receive a login and password for the account.
-
-Capabilities of a technical accounts:
-
-* Add new users
-* Modify data of current users
-* Add new trackers
-* Clone current trackers
-* Change owner of a tracker
-* Change tracker data plan
-* Analyze incoming data with the air console
-
-Restrictions for technical accounts:
-
-* Delete users
-* Remove trackers
-* Add, change, or delete plans
-* Change platform settings
-
-### Admin Panel API Permissions
-
-Every call to the Admin Panel API requires a set (possibly empty) of permissions. To determine if a user is allowed to execute an API call, the user's permissions are compared with the required permissions for the call. If the user does not have at least one required permission, the call is not executed, and an "Operation not permitted" error is returned.
-
-Each permission is defined as a pair of category (e.g., `trackers`) and operation (e.g., `read`). A set of permissions within one category is often grouped, as shown in the following example:
-
-* `trackers`: create, read
-
-This defines two permissions: (`trackers`, `create`) and (`trackers`, `read`).
-
-List of all possible categories and operations:
-
-* `accounting`: generate
-* `activation_code`: create, read, update
-* `base`: get\_dealer\_info
-* `notification_settings`: read, update
-* `service_settings`: read, update
-* `tariffs`: create, read, update
-* `trackers`: create, read, update, delete
-* `transactions`: create, read, update
-* `users`: create, read, update, delete
-* `user_sessions`: create
-* `sms`: create
-* `tracker_bundles`: read, update
+For questions and support, contact the [Navixy developer support team](../general/contacts.md).

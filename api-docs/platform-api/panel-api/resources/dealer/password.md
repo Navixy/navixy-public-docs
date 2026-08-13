@@ -9,42 +9,25 @@ description: API call to update dealer's password.
 
 API base path: `panel/dealer/password`.
 
-### update
-
-Changes password for the authorized Dealer.
+***
 
 _required permissions_: `password: "update"`.
 
-#### Parameters
-
-| name          | description              | type   |
-| ------------- | ------------------------ | ------ |
-| old\_password | Current dealer password. | string |
-| new\_password | New dealer password.     | string |
-
 {% include "../../../../.gitbook/includes/password-requirements.md" %}
 
-#### Example
+The complexity rules actually enforced for a given dealer are returned as `password_policy` by [dealer/get\_info](README.md#post-panel-dealer-get_info).
 
-cURL
+{% openapi-operation spec="admin-panel" path="/panel/dealer/password/update" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/dealer/password/update' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "old_password": "qwerty", "new_password": "Hh6FXTt%E!Rx*%f3"}'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+{% hint style="warning" %}
+On success, every panel session for this dealer is deleted, including the one that made the request. The session hash stops working immediately and you must authenticate again before making further calls.
+{% endhint %}
 
 #### Errors
 
+* 12 - Dealer not found - if the dealer record is missing.
 * 245 - New password must be different - if `old_password` = `new_password`.
 * 248 - Wrong password - if `old_password` is wrong.
+* 294 - Password was recently used - if `new_password` matches one of the recently used passwords.

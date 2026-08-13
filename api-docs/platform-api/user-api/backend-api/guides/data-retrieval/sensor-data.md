@@ -39,7 +39,7 @@ Some sensors are automatically created by the platform when a new device is acti
 For sensors that require manual creation, follow these steps:
 
 1. **Configure Data Sending:** Ensure that the sensor is configured to send data from the device side.
-2. **Verify Data Reception:** Use [AirConsole](../../../../panel-api/resources/tracker.md#consoleconnect) to verify that the platform is receiving the data correctly.
+2. **Verify Data Reception:** Use [AirConsole](../../../../panel-api/resources/tracker.md#post-panel-tracker-console-connect) to verify that the platform is receiving the data correctly.
 3. **Calibrate the Sensor:** If necessary, [calibrate the sensor](../../resources/tracking/tracker/sensor/calibration_data.md) (for analog sensors or those sending uncalibrated values) to ensure accurate data readings.
 
 By using these methods, you can effectively manage both automatically and manually created physical sensors, ensuring comprehensive and reliable data collection for your IoT and telematics applications.

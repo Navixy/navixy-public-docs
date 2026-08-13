@@ -6,6 +6,8 @@ description: Authenticate to the Navixy Admin Panel API.
 
 The Navixy Admin Panel API provides administrative access to manage the entire Navixy platform, including users, devices, settings, and system-wide configurations. To prevent unauthorized access, Admin Panel authentication uses a simplified but secure session-based model designed specifically for administrative operations.
 
+For the API's base URLs, its resource families, and where the full reference lives, see [Navixy Admin Panel API](getting-started.md).
+
 ## Authentication method
 
 The Admin Panel API uses **session hash authentication** as its sole authentication method. This approach is specifically designed for administrative workflows and provides:
@@ -53,6 +55,12 @@ curl -X POST "https://api.eu.navixy.com/v2/panel/account/auth/" \
 ```
 
 The `hash` value is your session token - save it securely for subsequent API calls.
+
+The full operation, including every response field and a panel for sending a test request, is below. It is the one Admin Panel operation that requires no existing session, so no `Authorization` header is sent to it. The hash it returns is then supplied in that header on every other call, which is the canonical method.
+
+{% openapi-operation spec="admin-panel" path="/panel/account/auth" method="post" %}
+[OpenAPI admin-panel](reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 ### For on-premise installations
 
@@ -109,6 +117,49 @@ curl "https://api.eu.navixy.com/v2/panel/user/list/?hash=1dc2b813769d846c2c15030
 {% hint style="danger" %}
 **Security Warning**: Query parameter method exposes credentials in URLs, server logs, and browser history. Use only for testing, never in production.
 {% endhint %}
+
+### The same three options apply to every parameter
+
+The three methods above are not specific to the session hash. **Any** parameter of any Admin Panel operation can be sent as a JSON body field, as a form-encoded body field, or as a query-string parameter. The examples above show this incidentally: `limit` travels in the body in the first two and in the query string in the third.
+
+So these three requests are equivalent:
+
+{% tabs %}
+{% tab title="JSON body" %}
+```bash
+curl -X POST "https://api.eu.navixy.com/v2/panel/user/list/" \
+  -H "Authorization: NVX 1dc2b813769d846c2c15030884948117" \
+  -H "Content-Type: application/json" \
+  -d '{"limit": 10}'
+```
+{% endtab %}
+
+{% tab title="Form-encoded body" %}
+```bash
+curl -X POST "https://api.eu.navixy.com/v2/panel/user/list/" \
+  -H "Authorization: NVX 1dc2b813769d846c2c15030884948117" \
+  -d 'limit=10'
+```
+{% endtab %}
+
+{% tab title="Query string" %}
+```bash
+curl -X POST "https://api.eu.navixy.com/v2/panel/user/list/?limit=10" \
+  -H "Authorization: NVX 1dc2b813769d846c2c15030884948117"
+```
+{% endtab %}
+{% endtabs %}
+
+**All three remain supported.** The body and query-string forms are genuinely useful for quick testing, and the query-string form in particular is the fastest way to try a call from a browser address bar.
+
+What differs is only how they are *documented*: the API reference shows the JSON body form, because OpenAPI requires each parameter to be declared in exactly one location and listing all three per parameter is not possible. So treat a request schema in the reference as the canonical form, and apply the equivalence above when you want one of the others. Nothing in the reference should be read as withdrawing them.
+
+The one caveat is the security one already noted: keep the query-string form out of production, because it exposes the hash in URLs, server logs, and browser history.
+
+Two exceptions, both of which the reference states on the operation itself:
+
+* The branding image upload and the user spreadsheet upload require `multipart/form-data`, and their `type` and `redirect_target` parameters must be form parts. Supplying `type` as a query parameter fails with error code 234.
+* `panel/timezone/list` requires no authentication at all, so none of the three hash methods applies to it.
 
 ## Session management
 

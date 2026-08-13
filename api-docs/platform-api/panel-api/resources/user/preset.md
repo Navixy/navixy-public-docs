@@ -13,456 +13,121 @@ Menu presets act as templates that can be assigned to users.
 
 ### Menu preset
 
-A template that includes a specific set of menu items, organized into groups and footer items.
+{% openapi-schemas spec="admin-panel" schemas="MenuPreset" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-| Name   | Description                             | Type                                     |
-| ------ | --------------------------------------- | ---------------------------------------- |
-| id     | An identifier for the preset            | int                                      |
-| title  | The title of the preset in the editor   | string                                   |
-| main   | A list of item groups in the sidebar    | [Menu group](preset.md#menu-group) array |
-| footer | A list of items in the sidebar's footer | [Menu item](preset.md#menu-item) array   |
+Note the asymmetry between the two layout areas: `main` is an **array** of groups, while `footer` is a **single** group.
 
 ### Menu group
 
-A collection of menu items, optionally titled, that are grouped together within the sidebar.
-
-| Name  | Description              | Type                                   |
-| ----- | ------------------------ | -------------------------------------- |
-| title | The title of the group   | optional string                        |
-| items | A list of the menu items | [Menu item](preset.md#menu-item) array |
+{% openapi-schemas spec="admin-panel" schemas="MenuGroup" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
 ### Menu item
 
-An individual item in the sidebar, which can include an icon and a list of tabs.
-
-| Name  | Description                 | Type                                 |
-| ----- | --------------------------- | ------------------------------------ |
-| title | The title of the menu item  | string                               |
-| icon  | The icon of the menu item   | optional string                      |
-| tabs  | A list of tabs in this item | [Menu tab](preset.md#menu-tab) array |
+{% openapi-schemas spec="admin-panel" schemas="MenuItem" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
 ### Menu tab
 
-A subitem within a menu item, providing additional navigation to specific sections or functionalities.
+{% openapi-schemas spec="admin-panel" schemas="MenuTab" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-| Name        | Description                | Type   |
-| ----------- | -------------------------- | ------ |
-| title       | The title of the tab       | string |
-| destination | The destination of the tab | string |
+All `title` values on presets, groups, items, and tabs are **localization keys** such as `common.menu.dashboard`, not display strings. The interface resolves them against the user's locale.
 
 ### Menu preset assignment
 
-Specifies how a menu preset is assigned to users.\
-It can be set as a default for all users or targeted to specific user IDs,\
-allowing for users to have different menu configurations.
-
-| Name | Description                               | Type                                                                 |
-| ---- | ----------------------------------------- | -------------------------------------------------------------------- |
-| type | Assignment type                           | [Menu preset assignment type](preset.md#menu-preset-assignment-type) |
-| ids  | User ids to assign to (if type = "users") | int array                                                            |
-
-### Menu preset assignment type
-
-Defines the type of assignment for a menu preset, either as a default for all users or for specific user assignments.
-
-| Name    | Description                                                            |
-| ------- | ---------------------------------------------------------------------- |
-| default | The preset will be used if there's no specific assignment fro the user |
-| users   | Assignment for the specified users                                     |
-
-## API actions
-
-API base path: `panel/user/menu`
-
-### list
-
-Lists all available menu presets with their current assignments.
-
-#### Example
-
-{% code title="cURL" overflow="wrap" %}
-```sh
-curl -X GET 'https://api.eu.navixy.com/v2/panel/user/menu/preset/list' \ 
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "list": [
-    {
-      "assignments": [],
-      "owner": "platform",
-      "preset": {
-        "id": 1,
-        "title": "common.menu.default.title",
-        "main": [
-          {
-            "items": [
-              {
-                "icon": "dashboard",
-                "tabs": [
-                  {
-                    "destination": "dashboard",
-                    "title": "common.menu.dashboard"
-                  }
-                ],
-                "title": "common.menu.dashboard"
-              }
-            ],
-            "title": null
-          }, {
-            "items": [
-              {
-                "icon": "map",
-                "tabs": [
-                  {
-                    "destination": "tracking",
-                    "title": "common.menu.tracking"
-                  }
-                ],
-                "title": "common.menu.tracking"
-              }, {
-                "icon": "share",
-                "tabs": [
-                  {
-                    "destination": "location_links",
-                    "title": "common.menu.location-sharing"
-                  }
-                ],
-                "title": "common.menu.location-sharing"
-              }
-            ],
-            "title": null
-          }, {
-            "items": [
-              {
-                "icon": "assessment",
-                "tabs": [
-                  {
-                    "destination": "reports",
-                    "title": "common.menu.reports"
-                  }, {
-                    "destination": "report_schedules",
-                    "title": "common.menu.schedule"
-                  }
-                ],
-                "title": "common.menu.reports"
-              }
-            ],
-            "title": null
-          }, {
-            "items": [
-              {
-                "icon": "directions_car",
-                "tabs": [
-                  {
-                    "destination": "fleet",
-                    "title": "common.menu.vehicles"
-                  }, {
-                    "destination": "garages",
-                    "title": "common.menu.garages"
-                  }, {
-                    "destination": "drivers",
-                    "title": "common.menu.drivers"
-                  }, {
-                    "destination": "driver_departments",
-                    "title": "common.menu.departments"
-                  }, {
-                    "destination": "driver_journal",
-                    "title": "common.menu.driver_journal"
-                  }, {
-                    "destination": "driver_skills",
-                    "title": "common.menu.driver_skills"
-                  }, {
-                    "destination": "service_tasks",
-                    "title": "common.menu.service_tasks"
-                  }
-                ],
-                "title": "common.menu.fleet"
-              }, {
-                "icon": "groups",
-                "tabs": [
-                  {
-                    "destination": "staff",
-                    "title": "common.menu.staff"
-                  }, {
-                    "destination": "tasks",
-                    "title": "common.menu.tasks"
-                  }, {
-                    "destination": "task_schedules",
-                    "title": "common.menu.templates"
-                  }, {
-                    "destination": "forms",
-                    "title": "common.menu.forms"
-                  }, {
-                    "destination": "task_courier",
-                    "title": "common.menu.task_courier"
-                  }, {
-                    "destination": "departments",
-                    "title": "common.menu.departments"
-                  }, {
-                    "destination": "places",
-                    "title": "common.menu.places"
-                  }
-                ],
-                "title": "common.menu.field_service"
-              }
-            ],
-            "title": null
-          }
-        ],
-        "footer": {
-          "items": [
-            {
-              "icon": "notifications",
-              "tabs": [
-                {
-                  "destination": "notifications",
-                  "title": "common.menu.notifications"
-                }
-              ],
-              "title": "common.menu.notifications"
-            }, {
-              "icon": "textsms",
-              "tabs": [
-                {
-                  "destination": "chat",
-                  "title": "common.menu.chat"
-                }
-              ],
-              "title": "common.menu.chat"
-            }, {
-              "icon": "custom-icon-add_device",
-              "tabs": [
-                {
-                  "destination": "device_activation",
-                  "title": "common.menu.device_activation"
-                }
-              ],
-              "title": "common.menu.device_activation"
-            }, {
-              "icon": "settings",
-              "tabs": [
-                {
-                  "destination": "device_settings",
-                  "title": "common.menu.device_settings"
-                }
-              ],
-              "title": "common.menu.device_settings"
-            }, {
-              "icon": "help_outline",
-              "tabs": [
-                {
-                  "destination": "feedback",
-                  "title": "common.menu.help"
-                }
-              ],
-              "title": "common.menu.help"
-            }
-          ],
-          "title": null
-        }
-      }
-    }
-  ]
-}
-```
-
-#### List item
-
-| Name        | Description                         | Type                                                             |
-| ----------- | ----------------------------------- | ---------------------------------------------------------------- |
-| preset      | An instance of menu preset          | [Menu preset](preset.md#menu-preset)                             |
-| owner       | The owner of the preset             | [Preset owner](preset.md#preset-owner)                           |
-| assignments | A set of assignments for the preset | [Menu preset assignment](preset.md#menu-preset-assignment) array |
+{% openapi-schemas spec="admin-panel" schemas="MenuPresetListEntry" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
 #### Preset owner
 
-| Name     | Description             |
-| -------- | ----------------------- |
-| platform | Default platform preset |
-| dealer   | Created by dealer       |
+`owner` reports who defined the preset:
 
-### create
+* `dealer` - created by the dealer, and editable by them.
+* `platform` - supplied by Navixy. Visible to the dealer but not editable.
 
-Creates given menu preset.
+### Menu preset assignment type
 
-#### Parameters
+{% openapi-schemas spec="admin-panel" schemas="MenuPresetAssignmentTarget" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-| Name   | Description          | Type                                              |
-| ------ | -------------------- | ------------------------------------------------- |
-| preset | New preset structure | [Menu preset](preset.md#menu-preset) (without id) |
+## API actions
 
-#### Example
+API path: `panel/user/menu/preset`.
 
-{% code title="cURL" overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/create' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
-    -H 'Content-Type: application/json' \
-    -d '{ "preset": { "title": "Created", "main": [ { "title": "Monitoring", "items": [ { "title": "Tasks", "tabs": [ { "title": "Tasks", "destination": "tasks" } ] } ] } ], "footer": [] } }'
-```
-{% endcode %}
+***
 
-#### Response
+_required permissions_: `users: "read"`.
 
-```json
-{
-  "success": true,
-  "id": 2
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/list" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
+
+***
+
+_required permissions_: `users: "create"`.
+
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/create" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
-* 7 – Invalid parameters - invalid menu preset structure (see error description for details).
+* 201 - Not found in the database - if a referenced menu item or destination does not exist.
 
-### update
+***
 
-Updates the menu preset.
+_required permissions_: `users: "update"`.
 
-#### Parameters
-
-| Name   | Description                                                      | Type                                 |
-| ------ | ---------------------------------------------------------------- | ------------------------------------ |
-| preset | New preset structure with id of the existing preset to overwrite | [Menu preset](preset.md#menu-preset) |
-
-#### Example
-
-{% code title="cURL" overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/update' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
-    -H 'Content-Type: application/json' \
-    -d '{ "preset": { "id": 2, "title": "Updated", "main": [ { "title": "Monitoring", "items": [ { "title": "Tasks", "tabs": [ { "title": "Tasks", "destination": "tasks" } ] } ] } ], "footer": [] } }'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/update" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
-* 7 – Invalid parameters - invalid menu preset structure (see error description for details).
-* 201 – Not found in the database — if there is no preset with the specified ID.
+* 201 - Not found in the database - if there is no preset with the specified ID.
 
-### delete
+***
 
-Deletes the menu preset.
+_required permissions_: `users: "delete"`.
 
-#### Parameters
-
-| Name       | Description         | Type |
-| ---------- | ------------------- | ---- |
-| preset\_id | preset id to delete | int  |
-
-#### Example
-
-{% code title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/delete' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
-    -H 'Content-Type: application/json' \
-    -d '{ "preset_id": 2 }'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/delete" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
-* 201 – Not found in the database — if preset with given id not found.
+* 201 - Not found in the database - if there is no preset with the specified ID.
 
-### assign
+***
 
-Assigns the menu preset to users.
+_required permissions_: `users: "update"`.
 
-#### Parameters
-
-| Name       | Description         | Type                                                       |
-| ---------- | ------------------- | ---------------------------------------------------------- |
-| preset\_id | Preset id to assign | int                                                        |
-| target     | The assignment      | [Menu preset assignment](preset.md#menu-preset-assignment) |
-
-#### Example
-
-{% code title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/menu/preset/assign' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b'
-    -H "Content-Type: application/json" \
-    -d '{ "preset_id": 2, "target": { "type": "users", "ids": [3] } }'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/assign" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
-* 7 – Invalid parameters - invalid request structure (see error description for details).
-* 201 – Not found in the database — if preset with given id not found.
+* 201 - Not found in the database - if there is no preset with the specified ID.
 
-### items/list
+## Available menu items
 
-Lists all available menu items.
+_required permissions_: `users: "read"`.
 
-#### Example
+{% hint style="info" %}
+This operation lives at `panel/user/menu/item/list`, outside the `menu/preset/` path used by the rest of this page.
+{% endhint %}
 
-{% code title="cURL" %}
-```sh
-curl -X GET 'https://api.eu.navixy.com/v2/panel/user/menu/preset/items/list' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b'
-```
-{% endcode %}
+{% openapi-operation spec="admin-panel" path="/panel/user/menu/item/list" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-#### Response
-
-```json
-[
-  { "title": "common.menu.dashboard", "destination": "dashboard" },
-  { "title": "common.menu.tracking", "destination": "tracking" },
-  { "title": "common.menu.location-sharing", "destination": "location_links" },
-  { "title": "common.menu.reports", "destination": "reports" },
-  { "title": "common.menu.schedule", "destination": "report_schedules" },
-  { "title": "common.menu.vehicles", "destination": "fleet" },
-  { "title": "common.menu.garages", "destination": "garages" },
-  { "title": "common.menu.drivers", "destination": "drivers" },
-  { "title": "common.menu.departments", "destination": "driver_departments" },
-  { "title": "common.menu.driver_journal", "destination": "driver_journal" },
-  { "title": "common.menu.driver_skills", "destination": "driver_skills" },
-  { "title": "common.menu.service_tasks", "destination": "service_tasks" },
-  { "title": "common.menu.staff", "destination": "staff" },
-  { "title": "common.menu.tasks", "destination": "tasks" },
-  { "title": "common.menu.templates", "destination": "task_schedules" },
-  { "title": "common.menu.forms", "destination": "forms" },
-  { "title": "common.menu.task_courier", "destination": "task_courier" },
-  { "title": "common.menu.departments", "destination": "departments" },
-  { "title": "common.menu.places", "destination": "places" },
-  { "title": "common.menu.notifications", "destination": "notifications" },
-  { "title": "common.menu.chat", "destination": "chat" },
-  { "title": "common.menu.device_activation", "destination": "device_activation" },
-  { "title": "common.menu.device_settings", "destination": "device_settings" },
-  { "title": "common.menu.help", "destination": "feedback" }
-]
-```
+Use this to discover the destinations available when composing a preset.

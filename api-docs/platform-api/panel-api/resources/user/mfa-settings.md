@@ -8,125 +8,57 @@
 
 API path: `panel/user/mfa/settings`.
 
-### update
-
-Updates users' MFA settings.
+***
 
 _required permissions_: `users: "update"`.
 
-#### Parameters
+{% openapi-operation spec="admin-panel" path="/panel/user/mfa/settings/update" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-| name     | description                | type                                           |
-| -------- | -------------------------- | ---------------------------------------------- |
-| target   | Target of the update.      | [Update target](mfa-settings.md#update-target) |
-| settings | MFA settings for the user. | [MFA settings](mfa-settings.md#mfa-settings)   |
+Both `target` and `settings` vary by their `type` field. See [Update target](mfa-settings.md#update-target) and [MFA settings](mfa-settings.md#mfa-settings) below.
 
-#### Update target
-
-| name | description                                                                | type                       |
-| ---- | -------------------------------------------------------------------------- | -------------------------- |
-| type | Specifies the type of the target: it could be either `all` or `selected`.  | string                     |
-| ids  | Used only when the `type` is `selected`. Specifies the `ids` of the users. | array of positive integers |
-
-#### Example
-
-{% code title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/mfa/settings/update' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
-    -H 'Content-Type: application/json' \
-    -d '{ "target": { "type": "all" }, "settings": { "type": "disallowed" } }'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
-
-#### Errors
-
-* 201 – Not found in the database — if the specified user does not exist or belongs to a different dealer.
-
-### read default
-
-Reads default MFA settings which are applied to the newly created users.
+***
 
 _required permissions_: `users: "read"`.
 
-#### Example
+{% openapi-operation spec="admin-panel" path="/panel/user/mfa/settings/default/read" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-{% code title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/mfa/settings/default/read' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b'
-```
-{% endcode %}
+`value` is `null` when the dealer has not configured a default.
 
-#### Response
-
-```json
-{
-  "success": true,
-  "value": {
-    "type": "disallowed"
-  }
-}
-```
-
-* `value` - optional [MFA settings](mfa-settings.md#mfa-settings).
-
-### update default
-
-Updates default MFA settings which are applied to the newly created users.
+***
 
 _required permissions_: `users: "update"`.
 
-#### Parameters
+{% openapi-operation spec="admin-panel" path="/panel/user/mfa/settings/default/update" method="post" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-| name     | description                 | type                                         |
-| -------- | --------------------------- | -------------------------------------------- |
-| settings | MFA settings for the users. | [MFA settings](mfa-settings.md#mfa-settings) |
-
-#### Example
-
-{% code title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/mfa/settings/default/update' \
-    -H 'Authorization: NVX 22eac1c27af4be7b9d04da2ce1af111b' \
-    -H 'Content-Type: application/json' \
-    -d '{ "settings": { "type": "disallowed" } }'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
+The default applies to users who have no explicit setting of their own.
 
 ## Types
 
 ### MFA settings
 
-```json
-{
-  "type": "allowed",
-  "factor_types": ["email"]
-}
-```
+{% openapi-schemas spec="admin-panel" schemas="MfaSettings" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-* `type` - [settings action type](mfa-settings.md#settings-action-type).
-* `factor_types` - optional array of [factor types](mfa-settings.md#factor-type). Required if `type` is `allowed`.
+`factor_types` is required when `type` is `allowed`, and must not be empty.
+
+### Update target
+
+{% openapi-schemas spec="admin-panel" schemas="MfaTarget" grouped="true" %}
+[OpenAPI admin-panel](../../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
+
+When `type` is `selected`, `ids` must contain between 1 and 100 user IDs. Note this is a tighter limit than the 10000 allowed by [menu preset assignment](preset.md#menu-preset-assignment-type).
 
 ### Settings action type
 
-* `allowed` - MFA with specified types is allowed for the users.
+* `allowed` - MFA with the specified factor types is allowed for the users.
 * `disallowed` - MFA is disallowed for the users.
 
 ### Factor type

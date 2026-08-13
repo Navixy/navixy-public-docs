@@ -1,394 +1,92 @@
 ---
-title: Plan
-description: API calls for interaction with user plans.
+title: Tariff
+description: API calls for the Tariff resource, covering service plans and device registration defaults.
 ---
 
-# Plans
+# Tariff
 
-API calls for managing user plans within the service platform (PaaS or Sub Paas).
+This resource is `tariff` in API paths and is called a plan in the Admin Panel interface. It manages the service plans a dealer offers to its users, and returns each one as a `Plan` object.
 
 ## Plan object
 
-```json
-{
-  "id": 12163,
-  "name": "Premium",
-  "group_id": 3,
-  "active": true,
-  "type": "monthly",
-  "price": 12.55,
-  "early_change_price": 23.0,
-  "device_limit": 2000,
-  "has_reports": true,
-  "store_period": "1y",
-  "device_type": "tracker",
-  "proportional_charge": false,
-  "service_prices": {
-    "incoming_sms": 0.3,
-    "outgoing_sms": 0.3,
-    "service_sms": 0.2,
-    "phone_call": 0.6,
-    "traffic": 0.09
-  }
-}
-```
+{% openapi-schemas spec="admin-panel" schemas="Plan" grouped="true" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-* `id` - int. Plan ID.
-* `name` - string. Plan name.
-* `group_id` - int. Plan group number.
-* `active` - boolean. `true` if user allowed change his current plan to this one.
-* `type` - [enum](../../user-api/backend-api/#data-types). Type of plan. Can be "monthly" or "activeday"\
-  (for "tracker" device\_type only).
-* `price` - double. Plan subscription price (usually per month).
-* `early_change_price` - double. Price of change plan from current to another. With the last change in less than 30 days\
-  (`tariff.freeze.period` config option). When not passed or `null` user cannot change plan frequently.
-* `device_limit` - int. A maximum limit of devices per user. Not used for cameras and sockets.
-* `has_reports` - boolean. If `true` the plan has reports.
-* `store_period` - string. Data storage period, e.g. "2h" (2 hours), "3d" (3 days), "5m" (5 months), "1y" (one year).
-* `device_type` - [enum](../../user-api/backend-api/#data-types). Device type. Can be "tracker", "camera" or "socket".
-* `proportional_charge` - boolean. `true` if monthly fee will be smaller when device was blocked during month (for "monthly" tariffs only).
-* `service_prices` - JSON object with service prices.
-  * `incoming_sms` - double. Incoming sms price.
-  * `outgoing_sms` - double. Outgoing sms price.
-  * `service_sms` - double. Service sms price.
-  * `phone_call` - double. Phone voice notification sms price.
-  * `traffic` - double. Traffic price per 1 MB.
+Notes on individual fields:
+
+* `type`, `device_type`, and the map codes inside `map_filter` use platform-wide enums described in the [data types](../../user-api/backend-api/#data-types) section.
+* `store_period` uses a short duration form here, such as `1y`, which is **not** the ISO 8601 form used by `store_period` on the [dealer object](dealer/README.md).
+* `early_change_price` is omitted from the response when it has no value, in which case users cannot change plan frequently.
 
 ## API actions
 
 API path: `panel/tariff`.
 
-### create
-
-Creates a new plan.
+***
 
 _required permissions_: `"tariffs": "create"`.
 
-#### Parameters
+Plan creation counts against the dealer's plan quota.
 
-| name   | description                   | type        |
-| ------ | ----------------------------- | ----------- |
-| tariff | Plan object without ID field. | JSON object |
+{% openapi-operation spec="admin-panel" path="/panel/tariff/create" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-#### Example
-
-cURL
-
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/create' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "tariff": {"name": "Premium", "group_id": 3, "active": true, "type": "monthly", "price": 12.55, "early_change_price": 23.0, "device_limit": 2000, "has_reports": true, "store_period": "1y", "device_type": "tracker", "proportional_charge": false, "service_prices": {"incoming_sms": 0.3, "outgoing_sms": 0.3, "service_sms": 0.2, "phone_call": 0.6, "traffic": 0.09}}}'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "id": 123568
-}
-```
-
-* `id` - int. An ID of the created plan.
-
-#### Errors
-
-* 201 – Not found in the database - if specified plan does not exist or belongs to different dealer.
-* 214 – Requested operation or parameters are not supported by the device - when `device_type` does not support specified plan `type`.
-* 244 – Duplicate entity label - if there's another dealer's plan with the same `name`.
-
-### list
-
-Returns list of all plans belonging to dealer.
-
-If "filter" is used, entities will be returned only if filter string contains one of the following fields:`id`, `name`, `price`, `device_type`.
+***
 
 _required permissions_: `"tariffs": "read"`.
 
-#### Parameters
+{% openapi-operation spec="admin-panel" path="/panel/tariff/list" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-| name         | description                                                                               | type                                           |
-| ------------ | ----------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| device\_type | Optional. Filter by device type. One of "tracker", "camera" or "socket".                  | [enum](../../user-api/backend-api/#data-types) |
-| filter       | Optional. Text filter.                                                                    | string                                         |
-| order\_by    | Optional. List ordering. One of: `id`, `name`, `device_type`, `group_id`, `price`.        | string                                         |
-| ascending    | Optional. Default is `true`. If `true`, ordering will be ascending, descending otherwise. | boolean                                        |
-| offset       | Optional. Default is `0`. Starting offset, used for pagination.                           | int                                            |
-| limit        | Optional. Max number of records to return, used for pagination.                           | int                                            |
+`wholesale_service_prices` reports the prices the dealer itself is charged, and is not part of any individual plan.
 
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/list' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06"}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/tariff/list?hash=fa7bf873fab9333144e171372a321b06
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "list": [
-    {
-      "id": 12163,
-      "name": "Premium",
-      "group_id": 3,
-      "active": true,
-      "type": "monthly",
-      "price": 12.55,
-      "early_change_price": 23.0,
-      "device_limit": 2000,
-      "has_reports": true,
-      "store_period": "1y",
-      "device_type": "tracker",
-      "proportional_charge": false,
-      "service_prices": {
-        "incoming_sms": 0.3,
-        "outgoing_sms": 0.3,
-        "service_sms": 0.2,
-        "phone_call": 0.6,
-        "traffic": 0.09
-      }
-    }
-  ],
-  "wholesale_service_prices": {
-    "incoming_sms": 0.27,
-    "outgoing_sms": 0.27,
-    "service_sms": 0.17,
-    "phone_call": 0.55,
-    "traffic": 0.05
-  },
-  "count": 42
-}
-```
-
-* `list` - objects array. List of plans. See plan object [here](tariff.md#plan-object).
-* `wholesale_service_prices` - JSON object. Wholesale prices for all services (what dealer will pay per sms, per call, per mb).
-* `count` - int. Total number of records (ignoring offset and limit).
-
-### read
-
-Returns plan with specified ID.
+***
 
 _required permissions_: `"tariffs": "read"`.
 
-#### Parameters
-
-| name       | description        | type |
-| ---------- | ------------------ | ---- |
-| tariff\_id | Tariff ID to read. | int  |
-
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/read' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "tariff_id": 12163}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/tariff/read?hash=fa7bf873fab9333144e171372a321b06&tariff_id=12163
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "value": {
-    "id": 12163,
-    "name": "Premium",
-    "group_id": 3,
-    "active": true,
-    "type": "monthly",
-    "price": 12.55,
-    "early_change_price": 23.0,
-    "device_limit": 2000,
-    "has_reports": true,
-    "store_period": "1y",
-    "device_type": "tracker",
-    "proportional_charge": false,
-    "service_prices": {
-      "incoming_sms": 0.3,
-      "outgoing_sms": 0.3,
-      "service_sms": 0.2,
-      "phone_call": 0.6,
-      "traffic": 0.09
-    }
-  }
-}
-```
-
-* `value` - JSON object. See plan object [here](tariff.md#plan-object).
+{% openapi-operation spec="admin-panel" path="/panel/tariff/read" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 #### Errors
 
-* 201 – Not found in the database - if specified plan does not exist or belongs to different dealer.
+* 201 - Not found in the database - if the plan does not exist or belongs to another dealer.
 
-### update
-
-Updates existing plan.
+***
 
 _required permissions_: `tariffs: "update"`.
 
-#### Parameters
+A plan's `device_type` cannot be changed after creation, so the update object omits it.
 
-| name   | description                                | type        |
-| ------ | ------------------------------------------ | ----------- |
-| tariff | Tariff object without `device_type` field. | JSON object |
-
-#### Example
-
-cURL
-
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/update' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "tariff": {"id": 12345, "name": "Premium", "group_id": 3, "active": true, "type": "monthly", "price": 12.55, "early_change_price": 23.0, "device_limit": 2000, "has_reports": true, "store_period": "1y", "proportional_charge": false, "service_prices": {"incoming_sms": 0.3, "outgoing_sms": 0.3, "service_sms": 0.2, "phone_call": 0.6, "traffic": 0.09}}}'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
-
-#### Errors
-
-* 201 – Not found in the database - if specified plan does not exist or belongs to different dealer.
-* 214 – Requested operation or parameters are not supported by the device when `device_type` does not support specified plan `type`.
-* 244 – Duplicate entity label - if there's another dealer's plan with the same `name`.
+{% openapi-operation spec="admin-panel" path="/panel/tariff/update" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
 ## defaults object
 
-```json
-{
-  "tariff_id": 1234,
-  "activation_bonus": 1.1,
-  "free_days": 14,
-  "free_days_device_limit": 3
-}
-```
+Defaults are applied when a device is registered: which plan it lands on, and what bonus and free period it receives. They are keyed by device type.
 
-* `tariff_id` - int. An ID of the default plan for this device type.
-* `activation_bonus` - double. Activation bonus - money added to bonus balance upon device registration.
-* `free_days` - int. Amount of free (without a fee) days after device registration.
-* `free_days_device_limit` - int. A maximum number of activated user's devices with free period (null means no limit).
+{% openapi-schemas spec="admin-panel" schemas="TariffDefaults" grouped="true" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-schemas %}
 
-### defaults/read
-
-Returns current plan defaults for trackers and cameras.
+***
 
 _required permissions_: `tariffs: "read"`.
 
-#### Parameters
+The defaults sit at the top level of the response under their device-type key, not nested under `value`.
 
-Only session `hash`.
+{% openapi-operation spec="admin-panel" path="/panel/tariff/defaults/read" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
 
-#### Examples
-
-{% tabs %}
-{% tab title="cURL" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/defaults/read' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06"}'
-```
-{% endtab %}
-
-{% tab title="HTTP GET" %}
-{% code overflow="wrap" %}
-```http
-https://api.eu.navixy.com/v2/panel/tariff/defaults/read?hash=fa7bf873fab9333144e171372a321b06
-```
-{% endcode %}
-{% endtab %}
-{% endtabs %}
-
-#### Response
-
-```json
-{
-  "success": true,
-  "tracker": {
-    "tariff_id": 1234,
-    "activation_bonus": 1.1,
-    "free_days": 14,
-    "free_days_device_limit": 3
-  },
-  "camera": {
-    "tariff_id": 1289,
-    "activation_bonus": 0.5,
-    "free_days": 7,
-    "free_days_device_limit": 3
-  }
-}
-```
-
-#### Errors
-
-[General](../../user-api/backend-api/errors.md#error-codes) types only.
-
-### defaults/update
-
-Updates current plan defaults for trackers and cameras.
+***
 
 _required permissions_: `tariffs: "update"`.
 
-#### Parameters
-
-| name    | description                    | type        |
-| ------- | ------------------------------ | ----------- |
-| tracker | Defaults object with ID field. | JSON object |
-
-#### Example
-
-cURL
-
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/tariff/defaults/update' \
-    -H 'Content-Type: application/json' \
-    -d '{"hash": "fa7bf873fab9333144e171372a321b06", "tracker": {"tariff_id": 1234, "activation_bonus": 1.1, "free_days": 14, "free_days_device_limit": 3}}'
-```
-{% endcode %}
-
-#### Response
-
-```json
-{
-  "success": true
-}
-```
-
-#### Errors
-
-* 239 – New plan doesn't exist - if plan with specified ID does not exist.
-* 237 – Invalid plan - if new plan has incompatible device type.
+{% openapi-operation spec="admin-panel" path="/panel/tariff/defaults/update" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
