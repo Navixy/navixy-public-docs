@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "version": "1.1.0",
+    "version": "1.1.1",
     "title": "Navixy Admin Panel API",
     "summary": "API calls for dealer, reseller, and account administration",
     "description": "This is an API reference for the Navixy Admin Panel API. Use these endpoints to authenticate a dealer session, read dealer information, manage activation codes, and read or update panel service, notification, and branding settings.\n\nThis specification covers every documented Admin Panel API resource family.\n\n**Parameters.** All parameters are documented in the JSON request body. The API also accepts the same parameters as form-encoded body fields or as query-string parameters, but those forms are not documented per operation. See the authentication guide for details.\n\n**Errors.** Detect an error by checking the HTTP status code: anything other than `200 OK` carries an error body with `success: false` and a `status.code` giving the API-level error code. The default error status is `400`, with some codes mapping to `402`, `403`, `404`, `409`, or `500`. Validation failures also include an `errors` array naming the offending parameter.",
@@ -40,7 +40,7 @@
     },
     {
       "name": "Order",
-      "description": "Equipment orders placed by the dealer, including the tracker bundles attached to them. All resources under the /panel/order/ path."
+      "description": "Equipment orders placed by the dealer. All resources under the /panel/order/ path."
     },
     {
       "name": "Subpaas",
@@ -953,7 +953,7 @@
         ],
         "summary": "Read order",
         "operationId": "orderRead",
-        "description": "Read a single equipment order belonging to the current dealer, with its attached tracker bundles.\n\nAn order that exists but belongs to another dealer returns error code 201, the same as one that does not exist, so a caller cannot use this operation to probe for other dealers' order IDs.",
+        "description": "Read a single equipment order belonging to the current dealer.\n\nAn order that exists but belongs to another dealer returns error code 201, the same as one that does not exist, so a caller cannot use this operation to probe for other dealers' order IDs.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5767,7 +5767,7 @@
           },
           "equip_id": {
             "type": "integer",
-            "description": "ID of the equipment model ordered."
+            "description": "ID of the equipment model ordered. The equipment catalogue is not exposed by this API, so this ID is only meaningful when matched against an order placed through the Admin Panel."
           },
           "type": {
             "type": "string",

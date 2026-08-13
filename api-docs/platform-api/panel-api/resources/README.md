@@ -25,6 +25,12 @@ For example, an `account/auth` call on the European platform uses `https://api.e
 
 The query-string and form-encoded body transports both percent-encode their values. Any character in those values outside ASCII codes 32 to 127 must be [URL encoded](https://en.wikipedia.org/wiki/Percent-encoding).
 
+## OpenAPI specification
+
+Every operation on every family page is generated from a single OpenAPI 3.1 specification, so the parameter tables, response schemas, and status codes are the specification rendered rather than prose written by hand.
+
+You can download the raw specification as [JSON](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/panel-api/reference/Admin_Panel.json) to generate a client, load into an API tool, or hand to an AI agent. Treat it as the technical source of truth.
+
 ## Resource families
 
 Every operation belongs to one of the 10 resource families below. For how dealers, sub-dealers, users, trackers, and plans relate to each other, see [Key concepts](../getting-started.md#key-concepts).

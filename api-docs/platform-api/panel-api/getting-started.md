@@ -34,7 +34,7 @@ Once you are authenticated, look up the operation you need in [Resources](resour
 
 ### For AI agents and LLMs
 
-* **OpenAPI specification**: a single OpenAPI 3.1 specification describes every Admin Panel operation, parameter, and schema. Each resource page renders it directly, so the parameter tables, response schemas, and status codes you see are generated from it rather than written by hand.
+* **[OpenAPI specification](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/panel-api/reference/Admin_Panel.json)**: the raw JSON specification for every endpoint, parameter, and schema. Every resource page renders it directly, so the parameter tables, response schemas, and status codes you see are generated from it rather than written by hand. Treat it as the technical source of truth.
 * **[Navixy docs via MCP](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/using-navixy-documentation-with-ai)**: connect to query this documentation interactively instead of parsing static pages.
 
 ## Key concepts
