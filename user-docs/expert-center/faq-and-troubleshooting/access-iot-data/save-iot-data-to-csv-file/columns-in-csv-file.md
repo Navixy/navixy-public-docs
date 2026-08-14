@@ -73,6 +73,8 @@ Simple parameters provide full names and mainly represent specific tracking info
 
 In the device packets, various event codes can be defined, each signifying a specific occurrence.
 
+Some data forwarding protocols pass this ID through unchanged as their own event code. See [Recurso Confiable event codes](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes) for an example.
+
 | **Event ID** | **Definition**                                       |
 | ------------ | ---------------------------------------------------- |
 | 2            | Track. No specific event, just a track point         |

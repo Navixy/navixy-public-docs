@@ -31,7 +31,7 @@ The Recurso Confiable protocol uses SOAP to push XML data every 5 minutes over H
 
 Data that’s sent to Recurso Confiable:
 
-* AVL Event Code
+* [AVL Event Code](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes)
 * License Plate
 * Shipment ID
 * Date

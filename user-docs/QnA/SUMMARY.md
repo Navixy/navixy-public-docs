@@ -67,6 +67,7 @@
   * [Missing Customer ID and Customer Name in RC-Walmart](using-navixy/missing-customer-id-and-customer-name-in-rc-walmart.md)
   * [How to copy calibration table across multiple devices](using-navixy/how-to-copy-calibration-table-across-multiple-devices.md)
   * [Event count inconsistency when selecting multiple devices](using-navixy/event-count-inconsistency-when-selecting-multiple-devices.md)
+  * [Recurso Confiable event codes](using-navixy/recurso-confiable-event-codes.md)
 * [Admin panel](admin-panel/README.md)
   * [Data retention period (increase from 1 year)](admin-panel/data-retention-period-increase-from-1-year.md)
   * [Device still connected after applying suspension plan](admin-panel/device-still-connected-after-applying-suspension-plan.md)
