@@ -1,12 +1,12 @@
 ---
-description: Write IF/THEN Logic expressions using the Navixy JEXL-based expression language. All expressions must return a boolean value to route data through the flow.
+description: Write IF/THEN Logic expressions using the Navixy JEXL-based expression language. Expressions route data by evaluating to true or false, though a missing value can behave differently.
 ---
 
 # IF/THEN Logic expressions and syntax
 
 ## Expression fundamentals
 
-The IF/THEN Logic node uses the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language), which is based on Java Expression Language (JEXL). All expressions must return a boolean value (true/false) for proper node operation.
+The IF/THEN Logic node uses the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language), based on Java Expression Language (JEXL). Expressions are meant to return `true` or `false`, but a missing value doesn't always follow that rule. Some operators route a missing value to THEN instead of ELSE, and some leave the stored attribute `null` rather than `false`. See [Missing values and null routing](#missing-values-and-null-routing) before relying on a comparison to fail safely.
 
 **Expression evaluation**: Expressions are evaluated from left to right, and you can use parentheses to control the order of operations.
 
@@ -21,6 +21,8 @@ condition1 && (condition2 || condition3 > condition4)
 ### Comparison operators
 
 <table><thead><tr><th width="138.54547119140625">Operator</th><th>Description</th></tr></thead><tbody><tr><td><code>==</code></td><td>Checks if two operands are equal. If operands are of different types, JEXL converts them to one if possible</td></tr><tr><td><code>!=</code></td><td>Checks for inequality of two operands. Returns true if operands are not equal</td></tr><tr><td><code>&#x3C;</code></td><td>Checks that the left operand is smaller than the right operand</td></tr><tr><td><code>&#x3C;=</code></td><td>Checks that the left operand is smaller or equal to the right operand</td></tr><tr><td><code>></code></td><td>Checks that the left operand is larger than the right operand</td></tr><tr><td><code>>=</code></td><td>Checks that the left operand is larger or equal to the right operand</td></tr></tbody></table>
+
+For how missing values affect routing, see [Missing values and null routing](#missing-values-and-null-routing).
 
 ### Logical operators
 
@@ -70,6 +72,20 @@ door_state_2 == 0
 ```
 value('lock_state', 1, 'valid') != 'unknown'
 avl_io_221 != null
+```
+
+**Missing-value caution**: `!=` against a non-null literal routes missing values to THEN, not ELSE.
+
+Safe: a presence guard limits the check to packets that carry the attribute.
+
+```
+value('temperature', 0, 'all') != null && value('temperature', 0, 'all') > 50
+```
+
+Unsafe: this fires on `temperature`'s first packets before it has any history, since `!=` treats a missing value as unequal to any literal.
+
+```
+value('temperature', 1, 'all') != 75
 ```
 
 **Numeric comparisons**:
@@ -232,15 +248,108 @@ You can create complex expressions by combining multiple conditions with parenth
 
 </details>
 
+## Missing values and null routing
+
+**Common symptom:** A condition fires on a device's very first packets, before the referenced attribute has ever arrived. This usually means the condition uses `!=` (or a negated pattern operator) against a missing value. See [Comparison operators with null operands](#comparison-operators-with-null-operands) and [Logical operators with null operands](#logical-operators-with-null-operands) for which operators are safe by default and which need a guard.
+
+A referenced attribute resolves to `null` in three cases:
+
+- It has never been sent for this device.
+- It's absent from the current packet, but an earlier packet still holds a value.
+- The requested history index doesn't exist yet.
+
+JEXL treats all three the same way, as `null`, so an operator's behavior on a missing value doesn't depend on which of the three caused it. A never-sent attribute doesn't error the flow.
+
+Every incoming message leaves the Logic node through exactly one branch, THEN or ELSE, even when the condition references missing data. If the condition's overall result is anything other than `true` (including `null`, or a value the node can't evaluate), the message routes to ELSE. The ELSE path therefore carries both "condition is false" and "condition could not be satisfied from available data."
+
+### Null-safe condition patterns
+
+**Presence guard** (recommended when a condition must apply only to packets that carry the attribute). The stored attribute is a real `true`/`false` here, not `null`:
+
+```jexl
+value('temperature', 0, 'all') != null && value('temperature', 0, 'all') > 50
+```
+
+**Explicit missing-data check**: `null` literals are accepted in conditions.
+
+```jexl
+value('attribute', 0, 'all') == null
+```
+
+**`||` chain ordering**: Put the term that may be null last.
+
+Unsafe: the null left operand routes to ELSE even though `speed > 50` is true on the same packet.
+
+```jexl
+value('attribute', 0, 'all') > 5 || value('speed', 0, 'all') > 50
+```
+
+Safe: the true left operand short-circuits before the null right operand is evaluated.
+
+```jexl
+value('speed', 0, 'all') > 50 || value('attribute', 0, 'all') > 5
+```
+
+**Don't rely on `!()` to detect missing data**: When `x` is null, both `x > 5` and `!(x > 5)` route to ELSE.
+
+**`'all'` vs `'valid'`**: `value(attr, 0, 'valid')` can return the last non-null reading from an earlier packet. The condition may still evaluate against a real value even when the current packet is missing it. Use `'all'` when the condition must reflect the current packet only.
+
+### Comparison operators with null operands
+
+| Situation | Routes to | Stored attribute value |
+| --- | --- | --- |
+| `<`, `<=`, `>`, or `>=` against a missing value | ELSE | `null` |
+| `!=` against a missing value and a non-null literal (e.g., `value('a', 0, 'all') != 1`) | THEN | `true` |
+| `==` against a missing value and a non-null literal | ELSE | `false` |
+| `== null` against a missing value | THEN | `true` |
+| `!= null` when the attribute is absent | ELSE | `false` |
+| `!= null` when the attribute is present | THEN | `true` |
+| `=~`, `=^`, or `=$` against a missing value and a string literal | ELSE | `false` |
+| `!~`, `!^`, or `!$` against a missing value and a string literal | THEN | `true` |
+
+{% hint style="warning" %}
+`!=` against a missing value and a non-null literal evaluates to `true` and routes to THEN. A condition like `value('attribute', 1, 'all') != 1` can fire on a device's first packets, before that attribute has any history. This can happen even when the intent is to route unknown values to ELSE.
+
+To fail safely when a value may not exist yet, use a presence guard or an explicit `== null` check:
+
+```jexl
+value('attribute', 1, 'all') != null && value('attribute', 1, 'all') != 1
+```
+
+`null == null` is `true`, and `null != null` is `false`. The guard checks whether the attribute has a value on this packet, not whether it differs from a literal.
+{% endhint %}
+
+{% hint style="warning" %}
+The pattern-matching operators resolve to a real `true`/`false` on a missing value, never `null` like the relational operators. The negated forms (`!~`, `!^`, `!$`) land on THEN because a missing value counts as "not a match" on the positive form. That's a different mechanism from `!=`, which lands on THEN because a missing value is "unequal" to the literal. The two operator families reach THEN for different reasons, so don't assume one explains the other.
+{% endhint %}
+
+### Logical operators with null operands
+
+| Situation | Routes to | Stored attribute value |
+| --- | --- | --- |
+| `!(x > 5)` when `x` is missing | ELSE | `null` |
+| Null operand in `||` evaluated before a true operand on the same packet | ELSE | `null` |
+| True operand in `||` evaluated before a null operand (short-circuits) | THEN | `true` |
+| Null operand in `&&` with a true operand, either order | ELSE | `null` |
+
+Unlike `||`, operand order doesn't change the outcome for `&&`. A true operand can't short-circuit past a null one, since AND still needs to know whether the null side would fail the condition.
+
 ## Error handling scenarios
 
-| Scenario                           | Result             | Flow Path       | Attribute Value |
-| ---------------------------------- | ------------------ | --------------- | --------------- |
-| Expression evaluates to `true`     | Success            | THEN connection | `true`          |
-| Expression evaluates to `false`    | Success            | ELSE connection | `false`         |
-| Referenced attribute is `null`     | Treated as `false` | ELSE connection | `false`         |
-| Syntax error in expression         | Treated as `false` | ELSE connection | `null`          |
-| Referenced attribute doesn't exist | Treated as `false` | ELSE connection | `null`          |
+| Scenario | Result | Flow Path | Attribute Value |
+| --- | --- | --- | --- |
+| Expression evaluates to `true` | Success | THEN connection | `true` |
+| Expression evaluates to `false` | Success | ELSE connection | `false` |
+| Referenced attribute is `null` and used alone, with no comparison operator | Resolves to `null` | ELSE connection | `null` |
+| Missing value compared with `<`, `<=`, `>`, or `>=` | Resolves to `null` | ELSE connection | `null` |
+| Missing value compared with `==` and a non-null literal | Evaluates to `false` | ELSE connection | `false` |
+| Missing value compared with `== null` | Evaluates to `true` | THEN connection | `true` |
+| Missing value compared with `!=` and a non-null literal | Evaluates to `true` | THEN connection | `true` |
+| Syntax error in expression | Resolves to `null` | ELSE connection | `null` |
+
+{% hint style="warning" %}
+A row that routes to ELSE doesn't always mean the attribute is stored as `false`. A bare null reference and the relational operators (`<`, `<=`, `>`, `>=`) route to ELSE but store the attribute as `null`. A downstream expression that checks the attribute directly (`my_flag == false` or `my_flag == 0`) needs a null-safe guard to catch that case, since it won't match a `null` value.
+{% endhint %}
 
 ## Practical implementation examples
 

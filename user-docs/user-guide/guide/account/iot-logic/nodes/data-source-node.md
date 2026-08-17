@@ -184,7 +184,7 @@ System message fields such as `speed`, `latitude`, `longitude`, `heading`, `sate
 A merged attribute lands as a point-in-time entry in the device's attribute history, not a sticky current value. If the device reports its own telemetry much more often than the external system pushes updates, the device's own packets can advance the attribute's history past the pushed value within seconds, even though the merge succeeded.
 
 {% hint style="info" %}
-This is an expected consequence of two data streams running at different speeds, not a defect. Reference the attribute downstream as `value('attribute_name', 0, 'valid')` instead of its bare name. `'valid'` walks back through the attribute's history to the last non-null reading, so downstream nodes get the pushed value regardless of timing.
+This is an expected consequence of two data streams running at different speeds, not a defect. Reference the attribute downstream as `value('attribute_name', 0, 'valid')` instead of its bare name. `'valid'` walks back through the attribute's history to the last non-null reading, so downstream nodes get the pushed value regardless of timing. See [Missing values and null routing](logic-node/logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for how `'valid'` compares to `'all'` in a Logic node condition.
 {% endhint %}
 
 The push endpoint accepts up to 1 request per second per API key, with a burst size of 1. Pace the external system's requests accordingly.
@@ -219,7 +219,7 @@ Yes, through the **Software** tab, but only to enrich a device you've already ad
 
 #### The system I'm pushing from reports less often than my device, will the pushed data get lost?
 
-No, but a pushed attribute can stop being the current value quickly if the device reports much more often, since both contributors share the same rolling history. Reference the attribute downstream as `value('attribute_name', 0, 'valid')` instead of its bare name to reliably get the last real reading regardless of timing. This is an expected consequence of two streams running at different speeds, not a defect.
+No, but a pushed attribute can stop being the current value quickly if the device reports much more often, since both contributors share the same rolling history. Reference the attribute downstream as `value('attribute_name', 0, 'valid')` instead of its bare name to reliably get the last real reading regardless of timing. This is an expected consequence of two streams running at different speeds, not a defect. See [How pushed data is handled](#how-pushed-data-is-handled) and [Missing values and null routing](logic-node/logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the `'valid'` vs `'all'` distinction in a Logic node condition.
 
 #### I pushed data but it's not showing up, what's wrong?
 

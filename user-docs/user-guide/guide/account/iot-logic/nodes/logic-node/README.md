@@ -30,8 +30,8 @@ For specific syntax options related to logical expressions, see [IF/THEN Logic e
 
 When data first reaches an **IF/THEN Logic** node, IoT Logic creates a user-defined boolean attribute that stores the evaluation results. Each subsequent data packet is evaluated against your logical expression, updating this attribute's value and routing the data accordingly:
 
-* **True results**: Data flows through the THEN connection (green) with the boolean attribute set to `true`
-* **False results**: Data flows through the ELSE connection (red) with the boolean attribute set to `false`
+* **True results**: Data flows through the THEN connection (green) with the boolean attribute set to `true`.
+* **False results**: Data flows through the ELSE connection (red) with the boolean attribute set to `false`. That's the usual case, but not the only one: on a missing value, some operators route to ELSE while leaving the attribute `null` instead of `false`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
 
 This evaluation happens independently for each data packet, allowing different records from the same device to follow different paths based on real-time conditions.
 
@@ -60,7 +60,7 @@ The **IF/THEN Logic** node offers:
 * **Complex condition support**: Combine multiple parameters using logical operators (AND, OR, etc.) for sophisticated decision-making.
 * **Geofence-based conditions**: Reference named Navixy geofences directly in expressions using `inGeofence()`, `enterGeofence()`, and `leaveGeofence()` functions, without manual coordinate comparisons. See [Geofence functions](geofence-functions.md).
 * **Attribute creation**: Generate boolean attributes that record validation results for use in other node, Navixy's monitoring systems and 3rd-party services.
-* **Flexible output paths**: Route data through THEN (true) and ELSE (false) connections to trigger different subsequent actions.
+* **Flexible output paths**: Route data through THEN (true) and ELSE (false, or occasionally null on a missing value) connections to trigger different subsequent actions.
 
 ## Configuration options
 
@@ -104,7 +104,7 @@ Enter the name for the boolean attribute that will store the validation result.
 Build your logical statement using the expression field.
 
 * Use [logical operators according to Navixy Expression Language syntax](logic-node-expressions-and-syntax.md) to reference device parameters and calculated attributes.
-* The expression must return a boolean value (true/false) for proper node operation.
+* The expression must return a boolean value (true/false) for proper node operation. A missing value can behave differently. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
 * Use the [autocomplete feature](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names) to select available attributes from connected data sources.
 * To reference a Navixy geofence as a condition, use the [geofence picker](geofence-functions.md) in the expression field.
 {% endstep %}
@@ -121,13 +121,13 @@ Click **Apply changes** to complete the node creation.
 After you configured the node, you need to establish connections for the validation results.
 
 * **THEN connection** (green): Connects to nodes that should process data when the expression evaluates to true.
-* **ELSE connection** (red): Connects to nodes that should process data when the expression evaluates to false or null.
+* **ELSE connection** (red): Connects to nodes that should process data whenever the expression doesn't evaluate to true. This includes a false result or a missing value that the node couldn't evaluate.
 * The THEN connection is mandatory, while the ELSE connection is optional.
 {% endstep %}
 {% endstepper %}
 
-{% hint style="info" %}
-When logical expressions can't be evaluated due to null values, invalid data types, or syntax errors, the result is treated as `false`, and data flows through the ELSE path.
+{% hint style="warning" %}
+Missing data often routes to the ELSE path, but not always. A `!=` comparison against a missing value and a non-null literal evaluates to `true` and routes to THEN instead, and so do the negated pattern operators (`!~`, `!^`, `!$`). Syntax errors also route to ELSE, but store the attribute as `null`, not `false`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full set of null-safe patterns and operator tables.
 {% endhint %}
 
 For detailed information on expression syntax, operators, and data flow behavior, see [IF/THEN Logic expressions and syntax](logic-node-expressions-and-syntax.md).
@@ -147,9 +147,11 @@ The **IF/THEN Logic** node creates two distinct output paths based on the expres
 
 ### ELSE connection (<mark style="color:red;">red</mark>)
 
-* **Activates when**: The logical expression returns `false`, `null`, or encounters evaluation errors.
+* **Activates when**: The logical expression returns `false`, evaluates to `null`, or can't be evaluated.
+* **Exceptions to watch for**: Most missing-value comparisons route here, but `!=` against a missing value and a non-null literal routes to THEN instead, and so do the negated pattern operators (`!~`, `!^`, `!$`) against a missing value.
+* **Stored value isn't always `false`**: Routing to ELSE doesn't guarantee the boolean attribute is stored as `false`. Relational comparisons (`<`, `<=`, `>`, `>=`) and a bare missing-value reference land on ELSE with the attribute left `null`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
 * **Connection requirement**: Optional. Use only when you need to handle negative results.
-* **Error handling**: Processes cases where expressions cannot be evaluated due to missing data or syntax errors.
+* **Error handling**: Processes cases where expressions can't be evaluated due to syntax errors or invalid data types. Missing-data routing depends on the operator. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
 * **Typical uses**: Logging failed validations, routing data through alternative processing paths, or continuing normal operations.
 
 ### **Terminal node requirement**
@@ -176,7 +178,7 @@ Yes. **IF/THEN Logic** nodes can reference any attributes available from connect
 
 #### What happens if my expression contains syntax errors?
 
-If an expression contains syntax errors or can't be evaluated, the **IF/THEN Logic** node treats the result as `false` and routes data through the ELSE connection. Check the expression syntax and ensure all referenced attributes exist in your data stream.
+If an expression contains syntax errors or can't be evaluated, the **IF/THEN Logic** node routes data through the ELSE connection and stores the attribute as `null`, not `false`. Check the expression syntax and ensure all referenced attributes exist in your data stream.
 
 #### Can I connect multiple nodes to the same IF/THEN Logic node output?
 
@@ -184,7 +186,11 @@ Yes. Both THEN and ELSE connections support multiple outgoing connections, allow
 
 #### How do I monitor IF/THEN Logic node results?
 
-IF/THEN Logic node results appear as boolean attributes in the [Data Stream Analyzer](../../data-stream-analyzer.md) table. Select your devices and look for the attribute name you specified in the expression name field. The values will display as `true` or `false` based on the evaluation results.
+IF/THEN Logic node results appear as boolean attributes in the [Data Stream Analyzer](../../data-stream-analyzer.md) table. Select your devices and look for the attribute name you specified in the expression name field. Values usually display as `true` or `false`, but a missing value can leave the attribute `null` instead, depending on the operator. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
+
+#### Why did my condition fire even though the attribute has no value yet?
+
+Most likely the condition uses `!=` against a non-null literal, or a negated pattern operator like `!~`, `!^`, `!$`, on a value that's never been received. These operators treat "no value" as different from the literal you're comparing against, so they evaluate to `true` and route to THEN. That's the opposite of what you'd expect from a safe default. Add a presence guard (`value('attr', 0, 'all') != null && ...`) or an explicit `== null` check if the condition should only fire once the attribute has a real value. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full operator-by-operator breakdown.
 
 #### Can I chain multiple IF/THEN Logic nodes together?
 
