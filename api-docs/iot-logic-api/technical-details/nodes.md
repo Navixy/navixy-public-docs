@@ -260,6 +260,21 @@ The Logic node supports two output connection types:
 * Activates when the expression evaluates to `false`, `null`, or encounters errors
 * Optional connection
 
+#### Null operand behavior in conditions
+
+A missing value doesn't route to ELSE the same way for every operator, and the stored attribute isn't always coerced to `false`:
+
+| Operator family | Example | Result | Routes to |
+| --- | --- | --- | --- |
+| Relational (`<`, `<=`, `>`, `>=`) | `null > 0` | `null` | ELSE |
+| Equality (`==`, `!=`) | `null != 5` | `true` | THEN |
+| Pattern matching (`=~`, `!~`, `=^`, `!^`, `=$`, `!$`) | `null =~ '.*'` | `false` | ELSE |
+| Logical AND (`&&`) | `null && true` | `null` | ELSE |
+| Logical OR (`||`), null operand evaluated first | `null || true` | `null` | ELSE |
+| Logical OR (`||`), true operand evaluated first | `true || null` | `true` | THEN |
+
+A `!=` comparison against a missing value, for example, evaluates to `true` and routes to THEN, which can be surprising for a condition meant to detect a specific value. See [Null propagation](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#null-propagation) for why each operator family behaves this way.
+
 #### Common topology patterns
 
 When you need to both trigger a side effect and forward data to Navixy on the same branch, connect the Logic node to both the terminal node and the Output Endpoint node using separate `then_edge` connections.
@@ -318,10 +333,10 @@ Here's a quick reference:
 
 ### Usage notes
 
-* The Logic node creates a boolean attribute using the `data.name` value
-* This attribute appears in Data Stream Analyzer and can be referenced by subsequent nodes
-* When expressions cannot be evaluated, the result is treated as `false` and data flows through the ELSE path
-* Multiple Logic nodes can be chained together for complex decision trees
+* The Logic node creates a boolean attribute using the `data.name` value.
+* This attribute appears in Data Stream Analyzer and can be referenced by subsequent nodes.
+* Any non-`true` result, including evaluation errors, routes through the ELSE path. See [Null operand behavior in conditions](#null-operand-behavior-in-conditions) for how this plays out per operator.
+* Multiple Logic nodes can be chained together for complex decision trees.
 
 ## Webhook node (`webhook`)
 

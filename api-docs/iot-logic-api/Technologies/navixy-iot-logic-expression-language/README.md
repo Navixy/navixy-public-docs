@@ -64,7 +64,7 @@ For complete syntax details, see [Expression syntax reference](expression-syntax
 The expression language handles numbers, strings, booleans, hexadecimal literals, and null values. Null represents missing or undefined data from devices.
 
 {% hint style="info" %}
-**Null propagation:** Null values propagate through expressions without causing errors, maintaining processing continuity even with unreliable device connectivity. Calculations involving null return null rather than failing.
+**Null propagation:** Null values propagate through expressions without causing errors, maintaining processing continuity even with unreliable device connectivity. Most operators return null when an operand is null. Equality (`==`, `!=`) and the pattern-matching operators are exceptions and always resolve to a real `true` or `false`.
 {% endhint %}
 
 For detailed type behavior and null handling rules, see [Data types](expression-syntax-reference.md#data-types-and-type-handling) in the Expression syntax reference.

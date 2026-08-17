@@ -255,19 +255,29 @@ Use these functions to combine multiple attribute values into a single string. T
 
 ### Null propagation
 
-**Rule:** Null values propagate through expressions without errors. When any operand is null, the expression typically evaluates to null.
+**Rule:** Null values propagate through expressions without errors, but the result depends on the operator family:
 
-| Expression         | Result  | Notes                  |
-| ------------------ | ------- | ---------------------- |
-| `null + 5`         | `null`  | Arithmetic with null   |
-| `temperature + 10` | `null`  | If temperature is null |
-| `null == null`     | `true`  | Null equality          |
-| `null != 5`        | `true`  | Null comparison        |
-| `null > 0`         | `false` | Null in comparison     |
+* Arithmetic (`+`, `-`, `*`, `/`, `%`) and the relational operators (`<`, `<=`, `>`, `>=`, the four operators that compare order rather than equality) return `null` when either operand is null.
+* Logical operators (`&&`, `||`) can also return `null`. A null operand isn't coerced to `false`. Depending on operand order, it can make the whole expression `null` even when the other operand is `true`.
+* Equality (`==`, `!=`) and the pattern-matching operators (`=~`, `!~`, `=^`, `!^`, `=$`, `!$`) are the exception: they always resolve to a real `true` or `false`, never `null`, regardless of which operand is null.
 
-{% hint style="info" %}
-In **Logic** nodes expressions evaluating to null are treated as `false` and route through ELSE path.
+| Expression | Result | Notes |
+| --- | --- | --- |
+| `null + 5` | `null` | Arithmetic with null |
+| `temperature + 10` | `null` | If temperature is null |
+| `null == null` | `true` | Null equality |
+| `null != 5` | `true` | Equality with a non-null literal: deterministic, not null |
+| `null > 0` | `null` | Relational operator: propagates null, not `false` |
+| `null =~ '.*'` | `false` | Pattern match: deterministic even though `.*` also matches an empty string |
+| `null && true` | `null` | Neither operand order short-circuits past a null with `&&` |
+| `null || true` | `null` | Left operand null: the result stays null even though the right operand is `true` |
+| `true || null` | `true` | Left operand true: short-circuits past the null right operand |
+
+{% hint style="warning" %}
+The relational operators diverge from stock Apache Commons JEXL here. In the [Apache Commons JEXL reference](https://commons.apache.org/proper/commons-jexl/reference/syntax.html) and its `JexlArithmetic` implementation, `lessThan`, `greaterThan`, `lessThanOrEqual`, and `greaterThanOrEqual` return `false` when either operand is null. IoT Logic returns `null` instead, confirmed by testing against the live platform. Equality and the pattern-matching operators match stock JEXL's documented null behavior. Only the relational family differs.
 {% endhint %}
+
+For how these results affect branching in a Logic node's condition, see [IF/THEN Logic node](../../technical-details/nodes.md#logic-node-logic).
 
 #### Error conditions resulting in null
 

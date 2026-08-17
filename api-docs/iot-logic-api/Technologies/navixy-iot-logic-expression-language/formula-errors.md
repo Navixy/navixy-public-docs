@@ -227,7 +227,7 @@ value(attribute_name, index, validation)
 `genTime()` and `srvTime()` take the same three arguments and reject an unrecognised validation mode the same way, reporting `JEXL error : genTime` or `JEXL error : srvTime`.
 
 {% hint style="warning" %}
-**Only `value()` range-checks its index.** `genTime()` and `srvTime()` accept any index, including one past the 12 values that are retained. The flow saves without an error, and the formula then returns null for every message: the attribute is created but never receives a value, and nothing reports a problem at save time or at runtime.
+**Only `value()` range-checks its index.** `genTime()` and `srvTime()` accept any index, including one past the 12 values that are retained. The flow saves without an error, and the formula then returns null for every message. The attribute is created, but every reading resolves to null, and nothing reports a problem at save time or at runtime.
 
 `genTime('speed', 100, 'valid')` saves and stays empty forever. `genTime('speed', 11, 'valid')` returns a timestamp. Keep the index within 0-11 for all three functions, and if an attribute stays empty for no visible reason, check its index first.
 {% endhint %}
