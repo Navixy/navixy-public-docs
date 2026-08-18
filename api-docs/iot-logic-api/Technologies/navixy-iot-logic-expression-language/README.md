@@ -236,11 +236,11 @@ Expression results integrate with the Navixy platform through multiple channels:
 
 [**Data Stream Analyzer**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/data-stream-analyzer)**:** Monitor expression results in real-time. View calculated attributes, historical values, and expression evaluation results for debugging and validation.
 
-[**Custom sensors**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/displaying-new-calculated-attributes-on-the-navixy-platform)**:** Convert calculated attributes into dashboard-visible sensors when connected to Navixy output endpoints.
+[**Custom sensors**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/initiate-attribute-node/displaying-new-calculated-attributes-on-the-navixy-platform)**:** Convert calculated attributes into dashboard-visible sensors when connected to Navixy output endpoints.
 
 [**Alert rules**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications)**:** Use boolean expression results from Logic nodes to trigger notifications based on real-time conditions.
 
-[**Third-party integration**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/output-endpoint-node)**:** Forward transformed data to external systems via MQTT output endpoints.
+[**Third-party integration**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/output-endpoint-node)**:** Forward transformed data to external systems via MQTT output endpoints.
 
 ### Additional resources
 

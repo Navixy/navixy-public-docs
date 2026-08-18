@@ -31,7 +31,7 @@ The expression language uses JEXL (Java Expression Language) as its foundation, 
 
 Attribute names must exactly match names from device telemetry. To make sure you use correct names, you can:
 
-* Use the [Autofill attribute names](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes#autofill-attribute-names) option
+* Use the [Autofill attribute names](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/initiate-attribute-node/managing-attributes#autofill-attribute-names) option
 * Lookup attribute names in [Data Stream Analyzer](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/data-stream-analyzer)
 
 ## Attribute access

@@ -179,7 +179,7 @@ Where `index` is the historical depth (0 = current message, 1 = previous, up to 
 
 **Account-wide attribute name uniqueness isn't currently enforced:** `data.items[].name` values aren't checked for uniqueness across the account at save time. Two unrelated flows can define a calculated attribute with the same name, and the platform silently accepts the duplicate: no error, no `292` code. The name is shared account-wide in Data Stream Analyzer and custom sensor bindings, and overwrites a matching device parameter in output data packets. Choose distinctive, scoped attribute names as a best practice, not because a duplicate will be rejected. It currently isn't.
 
-See [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes) for full examples.
+See [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/initiate-attribute-node/managing-attributes) for full examples.
 
 #### **logic**
 
@@ -321,7 +321,7 @@ This fires exactly once when the threshold is reached, then resets when the cond
 
 **Important constraint:** a single `value()` call reads at most 11 messages back, since IoT Logic keeps 12 values per attribute at indices 0 to 11. The counter pattern above is not limited by that depth: each message reads only index 1 of its own counter, so the count can grow past 12, as in the 30-message example. The 11-message ceiling applies to direct lookback formulas such as `value('speed', 11, 'valid')`. For state that must survive longer than the counter can hold, or for more complex state tracking, ask the user to consider alternative approaches.
 
-For full `value()` syntax, see [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes).
+For full `value()` syntax, see [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/initiate-attribute-node/managing-attributes).
 
 ***
 
@@ -425,11 +425,11 @@ Node 4 receives two edges total: `then_edge` from node 2, `else_edge` from node 
 Use these when the guide doesn't cover the detail you need.
 
 * [Expression language overview](../Technologies/navixy-iot-logic-expression-language/) — JEXL operators, `value()` function, expression syntax
-* [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/initiate-attribute-node/managing-attributes) — `value()` examples, indexed attributes, historical lookups
+* [Managing attributes](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/initiate-attribute-node/managing-attributes) — `value()` examples, indexed attributes, historical lookups
 * [Nodes reference](../technical-details/nodes.md) — full field schemas for all node types, including [connector configuration](../technical-details/nodes.md#connector-configuration) for `data_source`
 * [Merging external system data into a flow](merging-external-data-into-a-flow.md) — full walkthrough for configuring a `data_source` connector, assembling the push URL, and sending a push
-* [Logic node expressions and syntax](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/logic-node/logic-node-expressions-and-syntax) — condition expression reference
-* [Webhook node](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/flow-management/webhook-node) — body/header schema, dynamic attribute syntax
+* [Logic node expressions and syntax](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/logic-node/logic-node-expressions-and-syntax) — condition expression reference
+* [Webhook node](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/webhook-node) — body/header schema, dynamic attribute syntax
 * [Device catalog](https://www.navixy.com/devices/) — find your device and check the Inputs and outputs section for device-specific attribute names
 
 ***
