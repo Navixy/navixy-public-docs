@@ -42,7 +42,7 @@ Dashboard Studio provides two ways to build analytics from IoT Query data. Choos
 | ----------- | ---------------------------------- | -------------------------------------- |
 | SQL queries | Each panel has its own query       | One query powers all views             |
 | Layout      | Drag-and-drop canvas               | Fixed: data table, chart, location map |
-| Export      | JSON schema only                   | HTML, Excel, PDF                       |
+| Export      | JSON schema, PDF                   | HTML, Excel, PDF                       |
 | Use case    | Multi-panel operational monitoring | Exportable, single-dataset analysis    |
 
 Use dashboards when you need multiple independent visualizations on a single canvas, for example: combining a trip summary stat tile, a fuel consumption chart, and a zone visit table in one view. Use reports when a single dataset needs to be explored as a table, visualized as a chart, and mapped simultaneously, or when the output needs to be exported and shared outside Dashboard Studio.
@@ -162,17 +162,24 @@ Use the menu editing mode to create sections, drag reports between them, and reo
 
 Save your dashboard to store it in your menu. Dashboard Studio prompts for a name and section location. Reports save automatically as you work.
 
-Export reports to share them with other users or create backups.
+Dashboard Studio offers two ways to export a dashboard.
 
-To do it:
+**Export the JSON schema** to share it with other users or create a backup:
 
 1. Click <img src="../.gitbook/assets/image (11).png" alt="" data-size="line"> to enter edit mode.
 2. Click <img src="../.gitbook/assets/image (12).png" alt="" data-size="line"> to open the Full Schema window.
 3. Select **Export**.
 
-Dashboard Studio downloads a JSON file containing the complete report structure, including panels, queries, and visualization settings. You can import an existing schema as well.
+Dashboard Studio downloads a JSON file containing the dashboard's structure, including panels, queries, and visualization settings. You can import an existing schema as well.
 
 <figure><img src="../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+
+**Export a PDF** to share a static snapshot outside Dashboard Studio:
+
+1. Exit edit mode if you're in it.
+2. Wait for the dashboard to finish loading, then click **Export PDF** in the toolbar.
+
+Dashboard Studio renders the current panel layout into a paginated PDF document.
 
 ## How data refresh works
 
@@ -181,5 +188,5 @@ Dashboards display current data from IoT Query. Dashboard Studio queries the dat
 You can refresh data manually using the **Refresh** button in the top toolbar.
 
 {% hint style="info" %}
-Dashboard Studio does not cache results. Each panel runs its query independently when the report loads or refreshes.
+Panel results may be cached for up to five minutes, so values can briefly lag behind the underlying data. Failed queries are never cached, so a panel that fails to load always runs again.
 {% endhint %}

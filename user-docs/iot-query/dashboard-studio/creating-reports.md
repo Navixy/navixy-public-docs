@@ -28,7 +28,7 @@ Both reports and dashboards run SQL queries against your IoT Query database and 
 | ----------- | -------------------------------------- | ---------------------------------- |
 | SQL queries | One query powers all views             | Each tile has its own query        |
 | Layout      | Fixed: data table, chart, location map | Drag-and-drop canvas               |
-| Export      | HTML, Excel, PDF                       | JSON schema only                   |
+| Export      | HTML, Excel, PDF                       | JSON schema, PDF                   |
 | Use case    | Exportable, single-dataset analysis    | Multi-panel operational monitoring |
 
 Use reports when a single dataset needs to be explored as a table, visualized as a chart, and mapped simultaneously, or when the output needs to be exported and shared outside Dashboard Studio. Use dashboards when you need multiple independent visualizations on a single canvas, for example: combining a trip summary stat tile, a fuel consumption chart, and a zone visit table in one view.
