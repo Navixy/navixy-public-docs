@@ -34,7 +34,7 @@ For example, if we need to retrieve all trips for employee 1683258 in November, 
 
 {% code title="cURL" overflow="wrap" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/track/list' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset/track/list' \
     -H 'Content-Type: application/json' \
     -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b", "asset": {"id": 1683258, "type": "employee"}, "from": "2023-11-01 03:24:00", "to": "2023-11-30 06:24:00", "filter": false, "count_events": true}'
 ```
@@ -268,7 +268,7 @@ For instance, if we need to obtain track points for employee 1683258 that fall w
 
 {% code title="" overflow="wrap" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/track/read' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset/track/read' \
     -H 'Content-Type: application/json' \
     -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b", "asset": {"id": 1683258, "type": "employee"}, "from": "2023-11-01 00:00:00", "to": "2023-11-01 23:59:59", "filter": false, "simplify": false, "include_gsm_lbs": false}'
 ```

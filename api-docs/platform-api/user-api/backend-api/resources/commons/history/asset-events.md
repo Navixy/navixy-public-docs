@@ -41,7 +41,7 @@ The asset label is calculated as the vehicle label. If there is no vehicle asset
 
 {% code overflow="wrap" %}
 ```
-curl -X POST '{{ extra.api_example_url }}/history/asset/list' \
+curl -X POST 'https://api.eu.navixy.com/v2/history/asset/list' \
     -H 'Content-Type: application/json' \
     -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b", "assets": [{"id": 1683258, "type": "employee"}], "from": "2020-12-10 16:44:00", "to": "2020-12-22 16:44:00"}'
 ```
@@ -90,7 +90,7 @@ Interval will be restricted by store period interval.
 \=== "cURL"
 
 ```
-curl -X POST '{{ extra.api_example_url }}/history/asset/count' \
+curl -X POST 'https://api.eu.navixy.com/v2/history/asset/count' \
     -H 'Content-Type: application/json' \
     -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b", "assets": [{"id": 1683258, "type": "employee"}], "from": "2020-12-10 16:44:00", "to": "2020-12-22 16:44:00"}'
 ```

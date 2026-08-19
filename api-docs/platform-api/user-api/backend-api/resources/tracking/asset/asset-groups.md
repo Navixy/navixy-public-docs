@@ -60,7 +60,7 @@ Create new asset group.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/create' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/create' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
@@ -104,7 +104,7 @@ List asset groups by ids or asset.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/list' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/list' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
@@ -140,7 +140,7 @@ Set assets to existing group.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/set' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/set' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
@@ -182,7 +182,7 @@ Remove assets from group.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/remove' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/remove' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
@@ -221,7 +221,7 @@ Update asset group name.
 
 {% code title="cURL" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/update' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/update' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
@@ -260,7 +260,7 @@ Delete asset group.
 
 {% code title="" %}
 ```sh
-curl -X POST '{{ extra.api_example_url }}/asset_group/delete' \
+curl -X POST 'https://api.eu.navixy.com/v2/asset_group/delete' \
     -H 'Content-Type: application/json' \
     -d '{
 "hash":"59be129c1855e34ea9eb272b1e26ef1d",
