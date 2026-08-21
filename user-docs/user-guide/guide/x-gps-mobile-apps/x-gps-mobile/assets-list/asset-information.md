@@ -98,10 +98,12 @@ Tap the name or label in the **Linked units** entry to access the information sc
 
 {% columns %}
 {% column %}
-Tap the device label in the **GPS Data** entry to display its details, including the ID, model, connection and movement status, location, speed, and other technical data.
+Tap the device label in the **GPS Data** entry to display its details, including the ID, model, connection and movement status, location, speed, commands, and other technical data.
+
+[Commands](../../../devices-and-settings/object-management/commands.md) are firmware-level instructions sent directly to the device. You can add new commands only in the [Devices and settings](../../../devices-and-settings/) module of the Navixy platform.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../../.gitbook/assets/image (16) (1).png" alt="GPS device information"><figcaption><p>GPS device information</p></figcaption></figure>
+<figure><img src="../../../../.gitbook/assets/image (52).png" alt=""><figcaption></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
