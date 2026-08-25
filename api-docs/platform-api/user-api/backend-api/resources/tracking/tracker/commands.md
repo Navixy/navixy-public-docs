@@ -39,7 +39,7 @@ Each command has a common set of fields. The `config` object differs by `type`.
 * `name` - string. Human-readable label shown in the Commands block (e.g. `"engine_stop"`).
 * `type` - string. Always `"hardware"` for this variant.
 * `config` - object. Hardware command configuration.
-  * `command` - string. The exact protocol-level command string sent to the device (e.g. `"RELAY,1#"`). Valid values are device-specific — refer to your device manufacturer's documentation.
+  * `command` - string. The exact protocol-level command string sent to the device (e.g. `"RELAY,1#"`). Valid values are device-specific — refer to your device manufacturer's documentation. Can include a single `<>` placeholder; see [Dynamic command values](commands.md#dynamic-command-values).
   * `reliable` - boolean. If `true`, the platform requests delivery confirmation (acknowledgement) from the device before marking the command as successfully sent.
 {% endtab %}
 
@@ -74,13 +74,21 @@ Each command has a common set of fields. The `config` object differs by `type`.
   * `headers` - array of objects. HTTP request headers to include. Can be empty.
     * `key` - string. Header name (e.g. `"Authorization"`).
     * `value` - string. Header value (e.g. `"Bearer <TOKEN>"`).
-  * `body` - string. The JSON payload sent in the POST request body. Use `{{attribute_name}}` placeholders to embed live device data — they are replaced with current values at execution time.
+  * `body` - string. The JSON payload sent in the POST request body. Use `{{attribute_name}}` placeholders to embed live device data — they are replaced with current values at execution time. Can include a single `<>` placeholder; see [Dynamic command values](commands.md#dynamic-command-values).
 {% endtab %}
 {% endtabs %}
 
 {% hint style="warning" %}
 Hardware command strings are device-specific. Always refer to your device manufacturer's documentation for valid values. Sending an incorrect command string may have unintended effects on the device.
 {% endhint %}
+
+### Dynamic command values
+
+A hardware command's `command` string, or an HTTP command's `body`, can include a single `<>` placeholder instead of a fixed value. At execution time, the caller supplies the substitution value in the `param` field of [execute](commands.md#execute), and Navixy replaces `<>` with that value before sending.
+
+* A command's `config` can contain at most one `<>` placeholder. `create` and `update` reject a command with more than one.
+* `execute` requires `param` when the command's `config` contains `<>`, and rejects `param` when it doesn't. Either mismatch returns error 7.
+* `param` accepts up to 500 characters.
 
 ## API actions
 
@@ -240,20 +248,23 @@ curl -X POST 'https://api.eu.navixy.com/v2/tracker/command/update' \
 
 Executes a command immediately. For hardware commands, the command string is sent to the device. For HTTP commands, an HTTP POST request is dispatched to the configured URL with the current device attribute values substituted into the body.
 
+If the command's `config` contains a [dynamic value placeholder](commands.md#dynamic-command-values) (`<>`), pass the substitution value in `param`.
+
 **Required sub-user rights:** `tracker_update`.
 
 #### Parameters
 
-| name        | description                              | type   | format           |
-| ----------- | ---------------------------------------- | ------ | ---------------- |
-| hash        | API key or user session hash.            | string | `"your_api_key"` |
-| tracker\_id | ID of the tracker that owns the command. | int    | `70074765`       |
-| command\_id | ID of the command to execute.            | int    | `3`              |
+| name        | description                                                                                                                              | type   | format           |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------------- |
+| hash        | API key or user session hash.                                                                                                              | string | `"your_api_key"` |
+| tracker\_id | ID of the tracker that owns the command.                                                                                                   | int    | `70074765`       |
+| command\_id | ID of the command to execute.                                                                                                              | int    | `3`              |
+| param       | Optional. Value that replaces the `<>` placeholder in the command. Required if the command contains a placeholder, and rejected otherwise. Up to 500 characters. | string | `"1"`            |
 
 #### Examples
 
 {% tabs %}
-{% tab title="cURL" %}
+{% tab title="cURL — without a placeholder" %}
 ```sh
 curl -X POST 'https://api.eu.navixy.com/v2/tracker/command/execute' \
     -H 'Content-Type: application/json' \
@@ -261,6 +272,19 @@ curl -X POST 'https://api.eu.navixy.com/v2/tracker/command/execute' \
         "hash": "your_api_key",
         "tracker_id": 70074765,
         "command_id": 3
+    }'
+```
+{% endtab %}
+
+{% tab title="cURL — with a placeholder" %}
+```sh
+curl -X POST 'https://api.eu.navixy.com/v2/tracker/command/execute' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "hash": "your_api_key",
+        "tracker_id": 70074765,
+        "command_id": 3,
+        "param": "1"
     }'
 ```
 {% endtab %}
@@ -278,7 +302,7 @@ curl -X POST 'https://api.eu.navixy.com/v2/tracker/command/execute' \
 
 #### Errors
 
-* 7 - Invalid parameters – if required fields are missing or malformed.
+* 7 - Invalid parameters – if required fields are missing or malformed, if the command's `config` contains `<>` and `param` is missing, or if `param` is provided for a command without a placeholder.
 * 201 - Not found in the database – if the command or tracker does not exist.
 
 [General error codes](../../../errors.md)
