@@ -122,13 +122,46 @@ Slack supports receiving messages from external services via Incoming Webhooks. 
 
 Slack expects a JSON object with a `text` field. The `{{device_id}}`, `{{speed}}`, `{{latitude}}`, and `{{longitude}}` placeholders are replaced with the current values for the device at the moment the command is sent. When triggered from the Object widget, the message appears in the Slack channel configured for your webhook.
 
+### Dynamic command values
+
+A command string or software command body can include a single `<>` placeholder to prompt for a value each time you send the command, instead of hard-coding a fixed value.
+
+* In a device command, add `<>` inside the **Command string** field, for example `relay,<>` to send a different relay state on each send.
+* In a software command, add `<>` inside the **Body** field, for example `{"value": "<>"}`.
+
+Only one `<>` placeholder is allowed per command. Saving a command with more than one placeholder returns the error "Only one value is allowed per command. Remove the extra < >."
+
+When you send a command that contains `<>` from the Object widget, a dialog asks for the value before dispatch. See [Sending commands from the Object widget](#sending-commands-from-the-object-widget) for the full flow.
+
+{% hint style="info" %}
+Click the help icon in the Commands block to open **How command values work**, a summary of the `<>` syntax.
+{% endhint %}
+
+<!-- SCREENSHOT: Commands block help icon and the "How command values work" dialog explaining the <> placeholder syntax. -->
+
 ## Sending commands from the Object widget
 
 Once commands are saved, they appear in the **Commands** block of the device's [Object widget](../../tracking/objects-list/object-widget.md) in the Tracking module.
 
 <figure><img src="../../../.gitbook/assets/object-widget-commands.png" alt="Object widget Commands block showing two commands with send buttons"><figcaption></figcaption></figure>
 
-Click the **send** button next to a command name to dispatch it immediately. There is no confirmation dialog and the command is sent as soon as you click. The Commands block shows all device commands and software commands configured for that device.
+Click the **send** button next to a command name to dispatch it. The Commands block shows all device commands and software commands configured for that device.
+
+* If the command doesn't contain a [dynamic value placeholder](#dynamic-command-values), Navixy sends it immediately. There is no confirmation dialog.
+* If the command contains `<>`, a dialog opens asking you to enter a value. Enter a value of up to 500 characters and click **Send** to dispatch the command with the value substituted for `<>`. The **Send** button stays disabled until you enter a value, and empty or whitespace-only values aren't accepted.
+
+<!-- SCREENSHOT: Value input dialog shown when sending a command that contains the <> placeholder, with the value field and the Send button. -->
+
+After the command runs, Navixy shows a notification with the result:
+
+* **Device commands** show only whether the command succeeded, as `{ "success": true }` or `{ "success": false }`.
+* **Software commands** show the command name and the raw response from the destination endpoint, as `{status, body}`. Long responses scroll inside the notification.
+
+<!-- SCREENSHOT: Notification toast for a device command showing the success/fail result. -->
+
+<!-- SCREENSHOT: Notification toast for a software command showing the command name and the raw HTTP response (status and body). -->
+
+Sent commands also appear in the [Recent events](../../tracking/objects-list/object-widget.md#data-blocks) block of the Object widget, with their result available in an expandable view.
 
 {% hint style="info" %}
 Commands are per-device. Commands configured for one device do not appear in other devices' Object widgets. To send commands to multiple devices based on rules or conditions, use IoT Logic.
