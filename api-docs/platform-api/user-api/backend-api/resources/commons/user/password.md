@@ -52,10 +52,12 @@ Works only with standard user session (not with API key).
 
 #### Parameters
 
-| name          | description                                              | type   |
-| ------------- | -------------------------------------------------------- | ------ |
-| old\_password | Current password of the user.                            | string |
-| new\_password | New password for the user. 6 to 20 printable characters. | string |
+| name          | description                     | type   |
+| ------------- | ------------------------------- | ------ |
+| old\_password | Current password of the user.   | string |
+| new\_password | New password for the user.      | string |
+
+{% include "../../../../../../.gitbook/includes/password-requirements.md" %}
 
 #### Example
 
