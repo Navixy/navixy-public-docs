@@ -13,6 +13,6 @@ Track version history and updates for Navixy on-premise deployments. The changel
 * Bug fixes and stability updates
 * Installation and update facilitation scripts
 
-Browse by year: <a href="2025.md" class="button primary">2025</a>
+Browse by year: <a href="2026.md" class="button primary">2026</a> <a href="2025.md" class="button primary">2025</a>
 
 For questions about specific updates or deployment assistance, contact Navixy support team - [support@navixy.com](mailto:support@navixy.com)
