@@ -1,0 +1,224 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "Navixy Eco Fleet API",
+    "summary": "Fuel data resampling and fuel sensor quality scoring",
+    "description": "This is an API reference for the Navixy Eco Fleet API, which resamples fuel and movement data onto a uniform time grid and scores the quality of fuel sensor readings.\n\n**This API differs from the Platform API in four ways**, so read the operations rather than assuming the usual conventions:\n\n- The base path is `/eco_fleet/v1`, not `/v2`. Older documentation omitted the `/v1` segment, and requests without it are rejected by the platform router before reaching this service.\n- Identifiers are **path parameters**, and the period is a **query parameter**.\n- Successful responses are **CSV** or a bare JSON object. There is no `success` envelope.\n- Errors follow **RFC 7807 problem details**, with a string `type` identifier rather than the numeric `status.code` the Platform API uses.\n\n**Credentials** are the same as the Platform API: a session hash or an API key in the `Authorization` header. A request without one returns 401 with type `errors/default/unauthorized`.",
+    "contact": {
+      "name": "Navixy support",
+      "email": "support@navixy.com",
+      "url": "https://www.navixy.com/contact/"
+    },
+    "license": { "name": "Apache 2.0", "identifier": "Apache-2.0" }
+  },
+  "servers": [
+    { "url": "https://api.eu.navixy.com/eco_fleet/v1", "description": "Navixy production server on European platform" },
+    { "url": "https://api.us.navixy.com/eco_fleet/v1", "description": "Navixy production server on American platform" },
+    { "url": "https://api.me.navixy.com/eco_fleet/v1", "description": "Navixy production server on Middle East platform" }
+  ],
+  "security": [{ "api_key": [] }],
+  "tags": [
+    {
+      "name": "Eco Fleet",
+      "description": "Resampling fuel and movement data onto a uniform time grid, and scoring how noisy a fuel sensor's readings are."
+    }
+  ],
+  "paths": {
+    "/trackers/{tracker_id}/resampling": {
+      "post": {
+        "tags": ["Eco Fleet"],
+        "summary": "Resample fuel data",
+        "description": "Return fuel, speed, movement and location values resampled onto a uniform time grid, as CSV.\n\nColumns are `Time`, one column per fuel sensor named after that sensor, `SPEED` in km/h, `MOVEMENT` where 0 is parking, 1 is moving and 2 is idle, `LNG`, and `LAT`. A tracker with no fuel sensors returns the `Time` column alone.\n\nTimestamps follow the timezone the tracker is located in.",
+        "operationId": "ecoFleetTrackerResampling",
+        "parameters": [
+          {
+            "name": "tracker_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tracker, also known as object_id. Must belong to the authorized user and must not be blocked.",
+            "schema": { "type": "integer", "examples": [123456] }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "description": "Period to analyse, as an ISO 8601 interval. Defaults to the last week.",
+            "schema": { "type": "string", "examples": ["P7D/2020-12-31T00:00Z", "2023-08-24T08:04:36.306Z/2023-08-26T08:04:36.306Z"] }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "step_size": {
+                    "type": "integer",
+                    "description": "Resampling step in minutes.",
+                    "examples": [1]
+                  },
+                  "resampling_props": {
+                    "type": "array",
+                    "description": "How to resample each data type.",
+                    "items": { "$ref": "#/components/schemas/ResamplingProp" }
+                  }
+                },
+                "required": ["step_size", "resampling_props"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resampled series as CSV",
+            "content": {
+              "text/csv": {
+                "schema": { "type": "string" },
+                "examples": {
+                  "csv": {
+                    "summary": "A tracker with one fuel sensor",
+                    "value": "Time,FUEL_TANK,SPEED,MOVEMENT,LNG,LAT\n2026-08-11T00:00,42.5,0,0,60.545,56.826\n"
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad request, or the period could not be parsed.", "$ref": "#/components/responses/Problem" },
+          "401": { "description": "No credential supplied. Type `errors/default/unauthorized`.", "$ref": "#/components/responses/Problem" },
+          "404": { "description": "Tracker not found. Type `errors/entity/not-found`.", "$ref": "#/components/responses/Problem" },
+          "502": { "description": "The Navixy Platform API could not be reached, or returned an error. Type `errors/external-api/navixy`, with the underlying code and message in `detail`.", "$ref": "#/components/responses/Problem" },
+          "default": { "$ref": "#/components/responses/Problem" }
+        }
+      }
+    },
+    "/trackers/{tracker_id}/sensors/{sensor_id}/quality": {
+      "get": {
+        "tags": ["Eco Fleet"],
+        "summary": "Get fuel sensor quality index",
+        "description": "Return a quality index for a fuel sensor, calculated from its readings over the given period.\n\nA higher `smoothness` means less noise in the readings; a lower value means more noise.",
+        "operationId": "ecoFleetTrackerSensorQuality",
+        "parameters": [
+          {
+            "name": "tracker_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the tracker which has the sensor.",
+            "schema": { "type": "integer", "examples": [123] }
+          },
+          {
+            "name": "sensor_id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the sensor to analyze.",
+            "schema": { "type": "integer", "examples": [321] }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "description": "Sensor readings' datetime interval to analyse, as an ISO 8601 interval. Defaults to the last week.",
+            "schema": { "type": "string", "examples": ["P7D/2020-12-31T00:00Z"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The quality index. Note there is no `success` envelope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "smoothness": { "$ref": "#/components/schemas/Score" }
+                  },
+                  "examples": [{ "smoothness": 8.29 }]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Also returned as type `errors/sensors/quality/not-enough-readings` when the interval holds too few readings: use a period with more vehicle usage, or increase the sending frequency and wait for data to accumulate.",
+            "$ref": "#/components/responses/Problem"
+          },
+          "401": { "description": "No credential supplied. Type `errors/default/unauthorized`.", "$ref": "#/components/responses/Problem" },
+          "404": { "description": "Sensor or calibration table is missing. Type `errors/entity/not-found`.", "$ref": "#/components/responses/Problem" },
+          "502": { "description": "The Navixy Platform API could not be reached, or returned an error. Type `errors/external-api/navixy`, with the underlying code and message in `detail`.", "$ref": "#/components/responses/Problem" },
+          "default": { "$ref": "#/components/responses/Problem" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "description": "Either a user session hash or an API key, with the \"NVX \" prefix, for example \"NVX 22eac1c27af4be7b9d04da2ce1af111b\". The same credential the Platform API uses.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Score": {
+        "type": "number",
+        "description": "An abstract measurement score, from 1.0 to 10.0 inclusive.",
+        "minimum": 1.0,
+        "maximum": 10.0,
+        "examples": [8.29]
+      },
+      "ResamplingProp": {
+        "type": "object",
+        "description": "How one data type should be resampled.",
+        "properties": {
+          "data_type": {
+            "type": "string",
+            "description": "Which series this applies to.",
+            "enum": ["FUEL", "SPEED", "MOVEMENT", "LNG", "LAT"]
+          },
+          "resampling_method": {
+            "type": "string",
+            "description": "How to fill a gap. `FOLLOWING` fills from the next known value, for data missing at the end of a series. `PREVIOUS` fills from the previous known value, for data missing at the beginning. `MEDIAN_IN_WINDOW` suits evenly distributed data that is not normally distributed. `AVERAGE_IN_WINDOW` and `AVERAGE` suit normally distributed data that is not evenly distributed.",
+            "enum": ["FOLLOWING", "PREVIOUS", "MEDIAN_IN_WINDOW", "AVERAGE_IN_WINDOW", "AVERAGE"]
+          },
+          "delta": {
+            "type": ["integer", "null"],
+            "description": "Window size in seconds, where the method uses one.",
+            "examples": [600]
+          },
+          "fixed_value": {
+            "type": ["number", "null"],
+            "description": "A constant to use instead of a computed value, where applicable."
+          }
+        },
+        "required": ["data_type", "resampling_method"]
+      }
+    },
+    "responses": {
+      "Problem": {
+        "description": "Error response, following RFC 7807 problem details. Note this is not the Platform API error shape: there is no `success` field and no numeric `status.code`.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Error type identifier, for example `errors/entity/not-found`, `errors/external-api/navixy`, `errors/sensors/quality/not-enough-readings`, or `errors/default/unauthorized`. `about:blank` for generic HTTP errors.",
+                  "examples": ["errors/entity/not-found"]
+                },
+                "title": { "type": "string", "description": "Short human-readable summary.", "examples": ["Entity not found"] },
+                "status": { "type": "integer", "description": "HTTP status code, repeated in the body.", "examples": [400] },
+                "detail": {
+                  "type": "string",
+                  "description": "What went wrong. For `errors/external-api/navixy` this carries the underlying Platform API code and message.",
+                  "examples": ["sensor with id = 321 not found"]
+                },
+                "instance": { "type": "string", "description": "Path of the request that failed, relative to the base path.", "examples": ["/trackers/123/sensors/321/quality"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

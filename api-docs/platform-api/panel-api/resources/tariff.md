@@ -1,11 +1,17 @@
 ---
-title: Tariff
+title: Tariff (plan)
 description: API calls for the Tariff resource, covering service plans and device registration defaults.
 ---
 
-# Tariff
+# Tariff (plan)
 
-This resource is `tariff` in API paths and is called a plan in the Admin Panel interface. It manages the service plans a dealer offers to its users, and returns each one as a `Plan` object.
+A tariff is a service plan a dealer offers to its users. This resource manages those plans and the per-device-type defaults applied when a device is registered.
+
+{% hint style="info" %}
+**Tariff and plan are the same thing.** The API uses both words. The path is `panel/tariff`, the permission key is `"tariffs"`, and the field naming one is `tariff_id`, but the object returned is `Plan` and the operation summaries below say "List plans", "Create plan", and so on. The Admin Panel interface calls it a plan.
+
+This page uses tariff for the resource and `Plan` for the object it returns.
+{% endhint %}
 
 ## Plan object
 
@@ -15,7 +21,7 @@ This resource is `tariff` in API paths and is called a plan in the Admin Panel i
 
 Notes on individual fields:
 
-* `type`, `device_type`, and the map codes inside `map_filter` use platform-wide enums described in the [data types](../../user-api/backend-api/#data-types) section.
+* `type`, `device_type`, and the map codes inside `map_filter` use platform-wide enums described in the [data types](../../general/api-conventions.md#data-types) section.
 * `store_period` uses a short duration form here, such as `1y`, which is **not** the ISO 8601 form used by `store_period` on the [dealer object](dealer/README.md).
 * `early_change_price` is omitted from the response when it has no value, in which case users cannot change plan frequently.
 

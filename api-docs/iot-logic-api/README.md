@@ -22,7 +22,7 @@ This space documents the IoT Logic API in full. Choose the path below depending 
 
 ### For developers
 
-Start with [Key concepts](#key-concepts) below to see how flows and nodes fit together, then get access: [Authentication](authentication.md) covers obtaining a session hash or an API key.
+Start with [Key concepts](#key-concepts) below to see how flows and nodes fit together, then get access: [Authentication](authentication.md) explains which credential to use and links to how to obtain it.
 
 Once you're authenticated, build something. [Quick start: create your first flow](navixy-iot-guide/quick-start-create-your-first-flow.md) creates a working flow with one request, with every parameter explained. From there, [Guides](navixy-iot-guide/) walks through other common integrations, like sending data to an external MQTT broker or adding calculated attributes to the Navixy UI.
 

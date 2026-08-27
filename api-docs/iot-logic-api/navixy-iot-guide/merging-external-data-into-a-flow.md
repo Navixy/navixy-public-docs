@@ -167,7 +167,7 @@ For this example: `https://api.eu.navixy.com/v2/iot/logic/flow/push?flow_id=42&n
 
 ### Domain: account web application (alternative)
 
-If you'd rather match the URL the flow builder UI shows on the node's Software tab, use your account's own web application domain instead, for example `demo.navixy.com`, or a custom domain if your organization configured one. This needs one more call: `user/get_info` on the [User API](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/commons/user/index#get_info), same API key as everything else in this guide:
+If you'd rather match the URL the flow builder UI shows on the node's Software tab, use your account's own web application domain instead, for example `demo.navixy.com`, or a custom domain if your organization configured one. This needs one more call: `user/get_info` on the [User API](https://navixy.com/docs/navixy-api/user-api/resources/commons/user#post-user-get_info), same API key as everything else in this guide:
 
 ```bash
 curl -X GET "https://api.eu.navixy.com/v2/user/get_info" \

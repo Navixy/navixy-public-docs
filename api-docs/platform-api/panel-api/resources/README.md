@@ -14,14 +14,9 @@ Most operations require a session hash in the `Authorization` header. See [Admin
 
 ## Base URL
 
-The Admin Panel API is accessible via the `panel/` subsection of the API URL. The URLs for different Navixy platforms are as follows:
+The Admin Panel API is accessible via the `panel/` subsection of the API URL. For example, an `account/auth` call on the European platform uses `https://api.eu.navixy.com/v2/panel/account/auth`.
 
-* European Navixy ServerMate platform: `https://api.eu.navixy.com/v2/panel/`
-* American Navixy ServerMate platform: `https://api.us.navixy.com/v2/panel/`
-* Middle East Navixy ServerMate platform: `https://api.me.navixy.com/v2/panel/`
-* Self-hosted (On-Premise) installations: `https://api.your_domain/panel/`
-
-For example, an `account/auth` call on the European platform uses `https://api.eu.navixy.com/v2/panel/account/auth`.
+The regional base URLs are shared with the Platform API and are listed once in [Base URLs](../../general/api-conventions.md#base-urls).
 
 The query-string and form-encoded body transports both percent-encode their values. Any character in those values outside ASCII codes 32 to 127 must be [URL encoded](https://en.wikipedia.org/wiki/Percent-encoding).
 
@@ -42,7 +37,7 @@ Every operation belongs to one of the 10 resource families below. For how dealer
 | [Subpaas](subpaas/README.md) | Sub-dealer accounts and their credentials |
 | [User](user/README.md) | User accounts, balances, menu presets, and multi-factor authentication |
 | [Tracker](tracker.md) | Devices, clones, settings, and plans |
-| [Tariff](tariff.md) | Service plans and device registration defaults |
+| [Tariff (plan)](tariff.md) | Service plans and device registration defaults |
 | [Order](order.md) | Equipment orders |
 | [Gateways](gateways.md) | Email gateways |
 | [Timezone](timezone.md) | Supported time zones |
@@ -131,7 +126,7 @@ The tables below list every operation grouped by family. Each endpoint links to 
 | [`/panel/tracker/active/history/list`](tracker.md#post-panel-tracker-active-history-list) | POST | Report how many trackers were active in each month of a date range. |
 | [`/panel/tracker/raw_command/send`](tracker.md#post-panel-tracker-raw_command-send) | POST | Send a raw command to a tracker's device. |
 
-### Tariff
+### Tariff (plan)
 
 | Endpoint | Method | Description |
 | --- | --- | --- |

@@ -10,7 +10,7 @@ The WebSocket functionality provides real-time, event-driven access to device da
 
 WebSocket communication is ideal for applications that require immediate data delivery, such as monitoring dashboards, alert systems, or integrations that rely on timely IoT events.
 
-For more details, see [WebSocket in Navixy API](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket).\
+For more details, see [WebSocket in Navixy API](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket).\
 This guide covers connection setup, authentication, event types, and message formats.
 
 The iot\_monitor event stream is designed for Data Stream Analyzer (DSA) and delivers real-time telemetry from selected devices. It provides both the latest data and short-term history, allowing you to track attribute changes over time.
@@ -19,7 +19,7 @@ This feature supports use cases like diagnostics, trend visualization, and alert
 
 ## Data Stream Analyzer's "iot\_monitor" event subscription
 
-> This is a DSA-focused snippet showcasing subscription parameters. For complete information, see [WebSocket Subscription](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/subscription)
+> This is a DSA-focused snippet showcasing subscription parameters. For complete information, see [WebSocket Subscription](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/subscription)
 
 This subscription type is intended for the Data Stream Analyzer tool,\
 which allows viewing the attribute values of the last N messages received from a tracker.\
@@ -32,7 +32,7 @@ For each attribute, data is stored in two queues:
 After subscribing to "iot\_monitor", server will send values of attributes from the latest messages for\
 all non-blocked trackers included in the subscription in a single packet.\
 Receiver must be able to parse data from different devices in this packet.\
-New data will arrive in real-time in the [event message](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/events), but no more frequently than the specified `rate_limit`.
+New data will arrive in real-time in the [event message](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/events), but no more frequently than the specified `rate_limit`.
 
 ```json
 {
@@ -67,7 +67,7 @@ Response parameters:
 
 * `type` – required, text: _"response"_.
 * `action` – required, text: _"subscription/subscribe"_.
-* `events` – required, array of [enum](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api#data-types), without nulls. List of the subscribed events types ("", "" or "iot\_monitor").
+* `events` – required, array of [enum](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/general/api-conventions#data-types), without nulls. List of the subscribed events types ("", "" or "iot\_monitor").
 * `data` – required, map \<string, object>. Map with events subscription result. One key per subscribed event.
   * `state` – present if the "state" subscription requested, see sub response below.
   * `state_batch` – present if the "state\_batch" subscription requested, see sub response below.
@@ -80,10 +80,10 @@ Sub response:
 
 Keys is a tracker IDs, values – one of the item:
 
-* `normal` – non-blocked, normal status. [State events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/events#state-event) for this\
+* `normal` – non-blocked, normal status. [State events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/events#state-event) for this\
   tracker will be delivered to client.
-* `blocked` – tracker blocked. [State events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/events#state-event) for this tracker\
-  \`will _not_ be delivered to client. [Lifecycle events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/events#lifecycle-event) will be delivered. After unblocking,\
+* `blocked` – tracker blocked. [State events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/events#state-event) for this tracker\
+  \`will _not_ be delivered to client. [Lifecycle events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/events#lifecycle-event) will be delivered. After unblocking,\
   current tracker state will be sent automatically.
 * `unknown` – tracker ID missed in the database or not belong to current user.
 * `disallowed` – subscription for this tracker not allowed by the current session.
@@ -110,9 +110,9 @@ Response sample:
 
 ## Data Stream Analyzer event
 
-> This is a DSA-focused snippet showcasing only its event. For complete information, see [WebSocket Events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/events)
+> This is a DSA-focused snippet showcasing only its event. For complete information, see [WebSocket Events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/events)
 
-You can receive Data Stream Analyser messages through websocket. These messages are coming from server if client [subscribed](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/websocket/subscription) to the `iot_monitor` events of the specific tracker that is not blocked. These packets contain values of attributes from the latest messages sent by the selected tracker.\
+You can receive Data Stream Analyser messages through websocket. These messages are coming from server if client [subscribed](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket/subscription) to the `iot_monitor` events of the specific tracker that is not blocked. These packets contain values of attributes from the latest messages sent by the selected tracker.\
 It occurs in the next cases:
 
 * Immediately after subscription.

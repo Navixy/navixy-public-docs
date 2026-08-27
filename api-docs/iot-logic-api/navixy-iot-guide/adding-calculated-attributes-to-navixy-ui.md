@@ -26,7 +26,7 @@ Before proceeding with this scenario, ensure you have:
 
 ### Step 1: Authentication
 
-Before making API calls, you need to authenticate and obtain an API key. For detailed authentication instructions, see the [Authentication guide](../authentication.md).
+Before making API calls, you need to authenticate and obtain an API key. See the [Authentication guide](../authentication.md) for which credential to use and where to obtain one.
 
 Once authenticated, you'll have an API key for use in subsequent requests.
 
@@ -140,7 +140,7 @@ Now create sensors that correspond to your calculated attributes. These sensors 
 In the API, these are called "**Metering sensors**", but in the Navixy UI, they appear as "**Measurement/IoT Logic sensors**". This is the same functionality with different terminology.
 {% endhint %}
 
-For complete details on sensor configuration options and all available API calls, see the [Sensor API resource documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/sensor/index).
+For complete details on sensor configuration options and all available API calls, see the [Sensor API resource documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/sensor).
 
 #### Create engine temperature sensor
 
@@ -297,5 +297,5 @@ For detailed information about how these calculated attributes appear in the Nav
 #### Verification Steps
 
 1. Confirm flow is processing data using the [IoT Logic monitoring tools](../Websocket-access-for-DSA.md)
-2. Check [sensor readings via API](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/sensor/index#data-read) to ensure data is flowing correctly
+2. Check [sensor readings via API](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/sensor#post-tracker-sensor-data-read) to ensure data is flowing correctly
 3. Verify UI display shows expected calculated values

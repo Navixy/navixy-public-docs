@@ -32,7 +32,7 @@ _required permissions_: none beyond a valid session.
 
 #### Errors
 
-[General](../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../general/errors.md#error-codes) types only.
 
 ***
 
@@ -44,4 +44,4 @@ _required permissions_: none beyond a valid session.
 
 #### Errors
 
-[General](../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../general/errors.md#error-codes) types only.

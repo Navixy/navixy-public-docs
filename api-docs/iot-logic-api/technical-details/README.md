@@ -31,7 +31,7 @@ Both environments offer identical API functionality, but may differ in:
 
 ## Authentication
 
-Authentication for the Navixy IoT Logic API uses API keys or user session hashes. For detailed information about authentication methods, obtaining API keys, and best practices, please refer to the [Authentication](../authentication.md) documentation.
+Authentication for the Navixy IoT Logic API uses the same Navixy Platform credential as the rest of the platform: an API key or a user session hash. See [Authentication](../authentication.md) for which one to use and how to send it.
 
 ## API rate limiting
 

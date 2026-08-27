@@ -29,7 +29,7 @@ _required permissions_: `notification_settings: "read"`.
 
 #### Errors
 
-[General](../../../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../../../general/errors.md#error-codes) types only.
 
 ***
 
@@ -45,6 +45,6 @@ This is a full replacement, not a partial update. Any writable field you omit is
 
 #### Errors
 
-[General](../../../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../../../general/errors.md#error-codes) types only.
 
 Omitting any of `email_from`, `email_footer`, `sms_originator`, or `caller_id` returns error code 7 with an `errors` array naming the missing field.

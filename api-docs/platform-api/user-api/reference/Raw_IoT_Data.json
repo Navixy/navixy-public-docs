@@ -1,0 +1,229 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "Navixy Raw IoT Data API",
+    "summary": "Parsed raw device data export",
+    "description": "This is an API reference for the Navixy Raw IoT Data API, which exports the parsed raw data the platform received from tracking devices.\n\n**Separate base path.** These operations live under `/dwh/v1`, not the `/v2` path the Platform API uses, which is why they are a specification of their own.\n\n**Retention** is up to 6 months depending on the plan.\n\n**Errors** follow the Platform API model: a non-200 HTTP status with an API-level code in `status.code` of the response body. The default status is 400, and validation failures add an `errors` array naming each offending parameter.",
+    "contact": {
+      "name": "Navixy support",
+      "email": "support@navixy.com",
+      "url": "https://www.navixy.com/contact/"
+    },
+    "license": { "name": "Apache 2.0", "identifier": "Apache-2.0" }
+  },
+  "servers": [
+    { "url": "https://api.eu.navixy.com/dwh/v1", "description": "Navixy production server on European platform" },
+    { "url": "https://api.us.navixy.com/dwh/v1", "description": "Navixy production server on American platform" },
+    { "url": "https://api.me.navixy.com/dwh/v1", "description": "Navixy production server on Middle East platform" }
+  ],
+  "security": [{ "api_key": [] }],
+  "tags": [
+    {
+      "name": "Raw IoT Data",
+      "description": "Discovering which attributes a device sends, and exporting the parsed values as a CSV or Parquet file. All resources under the /tracker/raw_data/ path."
+    }
+  ],
+  "paths": {
+    "/tracker/raw_data/get_inputs": {
+      "post": {
+        "tags": ["Raw IoT Data"],
+        "summary": "Get available device attributes",
+        "description": "Return the attributes a device sends, so you know what can be requested in `columns` on a read.\n\nThis does not return device data. It reports which fields exist.\n\nOne device per request.\n\nWhere several inputs of the same type exist they are indexed, and **only the highest index is returned**: `lls_level_4` implies levels 1 to 3 also exist. Attribute names match those shown in Air Console when connecting to the device.",
+        "operationId": "dwhTrackerRawDataGetInputs",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker whose available attributes you want.",
+                    "examples": [123456]
+                  }
+                },
+                "required": ["tracker_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The attributes this device sends",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "description": "`true` if request finished successfully.", "readOnly": true, "examples": [true] },
+                    "discrete_inputs": { "type": "integer", "description": "Number of discrete inputs.", "examples": [8] },
+                    "discrete_outputs": { "type": "integer", "description": "Number of discrete outputs.", "examples": [8] },
+                    "inputs": {
+                      "type": "array",
+                      "description": "Available metering inputs, with the highest index only where several of a type exist.",
+                      "items": { "type": "string" },
+                      "examples": [["lls_level_4", "avl_io_100000"]]
+                    },
+                    "states": {
+                      "type": "array",
+                      "description": "Available status attributes.",
+                      "items": { "type": "string" },
+                      "examples": [["event_code"]]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The API-level code is in `status.code`. Error 201 not found in the database, when the tracker does not belong to the authorized user. Error 208 device blocked, when the tracker exists but is blocked by its tariff.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": { "$ref": "#/components/responses/ResponseError" }
+        }
+      }
+    },
+    "/tracker/raw_data/read": {
+      "post": {
+        "tags": ["Raw IoT Data"],
+        "summary": "Export parsed raw data",
+        "description": "Export the parsed values a device sent, as a CSV or Parquet file with one column per requested attribute.\n\n**Period.** Give either `from` and `to`, or a single ISO 8601 `interval` such as `2023-08-24T08:04:36.306Z/PT24H`. Both forms work. Note that a request with an empty body reports `interval` as the missing parameter: that is the internal field name, and `from` with `to` populates it.\n\n**The response is a file, not JSON.** CSV by default, Parquet when `format` is `parquet`. The first column of a CSV is always `msg_time`, whether or not it was requested.\n\nCSV output encloses rows and date-time values in double quotes, doubles an embedded quote, separates values with a comma, separates rows with a Unix line feed, and writes `NULL` as an empty value.\n\nUse `get_inputs` to discover valid `columns` values.",
+        "operationId": "dwhTrackerRawDataRead",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker to export.",
+                    "examples": [123456]
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Start of the period, by message time, meaning when the packet was registered by the tracker. ISO 8601 with a time zone. Up to 6 months back depending on the plan. Required unless `interval` is given.",
+                    "examples": ["2023-08-24T08:04:36Z"]
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "End of the period, by message time. Must be after `from`. ISO 8601 with a time zone. Required unless `interval` is given.",
+                    "examples": ["2023-08-24T08:04:36Z"]
+                  },
+                  "interval": {
+                    "type": "string",
+                    "description": "The period as a single ISO 8601 interval, as an alternative to `from` and `to`.",
+                    "examples": ["2023-08-24T08:04:36.306Z/PT24H"]
+                  },
+                  "columns": {
+                    "type": "array",
+                    "description": "Attributes to export, one per column. Obtain valid values from `get_inputs`. Must not be empty.",
+                    "items": { "type": "string" },
+                    "minItems": 1,
+                    "examples": [["flags.location_valid", "lat", "lng", "discrete_inputs.1", "inputs.board_voltage"]]
+                  },
+                  "server_time_filter": {
+                    "description": "Optional. Filters additionally by server time, meaning when the message reached the server, on top of the message-time period. Accepts an ISO 8601 interval string, an object with `from` and `to`, or an object with `interval`.",
+                    "oneOf": [
+                      { "type": "string", "examples": ["2024-02-03T10:26:26+0500/2024-02-03T10:27:18+0500"] },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "from": { "type": "string", "description": "Start of the server-time period." },
+                          "to": { "type": "string", "description": "End of the server-time period." }
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "interval": { "type": "string", "description": "Server-time period as an ISO 8601 interval." }
+                        }
+                      }
+                    ]
+                  },
+                  "format": {
+                    "type": "string",
+                    "description": "Optional. Output format. CSV when omitted.",
+                    "enum": ["parquet"]
+                  }
+                },
+                "required": ["tracker_id", "columns"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The exported file. CSV unless `format` is `parquet`.",
+            "content": {
+              "text/csv": {
+                "schema": { "type": "string" },
+                "examples": {
+                  "csv": {
+                    "summary": "Header row plus one data row",
+                    "value": "\"msg_time\",\"lat\",\"lng\"\n\"2023-08-24 08:04:36\",56.826,60.545\n"
+                  }
+                }
+              },
+              "application/vnd.apache.parquet": {
+                "schema": { "type": "string", "format": "binary" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The API-level code is in `status.code`. Error 201 not found in the database, when the tracker does not belong to the authorized user. Error 208 device blocked, when the tracker exists but is blocked by its tariff.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": { "$ref": "#/components/responses/ResponseError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "description": "Either a user session hash or an API key, with the \"NVX \" prefix, for example \"NVX 22eac1c27af4be7b9d04da2ce1af111b\". The same credential the Platform API uses.",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "responses": {
+      "ResponseError": {
+        "description": "Error response object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "boolean", "description": "Always false.", "examples": [false] },
+                "status": {
+                  "type": "object",
+                  "description": "Error status. Present only when an error occurred.",
+                  "properties": {
+                    "code": { "type": "integer", "description": "An error code in this API, not an HTTP code.", "examples": [201] },
+                    "description": { "type": "string", "description": "An error description.", "examples": ["Not found in the database"] }
+                  }
+                },
+                "errors": {
+                  "type": "array",
+                  "description": "Per-parameter detail, returned with validation failures such as error code 7. A parameter name here may be an internal field name rather than the documented parameter name.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "parameter": { "type": "string", "description": "Name of the parameter that failed validation.", "examples": ["interval"] },
+                      "error": { "type": "string", "description": "What was wrong with it.", "examples": ["must not be null"] }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

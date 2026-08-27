@@ -15,7 +15,7 @@ Service settings in Navixy allow administrators to configure and customize vario
 
 Notes on individual fields:
 
-* `locale`, `currency`, `maps`, `allowed_maps`, and `default_map.type` use platform-wide enums described in the [data types](../../../../user-api/backend-api/#data-types) section.
+* `locale`, `currency`, `maps`, `allowed_maps`, and `default_map.type` use platform-wide enums described in the [data types](../../../../general/api-conventions.md#data-types) section.
 * Branding image paths, that is `favicon`, `logo`, `app_logo`, `document_logo`, `monitoring_logo`, `login_wallpaper`, and `desktop_wallpaper`, are read-only here. Change them through the [branding image](image.md) operations.
 * `default_user_time_zone` is a [time zone ID](../../timezone.md) applied to users created via [user/upload](../../user/README.md#post-panel-user-upload).
 * `email_special` is the same underlying value as `email_special` in the [notification settings](notification.md#notification-settings-object).
@@ -34,7 +34,7 @@ _required permissions_: `service_settings: "read"`.
 
 #### Errors
 
-[General](../../../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../../../general/errors.md#error-codes) types only.
 
 ***
 

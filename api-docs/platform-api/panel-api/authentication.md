@@ -12,7 +12,7 @@ For the API's base URLs, its resource families, and where the full reference liv
 
 The Admin Panel API uses **session hash authentication** as its sole authentication method. This approach is specifically designed for administrative workflows and provides:
 
-* **Secure session duration**: 24-hour session lifespan
+* **Long-lived sessions**: see [Session lifespan](#session-lifespan)
 * **Administrative privileges**: Access to all account and device management functions
 * **Simple integration**: Single authentication step for admin operations
 
@@ -22,12 +22,9 @@ The Admin Panel API uses **session hash authentication** as its sole authenticat
 
 Admin Panel API authentication is accessible through the [`/panel/account` resource](resources/account.md).
 
-Depending on the deployment method (regional web server or on-premise installation), here are the common endpoint paths:
+The authentication endpoint is the base URL followed by `/panel/account/auth/`. On the European platform that is `https://api.eu.navixy.com/v2/panel/account/auth/`, and on a self-hosted (on-premise) installation it is `https://api.{your-domain}/v2/panel/account/auth/`, where `{your-domain}` is the domain your installation is served from.
 
-* **European server**: `https://api.eu.navixy.com/v2/panel/account/auth/`
-* **American server**: `https://api.us.navixy.com/v2/panel/account/auth/`
-* **Middle East server**: `https://api.me.navixy.com/v2/panel/account/auth/`
-* **On-premise installations**: `https://api.your-domain.com/v2/panel/account/auth/`
+The regional base URLs are shared with the Platform API and are listed once in [Base URLs](../general/api-conventions.md#base-urls).
 
 ## Obtaining a session hash
 
@@ -73,7 +70,7 @@ On-premise installations include default administrator credentials for initial s
 > **Security warning**: Change default credentials immediately after installation in production environments.
 
 ```bash
-curl -X POST "https://api.your-domain.com/v2/panel/account/auth/" \
+curl -X POST "https://api.{your-domain}/v2/panel/account/auth/" \
   -H "Content-Type: application/json" \
   -d '{"login": "admin", "password": "admin"}'
 ```
@@ -166,7 +163,9 @@ Two exceptions, both of which the reference states on the operation itself:
 
 #### Session lifespan
 
-Admin Panel API sessions have a **24-hour lifespan** from creation, regardless of activity. This duration accommodates longer administrative workflows and batch operations.
+An Admin Panel session expires **30 days after it was issued**. The deadline is absolute: it is fixed when the session is created, and using the session does not push it back. An integration calling the API every day still loses the session on day 30.
+
+30 days is a default, not a constant. The period is a per-installation setting, so a self-hosted deployment can use a different one. Handle expiry rather than hard-coding the number.
 
 #### Session expiration
 
@@ -184,7 +183,7 @@ When your session expires, API calls will return:
 
 To resolve expired sessions, simply obtain a new hash using the `/account/auth/` endpoint.
 
-> Unlike platform API sessions, admin panel sessions cannot be renewed. When a session expires after 24 hours, you must authenticate again to obtain a new session hash.
+> Unlike Platform API sessions, Admin Panel sessions cannot be renewed. There is no panel equivalent of `user/session/renew`, so when a session expires you must authenticate again to obtain a new hash.
 
 #### Ending sessions
 
@@ -336,7 +335,7 @@ curl -X POST "https://api.eu.navixy.com/v2/panel/user/list/" \
   -d '{"hash": "1dc2b813769d846c2c15030884948117"}'
 ```
 
-> Remember: Your session hash remains valid for 24 hours and can be reused for all admin panel operations during this time.
+> Remember: one session hash can be reused for all Admin Panel operations until it expires. See [Session lifespan](#session-lifespan).
 
 ## Technical service accounts
 
@@ -392,7 +391,7 @@ Follow these guidelines for secure and effective admin panel authentication:
 
 1. **Implement proper error handling** for all authentication scenarios
 2. **Cache session hashes** to avoid unnecessary authentication calls
-3. **Plan for 24-hour session lifecycle** in your application architecture
+3. **Plan for session expiry and re-authentication** in your application architecture, without hard-coding the lifetime
 4. **Test authentication flows** in development environments first
 5. **Document which technical accounts** are used by which integrations
 6. **Support JSON format** for all API requests consistently

@@ -23,4 +23,4 @@ The `zone_id` value is the identifier used wherever the API accepts a time zone,
 
 #### Errors
 
-[General](../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../general/errors.md#error-codes) types only.

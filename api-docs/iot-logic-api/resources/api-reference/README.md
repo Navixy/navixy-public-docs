@@ -27,7 +27,7 @@ For a complete walkthrough, see [Quick start: create your first flow](../../navi
 
 ### Authentication
 
-All requests require authentication using an API key with the `NVX ` prefix in the Authorization header (space-separated: `Authorization: NVX <key>`). See the [authentication guide](../../authentication.md) for detailed setup instructions.
+All requests require authentication using an API key with the `NVX ` prefix in the Authorization header (space-separated: `Authorization: NVX <key>`). See the [authentication guide](../../authentication.md) for which credential to use and how to obtain one.
 
 ### Base URLs
 

@@ -1,11 +1,15 @@
 ---
-title: Getting Started
-description: Getting started with Navixy API
+title: Navixy Developer Documentation
+description: >-
+  The Navixy Platform API and Admin Panel API: what each one is for, how to tell
+  which you need, and where to start.
 ---
 
 # Navixy Developer Documentation
 
 [Navixy](https://navixy.com), developed by [SquareGPS](https://squaregps.com), is a GPS and vehicle telematics platform. This documentation covers the Platform API and Admin Panel API: everything you need to query, control, and build on top of Navixy programmatically.
+
+They are two separate APIs with separate credentials, and each has its own getting started guide. Pick the one that matches what you are building.
 
 <table data-view="cards" data-card-size="large">
   <thead>
@@ -29,107 +33,31 @@ description: Getting started with Navixy API
   </tbody>
 </table>
 
-## Base URLs
+## Which API do you need?
 
-All API calls use HTTPS. Choose the base URL that matches your platform deployment:
+Both APIs are JSON over HTTPS, and both are documented from an OpenAPI specification. The dividing line is whose data you are acting on. The Platform API acts **as a platform user, on that user's own account**. The Admin Panel API acts **as a dealer, on the accounts the dealer manages**.
 
-| Region | Base URL |
-| --- | --- |
-| Europe | `https://api.eu.navixy.com/v2` |
-| North America | `https://api.us.navixy.com/v2` |
-| Middle East | `https://api.me.navixy.com/v2` |
-| On-Premise | `https://api.your_domain/v2` |
-
-Platform API calls use the base URL directly. Admin Panel API calls append `/panel/`. For example: `https://api.eu.navixy.com/v2/panel/account/auth`.
-
-## Getting started
-
-{% stepper %}
-{% step %}
-### Identify your use case
-
-Decide which API fits your task:
-
-* **Platform API:** you are building an application or integration that works with tracking data, devices, fleet, field service, or reports on behalf of a platform user.
-* **Admin Panel API:** you are managing a Navixy reseller deployment — provisioning users or devices, handling tariffs, or automating dealer-level account operations.
+| Dimension | Platform API | Admin Panel API |
+| --- | --- | --- |
+| You are | a platform user, or an application acting for one | a dealer or reseller administering a deployment |
+| It covers | the signed-in user's own account, sessions and settings, tracking (trackers, tracks, geofences, sensors, rules), fleet vehicles and maintenance, field service (tasks, places, employees), reports and tags, billing, and sub-users | dealer accounts, the end users beneath them, device registration and plans, activation codes, tariffs, sub-dealers, and panel branding and notification settings |
+| You authenticate with | a user session hash, or an API key | a panel session hash |
+| Reference | [Resources](user-api/resources/README.md) | [Admin Panel resources](panel-api/resources/README.md) |
+| Start here | [Navixy platform API](user-api/getting-started.md) | [Navixy Admin Panel API](panel-api/getting-started.md) |
 
 {% hint style="warning" %}
-The two APIs use separate authentication and separate base paths. A session hash from one cannot be used in the other.
+**The two sets of credentials are not interchangeable.** Both APIs send a credential in the `Authorization` header, and both name the scheme the same way. A hash issued by one is still rejected by the other. They also differ in what the header may carry, in whether a session can be renewed, and in how permissions work. Each API's authentication page is the only source for its own API: [Platform authentication](user-api/authentication.md) and [Admin Panel authentication](panel-api/authentication.md).
 {% endhint %}
-{% endstep %}
 
-{% step %}
-### Authenticate
+## What both APIs share
 
-{% tabs %}
-{% tab title="Platform API" %}
-Authenticate as a platform user to obtain a session hash or API key.
+| Shared behaviour | Where it is documented |
+| --- | --- |
+| Base URLs, data types, the date and time format, and request rate limits | [API conventions](general/api-conventions.md) |
+| The error response envelope and the error code table | [Errors](general/errors.md) |
+| Parameters in a JSON request body, also accepted form-encoded or as a query string | [Request conventions](user-api/getting-started.md#request-conventions) for the Platform API, [Using authentication in API requests](panel-api/authentication.md#using-authentication-in-api-requests) for the Admin Panel |
 
-→ [Platform authentication](user-api/authentication.md)
-{% endtab %}
-
-{% tab title="Admin Panel API" %}
-Authenticate as a dealer or technical account to obtain a panel session hash.
-
-→ [Admin Panel authentication](panel-api/authentication.md)
-{% endtab %}
-{% endtabs %}
-{% endstep %}
-
-{% step %}
-### Make a test call
-
-Use the hash from the previous step to confirm your setup is working.
-
-{% tabs %}
-{% tab title="Platform API" %}
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/tracker/list' \
-  -H 'Content-Type: application/json' \
-  -d '{"hash": "22eac1c27af4be7b9d04da2ce1af111b"}'
-```
-{% endcode %}
-
-A successful response returns a JSON array of GPS trackers on the account.
-{% endtab %}
-
-{% tab title="Admin Panel API" %}
-{% code overflow="wrap" %}
-```sh
-curl -X POST 'https://api.eu.navixy.com/v2/panel/user/list' \
-  -H 'Content-Type: application/json' \
-  -d '{"hash": "1dc2b813769d846c2c15030884948117", "limit": 10}'
-```
-{% endcode %}
-
-A successful response returns a JSON array of platform users managed by your dealer account.
-{% endtab %}
-{% endtabs %}
-{% endstep %}
-
-{% step %}
-### Explore the reference
-
-{% tabs %}
-{% tab title="Platform API" %}
-→ [Backend functionality](user-api/backend-api/README.md)
-
-Each resource section follows a consistent structure: object definition, available actions, parameters, request examples, response, and error codes.
-{% endtab %}
-
-{% tab title="Admin Panel API" %}
-→ [Admin Panel resources](panel-api/resources/README.md)
-
-The Panel API mirrors the structure of the Platform API reference, with the same conventions for parameters, responses, and error codes.
-{% endtab %}
-{% endtabs %}
-{% endstep %}
-{% endstepper %}
-
-{% hint style="info" %}
-To explore and test API calls interactively, use the [Navixy API Sandbox Postman collection](general/api-tools/postman.md).
-{% endhint %}
+Everything else is documented per API, including authentication, and should not be assumed to carry across.
 
 ## More APIs in the Navixy ecosystem
 
@@ -142,10 +70,11 @@ The Platform API and Admin Panel API cover the core of the Navixy platform. For 
 
 ## Troubleshooting
 
-* **Error codes:** all error codes and their meanings are documented in [Errors](user-api/backend-api/errors.md).
-* **Session expired:** session hashes expire after 24 hours. Re-authenticate with `user/auth` (Platform API) or `panel/account/auth` (Admin Panel API) to get a new hash.
+* **Error codes:** all error codes and their meanings are documented in [Errors](general/errors.md).
+* **Session expired:** re-authenticate to get a new hash. How long a session lasts, and whether it can be renewed, differs between the two APIs: see [Platform authentication](user-api/authentication.md) and [Admin Panel authentication](panel-api/authentication.md).
+* **Too many requests:** see [Request rate limits](general/api-conventions.md#request-rate-limits).
 * **Need help?** Contact the Navixy developer support team via [Contact Us](general/contacts.md).
 
-## API limits
-
-To ensure system stability for all customers, the platform limits API requests to 50 requests per second per user and per IP address (for applications serving multiple users). These limits are applied based on user session hash and API keys.
+{% hint style="info" %}
+To explore and test API calls interactively, use the [Navixy API Sandbox Postman collection](general/api-tools/postman.md).
+{% endhint %}

@@ -14,7 +14,7 @@ In Navixy, a Dealer is an entity that acts as a reseller or distributor of the N
 
 Notes on individual fields:
 
-* `features` lists the allowed [dealer features](../../../user-api/backend-api/resources/commons/dealer.md#dealer-features).
+* `features` lists the allowed [dealer features](../../../user-api/resources/commons/dealer.md#dealer-features).
 * `default_user_time_zone` is a [time zone ID](../timezone.md) applied to users created via [user/upload](../user/README.md#post-panel-user-upload). The same zone is preselected when creating a user in the Navixy Admin Panel.
 * `store_period` on the dealer applies to users on a `demo_tariff`. The `store_period` inside `tariff` is the plan's own maximum data store period. The two are separate values.
 * `password_policy` reports the complexity rules enforced for this dealer, and applies to [dealer/password/update](password.md) as well as to end user passwords.

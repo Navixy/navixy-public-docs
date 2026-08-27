@@ -7,7 +7,7 @@ description: What the Admin Panel API manages, its core concepts, and how to use
 
 The Admin Panel API (or Panel API for short) lets developers manage the Navixy platform at the dealer or reseller level: end-user accounts, devices, plans, and dealer-wide settings. Use it to build integrations and internal tools that automate administrative work instead of using the Admin Panel interface by hand.
 
-The structure of the Admin Panel API mirrors that of the [Backend API](../user-api/backend-api/), so it helps to read that page first. The main differences are the authorization scheme and the request paths. Requests and responses use JSON over HTTPS.
+The structure of the Admin Panel API mirrors that of the [Platform API](../user-api/getting-started.md), so it helps to read that page first. The main differences are the authorization scheme and the request paths. Requests and responses use JSON over HTTPS.
 
 Every operation is documented from a single OpenAPI specification, so each resource page under [Resources](resources/) carries the full parameter and response schema for its operations, along with a panel for sending a test request. Use those pages as the reference; this page orients you to the API as a whole.
 
@@ -30,7 +30,7 @@ This section documents the Admin Panel API in full. Choose the path below depend
 
 Start with [Key concepts](#key-concepts) below to see how dealers, users, trackers, and plans fit together, then get access: [Admin Panel authentication](authentication.md) covers obtaining a session hash and, for shared or automated access, a technical service account.
 
-Once you are authenticated, look up the operation you need in [Resources](resources/). Each resource family page carries the full parameter and response schema, plus a panel for sending a test request. [Errors](../user-api/backend-api/errors.md) covers the error code table shared with the Platform API.
+Once you are authenticated, look up the operation you need in [Resources](resources/). Each resource family page carries the full parameter and response schema, plus a panel for sending a test request. [Errors](../general/errors.md) covers the error code table shared with the Platform API, and [API conventions](../general/api-conventions.md) covers the base URLs, data types, date and time format, and request rate limits shared with it.
 
 ### For AI agents and LLMs
 
@@ -50,10 +50,10 @@ A dealer owns users directly, or indirectly through sub-dealers that resell on t
 | Clone | A second tracker sharing the same underlying device, so two users can see the same device independently. |
 | Source | The underlying device behind a tracker and its clones. Several operations act on the source instead of on the tracker. |
 | Order | An equipment order placed by the dealer. |
-| Tariff | A service plan a dealer offers to its users, called a plan in the interface and returned as a `Plan` object in the API. |
+| Tariff (plan) | A service plan a dealer offers to its users, called a plan in the interface and returned as a `Plan` object in the API. |
 | Tariff defaults | A dealer-level setting that determines which tariff a newly registered device lands on and what bonus and free period it receives. It is keyed by device type and separate from any individual tariff. |
 | Activation code | A code tied to a specific tariff that lets a user register a device with the tariff, balance bonus, and free period already configured. |
-| Session | A hash returned by authenticating, valid for 24 hours. Admin Panel sessions are separate from Platform API sessions, so a hash from one can't be used with the other. |
+| Session | A hash returned by authenticating, valid for 30 days from creation by default and not renewable. Admin Panel sessions are separate from Platform API sessions, so a hash from one can't be used with the other. |
 | Technical service account | A reduced-privilege account created by Navixy support, used instead of personal credentials for shared or automated access. |
 
 See [Admin Panel authentication](authentication.md) for how to obtain and use a session hash, and [Technical service accounts](authentication.md#technical-service-accounts) for the full comparison with full admin accounts.
@@ -70,6 +70,6 @@ See [Admin Panel permissions](authentication.md#admin-panel-permissions) for the
 
 * To authenticate and get a session hash, see [Admin Panel authentication](authentication.md).
 * To look up a specific operation's parameters and response, see [Resources](resources/).
-* To look up an error code, see [Errors](../user-api/backend-api/errors.md).
+* To look up an error code, see [Errors](../general/errors.md).
 
 For questions and support, contact the [Navixy developer support team](../general/contacts.md).

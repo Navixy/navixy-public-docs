@@ -37,4 +37,4 @@ The originators used when sending through the bound gateway are configured in [n
 
 #### Errors
 
-[General](../../user-api/backend-api/errors.md#error-codes) types only.
+[General](../../general/errors.md#error-codes) types only.
