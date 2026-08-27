@@ -1,5 +1,5 @@
 ---
-description: Create and manage assets: vehicles, equipment, and other tracked objects.
+description: "Create and manage assets: vehicles, equipment, and other tracked objects."
 ---
 
 # Working with assets

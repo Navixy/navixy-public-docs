@@ -1,7 +1,7 @@
 ---
 description: >-
-Reconstruct who changed an entity, what they changed, and when with
-entityHistory and auditEvents queries.
+  Reconstruct who changed an entity, what they changed, and when with
+  entityHistory and auditEvents queries.
 ---
 
 # Tracking changes with audit

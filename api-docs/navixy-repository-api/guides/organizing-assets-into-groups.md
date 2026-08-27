@@ -1,7 +1,7 @@
 ---
 description: >-
-Organize assets into typed, color-coded collections for fleet segmentation,
-reporting, and access control.
+  Organize assets into typed, color-coded collections for fleet segmentation,
+  reporting, and access control.
 ---
 
 # Organizing assets into groups

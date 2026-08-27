@@ -1,7 +1,7 @@
 ---
 description: >-
-Create, update, query, and delete JSCalendar-aligned schedules compatible with
-RFC 5545 (iCalendar).
+  Create, update, query, and delete JSCalendar-aligned schedules compatible with
+  RFC 5545 (iCalendar).
 ---
 
 # Managing schedules
