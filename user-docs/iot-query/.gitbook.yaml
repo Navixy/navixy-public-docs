@@ -1,0 +1,4 @@
+redirects:
+  # Driver performance events replaced by the rule-based transformation (TD-309,
+  # 2026-08). Key is the old published path; the old table was dropped outright.
+  iot-query/schema-overview/transformation-layer/common-transformations/driver-performance-events: iot-query/schema-overview/transformation-layer/common-transformations/rule-based-driver-events.md
