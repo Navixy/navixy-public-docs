@@ -1,7 +1,7 @@
 ---
 description: >-
-  Query the audit trail to retrieve a paginated, filterable log of all create,
-  update, and delete events across your organization.
+  Query the audit trail to retrieve a paginated, filterable log of entity
+  create, update, and delete events across your workspace.
 ---
 
 # Audit
@@ -14,11 +14,11 @@ Audit trail for tracking changes and access to system resources.
 
 ### auditEvents
 
-Lists audit events for an organization.
+Lists audit events for a workspace.
 
 ```graphql
 auditEvents(
-    organizationId: ID!
+    workspaceId: ID!
     filter: AuditEventFilter
     first: Int
     after: String
@@ -32,12 +32,12 @@ auditEvents(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization to retrieve audit events for. |
+| `workspaceId` | `ID!` | The workspace to retrieve audit events for. |
 | `filter` | `AuditEventFilter` | Filtering options for the returned audit events. |
-| `first` | `Int` | The first `n` elements from the [paginated list](pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](pagination.md). |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `orderBy` | `AuditEventOrder` | The ordering options for the returned audit events. |
 
 **Input types:**
@@ -51,13 +51,13 @@ Filtering options for audit events.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `actorIds` | `[ID!]` | Filter by actors (OR within field). |
-| `aggregateTypes` | `[Code!]` | Filter by entity types (OR within field). |
+| `aggregateTypes` | [[Code](common.md#code)!] | Filter by entity types (OR within field). |
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
-| `eventTypes` | [[AuditEventType](#type-auditeventtype)!] | Filter by event types (OR within field). |
-| `sourceTypes` | [[SourceType](#type-sourcetype)!] | Filter by source types (OR within field). |
+| `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
+| `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
 | `traceId` | `String` | Filter by trace ID. |
-| `from` | `DateTime` | Return events that occurred after this timestamp. |
-| `to` | `DateTime` | Return events that occurred before this timestamp. |
+| `from` | [DateTime](common.md#datetime) | Return events that occurred after this timestamp. |
+| `to` | [DateTime](common.md#datetime) | Return events that occurred before this timestamp. |
 
 </details>
 
@@ -69,8 +69,8 @@ Ordering options for audit events.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [AuditEventOrderField](#type-auditeventorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](common.md#type-orderdirection)! | The direction to order. |
+| `field` | [AuditEventOrderField](#auditeventorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -82,29 +82,14 @@ Ordering options for audit events.
 
 A paginated list of AuditEvent items.
 
-**Implements:** [Connection](common.md#type-connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AuditEventEdge](#type-auditeventedge)!]! | A list of edges. |
-| `nodes` | [[AuditEvent](#type-auditevent)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](common.md#type-countinfo) | The total count of items matching the filter. |
-
-</details>
-
-<details>
-
-<summary>PageInfo (entity)</summary>
-
-Information about the current page in a paginated connection.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `hasNextPage` | `Boolean!` | Whether more items exist after the current page. |
-| `hasPreviousPage` | `Boolean!` | Whether more items exist before the current page. |
-| `startCursor` | `String` | The cursor pointing to the first item in the current page. |
-| `endCursor` | `String` | The cursor pointing to the last item in the current page. |
+| `edges` | [[AuditEventEdge](#auditeventedge)!]! | A list of edges. |
+| `nodes` | [[AuditEvent](#auditevent)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -112,11 +97,11 @@ Information about the current page in a paginated connection.
 
 ### entityHistory
 
-Retrieves the change history for any entity within an organization.
+Retrieves the change history for any entity within a workspace.
 
 ```graphql
 entityHistory(
-    organizationId: ID!
+    workspaceId: ID!
     entityId: ID!
     filter: AuditEventFilter
     first: Int
@@ -131,13 +116,13 @@ entityHistory(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization that owns the entity. |
+| `workspaceId` | `ID!` | The workspace that owns the entity. |
 | `entityId` | `ID!` | The ID of the entity to retrieve history for. |
 | `filter` | `AuditEventFilter` | Filtering options for the returned audit events. |
-| `first` | `Int` | The first `n` elements from the [paginated list](pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](pagination.md). |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `orderBy` | `AuditEventOrder` | The ordering options for the returned audit events. |
 
 **Input types:**
@@ -151,13 +136,13 @@ Filtering options for audit events.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `actorIds` | `[ID!]` | Filter by actors (OR within field). |
-| `aggregateTypes` | `[Code!]` | Filter by entity types (OR within field). |
+| `aggregateTypes` | [[Code](common.md#code)!] | Filter by entity types (OR within field). |
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
-| `eventTypes` | [[AuditEventType](#type-auditeventtype)!] | Filter by event types (OR within field). |
-| `sourceTypes` | [[SourceType](#type-sourcetype)!] | Filter by source types (OR within field). |
+| `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
+| `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
 | `traceId` | `String` | Filter by trace ID. |
-| `from` | `DateTime` | Return events that occurred after this timestamp. |
-| `to` | `DateTime` | Return events that occurred before this timestamp. |
+| `from` | [DateTime](common.md#datetime) | Return events that occurred after this timestamp. |
+| `to` | [DateTime](common.md#datetime) | Return events that occurred before this timestamp. |
 
 </details>
 
@@ -169,8 +154,8 @@ Ordering options for audit events.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [AuditEventOrderField](#type-auditeventorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](common.md#type-orderdirection)! | The direction to order. |
+| `field` | [AuditEventOrderField](#auditeventorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -182,29 +167,14 @@ Ordering options for audit events.
 
 A paginated list of AuditEvent items.
 
-**Implements:** [Connection](common.md#type-connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AuditEventEdge](#type-auditeventedge)!]! | A list of edges. |
-| `nodes` | [[AuditEvent](#type-auditevent)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](common.md#type-countinfo) | The total count of items matching the filter. |
-
-</details>
-
-<details>
-
-<summary>PageInfo (entity)</summary>
-
-Information about the current page in a paginated connection.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `hasNextPage` | `Boolean!` | Whether more items exist after the current page. |
-| `hasPreviousPage` | `Boolean!` | Whether more items exist before the current page. |
-| `startCursor` | `String` | The cursor pointing to the first item in the current page. |
-| `endCursor` | `String` | The cursor pointing to the last item in the current page. |
+| `edges` | [[AuditEventEdge](#auditeventedge)!]! | A list of edges. |
+| `nodes` | [[AuditEvent](#auditevent)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -212,34 +182,34 @@ Information about the current page in a paginated connection.
 
 ## Objects
 
-<a id="type-auditevent"></a>
+<a id="auditevent"></a>
 
 ### AuditEvent
 
 An audit log entry recording an event that occurred in the system.
 
-**Implements:** [Node](common.md#type-node)
+**Implements:** [Node](common.md#node)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
-| `organization` | [Organization](organizations/README.md#type-organization) | The organization context. Null for system events. |
-| `actor` | [Actor](actors/README.md#type-actor) | The actor who triggered the event. |
+| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace context. Null for system events. |
+| `actor` | [Actor](actors/README.md#actor) | The actor who triggered the event. |
 | `ipAddress` | `String` | The client IP address. |
 | `userAgent` | `String` | The client User-Agent string. |
-| `sourceType` | [SourceType](#type-sourcetype)! | The source type of the request. |
+| `sourceType` | [SourceType](#sourcetype)! | The source type of the request. |
 | `traceId` | `String` | The distributed tracing ID (32 hex characters) for log correlation. |
-| `aggregateType` | `Code` | The type of entity affected. |
+| `aggregateType` | [Code](common.md#code) | The type of entity affected. |
 | `aggregateId` | `ID` | The ID of the affected entity. |
-| `eventType` | [AuditEventType](#type-auditeventtype)! | The type of event that occurred. |
-| `eventData` | `JSON` | The event payload with details such as changed fields. |
-| `occurredAt` | `DateTime!` | The date and time when the event occurred. |
+| `eventType` | [AuditEventType](#auditeventtype)! | The type of event that occurred. |
+| `eventData` | [JSON](common.md#json) | The event payload with details such as changed fields. |
+| `occurredAt` | [DateTime](common.md#datetime)! | The date and time when the event occurred. |
 
 ---
 
 ## Inputs
 
-<a id="type-auditeventfilter"></a>
+<a id="auditeventfilter"></a>
 
 ### AuditEventFilter
 
@@ -248,17 +218,17 @@ Filtering options for audit events.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `actorIds` | `[ID!]` | Filter by actors (OR within field). |
-| `aggregateTypes` | `[Code!]` | Filter by entity types (OR within field). |
+| `aggregateTypes` | [[Code](common.md#code)!] | Filter by entity types (OR within field). |
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
-| `eventTypes` | [[AuditEventType](#type-auditeventtype)!] | Filter by event types (OR within field). |
-| `sourceTypes` | [[SourceType](#type-sourcetype)!] | Filter by source types (OR within field). |
+| `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
+| `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
 | `traceId` | `String` | Filter by trace ID. |
-| `from` | `DateTime` | Return events that occurred after this timestamp. |
-| `to` | `DateTime` | Return events that occurred before this timestamp. |
+| `from` | [DateTime](common.md#datetime) | Return events that occurred after this timestamp. |
+| `to` | [DateTime](common.md#datetime) | Return events that occurred before this timestamp. |
 
 ---
 
-<a id="type-auditeventorder"></a>
+<a id="auditeventorder"></a>
 
 ### AuditEventOrder
 
@@ -266,14 +236,14 @@ Ordering options for audit events.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [AuditEventOrderField](#type-auditeventorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](common.md#type-orderdirection)! | The direction to order. |
+| `field` | [AuditEventOrderField](#auditeventorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 ---
 
 ## Enums
 
-<a id="type-sourcetype"></a>
+<a id="sourcetype"></a>
 
 ### SourceType
 
@@ -289,7 +259,7 @@ The source type identifying the origin of an API request.
 
 ---
 
-<a id="type-auditeventtype"></a>
+<a id="auditeventtype"></a>
 
 ### AuditEventType
 
@@ -317,7 +287,7 @@ The type of event recorded in the audit log.
 
 ---
 
-<a id="type-auditeventorderfield"></a>
+<a id="auditeventorderfield"></a>
 
 ### AuditEventOrderField
 
@@ -331,34 +301,34 @@ Fields available for ordering audit events.
 
 ## Pagination types
 
-<a id="type-auditeventconnection"></a>
+<a id="auditeventconnection"></a>
 
 ### AuditEventConnection
 
 A paginated list of AuditEvent items.
 
-**Implements:** [Connection](common.md#type-connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AuditEventEdge](#type-auditeventedge)!]! | A list of edges. |
-| `nodes` | [[AuditEvent](#type-auditevent)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](common.md#type-countinfo) | The total count of items matching the filter. |
+| `edges` | [[AuditEventEdge](#auditeventedge)!]! | A list of edges. |
+| `nodes` | [[AuditEvent](#auditevent)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="type-auditeventedge"></a>
+<a id="auditeventedge"></a>
 
 ### AuditEventEdge
 
 An edge in the AuditEvent connection.
 
-**Implements:** [Edge](common.md#type-edge)
+**Implements:** [Edge](common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [AuditEvent](#type-auditevent)! | The audit event at the end of the edge. |
+| `node` | [AuditEvent](#auditevent)! | The audit event at the end of the edge. |
 
 ---

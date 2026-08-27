@@ -8,7 +8,7 @@ description: Preventing lost updates with version-based concurrency control
 
 The API uses the optional `version` field for optimistic concurrency control, preventing lost updates when multiple clients simultaneously edit the same entity.
 
-### How optimistic locking works
+## How optimistic locking works
 
 Every versioned entity includes a `version` field:
 
@@ -23,29 +23,29 @@ type Device {
 
 The version starts at 1 when an entity is created and increments with each successful update.
 
-Update and delete mutations require the current version:
+Update and delete mutations accept the current version:
 
 ```graphql
-input UpdateDeviceInput {
+input DeviceUpdateInput {
   id: ID!
-  version: Int!   # Optional parameter. Include to enable conflict detection.
+  version: Int   # Optional. Include to enable conflict detection.
   title: String
   # ...
 }
 
-input DeleteDeviceInput {
+input DeviceDeleteInput {
   id: ID!
-  version: Int!   # Optional parameter. Include to enable conflict detection.
+  version: Int   # Optional. Include to enable conflict detection.
 }
 ```
 
-### Supported entities
+## Supported entities
 
 Optimistic locking applies to:
 
-<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/types.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/types.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups/types.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects/types.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory-2">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="organizations/#organization-2">Organization</a></td><td>Organization hierarchy nodes</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="organizations/members.md#member-2">Member</a></td><td>Organization memberships</td></tr><tr><td><a href="actors/integrations.md#integration-2">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, roles, tags, etc.)</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/README.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/README.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="workspaces/#workspace">Workspace</a></td><td>Tenants. Read-only in this API, so the version is informational</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="workspaces/members.md#member">Member</a></td><td>Workspace memberships</td></tr><tr><td><a href="actors/integrations.md#integration">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, roles, tags, etc.)</td></tr></tbody></table>
 
-### Operations by type
+## Operations by type
 
 <table><thead><tr><th width="207.5556640625">Operation</th><th>Behavior</th></tr></thead><tbody><tr><td>Create</td><td>Version not applicable. Returns <code>version: 1</code></td></tr><tr><td>Update with <code>version</code></td><td>Returns <a href="error-handling.md#version-conflict-409">409 Conflict</a> if the entity was modified since your last fetch</td></tr><tr><td>Update without <code>version</code></td><td>Applies unconditionally. Silently overwrites concurrent changes</td></tr><tr><td>Delete with <code>version</code></td><td>Returns <a href="error-handling.md#version-conflict-409">409 Conflict</a> if the entity was modified since your last fetch</td></tr><tr><td>Delete without <code>version</code></td><td>Deletes unconditionally, regardless of any concurrent changes</td></tr></tbody></table>
 
@@ -53,7 +53,7 @@ Optimistic locking applies to:
 Omitting `version` on a delete-type operation is particularly risky, as the operation proceeds unconditionally regardless of what happened to the entity since you last fetched it. Always include `version` when deleting unless you have a specific reason not to.
 {% endhint %}
 
-### Workflow
+## Workflow
 
 Here's the typical flow for updating an entity:
 
@@ -61,33 +61,37 @@ Here's the typical flow for updating an entity:
 
 ```graphql
 query {
-  device(id: "550e8400-e29b-41d4-a716-446655440001") {
-    id
-    version    # Returns 5
-    title
-  }
-}
-```
-
-2. Mutation requires version in input:
-
-```graphql
-mutation {
-  updateDevice(input: {
-    id: "550e8400-e29b-41d4-a716-446655440001"
-    version: 5          # Must match the current version
-    title: "New name"
-  }) {
-    device {
+  bdr {
+    device(id: "550e8400-e29b-41d4-a716-446655440001") {
       id
-      version          # Returns 6 (incremented)
+      version    # Returns 5
       title
     }
   }
 }
 ```
 
-### Handling conflicts
+2. Mutation includes the version in its input:
+
+```graphql
+mutation {
+  bdr {
+    deviceUpdate(input: {
+      id: "550e8400-e29b-41d4-a716-446655440001"
+      version: 5          # Must match the current version
+      title: "New name"
+    }) {
+      device {
+        id
+        version          # Returns 6 (incremented)
+        title
+      }
+    }
+  }
+}
+```
+
+## Handling conflicts
 
 If you provided `version` and the entity was modified since you fetched it, the API returns a [409 Conflict](error-handling.md#version-conflict-409) error. The HTTP status code will be 200 because the request was successfully received and processed — this is a business logic issue, not a transport failure. This follows the [GraphQL-over-HTTP specification](https://graphql.github.io/graphql-over-http/draft/), which reserves HTTP error codes (4xx, 5xx) for transport-level problems like authentication failures or malformed requests.
 
@@ -97,7 +101,7 @@ The actual error details are in the response body:
 {
   "errors": [{
     "message": "Conflict: entity was modified by another request",
-    "path": ["deviceUpdate"],
+    "path": ["bdr", "deviceUpdate"],
     "extensions": {
       "type": "https://api.navixy.com/errors/conflict",
       "title": "Optimistic Lock Conflict",
@@ -115,7 +119,7 @@ The actual error details are in the response body:
 }
 ```
 
-Use `extensions.code` for programmatic error handling, not HTTP status codes. See [Error handling ](error-handling.md)for more details.
+Use `extensions.code` for programmatic error handling, not HTTP status codes. See [Error handling](error-handling.md) for more details.
 
 When you receive a conflict error:
 
@@ -123,7 +127,7 @@ When you receive a conflict error:
 2. Merge the other user's changes with yours if needed
 3. Retry your update with the new version
 
-### Concurrent editing example
+## Concurrent editing example
 
 Here's what happens when two users edit the same device:
 
@@ -131,23 +135,37 @@ Here's what happens when two users edit the same device:
 
 User A's update succeeds first. User B's update fails because the version changed. After refetching, User B can successfully update with the current version.
 
-### Idempotent commands
+## Idempotent commands
 
-Mutations that manage relationships and assignments are called idempotent commands. They don't require or check the `version` field.
+Mutations that manage relationships and assignments are called idempotent commands: repeating the same call doesn't change the result. They don't require or check the `version` field.
 
-<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="devices/inventory.md#deviceinventorylink">deviceInventoryLink</a></td><td>Link device to inventory</td></tr><tr><td><a href="devices/inventory.md#deviceinventoryunlink">deviceInventoryUnlink</a></td><td>Unlink device from inventory</td></tr><tr><td><a href="devices/mutations.md#deviceidentifieradd">deviceIdentifierAdd</a></td><td>Add identifier to device</td></tr><tr><td><a href="devices/mutations.md#deviceidentifierremove">deviceIdentifierRemove</a></td><td>Remove identifier from device</td></tr><tr><td><a href="assets/groups/mutations.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="assets/groups/mutations.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr><tr><td><a href="access-control/mutations.md#roleassign">roleAssign</a></td><td>Assign role to actor</td></tr><tr><td><a href="access-control/mutations.md#rolerevoke">roleRevoke</a></td><td>Revoke role from actor</td></tr><tr><td><a href="access-control/mutations.md#permissiongrant">permissionGrant</a></td><td>Grant permission to role</td></tr><tr><td><a href="access-control/mutations.md#permissionrevoke">permissionRevoke</a></td><td>Revoke permission from role</td></tr><tr><td><a href="access-control/mutations.md#userscopeset">userScopeSet</a></td><td>Set user scope restriction</td></tr><tr><td><a href="access-control/mutations.md#userscoperemove">userScopeRemove</a></td><td>Remove user scope restriction</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="assets/groups.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="assets/groups.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr><tr><td><a href="access-control.md#roleassign">roleAssign</a></td><td>Assign role to actor</td></tr><tr><td><a href="access-control.md#rolerevoke">roleRevoke</a></td><td>Revoke role from actor</td></tr><tr><td><a href="access-control.md#permissiongrant">permissionGrant</a></td><td>Grant permission to role</td></tr><tr><td><a href="access-control.md#permissionrevoke">permissionRevoke</a></td><td>Revoke permission from role</td></tr><tr><td><a href="access-control.md#userscopeset">userScopeSet</a></td><td>Set user scope restriction</td></tr><tr><td><a href="access-control.md#userscoperemove">userScopeRemove</a></td><td>Remove user scope restriction</td></tr></tbody></table>
 
 These operations behave as follows:
 
-* Calling `link`/`assign`/`grant`/`add` when the relationship already exists returns success without making changes
-* Calling `unlink`/`revoke`/`remove` when the relationship doesn't exist returns success without making changes
+* Repeating `assign`/`grant`/`add`/`set` with the same input returns success without making changes
+* Calling `revoke`/`remove` when the relationship doesn't exist returns success without making changes
+* `permissionGrant` and `userScopeSet` replace the stored `actions` when repeated with different actions — the grant is a full overwrite, not a merge, so granting `[READ]` over an existing `[READ, UPDATE]` leaves only `READ`
+* `roleAssign` keeps the original assignment: repeating it with a different `expireDate` returns the existing assignment unchanged
 
 This design simplifies client code. You can safely retry these operations without worrying about conflicts or checking the current state first.
 
-### Best practices
+{% hint style="warning" %}
+The device link and identifier mutations are **not** idempotent:
+
+- `deviceInventoryLink` fails when the device is already assigned anywhere, and `deviceInventoryUnlink` fails when it has no active assignment. See [Managing device inventory](guides/managing-device-inventory.md).
+- `deviceIdentifierAdd` returns a [409 DUPLICATE](error-handling.md#duplicate-409) error when the identifier already exists, on this or any other device, and `deviceIdentifierRemove` returns a [404 error](error-handling.md#entity-not-found-404) for an unknown or already-removed identifier ID.
+{% endhint %}
+
+## Best practices
 
 1. Always include `version` in your queries. When fetching entities you plan to modify, request the `version` field so you have it ready for mutations.
-2. Always include `version` in updates and deletes. The field is optional, but omitting it removes your protection against overwriting changes made by other users since your last fetch. Omit it only for programmatic bulk operations where stale-read conflicts are not a concern.
-3. Be especially careful when deleting without `version`. Unlike unprotected updates, which still write a valid version to the database, unprotected deletes can be irreversible.
+2. Always include `version` in updates and deletes. The field is optional, but omitting it removes your protection against overwriting changes made by other users since your last fetch. Omit it only for bulk operations where overwriting concurrent changes is acceptable.
+3. Be especially careful when deleting without `version`. A wrong update can usually be corrected with another update, but a delete without `version` can permanently remove an entity that another user just changed.
 4. Handle conflicts gracefully. In collaborative applications, version conflicts are expected. Implement retry logic or prompt users to review changes.
 5. Don't cache versions long-term. Versions can change at any time. Always use the version from your most recent fetch of the entity.
+
+## See also
+
+* [Error handling](error-handling.md): Understand error structure, codes, and common error scenarios
+* [Managing device inventory](guides/managing-device-inventory.md): Assign devices to inventories and track assignment history

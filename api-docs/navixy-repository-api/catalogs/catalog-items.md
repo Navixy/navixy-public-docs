@@ -1,7 +1,8 @@
 ---
 description: >-
-  Queries, mutations, and types for catalog items, the configurable lookup entries
-  used for device types, asset types, statuses, and other reference data.
+  Queries, mutations, and types for catalog items, the configurable lookup
+  entries used for device types, asset types, statuses, and other reference
+  data.
 ---
 
 # Catalog items
@@ -12,7 +13,7 @@ Operations and types for managing catalog items - the configurable lookup entrie
 
 ## Queries
 
-### catalog
+### catalog (query)
 
 Retrieves a catalog by its ID.
 
@@ -34,46 +35,20 @@ catalog(id: ID!): Catalog
 
 A catalog definition that contains catalog items. Catalogs are themselves catalog items.
 
-**Implements:** [CatalogItem](#type-catalogitem), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [CatalogItem](#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | `Code!` | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](#type-catalog)! | Self-reference for the meta-catalog. |
-| `organization` | [Organization](../organizations/README.md#type-organization) | The organization that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](#type-catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `module` | [Module](system.md#type-module)! | The module this catalog is associated with. |
-| `items` | [CatalogItemConnection](#type-catalogitemconnection)! | The items in this catalog. |
-
-</details>
-
-<details>
-
-<summary>Organization (entity)</summary>
-
-An organization in the hierarchy that owns entities and users.
-
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
-| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title` | `String!` | The human-readable display name. |
-| `externalId` | `String` | An external system identifier for integration purposes. |
-| `isActive` | `Boolean!` | Whether this organization is active. |
-| `features` | [[OrganizationFeature](../organizations/README.md#type-organizationfeature)!]! | The feature flags enabled for this organization. |
-| `parent` | [Organization](../organizations/README.md#type-organization) | The parent organization in the hierarchy. Null for root organizations. |
-| `children` | [OrganizationConnection](../organizations/README.md#type-organizationconnection)! | The child organizations. |
-| `members` | [MemberConnection](../organizations/members.md#type-memberconnection)! | The members of this organization. |
-| `devices` | [DeviceConnection](../devices/types.md#type-deviceconnection)! | The devices owned by this organization. |
-| `assets` | [AssetConnection](../assets/types.md#type-assetconnection)! | The assets owned by this organization. |
-| `geoObjects` | [GeoObjectConnection](../geo-objects/types.md#type-geoobjectconnection)! | The geographic objects owned by this organization. |
-| `schedules` | [ScheduleConnection](../schedules.md#type-scheduleconnection)! | The schedules owned by this organization. |
+| `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `module` | [Module](system.md#module)! | The module this catalog is associated with. |
+| `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
 
 </details>
 
@@ -81,11 +56,11 @@ An organization in the hierarchy that owns entities and users.
 
 ### catalogs
 
-Lists catalogs for an organization.
+Lists catalogs for a workspace.
 
 ```graphql
 catalogs(
-    organizationId: ID!
+    workspaceId: ID!
     filter: CatalogItemFilter
     first: Int
     after: String
@@ -99,12 +74,12 @@ catalogs(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization to retrieve catalogs for. |
+| `workspaceId` | `ID!` | The workspace to retrieve catalogs for. |
 | `filter` | `CatalogItemFilter` | Filtering options for the returned catalogs. |
-| `first` | `Int` | The first `n` elements from the [paginated list](../pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](../pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](../pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](../pagination.md). |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `orderBy` | `CatalogItemOrder` | The ordering options for the returned catalogs. |
 
 **Input types:**
@@ -118,7 +93,7 @@ Filtering options for catalog items.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `codes` | `[Code!]` | Match any of these codes. |
+| `codes` | [[Code](../common.md#code)!] | Match any of these codes. |
 
 </details>
 
@@ -130,8 +105,8 @@ Ordering options for catalog items.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [CatalogItemOrderField](#type-catalogitemorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [CatalogItemOrderField](#catalogitemorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -143,29 +118,14 @@ Ordering options for catalog items.
 
 A paginated list of Catalog items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[CatalogEdge](#type-catalogedge)!]! | A list of edges. |
-| `nodes` | [[Catalog](#type-catalog)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
-
-</details>
-
-<details>
-
-<summary>PageInfo (entity)</summary>
-
-Information about the current page in a paginated connection.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `hasNextPage` | `Boolean!` | Whether more items exist after the current page. |
-| `hasPreviousPage` | `Boolean!` | Whether more items exist before the current page. |
-| `startCursor` | `String` | The cursor pointing to the first item in the current page. |
-| `endCursor` | `String` | The cursor pointing to the last item in the current page. |
+| `edges` | [[CatalogEdge](#catalogedge)!]! | A list of edges. |
+| `nodes` | [[Catalog](#catalog)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -199,12 +159,12 @@ Input for creating a user-defined catalog (a container for user catalog items).
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization that will own the catalog. |
-| `moduleId` | `ID` | The module this catalog belongs to. Defaults to CORE if omitted. |
-| `code` | `Code` | The machine-readable code, unique within the organization. Auto-generated from title if omitted. |
+| `workspaceId` | `ID!` | The workspace that will own the catalog. |
+| `moduleId` | `ID` | The module this catalog belongs to. Defaults to the platform's own module (`bdr`) if omitted. |
+| `code` | [Code](../common.md#code) | The machine-readable code, unique within the workspace. Auto-generated from title if omitted. |
 | `title` | `String!` | The display name. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `meta` | [CatalogItemMetaInput](#type-catalogitemmetainput) | The display properties. |
+| `meta` | [CatalogItemMetaInput](#catalogitemmetainput) | The display properties. |
 
 </details>
 
@@ -231,7 +191,7 @@ The result of a catalog mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `catalog` | [Catalog](#type-catalog)! | The created or updated catalog. |
+| `catalog` | [Catalog](#catalog)! | The created or updated catalog. |
 
 </details>
 
@@ -241,20 +201,20 @@ The result of a catalog mutation.
 
 A catalog definition that contains catalog items. Catalogs are themselves catalog items.
 
-**Implements:** [CatalogItem](#type-catalogitem), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [CatalogItem](#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | `Code!` | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](#type-catalog)! | Self-reference for the meta-catalog. |
-| `organization` | [Organization](../organizations/README.md#type-organization) | The organization that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](#type-catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `module` | [Module](system.md#type-module)! | The module this catalog is associated with. |
-| `items` | [CatalogItemConnection](#type-catalogitemconnection)! | The items in this catalog. |
+| `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `module` | [Module](system.md#module)! | The module this catalog is associated with. |
+| `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
 
 </details>
 
@@ -290,7 +250,7 @@ Input for updating a user-defined catalog.
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
 | `order` | `Int` | The new display order. |
-| `meta` | [CatalogItemMetaInput](#type-catalogitemmetainput) | The display properties. |
+| `meta` | [CatalogItemMetaInput](#catalogitemmetainput) | The display properties. |
 
 </details>
 
@@ -317,7 +277,7 @@ The result of a catalog mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `catalog` | [Catalog](#type-catalog)! | The created or updated catalog. |
+| `catalog` | [Catalog](#catalog)! | The created or updated catalog. |
 
 </details>
 
@@ -327,20 +287,20 @@ The result of a catalog mutation.
 
 A catalog definition that contains catalog items. Catalogs are themselves catalog items.
 
-**Implements:** [CatalogItem](#type-catalogitem), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [CatalogItem](#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | `Code!` | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](#type-catalog)! | Self-reference for the meta-catalog. |
-| `organization` | [Organization](../organizations/README.md#type-organization) | The organization that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](#type-catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `module` | [Module](system.md#type-module)! | The module this catalog is associated with. |
-| `items` | [CatalogItemConnection](#type-catalogitemconnection)! | The items in this catalog. |
+| `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `module` | [Module](system.md#module)! | The module this catalog is associated with. |
+| `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
 
 </details>
 
@@ -395,7 +355,7 @@ The result of a delete mutation.
 
 ## Objects
 
-<a id="type-catalogitemmeta"></a>
+<a id="catalogitemmeta"></a>
 
 ### CatalogItemMeta
 
@@ -404,36 +364,36 @@ Metadata about a catalog item.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `description` | `String` | A description of the catalog item. Can be localized. |
-| `origin` | [CatalogItemOrigin](#type-catalogitemorigin)! | The origin indicating how this item was created. |
+| `origin` | [CatalogItemOrigin](#catalogitemorigin)! | The origin indicating how this item was created. |
 | `canBeDeleted` | `Boolean!` | Whether this item can be deleted. Returns `false` if the item has dependencies or is system-managed. |
 | `hidden` | `Boolean!` | Whether this item is hidden from regular UI lists. |
 
 ---
 
-<a id="type-catalog"></a>
+<a id="catalog"></a>
 
 ### Catalog
 
 A catalog definition that contains catalog items. Catalogs are themselves catalog items.
 
-**Implements:** [CatalogItem](#type-catalogitem), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [CatalogItem](#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | `Code!` | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](#type-catalog)! | Self-reference for the meta-catalog. |
-| `organization` | [Organization](../organizations/README.md#type-organization) | The organization that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](#type-catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `module` | [Module](system.md#type-module)! | The module this catalog is associated with. |
-| `items` | [CatalogItemConnection](#type-catalogitemconnection)! | The items in this catalog. |
+| `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `module` | [Module](system.md#module)! | The module this catalog is associated with. |
+| `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
 
 ---
 
-<a id="type-catalogpayload"></a>
+<a id="catalogpayload"></a>
 
 ### CatalogPayload
 
@@ -441,13 +401,13 @@ The result of a catalog mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `catalog` | [Catalog](#type-catalog)! | The created or updated catalog. |
+| `catalog` | [Catalog](#catalog)! | The created or updated catalog. |
 
 ---
 
 ## Inputs
 
-<a id="type-catalogitemfilter"></a>
+<a id="catalogitemfilter"></a>
 
 ### CatalogItemFilter
 
@@ -456,11 +416,11 @@ Filtering options for catalog items.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `codes` | `[Code!]` | Match any of these codes. |
+| `codes` | [[Code](../common.md#code)!] | Match any of these codes. |
 
 ---
 
-<a id="type-catalogitemchildrenfilter"></a>
+<a id="catalogitemchildrenfilter"></a>
 
 ### CatalogItemChildrenFilter
 
@@ -472,7 +432,7 @@ Filtering options for catalog item children.
 
 ---
 
-<a id="type-catalogitemorder"></a>
+<a id="catalogitemorder"></a>
 
 ### CatalogItemOrder
 
@@ -480,12 +440,12 @@ Ordering options for catalog items.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [CatalogItemOrderField](#type-catalogitemorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [CatalogItemOrderField](#catalogitemorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 ---
 
-<a id="type-catalogitemmetainput"></a>
+<a id="catalogitemmetainput"></a>
 
 ### CatalogItemMetaInput
 
@@ -498,7 +458,7 @@ Display properties for catalog items.
 
 ---
 
-<a id="type-catalogcreateinput"></a>
+<a id="catalogcreateinput"></a>
 
 ### CatalogCreateInput
 
@@ -506,16 +466,16 @@ Input for creating a user-defined catalog (a container for user catalog items).
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization that will own the catalog. |
-| `moduleId` | `ID` | The module this catalog belongs to. Defaults to CORE if omitted. |
-| `code` | `Code` | The machine-readable code, unique within the organization. Auto-generated from title if omitted. |
+| `workspaceId` | `ID!` | The workspace that will own the catalog. |
+| `moduleId` | `ID` | The module this catalog belongs to. Defaults to the platform's own module (`bdr`) if omitted. |
+| `code` | [Code](../common.md#code) | The machine-readable code, unique within the workspace. Auto-generated from title if omitted. |
 | `title` | `String!` | The display name. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `meta` | [CatalogItemMetaInput](#type-catalogitemmetainput) | The display properties. |
+| `meta` | [CatalogItemMetaInput](#catalogitemmetainput) | The display properties. |
 
 ---
 
-<a id="type-catalogupdateinput"></a>
+<a id="catalogupdateinput"></a>
 
 ### CatalogUpdateInput
 
@@ -527,11 +487,11 @@ Input for updating a user-defined catalog.
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
 | `order` | `Int` | The new display order. |
-| `meta` | [CatalogItemMetaInput](#type-catalogitemmetainput) | The display properties. |
+| `meta` | [CatalogItemMetaInput](#catalogitemmetainput) | The display properties. |
 
 ---
 
-<a id="type-catalogdeleteinput"></a>
+<a id="catalogdeleteinput"></a>
 
 ### CatalogDeleteInput
 
@@ -544,7 +504,7 @@ Input for deleting a user-defined catalog.
 
 ---
 
-<a id="type-catalogitemdeleteinput"></a>
+<a id="catalogitemdeleteinput"></a>
 
 ### CatalogItemDeleteInput
 
@@ -559,7 +519,7 @@ Input for deleting a catalog item.
 
 ## Enums
 
-<a id="type-catalogitemorigin"></a>
+<a id="catalogitemorigin"></a>
 
 ### CatalogItemOrigin
 
@@ -567,13 +527,12 @@ The origin of a catalog item, indicating how it was created.
 
 | Value | Description |
 | ----- | ----------- |
-| `SYSTEM` | Predefined by platform. Immutable and available to all organizations. |
-| `ORGANIZATION` | Created by the current organization. |
-| `PARENT_ORGANIZATION` | Inherited from a parent organization in the dealer hierarchy. |
+| `SYSTEM` | Predefined by platform. Immutable and available to all workspaces. |
+| `WORKSPACE` | Created by the current workspace. |
 
 ---
 
-<a id="type-catalogitemorderfield"></a>
+<a id="catalogitemorderfield"></a>
 
 ### CatalogItemOrderField
 
@@ -590,28 +549,28 @@ Fields available for ordering catalog items.
 
 ## Interfaces
 
-<a id="type-catalogitem"></a>
+<a id="catalogitem"></a>
 
 ### CatalogItem
 
 A dictionary item that provides reference data for the system.
 
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | `Code!` | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](#type-catalog)! | The catalog this item belongs to. |
-| `organization` | [Organization](../organizations/README.md#type-organization) | The organization that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](#type-catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `catalog` | [Catalog](#catalog)! | The catalog this item belongs to. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---
 
-<a id="type-hierarchicalcatalogitem"></a>
+<a id="hierarchicalcatalogitem"></a>
 
 ### HierarchicalCatalogItem
 
@@ -619,72 +578,72 @@ A catalog item that supports parent-child hierarchy.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `parent` | [CatalogItem](#type-catalogitem) | The parent item in the hierarchy. Null for root items. |
+| `parent` | [CatalogItem](#catalogitem) | The parent item in the hierarchy. Null for root items. |
 
 ---
 
 ## Pagination types
 
-<a id="type-catalogitemconnection"></a>
+<a id="catalogitemconnection"></a>
 
 ### CatalogItemConnection
 
 A paginated list of CatalogItem items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[CatalogItemEdge](#type-catalogitemedge)!]! | A list of edges. |
-| `nodes` | [[CatalogItem](#type-catalogitem)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
+| `edges` | [[CatalogItemEdge](#catalogitemedge)!]! | A list of edges. |
+| `nodes` | [[CatalogItem](#catalogitem)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="type-catalogitemedge"></a>
+<a id="catalogitemedge"></a>
 
 ### CatalogItemEdge
 
 An edge in the CatalogItem connection.
 
-**Implements:** [Edge](../common.md#type-edge)
+**Implements:** [Edge](../common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [CatalogItem](#type-catalogitem)! | The catalog item at the end of the edge. |
+| `node` | [CatalogItem](#catalogitem)! | The catalog item at the end of the edge. |
 
 ---
 
-<a id="type-catalogconnection"></a>
+<a id="catalogconnection"></a>
 
 ### CatalogConnection
 
 A paginated list of Catalog items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[CatalogEdge](#type-catalogedge)!]! | A list of edges. |
-| `nodes` | [[Catalog](#type-catalog)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
+| `edges` | [[CatalogEdge](#catalogedge)!]! | A list of edges. |
+| `nodes` | [[Catalog](#catalog)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="type-catalogedge"></a>
+<a id="catalogedge"></a>
 
 ### CatalogEdge
 
 An edge in the Catalog connection.
 
-**Implements:** [Edge](../common.md#type-edge)
+**Implements:** [Edge](../common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [Catalog](#type-catalog)! | The catalog at the end of the edge. |
+| `node` | [Catalog](#catalog)! | The catalog at the end of the edge. |
 
 ---

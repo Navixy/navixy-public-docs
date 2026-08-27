@@ -1,30 +1,32 @@
 ---
-description: Create and manage assets — vehicles, equipment, and other tracked objects.
+description: Create and manage assets: vehicles, equipment, and other tracked objects.
 ---
 
 # Working with assets
 
 {% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-Assets in Navixy Repository API represent the physical or logical objects your organization tracks and manages. The most common example is a vehicle, but assets can be anything you need to monitor: construction equipment, forklifts, generators, shipping containers, leased machinery, or fixed infrastructure. If your organization has a reason to record it, assign attributes to it, or link a GPS device to it, it's a good candidate for an asset.
+Assets in Navixy Repository API represent the objects your workspace tracks and manages. The most common example is a vehicle, but assets can be anything you need to monitor: construction equipment, forklifts, generators, shipping containers, leased machinery, or fixed infrastructure. If your workspace has a reason to record it, assign attributes to it, or link a GPS device to it, it's a good candidate for an asset.
 
 Each asset is defined by the **asset type**, which acts as a template: it classifies the asset and determines which custom fields are available for it. For example, a "Delivery Truck" type might have fields for license plate, fuel capacity, and assigned driver, while a "Generator" type might have fields for power output, last service date, and installation site.
 
 To organize assets into named collections, such as grouping vehicles by depot or equipment by project, see [Organizing assets into groups](organizing-assets-into-groups.md).
 
-## Before you start
+## Prerequisites
 
-You need your organization's ID for all asset operations. Use the `me` query to retrieve it:
+You need your workspace's ID for all asset operations. Use the `me` query to retrieve it:
 
 ```graphql
-query GetMyOrganization {
-  me {
-    ... on User {
-      memberships {
-        nodes {
-          organization {
-            id
-            title
+query GetMyWorkspace {
+  bdr {
+    me {
+      ... on User {
+        memberships {
+          nodes {
+            workspace {
+              id
+              title
+            }
           }
         }
       }
@@ -34,7 +36,7 @@ query GetMyOrganization {
 ```
 
 {% hint style="info" %}
-The `... on User` inline fragment is required because `me` returns the [Actor interface](../actors/#actor-1), which can resolve to either a [User](../actors/users.md#user) or an [Integration](../actors/integrations.md#integration). The `memberships` field only exists on `User`, so the fragment ensures the query is valid for both actor types. If you authenticate as an `Integration`, the `memberships` block is omitted from the response.
+The `... on User` inline fragment is required because `me` returns the [Actor interface](../actors/README.md#actor), and the actual result can be a [User](../actors/users.md#user) or an [Integration](../actors/integrations.md#integration). The `... on User` block says "if the result is a User, also return these fields". `memberships` only exists on `User`, so without the block the query would be invalid. If you authenticate as an `Integration`, the response has no `memberships`.
 {% endhint %}
 
 You'll receive a response:
@@ -42,37 +44,41 @@ You'll receive a response:
 ```json
 {
   "data": {
-    "me": {
-      "memberships": {
-        "nodes": [
-          {
-            "organization": {
-              "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-              "title": "TransLog GmbH"
+    "bdr": {
+      "me": {
+        "memberships": {
+          "nodes": [
+            {
+              "workspace": {
+                "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+                "title": "TransLog GmbH"
+              }
             }
-          }
-        ]
-      }
-    }   
+          ]
+        }
+      }   
+    }
   }
 }
 ```
 
-Use the `id` of the organization you want to work with for all subsequent asset operations.
+Use the `id` of the workspace you want to work with for all subsequent asset operations.
 
 ### Check available asset types
 
-Before creating an asset, request the available asset types for your organization:
+Before creating an asset, request the available asset types for your workspace:
 
 ```graphql
 query ListAssetTypes {
-  assetTypes(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-  ) {
-    nodes {
-      id
-      code
-      title
+  bdr {
+    assetTypes(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+    ) {
+      nodes {
+        id
+        code
+        title
+      }
     }
   }
 }
@@ -83,14 +89,16 @@ You'll get an array of types, if any exist:
 ```json
 {
   "data": {
-    "assetTypes": {
-      "nodes": [
-        {
-          "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-          "code": "VEHICLE",
-          "title": "Vehicle"
-        }
-      ]
+    "bdr": {
+      "assetTypes": {
+        "nodes": [
+          {
+            "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+            "code": "VEHICLE",
+            "title": "Vehicle"
+          }
+        ]
+      }
     }
   }
 }
@@ -102,19 +110,21 @@ If you're working with an existing type and need to know which custom fields it 
 
 ```graphql
 query GetTruckTypeFields {
-  assetTypes(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    filter: { codes: ["delivery_truck"] }
-  ) {
-    nodes {
-      id
-      title
-      customFieldDefinitions {
-        code
+  bdr {
+    assetTypes(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: { codes: ["delivery_truck"] }
+    ) {
+      nodes {
+        id
         title
-        fieldType
-        params {
-          isRequired
+        customFieldDefinitions {
+          code
+          title
+          fieldType
+          params {
+            isRequired
+          }
         }
       }
     }
@@ -127,43 +137,53 @@ Response:
 ```json
 {
   "data": {
-    "assetTypes": {
-      "nodes": [
-        {
-          "id": "b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22",
-          "title": "Delivery Truck",
-          "customFieldDefinitions": [
-            {
-              "code": "license_plate",
-              "title": "License Plate",
-              "fieldType": "STRING",
-              "params": {
-                "isRequired": true
+    "bdr": {
+      "assetTypes": {
+        "nodes": [
+          {
+            "id": "b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22",
+            "title": "Delivery Truck",
+            "customFieldDefinitions": [
+              {
+                "code": "cf_license_plate",
+                "title": "License Plate",
+                "fieldType": "STRING",
+                "params": {
+                  "isRequired": true
+                }
+              },
+              {
+                "code": "cf_fuel_capacity_l",
+                "title": "Fuel Capacity (L)",
+                "fieldType": "DECIMAL",
+                "params": {
+                  "isRequired": false
+                }
               }
-            },
-            {
-              "code": "fuel_capacity_l",
-              "title": "Fuel Capacity (L)",
-              "fieldType": "DECIMAL",
-              "params": {
-                "isRequired": false
-              }
-            }
-          ]
-        }
-      ]
+            ]
+          }
+        ]
+      }
     }
   }
 }
 ```
 
-The `code` values here are exactly what you use as keys in `customFields.set` when creating or updating assets of this type. For type-specific parameters like maximum string length or the list of valid options, see [Implementing custom fields](implementing-custom-fields.md).
+The `code` values here are exactly what you use as `code` in `customFields.set` entries when creating or updating assets of this type. For type-specific parameters like maximum string length or the list of valid options, see [Implementing custom fields](implementing-custom-fields.md).
 
-## Understanding assets
+## How assets work
 
 ### Asset types
 
-An asset type classifies assets and defines which custom fields they have. It is a [catalog item](../catalogs/catalog-items.md): it has a [code](../common.md#code) (a stable machine-readable identifier), a `title` (the display name), and `meta` properties for UI customization. The `customFieldDefinitions` field lists all custom fields available on assets of that type.
+An asset type classifies assets and defines which custom fields they have. It is a [catalog item](../catalogs/catalog-items.md), so it combines the common catalog item fields with one field of its own, `customFieldDefinitions`:
+
+| Field | What it holds |
+| --- | --- |
+| `code` | A stable machine-readable identifier ([Code](../common.md#code)). Integrations and filters use it to reference the type. |
+| `title` | The display name shown in UIs. |
+| `meta` | UI and lifecycle properties: `description`, `origin`, `canBeDeleted`, and `hidden`. |
+| `customFieldDefinitions` | All custom fields available on assets of this type. |
+| `workspace` | The workspace that owns the type. `null` for system types. |
 
 {% hint style="warning" %}
 Before creating a type, remember that `code` is immutable after creation. Choose it carefully, since it's what integrations and filters will use to reference the type.
@@ -173,55 +193,67 @@ Before creating a type, remember that `code` is immutable after creation. Choose
 Before deleting an asset type, check `meta.canBeDeleted`. The API rejects deletion if the type still has dependent assets or is system-managed. Query `meta { canBeDeleted }` on the type to verify before calling `assetTypeDelete`.
 {% endhint %}
 
-Types can originate from three places: predefined by the platform (`SYSTEM`), created by your organization (`ORGANIZATION`), or inherited from a parent organization in the dealer hierarchy (`PARENT_ORGANIZATION`). The origin is exposed as `meta.origin` on the type. You can only create, update, and delete types with `ORGANIZATION` origin — system and inherited types are read-only. The `organization` field on an asset type is `null` for `SYSTEM`-origin types, since they're not owned by any single organization.
+Types come from one of two places, and the `meta.origin` field on the type says which: predefined by the platform (`SYSTEM`) or created by your workspace (`WORKSPACE`). You can only create, update, and delete types with `WORKSPACE` origin, because system types are read-only. The `workspace` field on an asset type is `null` for `SYSTEM`-origin types, since no single workspace owns them.
 
-For the full field reference, see [AssetType](../assets/types.md#assettype).
+For the full field reference, see [AssetType](../assets/README.md#assettype).
 
 ### Asset fields
 
-An asset has a `title`, belongs to an organization, and is classified by an asset type. Its dynamic attributes are listed in `customFields`. Devices are linked to assets through custom fields the `DEVICE` type: the `primaryDevice` field returns the one marked as primary, while `devices` returns all linked devices. Assets also have a `groups` connection field that returns the asset groups they belong to, with optional filtering, ordering, and pagination arguments.
+An asset has a `title`, belongs to a workspace, and is classified by an asset type. Everything else it stores lives in its custom fields:
 
-For the full field reference, see [Asset object](../assets/types.md#asset).
+| Field | What it holds |
+| --- | --- |
+| `title` | The display name. |
+| `workspace` | The workspace that owns the asset. |
+| `type` | The asset type that classifies the asset and defines its custom fields. |
+| `customFields` | The stored custom field values, returned as a list of typed values. |
+| `primaryDevice` | The linked device marked as primary. `null` if no primary device is set. |
+| `groups` | A paginated list of the asset groups the asset belongs to, with optional filtering and ordering arguments. |
+
+For the full field reference, see [Asset object](../assets/README.md#asset).
 
 ### Custom fields
 
-Assets store their domain-specific attributes in the `customFields` field. When creating or updating an asset, you pass custom field changes using [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput), which has two sub-fields:
+Assets store your own data, such as a license plate or a fuel capacity, in the `customFields` field. When creating or updating an asset, you describe custom field changes with [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput), which has two sub-fields:
 
-<table><thead><tr><th width="136.111083984375">Field</th><th width="105.66668701171875">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td><a href="../common.md#json">JSON</a></td><td>Key-value map of fields to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>List of field codes to clear.</td></tr><tr><td><code>setPrimary</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>Field codes to mark as primary (for <code>DEVICE</code>-type fields).</td></tr><tr><td><code>unsetPrimary</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>Field codes to unmark as primary.</td></tr></tbody></table>
+<table><thead><tr><th width="136.111083984375">Field</th><th width="180">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td>[<a href="../custom-fields.md#customfieldvalueinput">CustomFieldValueInput</a>!]</td><td>Typed field values to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>List of field codes to remove entirely.</td></tr></tbody></table>
 
-`customFields` is always a patch operation: fields you don't mention are left unchanged. To update one field without touching others, include only that field in `set`. To remove a value entirely, list its code in `unset`.
+`customFields` is always a patch operation: fields you don't mention are left unchanged. To update one field without touching others, include only that field in `set`. To remove a value entirely, list its code in `unset`. Each entry in `set` has a `code` and a `value`. Inside `value`, provide exactly one of its options, the one matching the field's declared type.
 
 See [Implementing custom fields](implementing-custom-fields.md) for details on defining field definitions and the supported field types.
 
 ### Linking devices
 
-Assets connect to devices through custom fields of `DEVICE` type. Unlike the built-in fields (`geojson_data`, `schedule_data`), device fields are user-defined: you create them as custom field definitions for the asset type, which means you control the field code, can have multiple device fields per type, and can designate one as primary.
+Assets connect to devices through custom fields of `DEVICE` type. Unlike the built-in `geojson_data` field, device fields are user-defined: you create them as custom field definitions for the asset type, which means you control the field code, can have multiple device fields per type, and can mark one as primary.
 
-The `Asset` type exposes two convenience fields that resolve these links:
+The `Asset` type has one shortcut field for the primary device. To read every linked device, request `customFields` and use an inline fragment on `DeviceCustomFieldValue`, the `... on` syntax shown in the verify step below.
 
-<table><thead><tr><th width="169.88885498046875">Field</th><th width="126.333251953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>primaryDevice</code></td><td><a href="../devices/types.md#device">Device</a></td><td>The device whose <code>DEVICE</code>-type field is marked as primary. <code>null</code> if no primary device is set.</td></tr><tr><td><code>devices</code></td><td>[<a href="../devices/types.md#device">Device</a>!]!</td><td>All devices linked through <code>DEVICE</code>-type custom fields.</td></tr></tbody></table>
+<table><thead><tr><th width="169.88885498046875">Field</th><th width="126.333251953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>primaryDevice</code></td><td><a href="../devices/README.md#device">Device</a></td><td>The device whose <code>DEVICE</code>-type field is marked as primary. <code>null</code> if no primary device is set.</td></tr></tbody></table>
 
 To link a device, set the value of your `DEVICE`-type custom field. You can also mark it as primary if you wish:
 
 ```graphql
 customFields: {
-  set: { tracker: "<device-id>" }
-  setPrimary: ["tracker"]
+  set: [{
+    code: "cf_tracker"
+    value: { device: { id: "<device-id>", isPrimary: true } }
+  }]
 }
 ```
 
-To unlink a device and clear its primary status:
+To unlink a device, remove the field. That clears its primary status too:
 
 ```graphql
 customFields: {
-  unset: ["tracker"]
-  unsetPrimary: ["tracker"]
+  unset: ["cf_tracker"]
 }
 ```
 
-Here, `tracker` is the code you chose when creating the DEVICE-type custom field definition for the asset type, not a fixed keyword. Each device can be linked to only one asset; attempting to assign a device that is already linked elsewhere returns a [409 Duplicate](../error-handling.md#duplicate-409) error.
+Here, `cf_tracker` is the code you chose when creating the `DEVICE`-type custom field definition for the asset type, not a fixed keyword. `isPrimary` is required on every `DEVICE` value, which prevents an update from removing the current primary mark by accident.
 
-The reverse lookup is also available: `Device.asset` returns the asset a device is linked to. See [Working with devices](working-with-devices.md) for details.
+Each device can be linked to only one asset. Assigning a device that is already linked elsewhere fails with a validation error, unless you add `reassign: true`, which detaches it from the other asset and attaches it here in one step: either both happen or neither does.
+
+The link works in both directions: `Device.asset` returns the asset a device is linked to. See [Working with devices](working-with-devices.md) for details.
 
 ## Example scenario: Registering a logistics fleet
 
@@ -229,32 +261,34 @@ TransLog GmbH is setting up their asset registry. They need to track both their 
 
 {% stepper %}
 {% step %}
-### **Create an asset type**
+### Create an asset type
 
-Start by creating a "Delivery Truck" asset type for your organization. Be careful when choosing the `code` — it's immutable after creation and will be used to reference this type in integrations and filters.
+Start by creating a "Delivery Truck" asset type for your workspace. Be careful when choosing the `code`, because it's immutable after creation and is used to reference this type in integrations and filters.
 
 {% hint style="info" %}
-`version` is optional — omitting it applies the update unconditionally without conflict detection. Include it whenever you want to guard against overwriting concurrent changes. See [Optimistic locking](../optimistic-locking.md) for details. In this example, we'll be using this field.
+`version` is optional. If you leave it out, an update always applies, even when someone else changed the record after you last read it. Include it to catch such conflicts, as the examples in this scenario do. See [Optimistic locking](../optimistic-locking.md) for details.
 {% endhint %}
 
 Run this mutation:
 
 ```graphql
 mutation CreateTruckType {
-  assetTypeCreate(input: {
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    code: "delivery_truck"
-    title: "Delivery Truck"
-    order: 10
-    meta: {
-      description: "Long-haul and last-mile delivery vehicles"
-    }
-  }) {
-    assetType {
-      id
-      version
-      code
-      title
+  bdr {
+    assetTypeCreate(input: {
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      code: "delivery_truck"
+      title: "Delivery Truck"
+      order: 10
+      meta: {
+        description: "Long-haul and last-mile delivery vehicles"
+      }
+    }) {
+      assetType {
+        id
+        version
+        code
+        title
+      }
     }
   }
 }
@@ -265,53 +299,65 @@ Response:
 ```json
 {
   "data": {
-    "assetTypeCreate": {
-      "assetType": {
-        "id": "b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22",
-        "version": 1,
-        "code": "delivery_truck",
-        "title": "Delivery Truck"
+    "bdr": {
+      "assetTypeCreate": {
+        "assetType": {
+          "id": "b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22",
+          "version": 1,
+          "code": "delivery_truck",
+          "title": "Delivery Truck"
+        }
       }
     }
   }
 }
 ```
 
-Save the `id` — you'll need it in the next step. You can also save `version` if you later need to update or delete the type.
+Save the `id`. You'll need it in the next step. You can also save `version` if you later need to update or delete the type.
 
 {% hint style="info" %}
-The `order` field controls how types appear in UI lists. Lower numbers appear first. If display order doesn't matter for your use case, you can omit it to calculate the position automatically.
+The `order` field controls how types appear in UI lists. Lower numbers appear first. If display order doesn't matter for your use case, omit it, and the position will be assigned automatically.
 {% endhint %}
 {% endstep %}
 
 {% step %}
 ### Define custom fields
 
-With the type created, add custom fields to be used by the assets of this type. Each delivery truck needs a license plate and a linked GPS device. Add both definitions in a single [assetTypeUpdate](../assets/mutations.md#assettypeupdate) call:
+With the type created, add custom fields to be used by the assets of this type. Each delivery truck needs a license plate and a linked GPS device. Add both definitions in a single [assetTypeUpdate](../assets/README.md#assettypeupdate) call:
 
 ```graphql
 mutation AddLicensePlateField {
-  assetTypeUpdate(input: {
-    id: "b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22"
-    version: 1
-    customFieldDefinitions: [
-      {
-        create: {
-          code: "license_plate"
-          title: "License Plate"
-          fieldType: STRING
-          params: { string: { isRequired: true } }
+  bdr {
+    assetTypeUpdate(input: {
+      id: "b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22"
+      version: 1
+      customFieldDefinitions: [
+        {
+          create: {
+            code: "cf_license_plate"
+            title: "License Plate"
+            fieldType: STRING
+            params: { string: { isRequired: true } }
+          }
         }
-      }
-    ]
-  }) {
-    assetType {
-      id
-      version
-      customFieldDefinitions {
-        code
-        title
-        fieldType
+        {
+          create: {
+            code: "cf_tracker"
+            title: "GPS Tracker"
+            fieldType: DEVICE
+            params: { device: { isRequired: false } }
+          }
+        }
+      ]
+    }) {
+      assetType {
+        id
+        version
+        customFieldDefinitions {
+          code
+          title
+          fieldType
+        }
       }
     }
   }
@@ -323,51 +369,60 @@ Response:
 ```json
 {
   "data": {
-    "assetTypeUpdate": {
-      "assetType": {
-        "id": "b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22",
-        "version": 2,
-        "customFieldDefinitions": [
-          {
-            "code": "license_plate",
-            "title": "License Plate",
-            "fieldType": "STRING"
-          }
-        ]
+    "bdr": {
+      "assetTypeUpdate": {
+        "assetType": {
+          "id": "b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22",
+          "version": 2,
+          "customFieldDefinitions": [
+            {
+              "code": "cf_license_plate",
+              "title": "License Plate",
+              "fieldType": "STRING"
+            },
+            {
+              "code": "cf_tracker",
+              "title": "GPS Tracker",
+              "fieldType": "DEVICE"
+            }
+          ]
+        }
       }
     }
   }
 }
 ```
 
-Save the `version` — you'll need it if you later update or delete the type. The `code` values in `customFieldDefinitions` are exactly what you'll use as keys in `customFields.set` when creating or updating assets of this type. The `tracker` field is the one you'll use later to link a GPS device to the truck.
+Save the `version`. You'll need it if you later update or delete the type. The `code` values in `customFieldDefinitions` are exactly what you'll use as `code` in `customFields.set` when creating or updating assets of this type. The `cf_tracker` field is the one you'll use later to link a GPS device to the truck.
 
 For the full list of supported field types and their parameters, see [Implementing custom fields](implementing-custom-fields.md).
 {% endstep %}
 
 {% step %}
-### **Create an asset**
+### Create an asset
 
-Create the first truck in the registry. Pass custom field values using the `set` map inside `customFields`. In this example, the "Delivery Truck" type has a `license_plate` field.
+Create the first truck in the registry. Add custom field values to the `set` list inside `customFields`, one entry per field. In this example, the "Delivery Truck" type has a `cf_license_plate` field.
 
 Run this mutation:
 
 ```graphql
 mutation RegisterTruck {
-  assetCreate(input: {
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    typeId: "b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22"
-    title: "Truck B-44 (Hamburg–Berlin)"
-    customFields: {
-      set: {
-        license_plate: "HH-TL 4421"
+  bdr {
+    assetCreate(input: {
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      typeId: "b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22"
+      title: "Truck B-44 (Hamburg–Berlin)"
+      customFields: {
+        set: [
+          { code: "cf_license_plate", value: { string: "HH-TL 4421" } }
+        ]
       }
-    }
-  }) {
-    asset {
-      id
-      version
-      title
+    }) {
+      asset {
+        id
+        version
+        title
+      }
     }
   }
 }
@@ -378,43 +433,50 @@ Response:
 ```json
 {
   "data": {
-    "assetCreate": {
-      "asset": {
-        "id": "019a6b2f-793e-807b-8001-555345529b44",
-        "version": 1,
-        "title": "Truck B-44 (Hamburg–Berlin)"
+    "bdr": {
+      "assetCreate": {
+        "asset": {
+          "id": "019a6b2f-793e-807b-8001-555345529b44",
+          "version": 1,
+          "title": "Truck B-44 (Hamburg–Berlin)"
+        }
       }
     }
   }
 }
 ```
 
-Save the `id` and `version` — you'll need them for updates.
+Save the `id` and `version`. You'll need them for updates.
 {% endstep %}
 
 {% step %}
-### **Verify the asset**
+### Verify the asset
 
 Query the asset to confirm it was created correctly:
 
 ```graphql
 query GetTruck {
-  asset(id: "019a6b2f-793e-807b-8001-555345529b44") {
-    id
-    version
-    title
-    type {
-      code
-      title
-    }
-    customFields
-    primaryDevice {
+  bdr {
+    asset(id: "019a6b2f-793e-807b-8001-555345529b44") {
       id
+      version
       title
-    }
-    devices {
-      id
-      title
+      type {
+        code
+        title
+      }
+      customFields {
+        code
+        ... on StringCustomFieldValue { value }
+        ... on DeviceCustomFieldValue {
+          isPrimary
+          device { id title }
+        }
+      }
+      primaryDevice {
+        id
+        title
+      }
     }
   }
 }
@@ -425,33 +487,42 @@ Response:
 ```json
 {
   "data": {
-    "asset": {
-      "id": "019a6b2f-793e-807b-8001-555345529b44",
-      "version": 1,
-      "title": "Truck B-44 (Hamburg–Berlin)",
-      "type": {
-        "code": "delivery_truck",
-        "title": "Delivery Truck"
-      },
-      "customFields": {
-        "license_plate": "HH-TL 4421"
-      },
-      "primaryDevice": null,
-      "devices": []
+    "bdr": {
+      "asset": {
+        "id": "019a6b2f-793e-807b-8001-555345529b44",
+        "version": 1,
+        "title": "Truck B-44 (Hamburg–Berlin)",
+        "type": {
+          "code": "delivery_truck",
+          "title": "Delivery Truck"
+        },
+        "customFields": [
+          {
+            "code": "cf_license_plate",
+            "value": "HH-TL 4421"
+          }
+        ],
+        "primaryDevice": null
+      }
     }
   }
 }
 ```
 
-`primaryDevice` is `null` and `devices` is empty because no GPS unit has been assigned yet. `customFields` returns a raw JSON object keyed by field code — the same keys you use in `set` and `unset`.
+`primaryDevice` is `null` because no GPS unit has been assigned yet. `customFields` returns a list of typed values, one per field, each carrying the `code` you use in `set` and `unset`. The element's type matches the field's declared `fieldType`, so select the fields you need through inline fragments (the `... on` blocks above) on [CustomFieldValue](../custom-fields.md#customfieldvalue).
 
 To keep the response clean, you can request only specific custom field codes:
 
 ```graphql
 query GetTruckLicensePlate {
-  asset(id: "019a6b2f-793e-807b-8001-555345529b44") {
-    title
-    customFields(codes: ["license_plate"])
+  bdr {
+    asset(id: "019a6b2f-793e-807b-8001-555345529b44") {
+      title
+      customFields(codes: ["cf_license_plate"]) {
+        code
+        ... on StringCustomFieldValue { value }
+      }
+    }
   }
 }
 ```
@@ -460,34 +531,39 @@ query GetTruckLicensePlate {
 {% step %}
 ### Assign a device
 
-A GPS unit has been installed in the truck. To link it, you need a `DEVICE`-type custom field on the asset type. If you haven't created one yet, add it via `assetTypeUpdate` (see Implementing[ custom fields](implementing-custom-fields.md)). In this example, the "Delivery Truck" type has a field with the code `tracker`.
+A GPS unit has been installed in the truck. To link it, you need a `DEVICE`-type custom field on the asset type. If you haven't created one yet, add it via `assetTypeUpdate` (see [Implementing custom fields](implementing-custom-fields.md)). In this example, the "Delivery Truck" type has a field with the code `cf_tracker`.
 
-To create a device or find its id, see [Working with devices](working-with-devices.md).
+To learn how to create a device or find its id, see [Working with devices](working-with-devices.md).
 
-Assign the device using `assetUpdate` with the device ID in `customFields.set`, and mark the field as primary with `setPrimary`:
+Assign the device using `assetUpdate` with the device ID in `customFields.set`. `isPrimary` is required on every `DEVICE` value, so state explicitly whether this device is the asset's primary one:
 
 ```graphql
 mutation AssignTruckDevice {
-  assetUpdate(input: {
-    id: "019a6b2f-793e-807b-8001-555345529b44"
-    version: 1
-    customFields: {
-      set: {
-        tracker: "c3hhef22-2f3e-6hj1-ee9g-9ee2eg713d44"
+  bdr {
+    assetUpdate(input: {
+      id: "019a6b2f-793e-807b-8001-555345529b44"
+      version: 1
+      customFields: {
+        set: [
+          {
+            code: "cf_tracker"
+            value: {
+              device: {
+                id: "c3aaef22-2f3e-6ab1-ee9c-9ee2ec713d44"
+                isPrimary: true
+              }
+            }
+          }
+        ]
       }
-      setPrimary: ["tracker"]
-    }
-  }) {
-    asset {
-      id
-      version
-      primaryDevice {
+    }) {
+      asset {
         id
-        title
-      }
-      devices {
-        id
-        title
+        version
+        primaryDevice {
+          id
+          title
+        }
       }
     }
   }
@@ -499,20 +575,16 @@ Response:
 ```json
 {
   "data": {
-    "assetUpdate": {
-      "asset": {
-        "id": "019a6b2f-793e-807b-8001-555345529b44",
-        "version": 2,
-        "primaryDevice": {
-          "id": "c3hhef22-2f3e-6hj1-ee9g-9ee2eg713d44",
-          "title": "GPS Unit #117"
-        },
-        "devices": [
-          {
-            "id": "c3hhef22-2f3e-6hj1-ee9g-9ee2eg713d44",
+    "bdr": {
+      "assetUpdate": {
+        "asset": {
+          "id": "019a6b2f-793e-807b-8001-555345529b44",
+          "version": 2,
+          "primaryDevice": {
+            "id": "c3aaef22-2f3e-6ab1-ee9c-9ee2ec713d44",
             "title": "GPS Unit #117"
           }
-        ]
+        }
       }
     }
   }
@@ -521,47 +593,51 @@ Response:
 
 Note that version increments to `2` after a successful update. Use this new version for any further mutations.
 
+If the device is already linked to another asset, this mutation fails with a validation error. Add `reassign: true` alongside `isPrimary` to detach it from the other asset and attach it here in one step.
+
 To unassign the device (e.g., if the unit is removed for maintenance), use `unset`:
 
 ```graphql
 mutation UnlinkForkliftDevice {
-  assetUpdate(input: {
-    id: "029b7c40-804f-918c-9112-666456630d55"
-    version: 2
-    customFields: {
-      unset: ["tracker"]
-      unsetPrimary: ["tracker"]
-    }
-  }) {
-    asset {
-      id
-      version
-      primaryDevice { id }
-      devices { id }
+  bdr {
+    assetUpdate(input: {
+      id: "029b7c40-804f-918c-9112-666456630d55"
+      version: 2
+      customFields: {
+        unset: ["cf_tracker"]
+      }
+    }) {
+      asset {
+        id
+        version
+        primaryDevice { id }
+      }
     }
   }
 }
 ```
 
-After unlinking, `primaryDevice` returns `null` and `devices` returns an empty array.
+After unlinking, `primaryDevice` returns `null`. Removing the field with `unset` clears its primary status at the same time, so there's no separate call for that.
 {% endstep %}
 
 {% step %}
-### **Delete the asset**
+### Delete the asset
 
 {% hint style="danger" %}
 Asset deletion is permanent. Unlike some other entity types in the API, assets don't support soft delete and cannot be restored after deletion. Make sure you no longer need the record before proceeding.
 {% endhint %}
 
-When the truck is decommissioned and you no longer need its record, run the [assetDelete](../assets/mutations.md#assetdelete) mutation:
+When the truck is decommissioned and you no longer need its record, run the [assetDelete](../assets/README.md#assetdelete) mutation:
 
 ```graphql
 mutation DecommissionTruck {
-  assetDelete(input: {
-    id: "019a6b2f-793e-807b-8001-555345529b44"
-    version: 2
-  }) {
-    deletedId
+  bdr {
+    assetDelete(input: {
+      id: "019a6b2f-793e-807b-8001-555345529b44"
+      version: 2
+    }) {
+      deletedId
+    }
   }
 }
 ```
@@ -571,8 +647,10 @@ Response:
 ```json
 {
   "data": {
-    "assetDelete": {
-      "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
+    "bdr": {
+      "assetDelete": {
+        "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
+      }
     }
   }
 }
@@ -584,25 +662,27 @@ Including `version` ensures you don't accidentally delete an asset that someone 
 
 ## Listing assets
 
-To list all assets for an organization, run the following query:
+To list all assets for a workspace, run the following query:
 
 ```graphql
 query ListAssets {
-  assets(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    first: 20
-  ) {
-    nodes {
-      id
-      title
-      type {
-        code
+  bdr {
+    assets(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      first: 20
+    ) {
+      nodes {
+        id
         title
+        type {
+          code
+          title
+        }
       }
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 }
@@ -610,21 +690,23 @@ query ListAssets {
 
 ### Filtering
 
-Use [AssetFilter](../assets/queries.md#assetfilter) to narrow results by type, linked GPS device, title, or custom field values. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter field reference and custom field filter operators, see [Filtering and sorting](../filtering-and-sorting.md#operators).
+Use [AssetFilter](../assets/README.md#assetfilter) to narrow down results by type, linked GPS device, title, or custom field values. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter field reference and custom field filter operators, see [Custom field filtering and sorting](../custom-field-filtering.md#operators).
 
 ```graphql
 query ListTrucks {
-  assets(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    filter: {
-      typeIds: ["b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22"]
-      titleContains: "hamburg"
-    }
-    first: 20
-  ) {
-    nodes {
-      id
-      title
+  bdr {
+    assets(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: {
+        typeIds: ["b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22"]
+        titleContains: "hamburg"
+      }
+      first: 20
+    ) {
+      nodes {
+        id
+        title
+      }
     }
   }
 }
@@ -634,47 +716,50 @@ To find all assets linked to a specific GPS device, run this query:
 
 ```graphql
 query FindAssetByDevice {
-  assets(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    filter: {
-      deviceIds: ["c3hhef22-2f3e-6hj1-ee9g-9ee2eg713d44"]
-    }
-    first: 5
-  ) {
-    nodes {
-      id
-      title
-      primaryDevice {
-        id
-        title
+  bdr {
+    assets(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: {
+        deviceIds: ["c3aaef22-2f3e-6ab1-ee9c-9ee2ec713d44"]
       }
-      devices {
+      first: 5
+    ) {
+      nodes {
         id
         title
+        primaryDevice {
+          id
+          title
+        }
       }
     }
   }
 }
 ```
 
-To filter assets by a custom field value, pass conditions to `customFields` in the filter. Each condition specifies a field `code`, a comparison `operator`, and a `value`. The following query finds all delivery trucks with a specific license plate:
+To filter assets by a custom field value, add conditions to the `customFields` list in the filter. Each condition specifies a field `code`, a comparison `operator`, and a `value`. The following query finds all delivery trucks with a specific license plate:
 
 ```graphql
 query FindTruckByPlate {
-  assets(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    filter: {
-      typeIds: ["b1ffcd00-0d1c-5fg9-cc7e-7cc0ce491b22"]
-      customFields: [
-        { code: "license_plate", operator: EQ, value: { string: "HH-TL 4421" } }
-      ]
-    }
-    first: 5
-  ) {
-    nodes {
-      id
-      title
-      customFields(codes: ["license_plate"])
+  bdr {
+    assets(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: {
+        typeIds: ["b1ffcd00-0d1c-5f29-cc7e-7cc0ce491b22"]
+        customFields: [
+          { code: "cf_license_plate", operator: EQ, value: { string: "HH-TL 4421" } }
+        ]
+      }
+      first: 5
+    ) {
+      nodes {
+        id
+        title
+        customFields(codes: ["cf_license_plate"]) {
+          code
+          ... on StringCustomFieldValue { value }
+        }
+      }
     }
   }
 }
@@ -684,26 +769,31 @@ Multiple conditions in the `customFields` array are combined with AND.
 
 ### Ordering
 
-Assets can be ordered by title (the default) or by any custom field using `customFieldCode`:
+Assets can be ordered by title (the default) or by a custom field using `customFieldCode`. Not every field type is sortable — see [Sorting by custom fields](../custom-field-filtering.md#sorting-by-custom-fields) for the supported list:
 
 ```graphql
 query AssetsByLicensePlate {
-  assets(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    orderBy: { customFieldCode: "license_plate", direction: ASC }
-    first: 20
-  ) {
-    nodes {
-      id
-      title
-      customFields(codes: ["license_plate"])
+  bdr {
+    assets(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      orderBy: { customFieldCode: "cf_license_plate", direction: ASC }
+      first: 20
+    ) {
+      nodes {
+        id
+        title
+        customFields(codes: ["cf_license_plate"]) {
+          code
+          ... on StringCustomFieldValue { value }
+        }
+      }
     }
   }
 }
 ```
 
 {% hint style="warning" %}
-`field` (an `AssetOrderField` enum) and `customFieldCode` are mutually exclusive — use one or the other. Valid values for `field` are defined in the [AssetOrderField enum](../assets/types.md#assetorderfield).
+`field` (an `AssetOrderField` enum) and `customFieldCode` can't be used together: pick one. Valid values for `field` are defined in the [AssetOrderField enum](../assets/README.md#assetorderfield).
 {% endhint %}
 
 For details on pagination, see [Pagination](../pagination.md).
@@ -717,7 +807,7 @@ If you include `version` in your mutation and the entity has been modified since
   "errors": [
     {
       "message": "Entity has been modified by another request",
-      "path": ["assetUpdate"],
+      "path": ["bdr", "assetUpdate"],
       "extensions": {
         "type": "https://api.navixy.com/errors/conflict",
         "title": "Optimistic Lock Conflict",
@@ -738,8 +828,8 @@ To resolve this, query the asset to get its current version and state, merge you
 
 For a full explanation of how versioning works, see [Optimistic locking](../optimistic-locking.md).
 
-### See also
+## See also
 
-* [Asset types and operations](../assets/): Complete reference for all asset operations and types
+* [Assets](../assets/): Complete reference for all asset operations and types
 * [Organizing assets into groups](organizing-assets-into-groups.md): Collect assets into named groups by depot, project, or any other dimension
-* [Implementing custom fields](implementing-custom-fields.md): Define the properties available to each asset type
+* [Implementing custom fields](implementing-custom-fields.md): Define custom fields and store your own data on entities

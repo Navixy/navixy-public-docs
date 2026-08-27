@@ -6,7 +6,7 @@ description: >-
 
 # Directives
 
-{% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
 
 Directives modify the behavior of fields, types, or operations in a GraphQL schema. They are prefixed with `@` and can be applied at various locations.
 
@@ -27,10 +27,15 @@ Conditionally excludes a field or fragment from the response.
 **Example:**
 
 ```graphql
-query GetDevice($skipCustomFields: Boolean!) {
-  device(id: "123") {
-    title
-    customFields @skip(if: $skipCustomFields)
+query GetDevice($skipIdentifiers: Boolean!) {
+  bdr {
+    device(id: "123") {
+      title
+      identifiers @skip(if: $skipIdentifiers) {
+        type
+        value
+      }
+    }
   }
 }
 ```
@@ -49,10 +54,13 @@ Conditionally includes a field or fragment in the response.
 
 ```graphql
 query GetDevice($includeRelations: Boolean!) {
-  device(id: "123") {
-    title
-    relations @include(if: $includeRelations) {
-      edges { node { id } }
+  bdr {
+    device(id: "123") {
+      title
+      relationsFrom @include(if: $includeRelations) {
+        id
+        type { code }
+      }
     }
   }
 }

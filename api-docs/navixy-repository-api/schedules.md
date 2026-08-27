@@ -13,7 +13,7 @@ Schedules define time-based rules using iCalendar ([RFC 5545](https://www.rfc-ed
 
 ## Queries
 
-### schedule
+### schedule (query)
 
 Retrieves a schedule by its ID.
 
@@ -23,8 +23,8 @@ schedule(id: ID!): Schedule
 
 **Arguments**
 
-| Name | Type  | Description                         |
-| ---- | ----- | ----------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `id` | `ID!` | The ID of the schedule to retrieve. |
 
 **Output types:**
@@ -35,27 +35,27 @@ schedule(id: ID!): Schedule
 
 A schedule definition for work hours, maintenance windows, or other time-based rules.
 
-**Implements:** [Node](common.md#type-node), [Titled](common.md#type-titled), [Versioned](common.md#type-versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Versioned](common.md#versioned)
 
-| Field          | Type                                              | Description                                                                                                                                                                                               |
-| -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`                                             | A globally unique identifier. This ID is opaque and should not be parsed by clients.                                                                                                                      |
-| `version`      | `Int!`                                            | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`        | `String!`                                         | The human-readable display name.                                                                                                                                                                          |
-| `organization` | [Organization](organizations/#type-organization)! | The organization that owns this schedule.                                                                                                                                                                 |
-| `scheduleData` | `ScheduleData!`                                   | The calendar and time interval definitions for this schedule.                                                                                                                                             |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The human-readable display name. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
 
-***
+---
 
 ### schedules
 
-Lists schedules for an organization.
+Lists schedules for a workspace.
 
 ```graphql
 schedules(
-    organizationId: ID!
+    workspaceId: ID!
     filter: ScheduleFilter
     first: Int
     after: String
@@ -67,15 +67,15 @@ schedules(
 
 **Arguments**
 
-| Name             | Type             | Description                                                          |
-| ---------------- | ---------------- | -------------------------------------------------------------------- |
-| `organizationId` | `ID!`            | The organization to retrieve schedules for.                          |
-| `filter`         | `ScheduleFilter` | Filtering options for the returned schedules.                        |
-| `first`          | `Int`            | The first `n` elements from the [paginated list](pagination.md).     |
-| `after`          | `String`         | The elements that come after the specified [cursor](pagination.md).  |
-| `last`           | `Int`            | The last `n` elements from the [paginated list](pagination.md).      |
-| `before`         | `String`         | The elements that come before the specified [cursor](pagination.md). |
-| `orderBy`        | `ScheduleOrder`  | The ordering options for the returned schedules.                     |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace to retrieve schedules for. |
+| `filter` | `ScheduleFilter` | Filtering options for the returned schedules. |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `orderBy` | `ScheduleOrder` | The ordering options for the returned schedules. |
 
 **Input types:**
 
@@ -85,8 +85,8 @@ schedules(
 
 Filtering options for schedules.
 
-| Field           | Type     | Description                                         |
-| --------------- | -------- | --------------------------------------------------- |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
 
 </details>
@@ -97,10 +97,10 @@ Filtering options for schedules.
 
 Ordering options for schedules.
 
-| Field       | Type                                                       | Description                     |
-| ----------- | ---------------------------------------------------------- | ------------------------------- |
-| `field`     | [ScheduleOrderField](schedules.md#type-scheduleorderfield) | The standard field to order by. |
-| `direction` | [OrderDirection](common.md#type-orderdirection)!           | The direction to order.         |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `field` | [ScheduleOrderField](#scheduleorderfield) | The standard field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -112,18 +112,18 @@ Ordering options for schedules.
 
 A paginated list of Schedule items.
 
-**Implements:** [Connection](common.md#type-connection)
+**Implements:** [Connection](common.md#connection)
 
-| Field      | Type                                                | Description                                                |
-| ---------- | --------------------------------------------------- | ---------------------------------------------------------- |
-| `edges`    | \[[ScheduleEdge](schedules.md#type-scheduleedge)!]! | A list of edges.                                           |
-| `nodes`    | \[[Schedule](schedules.md#type-schedule)!]!         | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](common.md#type-pageinfo)!                | Information about the current page.                        |
-| `total`    | [CountInfo](common.md#type-countinfo)               | The total count of items matching the filter.              |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `edges` | [[ScheduleEdge](#scheduleedge)!]! | A list of edges. |
+| `nodes` | [[Schedule](#schedule)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
-***
+---
 
 ## Mutations
 
@@ -139,8 +139,8 @@ scheduleCreate(
 
 **Arguments**
 
-| Name    | Type                   | Description                                 |
-| ------- | ---------------------- | ------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `ScheduleCreateInput!` | The input fields for creating the schedule. |
 
 **Input types:**
@@ -151,11 +151,11 @@ scheduleCreate(
 
 Input for creating a new schedule.
 
-| Field            | Type            | Description                                  |
-| ---------------- | --------------- | -------------------------------------------- |
-| `organizationId` | `ID!`           | The organization that will own the schedule. |
-| `title`          | `String!`       | The schedule display name.                   |
-| `scheduleData`   | `ScheduleData!` | The schedule data.                           |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace that will own the schedule. |
+| `title` | `String!` | The schedule display name. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The schedule data. |
 
 </details>
 
@@ -167,9 +167,9 @@ Input for creating a new schedule.
 
 The result of a schedule mutation.
 
-| Field      | Type                                    | Description                      |
-| ---------- | --------------------------------------- | -------------------------------- |
-| `schedule` | [Schedule](schedules.md#type-schedule)! | The created or updated schedule. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `schedule` | [Schedule](#schedule)! | The created or updated schedule. |
 
 </details>
 
@@ -179,19 +179,19 @@ The result of a schedule mutation.
 
 A schedule definition for work hours, maintenance windows, or other time-based rules.
 
-**Implements:** [Node](common.md#type-node), [Titled](common.md#type-titled), [Versioned](common.md#type-versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Versioned](common.md#versioned)
 
-| Field          | Type                                              | Description                                                                                                                                                                                               |
-| -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`                                             | A globally unique identifier. This ID is opaque and should not be parsed by clients.                                                                                                                      |
-| `version`      | `Int!`                                            | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`        | `String!`                                         | The human-readable display name.                                                                                                                                                                          |
-| `organization` | [Organization](organizations/#type-organization)! | The organization that owns this schedule.                                                                                                                                                                 |
-| `scheduleData` | `ScheduleData!`                                   | The calendar and time interval definitions for this schedule.                                                                                                                                             |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The human-readable display name. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
 
-***
+---
 
 ### scheduleUpdate
 
@@ -205,8 +205,8 @@ scheduleUpdate(
 
 **Arguments**
 
-| Name    | Type                   | Description                                 |
-| ------- | ---------------------- | ------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `ScheduleUpdateInput!` | The input fields for updating the schedule. |
 
 **Input types:**
@@ -217,12 +217,12 @@ scheduleUpdate(
 
 Input for updating an existing schedule.
 
-| Field          | Type           | Description                                                                                     |
-| -------------- | -------------- | ----------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`          | The schedule ID to update.                                                                      |
-| `version`      | `Int`          | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
-| `title`        | `String`       | The new display name.                                                                           |
-| `scheduleData` | `ScheduleData` | The new schedule data.                                                                          |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The schedule ID to update. |
+| `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
+| `title` | `String` | The new display name. |
+| `scheduleData` | [ScheduleData](#scheduledata) | The new schedule data. |
 
 </details>
 
@@ -234,9 +234,9 @@ Input for updating an existing schedule.
 
 The result of a schedule mutation.
 
-| Field      | Type                                    | Description                      |
-| ---------- | --------------------------------------- | -------------------------------- |
-| `schedule` | [Schedule](schedules.md#type-schedule)! | The created or updated schedule. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `schedule` | [Schedule](#schedule)! | The created or updated schedule. |
 
 </details>
 
@@ -246,19 +246,19 @@ The result of a schedule mutation.
 
 A schedule definition for work hours, maintenance windows, or other time-based rules.
 
-**Implements:** [Node](common.md#type-node), [Titled](common.md#type-titled), [Versioned](common.md#type-versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Versioned](common.md#versioned)
 
-| Field          | Type                                              | Description                                                                                                                                                                                               |
-| -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`                                             | A globally unique identifier. This ID is opaque and should not be parsed by clients.                                                                                                                      |
-| `version`      | `Int!`                                            | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`        | `String!`                                         | The human-readable display name.                                                                                                                                                                          |
-| `organization` | [Organization](organizations/#type-organization)! | The organization that owns this schedule.                                                                                                                                                                 |
-| `scheduleData` | `ScheduleData!`                                   | The calendar and time interval definitions for this schedule.                                                                                                                                             |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The human-readable display name. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
 
-***
+---
 
 ### scheduleDelete
 
@@ -272,8 +272,8 @@ scheduleDelete(
 
 **Arguments**
 
-| Name    | Type                   | Description                                 |
-| ------- | ---------------------- | ------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `ScheduleDeleteInput!` | The input fields for deleting the schedule. |
 
 **Input types:**
@@ -284,9 +284,9 @@ scheduleDelete(
 
 Input for deleting a schedule.
 
-| Field     | Type  | Description                                                                                     |
-| --------- | ----- | ----------------------------------------------------------------------------------------------- |
-| `id`      | `ID!` | The schedule ID to delete.                                                                      |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The schedule ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
 </details>
@@ -299,186 +299,220 @@ Input for deleting a schedule.
 
 The result of a delete mutation.
 
-| Field       | Type  | Description                   |
-| ----------- | ----- | ----------------------------- |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `deletedId` | `ID!` | The ID of the deleted entity. |
 
 </details>
 
-***
+---
 
 ## Objects
+
+<a id="schedule"></a>
 
 ### Schedule
 
 A schedule definition for work hours, maintenance windows, or other time-based rules.
 
-**Implements:** [Node](common.md#type-node), [Titled](common.md#type-titled), [Versioned](common.md#type-versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Versioned](common.md#versioned)
 
-| Field          | Type                                              | Description                                                                                                                                                                                               |
-| -------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`                                             | A globally unique identifier. This ID is opaque and should not be parsed by clients.                                                                                                                      |
-| `version`      | `Int!`                                            | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`        | `String!`                                         | The human-readable display name.                                                                                                                                                                          |
-| `organization` | [Organization](organizations/#type-organization)! | The organization that owns this schedule.                                                                                                                                                                 |
-| `scheduleData` | `ScheduleData!`                                   | The calendar and time interval definitions for this schedule.                                                                                                                                             |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The human-readable display name. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
-***
+---
+
+<a id="schedulepayload"></a>
 
 ### SchedulePayload
 
 The result of a schedule mutation.
 
-| Field      | Type                                    | Description                      |
-| ---------- | --------------------------------------- | -------------------------------- |
-| `schedule` | [Schedule](schedules.md#type-schedule)! | The created or updated schedule. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `schedule` | [Schedule](#schedule)! | The created or updated schedule. |
 
-***
+---
 
 ## Inputs
+
+<a id="schedulefilter"></a>
 
 ### ScheduleFilter
 
 Filtering options for schedules.
 
-| Field           | Type     | Description                                         |
-| --------------- | -------- | --------------------------------------------------- |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
 
-***
+---
+
+<a id="scheduleorder"></a>
 
 ### ScheduleOrder
 
 Ordering options for schedules.
 
-| Field       | Type                                                       | Description                     |
-| ----------- | ---------------------------------------------------------- | ------------------------------- |
-| `field`     | [ScheduleOrderField](schedules.md#type-scheduleorderfield) | The standard field to order by. |
-| `direction` | [OrderDirection](common.md#type-orderdirection)!           | The direction to order.         |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `field` | [ScheduleOrderField](#scheduleorderfield) | The standard field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
-***
+---
+
+<a id="schedulecreateinput"></a>
 
 ### ScheduleCreateInput
 
 Input for creating a new schedule.
 
-| Field            | Type            | Description                                  |
-| ---------------- | --------------- | -------------------------------------------- |
-| `organizationId` | `ID!`           | The organization that will own the schedule. |
-| `title`          | `String!`       | The schedule display name.                   |
-| `scheduleData`   | `ScheduleData!` | The schedule data.                           |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace that will own the schedule. |
+| `title` | `String!` | The schedule display name. |
+| `scheduleData` | [ScheduleData](#scheduledata)! | The schedule data. |
 
-***
+---
+
+<a id="scheduleupdateinput"></a>
 
 ### ScheduleUpdateInput
 
 Input for updating an existing schedule.
 
-| Field          | Type           | Description                                                                                     |
-| -------------- | -------------- | ----------------------------------------------------------------------------------------------- |
-| `id`           | `ID!`          | The schedule ID to update.                                                                      |
-| `version`      | `Int`          | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
-| `title`        | `String`       | The new display name.                                                                           |
-| `scheduleData` | `ScheduleData` | The new schedule data.                                                                          |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The schedule ID to update. |
+| `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
+| `title` | `String` | The new display name. |
+| `scheduleData` | [ScheduleData](#scheduledata) | The new schedule data. |
 
-***
+---
+
+<a id="scheduledeleteinput"></a>
 
 ### ScheduleDeleteInput
 
 Input for deleting a schedule.
 
-| Field     | Type  | Description                                                                                     |
-| --------- | ----- | ----------------------------------------------------------------------------------------------- |
-| `id`      | `ID!` | The schedule ID to delete.                                                                      |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The schedule ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
-***
+---
 
 ## Enums
+
+<a id="scheduleorderfield"></a>
 
 ### ScheduleOrderField
 
 Fields available for ordering schedules.
 
-| Value   | Description     |
-| ------- | --------------- |
+| Value | Description |
+| ----- | ----------- |
 | `TITLE` | Order by title. |
 
-***
+---
 
 ## Scalars
 
+<a id="scheduledata"></a>
+
 ### ScheduleData
 
-Schedule configuration as a JSON object — time intervals and recurrence. The same shape backs both the `Schedule` entity (`scheduleData`) and `FieldType.SCHEDULE` custom-field values.
+Schedule configuration as a JSON object — time intervals and recurrence. Backs the `Schedule`
+entity's `scheduleData`. Custom fields that need a schedule reference the entity instead.
 
-A **JSCalendar-aligned profile** ([RFC 8984](https://www.rfc-editor.org/rfc/rfc8984.html) field names) restricted to the subset that round-trips to iCalendar / [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545.html) (`.ics`). All date-times are **local wall-clock** (no offset), interpreted in the schedule-level `timeZone` — never UTC — so recurring events keep their wall-clock time across DST transitions. Validated on write (rejected with a field-specific message); reads are tolerant of legacy/empty values.
+A **JSCalendar-aligned profile** ([RFC 8984](https://www.rfc-editor.org/rfc/rfc8984.html) field names) restricted to the subset that round-trips
+to iCalendar / [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545.html) (`.ics`). All date-times are **local wall-clock** (no offset), interpreted
+in the schedule-level `timeZone` — never UTC — so recurring events keep their wall-clock time
+across DST transitions. Validated on write (rejected with a field-specific message); reads are
+tolerant of legacy/empty values.
 
-Field catalogue (NOT a single valid object — `end`/`duration` and `count`/`until` are mutually exclusive; numeric ranges below are value DOMAINS, not literal arrays). All date-times are local, e.g. `2025-01-06T09:00:00`; dates for all-day, e.g. `2025-06-10`.
+Field catalogue (NOT a single valid object — `end`/`duration` and `count`/`until` are mutually
+exclusive; numeric ranges below are value DOMAINS, not literal arrays). All date-times are local,
+e.g. `2025-01-06T09:00:00`; dates for all-day, e.g. `2025-06-10`.
 
 Top level:
-
-* `timeZone`: IANA string, required. Zone for every TIMED event (all-day events are zone-independent).
-* `active`: boolean, optional, default true. Manual on/off for schedule checks.
-* `description`: string, optional, free text. (The NAME is the entity title, not stored here.)
-* `events`: array, required, non-empty.
+- `timeZone`: IANA string, required. Zone for every TIMED event (all-day events are zone-independent).
+- `active`: boolean, optional, default true. Manual on/off for schedule checks.
+- `description`: string, optional, free text. (The NAME is the entity title, not stored here.)
+- `events`: array, required, non-empty.
 
 Each event:
-
-* `uid`: string, optional, stable slot id.
-* `title`: string, optional, maps to VEVENT SUMMARY.
-* `start`: local date (all-day) or date-time (timed), required. Date-times are exactly `yyyy-MM-dd'T'HH:mm:ss` — seconds required, no fractional seconds, no offset/`Z`.
-* `end` XOR `duration`: a timed event needs exactly one; an all-day event may omit both. `end` is a local date-time (one-off / manual slots); `duration` is a **positive** ISO-8601 duration (e.g. `PT9H`, preferred for recurring — stable across DST); for an all-day event the duration must be whole days (e.g. `P1D`), no time component.
-* `showWithoutTime`: boolean, optional. true → all-day: `start`/`end` are dates, FLOATING (ignores `timeZone`); an all-day `recurrenceRule` must not use `byHour`/`byMinute`/`bySecond`.
-* `recurrenceRule`: object, optional. Absent → a single occurrence at `start`.
-* `excludedDates`: array of local date-times, optional. EXDATE — drop whole occurrences.
-* `additionalDates`: array of local date-times, optional. RDATE — add one-off occurrences.
+- `uid`: string, optional, stable slot id.
+- `title`: string, optional, maps to VEVENT SUMMARY.
+- `start`: local date (all-day) or date-time (timed), required. Date-times are exactly
+  `yyyy-MM-dd'T'HH:mm:ss` — seconds required, no fractional seconds, no offset/`Z`.
+- `end` XOR `duration`: a timed event needs exactly one; an all-day event may omit both.
+  `end` is a local date-time (one-off / manual slots); `duration` is a **positive** ISO-8601
+  duration (e.g. `PT9H`, preferred for recurring — stable across DST); for an all-day event the
+  duration must be whole days (e.g. `P1D`), no time component.
+- `showWithoutTime`: boolean, optional. true → all-day: `start`/`end` are dates, FLOATING (ignores
+  `timeZone`); an all-day `recurrenceRule` must not use `byHour`/`byMinute`/`bySecond`.
+- `recurrenceRule`: object, optional. Absent → a single occurrence at `start`.
+- `excludedDates`: array of local date-times, optional. EXDATE — drop whole occurrences.
+- `additionalDates`: array of local date-times, optional. RDATE — add one-off occurrences.
 
 `recurrenceRule`:
+- `frequency`: one of `secondly|minutely|hourly|daily|weekly|monthly|yearly`, required.
+- `interval`: integer >= 1, optional (default 1).
+- `count` XOR `until`: optional; never both. Neither → repeats forever. `until` is a local date-time.
+- `byDay`: array of `{ "day": <mo|tu|we|th|fr|sa|su>, "nthOfPeriod"?: <non-zero int> }`. An ordinal
+  `nthOfPeriod` (e.g. `{day:"mo",nthOfPeriod:1}` = first Monday) is valid only for monthly/yearly.
+- `byMonth`: 1..12. `byMonthDay`: -31..-1 or 1..31. `byYearDay`: -366..-1 or 1..366.
+  `byWeekNo`: -53..-1 or 1..53. `byHour`: 0..23. `byMinute`: 0..59. `bySecond`: 0..60 (60 = leap second).
+- `firstDayOfWeek`: one of `mo..su`, optional (WKST, default mo).
 
-* `frequency`: one of `secondly|minutely|hourly|daily|weekly|monthly|yearly`, required.
-* `interval`: integer >= 1, optional (default 1).
-* `count` XOR `until`: optional; never both. Neither → repeats forever. `until` is a local date-time.
-* `byDay`: array of `{ "day": <mo|tu|we|th|fr|sa|su>, "nthOfPeriod"?: <non-zero int> }`. An ordinal `nthOfPeriod` (e.g. `{day:"mo",nthOfPeriod:1}` = first Monday) is valid only for monthly/yearly.
-* `byMonth`: 1..12. `byMonthDay`: -31..-1 or 1..31. `byYearDay`: -366..-1 or 1..366. `byWeekNo`: -53..-1 or 1..53. `byHour`: 0..23. `byMinute`: 0..59. `bySecond`: 0..60 (60 = leap second).
-* `firstDayOfWeek`: one of `mo..su`, optional (WKST, default mo).
+Numeric recurrence domains follow [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545.html) §3.3.10. Maps to a `VEVENT` per `events[]` entry on
+`.ics` export (post-MVP). See **Specification** below.
 
-Numeric recurrence domains follow [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545.html) §3.3.10. Maps to a `VEVENT` per `events[]` entry on `.ics` export (post-MVP). See **Specification** below.
+| Property | Value |
+| -------- | ----- |
+| Format | `JSCalendar-aligned JSON (RFC 8984)` |
+| Example | `{"timeZone": "America/New_York", "events": [{"start": "2025-01-06T09:00:00", "duration": "PT8H", "recurrenceRule": {"frequency": "weekly", "byDay": [{"day": "mo"}, {"day": "we"}, {"day": "fr"}]}}]}` |
+| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/schedules#scheduledata](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/schedules#scheduledata) |
 
-| Property      | Value                                                                                                                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format        | `JSCalendar-aligned JSON (RFC 8984)`                                                                                                                                                                    |
-| Example       | `{"timeZone": "America/New_York", "events": [{"start": "2025-01-06T09:00:00", "duration": "PT8H", "recurrenceRule": {"frequency": "weekly", "byDay": [{"day": "mo"}, {"day": "we"}, {"day": "fr"}]}}]}` |
-| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/schedules#scheduledata](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/schedules#scheduledata)              |
-
-***
+---
 
 ## Pagination types
+
+<a id="scheduleconnection"></a>
 
 ### ScheduleConnection
 
 A paginated list of Schedule items.
 
-**Implements:** [Connection](common.md#type-connection)
+**Implements:** [Connection](common.md#connection)
 
-| Field      | Type                                                | Description                                                |
-| ---------- | --------------------------------------------------- | ---------------------------------------------------------- |
-| `edges`    | \[[ScheduleEdge](schedules.md#type-scheduleedge)!]! | A list of edges.                                           |
-| `nodes`    | \[[Schedule](schedules.md#type-schedule)!]!         | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](common.md#type-pageinfo)!                | Information about the current page.                        |
-| `total`    | [CountInfo](common.md#type-countinfo)               | The total count of items matching the filter.              |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `edges` | [[ScheduleEdge](#scheduleedge)!]! | A list of edges. |
+| `nodes` | [[Schedule](#schedule)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
-***
+---
+
+<a id="scheduleedge"></a>
 
 ### ScheduleEdge
 
 An edge in the Schedule connection.
 
-**Implements:** [Edge](common.md#type-edge)
+**Implements:** [Edge](common.md#edge)
 
-| Field    | Type                                    | Description                          |
-| -------- | --------------------------------------- | ------------------------------------ |
-| `cursor` | `String!`                               | An opaque cursor for this edge.      |
-| `node`   | [Schedule](schedules.md#type-schedule)! | The schedule at the end of the edge. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `cursor` | `String!` | An opaque cursor for this edge. |
+| `node` | [Schedule](#schedule)! | The schedule at the end of the edge. |
 
-***
+---

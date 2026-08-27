@@ -1,23 +1,23 @@
 ---
 description: >-
-  Complete reference for assets: queries, mutations, and types for the trackable
-  business objects your workspace monitors and manages.
+  Complete reference for geo objects: queries, mutations, and types for
+  geofences, points of interest, and routes with GeoJSON geometry.
 ---
 
-# Assets
+# Geo objects
 
-{% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-Assets represent any trackable business object - vehicles, equipment, personnel, or any other entity you need to monitor and manage.
+Geo objects define geographic boundaries and points of interest - geofences, routes, and landmarks used for location-based automation.
 
 ## Queries
 
-### assetTypes
+### geoObjectTypes
 
-Lists asset types for a workspace.
+Lists geo object types for a workspace.
 
 ```graphql
-assetTypes(
+geoObjectTypes(
     workspaceId: ID!
     filter: CatalogItemFilter
     first: Int
@@ -25,20 +25,20 @@ assetTypes(
     last: Int
     before: String
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
-  ): AssetTypeConnection!
+  ): GeoObjectTypeConnection!
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to retrieve asset types for. |
-| `filter` | `CatalogItemFilter` | Filtering options for the returned asset types. |
+| `workspaceId` | `ID!` | The workspace to retrieve geo object types for. |
+| `filter` | `CatalogItemFilter` | Filtering options for the returned geo object types. |
 | `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
-| `orderBy` | `CatalogItemOrder` | The ordering options for the returned asset types. |
+| `orderBy` | `CatalogItemOrder` | The ordering options for the returned geo object types. |
 
 **Input types:**
 
@@ -51,7 +51,7 @@ Filtering options for catalog items.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `codes` | [[Code](../common.md#code)!] | Match any of these codes. |
+| `codes` | [[Code](common.md#code)!] | Match any of these codes. |
 
 </details>
 
@@ -63,8 +63,8 @@ Ordering options for catalog items.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [CatalogItemOrderField](../catalogs/catalog-items.md#catalogitemorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
+| `field` | [CatalogItemOrderField](catalogs/catalog-items.md#catalogitemorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -72,104 +72,103 @@ Ordering options for catalog items.
 
 <details>
 
-<summary>AssetTypeConnection</summary>
+<summary>GeoObjectTypeConnection</summary>
 
-A paginated list of AssetType items.
+A paginated list of GeoObjectType items.
 
-**Implements:** [Connection](../common.md#connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AssetTypeEdge](#assettypeedge)!]! | A list of edges. |
-| `nodes` | [[AssetType](#assettype)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
+| `edges` | [[GeoObjectTypeEdge](#geoobjecttypeedge)!]! | A list of edges. |
+| `nodes` | [[GeoObjectType](#geoobjecttype)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
 ---
 
-### asset (query)
+### geoObject (query)
 
-Retrieves an asset by its ID.
+Retrieves a geo object by its ID.
 
 ```graphql
-asset(id: ID!): Asset
+geoObject(id: ID!): GeoObject
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `id` | `ID!` | The ID of the asset to retrieve. |
+| `id` | `ID!` | The ID of the geo object to retrieve. |
 
 **Output types:**
 
 <details>
 
-<summary>Asset</summary>
+<summary>GeoObject</summary>
 
-A physical or logical asset being tracked.
+A geographic object such as a geofence, point of interest, or route.
 
-**Implements:** [Node](../common.md#node), [Titled](../common.md#titled), [Customizable](../common.md#customizable), [Versioned](../common.md#versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Customizable](common.md#customizable), [Versioned](common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
-| `type` | [AssetType](#assettype)! | The asset type classification. |
-| `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
-| `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
-| `groups` | [AssetGroupConnection](groups.md#assetgroupconnection)! | The groups this asset belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
+| `containsPoints` | [[PointContainmentResult](#pointcontainmentresult)!]! | Checks if the given points are contained within this geo object's geometry. Returns the containment status for each point. Only applicable to Polygon and MultiPolygon geometries. |
 
 </details>
 
 ---
 
-### assets
+### geoObjects
 
-Lists assets for a workspace.
+Lists geo objects for a workspace.
 
 ```graphql
-assets(
+geoObjects(
     workspaceId: ID!
-    filter: AssetFilter
+    filter: GeoObjectFilter
     first: Int
     after: String
     last: Int
     before: String
-    orderBy: AssetOrder = { field: TITLE, direction: ASC }
-  ): AssetConnection!
+    orderBy: GeoObjectOrder = { field: TITLE, direction: ASC }
+  ): GeoObjectConnection!
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to retrieve assets for. |
-| `filter` | `AssetFilter` | Filtering options for the returned assets. |
+| `workspaceId` | `ID!` | The workspace to retrieve geo objects for. |
+| `filter` | `GeoObjectFilter` | Filtering options for the returned geo objects. |
 | `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
-| `orderBy` | `AssetOrder` | The ordering options for the returned assets. |
+| `orderBy` | `GeoObjectOrder` | The ordering options for the returned geo objects. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetFilter</summary>
+<summary>GeoObjectFilter</summary>
 
-Filtering options for assets.
+Filtering options for geo objects.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `typeIds` | `[ID!]` | Filter by asset types (OR within field). |
-| `deviceIds` | `[ID!]` | Filter by linked devices (OR within field). |
+| `typeIds` | `[ID!]` | Filter by geo object types (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
+| `customFields` | [[CustomFieldFilter](custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
 
 </details>
 
@@ -181,9 +180,9 @@ A filter condition for a custom field value.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The custom field code to filter by. |
-| `operator` | [FieldOperator](../custom-fields.md#fieldoperator)! | The comparison operator. |
-| `value` | [CustomFieldFilterValue](../custom-fields.md#customfieldfiltervalue) | The value to compare against. Null for `IS_NULL` and `IS_NOT_NULL` operators. |
+| `code` | [Code](common.md#code)! | The custom field code to filter by. |
+| `operator` | [FieldOperator](custom-fields.md#fieldoperator)! | The comparison operator. |
+| `value` | [CustomFieldFilterValue](custom-fields.md#customfieldfiltervalue) | The value to compare against. Null for `IS_NULL` and `IS_NOT_NULL` operators. |
 
 </details>
 
@@ -212,11 +211,11 @@ Choose the variant that matches the custom field's data type:
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `string` | `String` | String value — for STRING, TEXT, OPTIONS fields. |
-| `decimal` | [Decimal](../common.md#decimal) | Arbitrary-precision decimal value — for DECIMAL fields. |
-| `integer` | [Long](../common.md#long) | Signed 64-bit integer value — for INTEGER fields. |
+| `decimal` | [Decimal](common.md#decimal) | Arbitrary-precision decimal value — for DECIMAL fields. |
+| `integer` | [Long](common.md#long) | Signed 64-bit integer value — for INTEGER fields. |
 | `boolean` | `Boolean` | Boolean value — for BOOLEAN fields. |
-| `date` | [Date](../common.md#date) | Date value — for DATE fields. |
-| `datetime` | [DateTime](../common.md#datetime) | Date-time value — for DATETIME fields. |
+| `date` | [Date](common.md#date) | Date value — for DATE fields. |
+| `datetime` | [DateTime](common.md#datetime) | Date-time value — for DATETIME fields. |
 | `id` | `ID` | ID value — for DEVICE, REFERENCE fields. |
 | `stringList` | `[String!]` | List of strings — for IN operator on string-based fields. |
 | `idList` | `[ID!]` | List of IDs — for IN operator on reference fields. |
@@ -225,15 +224,15 @@ Choose the variant that matches the custom field's data type:
 
 <details>
 
-<summary>AssetOrder</summary>
+<summary>GeoObjectOrder</summary>
 
-Ordering options for assets.
+Ordering options for geo objects.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [AssetOrderField](#assetorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
-| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
-| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
+| `field` | [GeoObjectOrderField](#geoobjectorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
+| `customFieldCode` | [Code](common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -241,18 +240,18 @@ Ordering options for assets.
 
 <details>
 
-<summary>AssetConnection</summary>
+<summary>GeoObjectConnection</summary>
 
-A paginated list of Asset items.
+A paginated list of GeoObject items.
 
-**Implements:** [Connection](../common.md#connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AssetEdge](#assetedge)!]! | A list of edges. |
-| `nodes` | [[Asset](#asset)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
+| `edges` | [[GeoObjectEdge](#geoobjectedge)!]! | A list of edges. |
+| `nodes` | [[GeoObject](#geoobject)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -260,36 +259,37 @@ A paginated list of Asset items.
 
 ## Mutations
 
-### assetCreate
+### geoObjectCreate
 
-Creates a new asset.
+Creates a new geo object.
 
 ```graphql
-assetCreate(
-    input: AssetCreateInput!
-  ): AssetPayload
+geoObjectCreate(
+    input: GeoObjectCreateInput!
+  ): GeoObjectPayload
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `AssetCreateInput!` | The input fields for creating the asset. |
+| `input` | `GeoObjectCreateInput!` | The input fields for creating the geo object. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetCreateInput</summary>
+<summary>GeoObjectCreateInput</summary>
 
-Input for creating a new asset.
+Input for creating a new geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace that will own the asset. |
-| `typeId` | `ID!` | The asset type ID. |
-| `title` | `String!` | The asset display name. |
-| `customFields` | [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput) | The custom field values. |
+| `workspaceId` | `ID!` | The workspace that will own the geo object. |
+| `typeId` | `ID!` | The geo object type ID. |
+| `title` | `String!` | The geo object display name. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The GeoJSON geometry. |
+| `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 </details>
 
@@ -305,8 +305,8 @@ via their required `isPrimary` flag — there is no separate setPrimary/unsetPri
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `set` | [[CustomFieldValueInput](../custom-fields.md#customfieldvalueinput)!] | Field values to set or overwrite. |
-| `unset` | [[Code](../common.md#code)!] | Field codes to remove entirely. |
+| `set` | [[CustomFieldValueInput](custom-fields.md#customfieldvalueinput)!] | Field values to set or overwrite. |
+| `unset` | [[Code](common.md#code)!] | Field codes to remove entirely. |
 
 </details>
 
@@ -321,8 +321,8 @@ An `isDefault` override cannot be changed on its own: send the current value alo
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The custom field code. |
-| `value` | [CustomFieldValueDataInput](../custom-fields.md#customfieldvaluedatainput) | The typed value. Null clears the field but keeps the key (distinct from `unset`). |
+| `code` | [Code](common.md#code)! | The custom field code. |
+| `value` | [CustomFieldValueDataInput](custom-fields.md#customfieldvaluedatainput) | The typed value. Null clears the field but keeps the key (distinct from `unset`). |
 | `isDefault` | `Boolean` | Overrides the definition's `isDefault` for this entity, in either direction. Omit to leave any existing override untouched; the override is dropped when the field is `unset` or its value is cleared. |
 
 </details>
@@ -354,17 +354,17 @@ field's declared FieldType:
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `string` | `String` | STRING / TEXT value. |
-| `decimal` | [Decimal](../common.md#decimal) | DECIMAL value (arbitrary precision, string-encoded). |
-| `integer` | [Long](../common.md#long) | INTEGER value (signed 64-bit). |
+| `decimal` | [Decimal](common.md#decimal) | DECIMAL value (arbitrary precision, string-encoded). |
+| `integer` | [Long](common.md#long) | INTEGER value (signed 64-bit). |
 | `boolean` | `Boolean` | BOOLEAN value. |
-| `date` | [Date](../common.md#date) | DATE value. |
-| `datetime` | [DateTime](../common.md#datetime) | DATETIME value. |
-| `geojson` | [GeoJSON](../common.md#geojson) | GEOJSON value. |
-| `device` | [DeviceValueInput](../custom-fields.md#devicevalueinput) | DEVICE value (primary-capable). |
-| `reference` | [ReferenceValueInput](../custom-fields.md#referencevalueinput) | REFERENCE value for a single-value field (primary-capable). |
-| `references` | [ReferenceListValueInput](../custom-fields.md#referencelistvalueinput) | REFERENCE value for an isMulti field (primary-capable). |
-| `option` | [Code](../common.md#code) | OPTIONS value for a single-value field. |
-| `options` | [[Code](../common.md#code)!] | OPTIONS value for an isMulti field. |
+| `date` | [Date](common.md#date) | DATE value. |
+| `datetime` | [DateTime](common.md#datetime) | DATETIME value. |
+| `geojson` | [GeoJSON](common.md#geojson) | GEOJSON value. |
+| `device` | [DeviceValueInput](custom-fields.md#devicevalueinput) | DEVICE value (primary-capable). |
+| `reference` | [ReferenceValueInput](custom-fields.md#referencevalueinput) | REFERENCE value for a single-value field (primary-capable). |
+| `references` | [ReferenceListValueInput](custom-fields.md#referencelistvalueinput) | REFERENCE value for an isMulti field (primary-capable). |
+| `option` | [Code](common.md#code) | OPTIONS value for a single-value field. |
+| `options` | [[Code](common.md#code)!] | OPTIONS value for an isMulti field. |
 
 </details>
 
@@ -412,69 +412,70 @@ REFERENCE custom-field value for an isMulti field.
 
 <details>
 
-<summary>AssetPayload</summary>
+<summary>GeoObjectPayload</summary>
 
-The result of an asset mutation.
+The result of a geo object mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `asset` | [Asset](#asset)! | The created or updated asset. |
+| `geoObject` | [GeoObject](#geoobject)! | The created or updated geo object. |
 
 </details>
 
 <details>
 
-<summary>Asset (entity)</summary>
+<summary>GeoObject (entity)</summary>
 
-A physical or logical asset being tracked.
+A geographic object such as a geofence, point of interest, or route.
 
-**Implements:** [Node](../common.md#node), [Titled](../common.md#titled), [Customizable](../common.md#customizable), [Versioned](../common.md#versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Customizable](common.md#customizable), [Versioned](common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
-| `type` | [AssetType](#assettype)! | The asset type classification. |
-| `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
-| `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
-| `groups` | [AssetGroupConnection](groups.md#assetgroupconnection)! | The groups this asset belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
+| `containsPoints` | [[PointContainmentResult](#pointcontainmentresult)!]! | Checks if the given points are contained within this geo object's geometry. Returns the containment status for each point. Only applicable to Polygon and MultiPolygon geometries. |
 
 </details>
 
 ---
 
-### assetUpdate
+### geoObjectUpdate
 
-Updates an existing asset.
+Updates an existing geo object.
 
 ```graphql
-assetUpdate(
-    input: AssetUpdateInput!
-  ): AssetPayload
+geoObjectUpdate(
+    input: GeoObjectUpdateInput!
+  ): GeoObjectPayload
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `AssetUpdateInput!` | The input fields for updating the asset. |
+| `input` | `GeoObjectUpdateInput!` | The input fields for updating the geo object. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetUpdateInput</summary>
+<summary>GeoObjectUpdateInput</summary>
 
-Input for updating an existing asset.
+Input for updating an existing geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The asset ID to update. |
+| `id` | `ID!` | The geo object ID to update. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
-| `customFields` | [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput) | The custom field changes. |
+| `geojsonData` | [GeoJSON](common.md#geojson) | The new geometry. |
+| `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field changes. |
 
 </details>
 
@@ -490,8 +491,8 @@ via their required `isPrimary` flag — there is no separate setPrimary/unsetPri
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `set` | [[CustomFieldValueInput](../custom-fields.md#customfieldvalueinput)!] | Field values to set or overwrite. |
-| `unset` | [[Code](../common.md#code)!] | Field codes to remove entirely. |
+| `set` | [[CustomFieldValueInput](custom-fields.md#customfieldvalueinput)!] | Field values to set or overwrite. |
+| `unset` | [[Code](common.md#code)!] | Field codes to remove entirely. |
 
 </details>
 
@@ -506,8 +507,8 @@ An `isDefault` override cannot be changed on its own: send the current value alo
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The custom field code. |
-| `value` | [CustomFieldValueDataInput](../custom-fields.md#customfieldvaluedatainput) | The typed value. Null clears the field but keeps the key (distinct from `unset`). |
+| `code` | [Code](common.md#code)! | The custom field code. |
+| `value` | [CustomFieldValueDataInput](custom-fields.md#customfieldvaluedatainput) | The typed value. Null clears the field but keeps the key (distinct from `unset`). |
 | `isDefault` | `Boolean` | Overrides the definition's `isDefault` for this entity, in either direction. Omit to leave any existing override untouched; the override is dropped when the field is `unset` or its value is cleared. |
 
 </details>
@@ -539,17 +540,17 @@ field's declared FieldType:
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `string` | `String` | STRING / TEXT value. |
-| `decimal` | [Decimal](../common.md#decimal) | DECIMAL value (arbitrary precision, string-encoded). |
-| `integer` | [Long](../common.md#long) | INTEGER value (signed 64-bit). |
+| `decimal` | [Decimal](common.md#decimal) | DECIMAL value (arbitrary precision, string-encoded). |
+| `integer` | [Long](common.md#long) | INTEGER value (signed 64-bit). |
 | `boolean` | `Boolean` | BOOLEAN value. |
-| `date` | [Date](../common.md#date) | DATE value. |
-| `datetime` | [DateTime](../common.md#datetime) | DATETIME value. |
-| `geojson` | [GeoJSON](../common.md#geojson) | GEOJSON value. |
-| `device` | [DeviceValueInput](../custom-fields.md#devicevalueinput) | DEVICE value (primary-capable). |
-| `reference` | [ReferenceValueInput](../custom-fields.md#referencevalueinput) | REFERENCE value for a single-value field (primary-capable). |
-| `references` | [ReferenceListValueInput](../custom-fields.md#referencelistvalueinput) | REFERENCE value for an isMulti field (primary-capable). |
-| `option` | [Code](../common.md#code) | OPTIONS value for a single-value field. |
-| `options` | [[Code](../common.md#code)!] | OPTIONS value for an isMulti field. |
+| `date` | [Date](common.md#date) | DATE value. |
+| `datetime` | [DateTime](common.md#datetime) | DATETIME value. |
+| `geojson` | [GeoJSON](common.md#geojson) | GEOJSON value. |
+| `device` | [DeviceValueInput](custom-fields.md#devicevalueinput) | DEVICE value (primary-capable). |
+| `reference` | [ReferenceValueInput](custom-fields.md#referencevalueinput) | REFERENCE value for a single-value field (primary-capable). |
+| `references` | [ReferenceListValueInput](custom-fields.md#referencelistvalueinput) | REFERENCE value for an isMulti field (primary-capable). |
+| `option` | [Code](common.md#code) | OPTIONS value for a single-value field. |
+| `options` | [[Code](common.md#code)!] | OPTIONS value for an isMulti field. |
 
 </details>
 
@@ -597,46 +598,46 @@ REFERENCE custom-field value for an isMulti field.
 
 <details>
 
-<summary>AssetPayload</summary>
+<summary>GeoObjectPayload</summary>
 
-The result of an asset mutation.
+The result of a geo object mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `asset` | [Asset](#asset)! | The created or updated asset. |
+| `geoObject` | [GeoObject](#geoobject)! | The created or updated geo object. |
 
 </details>
 
 <details>
 
-<summary>Asset (entity)</summary>
+<summary>GeoObject (entity)</summary>
 
-A physical or logical asset being tracked.
+A geographic object such as a geofence, point of interest, or route.
 
-**Implements:** [Node](../common.md#node), [Titled](../common.md#titled), [Customizable](../common.md#customizable), [Versioned](../common.md#versioned)
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Customizable](common.md#customizable), [Versioned](common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
-| `type` | [AssetType](#assettype)! | The asset type classification. |
-| `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
-| `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
-| `groups` | [AssetGroupConnection](groups.md#assetgroupconnection)! | The groups this asset belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
+| `containsPoints` | [[PointContainmentResult](#pointcontainmentresult)!]! | Checks if the given points are contained within this geo object's geometry. Returns the containment status for each point. Only applicable to Polygon and MultiPolygon geometries. |
 
 </details>
 
 ---
 
-### assetDelete
+### geoObjectDelete
 
-Deletes an asset.
+Deletes a geo object.
 
 ```graphql
-assetDelete(
-    input: AssetDeleteInput!
+geoObjectDelete(
+    input: GeoObjectDeleteInput!
   ): DeletePayload
 ```
 
@@ -644,19 +645,19 @@ assetDelete(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `AssetDeleteInput!` | The input fields for deleting the asset. |
+| `input` | `GeoObjectDeleteInput!` | The input fields for deleting the geo object. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetDeleteInput</summary>
+<summary>GeoObjectDeleteInput</summary>
 
-Input for deleting an asset.
+Input for deleting a geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The asset ID to delete. |
+| `id` | `ID!` | The geo object ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
 </details>
@@ -677,38 +678,38 @@ The result of a delete mutation.
 
 ---
 
-### assetTypeCreate
+### geoObjectTypeCreate
 
-Creates a new asset type.
+Creates a new geo object type.
 
 ```graphql
-assetTypeCreate(
-    input: AssetTypeCreateInput!
-  ): AssetTypePayload
+geoObjectTypeCreate(
+    input: GeoObjectTypeCreateInput!
+  ): GeoObjectTypePayload
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `AssetTypeCreateInput!` | The input fields for creating the asset type. |
+| `input` | `GeoObjectTypeCreateInput!` | The input fields for creating the geo object type. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetTypeCreateInput</summary>
+<summary>GeoObjectTypeCreateInput</summary>
 
-Input for creating an asset type.
+Input for creating a geo object type.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `workspaceId` | `ID!` | The workspace that will own the item. |
-| `code` | [Code](../common.md#code) | The machine-readable code. Auto-generated from title if omitted. |
+| `code` | [Code](common.md#code) | The machine-readable code. Auto-generated from title if omitted. |
 | `title` | `String!` | The display name. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `meta` | [CatalogItemMetaInput](../catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinitionInput](../custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions for this asset type. Only `create` is allowed when creating a new catalog item. |
+| `meta` | [CatalogItemMetaInput](catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinitionInput](custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions for this geo object type. Only `create` is allowed when creating a new catalog item. |
 
 </details>
 
@@ -736,11 +737,11 @@ Exactly one action must be provided.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `create` | [CustomFieldDefinitionCreateData](../custom-fields.md#customfielddefinitioncreatedata) | Create a new custom field definition. |
-| `update` | [CustomFieldDefinitionUpdateData](../custom-fields.md#customfielddefinitionupdatedata) | Update an existing custom field definition. |
-| `delete` | [CustomFieldDefinitionDeleteData](../custom-fields.md#customfielddefinitiondeletedata) | Delete a custom field definition. |
-| `archive` | [CustomFieldDefinitionArchiveData](../custom-fields.md#customfielddefinitionarchivedata) | Archive a custom field definition (non-destructive deactivation). |
-| `restore` | [CustomFieldDefinitionRestoreData](../custom-fields.md#customfielddefinitionrestoredata) | Restore a previously archived custom field definition. |
+| `create` | [CustomFieldDefinitionCreateData](custom-fields.md#customfielddefinitioncreatedata) | Create a new custom field definition. |
+| `update` | [CustomFieldDefinitionUpdateData](custom-fields.md#customfielddefinitionupdatedata) | Update an existing custom field definition. |
+| `delete` | [CustomFieldDefinitionDeleteData](custom-fields.md#customfielddefinitiondeletedata) | Delete a custom field definition. |
+| `archive` | [CustomFieldDefinitionArchiveData](custom-fields.md#customfielddefinitionarchivedata) | Archive a custom field definition (non-destructive deactivation). |
+| `restore` | [CustomFieldDefinitionRestoreData](custom-fields.md#customfielddefinitionrestoredata) | Restore a previously archived custom field definition. |
 
 </details>
 
@@ -752,12 +753,12 @@ Data for creating a custom field definition within its parent catalog item.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code) | The machine-readable code. Must start with `cf_`, so a custom-field code can never be confused with an entity's own field name. Auto-generated from the title if omitted, prefix included. The prefix also keeps this input clear of the platform's own reserved code `geojson_data`. |
+| `code` | [Code](common.md#code) | The machine-readable code. Must start with `cf_`, so a custom-field code can never be confused with an entity's own field name. Auto-generated from the title if omitted, prefix included. The prefix also keeps this input clear of the platform's own reserved code `geojson_data`. |
 | `title` | `String!` | The display name. |
 | `description` | `String` | The description. |
-| `fieldType` | [FieldType](../custom-fields.md#fieldtype)! | The data type. Immutable after creation. |
+| `fieldType` | [FieldType](custom-fields.md#fieldtype)! | The data type. Immutable after creation. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `params` | [FieldParamsInput](../custom-fields.md#fieldparamsinput)! | The type-specific parameters. Exactly one variant must be provided. |
+| `params` | [FieldParamsInput](custom-fields.md#fieldparamsinput)! | The type-specific parameters. Exactly one variant must be provided. |
 | `isDefault` | `Boolean` | Whether the field is on by default for entities of this type. Defaults to false. |
 
 </details>
@@ -772,17 +773,17 @@ Field parameters input. Exactly one field must be provided.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `string` | [StringFieldParamsInput](../custom-fields.md#stringfieldparamsinput) | Parameters for STRING field type. |
-| `text` | [TextFieldParamsInput](../custom-fields.md#textfieldparamsinput) | Parameters for TEXT field type. |
-| `decimal` | [DecimalFieldParamsInput](../custom-fields.md#decimalfieldparamsinput) | Parameters for DECIMAL field type. |
-| `integer` | [IntegerFieldParamsInput](../custom-fields.md#integerfieldparamsinput) | Parameters for INTEGER field type. |
-| `boolean` | [BooleanFieldParamsInput](../custom-fields.md#booleanfieldparamsinput) | Parameters for BOOLEAN field type. |
-| `date` | [DateFieldParamsInput](../custom-fields.md#datefieldparamsinput) | Parameters for DATE field type. |
-| `datetime` | [DateTimeFieldParamsInput](../custom-fields.md#datetimefieldparamsinput) | Parameters for DATETIME field type. |
-| `geojson` | [GeoJsonFieldParamsInput](../custom-fields.md#geojsonfieldparamsinput) | Parameters for GEOJSON field type. |
-| `options` | [OptionsFieldParamsInput](../custom-fields.md#optionsfieldparamsinput) | Parameters for OPTIONS field type. |
-| `device` | [DeviceFieldParamsInput](../custom-fields.md#devicefieldparamsinput) | Parameters for DEVICE field type. |
-| `reference` | [ReferenceFieldParamsInput](../custom-fields.md#referencefieldparamsinput) | Parameters for REFERENCE field type. |
+| `string` | [StringFieldParamsInput](custom-fields.md#stringfieldparamsinput) | Parameters for STRING field type. |
+| `text` | [TextFieldParamsInput](custom-fields.md#textfieldparamsinput) | Parameters for TEXT field type. |
+| `decimal` | [DecimalFieldParamsInput](custom-fields.md#decimalfieldparamsinput) | Parameters for DECIMAL field type. |
+| `integer` | [IntegerFieldParamsInput](custom-fields.md#integerfieldparamsinput) | Parameters for INTEGER field type. |
+| `boolean` | [BooleanFieldParamsInput](custom-fields.md#booleanfieldparamsinput) | Parameters for BOOLEAN field type. |
+| `date` | [DateFieldParamsInput](custom-fields.md#datefieldparamsinput) | Parameters for DATE field type. |
+| `datetime` | [DateTimeFieldParamsInput](custom-fields.md#datetimefieldparamsinput) | Parameters for DATETIME field type. |
+| `geojson` | [GeoJsonFieldParamsInput](custom-fields.md#geojsonfieldparamsinput) | Parameters for GEOJSON field type. |
+| `options` | [OptionsFieldParamsInput](custom-fields.md#optionsfieldparamsinput) | Parameters for OPTIONS field type. |
+| `device` | [DeviceFieldParamsInput](custom-fields.md#devicefieldparamsinput) | Parameters for DEVICE field type. |
+| `reference` | [ReferenceFieldParamsInput](custom-fields.md#referencefieldparamsinput) | Parameters for REFERENCE field type. |
 
 </details>
 
@@ -826,10 +827,10 @@ Parameters for DECIMAL field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `minDecimal` | [Decimal](../common.md#decimal) | The minimum allowed value. |
-| `maxDecimal` | [Decimal](../common.md#decimal) | The maximum allowed value. |
+| `minDecimal` | [Decimal](common.md#decimal) | The minimum allowed value. |
+| `maxDecimal` | [Decimal](common.md#decimal) | The maximum allowed value. |
 | `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
-| `defaultDecimal` | [Decimal](../common.md#decimal) | The default value. |
+| `defaultDecimal` | [Decimal](common.md#decimal) | The default value. |
 
 </details>
 
@@ -842,9 +843,9 @@ Parameters for INTEGER field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `minInteger` | [Long](../common.md#long) | The minimum allowed value. |
-| `maxInteger` | [Long](../common.md#long) | The maximum allowed value. |
-| `defaultInteger` | [Long](../common.md#long) | The default value. |
+| `minInteger` | [Long](common.md#long) | The minimum allowed value. |
+| `maxInteger` | [Long](common.md#long) | The maximum allowed value. |
+| `defaultInteger` | [Long](common.md#long) | The default value. |
 
 </details>
 
@@ -870,7 +871,7 @@ Parameters for DATE field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `defaultDate` | [Date](../common.md#date) | The default value. |
+| `defaultDate` | [Date](common.md#date) | The default value. |
 
 </details>
 
@@ -883,7 +884,7 @@ Parameters for DATETIME field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `defaultDatetime` | [DateTime](../common.md#datetime) | The default value. |
+| `defaultDatetime` | [DateTime](common.md#datetime) | The default value. |
 
 </details>
 
@@ -896,7 +897,7 @@ Parameters for GEOJSON field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `allowedTypes` | [[GeoJsonGeometryType](../geo-objects.md#geojsongeometrytype)!] | The allowed geometry types. Null means all types are allowed. |
+| `allowedTypes` | [[GeoJsonGeometryType](#geojsongeometrytype)!] | The allowed geometry types. Null means all types are allowed. |
 
 </details>
 
@@ -910,8 +911,8 @@ Parameters for OPTIONS field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `isMulti` | `Boolean` | Whether multiple options can be selected. |
-| `options` | [[FieldOptionInput](../custom-fields.md#fieldoptioninput)!]! | The available options. |
-| `defaultOptions` | [Code](../common.md#code) | The default option code. |
+| `options` | [[FieldOptionInput](custom-fields.md#fieldoptioninput)!]! | The available options. |
+| `defaultOptions` | [Code](common.md#code) | The default option code. |
 
 </details>
 
@@ -925,7 +926,7 @@ If the label already exists within this field, an error is returned.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code) | The unique code. Auto-generated from label if omitted. |
+| `code` | [Code](common.md#code) | The unique code. Auto-generated from label if omitted. |
 | `label` | `String!` | The display label. Must be unique within the custom field. |
 | `description` | `String` | The description. |
 | `isArchived` | `Boolean` | Whether this option is archived. |
@@ -955,7 +956,7 @@ Parameters for REFERENCE field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `isMulti` | `Boolean` | Whether multiple entities can be referenced. |
-| `refEntityTypeCode` | [Code](../common.md#code)! | The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`. The `customFieldTypes` query lists the accepted values for a given owner. |
+| `refEntityTypeCode` | [Code](common.md#code)! | The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`. The `customFieldTypes` query lists the accepted values for a given owner. |
 | `refSubtypeIds` | `[ID!]` | The subtype IDs a value may belong to (AssetType / GeoObjectType / catalog). Required for `user_catalog_item`, which needs exactly one catalog; rejected for target types that nothing narrows further. Omit or leave empty to allow the whole target type. |
 | `defaultRefIds` | `[ID!]` | The default referenced entity IDs. |
 
@@ -969,11 +970,11 @@ Data for updating an existing custom field definition. Note: `fieldType` cannot 
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to update. |
+| `code` | [Code](common.md#code)! | The code of the field definition to update. |
 | `title` | `String` | The new display name. |
 | `description` | `String` | The new description. |
 | `order` | `Int` | The new display order. |
-| `params` | [FieldParamsInput](../custom-fields.md#fieldparamsinput) | The updated parameters. Only `isRequired` and type-specific fields can be changed. |
+| `params` | [FieldParamsInput](custom-fields.md#fieldparamsinput) | The updated parameters. Only `isRequired` and type-specific fields can be changed. |
 | `isDefault` | `Boolean` | The new type-level default. Omit to leave unchanged. |
 
 </details>
@@ -991,8 +992,8 @@ Prefer archiving for non-destructive deactivation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to delete. |
-| `onValues` | [CustomFieldDefinitionDeleteBehavior](../custom-fields.md#customfielddefinitiondeletebehavior) | What to do when existing entities have values for this field. Defaults to `REJECT` to prevent accidental data loss. |
+| `code` | [Code](common.md#code)! | The code of the field definition to delete. |
+| `onValues` | [CustomFieldDefinitionDeleteBehavior](custom-fields.md#customfielddefinitiondeletebehavior) | What to do when existing entities have values for this field. Defaults to `REJECT` to prevent accidental data loss. |
 
 </details>
 
@@ -1009,7 +1010,7 @@ Archiving deactivates the field without data loss:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to archive. |
+| `code` | [Code](common.md#code)! | The code of the field definition to archive. |
 
 </details>
 
@@ -1021,7 +1022,7 @@ Data for restoring a previously archived custom field definition.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to restore. |
+| `code` | [Code](common.md#code)! | The code of the field definition to restore. |
 
 </details>
 
@@ -1029,63 +1030,63 @@ Data for restoring a previously archived custom field definition.
 
 <details>
 
-<summary>AssetTypePayload</summary>
+<summary>GeoObjectTypePayload</summary>
 
-The result of an asset type mutation.
+The result of a geo object type mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `assetType` | [AssetType](#assettype)! | The created or updated asset type. |
+| `geoObjectType` | [GeoObjectType](#geoobjecttype)! | The created or updated geo object type. |
 
 </details>
 
 <details>
 
-<summary>AssetType (entity)</summary>
+<summary>GeoObjectType (entity)</summary>
 
-A classification type for assets.
+A classification type for geographic objects.
 
-**Implements:** [CatalogItem](../catalogs/catalog-items.md#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
+**Implements:** [CatalogItem](catalogs/catalog-items.md#catalogitem), [Node](common.md#node), [Versioned](common.md#versioned), [Titled](common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
+| `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
 </details>
 
 ---
 
-### assetTypeUpdate
+### geoObjectTypeUpdate
 
-Updates an asset type.
+Updates a geo object type.
 
 ```graphql
-assetTypeUpdate(
-    input: AssetTypeUpdateInput!
-  ): AssetTypePayload
+geoObjectTypeUpdate(
+    input: GeoObjectTypeUpdateInput!
+  ): GeoObjectTypePayload
 ```
 
 **Arguments**
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `AssetTypeUpdateInput!` | The input fields for updating the asset type. |
+| `input` | `GeoObjectTypeUpdateInput!` | The input fields for updating the geo object type. |
 
 **Input types:**
 
 <details>
 
-<summary>AssetTypeUpdateInput</summary>
+<summary>GeoObjectTypeUpdateInput</summary>
 
-Input for updating an asset type.
+Input for updating a geo object type.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -1093,8 +1094,8 @@ Input for updating an asset type.
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
 | `order` | `Int` | The new display order. |
-| `meta` | [CatalogItemMetaInput](../catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinitionInput](../custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions belonging to this asset type. |
+| `meta` | [CatalogItemMetaInput](catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinitionInput](custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions belonging to this geo object type. |
 
 </details>
 
@@ -1122,11 +1123,11 @@ Exactly one action must be provided.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `create` | [CustomFieldDefinitionCreateData](../custom-fields.md#customfielddefinitioncreatedata) | Create a new custom field definition. |
-| `update` | [CustomFieldDefinitionUpdateData](../custom-fields.md#customfielddefinitionupdatedata) | Update an existing custom field definition. |
-| `delete` | [CustomFieldDefinitionDeleteData](../custom-fields.md#customfielddefinitiondeletedata) | Delete a custom field definition. |
-| `archive` | [CustomFieldDefinitionArchiveData](../custom-fields.md#customfielddefinitionarchivedata) | Archive a custom field definition (non-destructive deactivation). |
-| `restore` | [CustomFieldDefinitionRestoreData](../custom-fields.md#customfielddefinitionrestoredata) | Restore a previously archived custom field definition. |
+| `create` | [CustomFieldDefinitionCreateData](custom-fields.md#customfielddefinitioncreatedata) | Create a new custom field definition. |
+| `update` | [CustomFieldDefinitionUpdateData](custom-fields.md#customfielddefinitionupdatedata) | Update an existing custom field definition. |
+| `delete` | [CustomFieldDefinitionDeleteData](custom-fields.md#customfielddefinitiondeletedata) | Delete a custom field definition. |
+| `archive` | [CustomFieldDefinitionArchiveData](custom-fields.md#customfielddefinitionarchivedata) | Archive a custom field definition (non-destructive deactivation). |
+| `restore` | [CustomFieldDefinitionRestoreData](custom-fields.md#customfielddefinitionrestoredata) | Restore a previously archived custom field definition. |
 
 </details>
 
@@ -1138,12 +1139,12 @@ Data for creating a custom field definition within its parent catalog item.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code) | The machine-readable code. Must start with `cf_`, so a custom-field code can never be confused with an entity's own field name. Auto-generated from the title if omitted, prefix included. The prefix also keeps this input clear of the platform's own reserved code `geojson_data`. |
+| `code` | [Code](common.md#code) | The machine-readable code. Must start with `cf_`, so a custom-field code can never be confused with an entity's own field name. Auto-generated from the title if omitted, prefix included. The prefix also keeps this input clear of the platform's own reserved code `geojson_data`. |
 | `title` | `String!` | The display name. |
 | `description` | `String` | The description. |
-| `fieldType` | [FieldType](../custom-fields.md#fieldtype)! | The data type. Immutable after creation. |
+| `fieldType` | [FieldType](custom-fields.md#fieldtype)! | The data type. Immutable after creation. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `params` | [FieldParamsInput](../custom-fields.md#fieldparamsinput)! | The type-specific parameters. Exactly one variant must be provided. |
+| `params` | [FieldParamsInput](custom-fields.md#fieldparamsinput)! | The type-specific parameters. Exactly one variant must be provided. |
 | `isDefault` | `Boolean` | Whether the field is on by default for entities of this type. Defaults to false. |
 
 </details>
@@ -1158,17 +1159,17 @@ Field parameters input. Exactly one field must be provided.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `string` | [StringFieldParamsInput](../custom-fields.md#stringfieldparamsinput) | Parameters for STRING field type. |
-| `text` | [TextFieldParamsInput](../custom-fields.md#textfieldparamsinput) | Parameters for TEXT field type. |
-| `decimal` | [DecimalFieldParamsInput](../custom-fields.md#decimalfieldparamsinput) | Parameters for DECIMAL field type. |
-| `integer` | [IntegerFieldParamsInput](../custom-fields.md#integerfieldparamsinput) | Parameters for INTEGER field type. |
-| `boolean` | [BooleanFieldParamsInput](../custom-fields.md#booleanfieldparamsinput) | Parameters for BOOLEAN field type. |
-| `date` | [DateFieldParamsInput](../custom-fields.md#datefieldparamsinput) | Parameters for DATE field type. |
-| `datetime` | [DateTimeFieldParamsInput](../custom-fields.md#datetimefieldparamsinput) | Parameters for DATETIME field type. |
-| `geojson` | [GeoJsonFieldParamsInput](../custom-fields.md#geojsonfieldparamsinput) | Parameters for GEOJSON field type. |
-| `options` | [OptionsFieldParamsInput](../custom-fields.md#optionsfieldparamsinput) | Parameters for OPTIONS field type. |
-| `device` | [DeviceFieldParamsInput](../custom-fields.md#devicefieldparamsinput) | Parameters for DEVICE field type. |
-| `reference` | [ReferenceFieldParamsInput](../custom-fields.md#referencefieldparamsinput) | Parameters for REFERENCE field type. |
+| `string` | [StringFieldParamsInput](custom-fields.md#stringfieldparamsinput) | Parameters for STRING field type. |
+| `text` | [TextFieldParamsInput](custom-fields.md#textfieldparamsinput) | Parameters for TEXT field type. |
+| `decimal` | [DecimalFieldParamsInput](custom-fields.md#decimalfieldparamsinput) | Parameters for DECIMAL field type. |
+| `integer` | [IntegerFieldParamsInput](custom-fields.md#integerfieldparamsinput) | Parameters for INTEGER field type. |
+| `boolean` | [BooleanFieldParamsInput](custom-fields.md#booleanfieldparamsinput) | Parameters for BOOLEAN field type. |
+| `date` | [DateFieldParamsInput](custom-fields.md#datefieldparamsinput) | Parameters for DATE field type. |
+| `datetime` | [DateTimeFieldParamsInput](custom-fields.md#datetimefieldparamsinput) | Parameters for DATETIME field type. |
+| `geojson` | [GeoJsonFieldParamsInput](custom-fields.md#geojsonfieldparamsinput) | Parameters for GEOJSON field type. |
+| `options` | [OptionsFieldParamsInput](custom-fields.md#optionsfieldparamsinput) | Parameters for OPTIONS field type. |
+| `device` | [DeviceFieldParamsInput](custom-fields.md#devicefieldparamsinput) | Parameters for DEVICE field type. |
+| `reference` | [ReferenceFieldParamsInput](custom-fields.md#referencefieldparamsinput) | Parameters for REFERENCE field type. |
 
 </details>
 
@@ -1212,10 +1213,10 @@ Parameters for DECIMAL field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `minDecimal` | [Decimal](../common.md#decimal) | The minimum allowed value. |
-| `maxDecimal` | [Decimal](../common.md#decimal) | The maximum allowed value. |
+| `minDecimal` | [Decimal](common.md#decimal) | The minimum allowed value. |
+| `maxDecimal` | [Decimal](common.md#decimal) | The maximum allowed value. |
 | `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
-| `defaultDecimal` | [Decimal](../common.md#decimal) | The default value. |
+| `defaultDecimal` | [Decimal](common.md#decimal) | The default value. |
 
 </details>
 
@@ -1228,9 +1229,9 @@ Parameters for INTEGER field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `minInteger` | [Long](../common.md#long) | The minimum allowed value. |
-| `maxInteger` | [Long](../common.md#long) | The maximum allowed value. |
-| `defaultInteger` | [Long](../common.md#long) | The default value. |
+| `minInteger` | [Long](common.md#long) | The minimum allowed value. |
+| `maxInteger` | [Long](common.md#long) | The maximum allowed value. |
+| `defaultInteger` | [Long](common.md#long) | The default value. |
 
 </details>
 
@@ -1256,7 +1257,7 @@ Parameters for DATE field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `defaultDate` | [Date](../common.md#date) | The default value. |
+| `defaultDate` | [Date](common.md#date) | The default value. |
 
 </details>
 
@@ -1269,7 +1270,7 @@ Parameters for DATETIME field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `defaultDatetime` | [DateTime](../common.md#datetime) | The default value. |
+| `defaultDatetime` | [DateTime](common.md#datetime) | The default value. |
 
 </details>
 
@@ -1282,7 +1283,7 @@ Parameters for GEOJSON field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `allowedTypes` | [[GeoJsonGeometryType](../geo-objects.md#geojsongeometrytype)!] | The allowed geometry types. Null means all types are allowed. |
+| `allowedTypes` | [[GeoJsonGeometryType](#geojsongeometrytype)!] | The allowed geometry types. Null means all types are allowed. |
 
 </details>
 
@@ -1296,8 +1297,8 @@ Parameters for OPTIONS field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `isMulti` | `Boolean` | Whether multiple options can be selected. |
-| `options` | [[FieldOptionInput](../custom-fields.md#fieldoptioninput)!]! | The available options. |
-| `defaultOptions` | [Code](../common.md#code) | The default option code. |
+| `options` | [[FieldOptionInput](custom-fields.md#fieldoptioninput)!]! | The available options. |
+| `defaultOptions` | [Code](common.md#code) | The default option code. |
 
 </details>
 
@@ -1311,7 +1312,7 @@ If the label already exists within this field, an error is returned.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code) | The unique code. Auto-generated from label if omitted. |
+| `code` | [Code](common.md#code) | The unique code. Auto-generated from label if omitted. |
 | `label` | `String!` | The display label. Must be unique within the custom field. |
 | `description` | `String` | The description. |
 | `isArchived` | `Boolean` | Whether this option is archived. |
@@ -1341,7 +1342,7 @@ Parameters for REFERENCE field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `isMulti` | `Boolean` | Whether multiple entities can be referenced. |
-| `refEntityTypeCode` | [Code](../common.md#code)! | The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`. The `customFieldTypes` query lists the accepted values for a given owner. |
+| `refEntityTypeCode` | [Code](common.md#code)! | The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`. The `customFieldTypes` query lists the accepted values for a given owner. |
 | `refSubtypeIds` | `[ID!]` | The subtype IDs a value may belong to (AssetType / GeoObjectType / catalog). Required for `user_catalog_item`, which needs exactly one catalog; rejected for target types that nothing narrows further. Omit or leave empty to allow the whole target type. |
 | `defaultRefIds` | `[ID!]` | The default referenced entity IDs. |
 
@@ -1355,11 +1356,11 @@ Data for updating an existing custom field definition. Note: `fieldType` cannot 
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to update. |
+| `code` | [Code](common.md#code)! | The code of the field definition to update. |
 | `title` | `String` | The new display name. |
 | `description` | `String` | The new description. |
 | `order` | `Int` | The new display order. |
-| `params` | [FieldParamsInput](../custom-fields.md#fieldparamsinput) | The updated parameters. Only `isRequired` and type-specific fields can be changed. |
+| `params` | [FieldParamsInput](custom-fields.md#fieldparamsinput) | The updated parameters. Only `isRequired` and type-specific fields can be changed. |
 | `isDefault` | `Boolean` | The new type-level default. Omit to leave unchanged. |
 
 </details>
@@ -1377,8 +1378,8 @@ Prefer archiving for non-destructive deactivation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to delete. |
-| `onValues` | [CustomFieldDefinitionDeleteBehavior](../custom-fields.md#customfielddefinitiondeletebehavior) | What to do when existing entities have values for this field. Defaults to `REJECT` to prevent accidental data loss. |
+| `code` | [Code](common.md#code)! | The code of the field definition to delete. |
+| `onValues` | [CustomFieldDefinitionDeleteBehavior](custom-fields.md#customfielddefinitiondeletebehavior) | What to do when existing entities have values for this field. Defaults to `REJECT` to prevent accidental data loss. |
 
 </details>
 
@@ -1395,7 +1396,7 @@ Archiving deactivates the field without data loss:
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to archive. |
+| `code` | [Code](common.md#code)! | The code of the field definition to archive. |
 
 </details>
 
@@ -1407,7 +1408,7 @@ Data for restoring a previously archived custom field definition.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../common.md#code)! | The code of the field definition to restore. |
+| `code` | [Code](common.md#code)! | The code of the field definition to restore. |
 
 </details>
 
@@ -1415,46 +1416,46 @@ Data for restoring a previously archived custom field definition.
 
 <details>
 
-<summary>AssetTypePayload</summary>
+<summary>GeoObjectTypePayload</summary>
 
-The result of an asset type mutation.
+The result of a geo object type mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `assetType` | [AssetType](#assettype)! | The created or updated asset type. |
+| `geoObjectType` | [GeoObjectType](#geoobjecttype)! | The created or updated geo object type. |
 
 </details>
 
 <details>
 
-<summary>AssetType (entity)</summary>
+<summary>GeoObjectType (entity)</summary>
 
-A classification type for assets.
+A classification type for geographic objects.
 
-**Implements:** [CatalogItem](../catalogs/catalog-items.md#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
+**Implements:** [CatalogItem](catalogs/catalog-items.md#catalogitem), [Node](common.md#node), [Versioned](common.md#versioned), [Titled](common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
+| `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
 </details>
 
 ---
 
-### assetTypeDelete
+### geoObjectTypeDelete
 
-Deletes an asset type.
+Deletes a geo object type.
 
 ```graphql
-assetTypeDelete(
+geoObjectTypeDelete(
     input: CatalogItemDeleteInput!
   ): DeletePayload
 ```
@@ -1463,7 +1464,7 @@ assetTypeDelete(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `input` | `CatalogItemDeleteInput!` | The input fields for deleting the asset type. |
+| `input` | `CatalogItemDeleteInput!` | The input fields for deleting the geo object type. |
 
 **Input types:**
 
@@ -1498,169 +1499,214 @@ The result of a delete mutation.
 
 ## Objects
 
-<a id="assettype"></a>
+<a id="geoobjecttype"></a>
 
-### AssetType
+### GeoObjectType
 
-A classification type for assets.
+A classification type for geographic objects.
 
-**Implements:** [CatalogItem](../catalogs/catalog-items.md#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
+**Implements:** [CatalogItem](catalogs/catalog-items.md#catalogitem), [Node](common.md#node), [Versioned](common.md#versioned), [Titled](common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. |
 | `title` | `String!` | The human-readable display name. Can be localized. |
-| `code` | [Code](../common.md#code)! | A machine-readable code, unique within the catalog scope. |
+| `code` | [Code](common.md#code)! | A machine-readable code, unique within the catalog scope. |
 | `order` | `Int!` | The display order within the same level or category. |
-| `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
-| `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
+| `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
 ---
 
-<a id="asset"></a>
+<a id="geopoint"></a>
 
-### Asset
+### GeoPoint
 
-A physical or logical asset being tracked.
+A geographic coordinate point.
 
-**Implements:** [Node](../common.md#node), [Titled](../common.md#titled), [Customizable](../common.md#customizable), [Versioned](../common.md#versioned)
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `lat` | [Latitude](common.md#latitude)! | The latitude coordinate in decimal degrees. |
+| `lng` | [Longitude](common.md#longitude)! | The longitude coordinate in decimal degrees. |
+| `altitude` | `Float` | The altitude in meters above sea level. |
+| `accuracy` | `Float` | The horizontal accuracy in meters. |
+
+---
+
+<a id="geoobject"></a>
+
+### GeoObject
+
+A geographic object such as a geofence, point of interest, or route.
+
+**Implements:** [Node](common.md#node), [Titled](common.md#titled), [Customizable](common.md#customizable), [Versioned](common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
-| `type` | [AssetType](#assettype)! | The asset type classification. |
-| `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
-| `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
-| `groups` | [AssetGroupConnection](groups.md#assetgroupconnection)! | The groups this asset belongs to. |
+| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
+| `containsPoints` | [[PointContainmentResult](#pointcontainmentresult)!]! | Checks if the given points are contained within this geo object's geometry. Returns the containment status for each point. Only applicable to Polygon and MultiPolygon geometries. |
 
 ---
 
-<a id="assetpayload"></a>
+<a id="pointcontainmentresult"></a>
 
-### AssetPayload
+### PointContainmentResult
 
-The result of an asset mutation.
+The result of checking whether a point is contained within a geometry.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `asset` | [Asset](#asset)! | The created or updated asset. |
+| `index` | `Int!` | The index of the point in the input array (0-based). |
+| `point` | [GeoPoint](#geopoint)! | The point that was checked. |
+| `isContained` | `Boolean!` | Whether the point is inside the geometry. |
 
 ---
 
-<a id="assettypepayload"></a>
+<a id="geoobjectpayload"></a>
 
-### AssetTypePayload
+### GeoObjectPayload
 
-The result of an asset type mutation.
+The result of a geo object mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `assetType` | [AssetType](#assettype)! | The created or updated asset type. |
+| `geoObject` | [GeoObject](#geoobject)! | The created or updated geo object. |
+
+---
+
+<a id="geoobjecttypepayload"></a>
+
+### GeoObjectTypePayload
+
+The result of a geo object type mutation.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `geoObjectType` | [GeoObjectType](#geoobjecttype)! | The created or updated geo object type. |
 
 ---
 
 ## Inputs
 
-<a id="assetfilter"></a>
+<a id="geopointinput"></a>
 
-### AssetFilter
+### GeoPointInput
 
-Filtering options for assets.
+Input for a geographic coordinate point.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `typeIds` | `[ID!]` | Filter by asset types (OR within field). |
-| `deviceIds` | `[ID!]` | Filter by linked devices (OR within field). |
+| `lat` | [Latitude](common.md#latitude)! | The latitude coordinate (-90 to 90 degrees). |
+| `lng` | [Longitude](common.md#longitude)! | The longitude coordinate (-180 to 180 degrees). |
+| `altitude` | `Float` | The altitude in meters above sea level. |
+| `accuracy` | `Float` | The horizontal accuracy in meters. |
+
+---
+
+<a id="geoobjectfilter"></a>
+
+### GeoObjectFilter
+
+Filtering options for geo objects.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `typeIds` | `[ID!]` | Filter by geo object types (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
+| `customFields` | [[CustomFieldFilter](custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
 
 ---
 
-<a id="assetorder"></a>
+<a id="geoobjectorder"></a>
 
-### AssetOrder
+### GeoObjectOrder
 
-Ordering options for assets.
+Ordering options for geo objects.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [AssetOrderField](#assetorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
-| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
-| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
+| `field` | [GeoObjectOrderField](#geoobjectorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
+| `customFieldCode` | [Code](common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
+| `direction` | [OrderDirection](common.md#orderdirection)! | The direction to order. |
 
 ---
 
-<a id="assetcreateinput"></a>
+<a id="geoobjectcreateinput"></a>
 
-### AssetCreateInput
+### GeoObjectCreateInput
 
-Input for creating a new asset.
+Input for creating a new geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace that will own the asset. |
-| `typeId` | `ID!` | The asset type ID. |
-| `title` | `String!` | The asset display name. |
-| `customFields` | [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput) | The custom field values. |
+| `workspaceId` | `ID!` | The workspace that will own the geo object. |
+| `typeId` | `ID!` | The geo object type ID. |
+| `title` | `String!` | The geo object display name. |
+| `geojsonData` | [GeoJSON](common.md#geojson)! | The GeoJSON geometry. |
+| `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 ---
 
-<a id="assetupdateinput"></a>
+<a id="geoobjectupdateinput"></a>
 
-### AssetUpdateInput
+### GeoObjectUpdateInput
 
-Input for updating an existing asset.
+Input for updating an existing geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The asset ID to update. |
+| `id` | `ID!` | The geo object ID to update. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
-| `customFields` | [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput) | The custom field changes. |
+| `geojsonData` | [GeoJSON](common.md#geojson) | The new geometry. |
+| `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field changes. |
 
 ---
 
-<a id="assetdeleteinput"></a>
+<a id="geoobjectdeleteinput"></a>
 
-### AssetDeleteInput
+### GeoObjectDeleteInput
 
-Input for deleting an asset.
+Input for deleting a geo object.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The asset ID to delete. |
+| `id` | `ID!` | The geo object ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
 ---
 
-<a id="assettypecreateinput"></a>
+<a id="geoobjecttypecreateinput"></a>
 
-### AssetTypeCreateInput
+### GeoObjectTypeCreateInput
 
-Input for creating an asset type.
+Input for creating a geo object type.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `workspaceId` | `ID!` | The workspace that will own the item. |
-| `code` | [Code](../common.md#code) | The machine-readable code. Auto-generated from title if omitted. |
+| `code` | [Code](common.md#code) | The machine-readable code. Auto-generated from title if omitted. |
 | `title` | `String!` | The display name. |
 | `order` | `Int` | The display order. Auto-calculated as last position if omitted. |
-| `meta` | [CatalogItemMetaInput](../catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinitionInput](../custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions for this asset type. Only `create` is allowed when creating a new catalog item. |
+| `meta` | [CatalogItemMetaInput](catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinitionInput](custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions for this geo object type. Only `create` is allowed when creating a new catalog item. |
 
 ---
 
-<a id="assettypeupdateinput"></a>
+<a id="geoobjecttypeupdateinput"></a>
 
-### AssetTypeUpdateInput
+### GeoObjectTypeUpdateInput
 
-Input for updating an asset type.
+Input for updating a geo object type.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -1668,18 +1714,36 @@ Input for updating an asset type.
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
 | `order` | `Int` | The new display order. |
-| `meta` | [CatalogItemMetaInput](../catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
-| `customFieldDefinitions` | [[CustomFieldDefinitionInput](../custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions belonging to this asset type. |
+| `meta` | [CatalogItemMetaInput](catalogs/catalog-items.md#catalogitemmetainput) | The display properties. |
+| `customFieldDefinitions` | [[CustomFieldDefinitionInput](custom-fields.md#customfielddefinitioninput)!] | Operations on custom field definitions belonging to this geo object type. |
 
 ---
 
 ## Enums
 
-<a id="assetorderfield"></a>
+<a id="geojsongeometrytype"></a>
 
-### AssetOrderField
+### GeoJsonGeometryType
 
-Fields available for ordering assets.
+The type of GeoJSON geometry.
+
+| Value | Description |
+| ----- | ----------- |
+| `POINT` | A single geographic point. |
+| `MULTI_POINT` | A collection of points. |
+| `LINE_STRING` | A sequence of connected line segments. |
+| `MULTI_LINE_STRING` | A collection of line strings. |
+| `POLYGON` | A closed shape defined by a linear ring. |
+| `MULTI_POLYGON` | A collection of polygons. |
+| `GEOMETRY_COLLECTION` | A heterogeneous collection of geometry objects. |
+
+---
+
+<a id="geoobjectorderfield"></a>
+
+### GeoObjectOrderField
+
+Fields available for ordering geo objects.
 
 | Value | Description |
 | ----- | ----------- |
@@ -1689,66 +1753,66 @@ Fields available for ordering assets.
 
 ## Pagination types
 
-<a id="assetconnection"></a>
+<a id="geoobjectconnection"></a>
 
-### AssetConnection
+### GeoObjectConnection
 
-A paginated list of Asset items.
+A paginated list of GeoObject items.
 
-**Implements:** [Connection](../common.md#connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AssetEdge](#assetedge)!]! | A list of edges. |
-| `nodes` | [[Asset](#asset)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
+| `edges` | [[GeoObjectEdge](#geoobjectedge)!]! | A list of edges. |
+| `nodes` | [[GeoObject](#geoobject)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="assetedge"></a>
+<a id="geoobjectedge"></a>
 
-### AssetEdge
+### GeoObjectEdge
 
-An edge in the Asset connection.
+An edge in the GeoObject connection.
 
-**Implements:** [Edge](../common.md#edge)
+**Implements:** [Edge](common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [Asset](#asset)! | The asset at the end of the edge. |
+| `node` | [GeoObject](#geoobject)! | The geo object at the end of the edge. |
 
 ---
 
-<a id="assettypeconnection"></a>
+<a id="geoobjecttypeconnection"></a>
 
-### AssetTypeConnection
+### GeoObjectTypeConnection
 
-A paginated list of AssetType items.
+A paginated list of GeoObjectType items.
 
-**Implements:** [Connection](../common.md#connection)
+**Implements:** [Connection](common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[AssetTypeEdge](#assettypeedge)!]! | A list of edges. |
-| `nodes` | [[AssetType](#assettype)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
+| `edges` | [[GeoObjectTypeEdge](#geoobjecttypeedge)!]! | A list of edges. |
+| `nodes` | [[GeoObjectType](#geoobjecttype)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="assettypeedge"></a>
+<a id="geoobjecttypeedge"></a>
 
-### AssetTypeEdge
+### GeoObjectTypeEdge
 
-An edge in the AssetType connection.
+An edge in the GeoObjectType connection.
 
-**Implements:** [Edge](../common.md#edge)
+**Implements:** [Edge](common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [AssetType](#assettype)! | The asset type at the end of the edge. |
+| `node` | [GeoObjectType](#geoobjecttype)! | The geo object type at the end of the edge. |
 
 ---

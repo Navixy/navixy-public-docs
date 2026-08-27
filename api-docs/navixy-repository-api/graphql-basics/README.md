@@ -6,7 +6,7 @@ description: >-
 
 # GraphQL basics
 
-{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
 
 This article introduces GraphQL for developers who are new to it. If you've worked with REST APIs before, you'll find GraphQL takes a different approach to requesting and modifying data.
 
@@ -35,29 +35,31 @@ GraphQL works differently:
 
 ### Sample request
 
-Imagine you need to display a device's title, its status name, and the organization it belongs to.
+Imagine you need to display a device's title, its status name, and the workspace it belongs to.
 
 With REST, you might need multiple requests:
 
 ```bash
-GET /devices/123     # returns device data including status_id and organization_id
+GET /devices/123     # returns device data including status_id and workspace_id
 
 GET /statuses/456    # returns status data
 
-GET /organizations/789    # returns organization data
+GET /workspaces/789  # returns workspace data
 ```
 
 With GraphQL, you make one request and specify exactly what you need:
 
 ```graphql
 query {
-  device(id: "123") {
-    title
-    status {
+  bdr {
+    device(id: "123") {
       title
-    }
-    organization {
-      title
+      status {
+        title
+      }
+      workspace {
+        title
+      }
     }
   }
 }
@@ -68,13 +70,15 @@ The response contains only what you asked for:
 ```json
 {
   "data": {
-    "device": {
-      "title": "Truck 42",
-      "status": {
-        "title": "Active"
-      },
-      "organization": {
-        "title": "Berlin Fleet"
+    "bdr": {
+      "device": {
+        "title": "Truck 42",
+        "status": {
+          "title": "Active"
+        },
+        "workspace": {
+          "title": "Berlin Fleet"
+        }
       }
     }
   }
@@ -86,6 +90,26 @@ The response contains only what you asked for:
 Navixy Repository API has one endpoint.
 
 Every request — reading data, creating something, or subscribing to updates — goes to the same URL. The request body tells the API what you want to do.
+
+## Module namespaces
+
+The Navixy 4 platform serves more than one product module through this endpoint, and each module has its own entry point. All Navixy Repository API operations live under the `bdr` field, so every query and mutation in these docs starts the same way:
+
+```graphql
+query {
+  bdr {
+    devices(workspaceId: "...", first: 10) {
+      nodes { id title }
+    }
+  }
+}
+```
+
+The response mirrors the same structure: your data sits under `data.bdr`.
+
+The `bdr` block sets one rule for mutations: a single block may select only one mutation field. To run several mutations in one request, alias the `bdr` field itself, one block per call — see [Batch mutations](graphql-tips-and-patterns.md#batch-mutations). Queries have no such rule: one `bdr` block can select as many query fields as you need.
+
+Two lookup queries stay at the top level, outside any module: `node` and `nodes`, which retrieve any entity by its globally unique ID.
 
 ## Operations
 
@@ -105,9 +129,11 @@ Here's a simple query that fetches a device:
 
 ```graphql
 query {
-  device(id: "550e8400-e29b-41d4-a716-446655440001") {
-    id
-    title
+  bdr {
+    device(id: "550e8400-e29b-41d4-a716-446655440001") {
+      id
+      title
+    }
   }
 }
 ```
@@ -124,9 +150,11 @@ The response mirrors your query structure:
 ```json
 {
   "data": {
-    "device": {
-      "id": "550e8400-e29b-41d4-a716-446655440001",
-      "title": "Truck 42"
+    "bdr": {
+      "device": {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "title": "Truck 42"
+      }
     }
   }
 }
@@ -136,12 +164,14 @@ Notice that the response contains only `id` and `title` — exactly what you req
 
 ```graphql
 query {
-  device(id: "550e8400-e29b-41d4-a716-446655440001") {
-    id
-    title
-    status {
-      code
+  bdr {
+    device(id: "550e8400-e29b-41d4-a716-446655440001") {
+      id
       title
+      status {
+        code
+        title
+      }
     }
   }
 }
@@ -157,15 +187,17 @@ Here's a mutation that updates a device's title:
 
 ```graphql
 mutation {
-  deviceUpdate(input: {
-    id: "550e8400-e29b-41d4-a716-446655440001"
-    version: 5
-    title: "Truck 42 - Berlin"
-  }) {
-    device {
-      id
-      version
-      title
+  bdr {
+    deviceUpdate(input: {
+      id: "550e8400-e29b-41d4-a716-446655440001"
+      version: 5
+      title: "Truck 42 - Berlin"
+    }) {
+      device {
+        id
+        version
+        title
+      }
     }
   }
 }
@@ -183,11 +215,13 @@ The response shows the updated data:
 ```json
 {
   "data": {
-    "deviceUpdate": {
-      "device": {
-        "id": "550e8400-e29b-41d4-a716-446655440001",
-        "version": 6,
-        "title": "Truck 42 - Berlin"
+    "bdr": {
+      "deviceUpdate": {
+        "device": {
+          "id": "550e8400-e29b-41d4-a716-446655440001",
+          "version": 6,
+          "title": "Truck 42 - Berlin"
+        }
       }
     }
   }
@@ -200,14 +234,16 @@ Here's a mutation that creates a new asset:
 
 ```graphql
 mutation {
-  assetCreate(input: {
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    typeId: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
-    title: "Delivery Van 7"
-  }) {
-    asset {
-      id
-      title
+  bdr {
+    assetCreate(input: {
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      typeId: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+      title: "Delivery Van 7"
+    }) {
+      asset {
+        id
+        title
+      }
     }
   }
 }
@@ -228,10 +264,10 @@ Every object type in the API has a defined set of fields. For example, a `Device
 * `id`: the unique identifier
 * `title`: the display name
 * `status`: the current status (which is itself an object with its own fields)
-* `organization`: the organization that owns it
-* `customFields`: custom data specific to your setup
+* `workspace`: the workspace that owns it
+* `identifiers`: the hardware identifiers, such as IMEI or serial number
 
-You only get the fields you ask for. If you don't need `customFields`, don't include it in your query, and it won't be in the response.
+You only get the fields you ask for. If you don't need `identifiers`, don't include it in your query, and it won't be in the response.
 
 ### Nested fields
 
@@ -239,21 +275,23 @@ Some fields return objects rather than simple values. When a field returns an ob
 
 ```graphql
 query {
-  device(id: "550e8400-e29b-41d4-a716-446655440001") {
-    title
-    status {
-      code
+  bdr {
+    device(id: "550e8400-e29b-41d4-a716-446655440001") {
       title
-    }
-    organization {
-      title
-      features
+      status {
+        code
+        title
+      }
+      workspace {
+        title
+        isActive
+      }
     }
   }
 }
 ```
 
-Here, `status` and `organization` are objects, so we specify their fields inside curly braces. The `title` and `code` fields return simple values (strings), so they don't need nested fields. The `features` field returns an array of enum values.
+Here, `status` and `workspace` are objects, so their fields go inside curly braces. The `title` and `code` fields return simple values (strings), so they don't need nested fields. `isActive` returns a boolean.
 
 ## Arguments
 
@@ -263,8 +301,10 @@ The `device` query requires an `id` argument to know which device to fetch:
 
 ```graphql
 query {
-  device(id: "550e8400-e29b-41d4-a716-446655440001") {
-    title
+  bdr {
+    device(id: "550e8400-e29b-41d4-a716-446655440001") {
+      title
+    }
   }
 }
 ```
@@ -273,22 +313,24 @@ The `devices` query (plural) can take optional arguments to filter results:
 
 ```graphql
 query {
-  devices(
-    organizationId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-    filter: {
-      statusIds: ["a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"]
-    }
-    first: 10
-  ) {
-    nodes {
-      id
-      title
+  bdr {
+    devices(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: {
+        statusIds: ["a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"]
+      }
+      first: 10
+    ) {
+      nodes {
+        id
+        title
+      }
     }
   }
 }
 ```
 
-This requests the first 10 devices from a specific organization with a specific status. The `organizationId` is a required argument, and `filter` allows additional criteria like filtering by multiple status IDs.
+This requests the first 10 devices from a specific workspace with a specific status. The `workspaceId` is a required argument, and `filter` allows additional criteria like filtering by multiple status IDs.
 
 ## Types
 
@@ -320,7 +362,7 @@ Navixy Repository API adds these custom scalar types:
 
 ### Object types
 
-Object types represent the things you can fetch from the API: devices, organizations, assets, users, and so on. Each object type defines a set of fields you can request.
+Object types represent the things you can fetch from the API: devices, workspaces, assets, users, and so on. Each object type defines a set of fields you can request.
 
 Here's what the `Device` type looks like in the schema:
 
@@ -330,8 +372,8 @@ type Device {
   version: Int!
   title: String!
   status: DeviceStatus!
-  organization: Organization!
-  customFields: JSON!
+  workspace: Workspace!
+  identifiers: [DeviceIdentifier!]!
   # ... more fields
 }
 ```
@@ -346,17 +388,19 @@ Some fields return scalar types (`id` returns `ID!`), while others return other 
 
 ```graphql
 query {
-  device(id: "...") {
-    title              # String — scalar, no nested fields needed
-    status {           # DeviceStatus — object type
-      code             # String
-      title            # String
+  bdr {
+    device(id: "...") {
+      title              # String — scalar, no nested fields needed
+      status {           # DeviceStatus — object type
+        code             # String
+        title            # String
+      }
     }
   }
 }
 ```
 
-In the API reference, you'll see object types like `Device`, `Organization`, `DeviceStatus`, and many others.
+In the API reference, you'll see object types like `Device`, `Workspace`, `DeviceStatus`, and many others.
 
 ### Enums
 
@@ -373,13 +417,15 @@ When using an enum in a query, write the value without quotes:
 
 ```graphql
 mutation {
-  permissionGrant(input: {
-    roleId: "..."
-    permissionScopeId: "..."
-    actions: [READ, UPDATE]
-  }) {
-    rolePermission {
-      id
+  bdr {
+    permissionGrant(input: {
+      roleId: "..."
+      permissionScopeId: "..."
+      actions: [READ, UPDATE]
+    }) {
+      rolePermission {
+        id
+      }
     }
   }
 }
@@ -389,18 +435,22 @@ mutation {
 
 Input types are used for mutation arguments. They look similar to object types but can only be used as inputs, not outputs.
 
-In the API reference, you'll see input types like `CreateDeviceInput`, `UpdateAssetInput`, and `DeviceFilter`. They define what fields you can (or must) provide:
+In the API reference, you'll see input types like `DeviceCreateInput`, `AssetUpdateInput`, and `DeviceFilter`. They define what fields you can (or must) provide:
 
 ```graphql
 mutation {
-  assetCreate(input: {           # AssetCreateInput
-    organizationId: "..."        # Required
-    typeId: "..."                # Required
-    title: "Delivery Van"        # Required
-    customFields: { "vin": "..." }  # Optional
-  }) {
-    asset {
-      id
+  bdr {
+    assetCreate(input: {           # AssetCreateInput
+      workspaceId: "..."           # Required
+      typeId: "..."                # Required
+      title: "Delivery Van"        # Required
+      customFields: {              # Optional
+        set: [{ code: "cf_vin", value: { string: "1HGBH41JXMN109186" } }]
+      }
+    }) {
+      asset {
+        id
+      }
     }
   }
 }
@@ -410,15 +460,15 @@ mutation {
 
 Interfaces define a set of fields shared by multiple types. If a type implements an interface, it guarantees those fields exist.
 
-For example, the `Node` interface requires the `id` field. Many types implement it: `Device`, `Asset`, `Organization`, and others. This means you can always request `id` from any of these types.
+For example, the `Node` interface requires the `id` field. Many types implement it: `Device`, `Asset`, `Workspace`, and others. This means you can always request `id` from any of these types.
 
-The `Versioned` interface provides the `version` field used for optimistic locking. Types implementing it will always have this field available for concurrency control.
+The `Versioned` interface provides the `version` field, so you can always request `version` on types that implement it and include it when you update them. See [Optimistic locking](../optimistic-locking.md) for how the field is used.
 
 ## Type syntax
 
 The API reference uses special notation to indicate whether fields are required and whether they return single values or lists.
 
-**Required vs nullable**
+### Required vs nullable
 
 The `!` symbol means a value is required (non-null):
 
@@ -430,11 +480,11 @@ The `!` symbol means a value is required (non-null):
 For arguments, `!` means you must provide a value:
 
 ```graphql
-# id is required (UUID!), you must provide it
+# id is required (ID!), you must provide it
 device(id: "...")
 
-# title is optional (String without !), you can omit it
-devices(filter: { title: "Truck" })
+# filter is optional (DeviceFilter without !), you can omit it
+devices(workspaceId: "...", filter: { titleContains: "Truck" })
 ```
 
 ### Arrays
@@ -446,12 +496,10 @@ Square brackets `[]` indicate a list of values:
 The most common pattern is `[Type!]!` — a guaranteed list where every item exists:
 
 ```graphql
-# edges is [DeviceEdge!]! — always returns a list, every item is a valid edge
-devices(pagination: { first: 10 }) {
-  edges {        # Never null, never contains null items
-    node {
-      title
-    }
+# nodes is [Device!]! — always returns a list, every item is a valid device
+devices(workspaceId: "...", first: 10) {
+  nodes {        # Never null, never contains null items
+    title
   }
 }
 ```
@@ -467,7 +515,7 @@ When you see a type like `[DeviceEdge!]!` in the API reference:
 
 So `[DeviceEdge!]!` means "you'll always get a list, and every item in that list will be a valid DeviceEdge object."
 
-## Understanding responses
+## How responses work
 
 GraphQL responses are JSON objects with a consistent structure.
 
@@ -478,9 +526,11 @@ A successful response has a `data` field containing your requested data:
 ```json
 {
   "data": {
-    "device": {
-      "id": "550e8400-e29b-41d4-a716-446655440001",
-      "title": "Truck 42"
+    "bdr": {
+      "device": {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "title": "Truck 42"
+      }
     }
   }
 }
@@ -508,17 +558,17 @@ If something goes wrong, the response includes an `errors` array:
 }
 ```
 
-The `extensions` object contains machine-readable information for handling the error in your code. See Error handling for more information.
+The `extensions` object contains machine-readable information for handling the error in your code. See [Error handling](../error-handling.md) for more information.
 
 ## Schema
 
 A GraphQL API has a **schema** that defines all available types, fields, queries, and mutations. The schema is like a contract: it tells you exactly what you can request and what you'll get back.
 
-[Navixy Repository API schema](graphql-schema/schema.graphql) is public and available to developers.
+[Navixy Repository API schema](../graphql-schema/schema.graphql) is public and available to developers.
 
 ## Introspection
 
-GraphQL APIs are self-described. You can explore the schema using tools like our [sandbox](https://api.navixy.dev/v4/graphql/sandbox) or by querying the API directly — this is called **introspection**. GraphQL has special built-in fields that start with `__` (double underscore) for this purpose.
+GraphQL APIs are self-describing. You can explore the schema using tools like our [sandbox](https://api.navixy.dev/v4/graphql/sandbox) or by querying the API directly — this is called **introspection**. GraphQL has special built-in fields that start with `__` (double underscore) for this purpose.
 
 For example, to see all fields available on the `Device` type:
 
@@ -536,4 +586,5 @@ query {
 
 ## See also
 
-* [GraphQL tips and patterns:](graphql-basics/graphql-tips-and-patterns.md) variables, fragments, aliases, and more
+* [GraphQL tips and patterns](graphql-tips-and-patterns.md): Write cleaner requests with variables, fragments, aliases, and directives
+* [Error handling](../error-handling.md): Understand error structure, codes, and common error scenarios

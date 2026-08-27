@@ -13,4 +13,4 @@ This section contains detailed step-by-step tutorials for basic scenarios of usi
 * [Implementing custom fields](implementing-custom-fields.md)
 * [Managing schedules](managing-schedules.md)
 * [Working with geo objects](working-with-geo-objects.md)
-* [Configuring user permissions](configuring-user-permissions.md)
+* [Tracking changes with audit](tracking-changes-with-audit.md)

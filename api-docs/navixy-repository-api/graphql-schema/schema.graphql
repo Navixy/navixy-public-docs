@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema
-# Version: 0.6.10
+# Version: 0.8.0
 # =============================================================================
 #
 # TABLE OF CONTENTS
@@ -16,7 +16,7 @@
 # 9. Interfaces
 # 10. Pagination Types
 # 11. Catalog Item Types
-# 12. Organization
+# 12. Workspace
 # 13. Actors
 # 14. Access Control (ACL)
 # 15. Business Entities
@@ -51,11 +51,10 @@
 # CATALOG SYSTEM (Dictionaries)
 # ----------------------------
 # Catalogs are dictionaries/reference data used throughout the system.
-# Three types of catalog items by origin:
+# Two types of catalog items by origin:
 #
 #   SYSTEM              - Predefined by Navixy, immutable, available to all
-#   ORGANIZATION        - Created by specific organization
-#   PARENT_ORGANIZATION - Inherited from parent organization (dealer model)
+#   WORKSPACE        - Created by specific workspace
 #
 # Catalog items support:
 #   - Hierarchical structures (parent/children) for some types
@@ -276,7 +275,7 @@
 #   {
 #     "extensions": {
 #       // RFC 9457 standard fields
-#       "type": "https://www.navixy.com/docs/navixy-repository-api/error-handling#entity-not-found-404",
+#       "type": "https://api.navixy.com/errors/not-found",
 #       "title": "Resource Not Found",
 #       "status": 404,
 #       "detail": "Device with ID '019a6a3f-...' does not exist",
@@ -322,21 +321,22 @@
 # ERROR CODES REFERENCE
 # -----------------------------------------------------------------------------
 #
-#   | Code                | Type URI                                   | Status | Description                           |
-#   |---------------------|--------------------------------------------|--------|---------------------------------------|
-#   | UNAUTHORIZED        | .../error-handling#unauthorized-401                | 401    | Missing or invalid authentication     |
-#   | PERMISSION_DENIED   | .../error-handling#permission-denied-403           | 403    | Insufficient permissions              |
-#   | NOT_FOUND           | .../error-handling#entity-not-found-404            | 404    | Entity does not exist                 |
-#   | VALIDATION_ERROR    | .../error-handling##validation-error-400           | 400    | Input validation failed               |
-#   | CONFLICT            | .../error-handling#version-conflict-409            | 409    | Optimistic lock version mismatch      |
-#   | DUPLICATE           | .../error-handling#duplicate-409                   | 409    | Unique constraint violation           |
-#   | RATE_LIMITED        | .../error-handling#rate-limited-429                | 429    | Too many requests                     |
-#   | QUERY_TOO_COMPLEX   | .../error-handling#query-too-complex-400           | 400    | Query exceeds complexity limit        |
-#   | QUERY_TOO_DEEP      | .../error-handling#query-too-deep-400              | 400    | Query exceeds depth limit             |
-#   | INTERNAL_ERROR      | .../error-handling#internal-500                    | 500    | Unexpected server error               |
-#   | SERVICE_UNAVAILABLE | .../error-handling#service-unavailable-503         | 503    | Downstream service unavailable        |
+#   | Code                | Type URI                    | Status | Description                       |
+#   |---------------------|-----------------------------|--------|-----------------------------------|
+#   | UNAUTHORIZED        | .../errors/unauthorized     | 401    | Missing or invalid authentication |
+#   | PERMISSION_DENIED   | .../errors/forbidden        | 403    | Insufficient permissions          |
+#   | NOT_FOUND           | .../errors/not-found        | 404    | Entity does not exist             |
+#   | VALIDATION_ERROR    | .../errors/validation       | 400    | Input validation failed           |
+#   | CONFLICT            | .../errors/conflict         | 409    | Optimistic lock version mismatch  |
+#   | DUPLICATE           | .../errors/duplicate        | 409    | Unique constraint violation       |
+#   | RATE_LIMITED        | .../errors/rate-limited     | 429    | Too many requests                 |
+#   | QUERY_TOO_COMPLEX   | .../errors/query-too-complex| 400    | Query exceeds complexity limit    |
+#   | QUERY_TOO_DEEP      | .../errors/query-too-deep   | 400    | Query exceeds depth limit         |
+#   | INTERNAL_ERROR      | .../errors/internal         | 500    | Unexpected server error           |
+#   | SERVICE_UNAVAILABLE | .../errors/service-unavailable | 503 | Downstream service unavailable    |
 #
-#   Base URI: https://www.navixy.com/docs/navixy-repository-api
+#   Base URI: https://api.navixy.com — these are stable problem-type identifiers, not documentation
+#   links. The human-readable docs live at https://www.navixy.com/docs/navixy-repository-api.
 #
 # -----------------------------------------------------------------------------
 # ERROR EXAMPLES
@@ -354,7 +354,7 @@
 #         "path": ["device"],
 #         "locations": [{ "line": 1, "column": 9 }],
 #         "extensions": {
-#           "type": "https://www.navixy.com/docs/navixy-repository-api/error-handling#entity-not-found-404",
+#           "type": "https://api.navixy.com/errors/not-found",
 #           "title": "Resource Not Found",
 #           "status": 404,
 #           "detail": "Device with ID 'non-existent-id' does not exist",
@@ -379,7 +379,7 @@
 #         "path": ["deviceCreate"],
 #         "locations": [{ "line": 1, "column": 12 }],
 #         "extensions": {
-#           "type": "https://www.navixy.com/docs/navixy-repository-api/error-handling#validation-error-400",
+#           "type": "https://api.navixy.com/errors/validation",
 #           "title": "Validation Error",
 #           "status": 400,
 #           "detail": "Field 'title' must not be empty",
@@ -403,7 +403,7 @@
 #         "path": ["deviceUpdate"],
 #         "locations": [{ "line": 1, "column": 12 }],
 #         "extensions": {
-#           "type": "https://www.navixy.com/docs/navixy-repository-api/error-handling#version-conflict-409",
+#           "type": "https://api.navixy.com/errors/conflict",
 #           "title": "Optimistic Lock Conflict",
 #           "status": 409,
 #           "detail": "Device was modified. Expected version 5, current version 7",
@@ -430,7 +430,7 @@
 #         "path": ["deviceIdentifierAdd"],
 #         "locations": [{ "line": 1, "column": 12 }],
 #         "extensions": {
-#           "type": "https://www.navixy.com/docs/navixy-repository-api/error-handling#duplicate-409",
+#           "type": "https://api.navixy.com/errors/duplicate",
 #           "title": "Duplicate Entry",
 #           "status": 409,
 #           "detail": "Device identifier with type 'IMEI' and value '123456789012345' already exists",
@@ -485,12 +485,12 @@
 #
 # NULL PROPAGATION:
 #
-#   Query: { device(id: "...") { title organization { name } } }
+#   Query: { device(id: "...") { title workspace { name } } }
 #
-#   If organization resolver fails:
-#   - organization field becomes null
-#   - device field becomes null (because organization is non-nullable in type)
-#   - path: ["device", "organization"]
+#   If workspace resolver fails:
+#   - workspace field becomes null
+#   - device field becomes null (because workspace is non-nullable in type)
+#   - path: ["device", "workspace"]
 #
 # -----------------------------------------------------------------------------
 # HTTP STATUS CODES
@@ -615,6 +615,13 @@ scalar Date
 scalar JSON @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc8259")
 
 # @category: common
+"""
+A UUID (RFC 9562) owned by a system outside this API — unlike `ID`, which is always a platform
+UUIDv8 carrying an entity-type discriminator. Never accepted by `node(id:)`.
+"""
+scalar UUID @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc9562")
+
+# @category: common
 "A GeoJSON geometry object (RFC 7946). Supports Point, LineString, Polygon, and other geometry types."
 scalar GeoJSON @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc7946")
 
@@ -674,8 +681,8 @@ Constraints:
 - Maximum length: 64 characters
 
 Uniqueness:
-- For catalog items: unique within the same catalog and organization scope
-- For custom field definitions: unique per owner catalog item and organization
+- For catalog items: unique within the same catalog and workspace scope
+- For custom field definitions: unique per owner catalog item and workspace
 - For field options (OPTIONS type): unique within a single field definition
 - Additional uniqueness requirements may apply depending on context (see individual fields)
 
@@ -710,8 +717,8 @@ scalar Long @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api
 
 # @category: schedules
 """
-Schedule configuration as a JSON object — time intervals and recurrence. The same shape backs
-both the `Schedule` entity (`scheduleData`) and `FieldType.SCHEDULE` custom-field values.
+Schedule configuration as a JSON object — time intervals and recurrence. Backs the `Schedule`
+entity's `scheduleData`. Custom fields that need a schedule reference the entity instead.
 
 A **JSCalendar-aligned profile** (RFC 8984 field names) restricted to the subset that round-trips
 to iCalendar / RFC 5545 (`.ics`). All date-times are **local wall-clock** (no offset), interpreted
@@ -776,12 +783,10 @@ enum OrderDirection {
 # @category: catalogs/catalog-items
 "The origin of a catalog item, indicating how it was created."
 enum CatalogItemOrigin {
-  "Predefined by platform. Immutable and available to all organizations."
+  "Predefined by platform. Immutable and available to all workspaces."
   SYSTEM
-  "Created by the current organization."
-  ORGANIZATION
-  "Inherited from a parent organization in the dealer hierarchy."
-  PARENT_ORGANIZATION
+  "Created by the current workspace."
+  WORKSPACE
 }
 
 # @category: common
@@ -793,15 +798,6 @@ enum CountPrecision {
   APPROXIMATE
   "At least this many items exist. Counting stopped early for performance reasons."
   AT_LEAST
-}
-
-# @category: organizations
-"Feature flags that can be enabled for an organization."
-enum OrganizationFeature {
-  "The organization can create and manage child organizations (dealer/reseller model)."
-  DEALER
-  "The organization has custom branding including domain, logo, and color scheme."
-  WHITELABEL
 }
 
 # @category: custom-fields
@@ -823,18 +819,20 @@ enum FieldType {
   DATETIME
   "GeoJSON geometry object (Point, Polygon, LineString, etc.)."
   GEOJSON
-  "Schedule or calendar data with time intervals and recurrence rules."
-  SCHEDULE
   "Selection from a predefined list of options."
   OPTIONS
-  "Reference to a Device entity."
+  """
+  Reference to a Device entity. Definable on an `AssetType` only — see the `customFieldTypes` query.
+  May be narrowed to specific device types via `DeviceFieldParamsInput.refSubtypeIds`.
+  """
   DEVICE
-  "Reference to any entity by its type and ID."
+  """
+  Reference to any entity by its type and ID, including catalog items and tags. The target type is
+  fixed per definition by `ReferenceFieldParamsInput.refEntityTypeCode` and may be narrowed further
+  by `refSubtypeIds`; `customFieldTypes` lists the accepted target types.
+  Devices are not among them — they have their own `DEVICE` field type.
+  """
   REFERENCE
-  "Reference to a catalog item."
-  CATALOG
-  "Reference to a Tag entity."
-  TAG
 }
 
 # @category: devices
@@ -852,7 +850,7 @@ enum DeviceIdType {
   MAC_ADDRESS
   "Manufacturer-assigned serial number."
   SERIAL_NUMBER
-  "A custom identifier type defined by the organization."
+  "A custom identifier type defined by the workspace."
   CUSTOM
 }
 
@@ -987,6 +985,7 @@ enum GeoJsonGeometryType {
   "A heterogeneous collection of geometry objects."
   GEOMETRY_COLLECTION
 }
+
 # =============================================================================
 # 9. INTERFACES
 # =============================================================================
@@ -1006,19 +1005,108 @@ interface Titled {
 }
 
 # @category: common
-"An object that supports custom field values."
-interface Customizable {
-  """
-  Custom field values as a key-value map.
-  Keys are `CustomFieldDefinition` codes.
+"""
+An object that supports custom field values.
 
-  System-reserved codes (`geojson_data`, `schedule_data`) are excluded from this
-  map and exposed through dedicated typed fields on the entity instead.
+Implies `Node`: values are stored on the holder and indexed by its id, so every holder is an
+addressable entity. Selecting `id` on a `Customizable` fragment therefore needs no concrete type.
+"""
+interface Customizable implements Node {
+  "A globally unique identifier. This ID is opaque and should not be parsed by clients."
+  id: ID!
+
+  """
+  Typed custom field values, one entry per set field code. Each element is a concrete
+  `CustomFieldValue` implementation matching the field's `FieldType` — select fields via
+  inline fragments.
+
+  The system-reserved code `geojson_data` is excluded — it is exposed through
+  `GeoObject.geojsonData` instead.
   """
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
-  ): JSON!
+  ): [CustomFieldValue!]!
+}
+
+# @category: custom-fields
+"""
+A typed custom-field value on an entity. The concrete type matches the custom field's
+declared `FieldType`. `isPrimary` is present only on the primary-capable types
+(DEVICE / REFERENCE).
+"""
+interface CustomFieldValue {
+  "The custom field code."
+  code: Code!
+  """
+  Whether this field is on by default for this entity: the definition's `isDefault`, unless the
+  entity overrides it on the value.
+  """
+  isDefault: Boolean!
+}
+
+# @category: custom-fields
+"STRING / TEXT custom-field value."
+type StringCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: String! }
+
+# @category: custom-fields
+"DECIMAL custom-field value (arbitrary precision, string-encoded)."
+type DecimalCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Decimal! }
+
+# @category: custom-fields
+"INTEGER custom-field value (signed 64-bit)."
+type IntegerCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Long! }
+
+# @category: custom-fields
+"BOOLEAN custom-field value."
+type BooleanCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Boolean! }
+
+# @category: custom-fields
+"DATE custom-field value."
+type DateCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Date! }
+
+# @category: custom-fields
+"DATETIME custom-field value."
+type DateTimeCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: DateTime! }
+
+# @category: custom-fields
+"GEOJSON custom-field value."
+type GeoJsonCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: GeoJSON! }
+
+# @category: custom-fields
+"OPTIONS custom-field value (one or more option codes)."
+type OptionsCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, values: [Code!]! }
+
+# @category: custom-fields
+"DEVICE custom-field value (primary-capable)."
+type DeviceCustomFieldValue implements CustomFieldValue {
+  code: Code!
+  "Whether this field is on by default for this entity."
+  isDefault: Boolean!
+  "The linked device."
+  device: Device!
+  "Whether this device is the entity's primary DEVICE."
+  isPrimary: Boolean!
+}
+
+# @category: custom-fields
+"REFERENCE custom-field value (one or more referenced entities; primary-capable)."
+type ReferenceCustomFieldValue implements CustomFieldValue {
+  code: Code!
+  "Whether this field is on by default for this entity."
+  isDefault: Boolean!
+  """
+  The referenced entities, in stored order. Select concrete fields with inline fragments.
+  A single-value field returns a one-element list.
+
+  An element is null when its target no longer resolves — the referenced entity was deleted
+  while the reference stayed behind. The slot is kept so stored order still lines up with the
+  other elements. Nullable on purpose: with a non-null element type one deleted target would
+  null the whole holder, and inside a connection the whole page of results with it.
+  """
+  refs: [Node]!
+  "Whether this reference is the entity's primary REFERENCE."
+  isPrimary: Boolean!
 }
 
 # @category: common
@@ -1088,8 +1176,8 @@ interface CatalogItem implements Node & Versioned & Titled {
   order: Int!
   "The catalog this item belongs to."
   catalog: Catalog!
-  "The organization that owns this item. Null for system items."
-  organization: Organization
+  "The workspace that owns this item. Null for system items."
+  workspace: Workspace
   "Metadata about this item including description, origin, and display properties."
   meta: CatalogItemMeta!
 }
@@ -1197,28 +1285,28 @@ type UserCatalogItemEdge implements Edge {
   node: UserCatalogItem!
 }
 
-# --- Organization Connection ---
+# --- Workspace Connection ---
 
-# @category: organizations
-"A paginated list of Organization items."
-type OrganizationConnection implements Connection {
+# @category: workspaces
+"A paginated list of Workspace items."
+type WorkspaceConnection implements Connection {
   "A list of edges."
-  edges: [OrganizationEdge!]!
+  edges: [WorkspaceEdge!]!
   "A list of nodes in the connection (without edge metadata)."
-  nodes: [Organization!]!
+  nodes: [Workspace!]!
   "Information about the current page."
   pageInfo: PageInfo!
   "The total count of items matching the filter."
   total: CountInfo
 }
 
-# @category: organizations
-"An edge in the Organization connection."
-type OrganizationEdge implements Edge {
+# @category: workspaces
+"An edge in the Workspace connection."
+type WorkspaceEdge implements Edge {
   "An opaque cursor for this edge."
   cursor: String!
-  "The organization at the end of the edge."
-  node: Organization!
+  "The workspace at the end of the edge."
+  node: Workspace!
 }
 
 # --- User Connection ---
@@ -1247,7 +1335,7 @@ type UserEdge implements Edge {
 
 # --- Member Connection ---
 
-# @category: organizations/members
+# @category: workspaces/members
 "A paginated list of Member items."
 type MemberConnection implements Connection {
   "A list of edges."
@@ -1260,7 +1348,7 @@ type MemberConnection implements Connection {
   total: CountInfo
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "An edge in the Member connection."
 type MemberEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1836,7 +1924,7 @@ type Module implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
 }
 
@@ -1849,7 +1937,7 @@ type EntityType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The 4-character code embedded in UUIDs for entities of this type."
   uuidDiscriminator: String!
@@ -1868,19 +1956,19 @@ type DeviceVendor implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "Device models produced by this vendor."
   models(
     "Filtering options for the returned models."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned models."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
@@ -1896,7 +1984,7 @@ type DeviceModel implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The vendor that manufactures this model."
   vendor: DeviceVendor!
@@ -1911,7 +1999,7 @@ type DeviceType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
 }
 
@@ -1924,7 +2012,7 @@ type DeviceStatus implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
 }
 
@@ -1937,7 +2025,7 @@ type DeviceRelationType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
 }
 
@@ -1950,7 +2038,7 @@ type AssetType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "Custom field definitions specific to this asset type, ordered by display order."
   customFieldDefinitions: [CustomFieldDefinition!]!
@@ -1965,7 +2053,7 @@ type AssetGroupType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The asset types allowed in groups of this type, with optional quantity limits."
   allowedAssetTypes: [AssetGroupTypeConstraint!]!
@@ -1989,7 +2077,7 @@ type GeoObjectType implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "Custom field definitions specific to this geo object type, ordered by display order."
   customFieldDefinitions: [CustomFieldDefinition!]!
@@ -2004,19 +2092,19 @@ type Role implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The permissions assigned to this role."
   permissions(
     "Filtering options for the returned permissions."
     filter: RolePermissionFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned permissions."
     orderBy: RolePermissionOrder = { field: GRANTED_AT, direction: DESC }
@@ -2032,7 +2120,7 @@ type PermissionScope implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The module this permission scope belongs to."
   module: Module!
@@ -2049,7 +2137,7 @@ type Tag implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The entity types this tag can be applied to. Empty means the tag is universal."
   entityTypes: [EntityType!]!
@@ -2064,14 +2152,14 @@ type Country implements CatalogItem & Node & Versioned & Titled {
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The ISO 3166-1 alpha-2 country code."
   alpha2Code: CountryCode!
 }
 
 # @category: actors/users
-"A user-defined catalog item that supports hierarchical organization."
+"A user-defined catalog item that supports hierarchical workspace."
 type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & Versioned & Titled {
   id: ID!
   version: Int!
@@ -2079,7 +2167,7 @@ type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & V
   code: Code!
   order: Int!
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The parent item in the hierarchy. Null for root items."
   parent: UserCatalogItem
@@ -2087,13 +2175,13 @@ type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & V
   children(
     "Filtering options for the returned children."
     filter: CatalogItemChildrenFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned children."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -2110,7 +2198,7 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
   order: Int!
   "Self-reference for the meta-catalog."
   catalog: Catalog!
-  organization: Organization
+  workspace: Workspace
   meta: CatalogItemMeta!
   "The module this catalog is associated with."
   module: Module!
@@ -2118,13 +2206,13 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
   items(
     "Filtering options for the returned items."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned items."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -2132,109 +2220,95 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
 }
 
 # =============================================================================
-# 12. ORGANIZATION
+# 12. WORKSPACE
 # =============================================================================
 
-# @category: organizations
-"An organization in the hierarchy that owns entities and users."
-type Organization implements Node & Versioned & Titled {
+# @category: workspaces
+"A workspace that owns entities and users."
+type Workspace implements Node & Versioned & Titled {
   id: ID!
   version: Int!
   title: String!
+  """
+  The Console-owned organization this workspace belongs to. Opaque here: Console owns the ID
+  scheme, and one organization may own many workspaces.
+  """
+  organizationId: UUID!
   "An external system identifier for integration purposes."
   externalId: String
-  "Whether this organization is active."
+  "Whether this workspace is active."
   isActive: Boolean!
-  "The feature flags enabled for this organization."
-  features: [OrganizationFeature!]!
-  "The parent organization in the hierarchy. Null for root organizations."
-  parent: Organization
-  "The child organizations."
-  children(
-    "Filtering options for the returned children."
-    filter: OrganizationChildrenFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
-    first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
-    after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
-    last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
-    before: String
-    "The ordering options for the returned children."
-    orderBy: OrganizationOrder = { field: TITLE, direction: ASC }
-  ): OrganizationConnection!
-  "The members of this organization."
+  "The members of this workspace."
   members(
     "Filtering options for the returned members."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned members."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
   ): MemberConnection!
-  "The devices owned by this organization."
+  "The devices owned by this workspace."
   devices(
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
   ): DeviceConnection!
-  "The assets owned by this organization."
+  "The assets owned by this workspace."
   assets(
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
   ): AssetConnection!
-  "The geographic objects owned by this organization."
+  "The geographic objects owned by this workspace."
   geoObjects(
     "Filtering options for the returned geo objects."
     filter: GeoObjectFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned geo objects."
     orderBy: GeoObjectOrder = { field: TITLE, direction: ASC }
   ): GeoObjectConnection!
-  "The schedules owned by this organization."
+  "The schedules owned by this workspace."
   schedules(
     "Filtering options for the returned schedules."
     filter: ScheduleFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned schedules."
     orderBy: ScheduleOrder = { field: TITLE, direction: ASC }
@@ -2293,35 +2367,35 @@ type User implements Actor & Node & Versioned & Titled {
   externalId: String
   "Whether this user account is active."
   isActive: Boolean!
-  "The organization memberships for this user."
+  "The workspace memberships for this user."
   memberships(
     "Filtering options for the returned memberships."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned memberships."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
   ): MemberConnection!
 }
 
-# @category: organizations/members
-"A user's membership in an organization."
+# @category: workspaces/members
+"A user's membership in a workspace."
 type Member implements Node & Versioned {
   id: ID!
   version: Int!
   "The user."
   user: User!
-  "The organization the user belongs to."
-  organization: Organization!
+  "The workspace the user belongs to."
+  workspace: Workspace!
   "Whether this membership is active."
   isActive: Boolean!
-  "The date and time when the user was assigned to this organization."
+  "The date and time when the user was assigned to this workspace."
   assignedAt: DateTime!
 }
 
@@ -2331,8 +2405,8 @@ type Integration implements Actor & Node & Versioned & Titled {
   id: ID!
   version: Int!
   title: String!
-  "The organization this integration belongs to."
-  organization: Organization!
+  "The workspace this integration belongs to."
+  workspace: Workspace!
   "A reference to credentials stored in a secure vault."
   credentialRef: String
   "Whether this integration is active."
@@ -2430,8 +2504,8 @@ type Device implements Node & Titled & Versioned & InventoryItem {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this device."
-  organization: Organization!
+  "The workspace that owns this device."
+  workspace: Workspace!
   "The device type classification."
   type: DeviceType!
   "The specific device model."
@@ -2450,13 +2524,13 @@ type Device implements Node & Titled & Versioned & InventoryItem {
   relationsTo: [DeviceRelation!]!
   "The history of inventory assignments for this device."
   inventoryHistory(
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned history."
     orderBy: DeviceInventoryRelationOrder = {
@@ -2512,29 +2586,27 @@ type Asset implements Node & Titled & Customizable & Versioned {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this asset."
-  organization: Organization!
+  "The workspace that owns this asset."
+  workspace: Workspace!
   "The asset type classification."
   type: AssetType!
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
-  ): JSON!
+  ): [CustomFieldValue!]!
   "The primary device (isPrimary=true among DEVICE-type custom fields)."
   primaryDevice: Device
-  "All devices linked via DEVICE-type custom fields."
-  devices: [Device!]!
   "The groups this asset belongs to."
   groups(
     "Filtering options for the returned groups."
     filter: AssetGroupFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned groups."
     orderBy: AssetGroupOrder = { field: TITLE, direction: ASC }
@@ -2547,8 +2619,8 @@ type AssetGroup implements Node & Versioned & Titled {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this group."
-  organization: Organization!
+  "The workspace that owns this group."
+  workspace: Workspace!
   "The group type with membership constraints. Immutable after creation."
   type: AssetGroupType
   "The color for UI display in hexadecimal format."
@@ -2557,13 +2629,13 @@ type AssetGroup implements Node & Versioned & Titled {
   currentAssets(
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
@@ -2572,13 +2644,13 @@ type AssetGroup implements Node & Versioned & Titled {
   history(
     "Filtering options for the returned history."
     filter: AssetGroupItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned history."
     orderBy: AssetGroupItemOrder = { field: ATTACHED_AT, direction: DESC }
@@ -2605,19 +2677,19 @@ type Inventory implements Node & Versioned & Titled {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this inventory."
-  organization: Organization!
+  "The workspace that owns this inventory."
+  workspace: Workspace!
   "The devices assigned to this inventory."
   devices(
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
@@ -2630,8 +2702,8 @@ type GeoObject implements Node & Titled & Customizable & Versioned {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this geo object."
-  organization: Organization!
+  "The workspace that owns this geo object."
+  workspace: Workspace!
   "The geo object type classification."
   type: GeoObjectType!
   "The geographic shape of this object as GeoJSON geometry."
@@ -2639,7 +2711,7 @@ type GeoObject implements Node & Titled & Customizable & Versioned {
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
-  ): JSON!
+  ): [CustomFieldValue!]!
   """
   Checks if the given points are contained within this geo object's geometry.
   Returns the containment status for each point.
@@ -2668,8 +2740,8 @@ type Schedule implements Node & Titled & Versioned {
   id: ID!
   version: Int!
   title: String!
-  "The organization that owns this schedule."
-  organization: Organization!
+  "The workspace that owns this schedule."
+  workspace: Workspace!
   "The calendar and time interval definitions for this schedule."
   scheduleData: ScheduleData!
 }
@@ -2683,11 +2755,14 @@ A custom field definition that specifies the metadata for a custom field.
 
 Note: The `fieldType` property is immutable after creation.
 To change the field type, delete the definition and create a new one.
+
+Titled but not a `Node`: a definition is embedded in its owning catalog item and addressed
+through it, never by an id of its own. Within its owner it is identified by `code`.
 """
-type CustomFieldDefinition {
+type CustomFieldDefinition implements Titled {
   "The human-readable display name."
   title: String!
-  "The machine-readable code, unique per owner and organization."
+  "The machine-readable code, unique per owner and workspace. Always starts with `cf_`."
   code: Code!
   "A description of the field for UI hints."
   description: String
@@ -2701,11 +2776,28 @@ type CustomFieldDefinition {
   "The type-specific parameters for validation, defaults, and options."
   params: FieldParams!
   """
+  Whether the field is on by default for every entity of the owning type. An individual entity
+  can override it on its value.
+  """
+  isDefault: Boolean!
+  """
   Whether this field definition is archived.
   Archived fields preserve existing values but no longer appear in forms and accept no new input.
   Use the `archive` / `restore` actions in the parent catalog item's `customFieldDefinitions` input to toggle this state.
   """
   isArchived: Boolean!
+}
+
+# @category: custom-fields
+"One custom-field type that may be defined on a given owner, and what it may point at."
+type FieldTypeAvailability {
+  "The field type."
+  fieldType: FieldType!
+  """
+  Entity type codes a `REFERENCE` field on this owner may point at, as accepted by
+  `ReferenceFieldParamsInput.refEntityTypeCode`. Empty for every other field type.
+  """
+  referenceableEntityTypes: [Code!]!
 }
 
 # @category: custom-fields
@@ -2803,12 +2895,6 @@ type FieldParamsGeojson implements FieldParams {
 }
 
 # @category: custom-fields
-"Parameters for SCHEDULE field type."
-type FieldParamsSchedule implements FieldParams {
-  isRequired: Boolean!
-}
-
-# @category: custom-fields
 "Parameters for OPTIONS field type."
 type FieldParamsOptions implements FieldParams & MultiValue {
   isRequired: Boolean!
@@ -2836,33 +2922,43 @@ type FieldOption {
 "Parameters for DEVICE field type."
 type FieldParamsDevice implements FieldParams {
   isRequired: Boolean!
+  """
+  The device types a value may belong to. Empty means any device type is allowed.
+
+  An element is null when the device type behind it no longer resolves — see
+  `FieldParamsReference.refSubtypes`, which is resolved by the same loader.
+  """
+  refSubtypes: [CatalogItem]!
 }
 
 # @category: custom-fields
 "Parameters for REFERENCE field type."
-type FieldParamsReference implements FieldParams {
-  isRequired: Boolean!
-  "The entity type code that can be referenced."
-  refEntityTypeCode: Code!
-}
-
-# @category: custom-fields
-"Parameters for CATALOG field type."
-type FieldParamsCatalog implements FieldParams & MultiValue {
+type FieldParamsReference implements FieldParams & MultiValue {
   isRequired: Boolean!
   isMulti: Boolean!
-  "The catalog code that items can be selected from."
-  refCatalogCode: Code!
-  "The default item code."
-  defaultCatalog: Code
-}
+  "The entity type code that can be referenced."
+  refEntityTypeCode: Code!
+  """
+  The subtypes a value may belong to (AssetType / GeoObjectType / catalog).
+  Empty means the whole target type is allowed.
 
-# @category: custom-fields
-"Parameters for TAG field type."
-type FieldParamsTag implements FieldParams {
-  isRequired: Boolean!
-  "The default tag code."
-  defaultTag: Code
+  An element is null when its subtype no longer resolves — the classifier item was deleted
+  after the narrowing was validated on write. Nullable for the same reason as `defaultRefs`
+  below: both are resolved while `FieldParams!` itself is built, so a non-null element type
+  would let one dangling subtype blank an entire page of catalog types, even for a query that
+  never selects this field.
+  """
+  refSubtypes: [CatalogItem]!
+  """
+  The default referenced entities. Empty when the field has no default.
+
+  An element is null when its target no longer resolves — the entity was deleted after the
+  default was validated on write. Nullable for the same reason as
+  `ReferenceCustomFieldValue.refs`: `FieldParams!` is non-null on `CustomFieldDefinition!`
+  inside a non-null `customFieldDefinitions` list, so a non-null element type would let one
+  dangling default blank an entire page of catalog types.
+  """
+  defaultRefs: [Node]!
 }
 
 # =============================================================================
@@ -2873,8 +2969,8 @@ type FieldParamsTag implements FieldParams {
 "An audit log entry recording an event that occurred in the system."
 type AuditEvent implements Node {
   id: ID!
-  "The organization context. Null for system events."
-  organization: Organization
+  "The workspace context. Null for system events."
+  workspace: Workspace
   "The actor who triggered the event."
   actor: Actor
   "The client IP address."
@@ -2959,45 +3055,34 @@ enum CatalogItemOrderField {
   CREATED_AT
 }
 
-# --- Organization ---
+# --- Workspace ---
 
-# @category: organizations
-"Filtering options for organizations."
-input OrganizationFilter {
-  "Filter by parent organizations (OR within field)."
-  parentIds: [ID!]
+# @category: workspaces
+"Filtering options for workspaces."
+input WorkspaceFilter {
   "Filter by active status."
   isActive: Boolean
 }
 
-# @category: organizations
-"Filtering options for organization children. Excludes parentId as it is implicit."
-input OrganizationChildrenFilter {
-  "Filter by active status."
-  isActive: Boolean
-  "Partial match on title (case-insensitive contains)."
-  titleContains: String @trim
-}
-
-# @category: organizations
-"Ordering options for organizations."
-input OrganizationOrder {
+# @category: workspaces
+"Ordering options for workspaces."
+input WorkspaceOrder {
   "The field to order by."
-  field: OrganizationOrderField!
+  field: WorkspaceOrderField!
   "The direction to order."
   direction: OrderDirection!
 }
 
-# @category: organizations
-"Fields available for ordering organizations."
-enum OrganizationOrderField {
+# @category: workspaces
+"Fields available for ordering workspaces."
+enum WorkspaceOrderField {
   "Order by title."
   TITLE
 }
 
 # --- Member ---
 
-# @category: organizations/members
+# @category: workspaces/members
 "Filtering options for members."
 input MemberFilter {
   "Filter by users (OR within field)."
@@ -3006,7 +3091,7 @@ input MemberFilter {
   isActive: Boolean
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "Ordering options for members."
 input MemberOrder {
   "The field to order by."
@@ -3015,7 +3100,7 @@ input MemberOrder {
   direction: OrderDirection!
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "Fields available for ordering members."
 enum MemberOrderField {
   "Order by assignment date."
@@ -3124,9 +3209,11 @@ input AssetOrder {
   field: AssetOrderField
   """
   The custom field code to order by. Mutually exclusive with `field`.
-  Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME.
-  OPTIONS, TAG, BOOLEAN, GEOJSON, SCHEDULE, DEVICE, REFERENCE, CATALOG
-  are not supported for sorting.
+  Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the
+  reference types DEVICE and single-value REFERENCE, which sort by the title
+  of the entity they point at rather than by the stored id.
+  OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value
+  REFERENCE or a REFERENCE at an entity with no title.
   """
   customFieldCode: Code
   "The direction to order."
@@ -3237,9 +3324,11 @@ input GeoObjectOrder {
   field: GeoObjectOrderField
   """
   The custom field code to order by. Mutually exclusive with `field`.
-  Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME.
-  OPTIONS, TAG, BOOLEAN, GEOJSON, SCHEDULE, DEVICE, REFERENCE, CATALOG
-  are not supported for sorting.
+  Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the
+  reference types DEVICE and single-value REFERENCE, which sort by the title
+  of the entity they point at rather than by the stored id.
+  OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value
+  REFERENCE or a REFERENCE at an entity with no title.
   """
   customFieldCode: Code
   "The direction to order."
@@ -3437,13 +3526,13 @@ Choose the variant that matches the custom field's data type:
 | BOOLEAN           | `boolean`    | `{ boolean: true }`                    |
 | DATE              | `date`       | `{ date: "2024-01-15" }`              |
 | DATETIME          | `datetime`   | `{ datetime: "2024-01-15T10:30:00Z" }`|
-| OPTIONS, CATALOG, TAG | `string` | `{ string: "option_code" }`            |
+| OPTIONS           | `string`     | `{ string: "option_code" }`            |
 | DEVICE, REFERENCE | `id`         | `{ id: "019a6a3f-..." }`              |
 | (IN operator)     | `stringList` | `{ stringList: ["a", "b"] }`           |
 | (IN operator)     | `idList`     | `{ idList: ["uuid1", "uuid2"] }`       |
 """
 input CustomFieldFilterValue @oneOf {
-  "String value — for STRING, TEXT, OPTIONS, CATALOG, TAG fields."
+  "String value — for STRING, TEXT, OPTIONS fields."
   string: String
   "Arbitrary-precision decimal value — for DECIMAL fields."
   decimal: Decimal
@@ -3480,7 +3569,7 @@ input CustomFieldFilter {
 #   - IN: `value` must use `stringList` or `idList` variant
 #   - All other operators: `value` is a single-value variant
 #
-# MULTI-VALUE FIELDS (isMulti=true for OPTIONS/CATALOG, always for TAG):
+# MULTI-VALUE FIELDS (isMulti=true for OPTIONS/REFERENCE):
 #   Filter matches if ANY value in the array satisfies the condition.
 #   Example: field=["red","blue"], filter={operator:EQ, value:{string:"red"}} → match
 #
@@ -3492,16 +3581,122 @@ input CustomFieldFilter {
 # =============================================================================
 
 # @category: custom-fields
-"Input for updating custom field values using a patch model."
+"""
+Input for updating custom field values using a patch model.
+
+`set` provides typed values (create/overwrite); `unset` removes fields by code. Primary
+status travels with the value on the primary-capable variants (DEVICE/REFERENCE)
+via their required `isPrimary` flag — there is no separate setPrimary/unsetPrimary list.
+"""
 input CustomFieldsPatchInput {
-  "Fields to set or update as a key-value map."
-  set: JSON
-  "Field codes to remove."
+  "Field values to set or overwrite."
+  set: [CustomFieldValueInput!]
+  "Field codes to remove entirely."
   unset: [Code!]
-  "Field codes to mark as primary (replaces previous primary of the same field type)."
-  setPrimary: [Code!]
-  "Field codes to unmark as primary."
-  unsetPrimary: [Code!]
+}
+
+# @category: custom-fields
+"""
+A single custom-field value to set, addressed by code.
+
+Omitting `value` is the same as passing null, so an entry clears the field unless it carries one.
+An `isDefault` override cannot be changed on its own: send the current value alongside it.
+"""
+input CustomFieldValueInput {
+  "The custom field code."
+  code: Code!
+  "The typed value. Null clears the field but keeps the key (distinct from `unset`)."
+  value: CustomFieldValueDataInput
+  """
+  Overrides the definition's `isDefault` for this entity, in either direction. Omit to leave any
+  existing override untouched; the override is dropped when the field is `unset` or its value is
+  cleared.
+  """
+  isDefault: Boolean
+}
+
+# @category: custom-fields
+"""
+Typed custom-field value. Exactly one variant must be set (`@oneOf`), matching the custom
+field's declared FieldType:
+
+| FieldType          | Variant      |
+|--------------------|--------------|
+| STRING, TEXT       | `string`     |
+| DECIMAL            | `decimal`    |
+| INTEGER            | `integer`    |
+| BOOLEAN            | `boolean`    |
+| DATE               | `date`       |
+| DATETIME           | `datetime`   |
+| GEOJSON            | `geojson`    |
+| DEVICE             | `device`     |
+| REFERENCE (single) | `reference`  |
+| REFERENCE (multi)  | `references` |
+| OPTIONS (single)   | `option`     |
+| OPTIONS (multi)    | `options`    |
+"""
+input CustomFieldValueDataInput @oneOf {
+  "STRING / TEXT value."
+  string: String
+  "DECIMAL value (arbitrary precision, string-encoded)."
+  decimal: Decimal
+  "INTEGER value (signed 64-bit)."
+  integer: Long
+  "BOOLEAN value."
+  boolean: Boolean
+  "DATE value."
+  date: Date
+  "DATETIME value."
+  datetime: DateTime
+  "GEOJSON value."
+  geojson: GeoJSON
+  "DEVICE value (primary-capable)."
+  device: DeviceValueInput
+  "REFERENCE value for a single-value field (primary-capable)."
+  reference: ReferenceValueInput
+  "REFERENCE value for an isMulti field (primary-capable)."
+  references: ReferenceListValueInput
+  "OPTIONS value for a single-value field."
+  option: Code
+  "OPTIONS value for an isMulti field."
+  options: [Code!]
+}
+
+# @category: custom-fields
+"DEVICE custom-field value."
+input DeviceValueInput {
+  "The device to assign."
+  id: ID!
+  "Whether this device is the entity's primary DEVICE. Required — prevents silent demotion."
+  isPrimary: Boolean!
+  """
+  If the device is already assigned to another asset, detach it there and reassign it here,
+  atomically, instead of failing with VALIDATION_ERROR.
+
+  Asset holders only. A DEVICE field may only be defined on an AssetType since v0.7.0, but
+  definitions written before it stay live, and on such a field `reassign: true` is rejected with
+  VALIDATION_ERROR naming it: only an asset holds a device exclusively, so there is nothing to
+  detach it from.
+  """
+  reassign: Boolean
+}
+
+# @category: custom-fields
+"REFERENCE custom-field value for a single-value field."
+input ReferenceValueInput {
+  "The referenced entity ID."
+  id: ID!
+  "Whether this reference is the entity's primary REFERENCE. Required — prevents silent demotion."
+  isPrimary: Boolean!
+}
+
+# @category: custom-fields
+"REFERENCE custom-field value for an isMulti field."
+input ReferenceListValueInput {
+  "The referenced entity IDs, in the order they are stored."
+  ids: [ID!]!
+  "Whether this reference is the entity's primary REFERENCE. Required — prevents silent demotion."
+  isPrimary: Boolean!
 }
 
 # --- Device ---
@@ -3509,8 +3704,8 @@ input CustomFieldsPatchInput {
 # @category: devices
 "Input for creating a new device."
 input DeviceCreateInput {
-  "The organization that will own the device."
-  organizationId: ID!
+  "The workspace that will own the device."
+  workspaceId: ID!
   "The device type ID."
   typeId: ID!
   "The device model ID."
@@ -3520,10 +3715,20 @@ input DeviceCreateInput {
   "<vendor.title> <model.title> <identifier.value>" where the identifier
   is chosen by type priority: IMEI > SERIAL_NUMBER > MAC_ADDRESS, with
   fallback to identifiers[0] when none of the priority types are present.
+  With no identifiers at all the generated title is "<vendor.title> <model.title>".
   """
   title: String @trim
-  "The hardware identifiers. At least one entry is required."
-  identifiers: [DeviceIdentifierInput!]!
+  """
+  The hardware identifiers. Optional: a device may be registered before its hardware
+  is known. Identifiers can be added later with `deviceIdentifierAdd`.
+  """
+  identifiers: [DeviceIdentifierInput!]
+  """
+  Optionally assign the new device to an existing inventory. When provided, the
+  inventory must belong to the same workspace; the assignment is atomic with
+  device creation (the device is not created if the assignment fails).
+  """
+  inventoryId: ID
 }
 
 # @category: devices
@@ -3580,8 +3785,8 @@ input DeviceIdentifierRemoveInput {
 # @category: assets
 "Input for creating a new asset."
 input AssetCreateInput {
-  "The organization that will own the asset."
-  organizationId: ID!
+  "The workspace that will own the asset."
+  workspaceId: ID!
   "The asset type ID."
   typeId: ID!
   "The asset display name."
@@ -3617,8 +3822,8 @@ input AssetDeleteInput {
 # @category: assets/groups
 "Input for creating a new asset group."
 input AssetGroupCreateInput {
-  "The organization that will own the group."
-  organizationId: ID!
+  "The workspace that will own the group."
+  workspaceId: ID!
   "The group type ID. Immutable after creation."
   typeId: ID
   "The group display name."
@@ -3676,8 +3881,8 @@ input AssetGroupItemsRemoveInput {
 # @category: geo-objects
 "Input for creating a new geo object."
 input GeoObjectCreateInput {
-  "The organization that will own the geo object."
-  organizationId: ID!
+  "The workspace that will own the geo object."
+  workspaceId: ID!
   "The geo object type ID."
   typeId: ID!
   "The geo object display name."
@@ -3717,8 +3922,8 @@ input GeoObjectDeleteInput {
 # @category: schedules
 "Input for creating a new schedule."
 input ScheduleCreateInput {
-  "The organization that will own the schedule."
-  organizationId: ID!
+  "The workspace that will own the schedule."
+  workspaceId: ID!
   "The schedule display name."
   title: String! @trim
   "The schedule data."
@@ -3752,8 +3957,8 @@ input ScheduleDeleteInput {
 # @category: devices/inventory
 "Input for creating a new inventory."
 input InventoryCreateInput {
-  "The organization that will own the inventory."
-  organizationId: ID!
+  "The workspace that will own the inventory."
+  workspaceId: ID!
   "The display name."
   title: String! @trim
 }
@@ -3773,47 +3978,6 @@ input InventoryUpdateInput {
 "Input for deleting an inventory."
 input InventoryDeleteInput {
   "The inventory ID to delete."
-  id: ID!
-  "The current version for optimistic locking. If omitted, auto-increments without conflict check."
-  version: Int
-}
-
-# --- Organization ---
-
-# @category: organizations
-"Input for creating a new organization."
-input OrganizationCreateInput {
-  "The parent organization ID. Null for root organizations."
-  parentId: ID
-  "The display name."
-  title: String! @trim
-  "An external system identifier."
-  externalId: String @trim
-  "The feature flags to enable."
-  features: [OrganizationFeature!] = []
-}
-
-# @category: organizations
-"Input for updating an existing organization."
-input OrganizationUpdateInput {
-  "The organization ID to update."
-  id: ID!
-  "The current version for optimistic locking. If omitted, auto-increments without conflict check."
-  version: Int
-  "The new display name."
-  title: String @trim
-  "The new external identifier."
-  externalId: String @trim
-  "The new active status."
-  isActive: Boolean
-  "The new feature flags."
-  features: [OrganizationFeature!]
-}
-
-# @category: organizations
-"Input for deleting an organization and all its data."
-input OrganizationDeleteInput {
-  "The organization ID to delete."
   id: ID!
   "The current version for optimistic locking. If omitted, auto-increments without conflict check."
   version: Int
@@ -3841,16 +4005,16 @@ input PersonNameInput {
 
 # --- Member ---
 
-# @category: organizations/members
+# @category: workspaces/members
 "Input for creating a membership."
 input MemberCreateInput {
-  "The organization ID."
-  organizationId: ID!
+  "The workspace ID."
+  workspaceId: ID!
   "The user ID to add."
   userId: ID!
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "Input for updating a membership."
 input MemberUpdateInput {
   "The membership ID to update."
@@ -3861,7 +4025,7 @@ input MemberUpdateInput {
   isActive: Boolean
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "Input for removing a membership."
 input MemberRemoveInput {
   "The membership ID to remove."
@@ -3875,8 +4039,8 @@ input MemberRemoveInput {
 # @category: actors/integrations
 "Input for creating a new integration."
 input IntegrationCreateInput {
-  "The organization that will own the integration."
-  organizationId: ID!
+  "The workspace that will own the integration."
+  workspaceId: ID!
   "The display name."
   title: String! @trim
   "A reference to credentials in a secure vault."
@@ -3970,11 +4134,11 @@ input UserScopeRemoveInput {
 # --- Device Relations ---
 
 # @category: devices/inventory
-"Input for linking a device to an inventory. Both device and inventory must belong to the same organization."
+"Input for linking a device to an inventory. Both device and inventory must belong to the same workspace."
 input DeviceInventoryLinkInput {
   "The device ID."
   deviceId: ID!
-  "The inventory ID. Must be in the same organization as the device."
+  "The inventory ID. Must be in the same workspace as the device."
   inventoryId: ID!
 }
 
@@ -4027,8 +4191,10 @@ input CustomFieldDefinitionInput @oneOf {
 "Data for creating a custom field definition within its parent catalog item."
 input CustomFieldDefinitionCreateData {
   """
-  The machine-readable code. Auto-generated from title if omitted.
-  Codes `geojson_data` and `schedule_data` are reserved by the platform.
+  The machine-readable code. Must start with `cf_`, so a custom-field code can never be
+  confused with an entity's own field name. Auto-generated from the title if omitted, prefix
+  included. The prefix also keeps this input clear of the platform's own reserved code
+  `geojson_data`.
   """
   code: Code
   "The display name."
@@ -4041,6 +4207,8 @@ input CustomFieldDefinitionCreateData {
   order: Int
   "The type-specific parameters. Exactly one variant must be provided."
   params: FieldParamsInput!
+  "Whether the field is on by default for entities of this type. Defaults to false."
+  isDefault: Boolean
 }
 
 # @category: custom-fields
@@ -4056,6 +4224,8 @@ input CustomFieldDefinitionUpdateData {
   order: Int
   "The updated parameters. Only `isRequired` and type-specific fields can be changed."
   params: FieldParamsInput
+  "The new type-level default. Omit to leave unchanged."
+  isDefault: Boolean
 }
 
 # @category: custom-fields
@@ -4117,18 +4287,12 @@ input FieldParamsInput @oneOf {
   datetime: DateTimeFieldParamsInput
   "Parameters for GEOJSON field type."
   geojson: GeoJsonFieldParamsInput
-  "Parameters for SCHEDULE field type."
-  schedule: ScheduleFieldParamsInput
   "Parameters for OPTIONS field type."
   options: OptionsFieldParamsInput
   "Parameters for DEVICE field type."
   device: DeviceFieldParamsInput
   "Parameters for REFERENCE field type."
   reference: ReferenceFieldParamsInput
-  "Parameters for CATALOG field type."
-  catalog: CatalogFieldParamsInput
-  "Parameters for TAG field type."
-  tag: TagFieldParamsInput
 }
 
 # @category: custom-fields
@@ -4227,13 +4391,6 @@ input GeoJsonFieldParamsInput {
 }
 
 # @category: custom-fields
-"Parameters for SCHEDULE field type."
-input ScheduleFieldParamsInput {
-  "Whether a value is required."
-  isRequired: Boolean!
-}
-
-# @category: custom-fields
 "Parameters for OPTIONS field type."
 input OptionsFieldParamsInput {
   "Whether a value is required."
@@ -4268,6 +4425,8 @@ input FieldOptionInput {
 input DeviceFieldParamsInput {
   "Whether a value is required."
   isRequired: Boolean!
+  "The device type IDs a value may belong to. Omit or leave empty to allow any device type."
+  refSubtypeIds: [ID!]
 }
 
 # @category: custom-fields
@@ -4275,30 +4434,21 @@ input DeviceFieldParamsInput {
 input ReferenceFieldParamsInput {
   "Whether a value is required."
   isRequired: Boolean!
-  "The entity type code that can be referenced."
-  refEntityTypeCode: Code!
-}
-
-# @category: custom-fields
-"Parameters for CATALOG field type."
-input CatalogFieldParamsInput {
-  "Whether a value is required."
-  isRequired: Boolean!
-  "Whether multiple items can be selected."
+  "Whether multiple entities can be referenced."
   isMulti: Boolean = false
-  "The catalog code that items can be selected from."
-  refCatalogCode: Code!
-  "The default item code."
-  defaultCatalog: Code
-}
-
-# @category: custom-fields
-"Parameters for TAG field type."
-input TagFieldParamsInput {
-  "Whether a value is required."
-  isRequired: Boolean!
-  "The default tag code."
-  defaultTag: Code
+  """
+  The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`.
+  The `customFieldTypes` query lists the accepted values for a given owner.
+  """
+  refEntityTypeCode: Code!
+  """
+  The subtype IDs a value may belong to (AssetType / GeoObjectType / catalog). Required for
+  `user_catalog_item`, which needs exactly one catalog; rejected for target types that nothing
+  narrows further. Omit or leave empty to allow the whole target type.
+  """
+  refSubtypeIds: [ID!]
+  "The default referenced entity IDs."
+  defaultRefIds: [ID!]
 }
 
 # --- Catalog Item CRUD Inputs ---
@@ -4315,11 +4465,11 @@ input CatalogItemMetaInput {
 # @category: catalogs/catalog-items
 "Input for creating a user-defined catalog (a container for user catalog items)."
 input CatalogCreateInput {
-  "The organization that will own the catalog."
-  organizationId: ID!
+  "The workspace that will own the catalog."
+  workspaceId: ID!
   "The module this catalog belongs to. Defaults to CORE if omitted."
   moduleId: ID
-  "The machine-readable code, unique within the organization. Auto-generated from title if omitted."
+  "The machine-readable code, unique within the workspace. Auto-generated from title if omitted."
   code: Code
   "The display name."
   title: String! @trim
@@ -4356,11 +4506,11 @@ input CatalogDeleteInput {
 # @category: actors/users
 "Input for creating a user catalog item."
 input UserCatalogItemCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The catalog to add the item to."
   catalogId: ID!
-  "The machine-readable code, unique within the catalog and organization. Auto-generated from title if omitted."
+  "The machine-readable code, unique within the catalog and workspace. Auto-generated from title if omitted."
   code: Code
   "The display name."
   title: String! @trim
@@ -4392,8 +4542,8 @@ input UserCatalogItemUpdateInput {
 # @category: devices
 "Input for creating a device type."
 input DeviceTypeCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4422,8 +4572,8 @@ input DeviceTypeUpdateInput {
 # @category: devices
 "Input for creating a device status."
 input DeviceStatusCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4452,8 +4602,8 @@ input DeviceStatusUpdateInput {
 # @category: assets
 "Input for creating an asset type."
 input AssetTypeCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4489,8 +4639,8 @@ input AssetTypeUpdateInput {
 # @category: assets/groups
 "Input for creating an asset group type."
 input AssetGroupTypeCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4532,8 +4682,8 @@ input AssetGroupTypeConstraintInput {
 # @category: geo-objects
 "Input for creating a geo object type."
 input GeoObjectTypeCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4569,8 +4719,8 @@ input GeoObjectTypeUpdateInput {
 # @category: catalogs/tags
 "Input for creating a tag."
 input TagCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4603,8 +4753,8 @@ input TagUpdateInput {
 # @category: access-control
 "Input for creating a role."
 input RoleCreateInput {
-  "The organization that will own the item."
-  organizationId: ID!
+  "The workspace that will own the item."
+  workspaceId: ID!
   "The machine-readable code. Auto-generated from title if omitted."
   code: Code
   "The display name."
@@ -4652,6 +4802,18 @@ type Query {
   "Retrieves multiple entities by their globally unique identifiers. Returns items in the same order as the input IDs."
   nodes("The IDs of the entities to retrieve." ids: [ID!]!): [Node]!
 
+  # @category: custom-fields
+  """
+  Lists the custom-field types that may be defined on the given owner catalog item,
+  together with what a `REFERENCE` field defined there may point at. Creating a definition
+  with a type absent from this list fails with `VALIDATION_ERROR` on `input.fieldType`.
+
+  Returns an empty list for any catalog item whose instances cannot carry custom fields.
+  The owners that can are the ones whose instances implement `Customizable` — `AssetType`
+  and `GeoObjectType`.
+  """
+  customFieldTypes("The owner catalog item — the type the fields would be defined on." ownerTypeId: ID!): [FieldTypeAvailability!]!
+
   # --- Catalogs ---
 
   # @category: catalogs/catalog-items
@@ -4659,19 +4821,19 @@ type Query {
   catalog("The ID of the catalog to retrieve." id: ID!): Catalog
 
   # @category: catalogs/catalog-items
-  "Lists catalogs for an organization."
+  "Lists catalogs for a workspace."
   catalogs(
-    "The organization to retrieve catalogs for."
-    organizationId: ID!
+    "The workspace to retrieve catalogs for."
+    workspaceId: ID!
     "Filtering options for the returned catalogs."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned catalogs."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -4680,38 +4842,38 @@ type Query {
   # --- Org-scoped Catalog Items ---
 
   # @category: devices
-  "Lists device types for an organization."
+  "Lists device types for a workspace."
   deviceTypes(
-    "The organization to retrieve device types for."
-    organizationId: ID!
+    "The workspace to retrieve device types for."
+    workspaceId: ID!
     "Filtering options for the returned device types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned device types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceTypeConnection!
 
   # @category: devices
-  "Lists device statuses for an organization."
+  "Lists device statuses for a workspace."
   deviceStatuses(
-    "The organization to retrieve device statuses for."
-    organizationId: ID!
+    "The workspace to retrieve device statuses for."
+    workspaceId: ID!
     "Filtering options for the returned device statuses."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned device statuses."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -4720,177 +4882,177 @@ type Query {
   # @category: devices
   "Lists device models with optional vendor filter."
   deviceModels(
-    "The organization to retrieve device models for."
-    organizationId: ID!
+    "The workspace to retrieve device models for."
+    workspaceId: ID!
     "Filtering options for the returned device models."
     filter: DeviceModelFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned device models."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
   ): DeviceModelConnection!
 
   # @category: devices
-  "Lists device vendors for an organization."
+  "Lists device vendors for a workspace."
   deviceVendors(
-    "The organization to retrieve device vendors for."
-    organizationId: ID!
+    "The workspace to retrieve device vendors for."
+    workspaceId: ID!
     "Filtering options for the returned device vendors."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned device vendors."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceVendorConnection!
 
   # @category: devices
-  "Lists device relation types for an organization."
+  "Lists device relation types for a workspace."
   deviceRelationTypes(
-    "The organization to retrieve device relation types for."
-    organizationId: ID!
+    "The workspace to retrieve device relation types for."
+    workspaceId: ID!
     "Filtering options for the returned device relation types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned device relation types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceRelationTypeConnection!
 
   # @category: assets
-  "Lists asset types for an organization."
+  "Lists asset types for a workspace."
   assetTypes(
-    "The organization to retrieve asset types for."
-    organizationId: ID!
+    "The workspace to retrieve asset types for."
+    workspaceId: ID!
     "Filtering options for the returned asset types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned asset types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): AssetTypeConnection!
 
   # @category: assets/groups
-  "Lists asset group types for an organization."
+  "Lists asset group types for a workspace."
   assetGroupTypes(
-    "The organization to retrieve asset group types for."
-    organizationId: ID!
+    "The workspace to retrieve asset group types for."
+    workspaceId: ID!
     "Filtering options for the returned asset group types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned asset group types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): AssetGroupTypeConnection!
 
   # @category: geo-objects
-  "Lists geo object types for an organization."
+  "Lists geo object types for a workspace."
   geoObjectTypes(
-    "The organization to retrieve geo object types for."
-    organizationId: ID!
+    "The workspace to retrieve geo object types for."
+    workspaceId: ID!
     "Filtering options for the returned geo object types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned geo object types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): GeoObjectTypeConnection!
 
   # @category: access-control
-  "Lists roles for an organization."
+  "Lists roles for a workspace."
   roles(
-    "The organization to retrieve roles for."
-    organizationId: ID!
+    "The workspace to retrieve roles for."
+    workspaceId: ID!
     "Filtering options for the returned roles."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned roles."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): RoleConnection!
 
   # @category: catalogs/tags
-  "Lists tags for an organization."
+  "Lists tags for a workspace."
   tags(
-    "The organization to retrieve tags for."
-    organizationId: ID!
+    "The workspace to retrieve tags for."
+    workspaceId: ID!
     "Filtering options for the returned tags."
     filter: TagFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned tags."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
   ): TagConnection!
 
-  # --- Organizations ---
+  # --- Workspaces ---
 
-  # @category: organizations
-  "Retrieves an organization by its ID."
-  organization("The ID of the organization to retrieve." id: ID!): Organization
+  # @category: workspaces
+  "Retrieves a workspace by its ID."
+  workspace("The ID of the workspace to retrieve." id: ID!): Workspace
 
-  # @category: organizations
-  "Lists organizations."
-  organizations(
-    "Filtering options for the returned organizations."
-    filter: OrganizationFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+  # @category: workspaces
+  "Lists workspaces."
+  workspaces(
+    "Filtering options for the returned workspaces."
+    filter: WorkspaceFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
-    "The ordering options for the returned organizations."
-    orderBy: OrganizationOrder = { field: TITLE, direction: ASC }
-  ): OrganizationConnection!
+    "The ordering options for the returned workspaces."
+    orderBy: WorkspaceOrder = { field: TITLE, direction: ASC }
+  ): WorkspaceConnection!
 
   # --- Actors ---
 
@@ -4898,24 +5060,24 @@ type Query {
   "Retrieves the currently authenticated actor."
   me: Actor!
 
-  # @category: organizations/members
+  # @category: workspaces/members
   "Retrieves a member by its ID."
   member("The ID of the member to retrieve." id: ID!): Member
 
-  # @category: organizations/members
-  "Lists members of an organization."
+  # @category: workspaces/members
+  "Lists members of a workspace."
   members(
-    "The organization to retrieve members for."
-    organizationId: ID!
+    "The workspace to retrieve members for."
+    workspaceId: ID!
     "Filtering options for the returned members."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned members."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
@@ -4926,19 +5088,19 @@ type Query {
   integration("The ID of the integration to retrieve." id: ID!): Integration
 
   # @category: actors/integrations
-  "Lists integrations for an organization."
+  "Lists integrations for a workspace."
   integrations(
-    "The organization to retrieve integrations for."
-    organizationId: ID!
+    "The workspace to retrieve integrations for."
+    workspaceId: ID!
     "Filtering options for the returned integrations."
     filter: IntegrationFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned integrations."
     orderBy: IntegrationOrder = { field: TITLE, direction: ASC }
@@ -4951,19 +5113,19 @@ type Query {
   device("The ID of the device to retrieve." id: ID!): Device
 
   # @category: devices
-  "Lists devices for an organization."
+  "Lists devices for a workspace."
   devices(
-    "The organization to retrieve devices for."
-    organizationId: ID!
+    "The workspace to retrieve devices for."
+    workspaceId: ID!
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
@@ -4974,19 +5136,19 @@ type Query {
   asset("The ID of the asset to retrieve." id: ID!): Asset
 
   # @category: assets
-  "Lists assets for an organization."
+  "Lists assets for a workspace."
   assets(
-    "The organization to retrieve assets for."
-    organizationId: ID!
+    "The workspace to retrieve assets for."
+    workspaceId: ID!
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
@@ -4997,19 +5159,19 @@ type Query {
   assetGroup("The ID of the asset group to retrieve." id: ID!): AssetGroup
 
   # @category: assets/groups
-  "Lists asset groups for an organization."
+  "Lists asset groups for a workspace."
   assetGroups(
-    "The organization to retrieve asset groups for."
-    organizationId: ID!
+    "The workspace to retrieve asset groups for."
+    workspaceId: ID!
     "Filtering options for the returned asset groups."
     filter: AssetGroupFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned asset groups."
     orderBy: AssetGroupOrder = { field: TITLE, direction: ASC }
@@ -5020,19 +5182,19 @@ type Query {
   inventory("The ID of the inventory to retrieve." id: ID!): Inventory
 
   # @category: devices/inventory
-  "Lists inventories for an organization."
+  "Lists inventories for a workspace."
   inventories(
-    "The organization to retrieve inventories for."
-    organizationId: ID!
+    "The workspace to retrieve inventories for."
+    workspaceId: ID!
     "Filtering options for the returned inventories."
     filter: InventoryFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned inventories."
     orderBy: InventoryOrder = { field: TITLE, direction: ASC }
@@ -5043,19 +5205,19 @@ type Query {
   geoObject("The ID of the geo object to retrieve." id: ID!): GeoObject
 
   # @category: geo-objects
-  "Lists geo objects for an organization."
+  "Lists geo objects for a workspace."
   geoObjects(
-    "The organization to retrieve geo objects for."
-    organizationId: ID!
+    "The workspace to retrieve geo objects for."
+    workspaceId: ID!
     "Filtering options for the returned geo objects."
     filter: GeoObjectFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned geo objects."
     orderBy: GeoObjectOrder = { field: TITLE, direction: ASC }
@@ -5066,19 +5228,19 @@ type Query {
   schedule("The ID of the schedule to retrieve." id: ID!): Schedule
 
   # @category: schedules
-  "Lists schedules for an organization."
+  "Lists schedules for a workspace."
   schedules(
-    "The organization to retrieve schedules for."
-    organizationId: ID!
+    "The workspace to retrieve schedules for."
+    workspaceId: ID!
     "Filtering options for the returned schedules."
     filter: ScheduleFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned schedules."
     orderBy: ScheduleOrder = { field: TITLE, direction: ASC }
@@ -5087,40 +5249,40 @@ type Query {
   # --- Audit ---
 
   # @category: audit
-  "Lists audit events for an organization."
+  "Lists audit events for a workspace."
   auditEvents(
-    "The organization to retrieve audit events for."
-    organizationId: ID!
+    "The workspace to retrieve audit events for."
+    workspaceId: ID!
     "Filtering options for the returned audit events."
     filter: AuditEventFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned audit events."
     orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
   ): AuditEventConnection!
 
   # @category: audit
-  "Retrieves the change history for any entity within an organization."
+  "Retrieves the change history for any entity within a workspace."
   entityHistory(
-    "The organization that owns the entity."
-    organizationId: ID!
+    "The workspace that owns the entity."
+    workspaceId: ID!
     "The ID of the entity to retrieve history for."
     entityId: ID!
     "Filtering options for the returned audit events."
     filter: AuditEventFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned audit events."
     orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
@@ -5129,57 +5291,57 @@ type Query {
   # --- Access Control ---
 
   # @category: access-control
-  "Lists actor role assignments for an organization."
+  "Lists actor role assignments for a workspace."
   actorRoles(
-    "The organization to retrieve actor roles for."
-    organizationId: ID!
+    "The workspace to retrieve actor roles for."
+    workspaceId: ID!
     "Filtering options for the returned actor roles."
     filter: ActorRoleFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned actor roles."
     orderBy: ActorRoleOrder = { field: ASSIGNED_AT, direction: DESC }
   ): ActorRoleConnection!
 
   # @category: access-control
-  "Lists role permissions for an organization."
+  "Lists role permissions for a workspace."
   rolePermissions(
-    "The organization to retrieve role permissions for."
-    organizationId: ID!
+    "The workspace to retrieve role permissions for."
+    workspaceId: ID!
     "Filtering options for the returned role permissions."
     filter: RolePermissionFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned role permissions."
     orderBy: RolePermissionOrder = { field: GRANTED_AT, direction: DESC }
   ): RolePermissionConnection!
 
   # @category: access-control
-  "Lists user scope restrictions for an organization."
+  "Lists user scope restrictions for a workspace."
   userScopes(
-    "The organization to retrieve user scopes for."
-    organizationId: ID!
+    "The workspace to retrieve user scopes for."
+    workspaceId: ID!
     "Filtering options for the returned user scopes."
     filter: UserScopeFilter
-    "The first `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://docs.navixy.com/api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://docs.navixy.com/api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
     before: String
     "The ordering options for the returned user scopes."
     orderBy: UserScopeOrder = { field: ID, direction: ASC }
@@ -5240,13 +5402,6 @@ type InventoryPayload {
   inventory: Inventory!
 }
 
-# @category: organizations
-"The result of an organization mutation."
-type OrganizationPayload {
-  "The created or updated organization."
-  organization: Organization!
-}
-
 # @category: actors/users
 "The result of a user profile mutation."
 type UserPayload {
@@ -5254,7 +5409,7 @@ type UserPayload {
   user: User!
 }
 
-# @category: organizations/members
+# @category: workspaces/members
 "The result of a membership mutation."
 type MemberPayload {
   "The created or updated membership."
@@ -5397,7 +5552,16 @@ type Mutation {
   ): DevicePayload
 
   # @category: devices
-  "Deletes a device."
+  """
+  Deletes a device.
+
+  Every `DEVICE` custom-field value pointing at it is detached in the same transaction, on assets
+  and on geo objects alike, so no holder is left naming a device that is gone.
+
+  Rejected with `VALIDATION_ERROR` when one of those fields `isRequired`: detaching would leave
+  that holder invalid. Nothing is detached in that case, and the message names the holder and the
+  field code — a delete can therefore fail because of a field on an entirely different object.
+  """
   deviceDelete(
     "The input fields for deleting the device."
     input: DeviceDeleteInput!
@@ -5546,28 +5710,7 @@ type Mutation {
     input: InventoryDeleteInput!
   ): DeletePayload
 
-  # --- Organizations ---
-
-  # @category: organizations
-  "Creates a new organization."
-  organizationCreate(
-    "The input fields for creating the organization."
-    input: OrganizationCreateInput!
-  ): OrganizationPayload
-
-  # @category: organizations
-  "Updates an existing organization."
-  organizationUpdate(
-    "The input fields for updating the organization."
-    input: OrganizationUpdateInput!
-  ): OrganizationPayload
-
-  # @category: organizations
-  "Deletes an organization and all its data."
-  organizationDelete(
-    "The input fields for deleting the organization."
-    input: OrganizationDeleteInput!
-  ): DeletePayload
+  # Workspaces have no mutations: Console owns their lifecycle.
 
   # --- User Profile ---
 
@@ -5580,22 +5723,22 @@ type Mutation {
 
   # --- Members ---
 
-  # @category: organizations/members
-  "Adds a user to an organization as a member."
+  # @category: workspaces/members
+  "Adds a user to a workspace as a member."
   memberCreate(
     "The input fields for creating the membership."
     input: MemberCreateInput!
   ): MemberPayload
 
-  # @category: organizations/members
+  # @category: workspaces/members
   "Updates a membership."
   memberUpdate(
     "The input fields for updating the membership."
     input: MemberUpdateInput!
   ): MemberPayload
 
-  # @category: organizations/members
-  "Removes a user from an organization."
+  # @category: workspaces/members
+  "Removes a user from a workspace."
   memberRemove(
     "The input fields for removing the membership."
     input: MemberRemoveInput!
@@ -5897,14 +6040,14 @@ type Mutation {
 # Real-time subscriptions planned for future versions.
 #
 # Planned subscriptions:
-# - domainEvent(organizationId, aggregateType, eventType): DomainEvent
-# - auditEventOccurred(organizationId): AuditEvent
+# - domainEvent(workspaceId, aggregateType, eventType): DomainEvent
+# - auditEventOccurred(workspaceId): AuditEvent
 #
 # DomainEvent structure:
 #   aggregateType: Code!
 #   aggregateId: ID!
 #   eventType: AuditEventType!
-#   organizationId: ID
+#   workspaceId: ID
 #   payload: JSON
 #   occurredAt: DateTime!
 #

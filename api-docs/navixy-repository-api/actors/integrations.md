@@ -12,7 +12,7 @@ Integration accounts for API clients, automated systems, and third-party service
 
 ## Queries
 
-### integration
+### integration (query)
 
 Retrieves an integration by its ID.
 
@@ -34,42 +34,16 @@ integration(id: ID!): Integration
 
 An external system integration with API access.
 
-**Implements:** [Actor](README.md#type-actor), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [Actor](README.md#actor), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The display name of the actor. |
-| `organization` | [Organization](../organizations/README.md#type-organization)! | The organization this integration belongs to. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
 | `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
 | `isActive` | `Boolean!` | Whether this integration is active. |
-
-</details>
-
-<details>
-
-<summary>Organization (entity)</summary>
-
-An organization in the hierarchy that owns entities and users.
-
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
-| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title` | `String!` | The human-readable display name. |
-| `externalId` | `String` | An external system identifier for integration purposes. |
-| `isActive` | `Boolean!` | Whether this organization is active. |
-| `features` | [[OrganizationFeature](../organizations/README.md#type-organizationfeature)!]! | The feature flags enabled for this organization. |
-| `parent` | [Organization](../organizations/README.md#type-organization) | The parent organization in the hierarchy. Null for root organizations. |
-| `children` | [OrganizationConnection](../organizations/README.md#type-organizationconnection)! | The child organizations. |
-| `members` | [MemberConnection](../organizations/members.md#type-memberconnection)! | The members of this organization. |
-| `devices` | [DeviceConnection](../devices/types.md#type-deviceconnection)! | The devices owned by this organization. |
-| `assets` | [AssetConnection](../assets/types.md#type-assetconnection)! | The assets owned by this organization. |
-| `geoObjects` | [GeoObjectConnection](../geo-objects/types.md#type-geoobjectconnection)! | The geographic objects owned by this organization. |
-| `schedules` | [ScheduleConnection](../schedules.md#type-scheduleconnection)! | The schedules owned by this organization. |
 
 </details>
 
@@ -77,11 +51,11 @@ An organization in the hierarchy that owns entities and users.
 
 ### integrations
 
-Lists integrations for an organization.
+Lists integrations for a workspace.
 
 ```graphql
 integrations(
-    organizationId: ID!
+    workspaceId: ID!
     filter: IntegrationFilter
     first: Int
     after: String
@@ -95,12 +69,12 @@ integrations(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization to retrieve integrations for. |
+| `workspaceId` | `ID!` | The workspace to retrieve integrations for. |
 | `filter` | `IntegrationFilter` | Filtering options for the returned integrations. |
-| `first` | `Int` | The first `n` elements from the [paginated list](../pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](../pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](../pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](../pagination.md). |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `orderBy` | `IntegrationOrder` | The ordering options for the returned integrations. |
 
 **Input types:**
@@ -125,8 +99,8 @@ Ordering options for integrations.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [IntegrationOrderField](#type-integrationorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [IntegrationOrderField](#integrationorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -138,29 +112,14 @@ Ordering options for integrations.
 
 A paginated list of Integration items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[IntegrationEdge](#type-integrationedge)!]! | A list of edges. |
-| `nodes` | [[Integration](#type-integration)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
-
-</details>
-
-<details>
-
-<summary>PageInfo (entity)</summary>
-
-Information about the current page in a paginated connection.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `hasNextPage` | `Boolean!` | Whether more items exist after the current page. |
-| `hasPreviousPage` | `Boolean!` | Whether more items exist before the current page. |
-| `startCursor` | `String` | The cursor pointing to the first item in the current page. |
-| `endCursor` | `String` | The cursor pointing to the last item in the current page. |
+| `edges` | [[IntegrationEdge](#integrationedge)!]! | A list of edges. |
+| `nodes` | [[Integration](#integration)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -194,7 +153,7 @@ Input for creating a new integration.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization that will own the integration. |
+| `workspaceId` | `ID!` | The workspace that will own the integration. |
 | `title` | `String!` | The display name. |
 | `credentialRef` | `String` | A reference to credentials in a secure vault. |
 
@@ -210,7 +169,7 @@ The result of an integration mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `integration` | [Integration](#type-integration)! | The created or updated integration. |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
 </details>
 
@@ -220,14 +179,14 @@ The result of an integration mutation.
 
 An external system integration with API access.
 
-**Implements:** [Actor](README.md#type-actor), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [Actor](README.md#actor), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The display name of the actor. |
-| `organization` | [Organization](../organizations/README.md#type-organization)! | The organization this integration belongs to. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
 | `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
 | `isActive` | `Boolean!` | Whether this integration is active. |
 
@@ -279,7 +238,7 @@ The result of an integration mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `integration` | [Integration](#type-integration)! | The created or updated integration. |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
 </details>
 
@@ -289,14 +248,14 @@ The result of an integration mutation.
 
 An external system integration with API access.
 
-**Implements:** [Actor](README.md#type-actor), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [Actor](README.md#actor), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The display name of the actor. |
-| `organization` | [Organization](../organizations/README.md#type-organization)! | The organization this integration belongs to. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
 | `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
 | `isActive` | `Boolean!` | Whether this integration is active. |
 
@@ -353,26 +312,26 @@ The result of a delete mutation.
 
 ## Objects
 
-<a id="type-integration"></a>
+<a id="integration"></a>
 
 ### Integration
 
 An external system integration with API access.
 
-**Implements:** [Actor](README.md#type-actor), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
+**Implements:** [Actor](README.md#actor), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The display name of the actor. |
-| `organization` | [Organization](../organizations/README.md#type-organization)! | The organization this integration belongs to. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
 | `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
 | `isActive` | `Boolean!` | Whether this integration is active. |
 
 ---
 
-<a id="type-integrationpayload"></a>
+<a id="integrationpayload"></a>
 
 ### IntegrationPayload
 
@@ -380,13 +339,13 @@ The result of an integration mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `integration` | [Integration](#type-integration)! | The created or updated integration. |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
 ---
 
 ## Inputs
 
-<a id="type-integrationfilter"></a>
+<a id="integrationfilter"></a>
 
 ### IntegrationFilter
 
@@ -398,7 +357,7 @@ Filtering options for integrations.
 
 ---
 
-<a id="type-integrationorder"></a>
+<a id="integrationorder"></a>
 
 ### IntegrationOrder
 
@@ -406,12 +365,12 @@ Ordering options for integrations.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [IntegrationOrderField](#type-integrationorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [IntegrationOrderField](#integrationorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 ---
 
-<a id="type-integrationcreateinput"></a>
+<a id="integrationcreateinput"></a>
 
 ### IntegrationCreateInput
 
@@ -419,13 +378,13 @@ Input for creating a new integration.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization that will own the integration. |
+| `workspaceId` | `ID!` | The workspace that will own the integration. |
 | `title` | `String!` | The display name. |
 | `credentialRef` | `String` | A reference to credentials in a secure vault. |
 
 ---
 
-<a id="type-integrationupdateinput"></a>
+<a id="integrationupdateinput"></a>
 
 ### IntegrationUpdateInput
 
@@ -441,7 +400,7 @@ Input for updating an existing integration.
 
 ---
 
-<a id="type-integrationdeleteinput"></a>
+<a id="integrationdeleteinput"></a>
 
 ### IntegrationDeleteInput
 
@@ -456,7 +415,7 @@ Input for deleting an integration.
 
 ## Enums
 
-<a id="type-integrationorderfield"></a>
+<a id="integrationorderfield"></a>
 
 ### IntegrationOrderField
 
@@ -470,34 +429,34 @@ Fields available for ordering integrations.
 
 ## Pagination types
 
-<a id="type-integrationconnection"></a>
+<a id="integrationconnection"></a>
 
 ### IntegrationConnection
 
 A paginated list of Integration items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[IntegrationEdge](#type-integrationedge)!]! | A list of edges. |
-| `nodes` | [[Integration](#type-integration)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
+| `edges` | [[IntegrationEdge](#integrationedge)!]! | A list of edges. |
+| `nodes` | [[Integration](#integration)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="type-integrationedge"></a>
+<a id="integrationedge"></a>
 
 ### IntegrationEdge
 
 An edge in the Integration connection.
 
-**Implements:** [Edge](../common.md#type-edge)
+**Implements:** [Edge](../common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [Integration](#type-integration)! | The integration at the end of the edge. |
+| `node` | [Integration](#integration)! | The integration at the end of the edge. |
 
 ---

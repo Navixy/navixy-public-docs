@@ -1,18 +1,18 @@
 ---
 description: >-
-  Query reference for organization members, including their roles, permissions,
-  and user profile data within each organization.
+  Query reference for workspace members, including their roles, permissions, and
+  user profile data within each workspace.
 ---
 
 # Members
 
 {% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-Organization members represent the relationship between users and organizations, including their roles and permissions within each organization.
+Workspace members represent the relationship between users and workspaces, including their roles and permissions within each workspace.
 
 ## Queries
 
-### member
+### member (query)
 
 Retrieves a member by its ID.
 
@@ -32,42 +32,18 @@ member(id: ID!): Member
 
 <summary>Member</summary>
 
-A user's membership in an organization.
+A user's membership in a workspace.
 
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned)
+**Implements:** [Node](../common.md#node), [Versioned](../common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `user` | [User](../actors/users.md#type-user)! | The user. |
-| `organization` | [Organization](README.md#type-organization)! | The organization the user belongs to. |
+| `user` | [User](../actors/users.md#user)! | The user. |
+| `workspace` | [Workspace](README.md#workspace)! | The workspace the user belongs to. |
 | `isActive` | `Boolean!` | Whether this membership is active. |
-| `assignedAt` | `DateTime!` | The date and time when the user was assigned to this organization. |
-
-</details>
-
-<details>
-
-<summary>User (entity)</summary>
-
-A human user account authenticated via an identity provider.
-
-**Implements:** [Actor](../actors/README.md#type-actor), [Node](../common.md#type-node), [Versioned](../common.md#type-versioned), [Titled](../common.md#type-titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. |
-| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title` | `String!` | The display name for the user. This is the user's full name for display purposes. |
-| `name` | [PersonName](../actors/README.md#type-personname)! | The structured name components from the identity provider. |
-| `identityProvider` | `String!` | The identity provider name (keycloak, auth0, okta, etc.). |
-| `identityProviderId` | `String!` | The user's unique ID in the identity provider. |
-| `email` | `EmailAddress!` | The user's primary email address. |
-| `locale` | `Locale` | The user's preferred locale. |
-| `externalId` | `String` | An external system identifier for integration purposes. |
-| `isActive` | `Boolean!` | Whether this user account is active. |
-| `memberships` | [MemberConnection](#type-memberconnection)! | The organization memberships for this user. |
+| `assignedAt` | [DateTime](../common.md#datetime)! | The date and time when the user was assigned to this workspace. |
 
 </details>
 
@@ -75,11 +51,11 @@ A human user account authenticated via an identity provider.
 
 ### members
 
-Lists members of an organization.
+Lists members of a workspace.
 
 ```graphql
 members(
-    organizationId: ID!
+    workspaceId: ID!
     filter: MemberFilter
     first: Int
     after: String
@@ -93,12 +69,12 @@ members(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization to retrieve members for. |
+| `workspaceId` | `ID!` | The workspace to retrieve members for. |
 | `filter` | `MemberFilter` | Filtering options for the returned members. |
-| `first` | `Int` | The first `n` elements from the [paginated list](../pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](../pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](../pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](../pagination.md). |
+| `first` | `Int` | The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `after` | `String` | The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `last` | `Int` | The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination). |
+| `before` | `String` | The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination). |
 | `orderBy` | `MemberOrder` | The ordering options for the returned members. |
 
 **Input types:**
@@ -124,8 +100,8 @@ Ordering options for members.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [MemberOrderField](#type-memberorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [MemberOrderField](#memberorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 </details>
 
@@ -137,29 +113,14 @@ Ordering options for members.
 
 A paginated list of Member items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[MemberEdge](#type-memberedge)!]! | A list of edges. |
-| `nodes` | [[Member](#type-member)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
-
-</details>
-
-<details>
-
-<summary>PageInfo (entity)</summary>
-
-Information about the current page in a paginated connection.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `hasNextPage` | `Boolean!` | Whether more items exist after the current page. |
-| `hasPreviousPage` | `Boolean!` | Whether more items exist before the current page. |
-| `startCursor` | `String` | The cursor pointing to the first item in the current page. |
-| `endCursor` | `String` | The cursor pointing to the last item in the current page. |
+| `edges` | [[MemberEdge](#memberedge)!]! | A list of edges. |
+| `nodes` | [[Member](#member)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
@@ -169,7 +130,7 @@ Information about the current page in a paginated connection.
 
 ### memberCreate
 
-Adds a user to an organization as a member.
+Adds a user to a workspace as a member.
 
 ```graphql
 memberCreate(
@@ -193,7 +154,7 @@ Input for creating a membership.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization ID. |
+| `workspaceId` | `ID!` | The workspace ID. |
 | `userId` | `ID!` | The user ID to add. |
 
 </details>
@@ -208,7 +169,7 @@ The result of a membership mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `member` | [Member](#type-member)! | The created or updated membership. |
+| `member` | [Member](#member)! | The created or updated membership. |
 
 </details>
 
@@ -216,18 +177,18 @@ The result of a membership mutation.
 
 <summary>Member (entity)</summary>
 
-A user's membership in an organization.
+A user's membership in a workspace.
 
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned)
+**Implements:** [Node](../common.md#node), [Versioned](../common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `user` | [User](../actors/users.md#type-user)! | The user. |
-| `organization` | [Organization](README.md#type-organization)! | The organization the user belongs to. |
+| `user` | [User](../actors/users.md#user)! | The user. |
+| `workspace` | [Workspace](README.md#workspace)! | The workspace the user belongs to. |
 | `isActive` | `Boolean!` | Whether this membership is active. |
-| `assignedAt` | `DateTime!` | The date and time when the user was assigned to this organization. |
+| `assignedAt` | [DateTime](../common.md#datetime)! | The date and time when the user was assigned to this workspace. |
 
 </details>
 
@@ -275,7 +236,7 @@ The result of a membership mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `member` | [Member](#type-member)! | The created or updated membership. |
+| `member` | [Member](#member)! | The created or updated membership. |
 
 </details>
 
@@ -283,18 +244,18 @@ The result of a membership mutation.
 
 <summary>Member (entity)</summary>
 
-A user's membership in an organization.
+A user's membership in a workspace.
 
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned)
+**Implements:** [Node](../common.md#node), [Versioned](../common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `user` | [User](../actors/users.md#type-user)! | The user. |
-| `organization` | [Organization](README.md#type-organization)! | The organization the user belongs to. |
+| `user` | [User](../actors/users.md#user)! | The user. |
+| `workspace` | [Workspace](README.md#workspace)! | The workspace the user belongs to. |
 | `isActive` | `Boolean!` | Whether this membership is active. |
-| `assignedAt` | `DateTime!` | The date and time when the user was assigned to this organization. |
+| `assignedAt` | [DateTime](../common.md#datetime)! | The date and time when the user was assigned to this workspace. |
 
 </details>
 
@@ -302,7 +263,7 @@ A user's membership in an organization.
 
 ### memberRemove
 
-Removes a user from an organization.
+Removes a user from a workspace.
 
 ```graphql
 memberRemove(
@@ -349,26 +310,26 @@ The result of a delete mutation.
 
 ## Objects
 
-<a id="type-member"></a>
+<a id="member"></a>
 
 ### Member
 
-A user's membership in an organization.
+A user's membership in a workspace.
 
-**Implements:** [Node](../common.md#type-node), [Versioned](../common.md#type-versioned)
+**Implements:** [Node](../common.md#node), [Versioned](../common.md#versioned)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `user` | [User](../actors/users.md#type-user)! | The user. |
-| `organization` | [Organization](README.md#type-organization)! | The organization the user belongs to. |
+| `user` | [User](../actors/users.md#user)! | The user. |
+| `workspace` | [Workspace](README.md#workspace)! | The workspace the user belongs to. |
 | `isActive` | `Boolean!` | Whether this membership is active. |
-| `assignedAt` | `DateTime!` | The date and time when the user was assigned to this organization. |
+| `assignedAt` | [DateTime](../common.md#datetime)! | The date and time when the user was assigned to this workspace. |
 
 ---
 
-<a id="type-memberpayload"></a>
+<a id="memberpayload"></a>
 
 ### MemberPayload
 
@@ -376,13 +337,13 @@ The result of a membership mutation.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `member` | [Member](#type-member)! | The created or updated membership. |
+| `member` | [Member](#member)! | The created or updated membership. |
 
 ---
 
 ## Inputs
 
-<a id="type-memberfilter"></a>
+<a id="memberfilter"></a>
 
 ### MemberFilter
 
@@ -395,7 +356,7 @@ Filtering options for members.
 
 ---
 
-<a id="type-memberorder"></a>
+<a id="memberorder"></a>
 
 ### MemberOrder
 
@@ -403,12 +364,12 @@ Ordering options for members.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `field` | [MemberOrderField](#type-memberorderfield)! | The field to order by. |
-| `direction` | [OrderDirection](../common.md#type-orderdirection)! | The direction to order. |
+| `field` | [MemberOrderField](#memberorderfield)! | The field to order by. |
+| `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 ---
 
-<a id="type-membercreateinput"></a>
+<a id="membercreateinput"></a>
 
 ### MemberCreateInput
 
@@ -416,12 +377,12 @@ Input for creating a membership.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `organizationId` | `ID!` | The organization ID. |
+| `workspaceId` | `ID!` | The workspace ID. |
 | `userId` | `ID!` | The user ID to add. |
 
 ---
 
-<a id="type-memberupdateinput"></a>
+<a id="memberupdateinput"></a>
 
 ### MemberUpdateInput
 
@@ -435,7 +396,7 @@ Input for updating a membership.
 
 ---
 
-<a id="type-memberremoveinput"></a>
+<a id="memberremoveinput"></a>
 
 ### MemberRemoveInput
 
@@ -450,7 +411,7 @@ Input for removing a membership.
 
 ## Enums
 
-<a id="type-memberorderfield"></a>
+<a id="memberorderfield"></a>
 
 ### MemberOrderField
 
@@ -464,34 +425,34 @@ Fields available for ordering members.
 
 ## Pagination types
 
-<a id="type-memberconnection"></a>
+<a id="memberconnection"></a>
 
 ### MemberConnection
 
 A paginated list of Member items.
 
-**Implements:** [Connection](../common.md#type-connection)
+**Implements:** [Connection](../common.md#connection)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `edges` | [[MemberEdge](#type-memberedge)!]! | A list of edges. |
-| `nodes` | [[Member](#type-member)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../common.md#type-pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../common.md#type-countinfo) | The total count of items matching the filter. |
+| `edges` | [[MemberEdge](#memberedge)!]! | A list of edges. |
+| `nodes` | [[Member](#member)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../common.md#countinfo) | The total count of items matching the filter. |
 
 ---
 
-<a id="type-memberedge"></a>
+<a id="memberedge"></a>
 
 ### MemberEdge
 
 An edge in the Member connection.
 
-**Implements:** [Edge](../common.md#type-edge)
+**Implements:** [Edge](../common.md#edge)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [Member](#type-member)! | The member at the end of the edge. |
+| `node` | [Member](#member)! | The member at the end of the edge. |
 
 ---

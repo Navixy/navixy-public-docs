@@ -7,7 +7,7 @@ description: >-
 
 # Filtering and sorting
 
-List queries (those returning multiple items, like `devices`, `assets`, or `organizations`) accept `filter` and `orderBy` arguments that let you control which results come back and in what order. Instead of fetching everything and processing it client-side, you can request exactly what you need.
+List queries (those returning multiple items, like `devices`, `assets`, or `workspaces`) accept `filter` and `orderBy` arguments that let you control which results come back and in what order. Instead of fetching everything and processing it client-side, you can request exactly what you need.
 
 For navigating through large result sets, see [Pagination](pagination.md).
 
@@ -17,16 +17,18 @@ Pass a `filter` argument to any list query to narrow down results:
 
 ```graphql
 query {
-  devices(
-    organizationId: "019d48ea-0752-8000-801f-444556437ab1" # your organization id
-    filter: {
-      statusIds: ["status-active-uuid"]
-    }
-  ) {
-    nodes {
-      id
-      title
-      status { title }
+  bdr {
+    devices(
+      workspaceId: "019d48ea-0752-8000-801f-444556437ab1" # your workspace id
+      filter: {
+        statusIds: ["status-active-uuid"]
+      }
+    ) {
+      nodes {
+        id
+        title
+        status { title }
+      }
     }
   }
 }
@@ -34,7 +36,7 @@ query {
 
 This returns only devices with the specified status.
 
-Each entity type has its own filter input with different available fields. For example, `DeviceFilter` supports filtering by type, model, status, vendor, and inventory, while `OrganizationFilter` only supports filtering by parent and active status. Use introspection or your API's reference to see available filter fields for each entity.
+Each entity type has its own filter input with different available fields. For example, `DeviceFilter` supports filtering by type, model, status, vendor, and inventory, while `WorkspaceFilter` only supports filtering by active status. Use [introspection](graphql-basics/README.md#introspection) or the entity's reference page to see available filter fields.
 
 ### Filtering logic
 
@@ -81,15 +83,17 @@ Most filters include a `titleContains` field for partial text matching:
 
 ```graphql
 query {
-  devices(
-    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
-    filter: {
-      titleContains: "delivery"
-    }
-  ) {
-    nodes {
-      id
-      title
+  bdr {
+    devices(
+      workspaceId: "019d48ea-0752-8000-801f-444556437ab1"
+      filter: {
+        titleContains: "delivery"
+      }
+    ) {
+      nodes {
+        id
+        title
+      }
     }
   }
 }
@@ -97,7 +101,7 @@ query {
 
 This returns devices with "delivery" anywhere in their title, like "Delivery Van 1" or "North Delivery Truck". The search is case-insensitive.
 
-Some filters have additional text search fields. For example, `DeviceFilter` includes `identifierContains` for searching hardware identifiers like IMEI numbers. Unlike `titleContains`, identifier search is case-sensitive.
+Some filters have additional text search fields. For example, `DeviceFilter` includes `identifierContains` for searching hardware identifiers like IMEI numbers. Like `titleContains`, identifier search is case-insensitive.
 
 ### Limitations
 
@@ -111,13 +115,15 @@ Use the `orderBy` argument to control the order of results:
 
 ```graphql
 query {
-  devices(
-    organizationId: "019d48ea-0752-8000-801f-444556437ab1"
-    orderBy: { field: TITLE, direction: ASC }
-  ) {
-    nodes {
-      id
-      title
+  bdr {
+    devices(
+      workspaceId: "019d48ea-0752-8000-801f-444556437ab1"
+      orderBy: { field: TITLE, direction: ASC }
+    ) {
+      nodes {
+        id
+        title
+      }
     }
   }
 }
@@ -145,5 +151,5 @@ Cursors encode the current sort position. If you change `orderBy` between pagina
 
 ## See also
 
-* [Pagination](pagination.md): Navigating through filtered results using cursors
-* [Custom field filtering and sorting](custom-field-filtering.md): Filtering and sorting by custom field values in Navixy Repository API
+* [Pagination](pagination.md): Page through large result sets with cursors
+* [Custom field filtering and sorting](custom-field-filtering.md): Filter and sort assets and geo objects by custom field values

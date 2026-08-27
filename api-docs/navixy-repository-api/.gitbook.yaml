@@ -1,0 +1,33 @@
+redirects:
+  # single-page-per-concept merge (2026-08-26)
+  access-control/queries: access-control.md
+  access-control/mutations: access-control.md
+  access-control/types: access-control.md
+  assets/queries: assets/README.md
+  assets/mutations: assets/README.md
+  assets/types: assets/README.md
+  assets/groups/queries: assets/groups.md
+  assets/groups/mutations: assets/groups.md
+  assets/groups/types: assets/groups.md
+  devices/queries: devices/README.md
+  devices/mutations: devices/README.md
+  devices/types: devices/README.md
+  geo-objects/queries: geo-objects.md
+  geo-objects/mutations: geo-objects.md
+  geo-objects/types: geo-objects.md
+  # workspace rename (2026-08-21)
+  organizations: workspaces/README.md
+  organizations/members: workspaces/members.md
+  # removed all-operations reference (2026-08-21)
+  graphql-reference/all-operations-and-types: README.md
+  graphql-reference/all-operations-and-types/queries: README.md
+  graphql-reference/all-operations-and-types/mutations: README.md
+  graphql-reference/all-operations-and-types/inputs: README.md
+  graphql-reference/all-operations-and-types/objects: README.md
+  graphql-reference/all-operations-and-types/scalars: README.md
+  graphql-reference/all-operations-and-types/enums: README.md
+  graphql-reference/all-operations-and-types/interfaces: README.md
+  # removed empty stub (2026-08-24)
+  guides/configuring-user-permissions: guides/README.md
+  # directives moved out of the core-api-reference folder (2026-08-27)
+  core-api-reference/directives: directives.md
