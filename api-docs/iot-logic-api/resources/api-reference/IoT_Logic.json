@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "title": "Navixy IoT Logic API",
     "summary": "API calls for Flow and Node management",
     "description": "This is an API reference for Flow and Node management in Navixy IoT Logic. Use these endpoints to create and configure data processing flows, manage nodes and their connections, assign devices to flows, and export or import flow configurations.",
@@ -68,6 +68,18 @@
           "200": {
             "$ref": "#/components/responses/EntityCreatedResponse"
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 292 when the flow fails validation, which adds an `errors` array naming the node at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "402": {
+            "description": "Payment required, code 268: the account has reached its quota for this entity type.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -119,6 +131,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the flow does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic` right, or lacks `iot_logic_flow`, which this operation requires on top of it.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -157,6 +177,14 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/EntityCreatedResponse"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the flow does not exist, and 292 when the flow fails validation, which adds an `errors` array naming the node at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -197,6 +225,14 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the flow does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -241,6 +277,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic` right.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -291,6 +335,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the flow does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic` right, or lacks `iot_logic_flow`, which this operation requires on top of it.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -363,6 +415,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic_flow` right.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -418,6 +478,18 @@
           "200": {
             "$ref": "#/components/responses/OK"
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "429": {
+            "description": "Too many requests, code 15: this operation is rate limited to 1 request per second with a burst of 1.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -455,6 +527,18 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/EntityCreatedResponse"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 230 when the endpoint type is not `output_mqtt_client`, the only type this operation accepts, because the default endpoint is virtual and never stored.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "402": {
+            "description": "Payment required, code 268: the account has reached its quota for this entity type.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -514,6 +598,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the endpoint does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -551,6 +643,14 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the endpoint does not exist, and 230 when the endpoint type is not `output_mqtt_client`, the only type this operation accepts, because the default endpoint is virtual and never stored.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -592,6 +692,14 @@
           "200": {
             "$ref": "#/components/responses/OK"
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the endpoint does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right. Code 101 when the call comes from a demo session, which this operation does not accept.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -632,6 +740,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -684,6 +800,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault. It also returns 201 when the template does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic` right.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -757,6 +881,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic` right.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -814,6 +946,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session belongs to a sub-user, or lacks the `iot_logic` right, or lacks `iot_logic_flow`, which this operation requires on top of it.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -886,6 +1026,14 @@
               }
             }
           },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right.",
+            "$ref": "#/components/responses/ResponseError"
+          },
           "default": {
             "$ref": "#/components/responses/ResponseError"
           }
@@ -938,6 +1086,14 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Common codes are 3 for a wrong hash, 4 for an API key that does not exist or a session that has ended, and 7 for invalid parameters, which adds an `errors` array naming each parameter at fault.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Access denied, code 13: the session lacks the `iot_logic_flow` right.",
+            "$ref": "#/components/responses/ResponseError"
           },
           "default": {
             "$ref": "#/components/responses/ResponseError"
@@ -1021,7 +1177,7 @@
                 },
                 "status": {
                   "type": "object",
-                  "description": "Error status. It only presence when an error occurred.",
+                  "description": "Error status. Present only when an error occurred.",
                   "properties": {
                     "code": {
                       "type": "integer",
@@ -1032,6 +1188,46 @@
                       "type": "string",
                       "description": "An error description",
                       "example": "Database error"
+                    }
+                  }
+                },
+                "errors": {
+                  "type": "array",
+                  "description": "Per-item detail, returned with validation failures. Parameter validation, error code 7, returns `parameter` and `error`. Flow validation, error code 292, returns `message` with `node_ids` and `parameters` so a client can point at the node that failed.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "parameter": {
+                        "type": "string",
+                        "description": "Name of the parameter that failed validation. Returned with error code 7.",
+                        "example": "flow_id"
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "What was wrong with that parameter. Returned with error code 7.",
+                        "example": "must not be null"
+                      },
+                      "message": {
+                        "type": "string",
+                        "description": "What was wrong with the flow. Returned with error code 292.",
+                        "example": "The formula is invalid: [1:6 JEXL error : value]"
+                      },
+                      "node_ids": {
+                        "type": "array",
+                        "description": "IDs of the nodes the message applies to. Returned with error code 292.",
+                        "items": {
+                          "type": "integer"
+                        },
+                        "example": [2]
+                      },
+                      "parameters": {
+                        "type": "array",
+                        "description": "Paths to the node fields the message applies to. Returned with error code 292.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": ["data.items[0].value"]
+                      }
                     }
                   }
                 }
@@ -1242,7 +1438,6 @@
         "example": "simple_edge"
       },
       "Node": {
-        "type": "object",
         "description": "Flowchart Node",
         "oneOf": [
           {
@@ -1300,6 +1495,9 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"data_source\".",
+            "enum": [
+              "data_source"
+            ],
             "example": "data_source"
           },
           "data": {
@@ -1386,6 +1584,9 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"initiate_attributes\".",
+            "enum": [
+              "initiate_attributes"
+            ],
             "example": "initiate_attributes"
           },
           "data": {
@@ -1447,6 +1648,9 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"logic\".",
+            "enum": [
+              "logic"
+            ],
             "example": "logic"
           },
           "data": {
@@ -1496,6 +1700,9 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"action\".",
+            "enum": [
+              "action"
+            ],
             "example": "action"
           },
           "data": {
@@ -1619,6 +1826,9 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"webhook\".",
+            "enum": [
+              "webhook"
+            ],
             "example": "webhook"
           },
           "data": {
@@ -1705,10 +1915,12 @@
           "type": {
             "type": "string",
             "description": "Node type. Always \"output_endpoint\".",
+            "enum": [
+              "output_endpoint"
+            ],
             "example": "output_endpoint"
           },
           "data": {
-            "type": "object",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/NodeOutputEndpointDataDefault"
@@ -1738,6 +1950,9 @@
           "output_endpoint_type": {
             "type": "string",
             "description": "Type of endpoint. Always 'output_default' for Navixy platform.",
+            "enum": [
+              "output_default"
+            ],
             "example": "output_default"
           }
         },
@@ -1757,6 +1972,9 @@
           "output_endpoint_type": {
             "type": "string",
             "description": "Type of endpoint. Always 'output_mqtt_client'.",
+            "enum": [
+              "output_mqtt_client"
+            ],
             "example": "output_mqtt_client"
           },
           "output_endpoint_id": {
