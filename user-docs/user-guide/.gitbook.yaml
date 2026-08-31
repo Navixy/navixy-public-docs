@@ -37,3 +37,6 @@ redirects:
   guide/devices-and-settings/location-and-movement/tow-detection-block: guide/devices-and-settings/location-and-movement/tow-detection.md
   guide/devices-and-settings/connectivity/connection-state-block: guide/devices-and-settings/connectivity/connection-state.md
   guide/devices-and-settings/driver-safety/harsh-driving-block: guide/devices-and-settings/driver-safety/harsh-driving.md
+  # Geofence functions moved out of the IF/THEN Logic node (2026-08): the page now
+  # covers all four functions and serves the Initiate Attribute node as well
+  guide/account/iot-logic/nodes/logic-node/geofence-functions: guide/account/iot-logic/nodes/geofence-functions.md

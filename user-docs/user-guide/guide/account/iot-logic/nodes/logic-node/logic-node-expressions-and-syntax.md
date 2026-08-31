@@ -34,11 +34,11 @@ For how missing values affect routing, see [Missing values and null routing](#mi
 
 ### Geofence functions
 
-Three functions evaluate a device's position relative to a named Navixy geofence. For usage instructions and examples, see [Geofence functions](geofence-functions.md).
+Three functions evaluate a device's position relative to a named Navixy geofence, and a fourth one returns the name of the geofence the device is in. For usage instructions and examples, see [Geofence functions](../geofence-functions.md).
 
 <table><thead><tr><th width="194">Function</th><th width="137">Parameter</th><th>Returns true when</th></tr></thead><tbody><tr><td><code>inGeofence(id)</code></td><td>Geofence ID</td><td>The device is currently inside the geofence</td></tr><tr><td><code>enterGeofence(id)</code></td><td>Geofence ID</td><td>The device has just crossed into the geofence</td></tr><tr><td><code>leaveGeofence(id)</code></td><td>Geofence ID</td><td>The device has just crossed out of the geofence</td></tr></tbody></table>
 
-**Short syntax:**
+**Current position:**
 
 ```jexl
 inGeofence(35229 /* Delivery zone #4 */)
@@ -46,13 +46,13 @@ inGeofence(35229 /* Delivery zone #4 */)
 
 The geofence name appears as a comment for readability and has no effect on evaluation. The geofence picker inserts this format automatically.
 
-**Long syntax** (for use with the `value()` function):
+**Historical position:**
 
 ```jexl
-value("inGeofence(35229 /* Delivery zone #4 */)", 1, valid)
+inGeofence(35229 /* Delivery zone #4 */, 1, 'valid')
 ```
 
-The second parameter is the historical index (0 for the current packet, 1 for the previous), and the third is the validity filter, following the same convention as other `value()` calls.
+The second parameter is the index of the data packet (0 for the current one, 1 for the previous one, up to 11), and the third is the validity filter, following the same convention as `value()`. Both are optional. Don't wrap a geofence function inside `value()`: the first parameter of `value()` is an attribute name, not an expression.
 
 ## Expression examples
 
@@ -419,6 +419,6 @@ To detect the moment a vehicle leaves the authorized area rather than checking c
 leaveGeofence(51577 /* Austin Warehouse */) && value('business_hours', 0, 'valid') == true
 ```
 
-For the full reference on geofence functions including `enterGeofence()` and long syntax, see [Geofence functions](geofence-functions.md).
+For the full reference on geofence functions including `enterGeofence()`, `geofenceName()`, and testing an earlier position, see [Geofence functions](../geofence-functions.md).
 
 </details>

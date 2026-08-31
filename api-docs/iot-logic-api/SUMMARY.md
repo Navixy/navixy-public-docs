@@ -4,6 +4,7 @@
 * [Authentication](authentication.md)
 * [Technical reference](technical-details/README.md)
   * [Nodes](technical-details/nodes.md)
+  * [Geofence name function](technical-details/geofence-name.md)
 * [Flow object structure](flow-schema-structure/README.md)
   * [JSON-schema template](flow-schema-structure/general-json-schema-example.md)
 * [Guides](navixy-iot-guide/README.md)

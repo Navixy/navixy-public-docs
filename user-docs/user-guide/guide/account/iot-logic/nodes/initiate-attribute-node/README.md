@@ -45,6 +45,7 @@ The **Initiate Attribute** node by itself offers:
 * **Unit conversion**: Convert measurement units (e.g., speed from _km/h_ to _mph_, or temperature from _°C_ to _°F_)
 * **Time-based calculations**: Compare current readings with previous values to determine changes
 * **Time manipulation**: Customize timestamps for when attribute was generated on a device and when it was received by the server to avoid timeline inconsistencies and unify time formats
+* **Geofence lookup**: Write the name of the geofence a device is in into an attribute with `geofenceName()`, a paid option. See [Geofence functions](../geofence-functions.md)
 
 ## Configuration options
 

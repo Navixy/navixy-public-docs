@@ -20,6 +20,10 @@ When creating calculations, keep these points in mind:
 Mathematical functions can be applied to any numeric parameter or previously calculated attribute. Always validate your calculations with test data before deploying to production flows.
 {% endhint %}
 
+{% hint style="info" %}
+To fill an attribute with the name of the geofence a device is in, rather than with a calculation, use `geofenceName()`. It is a paid option, switched off by default. See [Geofence functions](../geofence-functions.md).
+{% endhint %}
+
 ## Basic calculations
 
 ### Unit conversions

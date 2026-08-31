@@ -194,6 +194,10 @@ To find more examples of formulas, see [Calculation examples](https://app.gitboo
 * `index` (integer, 0-11, optional): Historical depth (0 = newest). Default: 0
 * `validation_flag` (string, optional): `"valid"` excludes nulls, "all" includes nulls. Default: `"all"`
 
+**`geofenceName(group, index, validation)`**
+
+Returns the name of the geofence that contains the position of the message, as a string. All three parameters are optional. The function requires the account feature `iot_logic_geofence_search`, and without it `flowCreate` and `flowUpdate` reject the flow. For the parameters, the return values, and the feature, see [Geofence name function](geofence-name.md).
+
 #### Historical data access (`index` )
 
 IoT Logic maintains 12 values per parameter, addressed by index 0 to 11:
@@ -312,6 +316,8 @@ Do not attempt to chain Action → Output Endpoint or Webhook → Output Endpoin
 ### Expression language
 
 For logical conditions IoT Logic API uses [Navixy IoT Logic Expression Language](../Technologies/navixy-iot-logic-expression-language/).
+
+`data.condition` also accepts [`geofenceName()`](geofence-name.md), which returns the name of the geofence containing the position of the message. Compare the result with `==` or `!=`, and note that the function requires the account feature `iot_logic_geofence_search`.
 
 Here's a quick reference:
 
