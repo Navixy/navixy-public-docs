@@ -23,6 +23,7 @@
 
 ## Core API reference
 
+* [Core API reference](core-api-reference.md "Reference overview")
 * [Directives](directives.md)
 * [Common resources](common.md)
 * [Workspaces](workspaces/README.md)

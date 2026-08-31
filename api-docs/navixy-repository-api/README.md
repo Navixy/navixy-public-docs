@@ -42,7 +42,7 @@ These articles provide essential background knowledge and guidelines:
 
 ### Core API reference
 
-The API reference provides complete technical specifications for all GraphQL types and operations, grouped by category:
+The [API reference](core-api-reference.md) provides complete technical specifications for all GraphQL types and operations, grouped by category:
 
 - [Common resources](common.md)
 - [Directives](directives.md)
