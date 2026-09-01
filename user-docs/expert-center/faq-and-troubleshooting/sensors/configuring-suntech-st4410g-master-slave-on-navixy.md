@@ -1,5 +1,8 @@
 ---
-description: Set up Suntech ST4410G master-slave redundancy in Navixy. Covers slave mapping, distance monitoring parameters, and alert integration for asset security.
+description: >-
+  Set up Suntech ST4410G master-slave redundancy in Navixy. Covers slave
+  mapping, distance monitoring parameters, and alert integration for asset
+  security.
 ---
 
 # Configuring Suntech ST4410G master-slave in Navixy
@@ -65,7 +68,7 @@ Setting up these alerts is straightforward:
 1. Open the **Alerts** module in Navixy.
 2. Create a rule for the specific event you care about, like a device going missing.
 3. Select the master device and choose the **State field value** option.
-4. Add the condition (e.g., "present_device_absent" or "absent_device_recovered") and enter the 9-digit serial number of the slave unit.
+4. Add the condition (e.g., "present\_device\_absent" or "absent\_device\_recovered") and enter the 9-digit serial number of the slave unit.
 
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXesAk9lNzokfS4caOKZ3ptr4M-ctro2G_8Ebn7X9L438-zK9wKlWeg23xJvGTnuUiYUrBlm0Vc4yQrGghx2WtZ_5FMEvqBYF0FdLUWuX1AX94uKUAPMn1g25EgQtk-XtvW35kmp_A?key=tadSe0dC1rnchCyfbf2IlA)
 
@@ -75,9 +78,9 @@ With that in place, you'll be notified as soon as anything unexpected happens, w
 
 Managing alerts in a growing fleet shouldn't mean more manual work. Whether you're switching out devices often or dealing with complex conditions in the field, Navixy gives you two powerful ways to stay ahead:
 
-- [Navixy API tools](https://app.gitbook.com/s/y4jjF0toO75WHDuJCFA1/) help you automate at scale.
-- [IoT Logic](https://www.navixy.com/iot-logic/) offers flexibility for complex scenarios.
+* [Navixy API tools](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/y4jjF0toO75WHDuJCFA1/) help you automate at scale.
+* [IoT Logic](https://www.navixy.com/iot-logic/) offers flexibility for complex scenarios.
 
-## Final thoughts## 
+## Final thoughts#\#
 
-Navixy enhances this capability by enabling distance-based alerts between multiple master devices, adding another critical layer of security for tracking grouped assets. The platform's intuitive alert system allows for straightforward configuration of presence and tampering notifications, leveraging specific state field values like "present_device_absent" or "absent_device_recovered." This not only a simple process of receiving immediate notifications for unexpected events but also highlights Navixy's commitment to proactive security. The ST4410G's advanced master-slave functionality, seamlessly integrated and configurable within Navixy's versatile environment, including support for API tools and IoT Logic for complex scenarios.
+Navixy enhances this capability by enabling distance-based alerts between multiple master devices, adding another critical layer of security for tracking grouped assets. The platform's intuitive alert system allows for straightforward configuration of presence and tampering notifications, leveraging specific state field values like "present\_device\_absent" or "absent\_device\_recovered." This not only a simple process of receiving immediate notifications for unexpected events but also highlights Navixy's commitment to proactive security. The ST4410G's advanced master-slave functionality, seamlessly integrated and configurable within Navixy's versatile environment, including support for API tools and IoT Logic for complex scenarios.

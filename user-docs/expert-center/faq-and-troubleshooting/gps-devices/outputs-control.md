@@ -34,8 +34,8 @@ Then the customer selects the desired output and alters its state. For instance,
 
 Confirming is equivalent to sending an API request:
 
-* It will be an API call [/tracker/output/set\_all](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/output#set_all) if the device supports commands listing all states simultaneously. For example, enabling output 1 on a Teltonika device with 3 outputs where all outputs are off at the moment, would use a command like 'setdigout 1,0,0'.
-* It will be an API call [/tracker/output/set](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/output#set) if the device supports sending commands to each output individually.
+* It will be an API call [/tracker/output/set\_all](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/output#set_all) if the device supports commands listing all states simultaneously. For example, enabling output 1 on a Teltonika device with 3 outputs where all outputs are off at the moment, would use a command like 'setdigout 1,0,0'.
+* It will be an API call [/tracker/output/set](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/output#set) if the device supports sending commands to each output individually.
 
 By using APIs, you can [automate output control on your device](https://www.navixy.com/blog/cloud-functions-for-tailored-vehicle-telematics-solutions/?utm-source=slack), linking it to specific event types or received values.
 

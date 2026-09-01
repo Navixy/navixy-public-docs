@@ -61,7 +61,7 @@ You can read information from it:
 * `tracker_id` - int. An ID of the tracker (aka "object\_id").
 * `hardware_id` - string. An ID of the beacon.
 * `rssi` - int. RSSI stands for received signal strength indicator and represents the power of received signal on a device. According to it, you can understand how far away the beacon is from the device.
-* `get_time` - [date/time](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api#data-types). When this data received.
+* `get_time` - [date/time](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/getting-started#data-types). When this data received.
 * `latitude` - float. Latitude.
 * `longitude` - float. Longitude.
 * `ext_data` - object. Additional beacon data.
@@ -70,7 +70,7 @@ You can read information from it:
 
 There are two API calls that allow you to get all the necessary information about BLE beacons:
 
-1. The first call retrieves [historical data from devices](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/beacon/index#read). You can set the "from" and "to" parameters for obtaining data during a specific period about connected BLE beacons. Since we need the information from the BLE tags' point of view, i.e., the trailers, let's request the information using the "beacons" parameter.\
+1. The first call retrieves [historical data from devices](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/beacon#read). You can set the "from" and "to" parameters for obtaining data during a specific period about connected BLE beacons. Since we need the information from the BLE tags' point of view, i.e., the trailers, let's request the information using the "beacons" parameter.\
    Request example:
 
 {% code overflow="wrap" %}
@@ -117,7 +117,7 @@ Reply:
 }
 ```
 
-2\. The second call retrieves information about [currently connected beacons](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/beacon/index#last-values) to a specific device. For example, if you want to know which trailer is currently near the device, use the following request:
+2\. The second call retrieves information about [currently connected beacons](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/beacon#last-values) to a specific device. For example, if you want to know which trailer is currently near the device, use the following request:
 
 Request example:
 
@@ -157,7 +157,7 @@ Response:
 
 We've already gathered historical data using the first of the presented API calls, which showed on which devices the trailer was displayed at a specific time. To get information about the journeys and usage time of this trailer, we need to use one of the two API calls:
 
-1. API call [track/list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/track/index#list) to get trip information for the period. This will provide general information about the trips, such as where and when they started and ended, maximum speed, mileage, and more.\
+1. API call [track/list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/track#list) to get trip information for the period. This will provide general information about the trips, such as where and when they started and ended, maximum speed, mileage, and more.\
    Request:
 
 {% code overflow="wrap" %}
@@ -188,7 +188,7 @@ Response:
 }
 ```
 
-From this data, we can see that the trip lasted nearly 35 minutes (end\_date - start\_date), with an average speed of 49 km/h and a maximum speed of 62 km/h. The trip length was 18.91 km. This information allows us to determine how much to pay the driver for transporting the cargo, whether the contractual speed was exceeded, and other details. Additionally, the trip length can be used in the future to calculate the number of kilometers until the next maintenance of the trailer. 2. If you want a detailed track record of the trailer where the beacon is installed for displaying it in a report, for example, you can use the [track/read](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/track/index#read) request. This will give us data on all the points received by the platform during the journey.\
+From this data, we can see that the trip lasted nearly 35 minutes (end\_date - start\_date), with an average speed of 49 km/h and a maximum speed of 62 km/h. The trip length was 18.91 km. This information allows us to determine how much to pay the driver for transporting the cargo, whether the contractual speed was exceeded, and other details. Additionally, the trip length can be used in the future to calculate the number of kilometers until the next maintenance of the trailer. 2. If you want a detailed track record of the trailer where the beacon is installed for displaying it in a report, for example, you can use the [track/read](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/track#read) request. This will give us data on all the points received by the platform during the journey.\
 Request:
 
 {% code overflow="wrap" %}

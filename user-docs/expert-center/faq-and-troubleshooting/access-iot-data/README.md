@@ -1,5 +1,7 @@
 ---
-description: Retrieve raw telematics data from Navixy using AirConsole, API calls, database export, device logging, and CSV export for analysis.
+description: >-
+  Retrieve raw telematics data from Navixy using AirConsole, API calls, database
+  export, device logging, and CSV export for analysis.
 ---
 
 # Access IoT data
@@ -9,7 +11,7 @@ Accessing device data in the Navixy system can provide telematics professionals 
 Here are the options that you can use to retrieve raw device data:
 
 * **Air Console.** You can monitor raw data received from a device in real time through the Air Console feature. Once you establish a connection with the device, the raw data will begin displaying in the console if the device is online and sending data. More information about how to use the Air Console can be found [here](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/air-console).
-* **API.** You can use the [API call](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/data-warehouse-api/resources/tracker/raw-data) to retrieve parsed GPS data for a specific device. This call provides a list of GPS points and other sensor data directly from the Navixy database, which you can use for various purposes.
+* **API.** You can use the [API call](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/data-warehouse-api/raw-data) to retrieve parsed GPS data for a specific device. This call provides a list of GPS points and other sensor data directly from the Navixy database, which you can use for various purposes.
 * **Database export.** Navixy stores data from devices in the database and you can request the Navixy support team to export that data for you.
 * **Logging data of a specific device.** You can request the Navixy technical support team to collect logs of a particular device for a specific time period. The team will then gather the logs and send them to you.
 * **Raw data export in UI.** You can use the [Raw data](save-iot-data-to-csv-file/) block in Devices and Settings section for extracting devices data in a conviniant CSV format.

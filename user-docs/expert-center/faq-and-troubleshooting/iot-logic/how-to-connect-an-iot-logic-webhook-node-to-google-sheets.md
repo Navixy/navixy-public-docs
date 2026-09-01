@@ -38,13 +38,13 @@ Example:
 
 _{_
 
-&#x20; _"key": "MY\_SUPER\_SECRET\_123",_
+_"key": "MY\_SUPER\_SECRET\_123",_
 
-&#x20; _"event": "morning\_fuel\_report",_
+_"event": "morning\_fuel\_report",_
 
-&#x20; _"device\_id": "\{{device\_label\}}",_
+_"device\_id": "\{{device\_label\}}",_
 
-&#x20; _"timestamp": "\{{comb\_current\_time\}}"_
+_"timestamp": "\{{comb\_current\_time\}}"_
 
 _}_
 
@@ -68,37 +68,37 @@ The following sample code can be used to receive the values sent from the Webhoo
 
 _function doPost(e) {_
 
-&#x20; _var SECRET\_KEY = "MY\_SUPER\_SECRET\_123";_
+_var SECRET\_KEY = "MY\_SUPER\_SECRET\_123";_
 
-&#x20; _var data = JSON.parse(e.postData.contents);_
+_var data = JSON.parse(e.postData.contents);_
 
-&#x20; _if (data.key !== SECRET\_KEY) {_
+_if (data.key !== SECRET\_KEY) {_
 
-&#x20;   _return ContentService.createTextOutput("Access Denied").setMimeType(ContentService.MimeType.TEXT);_
-
-&#x20; _}_
-
-&#x20; _var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();_
-
-&#x20; _sheet.appendRow(\[_
-
-&#x20;   _new Date(),_
-
-&#x20;   _data.name || "",_
-
-&#x20;   _data.device\_id || "",_
-
-&#x20;   _data.longitud || "",_
-
-&#x20;   _data.latitud || ""_
-
-&#x20; _]);_
-
-&#x20; _return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);_
+_return ContentService.createTextOutput("Access Denied").setMimeType(ContentService.MimeType.TEXT);_
 
 _}_
 
-**Note**: Replace the sample code above with the script provided below. You may also customize the fields to match the data being sent from your IoT Logic Webhook.&#x20;
+_var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();_
+
+_sheet.appendRow(\[_
+
+_new Date(),_
+
+_data.name || "",_
+
+_data.device\_id || "",_
+
+_data.longitud || "",_
+
+_data.latitud || ""_
+
+_]);_
+
+_return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);_
+
+_}_
+
+**Note**: Replace the sample code above with the script provided below. You may also customize the fields to match the data being sent from your IoT Logic Webhook.
 
 The script above acts as an HTTP POST endpoint that receives requests sent from the IoT Logic Webhook node.
 
@@ -112,7 +112,7 @@ For example, if the webhook sends the following parameter:
 
 _{_
 
-&#x20; _"fuel\_level": 68.5_
+_"fuel\_level": 68.5_
 
 _}_
 
@@ -143,11 +143,11 @@ For this reason, Anyone is the recommended access level when receiving requests 
 
 <img src="../../.gitbook/assets/unknown (26).png" alt="" height="409" width="390">
 
-
-
 Select New Deployment, and then choose Web App from the deployment type menu. The deployment process may take a few moments. Once it is completed, a Web App URL will be generated. Copy this URL and paste it into the URL field of the Webhook node in your IoT Logic flow. The Web App URL is the endpoint that will receive the HTTP POST requests sent by the Webhook node.
 
 <img src="../../.gitbook/assets/unknown (27).png" alt="" height="494.99999999999994" width="624">
+
+&#x20;
 
 <img src="../../.gitbook/assets/unknown (28).png" alt="" height="492" width="624">
 
@@ -161,8 +161,8 @@ This allows you to update the script without having to modify the Webhook config
 
 <img src="../../.gitbook/assets/unknown (29).png" alt="" height="613" width="624">
 
-After completing all the steps described in this guide, the connection between IoT Logic and Google Sheets should be successfully established.&#x20;
+After completing all the steps described in this guide, the connection between IoT Logic and Google Sheets should be successfully established.
 
-This integration provides a simple and effective way to log telemetry data, external parameters, or custom IoT Logic attributes for reporting, analysis, auditing, or integration with other Google Workspace tools.&#x20;
+This integration provides a simple and effective way to log telemetry data, external parameters, or custom IoT Logic attributes for reporting, analysis, auditing, or integration with other Google Workspace tools.
 
 <br>

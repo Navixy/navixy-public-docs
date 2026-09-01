@@ -46,7 +46,7 @@ Tasks that the report addresses:
 * To determine which machines need repair if their fuel consumption is consistently high.
 
 {% hint style="info" %}
-You can also build the report using Navixy API. More information could be obtained in [Developers Hub](https://app.gitbook.com/s/y4jjF0toO75WHDuJCFA1/)
+You can also build the report using Navixy API. More information could be obtained in [Developers Hub](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/y4jjF0toO75WHDuJCFA1/)
 {% endhint %}
 
 ![Fuel report](../../../../.gitbook/assets/image-20230905-074120.png)

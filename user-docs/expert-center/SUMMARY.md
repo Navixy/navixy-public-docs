@@ -75,6 +75,7 @@
     * [Configuring sensors on Teltonika devices](faq-and-troubleshooting/sensors/configuring-sensors-on-teltonika-trackers.md)
     * [Configuring the Eye sensor on a Teltonika device](faq-and-troubleshooting/sensors/configuring-eye-sensor-on-teltonika-tracker.md)
     * [Configuring ERM Efuel Dome sensor in Navixy](faq-and-troubleshooting/sensors/configuring-erm-efuel-dome-sensor-on-navixy.md)
+    * [Configuring BLE Sensors on Suntech Trackers in Navixy Bluetooth](faq-and-troubleshooting/sensors/configuring-ble-sensors-on-suntech-trackers-in-navixy-bluetooth.md)
     * [Configuring Suntech ST4410G master-slave in Navixy](faq-and-troubleshooting/sensors/configuring-suntech-st4410g-master-slave-on-navixy.md)
     * [Manage sensors](faq-and-troubleshooting/sensors/manage-sensors.md)
     * [Monitor sensor values](faq-and-troubleshooting/sensors/monitor-sensor-values.md)
