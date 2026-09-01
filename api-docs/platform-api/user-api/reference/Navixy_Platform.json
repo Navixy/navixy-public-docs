@@ -33060,6 +33060,57 @@
               "precision": {
                 "type": "integer",
                 "description": "Precision of the location in metres."
+              },
+              "command": {
+                "type": "object",
+                "description": "Present on a `command_sent` event: a command dispatched from a tracker's Commands block.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the command that was sent."
+                  },
+                  "param": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Value substituted for the command's `<>` placeholder, when it has one."
+                  },
+                  "response": {
+                    "type": "object",
+                    "description": "Delivery result. A `hardware` command populates only `success`; an `http` command populates `status` and `body` (and `error` in place of them when the request itself failed) instead, leaving `success` absent.",
+                    "properties": {
+                      "status": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "description": "HTTP status code returned by the destination endpoint. Present only for an `http` command."
+                      },
+                      "body": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Raw response body from the destination endpoint, truncated to fit the event's storage limit. Present only for an `http` command."
+                      },
+                      "error": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "description": "Error message, up to 256 characters, when the request to the destination endpoint could not be completed. Present only for an `http` command, and only when the request failed."
+                      },
+                      "success": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ],
+                        "description": "Whether the command was sent to the device. Present only for a `hardware` command."
+                      }
+                    }
+                  }
+                }
               }
             },
             "additionalProperties": true
