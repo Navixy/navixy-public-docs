@@ -1,14 +1,14 @@
 ---
 description: >-
-  Query reference for workspace members, including their roles, permissions, and
-  user profile data within each workspace.
+  Query reference for workspace members: which users belong to a workspace,
+  whether each membership is active, and when it was assigned.
 ---
 
 # Members
 
 {% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-Workspace members represent the relationship between users and workspaces, including their roles and permissions within each workspace.
+Workspace members represent the relationship between users and workspaces: which user belongs to which workspace, whether the membership is active, and when it was assigned.
 
 ## Queries
 

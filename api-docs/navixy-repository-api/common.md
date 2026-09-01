@@ -75,6 +75,18 @@ An object with a globally unique identifier.
 
 ## Objects
 
+<a id="deletepayload"></a>
+
+### DeletePayload
+
+The result of a delete mutation.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `deletedId` | `ID!` | The ID of the deleted entity. |
+
+---
+
 <a id="pageinfo"></a>
 
 ### PageInfo
@@ -113,18 +125,6 @@ A monetary amount in minor units (cents) with currency.
 | ----- | ---- | ----------- |
 | `amount` | [Long](#long)! | Amount in minor currency units (for example, 1050 = $10.50). |
 | `currency` | [Currency](#currency)! | [ISO 4217](https://www.iso.org/standard/4217.html) currency. |
-
----
-
-<a id="deletepayload"></a>
-
-### DeletePayload
-
-The result of a delete mutation.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `deletedId` | `ID!` | The ID of the deleted entity. |
 
 ---
 
@@ -252,140 +252,6 @@ An interface for field parameters that support selecting multiple values.
 
 ## Scalars
 
-<a id="datetime"></a>
-
-### DateTime
-
-An [ISO 8601](https://www.iso.org/standard/8601.html) datetime string with timezone ([RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html)). Example: `2024-01-15T10:30:00Z`.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `YYYY-MM-DDTHH:mm:ss.sssZ` |
-| Example | `2025-01-15T14:30:00.000Z` |
-| Specification | [https://scalars.graphql.org/chillicream/date-time.html](https://scalars.graphql.org/chillicream/date-time.html) |
-
----
-
-<a id="json"></a>
-
-### JSON
-
-An arbitrary JSON value. Can be an object, array, string, number, boolean, or null.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `Any valid JSON` |
-| Example | `{"key": "value", "count": 42}` |
-| Specification | [https://www.rfc-editor.org/rfc/rfc8259](https://www.rfc-editor.org/rfc/rfc8259) |
-
----
-
-<a id="code"></a>
-
-### Code
-
-A machine-readable identifier code.
-
-Constraints:
-- Allowed characters: ASCII letters (a-z, A-Z), digits (0-9), underscore (_), dot (.), hyphen (-)
-- Must start with a letter or digit
-- Case-preserving: the original casing is stored as provided
-- Case-insensitive for uniqueness checks and comparisons
-- Maximum length: 64 characters
-
-Uniqueness:
-- For catalog items: unique within the same catalog and workspace scope
-- For custom field definitions: unique per owner catalog item and workspace
-- For field options (OPTIONS type): unique within a single field definition
-- Additional uniqueness requirements may apply depending on context (see individual fields)
-
-Examples: DEVICE_TYPE, vehicle_car, status.active, sensor-v2, ABC123
-
-| Property | Value |
-| -------- | ----- |
-| Format | `UPPER_SNAKE_CASE`, `lower_snake_case` |
-| Example | `DEVICE_TYPE`, `vehicle_type` |
-| Specification | [https://api.navixy.com/spec/scalars/code](https://api.navixy.com/spec/scalars/code) |
-
----
-
-<a id="long"></a>
-
-### Long
-
-Signed 64-bit integer in the range [-9223372036854775808, 9223372036854775807].
-Encoded as a JSON number.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `64-bit signed integer` |
-| Example | `1234567890123456789` |
-| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long) |
-
----
-
-<a id="date"></a>
-
-### Date
-
-An [ISO 8601](https://www.iso.org/standard/8601.html) date string without time component ([RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html)). Example: `2024-01-15`.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `YYYY-MM-DD` |
-| Example | `2025-01-15` |
-| Specification | [https://scalars.graphql.org/chillicream/date.html](https://scalars.graphql.org/chillicream/date.html) |
-
----
-
-<a id="geojson"></a>
-
-### GeoJSON
-
-A GeoJSON geometry object ([RFC 7946](https://www.rfc-editor.org/rfc/rfc7946.html)). Supports Point, LineString, Polygon, and other geometry types.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `GeoJSON geometry object` |
-| Example | `{"type": "Point", "coordinates": [125.6, 10.1]}` |
-| Specification | [https://www.rfc-editor.org/rfc/rfc7946](https://www.rfc-editor.org/rfc/rfc7946) |
-
----
-
-<a id="decimal"></a>
-
-### Decimal
-
-Arbitrary-precision decimal value encoded as a JSON string (e.g. `"5.25"`).
-String encoding avoids the precision loss inherent in JSON `Float`.
-
-Values exceeding the declared `scale` of a decimal custom field are rounded
-server-side using HALF_UP (round half away from zero for positive values,
-round half toward zero for negative — matches Java `RoundingMode.HALF_UP`).
-The rounded value is persisted in both the CFV table and the
-`custom_fields_data` JSONB blob; raw un-rounded input is never stored.
-
-Storage is `numeric(28, 10)` — up to 28 significant digits, of which at
-most 10 follow the decimal point (so up to 18 digits before). Values
-exceeding this envelope (e.g. more than 18 integer digits) are rejected
-as `VALIDATION_ERROR` at the API layer.
-
-| Property | Value |
-| -------- | ----- |
-| Format | `String-encoded decimal number` |
-| Example | `"123.456"` |
-| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal) |
-
----
-
-<a id="currency"></a>
-
-### Currency
-
-[ISO 4217](https://www.iso.org/standard/4217.html) three-letter currency code (for example: USD, EUR, JPY).
-
----
-
 <a id="uuid"></a>
 
 ### UUID
@@ -480,5 +346,143 @@ An [ISO 3166](https://www.iso.org/standard/3166.html)-1 alpha-2 country code. Ex
 | Format | `Two uppercase letters` |
 | Example | `US` |
 | Specification | [https://the-guild.dev/graphql/scalars/docs/scalars/country-code](https://the-guild.dev/graphql/scalars/docs/scalars/country-code) |
+
+---
+
+<a id="datetime"></a>
+
+### DateTime
+
+An [ISO 8601](https://www.iso.org/standard/8601.html) datetime string with timezone ([RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html)). Example: `2024-01-15T10:30:00Z`.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `YYYY-MM-DDTHH:mm:ss.sssZ` |
+| Example | `2025-01-15T14:30:00.000Z` |
+| Specification | [https://scalars.graphql.org/chillicream/date-time.html](https://scalars.graphql.org/chillicream/date-time.html) |
+
+---
+
+<a id="json"></a>
+
+### JSON
+
+An arbitrary JSON value. Can be an object, array, string, number, boolean, or null.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `Any valid JSON` |
+| Example | `{"key": "value", "count": 42}` |
+| Specification | [https://www.rfc-editor.org/rfc/rfc8259](https://www.rfc-editor.org/rfc/rfc8259) |
+
+---
+
+<a id="code"></a>
+
+### Code
+
+A machine-readable identifier code.
+
+Constraints:
+- Allowed characters: ASCII letters (a-z, A-Z), digits (0-9), underscore (_), dot (.), hyphen (-)
+- Must start with a letter or digit
+- Case-preserving: the original casing is stored as provided
+- Case-insensitive for uniqueness checks and comparisons
+- Length: 1 to 100 characters (auto-generated codes are truncated to 30)
+
+Uniqueness:
+- For catalog items: unique within the same catalog and workspace scope
+- For custom field definitions: unique per owner catalog item and workspace
+- For field options (OPTIONS type): unique within a single field definition
+- Additional uniqueness requirements may apply depending on context (see individual fields)
+
+Examples: DEVICE_TYPE, vehicle_car, status.active, sensor-v2, ABC123
+
+| Property | Value |
+| -------- | ----- |
+| Format | `UPPER_SNAKE_CASE`, `lower_snake_case` |
+| Example | `DEVICE_TYPE`, `vehicle_type` |
+| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#code](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#code) |
+
+---
+
+<a id="long"></a>
+
+### Long
+
+Signed 64-bit integer in the range [-9223372036854775808, 9223372036854775807].
+Encoded as a JSON number.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `64-bit signed integer` |
+| Example | `1234567890123456789` |
+| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long) |
+
+---
+
+<a id="date"></a>
+
+### Date
+
+An [ISO 8601](https://www.iso.org/standard/8601.html) date string without time component ([RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html)). Example: `2024-01-15`.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `YYYY-MM-DD` |
+| Example | `2025-01-15` |
+| Specification | [https://scalars.graphql.org/chillicream/date.html](https://scalars.graphql.org/chillicream/date.html) |
+
+---
+
+<a id="geojson"></a>
+
+### GeoJSON
+
+A bare GeoJSON geometry object ([RFC 7946](https://www.rfc-editor.org/rfc/rfc7946.html) §3.1) — one of the types `GeoJsonGeometryType` lists.
+
+The `Feature` and `FeatureCollection` wrappers are rejected everywhere this scalar is used,
+`GeoObject.geojsonData` and GEOJSON custom-field values alike: send `feature.geometry`, not the
+feature.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `GeoJSON geometry object` |
+| Example | `{"type": "Point", "coordinates": [125.6, 10.1]}` |
+| Specification | [https://www.rfc-editor.org/rfc/rfc7946](https://www.rfc-editor.org/rfc/rfc7946) |
+
+---
+
+<a id="decimal"></a>
+
+### Decimal
+
+Arbitrary-precision decimal value encoded as a JSON string (e.g. `"5.25"`).
+String encoding avoids the precision loss inherent in JSON `Float`.
+
+Values exceeding the declared `scale` of a decimal custom field are rounded
+server-side using HALF_UP (round half away from zero for positive values,
+round half toward zero for negative — matches Java `RoundingMode.HALF_UP`).
+The rounded value is persisted in both the CFV table and the
+`custom_fields_data` JSONB blob; raw un-rounded input is never stored.
+
+Storage is `numeric(28, 10)` — up to 28 significant digits, of which at
+most 10 follow the decimal point (so up to 18 digits before). Values
+exceeding this envelope (e.g. more than 18 integer digits) are rejected
+as `VALIDATION_ERROR` at the API layer.
+
+| Property | Value |
+| -------- | ----- |
+| Format | `String-encoded decimal number` |
+| Example | `"123.456"` |
+| Specification | [https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal](https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal) |
+
+---
+
+<a id="currency"></a>
+
+### Currency
+
+[ISO 4217](https://www.iso.org/standard/4217.html) three-letter currency code (for example: USD, EUR, JPY).
 
 ---

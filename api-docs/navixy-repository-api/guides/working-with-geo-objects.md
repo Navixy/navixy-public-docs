@@ -12,51 +12,7 @@ This guide walks you through creating, updating, and managing geo objects with d
 
 ## Prerequisites
 
-To work with geo objects, you need your workspace's ID. Use the [me](../actors/#me) query to find it through your membership:
-
-```graphql
-query GetMyWorkspace {
-  bdr {
-    me {
-      ... on User {
-        memberships {
-          nodes {
-            workspace {
-              id
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-The response returns your workspace's details:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "me": {
-        "memberships": {
-          "nodes": [
-            {
-              "workspace": {
-                "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                "title": "TransLog GmbH"
-              }
-            }
-          ]
-        }
-      }   
-    }
-  }
-}
-```
-
-Use the `id` of the workspace you want to work with for all subsequent geo object operations.
+To work with geo objects, you need your workspace's ID. It comes with your access credentials and is carried in your access token. See [Authentication](../authentication.md) for how tokens work and where the workspace ID comes from.
 
 ### Check the available geo object types
 

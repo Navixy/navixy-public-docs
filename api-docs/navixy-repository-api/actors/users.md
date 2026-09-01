@@ -1,7 +1,7 @@
 ---
 description: >-
-  Queries and mutations for user accounts, including profile lookups and user
-  settings updates.
+  Reference for user accounts and user-defined catalog items: the read-only User
+  object and the mutations that manage hierarchical catalog entries.
 ---
 
 # Users
@@ -11,89 +11,6 @@ description: >-
 User accounts representing human operators who access the system through the UI or API.
 
 ## Mutations
-
-### myProfileUpdate
-
-Updates the current user's profile (name only).
-
-```graphql
-myProfileUpdate(
-    input: MyProfileUpdateInput!
-  ): UserPayload
-```
-
-**Arguments**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `input` | `MyProfileUpdateInput!` | The input fields for updating the profile. |
-
-**Input types:**
-
-<details>
-
-<summary>MyProfileUpdateInput</summary>
-
-Input for updating the current user's profile.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `name` | [PersonNameInput](#personnameinput)! | The structured name components. |
-
-</details>
-
-<details>
-
-<summary>PersonNameInput</summary>
-
-Input for structured person name components.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `givenNames` | `String!` | The given name(s). |
-| `familyNames` | `String!` | The family name(s). |
-| `middleName` | `String` | The middle name or patronymic. |
-
-</details>
-
-**Output types:**
-
-<details>
-
-<summary>UserPayload</summary>
-
-The result of a user profile mutation.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `user` | [User](#user)! | The updated user. |
-
-</details>
-
-<details>
-
-<summary>User (entity)</summary>
-
-A human user account authenticated via an identity provider.
-
-**Implements:** [Actor](README.md#actor), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. |
-| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title` | `String!` | The display name for the user. This is the user's full name for display purposes. |
-| `name` | [PersonName](README.md#personname)! | The structured name components from the identity provider. |
-| `identityProvider` | `String!` | The identity provider name (keycloak, auth0, okta, etc.). |
-| `identityProviderId` | `String!` | The user's unique ID in the identity provider. |
-| `email` | [EmailAddress](../common.md#emailaddress)! | The user's primary email address. |
-| `externalId` | `String` | An external system identifier for integration purposes. |
-| `isActive` | `Boolean!` | Whether this user account is active. |
-| `memberships` | [MemberConnection](../workspaces/members.md#memberconnection)! | The workspace memberships for this user. |
-
-</details>
-
----
 
 ### userCatalogItemCreate
 
@@ -365,18 +282,6 @@ A human user account authenticated via an identity provider.
 
 ---
 
-<a id="userpayload"></a>
-
-### UserPayload
-
-The result of a user profile mutation.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `user` | [User](#user)! | The updated user. |
-
----
-
 <a id="usercatalogitempayload"></a>
 
 ### UserCatalogItemPayload
@@ -390,32 +295,6 @@ The result of a user catalog item mutation.
 ---
 
 ## Inputs
-
-<a id="myprofileupdateinput"></a>
-
-### MyProfileUpdateInput
-
-Input for updating the current user's profile.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `name` | [PersonNameInput](#personnameinput)! | The structured name components. |
-
----
-
-<a id="personnameinput"></a>
-
-### PersonNameInput
-
-Input for structured person name components.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `givenNames` | `String!` | The given name(s). |
-| `familyNames` | `String!` | The family name(s). |
-| `middleName` | `String` | The middle name or patronymic. |
-
----
 
 <a id="usercatalogitemcreateinput"></a>
 

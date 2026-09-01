@@ -2,7 +2,7 @@
 
 {% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-**Navixy Repository API** is a programming interface for managing the business entities of the Navixy platform. It provides a flexible way to define what you track (assets), how data is collected (devices), where important points are located (geo objects), when things happen (schedules), and who can access what (permissions).
+**Navixy Repository API** is a programming interface for managing the business entities of the Navixy platform. It provides a flexible way to define what you track (assets), how data is collected (devices), where important points are located (geo objects), and when things happen (schedules).
 
 **Navixy Repository API is based on GraphQL.** Unlike REST APIs where you call multiple endpoints to gather related data, GraphQL allows you to request the exact fields you need in a single query. You describe the shape of the data you want, and the API returns it in that shape.
 
@@ -52,7 +52,6 @@ The [API reference](core-api-reference.md) provides complete technical specifica
 - [Assets](assets/)
 - [Geo objects](geo-objects.md)
 - [Schedules](schedules.md)
-- [Access control](access-control.md)
 - [Custom fields](custom-fields.md)
 - [Audit](audit.md)
 - [Catalogs](catalogs/)

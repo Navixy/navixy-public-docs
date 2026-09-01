@@ -42,11 +42,11 @@ Errors are returned in the standard GraphQL format with additional details in th
 
 Every error includes these RFC 9457 standard fields:
 
-<table><thead><tr><th width="100">Field</th><th width="100">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>type</code></td><td>URI</td><td>Identifies the error type. The URI points to the error's documentation.</td></tr><tr><td><code>title</code></td><td>String</td><td>Summary of the problem type. Stays the same for all errors of this type.</td></tr><tr><td><code>status</code></td><td>Integer</td><td>HTTP status code (e.g., 400, 404, 409).</td></tr><tr><td><code>detail</code></td><td>String</td><td>Human-readable explanation specific to this occurrence of the problem.</td></tr><tr><td><code>instance</code></td><td>URI</td><td>The request path that caused the error. Useful for logs or support tickets.</td></tr></tbody></table>
+<table><thead><tr><th width="100">Field</th><th width="100">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>type</code></td><td>URI</td><td>A stable identifier for the error type, in URL form.</td></tr><tr><td><code>title</code></td><td>String</td><td>Summary of the problem type. Stays the same for all errors of this type.</td></tr><tr><td><code>status</code></td><td>Integer</td><td>HTTP status code (e.g., 400, 404, 409).</td></tr><tr><td><code>detail</code></td><td>String</td><td>Human-readable explanation specific to this occurrence of the problem.</td></tr><tr><td><code>instance</code></td><td>URI</td><td>The request path that caused the error. Useful for logs or support tickets.</td></tr></tbody></table>
 
 ### Navixy-specific fields
 
-<table><thead><tr><th width="181.60003662109375">Field</th><th>Description</th></tr></thead><tbody><tr><td><code>code</code></td><td>Machine-readable error code for use in your application logic.</td></tr><tr><td><code>traceId</code></td><td>Distributed tracing ID (32 hex characters). Correlates with the <code>traceparent</code> header if provided.</td></tr><tr><td><code>timestamp</code></td><td>When the error occurred (<a href="https://www.iso.org/iso-8601-date-and-time-format.html"><code>ISO 8601 format</code></a>).</td></tr><tr><td><code>field</code></td><td>For validation errors: the field that failed validation (e.g., <code>input.title</code>).</td></tr><tr><td><code>entityType</code></td><td>For entity-related errors: type of entity involved (e.g., <code>Device</code>).</td></tr><tr><td><code>entityId</code></td><td>For entity-related errors: ID of entity involved.</td></tr><tr><td><code>requiredAction</code></td><td>For permission errors: the permission the operation needs (e.g., <code>DELETE</code>).</td></tr><tr><td><code>expectedVersion</code></td><td>For conflict errors: the version you provided.</td></tr><tr><td><code>currentVersion</code></td><td>For conflict errors: the actual current version.</td></tr><tr><td><code>constraint</code></td><td>For duplicate errors: the database constraint that was violated.</td></tr><tr><td><code>allowedValues</code></td><td>For enum validation errors: the list of valid options.</td></tr></tbody></table>
+<table><thead><tr><th width="181.60003662109375">Field</th><th>Description</th></tr></thead><tbody><tr><td><code>code</code></td><td>Machine-readable error code for use in your application logic.</td></tr><tr><td><code>traceId</code></td><td>Distributed tracing ID (32 hex characters). Correlates with the <code>traceparent</code> header if provided.</td></tr><tr><td><code>timestamp</code></td><td>When the error occurred (<a href="https://www.iso.org/iso-8601-date-and-time-format.html"><code>ISO 8601 format</code></a>).</td></tr><tr><td><code>field</code></td><td>For validation errors: the field that failed validation (e.g., <code>input.title</code>).</td></tr><tr><td><code>entityType</code></td><td>For entity-related errors: type of entity involved (e.g., <code>Device</code>).</td></tr><tr><td><code>entityId</code></td><td>For entity-related errors: ID of entity involved.</td></tr><tr><td><code>expectedVersion</code></td><td>For conflict errors: the version you provided.</td></tr><tr><td><code>currentVersion</code></td><td>For conflict errors: the actual current version.</td></tr><tr><td><code>allowedValues</code></td><td>For enum validation errors: the list of valid options.</td></tr></tbody></table>
 
 ## Error codes
 
@@ -90,7 +90,7 @@ Returned when input data fails validation — for example, a required field is m
 
 ### Permission denied (403)
 
-Returned when you're authenticated but lack the required permission for the requested operation. Navixy Repository API uses role-based access control, so permissions depend on your assigned roles.
+Returned when you're authenticated but lack the required permission for the requested operation. Permissions are managed outside Navixy Repository API.
 
 ```json
 {
@@ -99,14 +99,11 @@ Returned when you're authenticated but lack the required permission for the requ
     "path": ["bdr", "deviceDelete"],
     "extensions": {
       "type": "https://api.navixy.com/errors/forbidden",
-      "title": "Forbidden",
+      "title": "Permission Denied",
       "status": 403,
-      "detail": "Actor lacks DELETE permission on device 550e8400-...",
+      "detail": "Access denied",
       "instance": "/graphql",
       "code": "PERMISSION_DENIED",
-      "entityType": "device",
-      "entityId": "550e8400-e29b-41d4-a716-446655440001",
-      "requiredAction": "DELETE",
       "traceId": "0af7651916cd43dd8448eb211c80319c",
       "timestamp": "2025-01-15T14:30:00.000Z"
     }
@@ -114,7 +111,7 @@ Returned when you're authenticated but lack the required permission for the requ
 }
 ```
 
-**How to handle:** The `requiredAction` tells you what permission is needed. Contact your administrator to request access.
+**How to handle:** The operation isn't allowed for your account. Permissions are managed outside Navixy Repository API, so contact your administrator to request access.
 
 ### Entity not found (404)
 
@@ -154,7 +151,7 @@ Returned when the entity was modified by another request since you last fetched 
     "path": ["bdr", "deviceUpdate"],
     "extensions": {
       "type": "https://api.navixy.com/errors/conflict",
-      "title": "Conflict",
+      "title": "Optimistic Lock Conflict",
       "status": 409,
       "detail": "Device 550e8400-... was modified. Expected version 5, current version 6.",
       "instance": "/graphql",
@@ -179,17 +176,16 @@ Returned when you try to create or update an entity with a value that must be un
 ```json
 {
   "errors": [{
-    "message": "Duplicate device identifier",
+    "message": "A device identifier with this type, value, and namespace already exists",
     "path": ["bdr", "deviceCreate"],
     "extensions": {
       "type": "https://api.navixy.com/errors/duplicate",
       "title": "Duplicate Entry",
       "status": 409,
-      "detail": "A device with identifier 'IMEI:123456789012345' already exists",
+      "detail": "A device identifier with this type, value, and namespace already exists",
       "instance": "/graphql",
       "code": "DUPLICATE",
-      "entityType": "Device",
-      "constraint": "device_identifier_unique",
+      "field": "identifier",
       "traceId": "0af7651916cd43dd8448eb211c80319c",
       "timestamp": "2025-01-15T14:30:00.000Z"
     }
@@ -197,7 +193,7 @@ Returned when you try to create or update an entity with a value that must be un
 }
 ```
 
-**How to handle:** The `constraint` field indicates which uniqueness rule was violated. Either use a different value or query for the existing entity if you need to update it instead.
+**How to handle:** The `detail` names the uniqueness rule that was violated, and `field` points at the input that holds the conflicting value. Either use a different value or query for the existing entity if you need to update it instead.
 
 ## Best practices
 

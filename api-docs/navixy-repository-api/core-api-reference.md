@@ -17,12 +17,11 @@ The reference states what each operation and field is. For how to use them toget
 | [Common resources](common.md) | The `node`/`nodes` lookup queries, shared scalars (`Code`, `DateTime`, `JSON`, `HexColorCode`), interfaces (`Node`, `Titled`, `Versioned`, `Customizable`), and shared types (`PageInfo`, `CountInfo`, `Money`). |
 | [Directives](directives.md) | The standard GraphQL directives plus the custom `@trim`. |
 | [Workspaces](workspaces/README.md) | `Workspace` (read-only: Navixy Console owns the lifecycle) and [members](workspaces/members.md) (`Member`, member CRUD). |
-| [Actors](actors/README.md) | The `Actor` interface and the `me` query, with [users](actors/users.md) (`User`, memberships, user catalog items) and [integrations](actors/integrations.md) (`Integration`, service accounts). |
+| [Actors](actors/README.md) | The `Actor` interface, with [users](actors/users.md) (`User`, memberships, user catalog items) and [integrations](actors/integrations.md) (`Integration`, service accounts). |
 | [Devices](devices/README.md) | `Device`, `DeviceIdentifier`, `DeviceRelation`, the device type/model/vendor/status catalogs, and [inventory](devices/inventory.md) (`Inventory`, assignment history). |
 | [Assets](assets/README.md) | `Asset` and `AssetType`, plus [asset groups](assets/groups.md) (`AssetGroup`, `AssetGroupType`, and `AssetGroupItem` membership history). |
 | [Geo objects](geo-objects.md) | `GeoObject` and `GeoObjectType` for geofences, points of interest, and routes, with GeoJSON geometry and the `containsPoints` check. |
 | [Schedules](schedules.md) | `Schedule` and the `ScheduleData` calendar value, compatible with iCalendar. |
-| [Access control](access-control.md) | `Role`, `PermissionScope`, role assignments (`ActorRole`), role permissions (`RolePermission`), and user scopes. |
 | [Custom fields](custom-fields.md) | `CustomFieldDefinition`, the `FieldType` catalog, the typed `CustomFieldValue` variants, and the patch inputs used in create and update mutations. |
 | [Audit](audit.md) | `AuditEvent`, the `auditEvents` and `entityHistory` queries, and the event and source type enums. |
 | [Catalogs](catalogs/README.md) | `Catalog` and [catalog items](catalogs/catalog-items.md) (`CatalogItem`, hierarchical `UserCatalogItem`), [tags](catalogs/tags.md), and [system catalogs](catalogs/system.md). |

@@ -18,51 +18,7 @@ This guide continues the FleetOps Ltd scenario from [Working with devices](worki
 
 ## Prerequisites
 
-You need your workspace's ID for all inventory operations. Use the `me` query to retrieve it:
-
-```graphql
-query GetMyWorkspace {
-  bdr {
-    me {
-      ... on User {
-        memberships {
-          nodes {
-            workspace {
-              id
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-You'll receive a response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "me": {
-        "memberships": {
-          "nodes": [
-            {
-              "workspace": {
-                "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                "title": "TransLog GmbH"
-              }
-            }
-          ]
-        }
-      }   
-    }
-  }
-}
-```
-
-Use the `id` of the workspace you want to work with for all subsequent device operations.
+You need your workspace's ID for all inventory operations. It comes with your access credentials and is carried in your access token. See [Authentication](../authentication.md) for how tokens work and where the workspace ID comes from.
 
 ## Example scenario: Managing warehouse stock
 

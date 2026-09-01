@@ -43,7 +43,7 @@ input DeviceDeleteInput {
 
 Optimistic locking applies to:
 
-<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/README.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/README.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="workspaces/#workspace">Workspace</a></td><td>Tenants. Read-only in this API, so the version is informational</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="workspaces/members.md#member">Member</a></td><td>Workspace memberships</td></tr><tr><td><a href="actors/integrations.md#integration">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, roles, tags, etc.)</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="devices/README.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="assets/README.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="assets/groups.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="geo-objects.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="devices/inventory.md#inventory">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="workspaces/#workspace">Workspace</a></td><td>Tenants. Read-only in this API, so the version is informational</td></tr><tr><td><a href="actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="workspaces/members.md#member">Member</a></td><td>Workspace memberships</td></tr><tr><td><a href="actors/integrations.md#integration">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, tags, etc.)</td></tr></tbody></table>
 
 ## Operations by type
 
@@ -139,14 +139,12 @@ User A's update succeeds first. User B's update fails because the version change
 
 Mutations that manage relationships and assignments are called idempotent commands: repeating the same call doesn't change the result. They don't require or check the `version` field.
 
-<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="assets/groups.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="assets/groups.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr><tr><td><a href="access-control.md#roleassign">roleAssign</a></td><td>Assign role to actor</td></tr><tr><td><a href="access-control.md#rolerevoke">roleRevoke</a></td><td>Revoke role from actor</td></tr><tr><td><a href="access-control.md#permissiongrant">permissionGrant</a></td><td>Grant permission to role</td></tr><tr><td><a href="access-control.md#permissionrevoke">permissionRevoke</a></td><td>Revoke permission from role</td></tr><tr><td><a href="access-control.md#userscopeset">userScopeSet</a></td><td>Set user scope restriction</td></tr><tr><td><a href="access-control.md#userscoperemove">userScopeRemove</a></td><td>Remove user scope restriction</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="assets/groups.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="assets/groups.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr></tbody></table>
 
 These operations behave as follows:
 
-* Repeating `assign`/`grant`/`add`/`set` with the same input returns success without making changes
-* Calling `revoke`/`remove` when the relationship doesn't exist returns success without making changes
-* `permissionGrant` and `userScopeSet` replace the stored `actions` when repeated with different actions — the grant is a full overwrite, not a merge, so granting `[READ]` over an existing `[READ, UPDATE]` leaves only `READ`
-* `roleAssign` keeps the original assignment: repeating it with a different `expireDate` returns the existing assignment unchanged
+* Repeating `add` with the same input returns success without making changes
+* Calling `remove` when the relationship doesn't exist returns success without making changes
 
 This design simplifies client code. You can safely retry these operations without worrying about conflicts or checking the current state first.
 

@@ -14,55 +14,7 @@ To organize assets into named collections, such as grouping vehicles by depot or
 
 ## Prerequisites
 
-You need your workspace's ID for all asset operations. Use the `me` query to retrieve it:
-
-```graphql
-query GetMyWorkspace {
-  bdr {
-    me {
-      ... on User {
-        memberships {
-          nodes {
-            workspace {
-              id
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-{% hint style="info" %}
-The `... on User` inline fragment is required because `me` returns the [Actor interface](../actors/README.md#actor), and the actual result can be a [User](../actors/users.md#user) or an [Integration](../actors/integrations.md#integration). The `... on User` block says "if the result is a User, also return these fields". `memberships` only exists on `User`, so without the block the query would be invalid. If you authenticate as an `Integration`, the response has no `memberships`.
-{% endhint %}
-
-You'll receive a response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "me": {
-        "memberships": {
-          "nodes": [
-            {
-              "workspace": {
-                "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                "title": "TransLog GmbH"
-              }
-            }
-          ]
-        }
-      }   
-    }
-  }
-}
-```
-
-Use the `id` of the workspace you want to work with for all subsequent asset operations.
+You need your workspace's ID for all asset operations. It comes with your access credentials and is carried in your access token. See [Authentication](../authentication.md) for how tokens work and where the workspace ID comes from.
 
 ### Check available asset types
 

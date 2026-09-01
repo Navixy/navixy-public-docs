@@ -38,18 +38,11 @@ This page provides a cross-reference of all catalog types organized by their par
 | ---- | ----------- |
 | [GeoObjectType](../geo-objects.md#geoobjecttype) | A classification type for geographic objects. |
 
-## Access
-
-| Name | Description |
-| ---- | ----------- |
-| [Role](../access-control.md#role) | A role that can be assigned to actors to grant permissions. |
-| [PermissionScope](../access-control.md#permissionscope) | A definition of a permission scope that can be granted to roles. |
-
 ## Other
 
 | Name | Description |
 | ---- | ----------- |
 | [Tag](tags.md#tag) | A tag for labeling and categorizing entities. |
-| [Module](system.md#module) | A system module that groups related functionality and permission scopes. |
+| [Module](system.md#module) | A system module that groups related functionality. |
 | [EntityType](system.md#entitytype) | A definition of an entity type in the system. |
 | [Country](system.md#country) | A country reference data item. |

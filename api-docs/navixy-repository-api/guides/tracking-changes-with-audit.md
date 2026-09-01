@@ -16,51 +16,7 @@ By the end, you'll be able to read one entity's full change history, decode the 
 
 You need an authenticated session (see [Authentication](../authentication.md)) and the ID of the workspace you're investigating.
 
-Retrieve the workspace ID through your membership:
-
-```graphql
-query GetMyWorkspace {
-  bdr {
-    me {
-      ... on User {
-        id
-        memberships(first: 10) {
-          nodes {
-            workspace {
-              id
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-Response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "me": {
-        "id": "019d48ea-0752-8000-801f-4445564372a1",
-        "memberships": {
-          "nodes": [
-            {
-              "workspace": {
-                "id": "019d48ea-0752-8000-801f-444556437ab1",
-                "title": "TransLog GmbH"
-              }
-            }
-          ]
-        }
-      }
-    }
-  }
-}
-```
+The workspace ID comes with your access credentials and is carried in your access token. See [Authentication](../authentication.md) for how tokens work and where the workspace ID comes from.
 
 You also need an audited entity that has been changed at least once. The first step below shows how to find its ID, including when the entity was already deleted. See [Which entities are audited](#which-entities-are-audited) for the list of audited entities.
 
@@ -107,7 +63,7 @@ Archiving a custom field definition is recorded as `UPDATED`, because archiving 
 Some values in the [AuditEventType](../audit.md#auditeventtype) and [SourceType](../audit.md#sourcetype) enums aren't in use yet. The API accepts them in a filter, but nothing ever matches them, so you get an empty list back instead of an error. Don't build alerts on the values below until they're supported:
 
 - Authentication events (`LOGIN`, `LOGOUT`, `FAILED_LOGIN`, `PASSWORD_RESET`, `SESSION_EXPIRED`) aren't recorded.
-- Relationship events (`LINKED`, `UNLINKED`, `ATTACHED`, `DETACHED`, `ROLE_ASSIGNED`, `ROLE_REVOKED`, `PERMISSION_GRANTED`, `PERMISSION_REVOKED`) aren't recorded. Role and permission changes therefore leave no audit entry.
+- Relationship events (`LINKED`, `UNLINKED`, `ATTACHED`, `DETACHED`) aren't recorded.
 - User accounts aren't audited. Only the `member` record that joins a user to a workspace is.
 - `sourceType` is always `API`. Filtering by `WEB`, `MOBILE`, `INTERNAL`, or `INTEGRATION` matches nothing.
 {% endhint %}
@@ -610,7 +566,7 @@ Audit queries are read-only, so they return the standard errors documented in [E
 An empty `nodes` array is a normal response, not an error. Work through the likely causes in this order:
 
 1. The event type isn't recorded yet. Check your `eventTypes` and `sourceTypes` filters against the [warning above](#which-entities-are-audited). Authentication and relationship event types never match, and `sourceTypes` only ever matches `API`.
-2. The entity type isn't audited. Only the eleven types listed above produce events. A change to a user account, a role, or an asset group membership leaves no entry.
+2. The entity type isn't audited. Only the eleven types listed above produce events. A change to a user account or an asset group membership leaves no entry.
 3. The period is wrong. `from` and `to` are compared against `occurredAt` in UTC. Make sure your values are in UTC too.
 4. The entity belongs to another workspace. `entityHistory` only searches the workspace whose `workspaceId` you provide, so an entity from a different workspace returns nothing.
 

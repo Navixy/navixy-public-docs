@@ -10,35 +10,6 @@ description: >-
 
 Actors represent entities that can perform actions in the system. This includes users (human operators) and integrations (API clients and automated systems).
 
-## Queries
-
-### me
-
-Retrieves the currently authenticated actor.
-
-```graphql
-me: Actor!
-```
-
-**Output types:**
-
-<details>
-
-<summary>Actor</summary>
-
-An entity that can perform actions and have permissions assigned.
-
-**Implements:** [Node](../common.md#node), [Titled](../common.md#titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. |
-| `title` | `String!` | The display name of the actor. |
-
-</details>
-
----
-
 ## Objects
 
 <a id="personname"></a>
@@ -85,7 +56,7 @@ The built-in system actor used for automated operations.
 
 ### Actor
 
-An entity that can perform actions and have permissions assigned.
+An entity that can perform actions.
 
 **Implements:** [Node](../common.md#node), [Titled](../common.md#titled)
 

@@ -37,7 +37,6 @@
   * [Asset groups](assets/groups.md)
 * [Geo objects](geo-objects.md)
 * [Schedules](schedules.md)
-* [Access control](access-control.md)
 * [Custom fields](custom-fields.md)
 * [Audit](audit.md)
 * [Catalogs](catalogs/README.md)

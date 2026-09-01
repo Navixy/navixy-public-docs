@@ -276,10 +276,6 @@ The type of event recorded in the audit log.
 | `UPDATED` | An existing entity was modified. |
 | `DELETED` | An entity was deleted. |
 | `RESTORED` | A soft-deleted entity was restored. |
-| `ROLE_ASSIGNED` | A role was assigned to an actor. |
-| `ROLE_REVOKED` | A role was removed from an actor. |
-| `PERMISSION_GRANTED` | A permission was granted to a role. |
-| `PERMISSION_REVOKED` | A permission was removed from a role. |
 | `LINKED` | Two entities were linked together. |
 | `UNLINKED` | A link between entities was removed. |
 | `ATTACHED` | An entity was added to a group. |

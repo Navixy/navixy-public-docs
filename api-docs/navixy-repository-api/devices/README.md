@@ -750,6 +750,11 @@ The result of a delete mutation.
 
 Adds an identifier to a device.
 
+  Not an idempotent command: `DUPLICATE` when an identifier with the same `type`, `value` and
+  `namespace` already exists — the uniqueness scope is the whole installation, not the device,
+  so the conflict may sit on a device the caller cannot see. A `null` namespace is global and
+  collides with other `null` namespaces.
+
 ```graphql
 deviceIdentifierAdd(
     input: DeviceIdentifierAddInput!
@@ -829,6 +834,9 @@ A hardware identifier for a device.
 
 Removes an identifier from a device.
 
+  Not an idempotent command: `NOT_FOUND` when `identifierId` names no identifier, including a
+  repeat of a call that already succeeded.
+
 ```graphql
 deviceIdentifierRemove(
     input: DeviceIdentifierRemoveInput!
@@ -874,6 +882,10 @@ The result of a delete mutation.
 ### deviceRelationCreate
 
 Creates a relationship between devices.
+
+  Not an idempotent command: `DUPLICATE` when the same `firstId`, `secondId` and `typeId` are
+  already related. The pair is ordered — relating A to B does not relate B to A, and creating the
+  reverse is a second, separate relationship rather than a duplicate.
 
 ```graphql
 deviceRelationCreate(
@@ -939,6 +951,9 @@ A relationship between two devices.
 ### deviceRelationRemove
 
 Removes a device relationship.
+
+  Not an idempotent command: `NOT_FOUND` when `id` names no relationship, including a repeat of a
+  call that already succeeded.
 
 ```graphql
 deviceRelationRemove(

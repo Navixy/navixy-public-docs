@@ -2,14 +2,14 @@
 description: >-
   Workspaces are isolated tenants that own all business data: members, devices,
   assets, geo objects, and configuration. Navixy Console provisions and owns
-  them, so workspaces are read-only in this API.
+  them, so this API exposes workspaces read-only.
 ---
 
 # Workspaces
 
 {% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
 
-A workspace is an isolated tenant that owns all business data: its own members, devices, assets, geo objects, and configuration. Workspaces are provisioned and owned by Navixy Console, so they are read-only in Navixy Repository API.
+A workspace is an isolated tenant that owns all business data: its own members, devices, assets, geo objects, and configuration. Workspaces are provisioned and owned by Navixy Console, so Navixy Repository API exposes them read-only.
 
 ## Queries
 

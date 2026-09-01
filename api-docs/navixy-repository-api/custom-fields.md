@@ -52,6 +52,56 @@ One custom-field type that may be defined on a given owner, and what it may poin
 
 ## Objects
 
+<a id="devicecustomfieldvalue"></a>
+
+### DeviceCustomFieldValue
+
+DEVICE custom-field value (primary-capable).
+
+**Implements:** [CustomFieldValue](#customfieldvalue)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `code` | [Code](common.md#code)! | The custom field code. |
+| `isDefault` | `Boolean!` | Whether this field is on by default for this entity. |
+| `device` | [Device](devices/README.md#device)! | The linked device. |
+| `isPrimary` | `Boolean!` | Whether this device is the entity's primary DEVICE. |
+
+---
+
+<a id="fieldparamsdevice"></a>
+
+### FieldParamsDevice
+
+Parameters for DEVICE field type.
+
+**Implements:** [FieldParams](#fieldparams)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `isRequired` | `Boolean!` | Whether a value is required for this field. |
+| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The device types a value may belong to. Empty means any device type is allowed. An element is null when the device type behind it no longer resolves — see `FieldParamsReference.refSubtypes`, which is resolved by the same loader. |
+
+---
+
+<a id="fieldparamsreference"></a>
+
+### FieldParamsReference
+
+Parameters for REFERENCE field type.
+
+**Implements:** [FieldParams](#fieldparams), [MultiValue](common.md#multivalue)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `isRequired` | `Boolean!` | Whether a value is required for this field. |
+| `isMulti` | `Boolean!` | Whether multiple values can be selected for this field. |
+| `refEntityTypeCode` | [Code](common.md#code)! | The entity type code that can be referenced. |
+| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The subtypes a value may belong to (AssetType / GeoObjectType / catalog). Empty means the whole target type is allowed. An element is null when its subtype no longer resolves — the classifier item was deleted after the narrowing was validated on write. Nullable for the same reason as `defaultRefs` below: both are resolved while `FieldParams!` itself is built, so a non-null element type would let one dangling subtype blank an entire page of catalog types, even for a query that never selects this field. |
+| `defaultRefs` | [[Node](common.md#node)]! | The default referenced entities. Empty when the field has no default. An element is null when its target no longer resolves — the entity was deleted after the default was validated on write. Nullable for the same reason as `ReferenceCustomFieldValue.refs`: `FieldParams!` is non-null on `CustomFieldDefinition!` inside a non-null `customFieldDefinitions` list, so a non-null element type would let one dangling default blank an entire page of catalog types. |
+
+---
+
 <a id="stringcustomfieldvalue"></a>
 
 ### StringCustomFieldValue
@@ -352,56 +402,6 @@ A single option in an OPTIONS field.
 
 ---
 
-<a id="devicecustomfieldvalue"></a>
-
-### DeviceCustomFieldValue
-
-DEVICE custom-field value (primary-capable).
-
-**Implements:** [CustomFieldValue](#customfieldvalue)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `code` | [Code](common.md#code)! | The custom field code. |
-| `isDefault` | `Boolean!` | Whether this field is on by default for this entity. |
-| `device` | [Device](devices/README.md#device)! | The linked device. |
-| `isPrimary` | `Boolean!` | Whether this device is the entity's primary DEVICE. |
-
----
-
-<a id="fieldparamsdevice"></a>
-
-### FieldParamsDevice
-
-Parameters for DEVICE field type.
-
-**Implements:** [FieldParams](#fieldparams)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `isRequired` | `Boolean!` | Whether a value is required for this field. |
-| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The device types a value may belong to. Empty means any device type is allowed. An element is null when the device type behind it no longer resolves — see `FieldParamsReference.refSubtypes`, which is resolved by the same loader. |
-
----
-
-<a id="fieldparamsreference"></a>
-
-### FieldParamsReference
-
-Parameters for REFERENCE field type.
-
-**Implements:** [FieldParams](#fieldparams), [MultiValue](common.md#multivalue)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `isRequired` | `Boolean!` | Whether a value is required for this field. |
-| `isMulti` | `Boolean!` | Whether multiple values can be selected for this field. |
-| `refEntityTypeCode` | [Code](common.md#code)! | The entity type code that can be referenced. |
-| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The subtypes a value may belong to (AssetType / GeoObjectType / catalog). Empty means the whole target type is allowed. An element is null when its subtype no longer resolves — the classifier item was deleted after the narrowing was validated on write. Nullable for the same reason as `defaultRefs` below: both are resolved while `FieldParams!` itself is built, so a non-null element type would let one dangling subtype blank an entire page of catalog types, even for a query that never selects this field. |
-| `defaultRefs` | [[Node](common.md#node)]! | The default referenced entities. Empty when the field has no default. An element is null when its target no longer resolves — the entity was deleted after the default was validated on write. Nullable for the same reason as `ReferenceCustomFieldValue.refs`: `FieldParams!` is non-null on `CustomFieldDefinition!` inside a non-null `customFieldDefinitions` list, so a non-null element type would let one dangling default blank an entire page of catalog types. |
-
----
-
 ## Inputs
 
 <a id="customfieldfiltervalue"></a>
@@ -445,6 +445,19 @@ Choose the variant that matches the custom field's data type:
 ### CustomFieldFilter
 
 A filter condition for a custom field value.
+
+One condition is one code compared one way. Where a filter input takes a LIST of these
+(`AssetFilter.customFields`, `GeoObjectFilter.customFields`), the entries combine with AND —
+an entity must satisfy every one of them, and repeating a code narrows rather than widens.
+
+Inside a single condition:
+- `IN` matches when the stored value equals ANY member of the list — the list itself is an OR.
+- On a multi-value field (`isMulti` OPTIONS / REFERENCE), a positive operator matches when ANY
+  stored value satisfies it: `["red","blue"]` matches `{operator: EQ, value: {string: "red"}}`.
+  `NE` and `IS_NULL` are the inversions of that, so they match only when NO stored value
+  qualifies — `NE "red"` does not match `["red","blue"]`.
+- A code with no field definition behind it is treated as SQL NULL: `IS_NULL` and `NE` match
+  every entity, every other operator matches none.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -706,7 +719,7 @@ Parameters for STRING field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minLength` | `Int` | The minimum character length. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.STRING` limit; it cannot raise it. |
 | `defaultString` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -721,7 +734,7 @@ Parameters for TEXT field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.TEXT` limit of 65,535; it cannot raise it. |
 | `defaultText` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -881,8 +894,8 @@ The data type of a custom field, determining validation rules and UI rendering.
 
 | Value | Description |
 | ----- | ----------- |
-| `STRING` | Single-line text input. Maximum 255 characters. |
-| `TEXT` | Multi-line text input. Maximum 65,535 characters. |
+| `STRING` | Single-line text input. At most 255 characters. |
+| `TEXT` | Multi-line text input. At most 65,535 characters, counted as UTF-16 code units: every Basic Multilingual Plane character costs one, while an astral character (most emoji, rarer CJK extensions) costs two, so text made entirely of those tops out at 32,767. Unlike STRING it is not orderable: TEXT cannot be used with `AssetOrder`/`GeoObjectOrder`'s `customFieldCode`, nor with the `GT`, `GTE`, `LT` and `LTE` operators. `EQ`, `NE`, `IN`, `CONTAINS`, `IS_NULL` and `IS_NOT_NULL` all work. |
 | `DECIMAL` | Arbitrary-precision decimal value (encoded as Decimal string). |
 | `INTEGER` | Signed 64-bit integer value (encoded as Long). |
 | `BOOLEAN` | Boolean true/false value. |

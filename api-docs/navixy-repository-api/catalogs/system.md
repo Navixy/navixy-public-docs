@@ -16,7 +16,7 @@ System-defined catalog items that cannot be modified by users.
 
 ### Module
 
-A system module that groups related functionality and permission scopes.
+A system module that groups related functionality.
 Examples: repo (core), fleet_management (FSM), iot (devices), reports, billing.
 
 **Implements:** [CatalogItem](catalog-items.md#catalogitem), [Node](../common.md#node), [Versioned](../common.md#versioned), [Titled](../common.md#titled)

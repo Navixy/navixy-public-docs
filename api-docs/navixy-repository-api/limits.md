@@ -68,18 +68,12 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 | Input | Limit |
 | --- | --- |
 | `title` (all entities) | 255 characters |
-| [Code](common.md#code) values (type codes, custom field codes, identifier `namespace`) | 64 characters |
+| [Code](common.md#code) values (type codes, custom field codes, identifier `namespace`) | 100 characters |
 | `externalId` | 100 characters |
 | Email addresses | 254 characters |
 | Name fields on users (`givenNames`, `familyNames`) | 255 characters |
 | `STRING` custom field values | 255 characters, restricted further by the definition's `maxLength` |
 | `TEXT` custom field values | 65,535 characters, restricted further by the definition's `maxLength` |
-
-<!-- TODO: verify against backend before release. Schema-vs-code mismatches as of 2026-08-27:
-     - Code: schema says max 64, backend validation enforces 100 (ScalarTypes.kt:227).
-     - STRING/TEXT: schema promises 255 / 65,535, but the backend does not enforce these caps —
-       only the per-definition maxLength is checked (CustomFieldValueValidatorImpl.kt:286-294).
-     The rows above print the schema values. Update them once the backend reconciles. -->
 
 
 ### Value ranges and formats

@@ -1,7 +1,7 @@
 ---
 description: >-
-  Organize assets into typed, color-coded collections for fleet segmentation,
-  reporting, and access control.
+  Organize assets into typed, color-coded collections for fleet segmentation
+  and reporting.
 ---
 
 # Organizing assets into groups
@@ -18,51 +18,7 @@ If you haven't created assets yet, start with [Working with assets](working-with
 
 ### Prerequisites
 
-You need your workspace's ID for all asset group operations. Use the `me` query to retrieve it:
-
-```graphql
-query GetMyWorkspace {
-  bdr {
-    me {
-      ... on User {
-        memberships {
-          nodes {
-            workspace {
-              id
-              title
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-You'll receive a response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "me": {
-        "memberships": {
-          "nodes": [
-            {
-              "workspace": {
-                "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
-                "title": "TransLog GmbH"
-              }
-            }
-          ]
-        }
-      }
-    }
-  }
-}
-```
-
-Use the `id` of the workspace you want to work with for all subsequent asset group operations.
+You need your workspace's ID for all asset group operations. It comes with your access credentials and is carried in your access token. See [Authentication](../authentication.md) for how tokens work and where the workspace ID comes from.
 
 ### Check available asset group types
 

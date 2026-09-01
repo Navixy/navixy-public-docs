@@ -308,6 +308,11 @@ The result of a delete mutation.
 
 Links a device to an inventory.
 
+  A device holds at most one active inventory link. This is not an idempotent command:
+  `VALIDATION_ERROR` when the device already has one, *including* a link to the very inventory
+  named in the input. Moving a device between inventories is `deviceInventoryUnlink` then
+  `deviceInventoryLink`, and re-running a link that already succeeded is an error, not a no-op.
+
 ```graphql
 deviceInventoryLink(
     input: DeviceInventoryLinkInput!
@@ -372,6 +377,10 @@ A record of a device's assignment to an inventory.
 ### deviceInventoryUnlink
 
 Unlinks a device from an inventory.
+
+  Not an idempotent command: `NOT_FOUND` when the device has no active inventory link, including
+  a repeat of a call that already succeeded. The input names only the device — the link to close
+  is the active one, whichever inventory it points at.
 
 ```graphql
 deviceInventoryUnlink(

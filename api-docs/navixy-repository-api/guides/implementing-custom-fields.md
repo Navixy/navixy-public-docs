@@ -143,7 +143,7 @@ If no custom fields have been created yet, `customFieldDefinitions` is an empty 
 
 Choose a [code](../common.md#code) for each field before creating its definition. The code is what you use to read and write the field's values in every query and mutation. Once entities store values under a code, avoid changing it: a code can only be changed by deleting the definition and creating a new one, and the stored values are lost with it.
 
-If you omit `code`, it's auto-generated from `title` (transliterated to lowercase Latin, spaces replaced with `_`, truncated at 40 characters, with a numeric suffix on collision). Explicitly setting a code gives you control over how that key appears in your data.
+If you omit `code`, it's auto-generated from `title` (transliterated to lowercase Latin, spaces replaced with `_`, truncated at 30 characters, with a numeric suffix on collision). Explicitly setting a code gives you control over how that key appears in your data.
 
 Codes can contain ASCII letters, digits, underscores, dots, and hyphens, and must start with a letter or digit (max 64 characters).
 

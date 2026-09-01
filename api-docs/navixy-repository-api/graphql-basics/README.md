@@ -406,26 +406,21 @@ In the API reference, you'll see object types like `Device`, `Workspace`, `Devic
 
 Enums are fixed sets of values. Unlike strings, you can only use the predefined values.
 
-For example, `ActionPermission` is an enum with these values:
+For example, `OrderDirection` is an enum with these values:
 
-* `READ`
-* `CREATE`
-* `UPDATE`
-* `DELETE`
+* `ASC`
+* `DESC`
 
 When using an enum in a query, write the value without quotes:
 
 ```graphql
-mutation {
+query {
   bdr {
-    permissionGrant(input: {
-      roleId: "..."
-      permissionScopeId: "..."
-      actions: [READ, UPDATE]
-    }) {
-      rolePermission {
-        id
-      }
+    devices(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      orderBy: { field: TITLE, direction: DESC }
+    ) {
+      nodes { id title }
     }
   }
 }

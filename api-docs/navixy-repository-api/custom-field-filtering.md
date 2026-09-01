@@ -42,6 +42,19 @@ Each condition in the `customFields` array has three parts:
 
 <table data-search="false"><thead><tr><th>Operator</th><th>Description</th></tr></thead><tbody><tr><td>EQ</td><td>Equals</td></tr><tr><td>NE</td><td>Not equals</td></tr><tr><td>GT</td><td>Greater than</td></tr><tr><td>GTE</td><td>Greater than or equal</td></tr><tr><td>LT</td><td>Less than</td></tr><tr><td>LTE</td><td>Less than or equal</td></tr><tr><td>CONTAINS</td><td>String contains (case-insensitive)</td></tr><tr><td>IN</td><td>Matches any value in the provided array</td></tr><tr><td>IS_NULL</td><td>Field has no value</td></tr><tr><td>IS_NOT_NULL</td><td>Field has a value</td></tr></tbody></table>
 
+### How CONTAINS matches
+
+On `STRING` and `TEXT` fields, `CONTAINS` ignores letter case and matches everything else literally:
+
+* Case differences never prevent a match, in any alphabet: `diesel` finds `Diesel Truck`, and `дизель` finds `Дизельный грузовик`.
+* Accents count: `cafe` does not find `café`.
+* Digits match literally: `part 7` does not find `part 0007`, and a Western digit does not find its equivalent from another script.
+* Invisible characters count: a soft hyphen or a zero-width space inside the stored value breaks the match.
+
+Search for the substring exactly as it is stored; only letter case can differ.
+
+The whole-value operators `EQ`, `NE`, and `IN` compare strings with the natural-language rules that [sorting](filtering-and-sorting.md#sort-behavior) uses, and those rules treat some visibly different strings as equal: for them, `1` equals `01`. A value that `EQ` matches is therefore not always found by `CONTAINS` with the same search string.
+
 ### Value formats
 
 The `value` field is a `@oneOf` input: provide exactly one of its options, the one matching your field's type:
@@ -109,7 +122,7 @@ This returns trucks with "north" in their title that are assigned to the northwe
 
 ## Sorting by custom fields
 
-Assets and geo objects support sorting by custom field values. The sortable field types are `STRING`, `TEXT`, `DECIMAL`, `INTEGER`, `DATE`, `DATETIME`, plus the reference types `DEVICE` and single-value `REFERENCE`, which sort by the title of the entity they point at rather than by the stored ID. `OPTIONS`, `BOOLEAN`, and `GEOJSON` fields are not sortable, and neither is a multi-value `REFERENCE` or a `REFERENCE` pointing at an entity with no title.
+Assets and geo objects support sorting by custom field values. The sortable field types are `STRING`, `DECIMAL`, `INTEGER`, `DATE`, `DATETIME`, plus the reference types `DEVICE` and single-value `REFERENCE`, which sort by the title of the entity they point at rather than by the stored ID. `TEXT`, `OPTIONS`, `BOOLEAN`, and `GEOJSON` fields are not sortable, and neither is a multi-value `REFERENCE` or a `REFERENCE` pointing at an entity with no title.
 
 ```graphql
 query {

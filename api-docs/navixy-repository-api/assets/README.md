@@ -169,7 +169,7 @@ Filtering options for assets.
 | `typeIds` | `[ID!]` | Filter by asset types (OR within field). |
 | `deviceIds` | `[ID!]` | Filter by linked devices (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
+| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. Unlike the ID list filters above, the conditions in this list combine with AND: an asset must satisfy every one of them. See `CustomFieldFilter` for how a single condition matches. |
 
 </details>
 
@@ -178,6 +178,19 @@ Filtering options for assets.
 <summary>CustomFieldFilter</summary>
 
 A filter condition for a custom field value.
+
+One condition is one code compared one way. Where a filter input takes a LIST of these
+(`AssetFilter.customFields`, `GeoObjectFilter.customFields`), the entries combine with AND —
+an entity must satisfy every one of them, and repeating a code narrows rather than widens.
+
+Inside a single condition:
+- `IN` matches when the stored value equals ANY member of the list — the list itself is an OR.
+- On a multi-value field (`isMulti` OPTIONS / REFERENCE), a positive operator matches when ANY
+  stored value satisfies it: `["red","blue"]` matches `{operator: EQ, value: {string: "red"}}`.
+  `NE` and `IS_NULL` are the inversions of that, so they match only when NO stored value
+  qualifies — `NE "red"` does not match `["red","blue"]`.
+- A code with no field definition behind it is treated as SQL NULL: `IS_NULL` and `NE` match
+  every entity, every other operator matches none.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -232,7 +245,7 @@ Ordering options for assets.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `field` | [AssetOrderField](#assetorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
-| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
+| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. TEXT, OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
 | `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 </details>
@@ -796,7 +809,7 @@ Parameters for STRING field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minLength` | `Int` | The minimum character length. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.STRING` limit; it cannot raise it. |
 | `defaultString` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -811,7 +824,7 @@ Parameters for TEXT field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.TEXT` limit of 65,535; it cannot raise it. |
 | `defaultText` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -1182,7 +1195,7 @@ Parameters for STRING field type.
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minLength` | `Int` | The minimum character length. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.STRING` limit; it cannot raise it. |
 | `defaultString` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -1197,7 +1210,7 @@ Parameters for TEXT field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required. |
-| `maxLength` | `Int` | The maximum character length. |
+| `maxLength` | `Int` | The maximum character length. Narrows the `FieldType.TEXT` limit of 65,535; it cannot raise it. |
 | `defaultText` | `String` | The default value. |
 | `trim` | `Boolean` | Whether to trim whitespace. |
 
@@ -1578,7 +1591,7 @@ Filtering options for assets.
 | `typeIds` | `[ID!]` | Filter by asset types (OR within field). |
 | `deviceIds` | `[ID!]` | Filter by linked devices (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
-| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. |
+| `customFields` | [[CustomFieldFilter](../custom-fields.md#customfieldfilter)!] | Filter by custom field values. Unlike the ID list filters above, the conditions in this list combine with AND: an asset must satisfy every one of them. See `CustomFieldFilter` for how a single condition matches. |
 
 ---
 
@@ -1591,7 +1604,7 @@ Ordering options for assets.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `field` | [AssetOrderField](#assetorderfield) | The standard field to order by. Mutually exclusive with `customFieldCode`. |
-| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, TEXT, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
+| `customFieldCode` | [Code](../common.md#code) | The custom field code to order by. Mutually exclusive with `field`. Supported field types: STRING, DECIMAL, INTEGER, DATE, DATETIME, and the reference types DEVICE and single-value REFERENCE, which sort by the title of the entity they point at rather than by the stored id. TEXT, OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value REFERENCE or a REFERENCE at an entity with no title. |
 | `direction` | [OrderDirection](../common.md#orderdirection)! | The direction to order. |
 
 ---
