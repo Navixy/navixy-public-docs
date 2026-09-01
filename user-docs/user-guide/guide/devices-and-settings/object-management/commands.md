@@ -161,7 +161,9 @@ After the command runs, Navixy shows a notification with the result:
 
 <!-- SCREENSHOT: Notification toast for a software command showing the command name and the raw HTTP response (status and body). -->
 
-Sent commands also appear in the [Recent events](../../tracking/objects-list/object-widget.md#data-blocks) block of the Object widget, with their result available in an expandable view.
+Sent commands also appear in the [Recent events](../../tracking/objects-list/object-widget.md#data-blocks) block of the Object widget, with their result available in an expandable view. If the command included a [dynamic value placeholder](#dynamic-command-values), the entry's title also shows the value that was sent, for example `Update status <online>`.
+
+<figure><img src="../../../.gitbook/assets/recent-events-command-value.png" alt="Recent events entry showing the sent value in the entry title next to the command name"><figcaption></figcaption></figure>
 
 {% hint style="info" %}
 Commands are per-device. Commands configured for one device do not appear in other devices' Object widgets. To send commands to multiple devices based on rules or conditions, use IoT Logic.
