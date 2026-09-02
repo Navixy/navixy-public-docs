@@ -62,9 +62,33 @@ All business logic errors (such as `NOT_FOUND`, `CONFLICT`, or `VALIDATION_ERROR
 
 ## Common error scenarios
 
+### Unauthorized (401)
+
+Returned when the request has no access token, or the token is malformed, expired, or wasn't issued by the Navixy identity service. The check runs before the query, so the response has no `data` field and the HTTP status is 401, unlike the 200 that business logic errors return. See [Authentication](authentication.md) for how to obtain and refresh a token.
+
+```json
+{
+  "errors": [{
+    "message": "Jwt expired at 2026-09-02T09:05:00Z",
+    "extensions": {
+      "type": "https://api.navixy.com/errors/unauthorized",
+      "title": "Unauthorized",
+      "status": 401,
+      "detail": "Jwt expired at 2026-09-02T09:05:00Z",
+      "instance": "/graphql",
+      "code": "UNAUTHORIZED",
+      "traceId": "0af7651916cd43dd8448eb211c80319c",
+      "timestamp": "2026-09-02T09:07:12.000Z"
+    }
+  }]
+}
+```
+
+**How to handle:** Obtain a new token and retry the request once. Don't retry with the same token: a rejected token stays rejected, so a retry loop only adds latency. Refresh on a schedule instead, shortly before the token expires, so a working integration never sees this error. If the token is fresh and the error persists, check that it was issued by the identity service that the API trusts.
+
 ### Validation error (400)
 
-Returned when input data fails validation — for example, a required field is missing, a value is out of range, or a string exceeds the maximum length.
+Returned when input data fails validation: a required field is missing, a value is out of range, or a string exceeds the maximum length.
 
 ```json
 {
@@ -204,5 +228,7 @@ Returned when you try to create or update an entity with a value that must be un
 
 ## See also
 
+* [Authentication](authentication.md): Obtain, refresh, and send the access token that every request needs
 * [Optimistic locking](optimistic-locking.md): Prevent concurrent updates from overwriting each other with `version`
+* [Limits](limits.md): Request, pagination, and input size limits, and the errors they return
 * [GraphQL basics](graphql-basics/README.md): Learn GraphQL fundamentals, from queries and mutations to the type system
