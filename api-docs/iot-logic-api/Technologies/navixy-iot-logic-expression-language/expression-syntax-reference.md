@@ -169,6 +169,10 @@ Use parentheses to override precedence or clarify complex expressions.
 All three functions read the same 12 stored values, so 0-11 is the whole usable range. `value()` enforces it and rejects a higher index when you save the flow. `genTime()` and `srvTime()` do not: they accept any index, save without complaint, and then return null for every message, leaving the attribute permanently empty with no error anywhere. See [Invalid value() arguments](formula-errors.md#invalid-value-arguments).
 {% endhint %}
 
+{% hint style="info" %}
+The 12 stored values are a rolling buffer per device, kept for up to 30 days after the most recent message from that device. Navixy then drops the whole buffer of that device at once, so all three functions return null until the device reports again. A device that returns after a month of silence therefore starts with no history, and only index 0 resolves on its first message back. To read the current buffer of a device, use [WebSocket access to Data Stream Analyzer](../../Websocket-access-for-DSA.md).
+{% endhint %}
+
 **Usage examples:**
 
 <table><thead><tr><th width="268.54541015625">Use case</th><th>Expression</th></tr></thead><tbody><tr><td>Default timestamp (current time)</td><td><code>"server_time": "now()"</code> or <code>"generation_time": "now()"</code></td></tr><tr><td>Data age</td><td><code>now() - genTime('temperature', 0, 'all')</code></td></tr><tr><td>Transmission delay</td><td><code>srvTime('temperature', 0, 'all') - genTime('temperature', 0, 'all')</code></td></tr><tr><td>Time offset</td><td><code>genTime('temperature', 0, 'valid') + 120000</code></td></tr></tbody></table>

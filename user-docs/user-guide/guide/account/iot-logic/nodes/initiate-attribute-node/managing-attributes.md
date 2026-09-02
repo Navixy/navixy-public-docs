@@ -140,7 +140,9 @@ Using full formula syntax allows you to access historical values or explicit val
 
 **Parameters:**
 
-<table><thead><tr><th width="152.54547119140625">Parameter</th><th width="176.45452880859375">Range/Values</th><th>Description</th></tr></thead><tbody><tr><td><code>attribute_name</code></td><td>Any valid attribute</td><td>Exact name from device telemetry (can be <a href="managing-attributes.md#autofill-attribute-names">autofilled</a>)</td></tr><tr><td><code>index</code></td><td>0-12</td><td>Historical position: 0=current, 1=previous, 12=12 readings ago</td></tr><tr><td><code>validation</code></td><td><code>'all'</code> or <code>'valid'</code></td><td><code>'all'</code>=includes nulls (exact index), <code>'valid'</code>=excludes nulls (Nth valid reading)</td></tr></tbody></table>
+<table><thead><tr><th width="152.54547119140625">Parameter</th><th width="176.45452880859375">Range/Values</th><th>Description</th></tr></thead><tbody><tr><td><code>attribute_name</code></td><td>Any valid attribute</td><td>Exact name from device telemetry (can be <a href="managing-attributes.md#autofill-attribute-names">autofilled</a>)</td></tr><tr><td><code>index</code></td><td>0-11</td><td>Historical position: 0=current, 1=previous, 11=oldest stored value</td></tr><tr><td><code>validation</code></td><td><code>'all'</code> or <code>'valid'</code></td><td><code>'all'</code>=includes nulls (exact index), <code>'valid'</code>=excludes nulls (Nth valid reading)</td></tr></tbody></table>
+
+Navixy stores 12 readings per attribute for each device, and keeps them for up to 30 days after the most recent message from that device. A device that returns after more than 30 days of silence starts with no history. On the first message back, `value('temperature', 1, 'valid')` resolves to null. To check what history a device currently has, open [Data Stream Analyzer](../../data-stream-analyzer.md).
 
 **Examples:**
 

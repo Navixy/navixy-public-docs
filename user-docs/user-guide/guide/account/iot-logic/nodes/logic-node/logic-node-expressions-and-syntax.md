@@ -252,13 +252,14 @@ You can create complex expressions by combining multiple conditions with parenth
 
 **Common symptom:** A condition fires on a device's very first packets, before the referenced attribute has ever arrived. This usually means the condition uses `!=` (or a negated pattern operator) against a missing value. See [Comparison operators with null operands](#comparison-operators-with-null-operands) and [Logical operators with null operands](#logical-operators-with-null-operands) for which operators are safe by default and which need a guard.
 
-A referenced attribute resolves to `null` in three cases:
+A referenced attribute resolves to `null` in four cases:
 
 - It has never been sent for this device.
 - It's absent from the current packet, but an earlier packet still holds a value.
 - The requested history index doesn't exist yet.
+- The device sent nothing for more than 30 days, so Navixy dropped its stored history.
 
-JEXL treats all three the same way, as `null`, so an operator's behavior on a missing value doesn't depend on which of the three caused it. A never-sent attribute doesn't error the flow.
+JEXL treats all four the same way, as `null`, so an operator's behavior on a missing value doesn't depend on which of the four caused it. A never-sent attribute doesn't error the flow. For the 30-day retention of stored values, see [Full syntax](../initiate-attribute-node/managing-attributes.md#full-syntax).
 
 Every incoming message leaves the Logic node through exactly one branch, THEN or ELSE, even when the condition references missing data. If the condition's overall result is anything other than `true` (including `null`, or a value the node can't evaluate), the message routes to ELSE. The ELSE path therefore carries both "condition is false" and "condition could not be satisfied from available data."
 

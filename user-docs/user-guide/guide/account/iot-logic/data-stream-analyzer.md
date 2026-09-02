@@ -106,3 +106,13 @@ Let's interpret the table values using the example in the screenshot above and s
 * Device **#1Teltonika FMB001** isn't returning any values. This may mean that the device can't provide this particular kind of data. Check if there are any other attributes with values for this device, if no, make sure that the device is properly connected.
 * Devices **#2Teltonika FMB001** - **#5Teltonika FMB001** are returning values consistently, indicating they are connected correctly. Their location can be determined using **latitude** and **longitude** attributes. Since their coordinates remain unchanged across several recent **Depth** levels, the devices are stationary. This is further confirmed by the **moving** attribute, which has a value of **0**. Based on these observations, the data appears to be accurate and updated in real time.
 * Device **STARLINK** provided values for only one **Depth** level, suggesting it was connected recently. The absence of values for the **moving** attribute likely indicates that this device likely doesn't have the relevant sensor.
+
+## Data availability
+
+Data Stream Analyzer keeps the last values of a device for up to 30 days after the most recent message from that device. Navixy holds the values in memory for fast diagnostics, not in long-term storage.
+
+When a device sends nothing for longer than 30 days, Navixy drops all of the cached values of that device at once. The device still appears in the **Devices** list, but its columns in the table stay empty until it reports again. Click **Play** to watch for new messages and confirm that the device is back.
+
+IoT Logic formulas read the same cached values, so a device that returns after more than 30 days of silence starts with no history. For details, see [Full syntax](nodes/initiate-attribute-node/managing-attributes.md#full-syntax).
+
+The 30-day window applies only to the values that Data Stream Analyzer shows. It doesn't limit the history of tracks and events in your account. For the retention of that history, see [Data retention period](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/admin-panel/data-retention-period-increase-from-1-year).

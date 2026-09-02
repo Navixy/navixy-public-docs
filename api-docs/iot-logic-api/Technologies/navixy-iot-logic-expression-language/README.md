@@ -51,7 +51,7 @@ For comprehensive details on node configuration and flow architecture, see the [
 Within IoT Logic, Navixy Expression Language allows calculations on actual data attributes that come from data sources. There are two options to access the readings:
 
 * **Current values:** Reference attributes by name directly in expressions. This provides clean, readable syntax for accessing real-time device data. [Short syntax](expression-syntax-reference.md#short-syntax-current-values) is supported in this case (e.g., `temperature` = `value('temperature', 0, 'all')`).
-* **Historical values:** Access previous readings using the `value()` function with parameters for historical depth and validation mode. The system maintains the last 12 values per attribute, addressed by index 0 to 11, for trend analysis and change detection. [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) is needed.
+* **Historical values:** Access previous readings using the `value()` function with parameters for historical depth and validation mode. Navixy stores the last 12 values per attribute, addressed by index 0 to 11, for trend analysis and change detection. Those values are kept for up to 30 days after the most recent message from a device, as described in [Time and data access functions](expression-syntax-reference.md#time-and-data-access-functions). [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) is needed.
 
 {% hint style="warning" %}
 Attribute names in expressions must exactly match device-transmitted names (case-sensitive). Mismatched names prevent calculation execution.
