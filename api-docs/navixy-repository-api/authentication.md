@@ -1,8 +1,9 @@
 ---
 description: >-
-  How Navixy Repository API authenticates requests: OpenID Connect access
-  tokens from the Navixy identity service, how to obtain one for users,
-  integrations, and Navixy 3 sessions, and how to send it.
+  How Navixy Repository API authenticates requests: OpenID Connect access tokens
+  from the Navixy identity service, how to obtain one for users, integrations,
+  and Navixy 3 sessions, and how to send it.
+hidden: true
 ---
 
 # Authentication
@@ -13,8 +14,6 @@ Navixy Repository API authenticates every request with an access token. The toke
 
 This page is for developers who integrate with Navixy Repository API directly or through Navixy SDK. It covers the three ways to obtain a token, what the token contains, how to send it, and the errors that authentication returns.
 
-<!-- TODO: the identity service is Keycloak. Its token endpoint has the form https://<identity host>/realms/<realm>/protocol/openid-connect/token, and the discovery document is at https://<identity host>/realms/<realm>/.well-known/openid-configuration. The local realm is called "quickstart"; production has no published host or realm yet. Fill in the <token endpoint URL> and <issuer URL> placeholders on this page once they exist. -->
-
 ## How authentication works
 
 You obtain an access token from the Navixy identity service and send it with every request in the `Authorization` header. The API validates the signature and the issuer of the token, then runs the operation as the actor named in the token. An actor is any party that a token can represent: a person or a program. A request with a missing, invalid, or expired token fails with an [`UNAUTHORIZED` error](error-handling.md#error-codes) and HTTP status 401.
@@ -24,17 +23,15 @@ Both users and integrations can authenticate:
 * A user is a person with a Navixy account. A user can belong to several organizations and workspaces.
 * An integration is a service account for machine-to-machine access. It belongs to one workspace and authenticates with a client ID and a client secret.
 
-A token is issued for exactly one organization and one workspace. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](README.md#key-concepts) for the full domain model and [Workspaces](workspaces/README.md) for the entity.
+A token is issued for exactly one organization and one workspace. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](./#key-concepts) for the full domain model and [Workspaces](workspaces/) for the entity.
 
 A user who belongs to three workspaces holds a different token for each one. Switching workspace means obtaining a new token, not editing the existing one. The token also lists the roles that the actor holds in that workspace, so the API doesn't call the identity service on every request.
-
-<!-- TODO: today the API gateway validates the issuer of the token and resolves the actor from the `sub` claim. It doesn't read the workspace claims or check the audience. Every workspace-scoped operation takes an explicit workspace ID instead. Re-verify this section when the gateway starts enforcing token context. -->
 
 ## Ways to obtain a token
 
 Navixy Repository API accepts tokens from three flows. Choose the one that matches how your code runs. Values in angle brackets, such as `<token endpoint URL>`, are the ones that Navixy provides with your credentials.
 
-<table><thead><tr><th width="200">Method</th><th width="220">Use it when</th><th>Expiration and refresh</th><th>Status</th></tr></thead><tbody><tr><td><a href="#sign-in-users-and-exchange-the-session-token">User sign-in with token exchange</a></td><td>You want people to sign in to your own web or mobile app with their Navixy account.</td><td>The access token expires after the number of seconds in <code>expires_in</code>. Refresh by exchanging again. No refresh token is issued.</td><td>Available</td></tr><tr><td><a href="#authenticate-an-integration-with-client-credentials">Client credentials for integrations</a></td><td>A server-side job or service calls the API without a person present.</td><td>The access token expires after <code>expires_in</code> seconds. Request a new token with the same credentials.</td><td>Planned. Credentials aren't issued yet.</td></tr><tr><td><a href="#exchange-a-navixy-3-session-for-a-token">Navixy 3 session exchange</a></td><td>You already use the <a href="https://www.navixy.com/docs/navixy-api">Navixy Platform API</a> with a session hash or an API key and want to call Navixy Repository API with the same account.</td><td>Returns an access token and a refresh token. Exchange the session again when the access token expires.</td><td>Available</td></tr></tbody></table>
+<table><thead><tr><th width="200">Method</th><th width="220">Use it when</th><th>Expiration and refresh</th><th>Status</th></tr></thead><tbody><tr><td><a href="authentication.md#sign-in-users-and-exchange-the-session-token">User sign-in with token exchange</a></td><td>You want people to sign in to your own web or mobile app with their Navixy account.</td><td>The access token expires after the number of seconds in <code>expires_in</code>. Refresh by exchanging again. No refresh token is issued.</td><td>Available</td></tr><tr><td><a href="authentication.md#authenticate-an-integration-with-client-credentials">Client credentials for integrations</a></td><td>A server-side job or service calls the API without a person present.</td><td>The access token expires after <code>expires_in</code> seconds. Request a new token with the same credentials.</td><td>Planned. Credentials aren't issued yet.</td></tr><tr><td><a href="authentication.md#exchange-a-navixy-3-session-for-a-token">Navixy 3 session exchange</a></td><td>You already use the <a href="https://www.navixy.com/docs/navixy-api">Navixy Platform API</a> with a session hash or an API key and want to call Navixy Repository API with the same account.</td><td>Returns an access token and a refresh token. Exchange the session again when the access token expires.</td><td>Available</td></tr></tbody></table>
 
 ### Sign in users and exchange the session token
 
@@ -43,8 +40,6 @@ Use this flow when you want people to sign in to your own web or mobile app with
 A session token can't be used with the API directly, because it doesn't name an organization or a workspace. Only the exchange step adds that information, and only a confidential client that your backend controls may perform the exchange. The exchange secret therefore never has to be sent to the browser.
 
 Before you start, request two clients in the Navixy identity service from Navixy: a public login client for your front end and a confidential exchange client for your backend. You receive the client IDs and the secret of the exchange client. Store the secret as a deployment secret of your backend. Never send it to the browser or commit it to a repository.
-
-<!-- TODO: describe how a customer requests the clients once the process exists. Today the IAM team provisions them by hand. -->
 
 #### Step 1: Sign the user in
 
@@ -82,8 +77,6 @@ The response is a standard [OAuth 2.0 token response](https://www.rfc-editor.org
 }
 ```
 
-<!-- TODO: confirm expires_in against the access-token lifespan of the identity service. 300 is a placeholder. -->
-
 **Parameters explained:**
 
 * `grant_type`, `subject_token`, and `subject_token_type` are the standard [RFC 8693 request parameters](https://www.rfc-editor.org/rfc/rfc8693.html#section-2.1). `subject_token` is the session token of the signed-in user.
@@ -93,7 +86,7 @@ The response is a standard [OAuth 2.0 token response](https://www.rfc-editor.org
 
 The organization and workspace parameters are a preference, not a command. If the user no longer has access to the organization or workspace that you named, the identity service ignores that value. It picks one that the user can access instead. If you name nothing, the identity service picks the organization with the lowest ID. Inside it, it picks the workspace with the lowest ID that the roles of the user include. The same user with the same roles always gets the same result, so a sign-in is repeatable.
 
-The exchange returns either a complete token or an error. A missing correlation ID, a request for an organization or workspace that the user can't access, or an unreachable identity backend all return an error. You never receive a token without an organization and a workspace. See [Authentication errors](#authentication-errors).
+The exchange returns either a complete token or an error. A missing correlation ID, a request for an organization or workspace that the user can't access, or an unreachable identity backend all return an error. You never receive a token without an organization and a workspace. See [Authentication errors](authentication.md#authentication-errors).
 
 Refresh is re-exchange. No refresh token is issued for context tokens. Store `expires_in` next to the token and exchange the session token again shortly before the access token expires. When the sign-in session of the user has ended, the exchange fails, and the correct outcome is to show the sign-in page again.
 
@@ -104,8 +97,6 @@ Use this flow for server-side jobs and services that call the API without a pers
 {% hint style="warning" %}
 Integration credentials aren't issued yet. The request below is the standard client credentials grant that Navixy SDK already implements, so your code doesn't change when credentials become available.
 {% endhint %}
-
-<!-- TODO: document where integration credentials are created (Navixy Console is the expected place) and which token the integration receives: today the identity service has no client for third-party integrations, and the API gateway provisions any unknown token subject as a user. -->
 
 Send the client ID and secret to the token endpoint of the identity service:
 
@@ -180,30 +171,26 @@ Response:
 * `expiresIn` is the lifetime of the access token in seconds.
 * `refreshToken` is an [OAuth 2.0 refresh token](https://www.rfc-editor.org/rfc/rfc6749.html#section-6). Send it to the token endpoint of the identity service with `grant_type=refresh_token` to get a new access token without exchanging the session again.
 
-<!-- TODO: confirm the refresh flow for tokens from nvx3SessionExchange. The backend returns the identity service's refresh token verbatim; whether a refresh grant is allowed for this client isn't verified. -->
-
-<!-- TODO: nvx3SessionExchange is served by the API but isn't in the public schema copy (contracts/graphql/nvx3-auth.graphql is a separate file). Decide whether to add it to the published schema. -->
-
 The mutation is also served under its former name, `nvx2SessionExchange`, with the input type `Nvx2SessionExchangeInput`. That name is deprecated and is removed in the second quarter of 2027. New code uses `nvx3SessionExchange`. The two names take the same input and return the same result.
 
 ## What the token contains
 
-The access token is a signed [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519.html). Besides the standard claims (`iss`, `sub`, `exp`, `aud`, `azp`), a context token from the [user sign-in flow](#sign-in-users-and-exchange-the-session-token) contains the claims below. Read them to learn which workspace the token is issued for and which roles the actor holds. Don't build authorization on them in your own code: the API checks them on every request.
+The access token is a signed [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519.html). Besides the standard claims (`iss`, `sub`, `exp`, `aud`, `azp`), a context token from the [user sign-in flow](authentication.md#sign-in-users-and-exchange-the-session-token) contains the claims below. Read them to learn which workspace the token is issued for and which roles the actor holds. Don't build authorization on them in your own code: the API checks them on every request.
 
-| Claim | Type | Meaning |
-| --- | --- | --- |
-| `actor_id` | UUID | The actor that the token represents. |
-| `actor_type` | String | One of `user`, `integration`, `ai_agent`, or `external_contractor`. |
-| `organization_id` | UUID | The organization that the token is issued for. |
-| `workspace_id` | UUID | The workspace that the token is issued for. Pass this value as `workspaceId` in queries and mutations. |
-| `role_ids` | List of UUIDs | The roles that the actor holds in this organization and workspace. Roles from other workspaces are absent. |
-| `many_organizations` | Boolean | Whether the actor can access more than one organization. Use it to decide whether to show an organization switcher. |
-| `many_workspaces` | Boolean | Whether the actor can access more than one workspace inside this organization. |
-| `session_ttl`, `token_ttl` | ISO 8601 duration | How long the sign-in session and the token are meant to last, for example `PT12H`. |
-| `refresh` | Boolean | Whether refresh is allowed for this actor. |
-| `min_acr` | `1` or `2` | The minimum authentication level: `1` for a single factor, `2` for multi-factor authentication. |
-| `write` | String | The rule for write operations: `role`, `fresh`, or `fresh+coapproval`. |
-| `max_age` | ISO 8601 duration | Present only when write operations require a recent sign-in. |
+| Claim                      | Type              | Meaning                                                                                                             |
+| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `actor_id`                 | UUID              | The actor that the token represents.                                                                                |
+| `actor_type`               | String            | One of `user`, `integration`, `ai_agent`, or `external_contractor`.                                                 |
+| `organization_id`          | UUID              | The organization that the token is issued for.                                                                      |
+| `workspace_id`             | UUID              | The workspace that the token is issued for. Pass this value as `workspaceId` in queries and mutations.              |
+| `role_ids`                 | List of UUIDs     | The roles that the actor holds in this organization and workspace. Roles from other workspaces are absent.          |
+| `many_organizations`       | Boolean           | Whether the actor can access more than one organization. Use it to decide whether to show an organization switcher. |
+| `many_workspaces`          | Boolean           | Whether the actor can access more than one workspace inside this organization.                                      |
+| `session_ttl`, `token_ttl` | ISO 8601 duration | How long the sign-in session and the token are meant to last, for example `PT12H`.                                  |
+| `refresh`                  | Boolean           | Whether refresh is allowed for this actor.                                                                          |
+| `min_acr`                  | `1` or `2`        | The minimum authentication level: `1` for a single factor, `2` for multi-factor authentication.                     |
+| `write`                    | String            | The rule for write operations: `role`, `fresh`, or `fresh+coapproval`.                                              |
+| `max_age`                  | ISO 8601 duration | Present only when write operations require a recent sign-in.                                                        |
 
 A decoded payload looks like this:
 
@@ -228,9 +215,7 @@ A decoded payload looks like this:
 }
 ```
 
-<!-- TODO: confirm the `aud` value for Navixy Repository API. The gateway doesn't check the audience yet, and no audience mapper for it exists in the identity service. -->
-
-Tokens from the [client credentials flow](#authenticate-an-integration-with-client-credentials) and the [Navixy 3 session exchange](#exchange-a-navixy-3-session-for-a-token) don't contain the organization, workspace, and role claims today. <!-- TODO: re-verify when integration credentials ship. -->
+Tokens from the [client credentials flow](authentication.md#authenticate-an-integration-with-client-credentials) and the [Navixy 3 session exchange](authentication.md#exchange-a-navixy-3-session-for-a-token) don't contain the organization, workspace, and role claims today.
 
 ## Using the token in requests
 
@@ -248,8 +233,6 @@ curl -L \
   }'
 ```
 
-<!-- TODO: replace <API endpoint URL> with the production endpoint at release. The address is deliberately not published while the API is in preview. -->
-
 Response:
 
 ```json
@@ -266,7 +249,7 @@ Response:
 }
 ```
 
-The `nvx3SessionExchange` mutation is the one exception: it takes a Navixy 3 session hash instead of a token. See [Exchange a Navixy 3 session for a token](#exchange-a-navixy-3-session-for-a-token).
+The `nvx3SessionExchange` mutation is the one exception: it takes a Navixy 3 session hash instead of a token. See [Exchange a Navixy 3 session for a token](authentication.md#exchange-a-navixy-3-session-for-a-token).
 
 ## Your workspace ID
 
@@ -306,7 +289,7 @@ Response:
 }
 ```
 
-Workspaces are read-only in Navixy Repository API. They are created, renamed, and closed in Navixy Console. See [Workspaces](workspaces/README.md).
+Workspaces are read-only in Navixy Repository API. They are created, renamed, and closed in Navixy Console. See [Workspaces](workspaces/).
 
 ## Recommended authentication flow
 
@@ -331,10 +314,10 @@ Navixy SDK implements the token handling of the last two flows. You pass a token
 
 Authentication failures return a GraphQL error envelope with [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) extensions, the same format as every other error of the API. Two codes come from authentication:
 
-| Code | HTTP status | Description | How to resolve |
-| --- | --- | --- | --- |
-| `UNAUTHORIZED` | 401 | The token is missing, malformed, expired, or wasn't issued by the Navixy identity service. | Obtain a new token and retry. If a working integration starts receiving this error, its token expired. |
-| `PERMISSION_DENIED` | 403 | The token is valid, but the actor lacks the permission for this operation. | The operation isn't allowed for this account. Permissions are managed outside Navixy Repository API, so ask your administrator. |
+| Code                | HTTP status | Description                                                                                | How to resolve                                                                                                                  |
+| ------------------- | ----------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| `UNAUTHORIZED`      | 401         | The token is missing, malformed, expired, or wasn't issued by the Navixy identity service. | Obtain a new token and retry. If a working integration starts receiving this error, its token expired.                          |
+| `PERMISSION_DENIED` | 403         | The token is valid, but the actor lacks the permission for this operation.                 | The operation isn't allowed for this account. Permissions are managed outside Navixy Repository API, so ask your administrator. |
 
 Token endpoint failures come from the identity service in the standard [OAuth 2.0 error format](https://www.rfc-editor.org/rfc/rfc6749.html#section-5.2). The body has `error` and `error_description` fields, and the HTTP status is 400 or 401. A failed exchange means that no token was issued, never a token with reduced content.
 
@@ -375,8 +358,6 @@ Returned by the token endpoint when the exchange can't be completed. Typical cau
 }
 ```
 
-<!-- TODO: capture the exact error_description values from the identity service for an expired subject token, a missing correlation id, and an unentitled selection. -->
-
 #### How to handle token exchange failures
 
 Check the session token first. If it expired, the user has to sign in again. If the session token is valid, drop the `navixy_organization_id` and `navixy_workspace_id` parameters and exchange again. The identity service then picks an organization and a workspace that the user can access. A failure without any selection means that the user has no role in any organization.
@@ -397,5 +378,5 @@ For the `PERMISSION_DENIED` error and the full error format, see [Error handling
 * [Getting started](getting-started.md): Make your first query and mutation with a token.
 * [Error handling](error-handling.md): The error envelope, all error codes, and how to handle each one.
 * [Limits](limits.md): The request rate limit that applies per authenticated caller.
-* [Workspaces](workspaces/README.md): The workspace entity and the queries that list its contents.
+* [Workspaces](workspaces/): The workspace entity and the queries that list its contents.
 * [Platform authentication](https://navixy.com/docs/navixy-api/user-api/authentication): Session hashes and API keys of the Navixy Platform API, the input of the Navixy 3 session exchange.

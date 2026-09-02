@@ -2,6 +2,7 @@
 description: >-
   Make your first Navixy Repository API calls: send an authenticated GraphQL
   request, read your workspace, and register a device.
+hidden: true
 ---
 
 # Getting started
@@ -10,14 +11,14 @@ description: >-
 
 This guide takes you from an access token to a working integration with Navixy Repository API. You send your first authenticated request and read your workspace. You then look up the catalog records that a device needs and register a device. Every step shows the full request and the response that you get back.
 
-The guide is for developers who are comfortable with HTTP and JSON. It doesn't assume GraphQL experience: every operation is shown in full, and [GraphQL basics](graphql-basics/README.md) explains the concepts if you need them.
+The guide is for developers who are comfortable with HTTP and JSON. It doesn't assume GraphQL experience: every operation is shown in full, and [GraphQL basics](graphql-basics/) explains the concepts if you need them.
 
 ## Prerequisites
 
 Before you start, make sure that you have the following:
 
 * An access token for Navixy Repository API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains the three ways to obtain one.
-* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](workspaces/README.md) for the entity.
+* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](workspaces/) for the entity.
 * An HTTP client that can send a POST request with a JSON body. The examples use `curl`. The [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox) works too and needs no setup.
 
 ### Find your workspace ID
@@ -76,8 +77,6 @@ curl -L \
   }'
 ```
 
-<!-- TODO: replace <API endpoint URL> with the production endpoint at release. The address is deliberately not published while the API is in preview. -->
-
 Response:
 
 ```json
@@ -103,7 +102,6 @@ The steps register a GPS device. Each step depends on IDs from the previous one,
 
 {% stepper %}
 {% step %}
-
 ### Read your workspace
 
 Fetch the workspace by ID to confirm that the token and the workspace ID work together. The `version` field is returned for every entity. You send it back with updates to detect concurrent changes.
@@ -152,7 +150,6 @@ Workspaces are read-only in Navixy Repository API. They are created, renamed, an
 {% endstep %}
 
 {% step %}
-
 ### Look up a device type and a device model
 
 A device needs two catalog records: a device type, which is a classification that you define, and a device model, which comes from the read-only hardware catalog. Run the following query to list the device types of your workspace:
@@ -259,7 +256,6 @@ Save the two IDs. The next step needs both.
 {% endstep %}
 
 {% step %}
-
 ### Create a device
 
 Register the device with its type, its model, and its IMEI:
@@ -345,8 +341,6 @@ Response:
 
 Every new device starts in the built-in `Not Activated` status. Save the `id` and the `version` from the response. Every later update and delete of the device takes the `id`, and the `version` protects those calls against concurrent changes.
 {% endstep %}
-
-<!-- TODO: add a step for device activation once the activation operation exists. Update, delete, and the rest of the lifecycle stay in guides/working-with-devices.md. -->
 {% endstepper %}
 
 {% hint style="success" %}
