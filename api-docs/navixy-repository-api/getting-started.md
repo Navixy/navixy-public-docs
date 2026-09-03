@@ -17,13 +17,13 @@ The guide is for developers who are comfortable with HTTP and JSON. It doesn't a
 
 Before you start, make sure that you have the following:
 
-* An access token for Navixy Repository API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains the three ways to obtain one.
+* An access token for Navixy Repository API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains how to obtain one.
 * The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](workspaces/) for the entity.
 * An HTTP client that can send a POST request with a JSON body. The examples use `curl`. The [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox) works too and needs no setup.
 
 ### Find your workspace ID
 
-A token issued for a workspace states it in the `workspace_id` claim, and that value is the ID to use. If your token has no such claim, or you want to confirm the ID, list the workspaces that your token can access:
+List the workspaces that your token can access. A context token also states the workspace in its `workspace_id` claim, and that value is the same ID:
 
 ```graphql
 query MyWorkspaces {
