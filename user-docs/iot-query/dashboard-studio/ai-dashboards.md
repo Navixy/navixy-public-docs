@@ -1,6 +1,9 @@
 ---
 title: Building dashboards with AI
-description: Describe what you want to monitor in plain language and let the AI Assistant build a SQL-backed dashboard you preview against your own data before saving it
+description: >-
+  Describe what you want to monitor in plain language and let the AI Assistant
+  build a SQL-backed dashboard you preview against your own data before saving
+  it
 ---
 
 # Building dashboards with AI
@@ -10,6 +13,10 @@ The AI Assistant builds a Dashboard Studio dashboard from a plain-language descr
 This assistant is built into Dashboard Studio. It is separate from the platform-wide Navixy AI Assistant, which answers account questions and builds IoT Logic flows.
 
 Use it when you know what you want to see but not which tables or queries produce it. If you prefer to build panels and write queries yourself, see [Creating dashboards](creating-dashboards.md).
+
+{% embed url="https://youtu.be/yFsCA1jGggM?si=WM7QCc30spIlyYR8" %}
+Create custom dashboard with a built-in AI Assistant
+{% endembed %}
 
 ## What the AI Assistant does
 
@@ -108,18 +115,18 @@ Applying the same result twice creates two separate dashboards rather than updat
 
 ## Known limitations
 
-| Limitation | Detail |
-| --- | --- |
-| **New dashboards only** | The assistant can't edit a dashboard you already have. Edit saved dashboards in the dashboard editor. |
-| **Saving requires a role** | Anyone can preview. Only admins and editors can apply, rename, or edit a dashboard. |
-| **Demo accounts save locally** | In a demo account, applied dashboards go to your browser, not your database. They disappear when the demo data is reset. |
-| **One continuous conversation** | The chat has no control for starting a new conversation, and the transcript keeps only the newest 100 turns. |
-| **History isn't always saved** | In a demo account, and on a workspace where the chat tables aren't set up, the page warns that chat history isn't being saved and may be lost when the service restarts. |
-| **Panel counts differ** | The result card counts every panel. The preview status line counts only panels that run SQL, so a dashboard with a text panel shows one fewer. |
-| **Ordering in the section** | Applied dashboards sort above any dashboard you add to **AI Dashboards** by hand. Reorder them by dragging in the menu editor. |
-| **Designed for desktop** | The chat and the preview grid target desktop widths. |
-| **Message length** | A single message can be up to 4,000 characters. |
-| **Message rate** | Up to 20 messages per minute. Beyond that, the assistant asks you to wait before sending again. |
+| Limitation                      | Detail                                                                                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **New dashboards only**         | The assistant can't edit a dashboard you already have. Edit saved dashboards in the dashboard editor.                                                                    |
+| **Saving requires a role**      | Anyone can preview. Only admins and editors can apply, rename, or edit a dashboard.                                                                                      |
+| **Demo accounts save locally**  | In a demo account, applied dashboards go to your browser, not your database. They disappear when the demo data is reset.                                                 |
+| **One continuous conversation** | The chat has no control for starting a new conversation, and the transcript keeps only the newest 100 turns.                                                             |
+| **History isn't always saved**  | In a demo account, and on a workspace where the chat tables aren't set up, the page warns that chat history isn't being saved and may be lost when the service restarts. |
+| **Panel counts differ**         | The result card counts every panel. The preview status line counts only panels that run SQL, so a dashboard with a text panel shows one fewer.                           |
+| **Ordering in the section**     | Applied dashboards sort above any dashboard you add to **AI Dashboards** by hand. Reorder them by dragging in the menu editor.                                           |
+| **Designed for desktop**        | The chat and the preview grid target desktop widths.                                                                                                                     |
+| **Message length**              | A single message can be up to 4,000 characters.                                                                                                                          |
+| **Message rate**                | Up to 20 messages per minute. Beyond that, the assistant asks you to wait before sending again.                                                                          |
 
 {% hint style="warning" %}
 Avoid deleting or renaming the **AI Dashboards** section. If you delete it, the next **Apply** fails with an error asking you to restore it from the menu editor. If you rename it, the next **Apply** creates a second **AI Dashboards** section beside it, and the renamed one stops receiving new dashboards.
