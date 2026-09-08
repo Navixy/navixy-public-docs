@@ -1,61 +1,96 @@
+---
+description: >-
+  Navixy GraphQL API is the programming interface of the Navixy platform:
+  which products it serves, how requests are shaped, and where to start.
+---
+
 # Overview
 
-{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-**Navixy Repository API** is a programming interface for managing the business entities of the Navixy platform. It provides a flexible way to define what you track (assets), how data is collected (devices), where important points are located (geo objects), and when things happen (schedules).
+{% hint style="warning" %}
+Navixy GraphQL API is separate from the RESTful [Navixy API](https://navixy.com/docs/navixy-api/). The two APIs have different endpoints, authentication, and data models. Use the REST documentation for the Platform API and the Admin Panel API, and this space for the GraphQL API.
+{% endhint %}
 
-**Navixy Repository API is based on GraphQL.** Unlike REST APIs where you call multiple endpoints to gather related data, GraphQL allows you to request the exact fields you need in a single query. You describe the shape of the data you want, and the API returns it in that shape.
+**Navixy GraphQL API** is the programming interface of the Navixy platform. One endpoint and one schema serve every platform product: business data, tracking, IoT Logic, alerts, and reports. You describe the data that you need in a single query, and the API returns exactly that shape.
 
-For a quick description of GraphQL concepts, see [GraphQL basics](graphql-basics/README.md).
+The API is based on GraphQL. Every request is an HTTP POST to one endpoint, authenticated with an OpenID Connect access token. Navixy provides the endpoint URL together with your credentials. To send your first request, see [Getting started](getting-started.md). For the token, see [Authentication](authentication.md). If you're new to GraphQL, start with [GraphQL basics](graphql-basics/README.md).
 
-## Purpose and capabilities
+## Products
 
-**Navixy Repository API** enables you to:
+Each product in the platform has its own entry point in the schema: a top-level field of the `Query` and `Mutation` types that groups the operations of that product. The documentation is published product by product as each one becomes available.
 
-- Create **assets** and organize them into **groups**
-- Register **devices** (GPS trackers, sensors) with hardware identifiers and add them to **inventories**
-- Define **geo objects** (geofences, points of interest, routes) with GeoJSON geometry
-- Create **schedules** for work hours, maintenance windows, and time-based rules
-- Configure **custom fields** to store your own workspace-specific data on assets and geo objects
+| Product | Documentation |
+| --- | --- |
+| [Business Data Repository](bdr/README.md): assets, devices and inventories, geo objects, schedules, custom fields, catalogs, and the audit log. Entry point: `bdr`. | Available |
+| [Tracking](tracking/README.md) | Coming soon |
+| IoT Logic. Updated GraphQL version of [IoT Logic API](https://navixy.com/docs/iot-logic-api/). | Coming soon |
+| Alerts | Coming soon |
+| Reports | Coming soon |
+
+Navixy Console has a separate API that isn't public yet. Console owns organizations and workspaces, so those entities are read-only in Navixy GraphQL API.
+
+## How requests work
+
+Every operation is nested under the field of its product, and the response has the same shape. The following query reads the title of a workspace through the Business Data Repository product:
+
+```graphql
+query {
+  bdr {
+    workspace(id: "019d48ea-0752-8000-801f-444556437ab1") {
+      title
+    }
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "bdr": {
+      "workspace": {
+        "title": "Northwind Logistics"
+      }
+    }
+  }
+}
+```
+
+Send the query in the `query` field of a JSON body, with any variables in the `variables` field. [Getting started](getting-started.md) shows the full HTTP request.
 
 ## Key concepts
 
-The API is organized around the following core resources:
+These terms apply to every product. Each product section defines its own entities.
 
-<table><thead><tr><th width="147.48895263671875">Term</th><th>Definition</th></tr></thead><tbody><tr><td><strong>Workspace</strong></td><td>The tenant that owns every other resource: members, assets, devices, geo objects, and schedules. Navixy Console provisions workspaces, so they are read-only in this API.</td></tr><tr><td><strong>Asset</strong></td><td>A business object you're tracking: a vehicle, piece of equipment, employee, or any other entity. Assets can be linked into <strong>asset groups</strong> or assigned one or multiple GPS devices.</td></tr><tr><td><strong>Device</strong></td><td>Physical tracking hardware (GPS tracker, sensor, beacon). Devices have types, models, statuses, and hardware identifiers (IMEI, serial number).</td></tr><tr><td><strong>Inventory</strong></td><td>A logical grouping of devices for stock management (warehouse, vehicle stock, field inventory).</td></tr><tr><td><strong>Geo object</strong></td><td>A location-based entity based on the GeoJSON standard: geofence, point of interest, or route.</td></tr><tr><td><strong>Schedule</strong></td><td>iCalendar-compatible time-based schedules for your operations (maintenance cycles, time shifts).</td></tr></tbody></table>
+| Term | Definition |
+| --- | --- |
+| Organization | The Navixy Console account that owns one or more workspaces. |
+| Workspace | The tenant that owns the business data of one customer: members, assets, devices, geo objects, and schedules. Most queries and mutations take a `workspaceId` argument. Navixy Console creates workspaces, so they are read-only in the API. |
+| Product | A group of related operations under one entry point, such as `bdr`. |
+| Actor | The party that an access token represents: a user or an integration. |
+| Access token | An OpenID Connect token issued by the Navixy identity service. Every request sends one in the `Authorization` header. |
 
 ## Navigation
 
-The Navixy Repository API documentation is organized into two sections: concept articles and the API reference.
+The pages at the top of this space apply to every product:
 
-### Concepts and guides
-
-These articles provide essential background knowledge and guidelines:
-
-- [GraphQL basics](graphql-basics/README.md): A brief introduction to GraphQL for developers familiar with REST APIs.
-- [GraphQL tips and patterns](graphql-basics/graphql-tips-and-patterns.md): Practical suggestions for improving your GraphQL experience.
+- [GraphQL basics](graphql-basics/README.md): GraphQL for developers who know REST, plus [tips and patterns](graphql-basics/graphql-tips-and-patterns.md).
+- [Getting started](getting-started.md): Your first authenticated requests.
+- [Authentication](authentication.md): How to obtain and send an access token.
+- [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting.md): How to page through list results and narrow them down.
 - [Error handling](error-handling.md): Error structure, codes, and common error scenarios.
-- [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting.md): How to page through large result sets and narrow them down by criteria and order.
-- [Optimistic locking](optimistic-locking.md): How the API handles concurrent updates to prevent conflicting changes from overwriting each other.
-- [Limits](limits.md): Request, pagination, and input size limits, and the errors they return.
-- [Guides](guides/): In-depth guides exploring the most common use cases.
+- [Optimistic locking](optimistic-locking.md): How the API prevents concurrent updates from overwriting each other.
+- [Limits](limits.md): Request, pagination, and input size limits.
 
-### Core API reference
+Each product has its own section with an overview, guides, and the API reference:
 
-The [API reference](core-api-reference.md) provides complete technical specifications for all GraphQL types and operations, grouped by category:
+- [Business Data Repository](bdr/README.md)
+- [Tracking](tracking/README.md)
 
-- [Common resources](common.md)
-- [Directives](directives.md)
-- [Workspaces](workspaces/)
-- [Actors](actors/)
-- [Devices](devices/)
-- [Assets](assets/)
-- [Geo objects](geo-objects.md)
-- [Schedules](schedules.md)
-- [Custom fields](custom-fields.md)
-- [Audit](audit.md)
-- [Catalogs](catalogs/)
+## Developer resources
 
-{% hint style="warning" %}
-The API supports [GraphQL introspection](graphql-basics/README.md#introspection) for authenticated users. You can also check the public [GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-repository-api/graphql-schema/schema.graphql).
-{% endhint %}
+- [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox): Run queries and mutations interactively against a demo environment.
+- [Public GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-repository-api/graphql-schema/schema.graphql): The full type system in one file.
+- [Introspection](graphql-basics/README.md#introspection): Explore the schema from your own GraphQL client.
+
+<!-- TODO: add the developer support channel when one exists for this API. -->

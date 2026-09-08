@@ -1,12 +1,12 @@
 ---
 description: >-
-  Learn GraphQL fundamentals for Navixy Repository API: how it differs from
+  Learn GraphQL fundamentals for Navixy GraphQL API: how it differs from
   REST, plus queries, mutations, and core type concepts.
 ---
 
 # GraphQL basics
 
-{% include "../.gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include "../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
 This article introduces GraphQL for developers who are new to it. If you've worked with REST APIs before, you'll find GraphQL takes a different approach to requesting and modifying data.
 
@@ -87,13 +87,13 @@ The response contains only what you asked for:
 
 ## Single endpoint
 
-Navixy Repository API has one endpoint.
+Navixy GraphQL API has one endpoint.
 
 Every request — reading data, creating something, or subscribing to updates — goes to the same URL. The request body tells the API what you want to do.
 
-## Module namespaces
+## Product namespaces
 
-The Navixy 4 platform serves more than one product module through this endpoint, and each module has its own entry point. All Navixy Repository API operations live under the `bdr` field, so every query and mutation in these docs starts the same way:
+Navixy GraphQL API serves more than one product through this endpoint, and each product has its own entry point. All Business Data Repository (BDR) operations are nested under the `bdr` field, so every query and mutation in these docs starts the same way:
 
 ```graphql
 query {
@@ -109,7 +109,7 @@ The response mirrors the same structure: your data sits under `data.bdr`.
 
 The `bdr` block sets one rule for mutations: a single block may select only one mutation field. To run several mutations in one request, alias the `bdr` field itself, one block per call — see [Batch mutations](graphql-tips-and-patterns.md#batch-mutations). Queries have no such rule: one `bdr` block can select as many query fields as you need.
 
-Two lookup queries stay at the top level, outside any module: `node` and `nodes`, which retrieve any entity by its globally unique ID.
+Two lookup queries stay at the top level, outside any product namespace: `node` and `nodes`, which retrieve any entity by its globally unique ID.
 
 ## Operations
 
@@ -253,7 +253,7 @@ mutation {
 
 A subscription opens a persistent connection to receive updates as they happen. Instead of polling the API repeatedly, you tell it what events you're interested in, and it pushes data to you.
 
-At the moment, Navixy Repository API doesn't support subscriptions.
+At the moment, Navixy GraphQL API doesn't support subscriptions.
 
 ## Fields
 
@@ -350,7 +350,7 @@ GraphQL has the following built-in scalar types:
 | `Boolean` | True or false                            | `true`                                   |
 | `ID`      | Unique identifier (serialized as string) | `"550e8400-e29b-41d4-a716-446655440001"` |
 
-Navixy Repository API adds these custom scalar types:
+Navixy GraphQL API adds these custom scalar types:
 
 | Type           | Description                                                           | Example                           |
 | -------------- | --------------------------------------------------------------------- | --------------------------------- |
@@ -559,7 +559,7 @@ The `extensions` object contains machine-readable information for handling the e
 
 A GraphQL API has a **schema** that defines all available types, fields, queries, and mutations. The schema is like a contract: it tells you exactly what you can request and what you'll get back.
 
-[Navixy Repository API schema](../graphql-schema/schema.graphql) is public and available to developers.
+[Navixy GraphQL API schema](../graphql-schema/schema.graphql) is public and available to developers.
 
 ## Introspection
 

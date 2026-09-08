@@ -1,5 +1,5 @@
 ---
-description: Cursor-based pagination in Navixy GraphQL APIs
+description: Cursor-based pagination in Navixy GraphQL API
 ---
 
 # Pagination
@@ -19,11 +19,11 @@ Pagination applies to all list queries. They return connection types following a
 
 Many nested fields are also paginated — for example, `Workspace.devices` or `AssetGroup.currentAssets`. You can identify paginated fields by their return type (anything ending in `Connection`) or by the presence of `first`, `after`, `last`, and `before` arguments.
 
-Pagination types are described in separate sections of each entity's page — see [Asset pagination types](assets/README.md#pagination-types) as an example. You can also use [introspection](graphql-basics/README.md#introspection) to explore them in your GraphQL client.
+Pagination types are described in separate sections of each entity's page — see [Asset pagination types](bdr/assets/README.md#pagination-types) as an example. You can also use [introspection](graphql-basics/README.md#introspection) to explore them in your GraphQL client.
 
 ## The Connection pattern
 
-Navixy GraphQL APIs use [Relay Cursor Connections](https://relay.dev/graphql/connections.htm), a pagination standard from the GraphQL community. Instead of traditional page numbers, they use opaque cursors that point to specific positions in the result set.
+Navixy GraphQL API uses [Relay Cursor Connections](https://relay.dev/graphql/connections.htm), a pagination standard from the GraphQL community. Instead of traditional page numbers, they use opaque cursors that point to specific positions in the result set.
 
 Using cursors instead of page numbers enables the following:
 
@@ -34,7 +34,7 @@ Using cursors instead of page numbers enables the following:
 ## Paginated query structure
 
 {% hint style="info" %}
-Examples on this page use Navixy Repository API queries. The same pattern applies to all Navixy GraphQL APIs.
+Examples on this page use Business Data Repository (BDR) queries. The same pattern applies to every product served by Navixy GraphQL API.
 {% endhint %}
 
 Every paginated query returns a **Connection** type with this structure (we're using the `device` entity as an example, but the principle is the same):

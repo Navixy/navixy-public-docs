@@ -1,10 +1,10 @@
 ---
-description: Understand Navixy Repository API errors based on RFC 9457 format
+description: Understand Navixy GraphQL API errors based on RFC 9457 format
 ---
 
 # Error handling
 
-{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
 When an operation fails, the API returns an error response with details to help you understand what went wrong and how to fix it. All errors follow the [RFC 9457 Problem Details](https://www.rfc-editor.org/rfc/rfc9457.html) format, providing both human-readable messages and machine-readable codes.
 
@@ -54,7 +54,7 @@ Every error includes these RFC 9457 standard fields:
 
 ## HTTP status codes
 
-Navixy Repository API follows the [GraphQL-over-HTTP specification](https://graphql.github.io/graphql-over-http/draft/), which means HTTP status codes reflect transport-level results, not domain-level errors.
+Navixy GraphQL API follows the [GraphQL-over-HTTP specification](https://graphql.github.io/graphql-over-http/draft/), which means HTTP status codes reflect transport-level results, not domain-level errors.
 
 <table><thead><tr><th width="128.4000244140625">HTTP Status</th><th>Meaning</th></tr></thead><tbody><tr><td>200</td><td>Request processed successfully. Check the <code>errors</code> array for any domain-level failures.</td></tr><tr><td>400</td><td>Invalid HTTP or GraphQL request (parse or validation error).</td></tr><tr><td>401</td><td>Authentication required or invalid.</td></tr><tr><td>403</td><td>Authorization failed (forbidden).</td></tr><tr><td>429</td><td>Rate limit exceeded.</td></tr><tr><td>5xx</td><td>Infrastructure or system error.</td></tr></tbody></table>
 
@@ -114,7 +114,7 @@ Returned when input data fails validation: a required field is missing, a value 
 
 ### Permission denied (403)
 
-Returned when you're authenticated but lack the required permission for the requested operation. Permissions are managed outside Navixy Repository API.
+Returned when you're authenticated but lack the required permission for the requested operation. Permissions are managed outside Navixy GraphQL API.
 
 ```json
 {
@@ -135,7 +135,7 @@ Returned when you're authenticated but lack the required permission for the requ
 }
 ```
 
-**How to handle:** The operation isn't allowed for your account. Permissions are managed outside Navixy Repository API, so contact your administrator to request access.
+**How to handle:** The operation isn't allowed for your account. Permissions are managed outside Navixy GraphQL API, so contact your administrator to request access.
 
 ### Entity not found (404)
 

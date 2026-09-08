@@ -1,12 +1,12 @@
 ---
 description: >-
-  Request, pagination, and input size limits enforced by Navixy Repository API,
+  Request, pagination, and input size limits enforced by Navixy GraphQL API,
   and the errors the API returns when a limit is exceeded.
 ---
 
 # Limits
 
-Navixy Repository API enforces limits on request size, request rate, pagination, and input values. This page lists every limit and the error you get when you exceed it. All limits apply per request unless stated otherwise.
+Navixy GraphQL API enforces limits on request size, request rate, pagination, and input values. This page lists every limit and the error you get when you exceed it. All limits apply per request unless stated otherwise.
 
 The request limits (complexity, depth, and rate) are deployment settings. The values on this page are the defaults, so a specific installation can use different ones.
 
@@ -68,7 +68,7 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 | Input | Limit |
 | --- | --- |
 | `title` (all entities) | 255 characters |
-| [Code](common.md#code) values (type codes, custom field codes, identifier `namespace`) | 100 characters |
+| [Code](bdr/common.md#code) values (type codes, custom field codes, identifier `namespace`) | 100 characters |
 | `externalId` | 100 characters |
 | Email addresses | 254 characters |
 | Name fields on users (`givenNames`, `familyNames`) | 255 characters |

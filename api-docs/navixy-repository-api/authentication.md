@@ -1,6 +1,6 @@
 ---
 description: >-
-  How Navixy Repository API authenticates requests: OpenID Connect access tokens
+  How Navixy GraphQL API authenticates requests: OpenID Connect access tokens
   from the Navixy identity service, how a product obtains one for its users, what
   the token contains, and how to send it.
 hidden: true
@@ -8,17 +8,17 @@ hidden: true
 
 # Authentication
 
-{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Navixy Repository API authenticates every request with an access token. The token is an [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) access token issued by the Navixy identity service. The API never sees your password or client secret: it only validates the token and identifies the caller from it.
+Navixy GraphQL API authenticates every request with an access token. The token is an [OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) access token issued by the Navixy identity service. The API never sees your password or client secret: it only validates the token and identifies the caller from it.
 
-This page is for developers who integrate with Navixy Repository API directly or through Navixy SDK. It covers how a product obtains a token for its users, what the token contains, how to send it, and the errors that authentication returns. It describes what works today. Machine-to-machine credentials for integrations aren't available yet, and the page says so where it matters.
+This page is for developers who integrate with Navixy GraphQL API directly or through Navixy SDK. It covers how a product obtains a token for its users, what the token contains, how to send it, and the errors that authentication returns. It describes what works today. Machine-to-machine credentials for integrations aren't available yet, and the page says so where it matters.
 
 ## How authentication works
 
 You obtain an access token from the Navixy identity service and send it with every request in the `Authorization` header. The API validates the signature and the issuer of the token, then runs the operation as the user that the token identifies. A request with a missing, invalid, or expired token fails with an [`UNAUTHORIZED` error](error-handling.md#error-codes) and HTTP status 401.
 
-Every query and mutation that lists or creates entities takes a `workspaceId` argument. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](./#key-concepts) for the full domain model and [Workspaces](workspaces/) for the entity. The token identifies who is calling, and the `workspaceId` argument says which workspace the call works in.
+Every query and mutation that lists or creates entities takes a `workspaceId` argument. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](./#key-concepts) for the full domain model and [Workspaces](bdr/workspaces/) for the entity. The token identifies who is calling, and the `workspaceId` argument says which workspace the call works in.
 
 Today only users authenticate. A user is a person with a Navixy account, and a user can belong to several organizations and workspaces. Integrations, the service accounts for machine-to-machine access, are part of the domain model but can't obtain credentials yet. See [Integrations: not available yet](#integrations-not-available-yet).
 
@@ -28,7 +28,7 @@ A token comes from the sign-in flow of a product: a web or mobile app with its o
 
 ### Sign in users and exchange the session token
 
-Use this flow when you want people to sign in to your own web or mobile app with their Navixy account. It has two steps. The browser signs in and receives a session token: a token that proves who signed in. Your backend then exchanges the session token for a context token: a token that also names the organization and workspace to work in. The context token is what your code sends to Navixy Repository API.
+Use this flow when you want people to sign in to your own web or mobile app with their Navixy account. It has two steps. The browser signs in and receives a session token: a token that proves who signed in. Your backend then exchanges the session token for a context token: a token that also names the organization and workspace to work in. The context token is what your code sends to Navixy GraphQL API.
 
 A session token doesn't name an organization or a workspace. Only the exchange step adds that information, and only a confidential client that your backend controls may perform the exchange. The exchange secret therefore never has to be sent to the browser.
 
@@ -93,7 +93,7 @@ Navixy SDK already has a `clientCredentials` helper for the OAuth 2.0 client cre
 
 The access token is a signed [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519.html). It has the standard claims `iss`, `sub`, `exp`, and `azp`. A context token from the exchange in [Sign in users and exchange the session token](#sign-in-users-and-exchange-the-session-token) also contains the claims below. Read them to learn which workspace the token was issued for and which roles the user holds.
 
-Navixy Repository API uses the token to identify the caller. It doesn't read the workspace or role claims: the workspace comes from the `workspaceId` argument of each operation. Don't build authorization on the claims in your own code either. Treat them as information for your app, such as which workspace to pass and whether to show an organization picker.
+Navixy GraphQL API uses the token to identify the caller. It doesn't read the workspace or role claims: the workspace comes from the `workspaceId` argument of each operation. Don't build authorization on the claims in your own code either. Treat them as information for your app, such as which workspace to pass and whether to show an organization picker.
 
 | Claim                      | Type              | Meaning                                                                                                             |
 | -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -136,7 +136,7 @@ A session token, the one the browser receives before the exchange, contains only
 
 ## Using the token in requests
 
-Send the access token in the `Authorization` header with the `Bearer` scheme. The header is the only supported way to send the token: the API doesn't read tokens from the query string or the request body. `<API endpoint URL>` stands for the GraphQL endpoint of Navixy Repository API, which Navixy provides together with your credentials.
+Send the access token in the `Authorization` header with the `Bearer` scheme. The header is the only supported way to send the token: the API doesn't read tokens from the query string or the request body. `<API endpoint URL>` stands for the GraphQL endpoint of Navixy GraphQL API, which Navixy provides together with your credentials.
 
 ```bash
 curl -L \
@@ -204,7 +204,7 @@ Response:
 }
 ```
 
-A context token also states the workspace in its `workspace_id` claim, and that value is the same ID. Workspaces are read-only in Navixy Repository API. They are created, renamed, and closed in Navixy Console. See [Workspaces](workspaces/).
+A context token also states the workspace in its `workspace_id` claim, and that value is the same ID. Workspaces are read-only in Navixy GraphQL API. They are created, renamed, and closed in Navixy Console. See [Workspaces](bdr/workspaces/).
 
 ## Recommended authentication flow
 
@@ -212,7 +212,7 @@ For an app with its own front end, the flow is:
 
 1. Sign the user in with OpenID Connect and PKCE against your login client, and keep the session token in the browser.
 2. On each request to your backend, exchange the session token for a context token, or reuse a cached context token that hasn't expired.
-3. Send the context token to Navixy Repository API in the `Authorization` header, with the `workspace_id` claim as the `workspaceId` argument.
+3. Send the context token to Navixy GraphQL API in the `Authorization` header, with the `workspace_id` claim as the `workspaceId` argument.
 4. Re-exchange shortly before `expires_in` runs out. When the exchange fails because the sign-in session ended, show the sign-in page.
 
 Navixy SDK sends the token with every request and calls your token provider before each one. Steps 3 and 4 therefore need no code of your own beyond the provider.
@@ -224,7 +224,7 @@ Authentication failures return a GraphQL error envelope with [RFC 9457](https://
 | Code                | HTTP status | Description                                                                                | How to resolve                                                                                                                  |
 | ------------------- | ----------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | `UNAUTHORIZED`      | 401         | The token is missing, malformed, expired, or wasn't issued by the Navixy identity service. | Obtain a new token and retry. If a working app starts receiving this error, its token expired.                                  |
-| `PERMISSION_DENIED` | 403         | The token is valid, but the user lacks the permission for this operation.                  | The operation isn't allowed for this account. Permissions are managed outside Navixy Repository API, so ask your administrator. |
+| `PERMISSION_DENIED` | 403         | The token is valid, but the user lacks the permission for this operation.                  | The operation isn't allowed for this account. Permissions are managed outside Navixy GraphQL API, so ask your administrator. |
 
 Token endpoint failures come from the identity service in the standard [OAuth 2.0 error format](https://www.rfc-editor.org/rfc/rfc6749.html#section-5.2). The body has `error` and `error_description` fields, and the HTTP status is 400 or 401. A failed exchange means that no token was issued, never a token with reduced content.
 
@@ -285,4 +285,4 @@ For the `PERMISSION_DENIED` error and the full error format, see [Error handling
 * [Getting started](getting-started.md): Make your first query and mutation with a token.
 * [Error handling](error-handling.md): The error envelope, all error codes, and how to handle each one.
 * [Limits](limits.md): The request rate limit that applies per authenticated caller.
-* [Workspaces](workspaces/): The workspace entity and the queries that list its contents.
+* [Workspaces](bdr/workspaces/): The workspace entity and the queries that list its contents.

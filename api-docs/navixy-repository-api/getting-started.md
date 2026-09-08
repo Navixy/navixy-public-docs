@@ -1,15 +1,15 @@
 ---
 description: >-
-  Make your first Navixy Repository API calls: send an authenticated GraphQL
+  Make your first Navixy GraphQL API calls: send an authenticated GraphQL
   request, read your workspace, and register a device.
 hidden: true
 ---
 
 # Getting started
 
-{% include ".gitbook/includes/navixy-repository-api-is-a-....md" %}
+{% include ".gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-This guide takes you from an access token to a working integration with Navixy Repository API. You send your first authenticated request and read your workspace. You then look up the catalog records that a device needs and register a device. Every step shows the full request and the response that you get back.
+This guide takes you from an access token to a working integration with Navixy GraphQL API. You send your first authenticated request and read your workspace. You then look up the catalog records that a device needs and register a device. Every step shows the full request and the response that you get back.
 
 The guide is for developers who are comfortable with HTTP and JSON. It doesn't assume GraphQL experience: every operation is shown in full, and [GraphQL basics](graphql-basics/) explains the concepts if you need them.
 
@@ -17,8 +17,8 @@ The guide is for developers who are comfortable with HTTP and JSON. It doesn't a
 
 Before you start, make sure that you have the following:
 
-* An access token for Navixy Repository API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains how to obtain one.
-* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](workspaces/) for the entity.
+* An access token for Navixy GraphQL API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains how to obtain one.
+* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](bdr/workspaces/) for the entity.
 * An HTTP client that can send a POST request with a JSON body. The examples use `curl`. The [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox) works too and needs no setup.
 
 ### Find your workspace ID
@@ -63,7 +63,7 @@ The examples on this page use the workspace ID `7c9e6679-7425-40de-944b-e07fc1f9
 
 ## How to send a request
 
-Navixy Repository API has one endpoint. Navixy provides its URL together with your credentials, and `<API endpoint URL>` stands for it in the examples. Send every operation as an HTTP POST request with a JSON body that has a `query` field and, optionally, a `variables` field. Put the access token in the `Authorization` header with the `Bearer` scheme. The following request reads the title of your workspace:
+Navixy GraphQL API has one endpoint. Navixy provides its URL together with your credentials, and `<API endpoint URL>` stands for it in the examples. Send every operation as an HTTP POST request with a JSON body that has a `query` field and, optionally, a `variables` field. Put the access token in the `Authorization` header with the `Bearer` scheme. The following request reads the title of your workspace:
 
 ```bash
 curl -L \
@@ -92,7 +92,7 @@ Response:
 }
 ```
 
-Every Navixy Repository API operation is nested inside the `bdr` field, and the response has the same shape under `data.bdr`. The steps below show only the GraphQL document and its variables. Send each one in the `query` and `variables` fields of the same POST request.
+Every Business Data Repository (BDR) operation is nested inside the `bdr` field, and the response has the same shape under `data.bdr`. The steps below show only the GraphQL document and its variables. Send each one in the `query` and `variables` fields of the same POST request.
 
 If the response has an `errors` array instead of `data`, the token or the request is wrong. An `UNAUTHORIZED` error means that the token is missing, expired, or invalid. See [Error handling](error-handling.md) for the error format and every error code.
 
@@ -146,7 +146,7 @@ Response:
 
 A `null` workspace means that no workspace with that ID is visible to your token. Check the ID against the `workspaces` query from the prerequisites.
 
-Workspaces are read-only in Navixy Repository API. They are created, renamed, and closed in Navixy Console.
+Workspaces are read-only in Navixy GraphQL API. They are created, renamed, and closed in Navixy Console.
 {% endstep %}
 
 {% step %}
@@ -344,14 +344,14 @@ Every new device starts in the built-in `Not Activated` status. Save the `id` an
 {% endstepper %}
 
 {% hint style="success" %}
-You sent authenticated requests to Navixy Repository API, read your workspace, and registered a device with a type, a model, and an IMEI. The same request shape, `bdr` block, input object, and `version` field, applies to every other entity in the API.
+You sent authenticated requests to Navixy GraphQL API, read your workspace, and registered a device with a type, a model, and an IMEI. The same request shape, `bdr` block, input object, and `version` field, applies to every other entity in the API.
 {% endhint %}
 
 ## Next steps
 
-* [Working with devices](guides/working-with-devices.md): Update and delete the device, manage its identifiers, and link it to other devices.
-* [Working with assets](guides/working-with-assets.md): Create the vehicles and equipment that devices track, and link a device to an asset.
+* [Working with devices](bdr/guides/working-with-devices.md): Update and delete the device, manage its identifiers, and link it to other devices.
+* [Working with assets](bdr/guides/working-with-assets.md): Create the vehicles and equipment that devices track, and link a device to an asset.
 * [Optimistic locking](optimistic-locking.md): Use the `version` field to keep concurrent updates from overwriting each other.
 * [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting.md): Page through long lists and narrow them down.
 * [Error handling](error-handling.md): The error format, every error code, and how to handle each one.
-* [Core API reference](core-api-reference.md): Every type and operation, grouped by entity.
+* [Core API reference](bdr/core-api-reference.md): Every type and operation, grouped by entity.
