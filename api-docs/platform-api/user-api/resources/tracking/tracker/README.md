@@ -326,6 +326,19 @@ These errors come in addition to the [general error codes](../../../../general/e
 
 ***
 
+{% openapi-operation spec="navixy-platform" path="/tracker/search_location" method="post" %}
+[OpenAPI navixy-platform](../../../reference/Navixy_Platform.json)
+{% endopenapi-operation %}
+
+#### Errors
+
+These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
+
+* 201 - No tracker with this ID belongs to the account, or the tracker has no valid GPS position yet.
+* 208 - The tracker exists but is blocked, normally because its tariff ended.
+
+***
+
 {% openapi-operation spec="navixy-platform" path="/tracker/get_readings" method="post" %}
 [OpenAPI navixy-platform](../../../reference/Navixy_Platform.json)
 {% endopenapi-operation %}

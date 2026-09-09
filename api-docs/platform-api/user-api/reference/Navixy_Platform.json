@@ -21230,6 +21230,112 @@
         }
       }
     },
+    "/tracker/search_location": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Search tracker location",
+        "description": "Reverse geocoding for a tracker: return the address at its current GPS position. Same parameters and response as `geocoder/search_location`, with `tracker_id` in place of the coordinates. Reachable from a geo link session as well as a normal one.\n\nFrom a geo link session `geocoder` and `goal` are ignored: the account's geocoder is used, and a position outside the link's bounding zones counts as no position, the same rule as `tracker/get_last_gps_point`.",
+        "operationId": "trackerSearchLocation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "geocoder": {
+                    "type": "string",
+                    "description": "Optional. Preferred geocoder. Accounts with premium GIS always use Google regardless of this value. Ignored from a geo link session.",
+                    "enum": [
+                      "google",
+                      "yandex",
+                      "progorod",
+                      "osm",
+                      "doublegis",
+                      "locationiq"
+                    ]
+                  },
+                  "lang": {
+                    "type": "string",
+                    "description": "Optional. ISO 639 language code for the result, at most 5 characters, for example `en` or `en_US`. Defaults to the session language.",
+                    "maxLength": 5
+                  },
+                  "with_details": {
+                    "type": "boolean",
+                    "description": "Optional. Default `false`. Include the parsed `details` object in the response."
+                  },
+                  "goal": {
+                    "type": "string",
+                    "description": "Optional. Default `ui`. What the lookup is for, which decides the geocoder chosen. Use `ui_user_action` for a lookup a user asked for directly, `ui` otherwise. **An unrecognised value is silently treated as `ui`.** Ignored from a geo link session.",
+                    "enum": [
+                      "ui",
+                      "ui_user_action"
+                    ]
+                  }
+                },
+                "required": [
+                  "tracker_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "The address at the tracker's current position."
+                    },
+                    "details": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/AddressDetails"
+                        }
+                      ],
+                      "description": "Present only when `with_details` was set."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 201: no tracker with this ID belongs to the account, or the tracker has no valid GPS position yet. Error 208: the tracker exists but is blocked, normally because its tariff ended.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
     "/tracker/get_inputs": {
       "post": {
         "tags": [
@@ -28249,7 +28355,7 @@
           "Trackers"
         ],
         "summary": "List all sensor inputs and state fields",
-        "description": "Get every sensor input and state field the platform knows, with descriptions translated into the account's language. Available to demo accounts, and takes no parameters.\n\nThis is the authoritative source for the `input_name` values a sensor can use, and for the state field names that appear in `get_diagnostics` and `readings/list`. Where a state field has a known value set, the value type and the translated value descriptions come back too.",
+        "description": "Get every sensor input and state field the platform knows, with descriptions translated into the account's language. Available to demo accounts, and takes no parameters. Reachable from a geo link session as well as a normal one.\n\nThis is the authoritative source for the `input_name` values a sensor can use, and for the state field names that appear in `get_diagnostics` and `readings/list`. Where a state field has a known value set, the value type and the translated value descriptions come back too.",
         "operationId": "trackerSensorInputNameList",
         "requestBody": {
           "required": true,

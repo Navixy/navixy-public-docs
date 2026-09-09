@@ -154,6 +154,7 @@ Most integrations start here, with [Tracker](tracker/README.md) for the device r
 | [`/tracker/batch_get_outputs`](tracker/README.md#post-tracker-batch_get_outputs) | POST | Read outputs for several trackers |
 | [`/tracker/output/update`](tracker/README.md#post-tracker-output-update) | POST | Rename an output |
 | [`/tracker/get_last_gps_point`](tracker/README.md#post-tracker-get_last_gps_point) | POST | Read the last GPS point |
+| [`/tracker/search_location`](tracker/README.md#post-tracker-search_location) | POST | Search tracker location |
 | [`/tracker/get_readings`](tracker/README.md#post-tracker-get_readings) | POST | Read general sensor values |
 | [`/tracker/get_state`](tracker/README.md#post-tracker-get_state) | POST | Read tracker state |
 | [`/tracker/get_states`](tracker/README.md#post-tracker-get_states) | POST | Read the state of several trackers |
