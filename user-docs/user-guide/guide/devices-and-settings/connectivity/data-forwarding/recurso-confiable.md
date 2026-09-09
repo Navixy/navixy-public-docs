@@ -1,124 +1,152 @@
 ---
-description: Transfer GPS tracking data from Navixy to the Recurso Confiable enterprise platform every 5 minutes via SOAP, used across Mexico, Colombia, and Central America.
+description: >-
+  Forward GPS positions, cargo temperature, and humidity from Navixy to the
+  Recurso Confiable platform over SOAP, used across Mexico and Central America.
 ---
 
 # Recurso Confiable
 
-## Recurso Confiable: GPS tracking/data forwarding for enterprises
+Recurso Confiable is a security and logistics platform for transport operations, and this protocol forwards vehicle data from Navixy into it. Carriers use it to deliver tracking data to customers who monitor shipments through Recurso Confiable, without giving those customers access to the Navixy account. It's used in Mexico, Colombia, the United States, and Central America.
 
-**Recurso Confiable** is a security and logistics software that monitors, gives visibility, and generates predictability on transport operations. Navixy created the Recurso Confiable data forwarding protocol to be used by other companies that also work with Recurso Confiable across multiple industries in Mexico, Colombia, the United States, and Central America.
+Navixy also offers **Recurso Confiable (Walmart)**, a variant for forwarding to Walmart through Recurso Confiable. It's configured the same way as described here.
 
-_Protocol Category: Enterprise protocol_
+In Navixy, select **Recurso Confiable** in the **Protocol** dropdown.
 
-### Table of contents
+## What Navixy sends
 
-1. [What is Recurso Confiable?](recurso-confiable.md#what-is-rc)
-2. [Technical information about Recurso Confiable](recurso-confiable.md#tech-info-rc)
-3. [Recurso Confiable Configuration](recurso-confiable.md#rc-config)
-4. [Setting up](recurso-confiable.md#setting-up)
-5. [Managing](recurso-confiable.md#managing)
-6. [Troubleshooting](recurso-confiable.md#troubleshooting)
+Navixy sends one SOAP request per message to the `GPSAssetTracking` method. The request contains these fields:
 
-### What is Recurso Confiable?
+| Field | Contents |
+| ----- | -------- |
+| `code` | The AVL event code for this message. See [Recurso Confiable event codes](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes). |
+| `asset` | The license plate, from the first part of External ID |
+| `shipment` | The shipment id, from the second part of External ID |
+| `customer` | The customer id and customer name, from the third and fourth parts of External ID |
+| `serialNumber` | The Navixy device id |
+| `date` | When the device recorded the message |
+| `latitude`, `longitude`, `altitude` | Position in degrees, altitude in meters |
+| `speed`, `course`, `direction` | Speed, heading in degrees, and heading as a compass direction |
+| `ignition` | Whether the ignition is on |
+| `odometer` | Distance traveled |
+| `battery` | Battery level |
+| `temperature` | Cargo temperature, when the device reports it |
+| `humidity` | Cargo humidity, when the device reports it |
+| `vehicleType`, `vehicleBrand`, `vehicleModel` | Vehicle details from Fleet management |
 
-With the Recurso Confiable protocol, enterprise partners can transfer GPS tracking data safely and reliably into a single location to optimize fleet management processes. This allows the client a way to work and communicate with other Recurso Confiable partners.
+{% hint style="info" %}
+Temperature and humidity make this protocol usable for cold-chain monitoring. Navixy reads whichever sensor is available, in this order of preference:
 
-When developing this protocol, Navixy took into account the needs of large logistics and retail companies. Companies can streamline important fleet management and GPS tracking platform data and capabilities such as control systems, trip planning, tracking in real-time, predictive modeling reporting, geofence implementation and editing, route optimization, and more. Companies previously disconnected from one another on the Recurso Confiable network are now able to communicate efficiently and quickly.
+* Temperature: the internal temperature sensor, then an external temperature sensor, then a Bluetooth temperature sensor.
+* Humidity: the internal humidity sensor, then a humidity sensor, then a Bluetooth humidity sensor.
 
-### Recurso Confiable general technical information
+When the device has no matching sensor, the field is sent empty.
+{% endhint %}
 
-The Recurso Confiable protocol uses SOAP to push XML data every 5 minutes over HTTP to Recurso Confiable.
+### When Navixy sends
 
-Data that’s sent to Recurso Confiable:
+Navixy sends a message when it has valid coordinates, or when it reports an urgent event. An urgent event goes out even without a position. Any other message without coordinates is skipped.
 
-* [AVL Event Code](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes)
-* License Plate
-* Shipment ID
-* Date
-* Direction
-* Latitude
-* Longitude
-* Altitude
-* Speed
-* Course
-* Ignition
-* Odometer
-* CustomerID
-* CustomerName
-* Device ID
+## Before you start
 
-### Recurso Confiable configuration
+Collect the following from Recurso Confiable:
 
-#### Setting up
+* The endpoint address and port. The address is commonly `http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc` on port `80`.
+* Your Recurso Confiable user id and password. Navixy requires both and won't save the retranslator without them.
+* The license plate, shipment id, customer id, and customer name for each vehicle, as registered on the Recurso Confiable side.
 
-Required Parameters
+Navixy authenticates by calling `GetUserToken` with the user id and password, then reuses the token until it expires.
 
-* Recurso Confiable Login and Password
-* External ID
-* Destination server address
-  * [http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc](http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc)
-* Destination server port
-  * 80
+## Set up forwarding
 
-To set up data forwarding in the Recurso Confiable protocol:
+{% stepper %}
+{% step %}
 
-1. Open the device settings from the main menu by clicking the gear icon on the bottom left of the screen.
-2. Click the **Data forwarding** block.
-3. Click **Protocols.**
-4. This opens a pop-up where you input the required parameters by clicking the **+** button.
-5. For the Recurso Confiable protocol, input the following information:
+### Open the Data forwarding block
 
-<table><thead><tr><th width="236.54541015625">Parameter</th><th>Explanation</th></tr></thead><tbody><tr><td>Name</td><td>Enter a name to make this retranslator easily identifiable</td></tr><tr><td>Protocol and login</td><td>Select the Recurso Confiable protocol from the dropdown<br>Use Recurso Confiable login and password</td></tr><tr><td>Destination server address and port</td><td>Address: http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc<br>Port: 80</td></tr></tbody></table>
+Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
+{% endstep %}
 
-6. The **Retranslation management** screen should look similar to the following, with Recurso Confiable login and password. Make sure the **Enabled** button is checked and click the **Save** button to complete the process.
+{% step %}
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/pasted-image-0-1-1-600x120.png)
+### Open the protocol list
 
-7. Next, the retranslator will need to be linked to the device on the Recurso Confiable side. To do so, select the **Link** <img src="https://www.navixy.com/wp-content/uploads/2022/08/image-3.png" alt="link image" data-size="line"> button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below.
-8. Next, add information needed to identify the device on Recurso Confiable in the External ID field either by clicking the pencil icon or the external ID field itself. This value should include the following from the Recurso Confiable side, where only the License Plate is mandatory:
+Click **Protocols**, then click **+** to add a configuration.
+{% endstep %}
 
-* License Plate
-* Route ID
-* Company ID
-* Company Name
+{% step %}
 
-The format for the External ID field will be separated by a pipe. For example:
+### Enter the Recurso Confiable settings
+
+Fill in the fields as follows:
+
+* **Name**: a label that identifies this retranslator
+* **Protocol**: **Recurso Confiable**
+* **Address**: `http://gps.rcontrol.com.mx/Tracking/wcf/RCService.svc`
+* **Port**: `80`
+* **Login**: your Recurso Confiable user id
+* **Password**: your Recurso Confiable password
+{% endstep %}
+
+{% step %}
+
+### Enable and save
+
+Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
+{% endstep %}
+
+{% step %}
+
+### Link the retranslator to a device
+
+In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**.
+{% endstep %}
+
+{% step %}
+
+### Set the External ID
+
+Click the link icon at the right of the retranslator row, then enter up to four values joined by pipe characters, in this order:
 
 ```
-ABC123|1|123|John
+licensePlate|shipmentId|customerId|customerName
 ```
 
-If only the License Plate is available, the External ID can be entered by itself:
+For example, `ABC123|1|123|John`.
+
+Only the license plate is required, and it must be 5 to 7 characters:
 
 ```
 ABC123
 ```
 
-Or if any other information is missing, be sure to include the pipes, for example:
+When you skip a value in the middle, keep its pipe so the remaining values stay in the right positions:
 
 ```
 ABC123||123|
 ```
 
-9. Select **Save** once completed.
+Repeat this step and the previous one for every device that forwards to Recurso Confiable. The retranslator configuration is shared across the account, but External ID is set per device.
+{% endstep %}
+{% endstepper %}
 
-#### Managing
+## Manage forwarding
 
-To edit or stop data from being forwarded, follow these steps:
+To change or stop forwarding to Recurso Confiable:
 
-1. Select the **Pencil** icon or click in the associated box to edit the external ID used to point to the device on the 3rd party system.
-2. Click the **Trash** button to stop the data forwarding.
-3. Acknowledge the change in the pop-up.
-4. Click **Protocols** to change retranslator settings such as name, login information, or enabled status
-5. This will open the retranslator management window. Select the row to edit and either click the pencil in the top left or double-click the row in question to allow editing. Save any changes.
+* Click the link icon at the right of the retranslator row to change the External ID of a device.
+* Switch off the toggle to stop forwarding for one device, and keep the configuration for the others.
+* Click **Protocols**, select the row, and edit it to change the name, address, or credentials. The change applies to every device linked to this retranslator.
+* Delete the configuration from the **Protocols** list to stop forwarding for all devices. Confirm in the dialog.
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/pasted-image-0-3-600x107.png)
+## Troubleshooting
 
-#### Troubleshooting
+When data doesn't appear in the Recurso Confiable system, check the following in order:
 
-If data doesn't display on the 3rd-party Recurso Confiable system, make sure that:
+1. The retranslator is enabled, and its toggle is switched on for the device.
+2. The user id and password are correct. Navixy can't request a token without them, so no data is sent at all.
+3. The address and port are correct.
+4. External ID has the values in the right order, with pipes kept for any value you skipped.
+5. The license plate, shipment id, customer id, and customer name match the records on the Recurso Confiable side.
+6. The device reports valid coordinates, unless you expect only urgent events.
 
-* Username and password for Recurso Confiable are correctly entered
-* URL was entered correctly
-* Retranslator is enabled
-* External ID matches the related Recurso Confiable information
+When positions arrive but temperature or humidity is empty, the device has no sensor that Navixy recognizes for that reading. Check the sensor configuration for the device.

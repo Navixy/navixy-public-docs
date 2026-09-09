@@ -1,96 +1,127 @@
 ---
-description: Send GPS and telematics data from Navixy to the Unigis TMS network every 5 minutes via SOAP, integrating fleet data with retail and logistics supply chains.
+description: >-
+  Forward GPS and telematics data from Navixy to the Unigis TMS platform,
+  sending one position per minute per vehicle over HTTP.
 ---
 
 # Unigis
 
-The **Unigis** protocol is a vehicle location data forwarding protocol between Navixy and a TMS platform developed by Unigis. The most frequent use cases relate to real-time collection of GPS tracking and vehicle Telematics data by logistics departments of large manufacturing and retail chain companies. Most of these companies are located in the US, Mexico, Colombia, Chile, Argentina, Brazil and Spain.
+Unigis is a transport management system, and the Unigis data forwarding protocol delivers vehicle positions from Navixy into it. Logistics departments at manufacturing and retail companies use it to receive data from their carriers, including suppliers to chains such as Walmart, Home Depot, and Kimberly-Clark. A carrier can send data to Unigis without giving the receiving company access to the Navixy account.
 
-_Protocol Category: Enterprise compliance_
+Unigis is most common with companies in the United States, Mexico, Colombia, Chile, Argentina, Brazil, and Spain.
 
-### Table of contents
+In Navixy, select **UNIGIS** in the **Protocol** dropdown. That is how Unigis is named in the interface.
 
-1. [What is Unigis?](unigis.md#what-is-unigis)
-2. [Technical information about Unigis](unigis.md#tech-info-unigis)
-3. [Unigis Configuration](unigis.md#unigis-config)
-4. [Setting up](unigis.md#setting-up)
-5. [Managing](unigis.md#managing)
-6. [Troubleshooting](unigis.md#troubleshooting)
+## What Navixy sends
 
-### What is Unigis?
+Navixy sends one HTTP POST request per position to the `LoginYInsertarEvento` method of the Unigis endpoint. The body is form-encoded, and it contains these fields:
 
-Through the Unigis data forwarding protocol, fleet GPS tracking data is streamlined across multiple servers, allowing data retransmission between Navixy and Unigis partners.
+| Field | Contents |
+| ----- | -------- |
+| `SystemUser` and `Password` | The Unigis credentials from the retranslator configuration, sent with every request |
+| `Dominio` | The External ID of the device, or the Navixy device id when External ID is empty |
+| `Codigo` | The Navixy event code for this message |
+| `Latitud`, `Longitud`, `Altitud` | Position in degrees, altitude in meters |
+| `Velocidad` | Speed |
+| `Rumbo` | Heading |
+| `FechaHoraEvento` | When the device recorded the position, in ISO 8601 |
+| `FechaHoraRecepcion` | When Navixy received the message, in ISO 8601 |
 
-Using the Unigis protocol, users can integrate with self-service chains and/or suppliers of products and services within the Unigis network, such as Walmart, Home Depot, and Kimberly-Clark. Fleet data can be transmitted between all parties without requiring access to Navixy's platform.
+Events such as a door alarm, a panic button press, or an engine shutdown aren't separate fields. Each arrives as a value in `Codigo` on the message that reports it.
 
-### Unigis general technical information
+Unigis responds to each request with a numeric code. A negative code means Unigis rejected the position, and Navixy closes the connection and retries.
 
-The Unigis protocol uses SOAP to send XML data from tracking devices to Unigis over HTTP as part of the OSI application layer. Data is pushed from the Navixy platform to Unigis every 5 minutes.
+### When Navixy sends
 
-Data that’s sent to Unigis:
+Navixy sends at most one position per minute per device. When a device reports more often than that, the positions in between are skipped rather than queued, so the data in Unigis is a one-minute sample and not a full track.
 
-* Date and time
-* Longitude
-* Latitude
-* Altitude
-* Speed
-* Inputs events
-* Door Open
-* Panic Button
-* Engine Off
-* Theft
-* External ID (License Plate)
+Two rules override the one-minute limit:
 
-Format: ASCII
+* An urgent event is sent as soon as it arrives, even if the previous position went out less than a minute earlier.
+* A message without valid coordinates is never sent, whatever its timing.
 
-### Unigis configuration
+## Before you start
 
-#### Setting up
+Collect the following from Unigis:
 
-To initiate data forwarding using the Unigis protocol from Navixy, you need the following parameters:
+* The endpoint address and port. Unigis operates several hubs, so confirm which one applies to your account.
+* Your Unigis login and password. Navixy requires both and won't save the retranslator without them.
 
-<table><thead><tr><th width="281.6363525390625">Parameter</th><th>Explanation</th></tr></thead><tbody><tr><td>Destination server address and port</td><td>URL of endpoint and port that is used by Ungis TMS.<br><br>Most commonly:<br><br>* Address: http://unigis2.unisolutions.com.ar/HUB/UNIGIS/MAPI/SOAP/GPS/Service.asmx<br>* Port: 80</td></tr><tr><td>Login and password</td><td>Your Unigis login and password</td></tr><tr><td>External ID</td><td>License plate number of an individual vehicle</td></tr></tbody></table>
+You also need the license plate as it's registered on the Unigis side, which goes in the External ID field of each device. Navixy accepts any non-empty value here, so a plate that doesn't match the Unigis record is accepted at save time and then rejected by Unigis.
 
-To set up data forwarding in the Unigis protocol:
+## Set up forwarding
 
-1. Open the device settings from the main menu by clicking the gear icon on the bottom left of the screen.
-2. Click the **Data forwarding** block.
-3. Click Protocols.
-4. This opens a pop-up where you input the required parameters by clicking the **+** button.
+{% stepper %}
+{% step %}
 
-For the Unigis protocol, input the following information:
+### Open the Data forwarding block
 
-1. **Name:** Enter a name to make this retranslator easily identifiable
-2. **Protocol:** Select the Unigis protocol from the dropdown
-3. Unigis login and password
-4. **Destination server address**, e.g. http://unigis2.unisolutions.com.ar/HUB/UNIGIS/MAPI/SOAP/GPS/Service.asmx
-5. **Destination port**, e.g. 80
+Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
+{% endstep %}
 
-A Retranslation management screen should look like the following, with Unigis login and password. Make sure the **Enabled** button is checked and click the **Save** button to complete the process.
+{% step %}
 
-![](https://www.navixy.com/wp-content/uploads/2022/08/pasted-image-0-600x112.png)
+### Open the protocol list
 
-Next, the retranslator will need to be linked to the device on the Unigis side. To do so, select the **Link** <img src="https://www.navixy.com/wp-content/uploads/2022/08/image-3.png" alt="link image" data-size="line"> button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below.
+Click **Protocols**, then click **+** to add a configuration.
+{% endstep %}
 
-Next, add the ID of the device in the 3rd-party system either by clicking the pencil icon or the external ID field. This value should be the license plate number on the Unigis side. Select **Save** once completed.
+{% step %}
 
-#### Managing
+### Enter the Unigis settings
 
-To edit or stop data from being forwarded, follow these steps:
+Fill in the fields as follows:
 
-1. Select the **Pencil** icon or click in the associated box to edit the external ID used to point to the device on the 3rd party system.
-2. Click the **Trash** button to stop the data forwarding.
-3. Acknowledge the change in the pop-up.
-4. Click **Protocols** to change retranslator settings such as name, login information, or enabled status
-5. This will open the retranslator management window. Select the row to edit and either click the pencil in the top left or double-click the row in question to allow editing. Save any changes.
+* **Name**: a label that identifies this retranslator
+* **Protocol**: **UNIGIS**
+* **Address**: the endpoint address from Unigis, for example `http://unigis2.unisolutions.com.ar/HUB/UNIGIS/MAPI/SOAP/GPS/Service.asmx`
+* **Port**: the port from Unigis, commonly `80`
+* **Login** and **Password**: your Unigis credentials
 
-![](https://www.navixy.com/wp-content/uploads/2022/08/pasted-image-0-1-600x96.png)
+When you enter an address without a path, Navixy uses `/HUB/UNIGIS/MAPI/SOAP/COMMServer/service.asmx`. Enter the full address that Unigis gave you rather than relying on this default.
+{% endstep %}
 
-#### Troubleshooting
+{% step %}
 
-If data doesn't display on the 3rd-party Unigis system, make sure that:
+### Enable and save
 
-* Username and password for Unigis are correctly entered
-* URL was entered correctly
-* Retranslator is enabled
-* External ID matches the license plate on Unigis
+Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
+{% endstep %}
+
+{% step %}
+
+### Link the retranslator to a device
+
+In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**.
+{% endstep %}
+
+{% step %}
+
+### Set the External ID
+
+Click the link icon at the right of the retranslator row, then enter the license plate as registered on the Unigis side. Click **Save**.
+
+Repeat this step and the previous one for every device that forwards to Unigis. The retranslator configuration is shared across the account, but External ID is set per device.
+{% endstep %}
+{% endstepper %}
+
+## Manage forwarding
+
+To change or stop forwarding to Unigis:
+
+* Click the link icon at the right of the retranslator row to change the External ID of a device.
+* Switch off the toggle to stop forwarding for one device, and keep the configuration for the others.
+* Click **Protocols**, select the row, and edit it to change the name, address, or credentials. The change applies to every device linked to this retranslator.
+* Delete the configuration from the **Protocols** list to stop forwarding for all devices. Confirm in the dialog.
+
+## Troubleshooting
+
+When data doesn't appear in Unigis, check the following in order:
+
+1. The retranslator is enabled, and its toggle is switched on for the device.
+2. The login and password match your Unigis credentials. Navixy sends them with every position, so a wrong password fails every request rather than only the first.
+3. The address includes the full path that Unigis gave you, and the port is correct.
+4. The External ID matches the license plate registered on the Unigis side.
+5. The device reports valid coordinates. Positions without a GPS fix are never forwarded.
+
+When positions arrive but there are fewer than expected, that's the one-minute limit rather than a fault. Unigis receives a one-minute sample of the track.

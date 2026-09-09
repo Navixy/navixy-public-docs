@@ -1,101 +1,135 @@
 ---
-description: Retransmit GPS and GLONASS fleet data to Wialon-based monitoring servers or a separate Navixy instance using the Gurtam TCP retranslation protocol.
+description: >-
+  Retransmit GPS, sensor, and event data to Wialon-based monitoring servers or
+  to a second Navixy server using the Gurtam Wialon IPS protocol over TCP.
 ---
 
 # Wialon IPS
 
-Wialon IPS is a generic, publicly available data forwarding protocol from Gurtam for retranslating personal and vehicle GPS and GLONASS devices that transfer data to satellite monitoring servers or third-party resources.
+Wialon IPS is a public protocol from Gurtam for passing GPS device data between servers. Because it's openly documented and widely supported, it's the general-purpose option when the receiving system isn't one of the named integrations.
 
-_Protocol Category: Data consolidation_
+Two uses are common:
 
-### Table of contents
+* Forwarding data from Navixy to a Wialon-based monitoring server, or to any server that accepts Wialon IPS.
+* Copying data between two Navixy servers, for example from a ServerMate account to an On-Premise installation.
 
-1. [What is Wialon IPS?](wialon-ips.md#what-is-wialon-ips)
-2. [Wialon IPS general technical information](wialon-ips.md#wialon-ips-general-technical-information)
-3. [Wialon IPS configuration](wialon-ips.md#wialon-ips-configuration)
-4. [Setting up](wialon-ips.md#setting-up)
-5. [Managing](wialon-ips.md#managing)
-6. [Troubleshooting](wialon-ips.md#troubleshooting)
+Wialon IPS sends more of the original device data than any other forwarding protocol, because it includes every sensor reading the device reported as a named parameter.
 
-### What is Wialon IPS?
+In Navixy, select **Wialon IPS** in the **Protocol** dropdown.
 
-The Wialon IPS data forwarding protocol can be used to forward fleet or vehicle device data between two Navixy servers (e.g. if you have ServerMate and On-Premise versions).
+## What Navixy sends
 
-This is ideal for partners with devices connected to Wialon who would like that data sent to Navixy. Data forwarded can include information regarding: vehicle positioning, fuel monitoring, sensors, temperature, etc.
+Navixy opens a TCP connection, sends a login packet, then sends one data packet per message. Both are plain text.
 
-### Wialon IPS general technical information
+The login packet identifies the device and, when a password is set, authenticates:
 
-The Wialon IPS protocol uses the TCP transport layer to send ASCII data to the 3rd party server, receive 3rd party data, or send to a separate Navixy server for further data processing.
+```
+#L#<device id>;<password>
+```
 
-Data sent to Wialon IPS:
+Each data packet begins with `#D#` and contains these values in order:
 
-* Date and time
-* Lat
-* Long
-* Altitude
-* Speed
-* Satellites
-* Inputs
-* Outputs
-* Analog sensors
-* Mileage
-* Battery level
-* Driver ID
-* Events
+| Value | Contents |
+| ----- | -------- |
+| Date and time | When the device recorded the position, in UTC |
+| Latitude and longitude | Position in NMEA format |
+| Speed | Speed |
+| Heading | Direction of travel in degrees |
+| Altitude | Altitude in meters |
+| Satellites | Number of satellites used, or `NA` |
+| HDOP | Horizontal accuracy, or `NA` |
+| Inputs and outputs | Digital input and output states, or `NA` |
+| Analog sensors | Analog sensor values, separated by commas |
+| Driver id | The driver identification key, or `NA` |
+| Named parameters | Every remaining sensor reading, as `name:type:value` |
 
-### Wialon IPS configuration
+The named parameters always include `EVENT`, which contains the Navixy event code. Navixy adds these when the data is available:
 
-#### Setting up
+* `SOS`, set to `1` on an SOS or emergency contact event
+* `raw_mileage`, the odometer reading in meters
+* `battery_level`, the battery level
+* `gsm.signal.csq`, the mobile signal strength
+* One parameter for each additional sensor input the device reported
 
-To set up data forwarding for the Wialon IPS protocol:
+Navixy sends every message, including messages without a position.
 
-1. Open the device settings from the main menu by clicking the **Gear** icon on the bottom left of the screen.
-2. Click the **Data forwarding** block.
-3. Click **Retranslators management**.
-4. This opens a pop-up where you input the required parameters by clicking the **+** button.
-5. For the Wialon IPS protocol, input the following information:
+## Before you start
 
-* Name
-  * Enter a name to make this retranslator easily identifiable
-* Protocol
-  * Select the Wialon IPS protocol from the dropdown
-* Destination server address
-  * 3rd party server
-  * Navixy A to Navixy B
-    * On A, input the server address for B
-  * If receiving from Wialon
-    * EU domain: tracker.navixy.com
-    * US domain: tracker.us.navixy.com
-* Destination Port
-  * Related information from the 3rd-party server
-  * Navixy A to Navixy B, and from Wialon IPS
-    * 47768
+Collect the following:
 
-6. The Retranslation management screen should look like the following, no password needed. Make sure the **Enabled** button is checked and click the **Save** button to complete the process.
+* The address and port of the receiving server.
+* The Wialon IPS password, when the receiving server requires one. Many don't.
 
-<figure><img src="https://www.navixy.com/wp-content/uploads/2022/10/wialon-ips.png" alt="Wialon IPS setup"><figcaption></figcaption></figure>
+When you forward between two Navixy servers, use the address of the receiving server and port `47768`.
 
-7. Next, the retranslator will need to be linked to the device on the Navixy side. To do so, select the **Link** ![link image](https://www.navixy.com/wp-content/uploads/2022/08/image-3.png) button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below. External ID is not needed for the Wialon IPS protocol.
-8. Select **Save** once completed.
+External ID isn't required. Navixy sends the device id unless you set one.
 
-{% hint style="warning" %}
-If receiving data from Wialon IPS, a related Wialon IPS-compatible device will need to be created on the Navixy platform, such as Bitrek.
+{% hint style="info" %}
+To receive data from Wialon into Navixy rather than send it, point the Wialon side at `tracker.navixy.com` for the EU platform or `tracker.us.navixy.com` for the US platform, on port `47768`. You also need to create a device in Navixy using a Wialon IPS compatible model, such as Bitrek, so that Navixy accepts the incoming data.
 {% endhint %}
 
-#### Managing
+## Set up forwarding
 
-To edit or stop data from being forwarded, follow these steps:
+{% stepper %}
+{% step %}
 
-1. Click the **Trash** button to stop the data forwarding.
-2. Acknowledge the change in the pop-up.
-3. Click **Protocols** to change retranslator settings such as name, login information, or enabled status
-4. This will open the retranslator management window. Select the row to edit and either click the pencil in the top left or double-click the row in question to allow editing. Save any changes.
+### Open the Data forwarding block
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/wialon-ips-management.png)
+Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
+{% endstep %}
 
-#### Troubleshooting
+{% step %}
 
-If data doesn't display on the 3rd-party Wialon IPS system or Navixy platform, verify:
+### Open the protocol list
 
-* The URL was entered correctly with the associated port
-* Retranslator is enabled
+Click **Protocols**, then click **+** to add a configuration.
+{% endstep %}
+
+{% step %}
+
+### Enter the Wialon IPS settings
+
+Fill in the fields as follows:
+
+* **Name**: a label that identifies this retranslator
+* **Protocol**: **Wialon IPS**
+* **Address**: the address of the receiving server
+* **Port**: the port of the receiving server, or `47768` between two Navixy servers
+* **Password**: the Wialon IPS password, when the receiving server requires one
+
+This protocol doesn't use a login. Leave that field empty.
+{% endstep %}
+
+{% step %}
+
+### Enable and save
+
+Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
+{% endstep %}
+
+{% step %}
+
+### Link the retranslator to a device
+
+In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**. Leave External ID empty unless the receiving server requires a different device id.
+{% endstep %}
+{% endstepper %}
+
+## Manage forwarding
+
+To change or stop forwarding over Wialon IPS:
+
+* Switch off the toggle in the **Data forwarding** block to stop forwarding for one device, and keep the configuration for the others.
+* Click **Protocols**, select the row, and edit it to change the name, address, port, or password. The change applies to every device linked to this retranslator.
+* Delete the configuration from the **Protocols** list to stop forwarding for all devices. Confirm in the dialog.
+
+## Troubleshooting
+
+When data doesn't appear on the receiving server, check the following in order:
+
+1. The retranslator is enabled, and its toggle is switched on for the device.
+2. The address and port are correct, and the receiving server accepts TCP connections on that port.
+3. The password matches what the receiving server requires, when it requires one.
+4. The receiving server accepts the device id that Navixy sends. When it requires a different id, set it in the External ID field.
+
+When you receive data from Wialon into Navixy and nothing arrives, confirm that a device was created in Navixy with a Wialon IPS compatible model.

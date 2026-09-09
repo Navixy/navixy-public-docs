@@ -1,97 +1,124 @@
 ---
-description: Push vehicle positioning and alarm events from Navixy to ILSP shared security monitoring centers in Mexico, enabling multi-company data sharing via HTTP.
+description: >-
+  Forward vehicle positions and security alarms from Navixy to ILSP monitoring
+  centers in Mexico, using an OAuth-authenticated JSON API.
 ---
 
 # ILSP
 
-## ILSP: a protocol for private security vehicle data between servers
+ILSP provides private security services in Mexico, and the ILSP data forwarding protocol delivers vehicle positions and security alarms into its monitoring centers. Companies that share a monitoring center use it to give ILSP visibility of their vehicles, and one Navixy account can forward to several ILSP customers at once.
 
-**ILSP** offers private security services in Mexico. The ILSP data forwarding protocol enables their software to share vehicle data across networks.
+In Navixy, select **ILSP** in the **Protocol** dropdown.
 
-_Protocol Category: Enterprise compliance_
+## What Navixy sends
 
-### Table of contents
+Navixy sends one HTTP POST request per message to `/CustomerServices/api/SetLastEvent`, with a JSON body containing these fields:
 
-1. [What is ILSP?](ilsp.md#what-is-ilsp)
-2. [Technical information about ILSP](ilsp.md#tech-info-ilsp)
-3. [ILSP Configuration](ilsp.md#ilsp-config)
-4. [Setting up](ilsp.md#setting-up)
-5. [Managing](ilsp.md#managing)
-6. [Troubleshooting](ilsp.md#troubleshooting)
+| Field | Contents |
+| ----- | -------- |
+| `customerId` | The customer number, taken from the first part of External ID |
+| `transportLineId` | The transport line number, taken from the third part of External ID |
+| `plates` | The license plate, taken from the second part of External ID |
+| `generatedEvent` | The event code: `2` for SOS, `3` for power lost, `4` for GSM damp alarm, and `1` for every other message |
+| `generatedEventDate` | When the device recorded the message |
+| `latitude` and `longitude` | Position in degrees |
+| `speed` | Speed |
+| `heading` | Direction of travel |
+| `odometer` | Distance traveled, sent only when the device reports it |
+| `battery` | Battery level, sent only when the device reports it |
 
-### What is ILSP?
+### When Navixy sends
 
-The ILSP data forwarding protocol is for companies that have common monitoring centers dedicated to security issues and need to monitor vehicle positioning and need to share this data with a third party.
+Navixy sends a message when it has a valid position, or when it reports an SOS, a power loss, or a GSM damp alarm. An alarm goes out even without a position, so ILSP receives the alert. Any other message without a position is skipped.
 
-Using ILSP, partners can update their information with Navixy data such as vehicle data, positioning, etc. Users can connect with multiple companies and send information to the ILSP, streamlining fleet and security data.
+## Before you start
 
-### ILSP general technical information
+Collect the following from ILSP:
 
-The ILSP protocol uses the POST method to send JSON data over HTTP to the ILSP servers for further data processing.
+* The endpoint address and port. The address is commonly `https://www.ilspservices.com.mx/` on port `443`.
+* Your client id and client secret. Navixy requires both and won't save the retranslator without them.
+* The customer number, license plate, and transport line number for each vehicle.
 
-Data sent to ILSP:
+{% hint style="info" %}
+ILSP authenticates with OAuth rather than with a username and password. Enter the client id in the **Login** field and the client secret in the **Password** field. Navixy requests a token before sending data, and renews it when it expires. After five failed token requests Navixy disables the retranslator, so a wrong client id or secret stops forwarding rather than retrying indefinitely.
+{% endhint %}
 
-* Customer ID
-* Transport Line ID
-* License Plate
-* Tracker Event and time
-  * SOS, power lost, and GSM damp alarm
-* Latitude
-* Longitude
-* Speed
-* Heading
-* Odometer
-* Battery
+## Set up forwarding
 
-### ILSP configuration
+{% stepper %}
+{% step %}
 
-#### Setting up
+### Open the Data forwarding block
 
-Required Parameters
+Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
+{% endstep %}
 
-* Login and Password
-  * ILSP Login and Password
-* Destination server address and port
-  * Address: `https://www.ilspservices.com.mx/`
-  * Port: 443
+{% step %}
 
-To set up data forwarding in ILSP protocol:
+### Open the protocol list
 
-1. Open the device settings from the main menu by clicking the gear icon on the bottom left of the screen.
-2. Click the **Data forwarding** block.
-3. Click **Retranslators management**.
-4. This opens a pop-up where you input the required parameters by clicking the **+** button.
-5. For the ILSP protocol, input the following information:
+Click **Protocols**, then click **+** to add a configuration.
+{% endstep %}
 
-<table><thead><tr><th width="288.18182373046875">Parameter</th><th>Explanation</th></tr></thead><tbody><tr><td>Name</td><td>Enter a name to make this retranslator easily identifiable</td></tr><tr><td>Protocol</td><td>Select the ILSP protocol from the dropdown</td></tr><tr><td>Destination server address and port</td><td>* Address: `https://www.ilspservices.com.mx/`<br>* Port: 443</td></tr></tbody></table>
+{% step %}
 
-6. The **Retranslation management** screen should look similar to the following, with ILSP login and password. Make sure the **Enabled** button is checked and click the **Save** button to complete the process.
+### Enter the ILSP settings
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/image-8-600x111.png)
+Fill in the fields as follows:
 
-7. Next, the retranslator will need to be linked to the device on the ILSP side. To do so, select the  <img src="https://www.navixy.com/wp-content/uploads/2022/08/image-3.png" alt="link" data-size="line">button in the **Data forwarding** block. Select the retranslator to be connected and click **Link** below.
-8. Add information needed to identify the device on ILSP in the **External ID** field, either by clicking the pencil icon or the external ID field itself. This value should include the following from the ILSP side:
+* **Name**: a label that identifies this retranslator
+* **Protocol**: **ILSP**
+* **Address**: `https://www.ilspservices.com.mx/`
+* **Port**: `443`
+* **Login**: your ILSP client id
+* **Password**: your ILSP client secret
+{% endstep %}
+
+{% step %}
+
+### Enable and save
+
+Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
+{% endstep %}
+
+{% step %}
+
+### Link the retranslator to a device
+
+In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**.
+{% endstep %}
+
+{% step %}
+
+### Set the External ID
+
+Click the link icon at the right of the retranslator row, then enter the three values that identify this vehicle to ILSP, joined by a pipe character:
 
 ```
-UserId|VehicleLicensePlate|RouteID
+customerId|licensePlate|transportLineId
 ```
 
-#### Managing
+For example, `4821|ABC-123|17`. All three parts are required. The customer number and the transport line number must be digits, and the license plate may contain uppercase letters, digits, and hyphens.
 
-To edit or stop data from being forwarded, follow these steps:
+Repeat this step and the previous one for every device that forwards to ILSP. The retranslator configuration is shared across the account, but External ID is set per device.
+{% endstep %}
+{% endstepper %}
 
-1. To stop the data forwarding, click the **Trash** button.
-2. Acknowledge the change via the pop-up.
-3. Click **Retranslators management** to change retranslator settings such as name, login information, or enabled status.
-4. This will open the **Retranslator management** window. Select the row to edit and either click the pencil in the top left or double-click the row in question to allow editing. Save any changes.
+## Manage forwarding
 
-![ILSP](https://www.navixy.com/wp-content/uploads/2022/10/image-9-600x100.png)
+To change or stop forwarding to ILSP:
 
-#### Troubleshooting
+* Click the link icon at the right of the retranslator row to change the External ID of a device.
+* Switch off the toggle to stop forwarding for one device, and keep the configuration for the others.
+* Click **Protocols**, select the row, and edit it to change the name, address, or credentials. The change applies to every device linked to this retranslator.
+* Delete the configuration from the **Protocols** list to stop forwarding for all devices. Confirm in the dialog.
 
-If data doesn't display on the 3rd-party ILSP system, check if:
+## Troubleshooting
 
-* Username and password for ILSP are correctly entered
-* URL was entered correctly
-* Retranslator is enabled
-* External ID information is correct
+When data doesn't appear in the ILSP system, check the following in order:
+
+1. The retranslator is enabled, and its toggle is switched on for the device.
+2. The client id and client secret are correct. Five failed token requests disable the retranslator, so correct the credentials and then switch **Enabled** off and on again.
+3. The address and port are correct.
+4. External ID has all three parts in the right order, separated by pipes, with no spaces around them.
+5. The customer number, license plate, and transport line number match the records on the ILSP side.

@@ -1,88 +1,121 @@
 ---
 description: >-
-  Sync vehicle positions from Navixy to SimpliRoute order management via HTTP
-  JSON, linking live tracker data to delivery routes and orders in Latin
-  America.
+  Forward vehicle positions from Navixy to SimpliRoute over HTTP, linking live
+  location data to the delivery orders managed in SimpliRoute.
 ---
 
-# Simpliroute
+# SimpliRoute
 
-## SimpliRoute
+SimpliRoute is a delivery route and order management service, and this protocol forwards vehicle positions from Navixy into it. SimpliRoute matches each position to the orders assigned to that vehicle, so dispatchers can follow deliveries against the planned route. It's used mainly in Latin America.
 
-**SimpliRoute** is a data retransmission protocol that delivers vehicle tracking data for users to send information from their system to SimpliRoute.
+In Navixy, select **Simple Route** in the **Protocol** dropdown. That is how SimpliRoute is named in the interface.
 
-_Protocol Category: Enterprise compliance_
+## What Navixy sends
 
-### Table of contents
+Navixy sends one HTTP POST request per position, with a JSON body containing these fields:
 
-1. [What is SimpliRoute?](simpliroute.md#what-is-simpliroute)
-2. [Technical information about SimpliRoute](simpliroute.md#tech-info-simpliroute)
-3. [SimpliRoute Configuration](simpliroute.md#simpliroute-config)
-4. [Setting up](simpliroute.md#setting-up)
-5. [Managing](simpliroute.md#managing)
-6. [Troubleshooting](simpliroute.md#troubleshooting)
+| Field | Contents |
+| ----- | -------- |
+| `idVehiculo` | The VIN of the vehicle linked to the device |
+| `patent` | The registration number of the vehicle, shortened as described below |
+| `empresaProveedoraGps` | The tax number from the account profile, identifying the GPS provider |
+| `acc` | Whether the ignition is on |
+| `latitude` and `longitude` | Position in degrees |
+| `speed` | Speed |
+| `datetime` | When the device recorded the position |
 
-### What is SimpliRoute?
+SimpliRoute responds with `GPS ok.` when it accepts a position.
 
-SimpliRoute is a data retransmission protocol that delivers vehicle location data and links it to the SimpliRoute order system. This allows users the ability to track orders that are managed within this software and that are synchronized with the vehicle positions obtained.
+{% hint style="warning" %}
+Navixy shortens the registration number before sending it: it removes spaces and hyphens, then keeps the first six characters. A plate recorded as `ABC-1234` is sent as `ABC123`. Make sure the vehicle is registered in SimpliRoute under the shortened form, or SimpliRoute won't match the position to a vehicle.
+{% endhint %}
 
-This data retransmission protocol is ideal for users looking to comply with SimpliRoute data forwarding to track vehicle positioning.
+### When Navixy sends
 
-### SimpliRoute general technical information
+Navixy sends every message that has a valid position and is less than 15 days old. Messages without a position are skipped. So are messages older than 15 days, which a device can send after storing data offline for a long period.
 
-The SimpliRoute protocol uses the POST method to send JSON data over HTTP to the SimpliRoute servers for further data processing.
+External ID isn't used by this protocol. Navixy identifies the vehicle by its VIN and registration number instead.
 
-Data sent to SimpliRoute:
+## Before you start
 
-* Vehicle VIN
-* License Plate
-* Latitude
-* Longitude
-* Date/Time
-* Speed
-* Ignition
-* GPS Provider - tax number specified in user information
+This protocol reads vehicle and account data rather than taking it from the retranslator configuration. All three of the following must be in place, or the retranslator sends nothing at all:
 
-### SimpliRoute configuration
+* A **tax number** on the account profile. SimpliRoute uses it to identify the GPS provider.
+* A **vehicle** linked to the device, created in [Fleet management](../../../fleet-management/vehicles.md).
+* A **VIN** and a **registration number** on that vehicle.
 
-#### Setting up
+Confirm all three before you create the retranslator. When any one is missing, forwarding fails silently: there's no error in the **Data forwarding** block, and no data reaches SimpliRoute.
 
-Required Parameters
+You also need the endpoint address and port from SimpliRoute.
 
-* Vehicle with an associated license plate and VIN according to the standards [here](../../../fleet-management/).
+## Set up forwarding
 
-To set up data forwarding for the SimpliRoute protocol:
+{% stepper %}
+{% step %}
 
-1. Open the device settings from the main menu by clicking the gear icon on the bottom left of the screen.
-2. Click the **Data forwarding** block.
-3. Click **Protocols**.
-4. This opens a pop-up where you input the required parameters by clicking the **+** button.
-5. For the SimpliRoute protocol, input the following information:
+### Check the vehicle and account data
 
-<table><thead><tr><th width="243.09088134765625">Parameter</th><th>Explanation</th></tr></thead><tbody><tr><td>Name</td><td>Enter a name to make this retranslator easily identifiable</td></tr><tr><td>Protocol</td><td>Select the SimpliRoute protocol from the dropdown</td></tr><tr><td>Destination server address and port</td><td>* Address: https://k8k5azm77j.execute-api.sa-east-1.amazonaws.com/prod/gps<br>* Port: 443</td></tr></tbody></table>
+Confirm the tax number on the account profile, and confirm that the device is linked to a vehicle that has both a VIN and a registration number.
+{% endstep %}
 
-6. The **Retranslation management** screen should look like the following, with SimpliRoute login and password. Make sure the **Enabled** button is checked and click the **Save** button to complete the process.
+{% step %}
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/pasted-image-0-2-600x115.png)
+### Open the Data forwarding block
 
-7. Next, the retranslator will need to be linked to the device on the SimpliRoute side. To do so, select the ![image-20250310-140837.png](../../../../.gitbook/assets/image-20250310-140837.png) button in the **Data forwarding** block. Select the retranslator to be connected, and click **Link** below. External ID is not needed for the SimpliRoute protocol.
-8. Select **Save** once completed.
+Go to **Devices and settings**, select the device, then find the **Data forwarding** block.
+{% endstep %}
 
-#### Managing
+{% step %}
 
-To edit or stop data from being forwarded, follow these steps:
+### Open the protocol list
 
-1. Click the **Trash** button to stop the data forwarding.
-2. Acknowledge the change in the pop-up.
-3. Click **Protocols** to change retranslator settings such as name, login information, or enabled status
-4. This will open the retranslator management window. Select the row to edit and either click the pencil in the top left or double-click the row in question to allow editing. Save any changes.
+Click **Protocols**, then click **+** to add a configuration.
+{% endstep %}
 
-![](https://www.navixy.com/wp-content/uploads/2022/10/pasted-image-0-1-600x116.png)
+{% step %}
 
-#### Troubleshooting
+### Enter the Simple Route settings
 
-If data doesn't display on the 3rd-party SimpliRoute system, make sure that:
+Fill in the fields as follows:
 
-* URL was entered correctly
-* Retranslator is enabled
-* A GPS device on Navixy is associated with a vehicle on the Navixy platform with a valid license plate and VIN
+* **Name**: a label that identifies this retranslator
+* **Protocol**: **Simple Route**
+* **Address**: the endpoint address from SimpliRoute
+* **Port**: the port from SimpliRoute, commonly `443`
+
+This protocol doesn't use a login or password. Leave both fields empty.
+{% endstep %}
+
+{% step %}
+
+### Enable and save
+
+Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
+{% endstep %}
+
+{% step %}
+
+### Link the retranslator to a device
+
+In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**. Leave External ID empty, because this protocol doesn't use it.
+{% endstep %}
+{% endstepper %}
+
+## Manage forwarding
+
+To change or stop forwarding to SimpliRoute:
+
+* Switch off the toggle in the **Data forwarding** block to stop forwarding for one device, and keep the configuration for the others.
+* Click **Protocols**, select the row, and edit it to change the name, address, or port. The change applies to every device linked to this retranslator.
+* Delete the configuration from the **Protocols** list to stop forwarding for all devices. Confirm in the dialog.
+
+## Troubleshooting
+
+When data doesn't appear in SimpliRoute, check the following in order:
+
+1. The retranslator is enabled, and its toggle is switched on for the device.
+2. The account profile has a tax number.
+3. The device is linked to a vehicle, and that vehicle has both a VIN and a registration number. A missing value here stops forwarding without any visible error.
+4. The vehicle is registered in SimpliRoute under the shortened registration number, with spaces and hyphens removed and only the first six characters kept.
+5. The address and port are correct.
+6. The device reports valid coordinates.
