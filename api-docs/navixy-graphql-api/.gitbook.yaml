@@ -1,0 +1,95 @@
+redirects:
+  # single-page-per-concept merge (2026-08-26)
+  assets/queries: business-data-repository/api-reference/assets/README.md
+  assets/mutations: business-data-repository/api-reference/assets/README.md
+  assets/types: business-data-repository/api-reference/assets/README.md
+  assets/groups/queries: business-data-repository/api-reference/assets/groups.md
+  assets/groups/mutations: business-data-repository/api-reference/assets/groups.md
+  assets/groups/types: business-data-repository/api-reference/assets/groups.md
+  devices/queries: business-data-repository/api-reference/devices/README.md
+  devices/mutations: business-data-repository/api-reference/devices/README.md
+  devices/types: business-data-repository/api-reference/devices/README.md
+  geo-objects/queries: business-data-repository/api-reference/geo-objects.md
+  geo-objects/mutations: business-data-repository/api-reference/geo-objects.md
+  geo-objects/types: business-data-repository/api-reference/geo-objects.md
+  # workspace rename (2026-08-21)
+  organizations: business-data-repository/api-reference/workspaces/README.md
+  organizations/members: business-data-repository/api-reference/workspaces/members.md
+  # removed all-operations reference (2026-08-21)
+  graphql-reference/all-operations-and-types: README.md
+  graphql-reference/all-operations-and-types/queries: README.md
+  graphql-reference/all-operations-and-types/mutations: README.md
+  graphql-reference/all-operations-and-types/inputs: README.md
+  graphql-reference/all-operations-and-types/objects: README.md
+  graphql-reference/all-operations-and-types/scalars: README.md
+  graphql-reference/all-operations-and-types/enums: README.md
+  graphql-reference/all-operations-and-types/interfaces: README.md
+  # removed empty stub (2026-08-24)
+  guides/configuring-user-permissions: business-data-repository/guides/README.md
+  # product restructure: root pages moved under business-data-repository/ and core-api-reference/ (2026-09-08)
+  custom-field-filtering: filtering-and-sorting/custom-field-filtering.md
+  core-api-reference: business-data-repository/api-reference/README.md
+  directives: core-api-reference/directives.md
+  common: core-api-reference/common.md
+  geo-objects: business-data-repository/api-reference/geo-objects.md
+  schedules: business-data-repository/api-reference/schedules.md
+  custom-fields: business-data-repository/api-reference/custom-fields.md
+  audit: business-data-repository/api-reference/audit.md
+  guides: business-data-repository/guides/README.md
+  guides/working-with-devices: business-data-repository/guides/working-with-devices.md
+  guides/managing-device-inventory: business-data-repository/guides/managing-device-inventory.md
+  guides/working-with-assets: business-data-repository/guides/working-with-assets.md
+  guides/organizing-assets-into-groups: business-data-repository/guides/organizing-assets-into-groups.md
+  guides/implementing-custom-fields: business-data-repository/guides/implementing-custom-fields.md
+  guides/managing-schedules: business-data-repository/guides/managing-schedules.md
+  guides/working-with-geo-objects: business-data-repository/guides/working-with-geo-objects.md
+  guides/tracking-changes-with-audit: business-data-repository/guides/tracking-changes-with-audit.md
+  workspaces: business-data-repository/api-reference/workspaces/README.md
+  workspaces/members: business-data-repository/api-reference/workspaces/members.md
+  actors: business-data-repository/api-reference/actors/README.md
+  actors/users: business-data-repository/api-reference/actors/users.md
+  actors/integrations: business-data-repository/api-reference/actors/integrations.md
+  devices: business-data-repository/api-reference/devices/README.md
+  devices/inventory: business-data-repository/api-reference/devices/inventory.md
+  assets: business-data-repository/api-reference/assets/README.md
+  assets/groups: business-data-repository/api-reference/assets/groups.md
+  catalogs: business-data-repository/api-reference/catalogs/README.md
+  catalogs/catalog-items: business-data-repository/api-reference/catalogs/catalog-items.md
+  catalogs/catalog-reference: business-data-repository/api-reference/catalogs/catalog-reference.md
+  catalogs/tags: business-data-repository/api-reference/catalogs/tags.md
+  catalogs/system: business-data-repository/api-reference/catalogs/system.md
+  # bdr/ paths, published briefly between MR !66 and the GitBook restructure (2026-09-08 to 2026-09-09)
+  bdr: business-data-repository/overview.md
+  bdr/guides: business-data-repository/guides/README.md
+  bdr/guides/working-with-devices: business-data-repository/guides/working-with-devices.md
+  bdr/guides/managing-device-inventory: business-data-repository/guides/managing-device-inventory.md
+  bdr/guides/working-with-assets: business-data-repository/guides/working-with-assets.md
+  bdr/guides/organizing-assets-into-groups: business-data-repository/guides/organizing-assets-into-groups.md
+  bdr/guides/implementing-custom-fields: business-data-repository/guides/implementing-custom-fields.md
+  bdr/guides/managing-schedules: business-data-repository/guides/managing-schedules.md
+  bdr/guides/working-with-geo-objects: business-data-repository/guides/working-with-geo-objects.md
+  bdr/guides/tracking-changes-with-audit: business-data-repository/guides/tracking-changes-with-audit.md
+  bdr/core-api-reference: business-data-repository/api-reference/README.md
+  bdr/custom-field-filtering: filtering-and-sorting/custom-field-filtering.md
+  bdr/common: core-api-reference/common.md
+  bdr/directives: core-api-reference/directives.md
+  bdr/geo-objects: business-data-repository/api-reference/geo-objects.md
+  bdr/schedules: business-data-repository/api-reference/schedules.md
+  bdr/custom-fields: business-data-repository/api-reference/custom-fields.md
+  bdr/audit: business-data-repository/api-reference/audit.md
+  bdr/workspaces: business-data-repository/api-reference/workspaces/README.md
+  bdr/workspaces/members: business-data-repository/api-reference/workspaces/members.md
+  bdr/actors: business-data-repository/api-reference/actors/README.md
+  bdr/actors/users: business-data-repository/api-reference/actors/users.md
+  bdr/actors/integrations: business-data-repository/api-reference/actors/integrations.md
+  bdr/devices: business-data-repository/api-reference/devices/README.md
+  bdr/devices/inventory: business-data-repository/api-reference/devices/inventory.md
+  bdr/assets: business-data-repository/api-reference/assets/README.md
+  bdr/assets/groups: business-data-repository/api-reference/assets/groups.md
+  bdr/catalogs: business-data-repository/api-reference/catalogs/README.md
+  bdr/catalogs/catalog-items: business-data-repository/api-reference/catalogs/catalog-items.md
+  bdr/catalogs/catalog-reference: business-data-repository/api-reference/catalogs/catalog-reference.md
+  bdr/catalogs/tags: business-data-repository/api-reference/catalogs/tags.md
+  bdr/catalogs/system: business-data-repository/api-reference/catalogs/system.md
+  # @specifiedBy target baked into the published GraphQL schema; the page never lived at this path
+  core-api-reference/schedules: business-data-repository/api-reference/schedules.md

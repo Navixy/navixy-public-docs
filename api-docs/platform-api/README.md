@@ -66,7 +66,7 @@ The Platform API and Admin Panel API cover the core of the Navixy platform. For 
 | API | What it covers |
 | --- | --- |
 | [IoT Logic API](https://navixy.com/docs/iot-logic-api/) | Configure and manage IoT Logic flows, write DSA scripts, use the Navixy expression language, and work directly with device-level behavior and protocols |
-| [Navixy GraphQL API](https://navixy.com/docs/navixy-repository-api/) | A single GraphQL API for the Navixy platform. The Business Data Repository product covers assets, devices, geo objects, schedules, and custom fields, and further products follow |
+| [Navixy GraphQL API](https://navixy.com/docs/navixy-graphql-api/) | A single GraphQL API for the Navixy platform. The Business Data Repository product covers assets, devices, geo objects, schedules, and custom fields, and further products follow |
 
 ## Troubleshooting
 
