@@ -1,0 +1,1158 @@
+# =============================================================================
+# NAVIXY 4 - GraphQL Schema — Shared Kernel
+# =============================================================================
+#
+# Types, interfaces, scalars and the directive used by more than one module,
+# plus the pagination/identity contract. Extracted from nvx4-api.graphql and
+# nvx4-billing-public.graphql (docs/adr/015-api-module-namespacing.md
+# §Decision item 3) — the selection criterion is "used by more than one module, or
+# part of the pagination/identity contract", not a syntactic category. Two members do not fit it:
+# `Money`/`Currency` (§6) are read only by the two billing files, undocumented as an exception when
+# the original kernel extraction moved them here; and the custom-field vocabulary (§2–§4 and
+# §7/§8) is a deliberate, recorded anticipatory exception — see §Decision item 3's 2026-08-24
+# amendment for both.
+#
+# No independent version marker: the kernel is nobody's module (see the
+# `# Version:` header in nvx4-api.graphql and nvx4-billing*.graphql instead).
+#
+# The schema's only `schema { query: Query, mutation: Mutation }` definition lives in
+# nvx4-api.graphql, not here — it names Query/Mutation, which are declared there, and Apollo
+# Kotlin's codegen classifies any schemaFiles entry with a `schema { ... }` block or a type
+# named `Query` as "a schema", erroring if more than one qualifies; nvx4-api.graphql already
+# qualifies via `type Query`, so the block has to live wherever that one file already does.
+#
+# TABLE OF CONTENTS
+# -----------------
+# 1. Directives
+# 2. Scalar Types
+# 3. Enums
+# 4. Interfaces
+# 5. Pagination Types
+# 6. Value Types
+# 7. Custom Field Types
+# 8. Custom Field Inputs
+#
+# =============================================================================
+
+# =============================================================================
+# 1. DIRECTIVES
+# =============================================================================
+
+"Automatically trims leading and trailing whitespace from string input values."
+directive @trim on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+# =============================================================================
+# 2. SCALAR TYPES
+# =============================================================================
+
+# @category: common
+"An ISO 8601 datetime string with timezone (RFC 3339). Example: `2024-01-15T10:30:00Z`."
+scalar DateTime
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/date-time.html")
+
+# @category: common
+"An arbitrary JSON value. Can be an object, array, string, number, boolean, or null."
+scalar JSON @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc8259")
+
+# @category: common
+"""
+A UUID (RFC 9562) owned by a system outside this API — unlike `ID`, which is always a platform
+UUIDv8 carrying an entity-type discriminator. Never accepted by `node(id:)`.
+
+Moved here from `nvx4-api.graphql` when tracking needed it for `TrackingEvent.commandId`: an
+identifier this platform did not mint belongs to no single module, and the list of them grows with
+every neighbouring system (`organizationId` from Console, NTF's message id, a future command id).
+See `docs/todo/tracking-api-design-followups.md` for the open question of whether `ID` should
+simply become this.
+"""
+scalar UUID @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc9562")
+
+# @category: common
+"""
+A machine-readable identifier code.
+
+Constraints:
+- Allowed characters: ASCII letters (a-z, A-Z), digits (0-9), underscore (_), dot (.), hyphen (-)
+- Must start with a letter or digit
+- Case-preserving: the original casing is stored as provided
+- Case-insensitive for uniqueness checks and comparisons
+- Length: 1 to 100 characters (auto-generated codes are truncated to 30)
+
+Uniqueness:
+- For catalog items: unique within the same catalog and workspace scope
+- For custom field definitions: unique per owner catalog item and workspace
+- For field options (OPTIONS type): unique within a single field definition
+- Additional uniqueness requirements may apply depending on context (see individual fields)
+
+Examples: DEVICE_TYPE, vehicle_car, status.active, sensor-v2, ABC123
+"""
+scalar Code @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#code")
+
+# @category: common
+"""
+Signed 64-bit integer in the range [-9223372036854775808, 9223372036854775807].
+Encoded as a JSON number.
+"""
+scalar Long @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long")
+
+# @category: common
+"""
+An ISO 8601 duration restricted to the fixed-length designators — `PnDTnHnMn.nS`, optionally
+signed. Examples: `PT5M` (five minutes), `PT1H30M`, `P1D`, `PT0.5S`, `-PT5M`.
+
+Always the ISO form, never a bare number of seconds and never a shorthand like `5m`: a duration
+that travels as a string with no agreed grammar is a duration every caller parses differently.
+
+The calendar designators are refused, not silently reinterpreted: `P1Y`, `P1M` and `P1W` all fail
+coercion. Their length is a question about a calendar and a time zone, and a duration on the wire
+carries neither — a month is 28 to 31 days, and a week is 168 hours only where no DST transition
+falls inside it. A caller that means a calendar step asks for a date range instead.
+
+`@specifiedBy` points at the Navixy page rather than at ISO 8601 or RFC 3339, because the full
+grammar in either is precisely what this scalar does not accept — a pointer to it would describe
+the wrong type. The anchor is not published yet
+(`docs/todo/tracking-api-design-followups.md`); the paragraphs above, and
+`ScalarCoercingTest.DurationCoercingTest`, are the contract until it is.
+"""
+scalar Duration @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#duration")
+
+# @category: common
+"An ISO 8601 date string without time component (RFC 3339). Example: `2024-01-15`."
+scalar Date
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/date.html")
+
+# @category: common
+"""
+A bare GeoJSON geometry object (RFC 7946 §3.1) — one of the types `GeoJsonGeometryType` lists.
+
+The `Feature` and `FeatureCollection` wrappers are rejected everywhere this scalar is used,
+`GeoObject.geojsonData` and GEOJSON custom-field values alike: send `feature.geometry`, not the
+feature.
+"""
+scalar GeoJSON @specifiedBy(url: "https://www.rfc-editor.org/rfc/rfc7946")
+
+# @category: common
+"""
+Arbitrary-precision decimal value encoded as a JSON string (e.g. `"5.25"`).
+String encoding avoids the precision loss inherent in JSON `Float`.
+
+Values exceeding the declared `scale` of a decimal custom field are rounded
+server-side using HALF_UP (round half away from zero for positive values,
+round half toward zero for negative — matches Java `RoundingMode.HALF_UP`).
+The rounded value is persisted in both the CFV table and the
+`custom_fields_data` JSONB blob; raw un-rounded input is never stored.
+
+Storage is `numeric(28, 10)` — up to 28 significant digits, of which at
+most 10 follow the decimal point (so up to 18 digits before). Values
+exceeding this envelope (e.g. more than 18 integer digits) are rejected
+as `VALIDATION_ERROR` at the API layer.
+"""
+scalar Decimal @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal")
+
+# =============================================================================
+# 3. ENUMS
+# =============================================================================
+
+# @category: common
+"The direction for sorting query results."
+enum OrderDirection {
+  "Sort in ascending order (A→Z, 0→9, oldest→newest). NULL values appear last."
+  ASC
+  "Sort in descending order (Z→A, 9→0, newest→oldest). NULL values appear first."
+  DESC
+}
+
+# @category: common
+"The precision level of a total count value."
+enum CountPrecision {
+  "The count is exact, calculated using `COUNT(*)`."
+  EXACT
+  "The count is approximate, derived from table statistics."
+  APPROXIMATE
+  "At least this many items exist. Counting stopped early for performance reasons."
+  AT_LEAST
+}
+
+# @category: custom-fields
+"The data type of a custom field, determining validation rules and UI rendering."
+enum FieldType {
+  "Single-line text input. At most 255 characters."
+  STRING
+  """
+  Multi-line text input. At most 65,535 characters, counted as UTF-16 code units: every Basic
+  Multilingual Plane character costs one, while an astral character (most emoji, rarer CJK
+  extensions) costs two, so text made entirely of those tops out at 32,767.
+
+  Unlike STRING it is not orderable: TEXT cannot be used with `AssetOrder`/`GeoObjectOrder`'s
+  `customFieldCode`, nor with the `GT`, `GTE`, `LT` and `LTE` operators. `EQ`, `NE`, `IN`,
+  `CONTAINS`, `IS_NULL` and `IS_NOT_NULL` all work.
+  """
+  TEXT
+  "Arbitrary-precision decimal value (encoded as Decimal string)."
+  DECIMAL
+  "Signed 64-bit integer value (encoded as Long)."
+  INTEGER
+  "Boolean true/false value."
+  BOOLEAN
+  "Calendar date without time component (YYYY-MM-DD)."
+  DATE
+  "Date and time with timezone information."
+  DATETIME
+  "GeoJSON geometry object (Point, Polygon, LineString, etc.)."
+  GEOJSON
+  "Selection from a predefined list of options."
+  OPTIONS
+  """
+  Reference to a Device entity. Definable on an `AssetType` only — see the `customFieldTypes` query.
+  May be narrowed to specific device types via `DeviceFieldParamsInput.refSubtypeIds`.
+  """
+  DEVICE
+  """
+  Reference to any entity by its type and ID, including catalog items and tags. The target type is
+  fixed per definition by `ReferenceFieldParamsInput.refEntityTypeCode` and may be narrowed further
+  by `refSubtypeIds`; `customFieldTypes` lists the accepted target types.
+  Devices are not among them — they have their own `DEVICE` field type.
+  """
+  REFERENCE
+}
+
+# @category: custom-fields
+"""
+Controls the behavior when deleting a custom field definition that has existing values.
+
+Prefer archiving for non-destructive deactivation.
+Use `CASCADE` only when permanent data removal is explicitly intended.
+"""
+enum CustomFieldDefinitionDeleteBehavior {
+  "Reject the deletion with an error if any entity has a value for this field. Default."
+  REJECT
+  "Delete the field definition and permanently remove all associated values."
+  CASCADE
+}
+
+# @category: custom-fields
+"Comparison operators for filtering by custom field values."
+enum FieldOperator {
+  "Value equals the specified value."
+  EQ
+  "Value does not equal the specified value."
+  NE
+  "Value is greater than the specified value."
+  GT
+  "Value is greater than or equal to the specified value."
+  GTE
+  "Value is less than the specified value."
+  LT
+  "Value is less than or equal to the specified value."
+  LTE
+  "String value contains the specified substring (case-insensitive)."
+  CONTAINS
+  "Value is one of the specified values in the array."
+  IN
+  "Value is null."
+  IS_NULL
+  "Value is not null."
+  IS_NOT_NULL
+}
+
+# @category: geo-objects
+"The type of GeoJSON geometry."
+enum GeoJsonGeometryType {
+  "A single geographic point."
+  POINT
+  "A collection of points."
+  MULTI_POINT
+  "A sequence of connected line segments."
+  LINE_STRING
+  "A collection of line strings."
+  MULTI_LINE_STRING
+  "A closed shape defined by a linear ring."
+  POLYGON
+  "A collection of polygons."
+  MULTI_POLYGON
+  "A heterogeneous collection of geometry objects."
+  GEOMETRY_COLLECTION
+}
+
+# =============================================================================
+# 4. INTERFACES
+# =============================================================================
+
+# @category: common
+"An object with a globally unique identifier."
+interface Node {
+  "A globally unique identifier. This ID is opaque and should not be parsed by clients."
+  id: ID!
+}
+
+# @category: common
+"An object that supports optimistic locking for concurrency control."
+interface Versioned {
+  """
+  The version number for optimistic locking.
+  Incremented on each update. Can be provided in update/delete mutations to prevent lost updates.
+  If omitted, the update proceeds without stale-read protection.
+  """
+  version: Int!
+}
+
+# @category: common
+"An edge in a paginated connection."
+interface Edge {
+  "An opaque cursor for this edge, used for pagination."
+  cursor: String!
+}
+
+# @category: common
+"A paginated connection following the Relay Cursor Connections specification."
+interface Connection {
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: common
+"An object with a human-readable display name."
+interface Titled {
+  "The human-readable display name."
+  title: String!
+}
+
+# @category: common
+"""
+An object that supports custom field values.
+
+Implies `Node`: values are stored on the holder and indexed by its id, so every holder is an
+addressable entity. Selecting `id` on a `Customizable` fragment therefore needs no concrete type.
+"""
+interface Customizable implements Node {
+  "A globally unique identifier. This ID is opaque and should not be parsed by clients."
+  id: ID!
+
+  """
+  Typed custom field values, one entry per set field code. Each element is a concrete
+  `CustomFieldValue` implementation matching the field's `FieldType` — select fields via
+  inline fragments.
+
+  The system-reserved code `geojson_data` is excluded — it is exposed through
+  `GeoObject.geojsonData` instead.
+  """
+  customFields(
+    "Limit returned fields to these codes. Returns all fields if not specified."
+    codes: [Code!]
+  ): [CustomFieldValue!]!
+}
+
+# @category: custom-fields
+"""
+A typed custom-field value on an entity. The concrete type matches the custom field's
+declared `FieldType`. `isPrimary` is present only on the primary-capable types
+(DEVICE / REFERENCE).
+"""
+interface CustomFieldValue {
+  "The custom field code."
+  code: Code!
+  """
+  Whether this field is on by default for this entity: the definition's `isDefault`, unless the
+  entity overrides it on the value.
+  """
+  isDefault: Boolean!
+}
+
+# @category: common
+"An interface for field parameters that support selecting multiple values."
+interface MultiValue {
+  "Whether multiple values can be selected for this field."
+  isMulti: Boolean!
+}
+
+# =============================================================================
+# 5. PAGINATION TYPES
+# =============================================================================
+
+# @category: common
+"Information about the current page in a paginated connection."
+type PageInfo {
+  "Whether more items exist after the current page."
+  hasNextPage: Boolean!
+  "Whether more items exist before the current page."
+  hasPreviousPage: Boolean!
+  "The cursor pointing to the first item in the current page."
+  startCursor: String
+  "The cursor pointing to the last item in the current page."
+  endCursor: String
+}
+
+# Pagination follows Relay Cursor Connections specification.
+# Arguments are provided directly on connection fields:
+#   first: Int     - Number of items to fetch from start (default: 20, max: 100)
+#   after: String  - Cursor to start after (forward pagination)
+#   last: Int      - Number of items to fetch from end
+#   before: String - Cursor to end before (backward pagination)
+#
+# If neither `first` nor `last` is specified, the server defaults to first: 20.
+
+# @category: common
+"Information about the total count of items in a connection."
+type CountInfo {
+  "The count of items matching the filter."
+  count: Int!
+  "The precision level of the count value."
+  precision: CountPrecision!
+}
+
+# =============================================================================
+# 6. VALUE TYPES
+# =============================================================================
+
+# @category: common
+"ISO 4217 three-letter currency code (for example: USD, EUR, JPY)."
+scalar Currency
+
+# @category: common
+"A monetary amount in minor units (cents) with currency."
+type Money {
+  "Amount in minor currency units (for example, 1050 = $10.50)."
+  amount: Long!
+  "ISO 4217 currency."
+  currency: Currency!
+}
+
+# =============================================================================
+# 7. CUSTOM FIELD TYPES
+# =============================================================================
+#
+# Vocabulary only — the engine (custom_field_definition, FK-bound to BDR's own
+# workspace/ci_base/ci_entity_type/actor tables) stays in BDR. See
+# docs/adr/015-api-module-namespacing.md §Decision item 3.
+#
+# DeviceCustomFieldValue, FieldParamsDevice and FieldParamsReference stay in nvx4-api.graphql —
+# they name BDR entity types (Device, CatalogItem) and would make the kernel depend on BDR. They
+# implement CustomFieldValue / FieldParams from that file instead; see the comment on each there.
+
+# @category: custom-fields
+"STRING / TEXT custom-field value."
+type StringCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: String! }
+
+# @category: custom-fields
+"DECIMAL custom-field value (arbitrary precision, string-encoded)."
+type DecimalCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Decimal! }
+
+# @category: custom-fields
+"INTEGER custom-field value (signed 64-bit)."
+type IntegerCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Long! }
+
+# @category: custom-fields
+"BOOLEAN custom-field value."
+type BooleanCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Boolean! }
+
+# @category: custom-fields
+"DATE custom-field value."
+type DateCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Date! }
+
+# @category: custom-fields
+"DATETIME custom-field value."
+type DateTimeCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: DateTime! }
+
+# @category: custom-fields
+"GEOJSON custom-field value."
+type GeoJsonCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: GeoJSON! }
+
+# @category: custom-fields
+"OPTIONS custom-field value (one or more option codes)."
+type OptionsCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, values: [Code!]! }
+
+# @category: custom-fields
+"REFERENCE custom-field value (one or more referenced entities; primary-capable)."
+type ReferenceCustomFieldValue implements CustomFieldValue {
+  code: Code!
+  "Whether this field is on by default for this entity."
+  isDefault: Boolean!
+  """
+  The referenced entities, in stored order. Select concrete fields with inline fragments.
+  A single-value field returns a one-element list.
+
+  An element is null when its target no longer resolves — the referenced entity was deleted
+  while the reference stayed behind. The slot is kept so stored order still lines up with the
+  other elements. Nullable on purpose: with a non-null element type one deleted target would
+  null the whole holder, and inside a connection the whole page of results with it.
+  """
+  refs: [Node]!
+  "Whether this reference is the entity's primary REFERENCE."
+  isPrimary: Boolean!
+}
+
+# @category: custom-fields
+"""
+A custom field definition that specifies the metadata for a custom field.
+
+Note: The `fieldType` property is immutable after creation.
+To change the field type, delete the definition and create a new one.
+
+Titled but not a `Node`: a definition is embedded in its owning catalog item and addressed
+through it, never by an id of its own. Within its owner it is identified by `code`.
+"""
+type CustomFieldDefinition implements Titled {
+  "The human-readable display name."
+  title: String!
+  "The machine-readable code, unique per owner and workspace. Always starts with `cf_`."
+  code: Code!
+  "A description of the field for UI hints."
+  description: String
+  "The display order within the owner context."
+  order: Int!
+  """
+  The data type determining validation rules and UI rendering.
+  This property is immutable and cannot be changed after creation.
+  """
+  fieldType: FieldType!
+  "The type-specific parameters for validation, defaults, and options."
+  params: FieldParams!
+  """
+  Whether the field is on by default for every entity of the owning type. An individual entity
+  can override it on its value.
+  """
+  isDefault: Boolean!
+  """
+  Whether this field definition is archived.
+  Archived fields preserve existing values but no longer appear in forms and accept no new input.
+  Use the `archive` / `restore` actions in the parent catalog item's `customFieldDefinitions` input to toggle this state.
+  """
+  isArchived: Boolean!
+}
+
+# @category: custom-fields
+"One custom-field type that may be defined on a given owner, and what it may point at."
+type FieldTypeAvailability {
+  "The field type."
+  fieldType: FieldType!
+  """
+  Entity type codes a `REFERENCE` field on this owner may point at, as accepted by
+  `ReferenceFieldParamsInput.refEntityTypeCode`. Empty for every other field type.
+  """
+  referenceableEntityTypes: [Code!]!
+}
+
+# @category: custom-fields
+"The base interface for field parameters."
+interface FieldParams {
+  "Whether a value is required for this field."
+  isRequired: Boolean!
+}
+
+# @category: custom-fields
+"Parameters for STRING field type."
+type FieldParamsString implements FieldParams {
+  isRequired: Boolean!
+  "The minimum character length."
+  minLength: Int
+  "The maximum character length."
+  maxLength: Int
+  "The default value."
+  defaultString: String
+  "Whether to trim leading and trailing whitespace."
+  trim: Boolean!
+}
+
+# @category: custom-fields
+"Parameters for TEXT field type."
+type FieldParamsText implements FieldParams {
+  isRequired: Boolean!
+  "The maximum character length."
+  maxLength: Int
+  "The default value."
+  defaultText: String
+  "Whether to trim leading and trailing whitespace."
+  trim: Boolean!
+}
+
+# @category: custom-fields
+"Parameters for DECIMAL field type."
+type FieldParamsDecimal implements FieldParams {
+  isRequired: Boolean!
+  "The minimum allowed value."
+  minDecimal: Decimal
+  "The maximum allowed value."
+  maxDecimal: Decimal
+  """
+  Digits after the decimal point. Must be >= 0. Values sent with more
+  fractional digits than `scale` are rounded using HALF_UP before storage.
+  """
+  scale: Int!
+  "The default value."
+  defaultDecimal: Decimal
+}
+
+# @category: custom-fields
+"Parameters for INTEGER field type."
+type FieldParamsInteger implements FieldParams {
+  isRequired: Boolean!
+  "The minimum allowed value."
+  minInteger: Long
+  "The maximum allowed value."
+  maxInteger: Long
+  "The default value."
+  defaultInteger: Long
+}
+
+# @category: custom-fields
+"Parameters for BOOLEAN field type."
+type FieldParamsBoolean implements FieldParams {
+  isRequired: Boolean!
+  "The default value."
+  defaultBoolean: Boolean
+}
+
+# @category: custom-fields
+"Parameters for DATE field type."
+type FieldParamsDate implements FieldParams {
+  isRequired: Boolean!
+  "The default value."
+  defaultDate: Date
+}
+
+# @category: custom-fields
+"Parameters for DATETIME field type."
+type FieldParamsDatetime implements FieldParams {
+  isRequired: Boolean!
+  "The default value."
+  defaultDatetime: DateTime
+}
+
+# @category: custom-fields
+"Parameters for GEOJSON field type."
+type FieldParamsGeojson implements FieldParams {
+  isRequired: Boolean!
+  "The allowed geometry types. Null means all types are allowed."
+  allowedTypes: [GeoJsonGeometryType!]
+}
+
+# @category: custom-fields
+"Parameters for OPTIONS field type."
+type FieldParamsOptions implements FieldParams & MultiValue {
+  isRequired: Boolean!
+  isMulti: Boolean!
+  "The available options to choose from."
+  options: [FieldOption!]!
+  "The default option code."
+  defaultOptions: Code
+}
+
+# @category: custom-fields
+"A single option in an OPTIONS field."
+type FieldOption {
+  "The unique code for this option within the field."
+  code: Code!
+  "The display label."
+  label: String!
+  "A description of the option."
+  description: String
+  "Whether this option is archived and should not be shown for new selections."
+  isArchived: Boolean!
+}
+
+# =============================================================================
+# 8. CUSTOM FIELD INPUTS
+# =============================================================================
+
+# @category: custom-fields
+"""
+Typed filter value for custom fields. Exactly one field must be set (`@oneOf`).
+Choose the variant that matches the custom field's data type:
+
+| FieldType         | Variant      | Example                                |
+|-------------------|--------------|----------------------------------------|
+| STRING, TEXT      | `string`     | `{ string: "hello" }`                  |
+| DECIMAL           | `decimal`    | `{ decimal: "42.50" }`                 |
+| INTEGER           | `integer`    | `{ integer: 42 }`                      |
+| BOOLEAN           | `boolean`    | `{ boolean: true }`                    |
+| DATE              | `date`       | `{ date: "2024-01-15" }`              |
+| DATETIME          | `datetime`   | `{ datetime: "2024-01-15T10:30:00Z" }`|
+| OPTIONS           | `string`     | `{ string: "option_code" }`            |
+| DEVICE, REFERENCE | `id`         | `{ id: "019a6a3f-..." }`              |
+| (IN operator)     | `stringList` | `{ stringList: ["a", "b"] }`           |
+| (IN operator)     | `idList`     | `{ idList: ["uuid1", "uuid2"] }`       |
+"""
+input CustomFieldFilterValue @oneOf {
+  "String value — for STRING, TEXT, OPTIONS fields."
+  string: String
+  "Arbitrary-precision decimal value — for DECIMAL fields."
+  decimal: Decimal
+  "Signed 64-bit integer value — for INTEGER fields."
+  integer: Long
+  "Boolean value — for BOOLEAN fields."
+  boolean: Boolean
+  "Date value — for DATE fields."
+  date: Date
+  "Date-time value — for DATETIME fields."
+  datetime: DateTime
+  "ID value — for DEVICE, REFERENCE fields."
+  id: ID
+  "List of strings — for IN operator on string-based fields."
+  stringList: [String!]
+  "List of IDs — for IN operator on reference fields."
+  idList: [ID!]
+}
+
+# @category: custom-fields
+"""
+A filter condition for a custom field value.
+
+One condition is one code compared one way. Where a filter input takes a LIST of these
+(`AssetFilter.customFields`, `GeoObjectFilter.customFields`), the entries combine with AND —
+an entity must satisfy every one of them, and repeating a code narrows rather than widens.
+
+Inside a single condition:
+- `IN` matches when the stored value equals ANY member of the list — the list itself is an OR.
+- On a multi-value field (`isMulti` OPTIONS / REFERENCE), a positive operator matches when ANY
+  stored value satisfies it: `["red","blue"]` matches `{operator: EQ, value: {string: "red"}}`.
+  `NE` and `IS_NULL` are the inversions of that, so they match only when NO stored value
+  qualifies — `NE "red"` does not match `["red","blue"]`.
+- A code with no field definition behind it is treated as SQL NULL: `IS_NULL` and `NE` match
+  every entity, every other operator matches none.
+"""
+input CustomFieldFilter {
+  "The custom field code to filter by."
+  code: Code!
+  "The comparison operator."
+  operator: FieldOperator!
+  "The value to compare against. Null for `IS_NULL` and `IS_NOT_NULL` operators."
+  value: CustomFieldFilterValue
+}
+
+#
+# OPERATOR RULES:
+#   - IS_NULL / IS_NOT_NULL: `value` must be null or omitted
+#   - IN: `value` must use `stringList` or `idList` variant
+#   - All other operators: `value` is a single-value variant
+#   - GT / GTE / LT / LTE: numeric, date and STRING fields only. TEXT is excluded — see FieldType.
+#
+# Invalid `value` format returns VALIDATION_ERROR with status 400.
+#
+
+# @category: custom-fields
+"""
+Input for updating custom field values using a patch model.
+
+`set` provides typed values (create/overwrite); `unset` removes fields by code. Primary
+status travels with the value on the primary-capable variants (DEVICE/REFERENCE)
+via their required `isPrimary` flag — there is no separate setPrimary/unsetPrimary list.
+"""
+input CustomFieldsPatchInput {
+  "Field values to set or overwrite."
+  set: [CustomFieldValueInput!]
+  "Field codes to remove entirely."
+  unset: [Code!]
+}
+
+# @category: custom-fields
+"""
+A single custom-field value to set, addressed by code.
+
+Omitting `value` is the same as passing null, so an entry clears the field unless it carries one.
+An `isDefault` override cannot be changed on its own: send the current value alongside it.
+"""
+input CustomFieldValueInput {
+  "The custom field code."
+  code: Code!
+  "The typed value. Null clears the field but keeps the key (distinct from `unset`)."
+  value: CustomFieldValueDataInput
+  """
+  Overrides the definition's `isDefault` for this entity, in either direction. Omit to leave any
+  existing override untouched; the override is dropped when the field is `unset` or its value is
+  cleared.
+  """
+  isDefault: Boolean
+}
+
+# @category: custom-fields
+"""
+Typed custom-field value. Exactly one variant must be set (`@oneOf`), matching the custom
+field's declared FieldType:
+
+| FieldType          | Variant      |
+|--------------------|--------------|
+| STRING, TEXT       | `string`     |
+| DECIMAL            | `decimal`    |
+| INTEGER            | `integer`    |
+| BOOLEAN            | `boolean`    |
+| DATE               | `date`       |
+| DATETIME           | `datetime`   |
+| GEOJSON            | `geojson`    |
+| DEVICE             | `device`     |
+| REFERENCE (single) | `reference`  |
+| REFERENCE (multi)  | `references` |
+| OPTIONS (single)   | `option`     |
+| OPTIONS (multi)    | `options`    |
+"""
+input CustomFieldValueDataInput @oneOf {
+  "STRING / TEXT value."
+  string: String
+  "DECIMAL value (arbitrary precision, string-encoded)."
+  decimal: Decimal
+  "INTEGER value (signed 64-bit)."
+  integer: Long
+  "BOOLEAN value."
+  boolean: Boolean
+  "DATE value."
+  date: Date
+  "DATETIME value."
+  datetime: DateTime
+  "GEOJSON value."
+  geojson: GeoJSON
+  "DEVICE value (primary-capable)."
+  device: DeviceValueInput
+  "REFERENCE value for a single-value field (primary-capable)."
+  reference: ReferenceValueInput
+  "REFERENCE value for an isMulti field (primary-capable)."
+  references: ReferenceListValueInput
+  "OPTIONS value for a single-value field."
+  option: Code
+  "OPTIONS value for an isMulti field."
+  options: [Code!]
+}
+
+# @category: custom-fields
+"DEVICE custom-field value."
+input DeviceValueInput {
+  "The device to assign."
+  id: ID!
+  "Whether this device is the entity's primary DEVICE. Required — prevents silent demotion."
+  isPrimary: Boolean!
+  """
+  If the device is already assigned to another asset, detach it there and reassign it here,
+  atomically, instead of failing with VALIDATION_ERROR.
+
+  Asset holders only. A DEVICE field may only be defined on an AssetType since v0.7.0, but
+  definitions written before it stay live, and on such a field `reassign: true` is rejected with
+  VALIDATION_ERROR naming it: only an asset holds a device exclusively, so there is nothing to
+  detach it from.
+  """
+  reassign: Boolean
+}
+
+# @category: custom-fields
+"REFERENCE custom-field value for a single-value field."
+input ReferenceValueInput {
+  "The referenced entity ID."
+  id: ID!
+  "Whether this reference is the entity's primary REFERENCE. Required — prevents silent demotion."
+  isPrimary: Boolean!
+}
+
+# @category: custom-fields
+"REFERENCE custom-field value for an isMulti field."
+input ReferenceListValueInput {
+  "The referenced entity IDs, in the order they are stored."
+  ids: [ID!]!
+  "Whether this reference is the entity's primary REFERENCE. Required — prevents silent demotion."
+  isPrimary: Boolean!
+}
+
+# @category: custom-fields
+"""
+A single operation on a custom field definition within the parent catalog item.
+Exactly one action must be provided.
+"""
+input CustomFieldDefinitionInput @oneOf {
+  "Create a new custom field definition."
+  create: CustomFieldDefinitionCreateData
+  "Update an existing custom field definition."
+  update: CustomFieldDefinitionUpdateData
+  "Delete a custom field definition."
+  delete: CustomFieldDefinitionDeleteData
+  "Archive a custom field definition (non-destructive deactivation)."
+  archive: CustomFieldDefinitionArchiveData
+  "Restore a previously archived custom field definition."
+  restore: CustomFieldDefinitionRestoreData
+}
+
+# @category: custom-fields
+"""
+Data for creating a custom field definition within its parent catalog item.
+
+A type carries at most **50 active** definitions, and at most **100 in total** — active and
+archived together. Archiving a field frees an active slot but not a total one: an archived
+definition accepts no new values, so it cannot grow, but it keeps its row and the values already
+stored under it, and only `delete` releases that. System-level fields owned by the entity type
+rather than by the type, such as the platform's own `geojson_data`, sit in a separate scope and
+never reduce either allowance. A type belongs to exactly one workspace, so the allowances are per
+type.
+
+Neither bound is expressible in the schema and both are enforced by the server: a `create` past
+either is rejected with `VALIDATION_ERROR`, naming the total bound when both are reached, since
+that is the one archiving cannot resolve. Since the commands in one `customFieldDefinitions` list
+share a transaction, a batch that crosses a bound is rejected whole — it does not fill the type to
+the limit and stop.
+"""
+input CustomFieldDefinitionCreateData {
+  """
+  The machine-readable code. Must start with `cf_`, so a custom-field code can never be
+  confused with an entity's own field name. Auto-generated from the title if omitted, prefix
+  included. The prefix also keeps this input clear of the platform's own reserved code
+  `geojson_data`.
+  """
+  code: Code
+  "The display name."
+  title: String! @trim
+  "The description."
+  description: String @trim
+  "The data type. Immutable after creation."
+  fieldType: FieldType!
+  "The display order. Auto-calculated as last position if omitted."
+  order: Int
+  "The type-specific parameters. Exactly one variant must be provided."
+  params: FieldParamsInput!
+  "Whether the field is on by default for entities of this type. Defaults to false."
+  isDefault: Boolean
+}
+
+# @category: custom-fields
+"Data for updating an existing custom field definition. Note: `fieldType` cannot be changed."
+input CustomFieldDefinitionUpdateData {
+  "The code of the field definition to update."
+  code: Code!
+  "The new display name."
+  title: String @trim
+  "The new description."
+  description: String @trim
+  "The new display order."
+  order: Int
+  "The updated parameters. Only `isRequired` and type-specific fields can be changed."
+  params: FieldParamsInput
+  "The new type-level default. Omit to leave unchanged."
+  isDefault: Boolean
+}
+
+# @category: custom-fields
+"""
+Data for permanently deleting a custom field definition.
+
+If entities have values for this field, the default behavior is to reject the deletion.
+Use `onValues: CASCADE` to explicitly allow deletion with all associated values.
+
+Prefer archiving for non-destructive deactivation.
+"""
+input CustomFieldDefinitionDeleteData {
+  "The code of the field definition to delete."
+  code: Code!
+  """
+  What to do when existing entities have values for this field.
+  Defaults to `REJECT` to prevent accidental data loss.
+  """
+  onValues: CustomFieldDefinitionDeleteBehavior = REJECT
+}
+
+# @category: custom-fields
+"""
+Data for archiving or restoring a custom field definition.
+
+Archiving deactivates the field without data loss:
+- The field definition and all its values are preserved.
+- The field no longer appears in forms and accepts no new values.
+- Existing values remain readable and visible in history/exports.
+"""
+input CustomFieldDefinitionArchiveData {
+  "The code of the field definition to archive."
+  code: Code!
+}
+
+# @category: custom-fields
+"""
+Data for restoring a previously archived custom field definition.
+
+Restoring makes the field active again, so it is refused with `VALIDATION_ERROR` when the type is
+already at the **active** limit stated on `CustomFieldDefinitionCreateData` — otherwise archiving
+would be a way around that limit. The total limit never refuses a restore: the row already exists
+and is already counted, so restoring moves it between the two buckets without adding to the total.
+Restoring a definition that is already active is never refused either, since it adds no field to
+the type; it still bumps the definition's `version`.
+"""
+input CustomFieldDefinitionRestoreData {
+  "The code of the field definition to restore."
+  code: Code!
+}
+
+# @category: custom-fields
+"Field parameters input. Exactly one field must be provided."
+input FieldParamsInput @oneOf {
+  "Parameters for STRING field type."
+  string: StringFieldParamsInput
+  "Parameters for TEXT field type."
+  text: TextFieldParamsInput
+  "Parameters for DECIMAL field type."
+  decimal: DecimalFieldParamsInput
+  "Parameters for INTEGER field type."
+  integer: IntegerFieldParamsInput
+  "Parameters for BOOLEAN field type."
+  boolean: BooleanFieldParamsInput
+  "Parameters for DATE field type."
+  date: DateFieldParamsInput
+  "Parameters for DATETIME field type."
+  datetime: DateTimeFieldParamsInput
+  "Parameters for GEOJSON field type."
+  geojson: GeoJsonFieldParamsInput
+  "Parameters for OPTIONS field type."
+  options: OptionsFieldParamsInput
+  "Parameters for DEVICE field type."
+  device: DeviceFieldParamsInput
+  "Parameters for REFERENCE field type."
+  reference: ReferenceFieldParamsInput
+}
+
+# @category: custom-fields
+"Parameters for STRING field type."
+input StringFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The minimum character length."
+  minLength: Int
+  "The maximum character length. Narrows the `FieldType.STRING` limit; it cannot raise it."
+  maxLength: Int
+  "The default value."
+  defaultString: String
+  "Whether to trim whitespace."
+  trim: Boolean = true
+}
+
+# @category: custom-fields
+"Parameters for TEXT field type."
+input TextFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The maximum character length. Narrows the `FieldType.TEXT` limit of 65,535; it cannot raise it."
+  maxLength: Int
+  "The default value."
+  defaultText: String
+  "Whether to trim whitespace."
+  trim: Boolean = false
+}
+
+# @category: custom-fields
+"Parameters for DECIMAL field type."
+input DecimalFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The minimum allowed value."
+  minDecimal: Decimal
+  "The maximum allowed value."
+  maxDecimal: Decimal
+  """
+  Digits after the decimal point. Must be >= 0. Values sent with more
+  fractional digits than `scale` are rounded using HALF_UP before storage.
+  """
+  scale: Int!
+  "The default value."
+  defaultDecimal: Decimal
+}
+
+# @category: custom-fields
+"Parameters for INTEGER field type."
+input IntegerFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The minimum allowed value."
+  minInteger: Long
+  "The maximum allowed value."
+  maxInteger: Long
+  "The default value."
+  defaultInteger: Long
+}
+
+# @category: custom-fields
+"Parameters for BOOLEAN field type."
+input BooleanFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The default value."
+  defaultBoolean: Boolean
+}
+
+# @category: custom-fields
+"Parameters for DATE field type."
+input DateFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The default value."
+  defaultDate: Date
+}
+
+# @category: custom-fields
+"Parameters for DATETIME field type."
+input DateTimeFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The default value."
+  defaultDatetime: DateTime
+}
+
+# @category: custom-fields
+"Parameters for GEOJSON field type."
+input GeoJsonFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The allowed geometry types. Null means all types are allowed."
+  allowedTypes: [GeoJsonGeometryType!]
+}
+
+# @category: custom-fields
+"Parameters for OPTIONS field type."
+input OptionsFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "Whether multiple options can be selected."
+  isMulti: Boolean = false
+  "The available options."
+  options: [FieldOptionInput!]!
+  "The default option code."
+  defaultOptions: Code
+}
+
+# @category: custom-fields
+"""
+Input for an option definition.
+When updating options: if an entry without `code` is provided, a new option is created.
+If the label already exists within this field, an error is returned.
+"""
+input FieldOptionInput {
+  "The unique code. Auto-generated from label if omitted."
+  code: Code
+  "The display label. Must be unique within the custom field."
+  label: String!
+  "The description."
+  description: String
+  "Whether this option is archived."
+  isArchived: Boolean = false
+}
+
+# @category: custom-fields
+"Parameters for DEVICE field type."
+input DeviceFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "The device type IDs a value may belong to. Omit or leave empty to allow any device type."
+  refSubtypeIds: [ID!]
+}
+
+# @category: custom-fields
+"Parameters for REFERENCE field type."
+input ReferenceFieldParamsInput {
+  "Whether a value is required."
+  isRequired: Boolean!
+  "Whether multiple entities can be referenced."
+  isMulti: Boolean = false
+  """
+  The target entity type code, e.g. `asset`, `geo_object`, `schedule`, `tag`, `user_catalog_item`.
+  The `customFieldTypes` query lists the accepted values for a given owner.
+  """
+  refEntityTypeCode: Code!
+  """
+  The subtype IDs a value may belong to (AssetType / GeoObjectType / catalog). Required for
+  `user_catalog_item`, which needs exactly one catalog; rejected for target types that nothing
+  narrows further. Omit or leave empty to allow the whole target type.
+  """
+  refSubtypeIds: [ID!]
+  "The default referenced entity IDs."
+  defaultRefIds: [ID!]
+}

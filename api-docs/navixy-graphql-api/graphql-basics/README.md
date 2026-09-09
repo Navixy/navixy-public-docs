@@ -559,7 +559,7 @@ The `extensions` object contains machine-readable information for handling the e
 
 A GraphQL API has a **schema** that defines all available types, fields, queries, and mutations. The schema is like a contract: it tells you exactly what you can request and what you'll get back.
 
-[Navixy GraphQL API schema](../graphql-schema/schema.graphql) is public and available to developers.
+The [Navixy GraphQL API schema](../developer-resources/public-graphql-schema.md) is public and available to developers, split into one file for the shared types and one per product.
 
 ## Introspection
 

@@ -78,5 +78,5 @@ Each product has its own section with an overview, guides, and the API reference
 ## Developer resources
 
 * [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox): Run queries and mutations interactively against a demo environment.
-* [Public GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-graphql-api/graphql-schema/schema.graphql): The full type system in one file.
+* [Public GraphQL schema](developer-resources/public-graphql-schema.md): The full type system, in one file for the shared types and one per product.
 * [Introspection](graphql-basics/#introspection): Explore the schema from your own GraphQL client.

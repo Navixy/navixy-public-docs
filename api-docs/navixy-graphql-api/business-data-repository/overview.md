@@ -60,5 +60,5 @@ The API reference gives the complete technical specification for the GraphQL typ
 For the types that BDR shares with the other products, and for an index of the whole API, see the [Core API reference](../core-api-reference/README.md).
 
 {% hint style="warning" %}
-The API supports [GraphQL introspection](../graphql-basics/#introspection) for authenticated users. You can also check the public [GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-graphql-api/graphql-schema/schema.graphql).
+The API supports [GraphQL introspection](../graphql-basics/#introspection) for authenticated users. You can also check the public [GraphQL schema](../developer-resources/public-graphql-schema.md).
 {% endhint %}
