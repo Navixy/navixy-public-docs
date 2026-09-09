@@ -8,7 +8,7 @@ description: >-
 
 {% include "../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-This article covers patterns that make your GraphQL code cleaner, more maintainable, and easier to debug. If you're new to GraphQL, start with [GraphQL basics ](README.md)first.
+This article covers patterns that make your GraphQL code cleaner, more maintainable, and easier to debug. If you're new to GraphQL, start with [GraphQL basics ](./)first.
 
 ## Variables
 
@@ -157,7 +157,7 @@ Both queries now share the same field selection for core device data.
 
 ### Inline fragments for interfaces
 
-When working with interfaces like [Node](../bdr/common.md#node), use inline fragments to request type-specific fields:
+When working with interfaces like [Node](../core-api-reference/common.md#node), use inline fragments to request type-specific fields:
 
 ```graphql
 query GetNode($id: ID!) {
@@ -273,7 +273,7 @@ There are no dedicated bulk mutations, so aliased blocks are also how you update
 
 ## Directives
 
-Directives modify how fields are executed. The API supports the standard GraphQL directives plus one custom directive; see [Directives](../bdr/directives.md) for the full list. The two you use directly in queries are `@include` and `@skip`, which turn a field on or off based on a variable.
+Directives modify how fields are executed. The API supports the standard GraphQL directives plus one custom directive; see [Directives](../core-api-reference/directives.md) for the full list. The two you use directly in queries are `@include` and `@skip`, which turn a field on or off based on a variable.
 
 Directives can be used to:
 
@@ -304,7 +304,7 @@ query ListDevices(
 
 ## See also
 
-* [GraphQL basics](README.md): Learn GraphQL fundamentals, from queries and mutations to the type system
-* [Directives](../bdr/directives.md): Complete reference for the standard and custom directives
-* [Common resources](../bdr/common.md): Complete reference for shared scalars, interfaces, and types
+* [GraphQL basics](./): Learn GraphQL fundamentals, from queries and mutations to the type system
+* [Directives](../core-api-reference/directives.md): Complete reference for the standard and custom directives
+* [Common resources](../core-api-reference/common.md): Complete reference for shared scalars, interfaces, and types
 * [Error handling](../error-handling.md): Understand error structure, codes, and common error scenarios

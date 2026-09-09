@@ -1,7 +1,7 @@
 ---
 description: >-
-  Organize assets into typed, color-coded collections for fleet segmentation
-  and reporting.
+  Organize assets into typed, color-coded collections for fleet segmentation and
+  reporting.
 ---
 
 # Organizing assets into groups
@@ -64,15 +64,15 @@ If no group types exist, read how to create them in the [example scenario](organ
 
 ### Asset group types
 
-An asset group type is a [catalog item](../catalogs/catalog-items.md) that classifies groups and sets the membership rules. Like asset types, it combines the common catalog item fields with one field of its own, `allowedAssetTypes`:
+An asset group type is a [catalog item](../../business-data-repository/api-reference/catalogs/catalog-items.md) that classifies groups and sets the membership rules. Like asset types, it combines the common catalog item fields with one field of its own, `allowedAssetTypes`:
 
-| Field | What it holds |
-| --- | --- |
-| `code` | A stable machine-readable identifier ([Code](../common.md#code)). Integrations and filters use it to reference the type. |
-| `title` | The display name shown in UIs. |
-| `meta` | UI and lifecycle properties: `description`, `origin`, `canBeDeleted`, and `hidden`. |
-| `allowedAssetTypes` | Rules stating which asset types groups of this type are meant to hold, and how many of each. |
-| `workspace` | The workspace that owns the type. `null` for system types. |
+| Field               | What it holds                                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `code`              | A stable machine-readable identifier ([Code](../../core-api-reference/common.md#code)). Integrations and filters use it to reference the type. |
+| `title`             | The display name shown in UIs.                                                                                                                 |
+| `meta`              | UI and lifecycle properties: `description`, `origin`, `canBeDeleted`, and `hidden`.                                                            |
+| `allowedAssetTypes` | Rules stating which asset types groups of this type are meant to hold, and how many of each.                                                   |
+| `workspace`         | The workspace that owns the type. `null` for system types.                                                                                     |
 
 {% hint style="warning" %}
 `code` is immutable after creation. Choose it carefully, because it's what integrations and filters will use to reference the type.
@@ -86,7 +86,7 @@ These rules are stored and returned by the API, but not enforced yet: adding an 
 
 Types come from one of two places, and the `meta.origin` field says which: predefined by the platform (`SYSTEM`) or created by your workspace (`WORKSPACE`). You can only create, update, and delete types with `WORKSPACE` origin, because system types are read-only.
 
-For the full field reference, see [AssetGroupType](../assets/groups.md).
+For the full field reference, see [AssetGroupType](../../business-data-repository/api-reference/assets/groups.md).
 
 ### Asset groups
 
@@ -94,13 +94,13 @@ An asset group is a named collection that belongs to a workspace and usually has
 
 Groups have an optional `color` for visual identification in UIs, and offer two ways to query their members: `currentAssets` returns only the assets in the group right now, while `history` returns the full membership timeline, including past members.
 
-For the full field reference, see [AssetGroup](../assets/groups.md#assetgroup).
+For the full field reference, see [AssetGroup](../../business-data-repository/api-reference/assets/groups.md#assetgroup).
 
 ### Membership records
 
 Every add and remove operation creates or closes an `AssetGroupItem` record. This object tracks when an asset joined (`attachedAt`) and when it left (`detachedAt`). A null `detachedAt` means the asset is currently in the group. The history survives removal, because removing an asset only fills in `detachedAt` instead of deleting the record (a soft delete). This lets you see who was in the group at any point in the past.
 
-For the full field reference, see [AssetGroupItem](../assets/groups.md#assetgroupitem).
+For the full field reference, see [AssetGroupItem](../../business-data-repository/api-reference/assets/groups.md#assetgroupitem).
 
 ## Example scenario: Setting up a depot fleet structure
 
@@ -108,7 +108,6 @@ TransLog GmbH wants to organize their delivery trucks by regional depot. They'll
 
 {% stepper %}
 {% step %}
-
 ### Create an asset group type
 
 Start by creating the "Depot" group type. This type is meant for delivery trucks only, with no limit on how many can join a group.
@@ -186,7 +185,6 @@ To create a group type with no asset type restrictions, omit `allowedAssetTypes`
 {% endstep %}
 
 {% step %}
-
 ### Create an asset group
 
 Create the Hamburg Depot group using the type you just created.
@@ -242,10 +240,9 @@ Save the group `id` and `version`.
 {% endstep %}
 
 {% step %}
-
 ### Add assets to the group
 
-Add Truck B-44 to the Hamburg Depot group. [assetGroupItemsAdd](../assets/groups.md#assetgroupitemsadd) takes a list of asset IDs, so one call can add several assets at once, and it returns the updated group.
+Add Truck B-44 to the Hamburg Depot group. [assetGroupItemsAdd](../../business-data-repository/api-reference/assets/groups.md#assetgroupitemsadd) takes a list of asset IDs, so one call can add several assets at once, and it returns the updated group.
 
 ```graphql
 mutation AddTruckToHamburg {
@@ -300,16 +297,15 @@ Response:
 }
 ```
 
-The truck now appears in `currentAssets`, so it's now a member of the group. To see the membership record itself, including its `attachedAt` and `detachedAt` timestamps, query the group's `history` field (see [Query membership history](#query-membership-history)).
+The truck now appears in `currentAssets`, so it's now a member of the group. To see the membership record itself, including its `attachedAt` and `detachedAt` timestamps, query the group's `history` field (see [Query membership history](organizing-assets-into-groups.md#query-membership-history)).
 
 Two behaviors to know about when adding assets:
 
 * **Adding an asset that's already in the group** succeeds silently and changes nothing. No duplicate record is created and no error is returned, so the call is idempotent.
-* **The type's membership rules aren't checked.** Adding an asset whose type isn't listed in `allowedAssetTypes`, or adding more assets than `maxItems` allows, currently succeeds. See the warning in [Asset group types](#asset-group-types).
+* **The type's membership rules aren't checked.** Adding an asset whose type isn't listed in `allowedAssetTypes`, or adding more assets than `maxItems` allows, currently succeeds. See the warning in [Asset group types](organizing-assets-into-groups.md#asset-group-types).
 {% endstep %}
 
 {% step %}
-
 ### Verify membership
 
 You can verify group membership from either side: by querying the group's `currentAssets`, or by querying the asset's `groups` field.
@@ -414,7 +410,6 @@ An asset can belong to several groups at once, including several groups of the s
 {% endstep %}
 
 {% step %}
-
 ### Update the group
 
 The Hamburg depot is being rebranded. Update the group's title and color. Note the `version` field: include it so the update fails if someone else changed the group first, and make sure it matches the version you last read. See [Optimistic locking](../../optimistic-locking.md).
@@ -468,7 +463,6 @@ You can update a group's `title` and `color`, and replace its full membership by
 {% endstep %}
 
 {% step %}
-
 ### Remove an asset from the group
 
 Truck B-44 has been reassigned to the Berlin depot. Remove it from the Hamburg & Kiel group.
@@ -524,7 +518,6 @@ Removing an asset that isn't currently in the group succeeds silently and change
 {% endstep %}
 
 {% step %}
-
 ### Query membership history
 
 After a period of reassignments, query the full membership history of the group to see all past and current members:
@@ -583,11 +576,9 @@ history(
   first: 20
 )
 ```
-
 {% endstep %}
 
 {% step %}
-
 ### Delete the group
 
 When a depot closes and you no longer need the group, delete it using its current `version`.
@@ -743,5 +734,5 @@ For a full explanation of how versioning works, see [Optimistic locking](../../o
 
 ## See also
 
-* [Asset groups](../assets/groups.md): Complete reference for all asset group operations and types
+* [Asset groups](../../business-data-repository/api-reference/assets/groups.md): Complete reference for all asset group operations and types
 * [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment

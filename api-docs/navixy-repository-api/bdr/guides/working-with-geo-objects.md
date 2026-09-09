@@ -176,9 +176,9 @@ For details on geometry structure, winding order for polygons, and coordinate re
 
 Geo objects support custom fields. You might want to add fields for:
 
-- Access restrictions (delivery time windows, vehicle type requirements)
-- Operational metadata (zone manager contact, capacity limits)
-- Business attributes (pricing tier, priority level)
+* Access restrictions (delivery time windows, vehicle type requirements)
+* Operational metadata (zone manager contact, capacity limits)
+* Business attributes (pricing tier, priority level)
 
 See [Implementing custom fields](implementing-custom-fields.md) for details on defining and using custom fields.
 
@@ -357,9 +357,9 @@ mutation CreateDeliveryZone {
 
 Note the coordinate structure:
 
-- The outer array holds one or more rings. A ring is a closed loop of coordinate pairs. This example has one ring, the outer boundary.
-- Each ring is an array of `[longitude, latitude]` pairs.
-- The first and last pairs are identical, which closes the loop.
+* The outer array holds one or more rings. A ring is a closed loop of coordinate pairs. This example has one ring, the outer boundary.
+* Each ring is an array of `[longitude, latitude]` pairs.
+* The first and last pairs are identical, which closes the loop.
 
 The response returns:
 
@@ -794,7 +794,7 @@ The response returns only matching geo objects:
 }
 ```
 
-For more on filtering and pagination, see [Filtering and sorting](../../filtering-and-sorting.md) and [Pagination](../../pagination.md).
+For more on filtering and pagination, see [Filtering and sorting](../../filtering-and-sorting/) and [Pagination](../../pagination.md).
 
 ## Handling version conflicts
 
@@ -833,6 +833,6 @@ For more details on version conflicts, see [Optimistic locking](../../optimistic
 
 ## See also
 
-* [Geo objects](../geo-objects.md): Complete reference for all geo object operations and types
-* [Filtering and sorting](../../filtering-and-sorting.md): Narrow list queries and control result order
+* [Geo objects](../../business-data-repository/api-reference/geo-objects.md): Complete reference for all geo object operations and types
+* [Filtering and sorting](../../filtering-and-sorting/): Narrow list queries and control result order
 * [Optimistic locking](../../optimistic-locking.md): Prevent concurrent updates from overwriting each other with `version`

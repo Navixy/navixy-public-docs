@@ -18,7 +18,7 @@ The guide is for developers who are comfortable with HTTP and JSON. It doesn't a
 Before you start, make sure that you have the following:
 
 * An access token for Navixy GraphQL API. The token is an OpenID Connect access token from the Navixy identity service. [Authentication](authentication.md) explains how to obtain one.
-* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](bdr/workspaces/) for the entity.
+* The ID of the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. Every query and mutation that lists or creates entities takes a `workspaceId` argument. See [Workspaces](business-data-repository/api-reference/workspaces/) for the entity.
 * An HTTP client that can send a POST request with a JSON body. The examples use `curl`. The [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox) works too and needs no setup.
 
 ### Find your workspace ID
@@ -352,6 +352,6 @@ You sent authenticated requests to Navixy GraphQL API, read your workspace, and 
 * [Working with devices](bdr/guides/working-with-devices.md): Update and delete the device, manage its identifiers, and link it to other devices.
 * [Working with assets](bdr/guides/working-with-assets.md): Create the vehicles and equipment that devices track, and link a device to an asset.
 * [Optimistic locking](optimistic-locking.md): Use the `version` field to keep concurrent updates from overwriting each other.
-* [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting.md): Page through long lists and narrow them down.
+* [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting/): Page through long lists and narrow them down.
 * [Error handling](error-handling.md): The error format, every error code, and how to handle each one.
-* [Core API reference](bdr/core-api-reference.md): Every type and operation, grouped by entity.
+* [Core API reference](business-data-repository/api-reference/): Every type and operation, grouped by entity.

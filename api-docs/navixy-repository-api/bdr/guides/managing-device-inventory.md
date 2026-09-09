@@ -12,7 +12,7 @@ An inventory in Business Data Repository (BDR) is a named container that represe
 
 A device can be assigned to at most one inventory at a time. To move a device, unlink it from its current inventory first, then link it to the new one.
 
-Unlinking doesn't erase the past. Every assignment a device has ever had stays on the device, readable through its [`inventoryHistory`](#view-assignment-history) field. This is a dedicated inventory history, separate from the [audit trail](tracking-changes-with-audit.md): inventory assignments produce no audit events, so `inventoryHistory` is the only place to find them.
+Unlinking doesn't erase the past. Every assignment a device has ever had stays on the device, readable through its [`inventoryHistory`](managing-device-inventory.md#view-assignment-history) field. This is a dedicated inventory history, separate from the [audit trail](tracking-changes-with-audit.md): inventory assignments produce no audit events, so `inventoryHistory` is the only place to find them.
 
 This guide continues the FleetOps Ltd scenario from [Working with devices](working-with-devices.md). The company has registered a batch of Teltonika FMB003 trackers. Now the hardware operations team needs to track which warehouse holds each device as units move from central stock to regional depots ahead of installation.
 
@@ -488,4 +488,4 @@ For a full explanation of how versioning works, see [Optimistic locking](../../o
 ## See also
 
 * [Working with devices](working-with-devices.md): Register GPS devices and manage their identifiers and relations
-* [Inventory](../devices/inventory.md): Complete reference for all inventory operations and types
+* [Inventory](../../business-data-repository/api-reference/devices/inventory.md): Complete reference for all inventory operations and types

@@ -1,8 +1,8 @@
 ---
 description: >-
   How Navixy GraphQL API authenticates requests: OpenID Connect access tokens
-  from the Navixy identity service, how a product obtains one for its users, what
-  the token contains, and how to send it.
+  from the Navixy identity service, how a product obtains one for its users,
+  what the token contains, and how to send it.
 hidden: true
 ---
 
@@ -18,9 +18,9 @@ This page is for developers who integrate with Navixy GraphQL API directly or th
 
 You obtain an access token from the Navixy identity service and send it with every request in the `Authorization` header. The API validates the signature and the issuer of the token, then runs the operation as the user that the token identifies. A request with a missing, invalid, or expired token fails with an [`UNAUTHORIZED` error](error-handling.md#error-codes) and HTTP status 401.
 
-Every query and mutation that lists or creates entities takes a `workspaceId` argument. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](./#key-concepts) for the full domain model and [Workspaces](bdr/workspaces/) for the entity. The token identifies who is calling, and the `workspaceId` argument says which workspace the call works in.
+Every query and mutation that lists or creates entities takes a `workspaceId` argument. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. An organization is the Navixy Console account that owns one or more workspaces. See [Key concepts](./#key-concepts) for the full domain model and [Workspaces](business-data-repository/api-reference/workspaces/) for the entity. The token identifies who is calling, and the `workspaceId` argument says which workspace the call works in.
 
-Today only users authenticate. A user is a person with a Navixy account, and a user can belong to several organizations and workspaces. Integrations, the service accounts for machine-to-machine access, are part of the domain model but can't obtain credentials yet. See [Integrations: not available yet](#integrations-not-available-yet).
+Today only users authenticate. A user is a person with a Navixy account, and a user can belong to several organizations and workspaces. Integrations, the service accounts for machine-to-machine access, are part of the domain model but can't obtain credentials yet. See [Integrations: not available yet](authentication.md#integrations-not-available-yet).
 
 ## How to obtain a token
 
@@ -79,7 +79,7 @@ The response is a standard [OAuth 2.0 token response](https://www.rfc-editor.org
 
 The organization and workspace parameters are a preference, not a command. If the user no longer has access to the organization or workspace that you named, the identity service ignores that value. It picks one that the user can access instead. If you name nothing, the identity service picks the organization with the lowest ID. Inside it, it picks the workspace with the lowest ID that the roles of the user include. The same user with the same roles always gets the same result, so a sign-in is repeatable.
 
-The exchange returns either a complete token or an error. A missing correlation ID, a request for an organization or workspace that the user can't access, or an unreachable identity backend all return an error. You never receive a token without an organization and a workspace. See [Authentication errors](#authentication-errors).
+The exchange returns either a complete token or an error. A missing correlation ID, a request for an organization or workspace that the user can't access, or an unreachable identity backend all return an error. You never receive a token without an organization and a workspace. See [Authentication errors](authentication.md#authentication-errors).
 
 Refresh is re-exchange. No refresh token is issued for context tokens. Store `expires_in` next to the token and exchange the session token again shortly before the access token expires. When the sign-in session of the user has ended, the exchange fails, and the correct outcome is to show the sign-in page again.
 
@@ -91,24 +91,24 @@ Navixy SDK already has a `clientCredentials` helper for the OAuth 2.0 client cre
 
 ## What the token contains
 
-The access token is a signed [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519.html). It has the standard claims `iss`, `sub`, `exp`, and `azp`. A context token from the exchange in [Sign in users and exchange the session token](#sign-in-users-and-exchange-the-session-token) also contains the claims below. Read them to learn which workspace the token was issued for and which roles the user holds.
+The access token is a signed [JSON Web Token](https://www.rfc-editor.org/rfc/rfc7519.html). It has the standard claims `iss`, `sub`, `exp`, and `azp`. A context token from the exchange in [Sign in users and exchange the session token](authentication.md#sign-in-users-and-exchange-the-session-token) also contains the claims below. Read them to learn which workspace the token was issued for and which roles the user holds.
 
 Navixy GraphQL API uses the token to identify the caller. It doesn't read the workspace or role claims: the workspace comes from the `workspaceId` argument of each operation. Don't build authorization on the claims in your own code either. Treat them as information for your app, such as which workspace to pass and whether to show an organization picker.
 
-| Claim                      | Type              | Meaning                                                                                                             |
-| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Claim                      | Type              | Meaning                                                                                                            |
+| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `actor_id`                 | UUID              | The actor that the token represents. An actor is any party that a token can represent: today, a user.              |
-| `actor_type`               | String            | One of `user`, `integration`, `ai_agent`, or `external_contractor`. Today always `user`.                             |
-| `organization_id`          | UUID              | The organization that the token was issued for.                                                                     |
-| `workspace_id`             | UUID              | The workspace that the token was issued for. Pass this value as `workspaceId` in queries and mutations.             |
-| `role_ids`                 | List of UUIDs     | The roles that the user holds in this organization and workspace. Roles from other workspaces are absent.           |
-| `many_organizations`       | Boolean           | Whether the user can access more than one organization. Use it to decide whether to show an organization switcher.  |
-| `many_workspaces`          | Boolean           | Whether the user can access more than one workspace inside this organization.                                       |
-| `session_ttl`, `token_ttl` | ISO 8601 duration | How long the sign-in session and the token are meant to last, for example `PT12H`.                                  |
-| `refresh`                  | Boolean           | Whether refresh is allowed for this user.                                                                           |
-| `min_acr`                  | `1` or `2`        | The minimum authentication level: `1` for a single factor, `2` for multi-factor authentication.                     |
-| `write`                    | String            | The rule for write operations: `role`, `fresh`, or `fresh+coapproval`.                                              |
-| `max_age`                  | ISO 8601 duration | Present only when write operations require a recent sign-in.                                                        |
+| `actor_type`               | String            | One of `user`, `integration`, `ai_agent`, or `external_contractor`. Today always `user`.                           |
+| `organization_id`          | UUID              | The organization that the token was issued for.                                                                    |
+| `workspace_id`             | UUID              | The workspace that the token was issued for. Pass this value as `workspaceId` in queries and mutations.            |
+| `role_ids`                 | List of UUIDs     | The roles that the user holds in this organization and workspace. Roles from other workspaces are absent.          |
+| `many_organizations`       | Boolean           | Whether the user can access more than one organization. Use it to decide whether to show an organization switcher. |
+| `many_workspaces`          | Boolean           | Whether the user can access more than one workspace inside this organization.                                      |
+| `session_ttl`, `token_ttl` | ISO 8601 duration | How long the sign-in session and the token are meant to last, for example `PT12H`.                                 |
+| `refresh`                  | Boolean           | Whether refresh is allowed for this user.                                                                          |
+| `min_acr`                  | `1` or `2`        | The minimum authentication level: `1` for a single factor, `2` for multi-factor authentication.                    |
+| `write`                    | String            | The rule for write operations: `role`, `fresh`, or `fresh+coapproval`.                                             |
+| `max_age`                  | ISO 8601 duration | Present only when write operations require a recent sign-in.                                                       |
 
 A decoded payload looks like this:
 
@@ -132,7 +132,7 @@ A decoded payload looks like this:
 }
 ```
 
-A session token, the one the browser receives before the exchange, contains only the standard claims. It identifies the user, and the API accepts it today. It has no organization, workspace, or role claims, so your app has to know the workspace ID from elsewhere. See [Your workspace ID](#your-workspace-id).
+A session token, the one the browser receives before the exchange, contains only the standard claims. It identifies the user, and the API accepts it today. It has no organization, workspace, or role claims, so your app has to know the workspace ID from elsewhere. See [Your workspace ID](authentication.md#your-workspace-id).
 
 ## Using the token in requests
 
@@ -204,7 +204,7 @@ Response:
 }
 ```
 
-A context token also states the workspace in its `workspace_id` claim, and that value is the same ID. Workspaces are read-only in Navixy GraphQL API. They are created, renamed, and closed in Navixy Console. See [Workspaces](bdr/workspaces/).
+A context token also states the workspace in its `workspace_id` claim, and that value is the same ID. Workspaces are read-only in Navixy GraphQL API. They are created, renamed, and closed in Navixy Console. See [Workspaces](business-data-repository/api-reference/workspaces/).
 
 ## Recommended authentication flow
 
@@ -221,9 +221,9 @@ Navixy SDK sends the token with every request and calls your token provider befo
 
 Authentication failures return a GraphQL error envelope with [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457.html) extensions, the same format as every other error of the API. Two codes come from authentication:
 
-| Code                | HTTP status | Description                                                                                | How to resolve                                                                                                                  |
-| ------------------- | ----------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| `UNAUTHORIZED`      | 401         | The token is missing, malformed, expired, or wasn't issued by the Navixy identity service. | Obtain a new token and retry. If a working app starts receiving this error, its token expired.                                  |
+| Code                | HTTP status | Description                                                                                | How to resolve                                                                                                               |
+| ------------------- | ----------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `UNAUTHORIZED`      | 401         | The token is missing, malformed, expired, or wasn't issued by the Navixy identity service. | Obtain a new token and retry. If a working app starts receiving this error, its token expired.                               |
 | `PERMISSION_DENIED` | 403         | The token is valid, but the user lacks the permission for this operation.                  | The operation isn't allowed for this account. Permissions are managed outside Navixy GraphQL API, so ask your administrator. |
 
 Token endpoint failures come from the identity service in the standard [OAuth 2.0 error format](https://www.rfc-editor.org/rfc/rfc6749.html#section-5.2). The body has `error` and `error_description` fields, and the HTTP status is 400 or 401. A failed exchange means that no token was issued, never a token with reduced content.
@@ -285,4 +285,4 @@ For the `PERMISSION_DENIED` error and the full error format, see [Error handling
 * [Getting started](getting-started.md): Make your first query and mutation with a token.
 * [Error handling](error-handling.md): The error envelope, all error codes, and how to handle each one.
 * [Limits](limits.md): The request rate limit that applies per authenticated caller.
-* [Workspaces](bdr/workspaces/): The workspace entity and the queries that list its contents.
+* [Workspaces](business-data-repository/api-reference/workspaces/): The workspace entity and the queries that list its contents.

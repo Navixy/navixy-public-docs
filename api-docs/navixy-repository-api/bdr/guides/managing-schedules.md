@@ -20,7 +20,7 @@ To work with a schedule, you need your workspace's ID. It comes with your access
 
 ## How schedule data works
 
-A schedule consists of metadata (title and workspace) and calendar data stored in the `scheduleData` field, which accepts a value of [ScheduleData](../schedules.md#scheduledata), a structured JSON object validated on every write.
+A schedule consists of metadata (title and workspace) and calendar data stored in the `scheduleData` field, which accepts a value of [ScheduleData](../../business-data-repository/api-reference/schedules.md#scheduledata), a structured JSON object validated on every write.
 
 ### Top-level fields
 
@@ -34,8 +34,8 @@ All date-time values in events (`start`, `end`, `excludedDates`, `additionalDate
 
 For example, for `"timeZone": "Europe/Berlin"`:
 
-- `"start": "2025-01-06T06:00:00"` means 6:00 AM Berlin time.
-- The API handles daylight saving time (DST) changes automatically, so a recurring event at `06:00:00` stays at 6 AM local time year-round.
+* `"start": "2025-01-06T06:00:00"` means 6:00 AM Berlin time.
+* The API handles daylight saving time (DST) changes automatically, so a recurring event at `06:00:00` stays at 6 AM local time year-round.
 
 All-day events (where `showWithoutTime: true`) use date strings instead of date-times (`2025-06-10`, not `2025-06-10T00:00:00`) and are timezone-independent.
 
@@ -53,13 +53,13 @@ The `recurrenceRule` property supports these fields:
 
 ### Validation
 
-`scheduleData` is validated on every write against the following rules:&#x20;
+`scheduleData` is validated on every write against the following rules:
 
-- required fields
-- pairs that can't be combined (`end`/`duration`, `count`/`until`)
-- date-time format (local time only, no offset or `Z`)
-- recurrence constraints (`byWeekNo` only with `yearly`, ordinal `byDay` only with `monthly`/`yearly`, no `byHour`/`byMinute`/`bySecond` on all-day events)
-- field types
+* required fields
+* pairs that can't be combined (`end`/`duration`, `count`/`until`)
+* date-time format (local time only, no offset or `Z`)
+* recurrence constraints (`byWeekNo` only with `yearly`, ordinal `byDay` only with `monthly`/`yearly`, no `byHour`/`byMinute`/`bySecond` on all-day events)
+* field types
 
 If the input breaks any of these rules, the API rejects the whole write with a [validation error](../../error-handling.md#validation-error-400) that names the problem field. The rules apply only to writes. Reading is never validated, so schedules saved before a rule existed can still be read.
 
@@ -111,10 +111,10 @@ mutation CreateMaintenanceSchedule {
 
 Note the following:
 
-- `timeZone` is `Europe/Berlin`. All date-times in this schedule are Berlin local time: no `Z`, no offset.
-- `start: "2025-01-06T06:00:00"` is a Monday, which matches the `byDay: [{ day: "mo" }]` rule. Always make `start` match your repeat rule, otherwise the first occurrence may not land where you expect.
-- `duration: "PT4H"` defines a 4-hour window (06:00–10:00). Using `duration` instead of `end` keeps the window stable across DST changes.
-- `frequency: "weekly"` with `byDay: [{ day: "mo" }]` means the event repeats every Monday.
+* `timeZone` is `Europe/Berlin`. All date-times in this schedule are Berlin local time: no `Z`, no offset.
+* `start: "2025-01-06T06:00:00"` is a Monday, which matches the `byDay: [{ day: "mo" }]` rule. Always make `start` match your repeat rule, otherwise the first occurrence may not land where you expect.
+* `duration: "PT4H"` defines a 4-hour window (06:00–10:00). Using `duration` instead of `end` keeps the window stable across DST changes.
+* `frequency: "weekly"` with `byDay: [{ day: "mo" }]` means the event repeats every Monday.
 
 The response confirms creation:
 
@@ -161,7 +161,7 @@ The `scheduleData` field returns the full JSON structure you provided. Use it to
 {% step %}
 #### Exclude holidays
 
-The maintenance provider doesn't work on public holidays. Several holidays in the year fall on Mondays. Add these as exception dates using `excludedDates`. This requires updating the schedule with [scheduleUpdate](../schedules.md#scheduleupdate).
+The maintenance provider doesn't work on public holidays. Several holidays in the year fall on Mondays. Add these as exception dates using `excludedDates`. This requires updating the schedule with [scheduleUpdate](../../business-data-repository/api-reference/schedules.md#scheduleupdate).
 
 {% hint style="danger" %}
 When updating `scheduleData`, you must provide the complete value, as the API replaces the entire field. Include all existing configuration alongside your changes.
@@ -741,6 +741,6 @@ To detach the schedule, remove the field with `unset: ["cf_maintenance_schedule"
 
 ## See also
 
-* [Schedules](../schedules.md): Complete reference for all schedule operations and types
+* [Schedules](../../business-data-repository/api-reference/schedules.md): Complete reference for all schedule operations and types
 * [Implementing custom fields](implementing-custom-fields.md): Define custom fields and store your own data on entities
 * [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment

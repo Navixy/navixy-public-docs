@@ -43,7 +43,7 @@ input DeviceDeleteInput {
 
 Optimistic locking applies to:
 
-<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="bdr/devices/README.md#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="bdr/assets/README.md#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="bdr/assets/groups.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="bdr/geo-objects.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="bdr/schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="bdr/devices/inventory.md#inventory">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="bdr/workspaces/#workspace">Workspace</a></td><td>Tenants. Read-only in this API, so the version is informational</td></tr><tr><td><a href="bdr/actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="bdr/workspaces/members.md#member">Member</a></td><td>Workspace memberships</td></tr><tr><td><a href="bdr/actors/integrations.md#integration">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="bdr/catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, tags, etc.)</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th width="180">Entity</th><th>Description</th></tr></thead><tbody><tr><td><a href="business-data-repository/api-reference/devices/#device">Device</a></td><td>GPS trackers, sensors, beacons</td></tr><tr><td><a href="business-data-repository/api-reference/assets/#asset">Asset</a></td><td>Vehicles, equipment, employees</td></tr><tr><td><a href="business-data-repository/api-reference/assets/groups.md#assetgroup">AssetGroup</a></td><td>Asset collections</td></tr><tr><td><a href="business-data-repository/api-reference/geo-objects.md#geoobject">Geo object</a></td><td>Geofences, POIs, routes</td></tr><tr><td><a href="business-data-repository/api-reference/schedules.md#schedule">Schedule</a></td><td>Work hours, maintenance windows</td></tr><tr><td><a href="business-data-repository/api-reference/devices/inventory.md#inventory">Inventory</a></td><td>Warehouse records</td></tr><tr><td><a href="business-data-repository/api-reference/workspaces/#workspace">Workspace</a></td><td>Tenants. Read-only in this API, so the version is informational</td></tr><tr><td><a href="business-data-repository/api-reference/actors/users.md#user">User</a></td><td>User accounts</td></tr><tr><td><a href="business-data-repository/api-reference/workspaces/members.md#member">Member</a></td><td>Workspace memberships</td></tr><tr><td><a href="business-data-repository/api-reference/actors/integrations.md#integration">Integration</a></td><td>External system integrations</td></tr><tr><td><a href="business-data-repository/api-reference/catalogs/catalog-items.md#catalogitem">CatalogItem</a></td><td>All catalog items (device types, asset types, tags, etc.)</td></tr></tbody></table>
 
 ## Operations by type
 
@@ -139,7 +139,7 @@ User A's update succeeds first. User B's update fails because the version change
 
 Mutations that manage relationships and assignments are called idempotent commands: repeating the same call doesn't change the result. They don't require or check the `version` field.
 
-<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="bdr/assets/groups.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="bdr/assets/groups.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr></tbody></table>
+<table data-search="false"><thead><tr><th>Mutation</th><th>Purpose</th></tr></thead><tbody><tr><td><a href="business-data-repository/api-reference/assets/groups.md#assetgroupitemsadd">assetGroupItemsAdd</a></td><td>Add asset to group</td></tr><tr><td><a href="business-data-repository/api-reference/assets/groups.md#assetgroupitemsremove">assetGroupItemsRemove</a></td><td>Remove asset from group</td></tr></tbody></table>
 
 These operations behave as follows:
 
@@ -151,8 +151,8 @@ This design simplifies client code. You can safely retry these operations withou
 {% hint style="warning" %}
 The device link and identifier mutations are **not** idempotent:
 
-- `deviceInventoryLink` fails when the device is already assigned anywhere, and `deviceInventoryUnlink` fails when it has no active assignment. See [Managing device inventory](bdr/guides/managing-device-inventory.md).
-- `deviceIdentifierAdd` returns a [409 DUPLICATE](error-handling.md#duplicate-409) error when the identifier already exists, on this or any other device, and `deviceIdentifierRemove` returns a [404 error](error-handling.md#entity-not-found-404) for an unknown or already-removed identifier ID.
+* `deviceInventoryLink` fails when the device is already assigned anywhere, and `deviceInventoryUnlink` fails when it has no active assignment. See [Managing device inventory](bdr/guides/managing-device-inventory.md).
+* `deviceIdentifierAdd` returns a [409 DUPLICATE](error-handling.md#duplicate-409) error when the identifier already exists, on this or any other device, and `deviceIdentifierRemove` returns a [404 error](error-handling.md#entity-not-found-404) for an unknown or already-removed identifier ID.
 {% endhint %}
 
 ## Best practices

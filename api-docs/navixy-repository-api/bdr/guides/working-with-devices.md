@@ -16,8 +16,8 @@ You need your workspace's ID for all device operations. It comes with your acces
 
 You also need IDs for two catalog records before you create a device:
 
-- Device type: a classification you define (for example, "GPS Tracker" or "Sensor")
-- Device model: the specific hardware model taken from the read-only model catalog
+* Device type: a classification you define (for example, "GPS Tracker" or "Sensor")
+* Device model: the specific hardware model taken from the read-only model catalog
 
 To check what device types already exist in your workspace, run this query:
 
@@ -76,7 +76,7 @@ Save the returned IDs. You'll need both to create a device.
 
 Each device can have one or more hardware identifiers that connect the platform record to the physical hardware. Telematics servers and other systems use these identifiers to look up a device.
 
-The available identifier types are defined by the [DeviceIdType](../devices/README.md#enums) enum:
+The available identifier types are defined by the [DeviceIdType](../../business-data-repository/api-reference/devices/#enums) enum:
 
 <table><thead><tr><th width="198">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>IMEI</code></td><td>15-digit International Mobile Equipment Identity</td></tr><tr><td><code>SERIAL_NUMBER</code></td><td>Manufacturer-assigned serial number</td></tr><tr><td><code>MAC_ADDRESS</code></td><td>Network interface MAC address</td></tr><tr><td><code>GUID</code></td><td>GUID/UUID identifier</td></tr><tr><td><code>MEID_HEX</code></td><td>Mobile Equipment Identifier, hexadecimal format</td></tr><tr><td><code>MEID_DEC</code></td><td>Mobile Equipment Identifier, decimal format</td></tr><tr><td><code>CUSTOM</code></td><td>Workspace-defined identifier</td></tr></tbody></table>
 
@@ -84,11 +84,11 @@ An identifier must be unique. Uniqueness is checked on the combination of `type`
 
 ### Device status and properties
 
-Devices don't support [custom fields](implementing-custom-fields.md). The only properties you can change are `title` and `modelId`. Device status is controlled by the platform: every new device starts with the system status `Not Activated`. The platform provides three built-in statuses (`Not Activated`, `Active`, `Inactive`) visible to all workspaces. You can create additional custom statuses with [deviceStatusCreate](../devices/README.md#devicestatuscreate), but status cannot be changed through the public API.
+Devices don't support [custom fields](implementing-custom-fields.md). The only properties you can change are `title` and `modelId`. Device status is controlled by the platform: every new device starts with the system status `Not Activated`. The platform provides three built-in statuses (`Not Activated`, `Active`, `Inactive`) visible to all workspaces. You can create additional custom statuses with [deviceStatusCreate](../../business-data-repository/api-reference/devices/#devicestatuscreate), but status cannot be changed through the public API.
 
 #### Asset link
 
-The `asset` field returns the linked asset as a full [Asset](../assets/README.md#asset) object, so you can query any of its fields directly, or `null` if the device isn't assigned to any asset. This is the same link seen from the device side: assets link to devices through custom fields of type `DEVICE`, and `Device.asset` follows that link back. The link is managed entirely from the asset side. See [Working with assets](working-with-assets.md) for details.
+The `asset` field returns the linked asset as a full [Asset](../../business-data-repository/api-reference/assets/#asset) object, so you can query any of its fields directly, or `null` if the device isn't assigned to any asset. This is the same link seen from the device side: assets link to devices through custom fields of type `DEVICE`, and `Device.asset` follows that link back. The link is managed entirely from the asset side. See [Working with assets](working-with-assets.md) for details.
 
 ### Device relations
 
@@ -190,14 +190,14 @@ Response:
 Save the `id` and `version`. You'll need both for later operations.
 
 {% hint style="info" %}
-If any identifier already exists on another device, [deviceCreate](../devices/README.md#devicecreate) fails and the device is not created.
+If any identifier already exists on another device, [deviceCreate](../../business-data-repository/api-reference/devices/#devicecreate) fails and the device is not created.
 {% endhint %}
 {% endstep %}
 
 {% step %}
 ### Add more identifiers
 
-The IMEI was provided at creation. To register additional identifiers, such as a serial number, use [deviceIdentifierAdd](../devices/README.md#deviceidentifieradd):
+The IMEI was provided at creation. To register additional identifiers, such as a serial number, use [deviceIdentifierAdd](../../business-data-repository/api-reference/devices/#deviceidentifieradd):
 
 ```graphql
 mutation AddSerialNumber {
@@ -465,7 +465,7 @@ Response:
 ```
 
 {% hint style="info" %}
-Providing `version` turns on optimistic locking: if the device changed since you last fetched it, the API returns a [409 Conflict](../../error-handling.md#version-conflict-409) error instead of overwriting the change without warning. Without `version`, the update always applies. See [Handling version conflicts](#handling-version-conflicts) for details.
+Providing `version` turns on optimistic locking: if the device changed since you last fetched it, the API returns a [409 Conflict](../../error-handling.md#version-conflict-409) error instead of overwriting the change without warning. Without `version`, the update always applies. See [Handling version conflicts](working-with-devices.md#handling-version-conflicts) for details.
 {% endhint %}
 {% endstep %}
 
@@ -544,7 +544,7 @@ query ListDevices {
 
 ## Filtering
 
-Use [DeviceFilter](../devices/README.md#devicefilter) to narrow down results. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter reference, see [Filtering and sorting](../../filtering-and-sorting.md).
+Use [DeviceFilter](../../business-data-repository/api-reference/devices/#devicefilter) to narrow down results. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter reference, see [Filtering and sorting](../../filtering-and-sorting/).
 
 Common filter combinations:
 
@@ -569,16 +569,16 @@ query FindActiveTrackers {
 }
 ```
 
-[DeviceFilter](../devices/README.md#devicefilter) supports the following fields:
+[DeviceFilter](../../business-data-repository/api-reference/devices/#devicefilter) supports the following fields:
 
-| Field | Description |
-| --- | --- |
-| `typeIds` | One or more device type IDs |
-| `modelIds` | One or more device model IDs |
-| `statusIds` | One or more device status IDs |
-| `vendorIds` | One or more manufacturer IDs |
-| `inventoryIds` | One or more inventory IDs |
-| `titleContains` | Partial, case-insensitive match on the device title |
+| Field                | Description                                             |
+| -------------------- | ------------------------------------------------------- |
+| `typeIds`            | One or more device type IDs                             |
+| `modelIds`           | One or more device model IDs                            |
+| `statusIds`          | One or more device status IDs                           |
+| `vendorIds`          | One or more manufacturer IDs                            |
+| `inventoryIds`       | One or more inventory IDs                               |
+| `titleContains`      | Partial, case-insensitive match on the device title     |
 | `identifierContains` | Partial, case-insensitive match on any identifier value |
 
 `identifierContains` is particularly useful for looking up a device by a partial IMEI or serial number:
@@ -626,6 +626,6 @@ For a full explanation of how versioning works, see [Optimistic locking](../../o
 
 ## See also
 
-* [Devices](../devices/README.md): Complete reference for all device operations and types
+* [Devices](../../business-data-repository/api-reference/devices/): Complete reference for all device operations and types
 * [Managing device inventory](managing-device-inventory.md): Assign devices to inventories and track assignment history
 * [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment

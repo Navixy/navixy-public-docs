@@ -6,7 +6,7 @@ description: Cursor-based pagination in Navixy GraphQL API
 
 When querying lists of entities (devices, assets, users, etc.), the API returns paginated results. This prevents overwhelming responses when you have thousands of records.
 
-To control which results appear and in what order, see [Filtering and sorting](filtering-and-sorting.md).
+To control which results appear and in what order, see [Filtering and sorting](filtering-and-sorting/).
 
 ## Where pagination applies
 
@@ -19,7 +19,7 @@ Pagination applies to all list queries. They return connection types following a
 
 Many nested fields are also paginated — for example, `Workspace.devices` or `AssetGroup.currentAssets`. You can identify paginated fields by their return type (anything ending in `Connection`) or by the presence of `first`, `after`, `last`, and `before` arguments.
 
-Pagination types are described in separate sections of each entity's page — see [Asset pagination types](bdr/assets/README.md#pagination-types) as an example. You can also use [introspection](graphql-basics/README.md#introspection) to explore them in your GraphQL client.
+Pagination types are described in separate sections of each entity's page — see [Asset pagination types](business-data-repository/api-reference/assets/#pagination-types) as an example. You can also use [introspection](graphql-basics/#introspection) to explore them in your GraphQL client.
 
 ## The Connection pattern
 
@@ -263,5 +263,5 @@ No random page access. Cursor-based pagination doesn't support "jump to page 50"
 
 ## See also
 
-* [Filtering and sorting](filtering-and-sorting.md): Narrow list queries and control result order
+* [Filtering and sorting](filtering-and-sorting/): Narrow list queries and control result order
 * [Error handling](error-handling.md): Understand error structure, codes, and common error scenarios

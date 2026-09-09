@@ -6,9 +6,9 @@ description: >-
 
 # Custom field filtering and sorting
 
-Assets and geo objects are the entities that support custom fields, and both can be filtered and sorted by their custom field values. This is in addition to the standard `filter` and `orderBy` arguments described in [Filtering and sorting](../filtering-and-sorting.md).
+[Business Data Repository's](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/business-data-repository) assets and geo objects are the entities that support custom fields, and both can be filtered and sorted by their custom field values. This is in addition to the standard `filter` and `orderBy` arguments described in [Filtering and sorting](./).
 
-For an overview of custom fields themselves, see [Custom fields](custom-fields.md).
+For an overview of custom fields themselves, see [Custom fields](../business-data-repository/api-reference/custom-fields.md).
 
 ## Filtering by custom fields
 
@@ -53,7 +53,7 @@ On `STRING` and `TEXT` fields, `CONTAINS` ignores letter case and matches everyt
 
 Search for the substring exactly as it is stored; only letter case can differ.
 
-The whole-value operators `EQ`, `NE`, and `IN` compare strings with the natural-language rules that [sorting](../filtering-and-sorting.md#sort-behavior) uses, and those rules treat some visibly different strings as equal: for them, `1` equals `01`. A value that `EQ` matches is therefore not always found by `CONTAINS` with the same search string.
+The whole-value operators `EQ`, `NE`, and `IN` compare strings with the natural-language rules that [sorting](./#sort-behavior) uses, and those rules treat some visibly different strings as equal: for them, `1` equals `01`. A value that `EQ` matches is therefore not always found by `CONTAINS` with the same search string.
 
 ### Value formats
 
@@ -144,5 +144,5 @@ Use either `field` or `customFieldCode` in your `orderBy` input, not both — th
 
 ## See also
 
-* [Filtering and sorting](../filtering-and-sorting.md): Narrow list queries and control result order
-* [Implementing custom fields](guides/implementing-custom-fields.md): Define custom fields and store your own data on entities
+* [Filtering and sorting](./): Narrow list queries and control result order
+* [Implementing custom fields](../bdr/guides/implementing-custom-fields.md): Define custom fields and store your own data on entities

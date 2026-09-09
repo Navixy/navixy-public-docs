@@ -9,7 +9,7 @@ description: >-
 
 List queries (those returning multiple items, like `devices`, `assets`, or `workspaces`) accept `filter` and `orderBy` arguments that let you control which results come back and in what order. Instead of fetching everything and processing it client-side, you can request exactly what you need.
 
-For navigating through large result sets, see [Pagination](pagination.md).
+For navigating through large result sets, see [Pagination](../pagination.md).
 
 ## Filtering
 
@@ -36,7 +36,7 @@ query {
 
 This returns only devices with the specified status.
 
-Each entity type has its own filter input with different available fields. For example, `DeviceFilter` supports filtering by type, model, status, vendor, and inventory, while `WorkspaceFilter` only supports filtering by active status. Use [introspection](graphql-basics/README.md#introspection) or the entity's reference page to see available filter fields.
+Each entity type has its own filter input with different available fields. For example, `DeviceFilter` supports filtering by type, model, status, vendor, and inventory, while `WorkspaceFilter` only supports filtering by active status. Use [introspection](../graphql-basics/#introspection) or the entity's reference page to see available filter fields.
 
 ### Filtering logic
 
@@ -107,7 +107,7 @@ Some filters have additional text search fields. For example, `DeviceFilter` inc
 
 The API does not support complex boolean expressions with nested AND/OR/NOT operators. If you need more complex filtering logic, apply the most restrictive server-side filter you can, then filter the results further in your application.
 
-For filtering assets, geo objects, and schedules by their custom field values, see [Custom field filtering and sorting](bdr/custom-field-filtering.md).
+For filtering assets, geo objects, and schedules by their custom field values, see [Custom field filtering and sorting](custom-field-filtering.md).
 
 ## Sorting
 
@@ -143,7 +143,7 @@ Text fields use natural sorting with ICU collation:
 
 NULL values appear last when sorting ASC, and first when sorting DESC.
 
-For sorting assets and geo objects by custom field values, see [Custom field filtering and sorting](bdr/custom-field-filtering.md).
+For sorting assets and geo objects by custom field values, see [Custom field filtering and sorting](custom-field-filtering.md).
 
 ### Sorting and pagination
 
@@ -151,5 +151,5 @@ Cursors encode the current sort position. If you change `orderBy` between pagina
 
 ## See also
 
-* [Pagination](pagination.md): Page through large result sets with cursors
-* [Custom field filtering and sorting](bdr/custom-field-filtering.md): Filter and sort assets and geo objects by custom field values
+* [Pagination](../pagination.md): Page through large result sets with cursors
+* [Custom field filtering and sorting](custom-field-filtering.md): Filter and sort assets and geo objects by custom field values

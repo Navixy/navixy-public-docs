@@ -1,5 +1,5 @@
 ---
-description: "Create and manage assets: vehicles, equipment, and other tracked objects."
+description: 'Create and manage assets: vehicles, equipment, and other tracked objects.'
 ---
 
 # Working with assets
@@ -58,7 +58,7 @@ You'll get an array of types, if any exist:
 
 If you need a type that doesn't exist yet, you can create it as described in [the scenario below](working-with-assets.md#create-an-asset-type).
 
-If you're working with an existing type and need to know which custom fields it has, query [customFieldDefinitions](../custom-fields.md#customfielddefinition) on the type:
+If you're working with an existing type and need to know which custom fields it has, query [customFieldDefinitions](../../business-data-repository/api-reference/custom-fields.md#customfielddefinition) on the type:
 
 ```graphql
 query GetTruckTypeFields {
@@ -127,15 +127,15 @@ The `code` values here are exactly what you use as `code` in `customFields.set` 
 
 ### Asset types
 
-An asset type classifies assets and defines which custom fields they have. It is a [catalog item](../catalogs/catalog-items.md), so it combines the common catalog item fields with one field of its own, `customFieldDefinitions`:
+An asset type classifies assets and defines which custom fields they have. It is a [catalog item](../../business-data-repository/api-reference/catalogs/catalog-items.md), so it combines the common catalog item fields with one field of its own, `customFieldDefinitions`:
 
-| Field | What it holds |
-| --- | --- |
-| `code` | A stable machine-readable identifier ([Code](../common.md#code)). Integrations and filters use it to reference the type. |
-| `title` | The display name shown in UIs. |
-| `meta` | UI and lifecycle properties: `description`, `origin`, `canBeDeleted`, and `hidden`. |
-| `customFieldDefinitions` | All custom fields available on assets of this type. |
-| `workspace` | The workspace that owns the type. `null` for system types. |
+| Field                    | What it holds                                                                                                                                  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `code`                   | A stable machine-readable identifier ([Code](../../core-api-reference/common.md#code)). Integrations and filters use it to reference the type. |
+| `title`                  | The display name shown in UIs.                                                                                                                 |
+| `meta`                   | UI and lifecycle properties: `description`, `origin`, `canBeDeleted`, and `hidden`.                                                            |
+| `customFieldDefinitions` | All custom fields available on assets of this type.                                                                                            |
+| `workspace`              | The workspace that owns the type. `null` for system types.                                                                                     |
 
 {% hint style="warning" %}
 Before creating a type, remember that `code` is immutable after creation. Choose it carefully, since it's what integrations and filters will use to reference the type.
@@ -147,28 +147,28 @@ Before deleting an asset type, check `meta.canBeDeleted`. The API rejects deleti
 
 Types come from one of two places, and the `meta.origin` field on the type says which: predefined by the platform (`SYSTEM`) or created by your workspace (`WORKSPACE`). You can only create, update, and delete types with `WORKSPACE` origin, because system types are read-only. The `workspace` field on an asset type is `null` for `SYSTEM`-origin types, since no single workspace owns them.
 
-For the full field reference, see [AssetType](../assets/README.md#assettype).
+For the full field reference, see [AssetType](../../business-data-repository/api-reference/assets/#assettype).
 
 ### Asset fields
 
 An asset has a `title`, belongs to a workspace, and is classified by an asset type. Everything else it stores lives in its custom fields:
 
-| Field | What it holds |
-| --- | --- |
-| `title` | The display name. |
-| `workspace` | The workspace that owns the asset. |
-| `type` | The asset type that classifies the asset and defines its custom fields. |
-| `customFields` | The stored custom field values, returned as a list of typed values. |
-| `primaryDevice` | The linked device marked as primary. `null` if no primary device is set. |
-| `groups` | A paginated list of the asset groups the asset belongs to, with optional filtering and ordering arguments. |
+| Field           | What it holds                                                                                              |
+| --------------- | ---------------------------------------------------------------------------------------------------------- |
+| `title`         | The display name.                                                                                          |
+| `workspace`     | The workspace that owns the asset.                                                                         |
+| `type`          | The asset type that classifies the asset and defines its custom fields.                                    |
+| `customFields`  | The stored custom field values, returned as a list of typed values.                                        |
+| `primaryDevice` | The linked device marked as primary. `null` if no primary device is set.                                   |
+| `groups`        | A paginated list of the asset groups the asset belongs to, with optional filtering and ordering arguments. |
 
-For the full field reference, see [Asset object](../assets/README.md#asset).
+For the full field reference, see [Asset object](../../business-data-repository/api-reference/assets/#asset).
 
 ### Custom fields
 
-Assets store your own data, such as a license plate or a fuel capacity, in the `customFields` field. When creating or updating an asset, you describe custom field changes with [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput), which has two sub-fields:
+Assets store your own data, such as a license plate or a fuel capacity, in the `customFields` field. When creating or updating an asset, you describe custom field changes with [CustomFieldsPatchInput](../../business-data-repository/api-reference/custom-fields.md#customfieldspatchinput), which has two sub-fields:
 
-<table><thead><tr><th width="136.111083984375">Field</th><th width="180">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td>[<a href="../custom-fields.md#customfieldvalueinput">CustomFieldValueInput</a>!]</td><td>Typed field values to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>List of field codes to remove entirely.</td></tr></tbody></table>
+<table><thead><tr><th width="136.111083984375">Field</th><th width="180">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td>[<a href="../../business-data-repository/api-reference/custom-fields.md#customfieldvalueinput">CustomFieldValueInput</a>!]</td><td>Typed field values to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../../core-api-reference/common.md#code">Code</a>!]</td><td>List of field codes to remove entirely.</td></tr></tbody></table>
 
 `customFields` is always a patch operation: fields you don't mention are left unchanged. To update one field without touching others, include only that field in `set`. To remove a value entirely, list its code in `unset`. Each entry in `set` has a `code` and a `value`. Inside `value`, provide exactly one of its options, the one matching the field's declared type.
 
@@ -180,7 +180,7 @@ Assets connect to devices through custom fields of `DEVICE` type. Unlike the bui
 
 The `Asset` type has one shortcut field for the primary device. To read every linked device, request `customFields` and use an inline fragment on `DeviceCustomFieldValue`, the `... on` syntax shown in the verify step below.
 
-<table><thead><tr><th width="169.88885498046875">Field</th><th width="126.333251953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>primaryDevice</code></td><td><a href="../devices/README.md#device">Device</a></td><td>The device whose <code>DEVICE</code>-type field is marked as primary. <code>null</code> if no primary device is set.</td></tr></tbody></table>
+<table><thead><tr><th width="169.88885498046875">Field</th><th width="126.333251953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>primaryDevice</code></td><td><a href="../../business-data-repository/api-reference/devices/#device">Device</a></td><td>The device whose <code>DEVICE</code>-type field is marked as primary. <code>null</code> if no primary device is set.</td></tr></tbody></table>
 
 To link a device, set the value of your `DEVICE`-type custom field. You can also mark it as primary if you wish:
 
@@ -275,7 +275,7 @@ The `order` field controls how types appear in UI lists. Lower numbers appear fi
 {% step %}
 ### Define custom fields
 
-With the type created, add custom fields to be used by the assets of this type. Each delivery truck needs a license plate and a linked GPS device. Add both definitions in a single [assetTypeUpdate](../assets/README.md#assettypeupdate) call:
+With the type created, add custom fields to be used by the assets of this type. Each delivery truck needs a license plate and a linked GPS device. Add both definitions in a single [assetTypeUpdate](../../business-data-repository/api-reference/assets/#assettypeupdate) call:
 
 ```graphql
 mutation AddLicensePlateField {
@@ -461,7 +461,7 @@ Response:
 }
 ```
 
-`primaryDevice` is `null` because no GPS unit has been assigned yet. `customFields` returns a list of typed values, one per field, each carrying the `code` you use in `set` and `unset`. The element's type matches the field's declared `fieldType`, so select the fields you need through inline fragments (the `... on` blocks above) on [CustomFieldValue](../custom-fields.md#customfieldvalue).
+`primaryDevice` is `null` because no GPS unit has been assigned yet. `customFields` returns a list of typed values, one per field, each carrying the `code` you use in `set` and `unset`. The element's type matches the field's declared `fieldType`, so select the fields you need through inline fragments (the `... on` blocks above) on [CustomFieldValue](../../business-data-repository/api-reference/custom-fields.md#customfieldvalue).
 
 To keep the response clean, you can request only specific custom field codes:
 
@@ -579,7 +579,7 @@ After unlinking, `primaryDevice` returns `null`. Removing the field with `unset`
 Asset deletion is permanent. Unlike some other entity types in the API, assets don't support soft delete and cannot be restored after deletion. Make sure you no longer need the record before proceeding.
 {% endhint %}
 
-When the truck is decommissioned and you no longer need its record, run the [assetDelete](../assets/README.md#assetdelete) mutation:
+When the truck is decommissioned and you no longer need its record, run the [assetDelete](../../business-data-repository/api-reference/assets/#assetdelete) mutation:
 
 ```graphql
 mutation DecommissionTruck {
@@ -642,7 +642,7 @@ query ListAssets {
 
 ### Filtering
 
-Use [AssetFilter](../assets/README.md#assetfilter) to narrow down results by type, linked GPS device, title, or custom field values. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter field reference and custom field filter operators, see [Custom field filtering and sorting](../custom-field-filtering.md#operators).
+Use [AssetFilter](../../business-data-repository/api-reference/assets/#assetfilter) to narrow down results by type, linked GPS device, title, or custom field values. Conditions across different fields are combined with AND, while multiple values within a single field are combined with OR. For the full filter field reference and custom field filter operators, see [Custom field filtering and sorting](../../filtering-and-sorting/custom-field-filtering.md#operators).
 
 ```graphql
 query ListTrucks {
@@ -721,7 +721,7 @@ Multiple conditions in the `customFields` array are combined with AND.
 
 ### Ordering
 
-Assets can be ordered by title (the default) or by a custom field using `customFieldCode`. Not every field type is sortable — see [Sorting by custom fields](../custom-field-filtering.md#sorting-by-custom-fields) for the supported list:
+Assets can be ordered by title (the default) or by a custom field using `customFieldCode`. Not every field type is sortable — see [Sorting by custom fields](../../filtering-and-sorting/custom-field-filtering.md#sorting-by-custom-fields) for the supported list:
 
 ```graphql
 query AssetsByLicensePlate {
@@ -745,7 +745,7 @@ query AssetsByLicensePlate {
 ```
 
 {% hint style="warning" %}
-`field` (an `AssetOrderField` enum) and `customFieldCode` can't be used together: pick one. Valid values for `field` are defined in the [AssetOrderField enum](../assets/README.md#assetorderfield).
+`field` (an `AssetOrderField` enum) and `customFieldCode` can't be used together: pick one. Valid values for `field` are defined in the [AssetOrderField enum](../../business-data-repository/api-reference/assets/#assetorderfield).
 {% endhint %}
 
 For details on pagination, see [Pagination](../../pagination.md).
@@ -782,6 +782,6 @@ For a full explanation of how versioning works, see [Optimistic locking](../../o
 
 ## See also
 
-* [Assets](../assets/): Complete reference for all asset operations and types
+* [Assets](../../business-data-repository/api-reference/assets/): Complete reference for all asset operations and types
 * [Organizing assets into groups](organizing-assets-into-groups.md): Collect assets into named groups by depot, project, or any other dimension
 * [Implementing custom fields](implementing-custom-fields.md): Define custom fields and store your own data on entities

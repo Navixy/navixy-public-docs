@@ -1,0 +1,74 @@
+---
+description: >-
+  Predefined system catalog items available to all workspaces. These read-only
+  reference types cannot be modified or deleted.
+---
+
+# System catalogs
+
+{% include "../../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
+
+System-defined catalog items that cannot be modified by users.
+
+## Objects
+
+### Module
+
+A system module that groups related functionality. Examples: repo (core), fleet\_management (FSM), iot (devices), reports, billing.
+
+**Implements:** [CatalogItem](catalog-items.md#catalogitem), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+
+| Field       | Type                                                 | Description                                                                     |
+| ----------- | ---------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `id`        | `ID!`                                                | A globally unique identifier.                                                   |
+| `version`   | `Int!`                                               | The version number for optimistic locking.                                      |
+| `title`     | `String!`                                            | The human-readable display name. Can be localized.                              |
+| `code`      | [Code](../../../core-api-reference/common.md#code)!  | A machine-readable code, unique within the catalog scope.                       |
+| `order`     | `Int!`                                               | The display order within the same level or category.                            |
+| `catalog`   | [Catalog](catalog-items.md#catalog)!                 | The catalog this item belongs to.                                               |
+| `workspace` | [Workspace](../workspaces/#workspace)                | The workspace that owns this item. Null for system items.                       |
+| `meta`      | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
+
+***
+
+### EntityType
+
+A definition of an entity type in the system.
+
+**Implements:** [CatalogItem](catalog-items.md#catalogitem), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+
+| Field                    | Type                                                                    | Description                                                                     |
+| ------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `id`                     | `ID!`                                                                   | A globally unique identifier.                                                   |
+| `version`                | `Int!`                                                                  | The version number for optimistic locking.                                      |
+| `title`                  | `String!`                                                               | The human-readable display name. Can be localized.                              |
+| `code`                   | [Code](../../../core-api-reference/common.md#code)!                     | A machine-readable code, unique within the catalog scope.                       |
+| `order`                  | `Int!`                                                                  | The display order within the same level or category.                            |
+| `catalog`                | [Catalog](catalog-items.md#catalog)!                                    | The catalog this item belongs to.                                               |
+| `workspace`              | [Workspace](../workspaces/#workspace)                                   | The workspace that owns this item. Null for system items.                       |
+| `meta`                   | [CatalogItemMeta](catalog-items.md#catalogitemmeta)!                    | Metadata about this item including description, origin, and display properties. |
+| `uuidDiscriminator`      | `String!`                                                               | The 4-character code embedded in UUIDs for entities of this type.               |
+| `isCustomizable`         | `Boolean!`                                                              | Whether entities of this type support custom fields.                            |
+| `customFieldDefinitions` | \[[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions for entities of this type, ordered by display order.   |
+
+***
+
+### Country
+
+A country reference data item.
+
+**Implements:** [CatalogItem](catalog-items.md#catalogitem), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+
+| Field        | Type                                                              | Description                                                                     |
+| ------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `id`         | `ID!`                                                             | A globally unique identifier.                                                   |
+| `version`    | `Int!`                                                            | The version number for optimistic locking.                                      |
+| `title`      | `String!`                                                         | The human-readable display name. Can be localized.                              |
+| `code`       | [Code](../../../core-api-reference/common.md#code)!               | A machine-readable code, unique within the catalog scope.                       |
+| `order`      | `Int!`                                                            | The display order within the same level or category.                            |
+| `catalog`    | [Catalog](catalog-items.md#catalog)!                              | The catalog this item belongs to.                                               |
+| `workspace`  | [Workspace](../workspaces/#workspace)                             | The workspace that owns this item. Null for system items.                       |
+| `meta`       | [CatalogItemMeta](catalog-items.md#catalogitemmeta)!              | Metadata about this item including description, origin, and display properties. |
+| `alpha2Code` | [CountryCode](../../../core-api-reference/common.md#countrycode)! | The [ISO 3166](https://www.iso.org/standard/3166.html)-1 alpha-2 country code.  |
+
+***

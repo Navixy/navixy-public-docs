@@ -6,7 +6,7 @@ description: >-
 
 # Catalogs
 
-{% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
+{% include "../../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
 Catalogs are the reference data system of Business Data Repository (BDR). They provide structured, reusable lookup values (such as asset types or geo object types) that classify and annotate entities throughout the API. Rather than allowing freeform text, catalogs enforce standardized values, keeping data consistent, supporting filtering and reporting, and enabling localized display names.
 
@@ -24,9 +24,9 @@ Catalogs solve both problems at once. All reference data, whether platform-defin
 
 Every catalog entry, regardless of its type, implements the [CatalogItem](catalog-items.md#catalogitem) interface. This common structure means you work with catalog items the same way across the entire API.
 
-<table><thead><tr><th width="129.88897705078125">Field</th><th width="166.55560302734375">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>ID!</code></td><td>A globally unique identifier.</td></tr><tr><td><code>version</code></td><td><code>Int!</code></td><td>The version number for <a href="../../optimistic-locking.md">optimistic locking</a>.</td></tr><tr><td><code>title</code></td><td><code>String!</code></td><td>The human-readable display name. Can be localized.</td></tr><tr><td><code>code</code></td><td><a href="../common.md#code">Code</a>!</td><td>A machine-readable identifier, unique within the catalog scope.</td></tr><tr><td><code>order</code></td><td><code>Int!</code></td><td>The display order within the same level or category.</td></tr><tr><td><code>catalog</code></td><td><a href="catalog-items.md#catalog-2">Catalog</a>!</td><td>The catalog this item belongs to.</td></tr><tr><td><code>workspace</code></td><td><a href="../workspaces/#workspace">Workspace</a></td><td>The workspace that owns this item. <code>null</code> for system items.</td></tr><tr><td><code>meta</code></td><td><a href="catalog-items.md#catalogitemmeta">CatalogItemMeta</a>!</td><td>Metadata, including origin, display properties, and deletion eligibility.</td></tr></tbody></table>
+<table><thead><tr><th width="129.88897705078125">Field</th><th width="166.55560302734375">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td><code>ID!</code></td><td>A globally unique identifier.</td></tr><tr><td><code>version</code></td><td><code>Int!</code></td><td>The version number for <a href="../../../optimistic-locking.md">optimistic locking</a>.</td></tr><tr><td><code>title</code></td><td><code>String!</code></td><td>The human-readable display name. Can be localized.</td></tr><tr><td><code>code</code></td><td><a href="../../../core-api-reference/common.md#code">Code</a>!</td><td>A machine-readable identifier, unique within the catalog scope.</td></tr><tr><td><code>order</code></td><td><code>Int!</code></td><td>The display order within the same level or category.</td></tr><tr><td><code>catalog</code></td><td><a href="catalog-items.md#catalog-2">Catalog</a>!</td><td>The catalog this item belongs to.</td></tr><tr><td><code>workspace</code></td><td><a href="../workspaces/#workspace">Workspace</a></td><td>The workspace that owns this item. <code>null</code> for system items.</td></tr><tr><td><code>meta</code></td><td><a href="catalog-items.md#catalogitemmeta">CatalogItemMeta</a>!</td><td>Metadata, including origin, display properties, and deletion eligibility.</td></tr></tbody></table>
 
-The `code` field uses the [Code](../common.md#code) scalar, a case-insensitive alphanumeric identifier. System-defined items follow `UPPER_SNAKE_CASE` (e.g., `DEVICE_TYPE`, `ACTIVE`), while user-created items use `lower_snake_case`. System item codes are stable across the platform (hardcoded and unchanging), making them safe to use as enum-like constants in business logic. Codes for user-created items are unique within the catalog and workspace.
+The `code` field uses the [Code](../../../core-api-reference/common.md#code) scalar, a case-insensitive alphanumeric identifier. System-defined items follow `UPPER_SNAKE_CASE` (e.g., `DEVICE_TYPE`, `ACTIVE`), while user-created items use `lower_snake_case`. System item codes are stable across the platform (hardcoded and unchanging), making them safe to use as enum-like constants in business logic. Codes for user-created items are unique within the catalog and workspace.
 
 ### Catalogs are catalog items
 
@@ -40,7 +40,7 @@ The `CatalogItemMeta.origin` field indicates how an item was created and determi
 
 System items cannot be deleted or modified. The `meta.canBeDeleted` field reflects whether a given item is eligible for deletion, returning `false` for system-managed items and for any item referenced by other entities.
 
-Note that origin applies at the **item** level, not the catalog level. Some system catalogs, such as [AssetType](../assets/README.md#assettype), accept workspace-created items alongside platform-defined ones. In those cases, the catalog itself has `SYSTEM` origin, while the items your workspace adds have `WORKSPACE` origin.
+Note that origin applies at the **item** level, not the catalog level. Some system catalogs, such as [AssetType](../assets/#assettype), accept workspace-created items alongside platform-defined ones. In those cases, the catalog itself has `SYSTEM` origin, while the items your workspace adds have `WORKSPACE` origin.
 
 ### User-created catalogs
 

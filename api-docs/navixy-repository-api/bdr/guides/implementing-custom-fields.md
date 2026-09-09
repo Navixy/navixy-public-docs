@@ -16,27 +16,39 @@ Custom fields can be user-defined or predefined. User-defined fields are ones yo
 This guide covers user-defined fields. Every user-defined code must start with `cf_`, so a custom field can never share a name with a built-in field like `title`. If you omit `code` entirely, the API generates it from the title, prefix included; a code you supply yourself must already start with `cf_`, or the API rejects it with a validation error. The code `geojson_data` is reserved by the platform, so a definition can't claim it.
 {% endhint %}
 
-Every custom field has a [FieldType](../custom-fields.md#fieldtype) that determines what kind of data it stores and what validation options are available. You can add any number of fields with different types to a given entity type.
+Every custom field has a [FieldType](../../business-data-repository/api-reference/custom-fields.md#fieldtype) that determines what kind of data it stores and what validation options are available. You can add any number of fields with different types to a given entity type.
 
 ### Field type reference
 
-<table><thead><tr><th width="135">Field type</th><th width="185">Use for</th><th width="247">Key params</th><th>Value in <code>set</code></th></tr></thead><tbody><tr><td><code>STRING</code></td><td>Short text, codes, identifiers</td><td><code>isRequired</code>, <code>minLength</code>, <code>maxLength</code>, <code>defaultString</code>, <code>trim</code></td><td><code>{ string: "1HGBH41JXMN109186" }</code></td></tr><tr><td><code>TEXT</code></td><td>Long descriptions, notes</td><td><code>isRequired</code>, <code>maxLength</code>, <code>defaultText</code>, <code>trim</code></td><td><code>{ string: "Installed under dashboard" }</code></td></tr><tr><td><code>DECIMAL</code></td><td>Precise measurements, currency, weights</td><td><code>isRequired</code>, <code>minDecimal</code>, <code>maxDecimal</code>, <code>scale</code>, <code>defaultDecimal</code></td><td><code>{ decimal: "42.50" }</code></td></tr><tr><td><code>INTEGER</code></td><td>Whole-number quantities, counts</td><td><code>isRequired</code>, <code>minInteger</code>, <code>maxInteger</code>, <code>defaultInteger</code></td><td><code>{ integer: 42 }</code></td></tr><tr><td><code>BOOLEAN</code></td><td>Flags, yes/no attributes</td><td><code>isRequired</code>, <code>defaultBoolean</code></td><td><code>{ boolean: true }</code></td></tr><tr><td><code>DATE</code></td><td>Calendar dates</td><td><code>isRequired</code>, <code>defaultDate</code></td><td><code>{ date: "2025-06-01" }</code></td></tr><tr><td><code>DATETIME</code></td><td>Timestamps</td><td><code>isRequired</code>, <code>defaultDatetime</code></td><td><code>{ datetime: "2025-06-01T09:00:00Z" }</code></td></tr><tr><td><code>GEOJSON</code></td><td>Geometry data</td><td><code>isRequired</code>, <code>allowedTypes</code> (<a href="../geo-objects.md#geojsongeometrytype">GeoJsonGeometryType</a>)</td><td><code>{ geojson: {"type":"Point","coordinates":[...]} }</code></td></tr><tr><td><code>OPTIONS</code></td><td>Predefined choices (single or multi)</td><td><code>isRequired</code>, <code>isMulti</code>, <code>options[]</code>, <code>defaultOptions</code></td><td><code>{ option: "diesel" }</code> or <code>{ options: ["diesel"] }</code></td></tr><tr><td><code>DEVICE</code></td><td>Links to device records. Definable on an <code>AssetType</code> only</td><td><code>isRequired</code>, <code>refSubtypeIds</code></td><td><code>{ device: { id: "...", isPrimary: true } }</code></td></tr><tr><td><code>REFERENCE</code></td><td>Links to any other entity, including catalog items and tags</td><td><code>isRequired</code>, <code>isMulti</code>, <code>refEntityTypeCode</code>, <code>refSubtypeIds</code>, <code>defaultRefIds</code></td><td><code>{ reference: { id: "...", isPrimary: false } }</code> or <code>{ references: { ids: [...], isPrimary: false } }</code></td></tr></tbody></table>
+| Field type  | Use for                                                     | Key params                                                                                                                            | Value in `set`                                                                                         |
+| ----------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `STRING`    | Short text, codes, identifiers                              | `isRequired`, `minLength`, `maxLength`, `defaultString`, `trim`                                                                       | `{ string: "1HGBH41JXMN109186" }`                                                                      |
+| `TEXT`      | Long descriptions, notes                                    | `isRequired`, `maxLength`, `defaultText`, `trim`                                                                                      | `{ string: "Installed under dashboard" }`                                                              |
+| `DECIMAL`   | Precise measurements, currency, weights                     | `isRequired`, `minDecimal`, `maxDecimal`, `scale`, `defaultDecimal`                                                                   | `{ decimal: "42.50" }`                                                                                 |
+| `INTEGER`   | Whole-number quantities, counts                             | `isRequired`, `minInteger`, `maxInteger`, `defaultInteger`                                                                            | `{ integer: 42 }`                                                                                      |
+| `BOOLEAN`   | Flags, yes/no attributes                                    | `isRequired`, `defaultBoolean`                                                                                                        | `{ boolean: true }`                                                                                    |
+| `DATE`      | Calendar dates                                              | `isRequired`, `defaultDate`                                                                                                           | `{ date: "2025-06-01" }`                                                                               |
+| `DATETIME`  | Timestamps                                                  | `isRequired`, `defaultDatetime`                                                                                                       | `{ datetime: "2025-06-01T09:00:00Z" }`                                                                 |
+| `GEOJSON`   | Geometry data                                               | `isRequired`, `allowedTypes` ([GeoJsonGeometryType](../../business-data-repository/api-reference/geo-objects.md#geojsongeometrytype)) | `{ geojson: {"type":"Point","coordinates":[...]} }`                                                    |
+| `OPTIONS`   | Predefined choices (single or multi)                        | `isRequired`, `isMulti`, `options[]`, `defaultOptions`                                                                                | `{ option: "diesel" }` or `{ options: ["diesel"] }`                                                    |
+| `DEVICE`    | Links to device records. Definable on an `AssetType` only   | `isRequired`, `refSubtypeIds`                                                                                                         | `{ device: { id: "...", isPrimary: true } }`                                                           |
+| `REFERENCE` | Links to any other entity, including catalog items and tags | `isRequired`, `isMulti`, `refEntityTypeCode`, `refSubtypeIds`, `defaultRefIds`                                                        | `{ reference: { id: "...", isPrimary: false } }` or `{ references: { ids: [...], isPrimary: false } }` |
 
 {% hint style="info" %}
-There is no separate field type for schedules, catalog items, or tags. Use `REFERENCE` and fix the target with `refEntityTypeCode`, for example `schedule`, `tag`, or `user_catalog_item`. Devices are the exception: they keep their own `DEVICE` type. To find out which types a given owner accepts, and which entity types its `REFERENCE` fields may point at, query [customFieldTypes](#discovering-available-field-types).
+There is no separate field type for schedules, catalog items, or tags. Use `REFERENCE` and fix the target with `refEntityTypeCode`, for example `schedule`, `tag`, or `user_catalog_item`. Devices are the exception: they keep their own `DEVICE` type. To find out which types a given owner accepts, and which entity types its `REFERENCE` fields may point at, query [customFieldTypes](implementing-custom-fields.md#discovering-available-field-types).
 {% endhint %}
 
-Each field is defined by [CustomFieldDefinition](../custom-fields.md#customfielddefinition), a metadata record that specifies the field's code, display title, type, and validation rules. When you create or update an entity, you supply field values through the `customFields` field in the mutation input, and the API validates each value against the corresponding definition.
+Each field is defined by [CustomFieldDefinition](../../business-data-repository/api-reference/custom-fields.md#customfielddefinition), a metadata record that specifies the field's code, display title, type, and validation rules. When you create or update an entity, you supply field values through the `customFields` field in the mutation input, and the API validates each value against the corresponding definition.
 
 ### Writing custom field values
 
-In any create or update mutation, `customFields` accepts a [CustomFieldsPatchInput](../custom-fields.md#customfieldspatchinput) with two sub-fields:
+In any create or update mutation, `customFields` accepts a [CustomFieldsPatchInput](../../business-data-repository/api-reference/custom-fields.md#customfieldspatchinput) with two sub-fields:
 
-<table><thead><tr><th width="169">Field</th><th width="230">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td>[<a href="../custom-fields.md#customfieldvalueinput">CustomFieldValueInput</a>!]</td><td>Typed field values to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../common.md#code">Code</a>!]</td><td>List of field codes to remove entirely.</td></tr></tbody></table>
+<table><thead><tr><th width="169">Field</th><th width="230">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>set</code></td><td>[<a href="../../business-data-repository/api-reference/custom-fields.md#customfieldvalueinput">CustomFieldValueInput</a>!]</td><td>Typed field values to create or overwrite.</td></tr><tr><td><code>unset</code></td><td>[<a href="../../core-api-reference/common.md#code">Code</a>!]</td><td>List of field codes to remove entirely.</td></tr></tbody></table>
 
 Each entry in `set` has three parts:
 
-<table><thead><tr><th width="140">Field</th><th width="230">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>code</code></td><td><a href="../common.md#code">Code</a>!</td><td>The field code, including the <code>cf_</code> prefix.</td></tr><tr><td><code>value</code></td><td><a href="../custom-fields.md#customfieldvaluedatainput">CustomFieldValueDataInput</a></td><td>The typed value. Uses <a href="../directives.md#oneof">@oneOf</a>, so provide exactly one option, the one matching the field's declared type. Set it to <code>null</code> to clear the value but keep the key, which is different from <code>unset</code>.</td></tr><tr><td><code>isDefault</code></td><td><code>Boolean</code></td><td>Overrides the definition's <code>isDefault</code> for this entity, in either direction. Omit to leave any existing override untouched.</td></tr></tbody></table>
+<table><thead><tr><th width="140">Field</th><th width="230">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>code</code></td><td><a href="../../core-api-reference/common.md#code">Code</a>!</td><td>The field code, including the <code>cf_</code> prefix.</td></tr><tr><td><code>value</code></td><td><a href="../../business-data-repository/api-reference/custom-fields.md#customfieldvaluedatainput">CustomFieldValueDataInput</a></td><td>The typed value. Uses <a href="../../core-api-reference/directives.md#oneof">@oneOf</a>, so provide exactly one option, the one matching the field's declared type. Set it to <code>null</code> to clear the value but keep the key, which is different from <code>unset</code>.</td></tr><tr><td><code>isDefault</code></td><td><code>Boolean</code></td><td>Overrides the definition's <code>isDefault</code> for this entity, in either direction. Omit to leave any existing override untouched.</td></tr></tbody></table>
 
 This is the **patch model**: fields you don't mention are left unchanged. You can `set` and `unset` in the same mutation. For example, to update a license plate and remove an assigned driver in one call, add this code:
 
@@ -59,7 +71,6 @@ Adding this metadata requires the following steps:
 
 {% stepper %}
 {% step %}
-
 #### Choose a field type
 
 Before creating a definition, pick the `fieldType` that best matches your data. See the [field type reference](implementing-custom-fields.md#field-type-reference).
@@ -70,10 +81,9 @@ Before creating a definition, pick the `fieldType` that best matches your data. 
 {% endstep %}
 
 {% step %}
-
 #### Create field definitions
 
-Custom field definitions belong to the type whose entities will have the fields. In this scenario, that's an `AssetType` such as "Vehicle". There's no separate mutation for definitions: include them in the `customFieldDefinitions` list when you update the type itself with [assetTypeUpdate](../assets/README.md#assettypeupdate). The whole mutation succeeds or fails as one change: either every definition in the list is created, updated, or deleted under one type `version`, or none of them are.
+Custom field definitions belong to the type whose entities will have the fields. In this scenario, that's an `AssetType` such as "Vehicle". There's no separate mutation for definitions: include them in the `customFieldDefinitions` list when you update the type itself with [assetTypeUpdate](../../business-data-repository/api-reference/assets/#assettypeupdate). The whole mutation succeeds or fails as one change: either every definition in the list is created, updated, or deleted under one type `version`, or none of them are.
 
 {% hint style="info" %}
 The `version` field is optional (see [Optimistic locking](../../optimistic-locking.md)) but recommended when modifying a shared catalog item that other users may be editing concurrently.
@@ -137,11 +147,11 @@ Response (if the fields already exist):
 }
 ```
 
-If no custom fields have been created yet, `customFieldDefinitions` is an empty array. The same pattern works for [geoObjectTypes](../geo-objects.md#geoobjecttypes), the other owner that has custom fields.
+If no custom fields have been created yet, `customFieldDefinitions` is an empty array. The same pattern works for [geoObjectTypes](../../business-data-repository/api-reference/geo-objects.md#geoobjecttypes), the other owner that has custom fields.
 
 **2.2 Choose codes for your fields**
 
-Choose a [code](../common.md#code) for each field before creating its definition. The code is what you use to read and write the field's values in every query and mutation. Once entities store values under a code, avoid changing it: a code can only be changed by deleting the definition and creating a new one, and the stored values are lost with it.
+Choose a [code](../../core-api-reference/common.md#code) for each field before creating its definition. The code is what you use to read and write the field's values in every query and mutation. Once entities store values under a code, avoid changing it: a code can only be changed by deleting the definition and creating a new one, and the stored values are lost with it.
 
 If you omit `code`, it's auto-generated from `title` (transliterated to lowercase Latin, spaces replaced with `_`, truncated at 30 characters, with a numeric suffix on collision). Explicitly setting a code gives you control over how that key appears in your data.
 
@@ -149,7 +159,7 @@ Codes can contain ASCII letters, digits, underscores, dots, and hyphens, and mus
 
 **2.3 Create the field definitions**
 
-Add all three fields in a single mutation. Each entry in `customFieldDefinitions` names one operation, `create` in this case, because the input is [@oneOf](../directives.md#oneof): exactly one of `create`, `update`, `delete`, `archive`, or `restore` per entry.
+Add all three fields in a single mutation. Each entry in `customFieldDefinitions` names one operation, `create` in this case, because the input is [@oneOf](../../core-api-reference/directives.md#oneof): exactly one of `create`, `update`, `delete`, `archive`, or `restore` per entry.
 
 ```graphql
 mutation AddVehicleFields {
@@ -254,16 +264,15 @@ The response returns the updated type with incremented `version` and the full li
 ```
 
 {% hint style="warning" %}
-The `params` input is [@oneOf](../directives.md#oneof): provide exactly one params block, and it must be the one matching your `fieldType`.
+The `params` input is [@oneOf](../../core-api-reference/directives.md#oneof): provide exactly one params block, and it must be the one matching your `fieldType`.
 
-Each field type has its own named params block. The example above demonstrates this: the VIN field uses `params: { string: { ... } }`, the fuel type field uses `params: { options: { ... } }`, and the service date field uses `params: { date: { ... } }`. Providing the wrong variant returns a [validation error](../../error-handling.md#validation-error-400).&#x20;
+Each field type has its own named params block. The example above demonstrates this: the VIN field uses `params: { string: { ... } }`, the fuel type field uses `params: { options: { ... } }`, and the service date field uses `params: { date: { ... } }`. Providing the wrong variant returns a [validation error](../../error-handling.md#validation-error-400).
 {% endhint %}
 
-The same pattern applies to [geoObjectTypeUpdate](../geo-objects.md#geoobjecttypeupdate), with just the parent type's input changing. Only `create` is allowed for a catalog item creation mutation such as [assetTypeCreate](../assets/README.md#assettypecreate). The full set of operations (`update`, `delete`, `archive`, `restore`) is available for [assetTypeUpdate](../assets/README.md#assettypeupdate).
+The same pattern applies to [geoObjectTypeUpdate](../../business-data-repository/api-reference/geo-objects.md#geoobjecttypeupdate), with just the parent type's input changing. Only `create` is allowed for a catalog item creation mutation such as [assetTypeCreate](../../business-data-repository/api-reference/assets/#assettypecreate). The full set of operations (`update`, `delete`, `archive`, `restore`) is available for [assetTypeUpdate](../../business-data-repository/api-reference/assets/#assettypeupdate).
 {% endstep %}
 
 {% step %}
-
 #### Set and update values
 
 Pass `customFields` in the create mutation with the initial values under `set`. The following example creates a vehicle asset with all three fields populated:
@@ -332,11 +341,10 @@ The response returns the created asset's `id`, `version`, and `customFields`:
 If any custom field value fails validation, the entire mutation is rejected with a [validation error](../../error-handling.md#validation-error-400). Common causes include a value that violates the field's `params` constraints (for example, a VIN shorter than 17 characters), an unrecognized field code, or a value of the wrong type. The error response includes a `field` path and a `detail` message identifying the problem. See [Error handling](../../error-handling.md) for the full error format.
 {% endhint %}
 
-The same pattern applies to [geoObjectCreate](../geo-objects.md#geoobjectcreate).
+The same pattern applies to [geoObjectCreate](../../business-data-repository/api-reference/geo-objects.md#geoobjectcreate).
 {% endstep %}
 
 {% step %}
-
 #### Update custom field values
 
 Use `set` to overwrite specific fields and `unset` to remove them. Fields omitted from both are left unchanged.
@@ -405,10 +413,9 @@ You can include `version` in update mutations to enable [optimistic locking](../
 {% endstep %}
 
 {% step %}
-
 #### Read custom field values
 
-`customFields` on any entity returns a list of typed values, one per field that has a value. Each element's type matches the field's declared `fieldType`: a `STRING` field comes back as a `StringCustomFieldValue`, a `DATE` field as a `DateCustomFieldValue`, and so on. All of them share the [CustomFieldValue](../custom-fields.md#customfieldvalue) interface, which only guarantees `code` and `isDefault`. To read the actual values, use inline fragments, the `... on TypeName { }` blocks in the query below. Each block says "if the element is this type, also return these fields" (see [Inline fragments for interfaces](../../graphql-basics/graphql-tips-and-patterns.md#inline-fragments-for-interfaces)). By default, all fields are returned. Run the following query:
+`customFields` on any entity returns a list of typed values, one per field that has a value. Each element's type matches the field's declared `fieldType`: a `STRING` field comes back as a `StringCustomFieldValue`, a `DATE` field as a `DateCustomFieldValue`, and so on. All of them share the [CustomFieldValue](../../business-data-repository/api-reference/custom-fields.md#customfieldvalue) interface, which only guarantees `code` and `isDefault`. To read the actual values, use inline fragments, the `... on TypeName { }` blocks in the query below. Each block says "if the element is this type, also return these fields" (see [Inline fragments for interfaces](../../graphql-basics/graphql-tips-and-patterns.md#inline-fragments-for-interfaces)). By default, all fields are returned. Run the following query:
 
 ```graphql
 query GetAssetFields {
@@ -502,16 +509,14 @@ The response contains only the requested fields:
   }
 }
 ```
-
 {% endstep %}
 
 {% step %}
-
 #### Filter entities by custom field value
 
-The asset and geo object list queries support filtering by custom field values through [CustomFieldFilter](../custom-fields.md#customfieldfilter). Add one or more conditions to the `customFields` filter array. Multiple conditions are applied as AND.
+The asset and geo object list queries support filtering by custom field values through [CustomFieldFilter](../../business-data-repository/api-reference/custom-fields.md#customfieldfilter). Add one or more conditions to the `customFields` filter array. Multiple conditions are applied as AND.
 
-For the full operator list and value formats by field type, see [Filtering and sorting](../custom-field-filtering.md#operators).
+For the full operator list and value formats by field type, see [Filtering and sorting](../../filtering-and-sorting/custom-field-filtering.md#operators).
 
 **How to filter by an OPTIONS value**
 
@@ -684,10 +689,7 @@ Omit `value` (or set it to `null`) when using the `IS_NULL` and `IS_NOT_NULL` op
 
 ## Discovering available field types
 
-Not every field type can be defined on every owner. `DEVICE` fields, for example, may only be
-defined on an `AssetType`, and a `REFERENCE` field can only point at the entity types the platform
-accepts for that owner. Rather than hardcoding those rules, ask the API with
-[customFieldTypes](../custom-fields.md#customfieldtypes):
+Not every field type can be defined on every owner. `DEVICE` fields, for example, may only be defined on an `AssetType`, and a `REFERENCE` field can only point at the entity types the platform accepts for that owner. Rather than hardcoding those rules, ask the API with [customFieldTypes](../../business-data-repository/api-reference/custom-fields.md#customfieldtypes):
 
 ```graphql
 query VehicleFieldTypes {
@@ -726,10 +728,7 @@ Response:
 }
 ```
 
-`referenceableEntityTypes` lists the values accepted by `ReferenceFieldParamsInput.refEntityTypeCode`,
-and it's empty for every field type other than `REFERENCE`. Creating a definition whose `fieldType`
-is absent from this list fails with a [validation error](../../error-handling.md#validation-error-400)
-on `input.fieldType`.
+`referenceableEntityTypes` lists the values accepted by `ReferenceFieldParamsInput.refEntityTypeCode`, and it's empty for every field type other than `REFERENCE`. Creating a definition whose `fieldType` is absent from this list fails with a [validation error](../../error-handling.md#validation-error-400) on `input.fieldType`.
 
 ## Managing definitions
 
@@ -912,18 +911,18 @@ If you create a new definition with the same `code` later, existing records don'
 
 Keep in mind the following:
 
-- **Validation errors reject the entire mutation:** Mutations that include invalid custom field values are rejected in full. See [Error handling](../../error-handling.md) for the error format.
-- `fieldType`** is immutable:** To change a field's type, delete its definition and create a new one. Deleting the definition removes its values from all entity records.
-- `code`** is stable once in use:** `code` must start with `cf_` and be unique within the owner type and workspace. As this is the key used to read and write values across all entity mutations and queries, avoid recreating it under a different name if records contain values paired with it. If you rely on auto-generation, verify the generated code before any records are written under it.
-- `params`** takes exactly one params block:** `FieldParamsInput` is [@oneOf](../directives.md#oneof), so provide exactly the block that matches your `fieldType`. Providing `string: { ... }` when `fieldType` is `DECIMAL` returns a validation error.
-- **Multi-value fields and filtering:** For `OPTIONS` and `REFERENCE` fields configured with `isMulti: true`, a filter matches if _any_ value in the list satisfies the condition. For example, if an asset has `cf_fuel_type` set to `["diesel", "hybrid"]`, filtering with `EQ: "diesel"` matches it.
-- **Predefined fields:** The platform manages `geojson_data`, which is excluded from `customFields` responses and returned through `GeoObject.geojsonData` instead. Its code is reserved and can't be used for a user-defined field.
-- **Owners are **`Customizable`** types only:** custom fields are defined on an `AssetType` or a `GeoObjectType`, so assets and geo objects are the entities that have them. `DEVICE` fields are narrower still: they may only be defined on an `AssetType`.
-- `isPrimary`** is required on **`DEVICE`** and **`REFERENCE`** values:** stating it on every write prevents an update from silently demoting the entity's current primary value.
+* **Validation errors reject the entire mutation:** Mutations that include invalid custom field values are rejected in full. See [Error handling](../../error-handling.md) for the error format.
+* `fieldType`\*\* is immutable:\*\* To change a field's type, delete its definition and create a new one. Deleting the definition removes its values from all entity records.
+* `code`\*\* is stable once in use:\*\* `code` must start with `cf_` and be unique within the owner type and workspace. As this is the key used to read and write values across all entity mutations and queries, avoid recreating it under a different name if records contain values paired with it. If you rely on auto-generation, verify the generated code before any records are written under it.
+* `params`\*\* takes exactly one params block:\*\* `FieldParamsInput` is [@oneOf](../../core-api-reference/directives.md#oneof), so provide exactly the block that matches your `fieldType`. Providing `string: { ... }` when `fieldType` is `DECIMAL` returns a validation error.
+* **Multi-value fields and filtering:** For `OPTIONS` and `REFERENCE` fields configured with `isMulti: true`, a filter matches if _any_ value in the list satisfies the condition. For example, if an asset has `cf_fuel_type` set to `["diesel", "hybrid"]`, filtering with `EQ: "diesel"` matches it.
+* **Predefined fields:** The platform manages `geojson_data`, which is excluded from `customFields` responses and returned through `GeoObject.geojsonData` instead. Its code is reserved and can't be used for a user-defined field.
+* **Owners are `Customizable` types only:** custom fields are defined on an `AssetType` or a `GeoObjectType`, so assets and geo objects are the entities that have them. `DEVICE` fields are narrower still: they may only be defined on an `AssetType`.
+* `isPrimary`\*\* is required on **`DEVICE`** and **`REFERENCE`** values:\*\* stating it on every write prevents an update from silently demoting the entity's current primary value.
 
 ## See also
 
-* [Custom fields](../custom-fields.md): Complete reference for all custom field operations and types
-* [Filtering and sorting](../../filtering-and-sorting.md): Narrow list queries and control result order
-* [Custom field filtering and sorting](../custom-field-filtering.md): Filter and sort assets and geo objects by custom field values
+* [Custom fields](../../business-data-repository/api-reference/custom-fields.md): Complete reference for all custom field operations and types
+* [Filtering and sorting](../../filtering-and-sorting/): Narrow list queries and control result order
+* [Custom field filtering and sorting](../../filtering-and-sorting/custom-field-filtering.md): Filter and sort assets and geo objects by custom field values
 * [Optimistic locking](../../optimistic-locking.md): Prevent concurrent updates from overwriting each other with `version`

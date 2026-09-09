@@ -1,7 +1,7 @@
 ---
 description: >-
-  Request, pagination, and input size limits enforced by Navixy GraphQL API,
-  and the errors the API returns when a limit is exceeded.
+  Request, pagination, and input size limits enforced by Navixy GraphQL API, and
+  the errors the API returns when a limit is exceeded.
 ---
 
 # Limits
@@ -12,12 +12,12 @@ The request limits (complexity, depth, and rate) are deployment settings. The va
 
 ## Request limits
 
-| Limit | Default value | Error when exceeded |
-| --- | --- | --- |
-| Query complexity | 200 | [`QUERY_TOO_COMPLEX` (400)](error-handling.md#error-codes) |
-| Query depth | 15 levels | [`QUERY_TOO_DEEP` (400)](error-handling.md#error-codes) |
-| Request rate | 100 requests per 60 seconds | [`RATE_LIMITED` (429)](error-handling.md#error-codes) |
-| Mutation fields per `bdr` block | 1 | [Validation error (400)](error-handling.md#validation-error-400) |
+| Limit                           | Default value               | Error when exceeded                                              |
+| ------------------------------- | --------------------------- | ---------------------------------------------------------------- |
+| Query complexity                | 200                         | [`QUERY_TOO_COMPLEX` (400)](error-handling.md#error-codes)       |
+| Query depth                     | 15 levels                   | [`QUERY_TOO_DEEP` (400)](error-handling.md#error-codes)          |
+| Request rate                    | 100 requests per 60 seconds | [`RATE_LIMITED` (429)](error-handling.md#error-codes)            |
+| Mutation fields per `bdr` block | 1                           | [Validation error (400)](error-handling.md#validation-error-400) |
 
 ### Query complexity
 
@@ -65,26 +65,25 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 
 ### Length limits
 
-| Input | Limit |
-| --- | --- |
-| `title` (all entities) | 255 characters |
-| [Code](bdr/common.md#code) values (type codes, custom field codes, identifier `namespace`) | 100 characters |
-| `externalId` | 100 characters |
-| Email addresses | 254 characters |
-| Name fields on users (`givenNames`, `familyNames`) | 255 characters |
-| `STRING` custom field values | 255 characters, restricted further by the definition's `maxLength` |
-| `TEXT` custom field values | 65,535 characters, restricted further by the definition's `maxLength` |
-
+| Input                                                                                                     | Limit                                                                 |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `title` (all entities)                                                                                    | 255 characters                                                        |
+| [Code](core-api-reference/common.md#code) values (type codes, custom field codes, identifier `namespace`) | 100 characters                                                        |
+| `externalId`                                                                                              | 100 characters                                                        |
+| Email addresses                                                                                           | 254 characters                                                        |
+| Name fields on users (`givenNames`, `familyNames`)                                                        | 255 characters                                                        |
+| `STRING` custom field values                                                                              | 255 characters, restricted further by the definition's `maxLength`    |
+| `TEXT` custom field values                                                                                | 65,535 characters, restricted further by the definition's `maxLength` |
 
 ### Value ranges and formats
 
-| Input | Rule |
-| --- | --- |
+| Input                         | Rule                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------- |
 | `DECIMAL` custom field values | Up to 28 significant digits: at most 18 before and 10 after the decimal point |
-| `INTEGER` custom field values | Signed 64-bit integer range |
-| `HexColorCode` | `#RGB` or `#RRGGBB` |
-| `CountryCode` | Exactly 2 uppercase letters |
-| Latitude and longitude | −90 to 90 and −180 to 180 |
+| `INTEGER` custom field values | Signed 64-bit integer range                                                   |
+| `HexColorCode`                | `#RGB` or `#RRGGBB`                                                           |
+| `CountryCode`                 | Exactly 2 uppercase letters                                                   |
+| Latitude and longitude        | −90 to 90 and −180 to 180                                                     |
 
 ### Batch size limits
 
@@ -94,13 +93,13 @@ The `assetIds` list in asset group mutations (`assetGroupItemsAdd`, `assetGroupI
 
 The API sets no cap on the following, so the practical bound is the query complexity limit and your own restraint:
 
-- The number of identifiers per device
-- The number of custom field definitions per type
-- The number of entries in `customFields.set` and `unset`
-- The number of conditions in the `customFields` filter
-- The number of IDs in one `nodes(ids: [...])` lookup
-- The size of a GeoJSON geometry
-- The number of events in one `scheduleData` value
+* The number of identifiers per device
+* The number of custom field definitions per type
+* The number of entries in `customFields.set` and `unset`
+* The number of conditions in the `customFields` filter
+* The number of IDs in one `nodes(ids: [...])` lookup
+* The size of a GeoJSON geometry
+* The number of events in one `scheduleData` value
 
 There is also no random page access: pagination is cursor-only, with no offset argument. See [Pagination](pagination.md#best-practices) for the reasoning.
 
