@@ -28,7 +28,6 @@ redirects:
   guides/configuring-user-permissions: business-data-repository/guides/README.md
   # product restructure: root pages moved under business-data-repository/ and core-api-reference/ (2026-09-08)
   custom-field-filtering: filtering-and-sorting/custom-field-filtering.md
-  core-api-reference: business-data-repository/api-reference/README.md
   directives: core-api-reference/directives.md
   common: core-api-reference/common.md
   geo-objects: business-data-repository/api-reference/geo-objects.md
@@ -69,7 +68,7 @@ redirects:
   bdr/guides/managing-schedules: business-data-repository/guides/managing-schedules.md
   bdr/guides/working-with-geo-objects: business-data-repository/guides/working-with-geo-objects.md
   bdr/guides/tracking-changes-with-audit: business-data-repository/guides/tracking-changes-with-audit.md
-  bdr/core-api-reference: business-data-repository/api-reference/README.md
+  bdr/core-api-reference: core-api-reference/README.md
   bdr/custom-field-filtering: filtering-and-sorting/custom-field-filtering.md
   bdr/common: core-api-reference/common.md
   bdr/directives: core-api-reference/directives.md
@@ -91,5 +90,7 @@ redirects:
   bdr/catalogs/catalog-reference: business-data-repository/api-reference/catalogs/catalog-reference.md
   bdr/catalogs/tags: business-data-repository/api-reference/catalogs/tags.md
   bdr/catalogs/system: business-data-repository/api-reference/catalogs/system.md
+  # reference hub moved to the space root (2026-09-09)
+  business-data-repository/api-reference: core-api-reference/README.md
   # @specifiedBy target baked into the published GraphQL schema; the page never lived at this path
   core-api-reference/schedules: business-data-repository/api-reference/schedules.md

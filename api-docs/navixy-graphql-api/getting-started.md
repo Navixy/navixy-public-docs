@@ -354,4 +354,4 @@ You sent authenticated requests to Navixy GraphQL API, read your workspace, and 
 * [Optimistic locking](optimistic-locking.md): Use the `version` field to keep concurrent updates from overwriting each other.
 * [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting/): Page through long lists and narrow them down.
 * [Error handling](error-handling.md): The error format, every error code, and how to handle each one.
-* [Core API reference](business-data-repository/api-reference/): Every type and operation, grouped by entity.
+* [Core API reference](core-api-reference/README.md): Every type and operation of the API, grouped by product and category.

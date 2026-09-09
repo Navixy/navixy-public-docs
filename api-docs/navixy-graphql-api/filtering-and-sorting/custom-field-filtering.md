@@ -6,7 +6,7 @@ description: >-
 
 # Custom field filtering and sorting
 
-[Business Data Repository's](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/business-data-repository) assets and geo objects are the entities that support custom fields, and both can be filtered and sorted by their custom field values. This is in addition to the standard `filter` and `orderBy` arguments described in [Filtering and sorting](./).
+[Business Data Repository's](../business-data-repository/overview.md) assets and geo objects are the entities that support custom fields, and both can be filtered and sorted by their custom field values. This is in addition to the standard `filter` and `orderBy` arguments described in [Filtering and sorting](./).
 
 For an overview of custom fields themselves, see [Custom fields](../business-data-repository/api-reference/custom-fields.md).
 
