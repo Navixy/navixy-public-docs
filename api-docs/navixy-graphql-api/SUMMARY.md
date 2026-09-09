@@ -20,7 +20,7 @@
 
 ## Business Data Repository
 
-* [Business Data Repository overview](business-data-repository/overview.md)
+* [Business Data Repository overview](business-data-repository/overview.md "Overview")
 * [Guides](business-data-repository/guides/README.md)
   * [Working with devices](business-data-repository/guides/working-with-devices.md)
   * [Managing device inventory](business-data-repository/guides/managing-device-inventory.md)
@@ -51,9 +51,9 @@
 
 ## Tracking
 
-* [Tracking](tracking/README.md)
+* [Tracking overview](tracking/overview.md "Overview")
 
 ## Developer resources
 
 * [GraphQL Sandbox (Demo)](https://api.navixy.dev/v4/graphql/sandbox)
-* [Public GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-graphql-api/graphql-schema/schema.graphql)
+* [Public GraphQL schema](developer-resources/public-graphql-schema.md)

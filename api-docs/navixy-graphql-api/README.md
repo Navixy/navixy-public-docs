@@ -20,13 +20,7 @@ The API is based on GraphQL. Every request is an HTTP POST to one endpoint, auth
 
 Each product in the platform has its own entry point in the schema: a top-level field of the `Query` and `Mutation` types that groups the operations of that product. The documentation is published product by product as each one becomes available.
 
-| Product                                                                                                                                                                                    | Documentation |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
-| [Business Data Repository](business-data-repository/overview.md): assets, devices and inventories, geo objects, schedules, custom fields, catalogs, and the audit log. Entry point: `bdr`. | Available     |
-| [Tracking](tracking/)                                                                                                                                                                      | Coming soon   |
-| IoT Logic. Updated GraphQL version of [IoT Logic API](https://navixy.com/docs/iot-logic-api/).                                                                                             | Coming soon   |
-| Alerts                                                                                                                                                                                     | Coming soon   |
-| Reports                                                                                                                                                                                    | Coming soon   |
+<table><thead><tr><th width="567">Product</th><th>Documentation</th></tr></thead><tbody><tr><td><a href="business-data-repository/overview.md">Business Data Repository</a>: assets, devices and inventories, geo objects, schedules, custom fields, catalogs, and the audit log.</td><td>Available for preview</td></tr><tr><td><a href="tracking/overview.md">Tracking</a></td><td>Coming soon</td></tr><tr><td>IoT Logic. Updated GraphQL version of <a href="https://navixy.com/docs/iot-logic-api/">IoT Logic API</a>.</td><td>Coming soon</td></tr><tr><td>Alerts</td><td>Coming soon</td></tr><tr><td>Reports</td><td>Coming soon</td></tr></tbody></table>
 
 Navixy Console has a separate API that isn't public yet. Console owns organizations and workspaces, so those entities are read-only in Navixy GraphQL API.
 
@@ -62,13 +56,7 @@ Send the query in the `query` field of a JSON body, with any variables in the `v
 
 These terms apply to every product. Each product section defines its own entities.
 
-| Term         | Definition                                                                                                                                                                                                                                   |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Organization | The Navixy Console account that owns one or more workspaces.                                                                                                                                                                                 |
-| Workspace    | The tenant that owns the business data of one customer: members, assets, devices, geo objects, and schedules. Most queries and mutations take a `workspaceId` argument. Navixy Console creates workspaces, so they are read-only in the API. |
-| Product      | A group of related operations under one entry point, such as `bdr`.                                                                                                                                                                          |
-| Actor        | The party that an access token represents: a user or an integration.                                                                                                                                                                         |
-| Access token | An OpenID Connect token issued by the Navixy identity service. Every request sends one in the `Authorization` header.                                                                                                                        |
+<table><thead><tr><th width="200">Term</th><th>Definition</th></tr></thead><tbody><tr><td>Organization</td><td>The Navixy Console account that owns one or more workspaces.</td></tr><tr><td>Workspace</td><td>The tenant that owns the business data of one customer: members, assets, devices, geo objects, and schedules. Most queries and mutations take a <code>workspaceId</code> argument. Navixy Console creates workspaces, so they are read-only in the API.</td></tr><tr><td>Product</td><td>A group of related operations under one entry point, such as <code>bdr</code>.</td></tr><tr><td>Actor</td><td>The party that an access token represents: a user or an integration.</td></tr><tr><td>Access token</td><td>An OpenID Connect token issued by the Navixy identity service. Every request sends one in the <code>Authorization</code> header.</td></tr></tbody></table>
 
 ## Navigation
 
@@ -85,7 +73,7 @@ The pages at the top of this space apply to every product:
 Each product has its own section with an overview, guides, and the API reference:
 
 * [Business Data Repository](business-data-repository/overview.md)
-* [Tracking](tracking/)
+* [Tracking](tracking/overview.md)
 
 ## Developer resources
 

@@ -14,30 +14,17 @@ The reference states what each operation and field is. For how to use them toget
 
 These two pages belong to no single product. Every product of Navixy GraphQL API uses what they document.
 
-| Page | Covers |
-| --- | --- |
-| [Common resources](common.md) | The `node`/`nodes` lookup queries, the shared scalars (`Code`, `DateTime`, `Long`, `Decimal`, `JSON`, `HexColorCode`), the interfaces (`Node`, `Titled`, `Versioned`, `Customizable`), and the pagination types (`PageInfo`, `CountInfo`). |
-| [Directives](directives.md) | The standard GraphQL directives plus the custom `@trim`. |
+<table><thead><tr><th width="212">Page</th><th>Covers</th></tr></thead><tbody><tr><td><a href="common.md">Common resources</a></td><td>The <code>node</code>/<code>nodes</code> lookup queries, the shared scalars (<code>Code</code>, <code>DateTime</code>, <code>Long</code>, <code>Decimal</code>, <code>JSON</code>, <code>HexColorCode</code>), the interfaces (<code>Node</code>, <code>Titled</code>, <code>Versioned</code>, <code>Customizable</code>), and the pagination types (<code>PageInfo</code>, <code>CountInfo</code>).</td></tr><tr><td><a href="directives.md">Directives</a></td><td>The standard GraphQL directives plus the custom <code>@trim</code>.</td></tr></tbody></table>
 
 ## Business Data Repository
 
 Entry point: `bdr`. For what the product covers and how to start, see the [product overview](../business-data-repository/overview.md).
 
-| Category | Covers |
-| --- | --- |
-| [Workspaces](../business-data-repository/api-reference/workspaces/) | `Workspace` (read-only: Navixy Console owns the lifecycle) and [members](../business-data-repository/api-reference/workspaces/members.md) (`Member`, member CRUD). |
-| [Actors](../business-data-repository/api-reference/actors/) | The `Actor` interface, with [users](../business-data-repository/api-reference/actors/users.md) (`User`, memberships, user catalog items) and [integrations](../business-data-repository/api-reference/actors/integrations.md) (`Integration`, service accounts). |
-| [Devices](../business-data-repository/api-reference/devices/) | `Device`, `DeviceIdentifier`, `DeviceRelation`, the device type/model/vendor/status catalogs, and [inventory](../business-data-repository/api-reference/devices/inventory.md) (`Inventory`, assignment history). |
-| [Assets](../business-data-repository/api-reference/assets/) | `Asset` and `AssetType`, plus [asset groups](../business-data-repository/api-reference/assets/groups.md) (`AssetGroup`, `AssetGroupType`, and `AssetGroupItem` membership history). |
-| [Geo objects](../business-data-repository/api-reference/geo-objects.md) | `GeoObject` and `GeoObjectType` for geofences, points of interest, and routes, with GeoJSON geometry and the `containsPoints` check. |
-| [Schedules](../business-data-repository/api-reference/schedules.md) | `Schedule` and the `ScheduleData` calendar value, compatible with iCalendar. |
-| [Custom fields](../business-data-repository/api-reference/custom-fields.md) | `CustomFieldDefinition`, the `FieldType` catalog, the typed `CustomFieldValue` variants, and the patch inputs used in create and update mutations. |
-| [Audit](../business-data-repository/api-reference/audit.md) | `AuditEvent`, the `auditEvents` and `entityHistory` queries, and the event and source type enums. |
-| [Catalogs](../business-data-repository/api-reference/catalogs/) | `Catalog` and [catalog items](../business-data-repository/api-reference/catalogs/catalog-items.md) (`CatalogItem`, hierarchical `UserCatalogItem`), [tags](../business-data-repository/api-reference/catalogs/tags.md), and [system catalogs](../business-data-repository/api-reference/catalogs/system.md). |
+<table><thead><tr><th width="186">Category</th><th>Covers</th></tr></thead><tbody><tr><td><a href="../business-data-repository/api-reference/workspaces/">Workspaces</a></td><td><code>Workspace</code> (read-only: Navixy Console owns the lifecycle) and <a href="../business-data-repository/api-reference/workspaces/members.md">members</a> (<code>Member</code>, member CRUD).</td></tr><tr><td><a href="../business-data-repository/api-reference/actors/">Actors</a></td><td>The <code>Actor</code> interface, with <a href="../business-data-repository/api-reference/actors/users.md">users</a> (<code>User</code>, memberships, user catalog items) and <a href="../business-data-repository/api-reference/actors/integrations.md">integrations</a> (<code>Integration</code>, service accounts).</td></tr><tr><td><a href="../business-data-repository/api-reference/devices/">Devices</a></td><td><code>Device</code>, <code>DeviceIdentifier</code>, <code>DeviceRelation</code>, the device type/model/vendor/status catalogs, and <a href="../business-data-repository/api-reference/devices/inventory.md">inventory</a> (<code>Inventory</code>, assignment history).</td></tr><tr><td><a href="../business-data-repository/api-reference/assets/">Assets</a></td><td><code>Asset</code> and <code>AssetType</code>, plus <a href="../business-data-repository/api-reference/assets/groups.md">asset groups</a> (<code>AssetGroup</code>, <code>AssetGroupType</code>, and <code>AssetGroupItem</code> membership history).</td></tr><tr><td><a href="../business-data-repository/api-reference/geo-objects.md">Geo objects</a></td><td><code>GeoObject</code> and <code>GeoObjectType</code> for geofences, points of interest, and routes, with GeoJSON geometry and the <code>containsPoints</code> check.</td></tr><tr><td><a href="../business-data-repository/api-reference/schedules.md">Schedules</a></td><td><code>Schedule</code> and the <code>ScheduleData</code> calendar value, compatible with iCalendar.</td></tr><tr><td><a href="../business-data-repository/api-reference/custom-fields.md">Custom fields</a></td><td><code>CustomFieldDefinition</code>, the <code>FieldType</code> catalog, the typed <code>CustomFieldValue</code> variants, and the patch inputs used in create and update mutations.</td></tr><tr><td><a href="../business-data-repository/api-reference/audit.md">Audit</a></td><td><code>AuditEvent</code>, the <code>auditEvents</code> and <code>entityHistory</code> queries, and the event and source type enums.</td></tr><tr><td><a href="../business-data-repository/api-reference/catalogs/">Catalogs</a></td><td><code>Catalog</code> and <a href="../business-data-repository/api-reference/catalogs/catalog-items.md">catalog items</a> (<code>CatalogItem</code>, hierarchical <code>UserCatalogItem</code>), <a href="../business-data-repository/api-reference/catalogs/tags.md">tags</a>, and <a href="../business-data-repository/api-reference/catalogs/system.md">system catalogs</a>.</td></tr></tbody></table>
 
 ## Other products
 
-Tracking, IoT Logic, Alerts, and Reports are in preparation. Their reference pages appear here as each product becomes available.
+Tracking, IoT Logic, Alerts, and Reports are in preparation. Their reference pages will appear here as each product becomes available.
 
 ## How the reference pages are structured
 
@@ -46,7 +33,7 @@ Every category page follows the same order: queries, then mutations, then the ca
 ## Other ways to explore the API
 
 * [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox): Run queries and mutations interactively.
-* [Public GraphQL schema](https://raw.githubusercontent.com/Navixy/navixy-api/refs/heads/master/docs/navixy-graphql-api/graphql-schema/schema.graphql): The full type system in one file.
+* [Public GraphQL schema](../developer-resources/public-graphql-schema.md): The full type system split into several files.
 * [Introspection](../graphql-basics/#introspection): Explore the schema from your own GraphQL client.
 
 ## See also
