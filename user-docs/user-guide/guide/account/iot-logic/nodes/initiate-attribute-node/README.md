@@ -88,6 +88,7 @@ Add mathematical expressions to calculate attribute values.
   **Note**. Click ![image-20250605-115154.png](../../../../../.gitbook/assets/image-20250605-115154.png) inside the **Formula** field to open the list of available attributes and select the needed one. It will be added to the field automatically in the ready-to-use format. For details on autofilling attribute names, see [Autofill attribute names](managing-attributes.md#autofill-attribute-names).
 * Apply mathematical operations based on [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language) to transform values.
 * Use different depth index values to access historical values (the default is 0).
+* Handle values that might be missing. If a value that the formula needs is missing, the formula produces nothing, and the attribute then has no value for that packet. See [Missing values in expressions](../missing-values-in-expressions.md).
 {% endstep %}
 
 {% step %}
@@ -140,6 +141,8 @@ Inside the **Initiate Attribute** node, parameter values are processed according
 
 If you use the same name for a calculated attribute as an existing parameter, the attribute replaces the original parameter in the output data packet.
 
+An attribute whose formula couldn't be calculated has no value for that packet. Nothing marks it as an error. If the attribute uses the same name as a device parameter, the original parameter value stays in the packet instead, so the packet looks normal and the calculation silently didn't happen. See [Missing values in expressions](../missing-values-in-expressions.md).
+
 ## Frequently asked questions
 
 #### Can I reference non-latest values in my calculations?
@@ -163,3 +166,7 @@ Yes. Attributes created earlier in the flow can be referenced in subsequent **In
 #### How do I avoid typos when referencing attribute names in formulas?
 
 Use the autofill feature in the Formula field to select from available attributes. For detailed instructions, see [Autofill attribute names](managing-attributes.md#autofill-attribute-names).
+
+#### Why is one of my calculated attributes sometimes missing?
+
+The formula couldn't be calculated for those packets, most often because a value that it reads was missing from the packet. The attribute then has no value, and no error is reported. See [Missing values in expressions](../missing-values-in-expressions.md).

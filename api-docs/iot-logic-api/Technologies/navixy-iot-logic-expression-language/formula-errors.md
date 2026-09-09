@@ -1,5 +1,5 @@
 ---
-description: "Human-readable explanations for all JEXL formula validation error messages in Navixy IoT Logic, with causes and corrected examples."
+description: "Formula errors in Navixy IoT Logic: every JEXL validation message with its cause and fix, and what happens when a saved formula fails while a message is processed."
 ---
 
 # Formula error reference
@@ -12,7 +12,7 @@ This page maps each raw error message to its cause and shows how to correct the 
 
 ## How formula errors are returned
 
-Formulas are validated when you save the flow, on `flowCreate` and `flowUpdate`, not when a message is processed. A formula the parser rejects fails the whole save: the flow is not stored, and no partial update is applied.
+Formulas are validated when you save the flow, on `flowCreate` and `flowUpdate`, not when a message is processed. A formula the parser rejects fails the whole save: the flow is not stored, and no partial update is applied. For what happens when an already-saved formula fails on a message, see [When a saved formula fails on a message](#when-a-saved-formula-fails-on-a-message).
 
 A rejected request returns HTTP 400 with internal code `292` (`IoT Flow Invalid`). The formula error appears in the `errors` array, with the node it came from and the field inside that node:
 
@@ -36,6 +36,46 @@ A rejected request returns HTTP 400 with internal code `292` (`IoT Flow Invalid`
 `parameters` points at the field holding the bad formula: `data.condition` for a Logic node, `data.items[0].value` for the first calculated attribute of an Initiate Attribute node. The `1:7` prefix is the line and column where parsing failed, so a formula rejected at `1:7` failed at its seventh character.
 
 For the full error code list, see [Common error codes](../../technical-details/#common-error-codes).
+
+## When a saved formula fails on a message
+
+Validation at save time checks that the formula parses, that `value()` indexes are in range, and that every geofence ID exists and is readable. It doesn't check the formula against the data of the device, so it can't tell whether an attribute the formula reads is ever actually sent. A formula that fails on every real message therefore saves without an error. The flow saving cleanly is not evidence that the formula works.
+
+At runtime a formula that fails produces no value, and nothing reports the failure:
+
+| Where | What happens |
+| --- | --- |
+| The outgoing data packet | The attribute has no value for that message. |
+| The stored attribute history | Data Stream Analyzer records the message under `all_fields` with a `null` value, and omits it from `nonnull_fields`. |
+| A `logic` node condition | Any result other than `true` takes the `else` path, so a failed condition routes to `else`. The node leaves its own boolean attribute out of the packet as well. |
+| The API | No response field, no event, and no counter records it. `flowRead` returns the flow unchanged. |
+| Data Stream Analyzer | With null values excluded, the attribute keeps the value from the last message that produced one, together with that message's timestamp. Include null values to see the failures. |
+
+Compare the empty attribute with the attributes that its formula reads. If those have values and the calculated one doesn't, the formula failed. The device is not the cause.
+
+### How to tell a failure from a real result
+
+An attribute holding `false` was calculated. An attribute with no value either failed or was never calculated. Two ways to tell them apart:
+
+* A `logic` node stores `false` under its `data.name` when the condition really is `false`, and stores nothing when the condition failed. A stored `false` therefore proves that the condition was evaluated.
+* In the `iot_monitor` WebSocket event, a message that produced no value adds a `null` entry under `all_fields` and adds nothing under `nonnull_fields`. Comparing the two separates "no value on this message" from "never had a value". See [Data Stream Analyzer event](../../Websocket-access-for-DSA.md).
+
+### Writing a formula that survives a missing attribute
+
+Compare against the value that you expect instead of relying on the attribute being a usable boolean or number:
+
+| Instead of | Write | Why |
+| --- | --- | --- |
+| `door_open || hood_open` | `door_open == true || hood_open == true` | `==` returns a real `true` or `false` for a missing attribute, so the chain keeps working |
+| `ignition && inGeofence(123)` | `ignition == true && inGeofence(123) == true` | Either operand can be missing. A missing operand that `&&` actually reads stops the condition |
+| `!door_closed` | `door_closed == false` | `!` rejects a missing operand, `==` doesn't |
+| `temperature + 10 > 30` | `temperature != null && temperature + 10 > 30` | `&&` never reads the arithmetic once the guard is `false` |
+| `speed ?: 0` | `speed ?? 0` | `??` substitutes only for `null`, while `?:` also substitutes for `false`, `0`, and empty text |
+| `(value('s',0,'all') * 2) ?? 0` on a name | `(s ?? 0) * 2` | A fallback around a calculation catches the method path only. Around the name it works in both |
+
+The guard has to come first. `&&` reads its operands from left to right, so `temperature + 10 > 30 && temperature != null` fails before the guard is ever read.
+
+For the operator-by-operator rules, see [Null propagation](expression-syntax-reference.md#null-propagation). For the same behavior written for the flow builder rather than the API, see [Missing values in expressions](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/missing-values-in-expressions) in the Navixy user documentation.
 
 ## Quick reference
 
@@ -227,9 +267,9 @@ value(attribute_name, index, validation)
 `genTime()` and `srvTime()` take the same three arguments and reject an unrecognised validation mode the same way, reporting `JEXL error : genTime` or `JEXL error : srvTime`.
 
 {% hint style="warning" %}
-**Only `value()` range-checks its index.** `genTime()` and `srvTime()` accept any index, including one past the 12 values that are retained. The flow saves without an error, and the formula then returns null for every message. The attribute is created, but every reading resolves to null, and nothing reports a problem at save time or at runtime.
+**Only `value()` range-checks its index.** `genTime()`, `srvTime()`, `inGeofence()`, and `geofenceName()` accept any index, including one past the 12 values that are retained. The flow saves without an error, and the formula then returns null for every message. The attribute is created, but every reading resolves to null, and nothing reports a problem at save time or at runtime.
 
-`genTime('speed', 100, 'valid')` saves and stays empty forever. `genTime('speed', 11, 'valid')` returns a timestamp. Keep the index within 0-11 for all three functions, and if an attribute stays empty for no visible reason, check its index first.
+`genTime('speed', 100, 'valid')` saves and stays empty forever, and so does `inGeofence(123, 12)`. `genTime('speed', 11, 'valid')` returns a timestamp. Keep the index within 0-11 for all of these functions, and if an attribute stays empty for no visible reason, check its index first.
 {% endhint %}
 
 For details on how each parameter behaves, see [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) in the Expression syntax reference.

@@ -54,7 +54,7 @@ Within IoT Logic, Navixy Expression Language allows calculations on actual data 
 * **Historical values:** Access previous readings using the `value()` function with parameters for historical depth and validation mode. Navixy stores the last 12 values per attribute, addressed by index 0 to 11, for trend analysis and change detection. Those values are kept for up to 30 days after the most recent message from a device, as described in [Time and data access functions](expression-syntax-reference.md#time-and-data-access-functions). [Full syntax](expression-syntax-reference.md#full-syntax-historical-and-advanced) is needed.
 
 {% hint style="warning" %}
-Attribute names in expressions must exactly match device-transmitted names (case-sensitive). Mismatched names prevent calculation execution.
+Attribute names in expressions must exactly match device-transmitted names (case-sensitive). A mismatched name resolves to `null`, exactly like a name that the message doesn't include, and the operator that reads that `null` then stops the whole formula. Nothing reports the mismatch, at save time or at runtime.
 {% endhint %}
 
 For complete syntax details, see [Expression syntax reference](expression-syntax-reference.md).
@@ -64,7 +64,7 @@ For complete syntax details, see [Expression syntax reference](expression-syntax
 The expression language handles numbers, strings, booleans, hexadecimal literals, and null values. Null represents missing or undefined data from devices.
 
 {% hint style="info" %}
-**Null propagation:** Null values propagate through expressions without causing errors, maintaining processing continuity even with unreliable device connectivity. Most operators return null when an operand is null. Equality (`==`, `!=`) and the pattern-matching operators are exceptions and always resolve to a real `true` or `false`.
+**Missing values:** An attribute name that the message doesn't include resolves to `null`. Equality (`==`, `!=`) and the containment operators (`=~`, `!~`) return a real `true` or `false` for it. Every other operator stops the evaluation, and the formula produces no value at all. The starts-with and ends-with operators are the one exception that depends on syntax. See [Null propagation](expression-syntax-reference.md#null-propagation).
 {% endhint %}
 
 For detailed type behavior and null handling rules, see [Data types](expression-syntax-reference.md#data-types-and-type-handling) in the Expression syntax reference.
@@ -246,5 +246,7 @@ Expression results integrate with the Navixy platform through multiple channels:
 
 * [Expression syntax reference](expression-syntax-reference.md)
 * [Formula error reference](formula-errors.md)
+* [Geofence functions](../../technical-details/geofence-functions.md)
+* [Missing values in expressions](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/missing-values-in-expressions) in the Navixy user documentation
 * [Complete IoT Logic API reference](../../resources/api-reference/)
 * [IoT Logic user guide](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic)

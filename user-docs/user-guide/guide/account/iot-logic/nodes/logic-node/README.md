@@ -127,7 +127,7 @@ After you configured the node, you need to establish connections for the validat
 {% endstepper %}
 
 {% hint style="warning" %}
-Missing data often routes to the ELSE path, but not always. A `!=` comparison against a missing value and a non-null literal evaluates to `true` and routes to THEN instead, and so do the negated pattern operators (`!~`, `!^`, `!$`). Syntax errors also route to ELSE, but store the attribute as `null`, not `false`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full set of null-safe patterns and operator tables.
+Missing data often routes to the ELSE path, but not always. A `!=` comparison against a missing value and a non-null literal evaluates to `true` and routes to THEN instead, and so do `!~`, and `!^` and `!$` when the value comes from `value()`. Syntax errors also route to ELSE, but store the attribute as `null`, not `false`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full set of null-safe patterns and operator tables.
 {% endhint %}
 
 For detailed information on expression syntax, operators, and data flow behavior, see [IF/THEN Logic expressions and syntax](logic-node-expressions-and-syntax.md).
@@ -148,7 +148,7 @@ The **IF/THEN Logic** node creates two distinct output paths based on the expres
 ### ELSE connection (<mark style="color:red;">red</mark>)
 
 * **Activates when**: The logical expression returns `false`, evaluates to `null`, or can't be evaluated.
-* **Exceptions to watch for**: Most missing-value comparisons route here, but `!=` against a missing value and a non-null literal routes to THEN instead, and so do the negated pattern operators (`!~`, `!^`, `!$`) against a missing value.
+* **Exceptions to watch for**: Most missing-value comparisons route here. A `!=` comparison against a missing value and a non-null literal routes to THEN instead, and so do `!~`, and `!^` and `!$` on a missing `value()` result.
 * **Stored value isn't always `false`**: Routing to ELSE doesn't guarantee the boolean attribute is stored as `false`. Relational comparisons (`<`, `<=`, `>`, `>=`) and a bare missing-value reference land on ELSE with the attribute left `null`. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
 * **Connection requirement**: Optional. Use only when you need to handle negative results.
 * **Error handling**: Processes cases where expressions can't be evaluated due to syntax errors or invalid data types. Missing-data routing depends on the operator. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing).
@@ -190,7 +190,7 @@ IF/THEN Logic node results appear as boolean attributes in the [Data Stream Anal
 
 #### Why did my condition fire even though the attribute has no value yet?
 
-Most likely the condition uses `!=` against a non-null literal, or a negated pattern operator like `!~`, `!^`, `!$`, on a value that's never been received. These operators treat "no value" as different from the literal you're comparing against, so they evaluate to `true` and route to THEN. That's the opposite of what you'd expect from a safe default. Add a presence guard (`value('attr', 0, 'all') != null && ...`) or an explicit `== null` check if the condition should only fire once the attribute has a real value. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full operator-by-operator breakdown.
+Most likely the condition uses `!=` against a non-null literal, or `!~`, on a value that's never been received. Both operators treat "no value" as different from the literal that you're comparing against, so they evaluate to `true` and route to THEN. A safe default would do the opposite. The `!^` and `!$` operators do the same on a missing `value()` result, and resolve to `null` when the attribute is referenced by name. Add a presence guard (`value('attr', 0, 'all') != null && ...`) or an explicit `== null` check if the condition should only fire once the attribute has a real value. See [Missing values and null routing](logic-node-expressions-and-syntax.md#missing-values-and-null-routing) for the full operator-by-operator breakdown.
 
 #### Can I chain multiple IF/THEN Logic nodes together?
 

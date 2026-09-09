@@ -54,6 +54,8 @@ IoT Logic uses a built-in expression language based on JEXL (Java Expression Lan
 
 For the full syntax reference and function catalog, see the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-iot-logic-expression-language) documentation.
 
+Calculation formulas and condition formulas both work on the values that a GPS device sends. A missing value can stop a formula from producing anything. See [Missing values in expressions](nodes/missing-values-in-expressions.md).
+
 ### Data Stream Analyzer
 
 Data Stream Analyzer is a monitoring tool offering real-time troubleshooting capabilities for your data flow. The Analyzer provides a detailed view of incoming device data, making it the primary instrument to assess data integrity. On top of that, it has the potential to minimize operational risks, enhance decision-making, and improve service quality by allowing you to quickly identify data inconsistencies, optimize device performance, and maintain seamless operations.
@@ -90,4 +92,6 @@ For complete API documentation, parameters, request/response formats, and code e
   * [Device action](nodes/action-node.md)
   * [Webhook](nodes/webhook-node.md)
   * [Output Endpoint node](nodes/output-endpoint-node.md)
+  * [Geofence functions](nodes/geofence-functions.md)
+  * [Missing values in expressions](nodes/missing-values-in-expressions.md)
 * [Data Stream Analyzer](data-stream-analyzer.md)

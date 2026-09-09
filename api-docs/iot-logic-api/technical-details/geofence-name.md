@@ -81,8 +81,10 @@ geofenceName() ?: 'Outside all geofences'
 
 When `geofenceName()` returns `null`, this formula produces `Outside all geofences` instead of an empty value.
 
+`?:` substitutes the right side for `null` and also for `false`, `0`, and empty text. To substitute only for `null`, use `??` instead: `geofenceName() ?? 'Outside all geofences'`. For a typical geofence name the two behave the same, because the function returns either a name or `null`.
+
 {% hint style="warning" %}
-Only `value()` rejects an `index` above 11 at save time. `geofenceName()`, `genTime()`, and `srvTime()` accept any index, save without an error, and then return `null` for every message. The attribute is created and stays empty, and nothing reports a problem. Keep `index` within 0 to 11. See [Invalid value() arguments](../Technologies/navixy-iot-logic-expression-language/formula-errors.md#invalid-value-arguments).
+Only `value()` rejects an `index` above 11 at save time. `geofenceName()`, `genTime()`, `srvTime()`, and `inGeofence()` accept any index and save without an error, and the attribute then stays empty for every message. The attribute is created and stays empty, and nothing reports a problem. Keep `index` within 0 to 11. See [Invalid value() arguments](../Technologies/navixy-iot-logic-expression-language/formula-errors.md#invalid-value-arguments).
 {% endhint %}
 
 ## How the geofence search works
@@ -156,7 +158,7 @@ A `logic` node can branch on the name. The condition below sends messages record
 }
 ```
 
-The `!=` comparison is safe against `null`, because the equality operators always return a real `true` or `false`. The relational operators `<`, `<=`, `>`, and `>=` return `null` when an operand is `null`, so don't use them to test the result. See [Null propagation](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#null-propagation).
+The `!=` comparison is safe against `null`, because the equality operators always return a real `true` or `false`. The relational operators `<`, `<=`, `>`, and `>=` reject a `null` operand and stop the whole formula, so don't use them to test the result. See [Null propagation](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#null-propagation).
 
 ## Rejection when the feature is missing
 
@@ -212,13 +214,14 @@ Nothing in the API response or in Data Stream Analyzer marks the difference betw
 
 * Pass a tag whenever the flow only needs a known set of geofences. The search costs less, and it keeps working on accounts above the 15,000-geofence limit.
 * Add a `?:` fallback when the attribute feeds an external system that treats an empty value as an error.
-* Compare with `==` or `!=` in a `logic` node condition, never with `<` or `>`, which return `null` for a `null` operand.
+* Compare with `==` or `!=` in a `logic` node condition, never with `<` or `>`. Those operators stop the whole formula on a `null` operand.
 * Type the call by hand. Neither the formula autocomplete of the flow builder nor `flow/sources/attribute/list` offers `geofenceName`, and the geofence picker inserts only the ID-based geofence functions.
 * Write the name as `geofenceName`. The spelling `geofence_name` is not accepted, and a formula that uses it fails validation with `unsolvable function/method 'geofence_name'`.
 * Call the function directly. Wrapping it in `value()` does not work, because the first parameter of `value()` is an attribute name rather than an expression: `value("geofenceName()", 0, 'all')` looks for an attribute literally named `geofenceName()` and returns `null` for every message.
 
 ## See also
 
+* [Geofence functions](geofence-functions.md) for `inGeofence()`, `enterGeofence()`, and `leaveGeofence()`, which test one geofence by ID.
 * [Nodes](nodes.md) for the full structure of the `initiate_attributes` and `logic` nodes.
 * [Expression syntax reference](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md) for operators, data types, and null handling.
 * [Formula error reference](../Technologies/navixy-iot-logic-expression-language/formula-errors.md) for every formula validation message.

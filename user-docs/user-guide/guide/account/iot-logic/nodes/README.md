@@ -12,6 +12,8 @@ The **Nodes** pane on the canvas groups these node types into four labeled secti
 
 Two of these nodes can also reference your Navixy geofences directly, so a flow can branch on whether a device is inside an area or record the name of the area it is in. See [Geofence functions](geofence-functions.md).
 
+Formulas in an **Initiate Attribute** node and conditions in an **IF/THEN Logic** node work on the values that a GPS device sends. A missing value can stop a formula from producing anything. See [Missing values in expressions](missing-values-in-expressions.md).
+
 {% hint style="info" %}
 **Device action** and **Webhook** are terminal nodes, they perform an action when triggered but don't pass data forward, so no outgoing connections can be added after them. If you place a terminal node on a conditional branch of an **IF/THEN Logic** node, connect the Logic node directly to an **Output Endpoint** node in parallel to ensure data continues flowing through the other branch.
 {% endhint %}

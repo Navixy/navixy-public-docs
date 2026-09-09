@@ -34,6 +34,7 @@
         * [Webhook](guide/account/iot-logic/nodes/webhook-node.md)
         * [Output Endpoint](guide/account/iot-logic/nodes/output-endpoint-node.md)
         * [Geofence functions](guide/account/iot-logic/nodes/geofence-functions.md)
+        * [Missing values in expressions](guide/account/iot-logic/nodes/missing-values-in-expressions.md)
       * [Data Stream Analyzer](guide/account/iot-logic/data-stream-analyzer.md)
     * [Tags](guide/account/tags.md)
     * [Custom fields](guide/account/custom-fields.md)

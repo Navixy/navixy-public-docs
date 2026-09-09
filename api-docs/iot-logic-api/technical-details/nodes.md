@@ -198,6 +198,10 @@ To find more examples of formulas, see [Calculation examples](https://app.gitboo
 
 Returns the name of the geofence that contains the position of the message, as a string. All three parameters are optional. The function requires the account feature `iot_logic_geofence_search`, and without it `flowCreate` and `flowUpdate` reject the flow. For the parameters, the return values, and the feature, see [Geofence name function](geofence-name.md).
 
+**`inGeofence(id, index, validation)`, `enterGeofence(id)`, `leaveGeofence(id)`**
+
+Test one geofence named by its numeric ID. `inGeofence()` returns whether the device is inside it, and `enterGeofence()` and `leaveGeofence()` return whether the device has just crossed into or out of it. Each returns a boolean, or `null` when it can't answer, for example when the message includes no position. `enterGeofence()` and `leaveGeofence()` take the ID and nothing else. Compare the result with `== true` when the call is one operand of `&&` or `||`. For the parameters, the return values, and every case that gives `null`, see [Geofence functions](geofence-functions.md).
+
 #### Historical data access (`index` )
 
 IoT Logic maintains 12 values per parameter, addressed by index 0 to 11:
@@ -206,7 +210,7 @@ IoT Logic maintains 12 values per parameter, addressed by index 0 to 11:
 * Index 1-10: previous values
 * Index 11: oldest available value
 
-Index 12 or higher is out of range. A formula that uses it fails validation with a `JEXL error : value` message and cannot be saved.
+Index 12 or higher is out of range. A formula that uses it fails validation with a `JEXL error : value` message and cannot be saved. This applies to `value()` alone. `genTime()`, `srvTime()`, `inGeofence()`, and `geofenceName()` accept any index and save without an error, and the attribute then stays empty for every message.
 
 {% hint style="info" %}
 Short syntax is also supported for attribute names in formulas. When referencing only the latest value of an attribute, you can omit the full `value()` function syntax and quotation marks. For example, the temperature conversion formula can be written as `temperature*1.8 + 32` instead of `value('temperature', 0, 'all')*1.8 + 32`.
@@ -261,23 +265,30 @@ The Logic node supports two output connection types:
 
 **ELSE connection (`else_edge`)**
 
-* Activates when the expression evaluates to `false`, `null`, or encounters errors
+* Activates when the expression evaluates to `false`, when it produces no value, or when it fails
 * Optional connection
 
 #### Null operand behavior in conditions
 
 A missing value doesn't route to ELSE the same way for every operator, and the stored attribute isn't always coerced to `false`:
 
-| Operator family | Example | Result | Routes to |
-| --- | --- | --- | --- |
-| Relational (`<`, `<=`, `>`, `>=`) | `null > 0` | `null` | ELSE |
-| Equality (`==`, `!=`) | `null != 5` | `true` | THEN |
-| Pattern matching (`=~`, `!~`, `=^`, `!^`, `=$`, `!$`) | `null =~ '.*'` | `false` | ELSE |
-| Logical AND (`&&`) | `null && true` | `null` | ELSE |
-| Logical OR (`||`), null operand evaluated first | `null || true` | `null` | ELSE |
-| Logical OR (`||`), true operand evaluated first | `true || null` | `true` | THEN |
+| Operator family | Example | Result | Stored under `data.name` | Routes to |
+| --- | --- | --- | --- | --- |
+| Equality (`==`, `!=`) | `null != 5` | `true` | `true` | THEN |
+| Containment (`=~`, `!~`) | `null =~ '.*'` | `false` | `false` | ELSE |
+| Starts with, ends with, attribute by name | `attr =^ 'AB'` | no value | nothing | ELSE |
+| Starts with, ends with, `value()` result | `value('attr',0,'all') =^ 'AB'` | `false` | `false` | ELSE |
+| Relational (`<`, `<=`, `>`, `>=`) | `null > 0` | no value | nothing | ELSE |
+| Arithmetic (`+`, `-`, `*`, `/`, `%`) | `null + 1 > 0` | no value | nothing | ELSE |
+| Negation (`!`) | `!null` | no value | nothing | ELSE |
+| Logical AND, left operand `false` | `false && null` | `false` | `false` | ELSE |
+| Logical AND, null operand read | `true && null`, `null && true` | no value | nothing | ELSE |
+| Logical OR, left operand `true` | `true || null` | `true` | `true` | THEN |
+| Logical OR, null operand read | `false || null`, `null || true` | no value | nothing | ELSE |
 
-A `!=` comparison against a missing value, for example, evaluates to `true` and routes to THEN, which can be surprising for a condition meant to detect a specific value. See [Null propagation](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#null-propagation) for why each operator family behaves this way.
+A `!=` comparison against a missing value, for example, evaluates to `true` and routes to THEN. That is surprising for a condition meant to detect a specific value. The containment operators `=~` and `!~` accept a missing value and return a real boolean. The starts-with and ends-with operators do so only when the missing value comes from `value()`, and stop the evaluation when the attribute is referenced by name. See [Attribute name versus value()](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#attribute-name-versus-value).
+
+Two conditions that both route to ELSE can still be told apart, because the node stores `false` only when it evaluated the condition. An empty value under `data.name` means that the condition stopped. See [Null propagation](../Technologies/navixy-iot-logic-expression-language/expression-syntax-reference.md#null-propagation) for why each operator family behaves this way, and [When a saved formula fails on a message](../Technologies/navixy-iot-logic-expression-language/formula-errors.md#when-a-saved-formula-fails-on-a-message) for what happens to the attribute.
 
 #### Common topology patterns
 
@@ -341,7 +352,7 @@ Here's a quick reference:
 
 * The Logic node creates a boolean attribute using the `data.name` value.
 * This attribute appears in Data Stream Analyzer and can be referenced by subsequent nodes.
-* Any non-`true` result, including evaluation errors, routes through the ELSE path. See [Null operand behavior in conditions](#null-operand-behavior-in-conditions) for how this plays out per operator.
+* Any non-`true` result, including evaluation errors, routes through the ELSE path. A condition that stopped stores nothing under `data.name`, while a condition that is genuinely `false` stores `false`. That difference is how you tell the two apart. See [Null operand behavior in conditions](#null-operand-behavior-in-conditions) for how this plays out per operator.
 * Multiple Logic nodes can be chained together for complex decision trees.
 
 ## Webhook node (`webhook`)

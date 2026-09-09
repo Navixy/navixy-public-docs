@@ -111,9 +111,11 @@ Syntax option doesn't affect the formula itself! You can also combine short and 
 
 Formulas can also call the geofence functions, which read the device position against the geofences in your account. `geofenceName()` returns the name of the geofence the device is in, as text, so it fits an attribute value directly. See [Geofence functions](../geofence-functions.md).
 
+Both syntax options can read a value that isn't there. A formula that then calculates with that value produces nothing, and the attribute is left out of the data packet. See [Missing values in expressions](../missing-values-in-expressions.md).
+
 ### Short syntax
 
-Short formula option accesses the latest attribute value, without checking validity. It is handy when you don't need historical values in a formula and don't want to filter out `null` values.
+Short formula option accesses the latest attribute value, without checking validity. Use it when you don't need historical values in a formula. The value that it reads can be empty, and most operators can't calculate with an empty value.
 
 {% hint style="info" %}
 [Autofill ](managing-attributes.md#autofill-attribute-names)feature always uses the short syntax.

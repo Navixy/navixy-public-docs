@@ -166,7 +166,7 @@ Use parentheses to override precedence or clarify complex expressions.
 | `srvTime(attribute_name, index, validation)` | <p><code>attribute_name</code> (String)</p><p><code>index</code> (Integer, 0-11)</p><p><code>validation</code> (String: <code>'all'</code> or <code>'valid'</code>)</p> | Server-side reception timestamp (milliseconds) for attribute value. Default: `now()`  |
 
 {% hint style="warning" %}
-All three functions read the same 12 stored values, so 0-11 is the whole usable range. `value()` enforces it and rejects a higher index when you save the flow. `genTime()` and `srvTime()` do not: they accept any index, save without complaint, and then return null for every message, leaving the attribute permanently empty with no error anywhere. See [Invalid value() arguments](formula-errors.md#invalid-value-arguments).
+All three functions read the same 12 stored values, so 0-11 is the whole usable range. `value()` enforces it and rejects a higher index when you save the flow. `genTime()`, `srvTime()`, `inGeofence()`, and `geofenceName()` do not: they accept any index, save without complaint, and then return null for every message, leaving the attribute permanently empty with no error anywhere. See [Invalid value() arguments](formula-errors.md#invalid-value-arguments).
 {% endhint %}
 
 {% hint style="info" %}
@@ -259,41 +259,83 @@ Use these functions to combine multiple attribute values into a single string. T
 
 ### Null propagation
 
-**Rule:** Null values propagate through expressions without errors, but the result depends on the operator family:
+**Rule:** An attribute name that the message doesn't include resolves to `null` rather than failing. Each operator then decides what to do with that `null`:
 
-* Arithmetic (`+`, `-`, `*`, `/`, `%`) and the relational operators (`<`, `<=`, `>`, `>=`, the four operators that compare order rather than equality) return `null` when either operand is null.
-* Logical operators (`&&`, `||`) can also return `null`. A null operand isn't coerced to `false`. Depending on operand order, it can make the whole expression `null` even when the other operand is `true`.
-* Equality (`==`, `!=`) and the pattern-matching operators (`=~`, `!~`, `=^`, `!^`, `=$`, `!$`) are the exception: they always resolve to a real `true` or `false`, never `null`, regardless of which operand is null.
+* Equality (`==`, `!=`) and the containment operators (`=~`, `!~`) accept a `null` operand and return a real `true` or `false`, on either side and in either syntax.
+* The starts-with and ends-with operators (`=^`, `!^`, `=$`, `!$`) depend on how the `null` reached them. See [Attribute name versus value()](#attribute-name-versus-value).
+* Every other operator rejects it in both syntaxes: arithmetic (`+`, `-`, `*`, `/`, `%`), the bitwise operators (`&`, `|`, `^`), the relational operators (`<`, `<=`, `>`, `>=`), and `!`. The engine's null check runs before the arithmetic method, so it stops the evaluation instead of choosing a result.
+* `&&` and `||` read their operands from left to right and stop as soon as one operand decides the answer. A `null` that they never read has no effect. A `null` that they do read stops the evaluation, on either side.
+* A `math:` function that receives a `null` argument stops the evaluation, because `java.lang.Math` has no overload that accepts `null`. The `util:` functions accept `Object` and return `null` instead, so the operator that reads that `null` decides what happens next.
+
+An operator that stops the evaluation stops the **whole formula**, not just the failing term. IoT Logic contains the failure, and the formula produces no value at all. No value is not the same as `false`. `(temperature + 10) > 30` produces nothing when `temperature` is missing, and a `logic` node with that condition takes the `else` path without storing a result. For what happens next, see [When a saved formula fails on a message](formula-errors.md#when-a-saved-formula-fails-on-a-message).
+
+In this table, "no value" means that the evaluation stopped: the attribute has no value for that message, and a `logic` node condition routes to `else`.
 
 | Expression | Result | Notes |
 | --- | --- | --- |
-| `null + 5` | `null` | Arithmetic with null |
-| `temperature + 10` | `null` | If temperature is null |
-| `null == null` | `true` | Null equality |
-| `null != 5` | `true` | Equality with a non-null literal: deterministic, not null |
-| `null > 0` | `null` | Relational operator: propagates null, not `false` |
-| `null =~ '.*'` | `false` | Pattern match: deterministic even though `.*` also matches an empty string |
-| `null && true` | `null` | Neither operand order short-circuits past a null with `&&` |
-| `null || true` | `null` | Left operand null: the result stays null even though the right operand is `true` |
-| `true || null` | `true` | Left operand true: short-circuits past the null right operand |
+| `null == null` | `true` | Equality accepts a `null` operand |
+| `null != 5` | `true` | A real result, not an empty one |
+| `null =~ '.*'` | `false` | Containment accepts a `null` operand |
+| `null =~ ['x','y']` | `false` | The same for a list on the right |
+| `null !~ 'AB'` | `true` | The negated form of the same operator |
+| `attr =^ 'AB'` | no value | Starts-with on an attribute referenced by name, and the same for `!^`, `=$`, `!$` |
+| `value('attr',0,'all') =^ 'AB'` | `false` | The same operator on a `null` returned by a method |
+| `value('attr',0,'all') !^ 'AB'` | `true` | The negated form of the same call |
+| `null + 5` | no value | Arithmetic rejects a `null` operand |
+| `temperature + 10` | no value | The same, when the message doesn't include `temperature` |
+| `null > 0` | no value | Relational operators reject a `null` operand. The result is not `false` |
+| `null & 1` | no value | Bitwise operators reject a `null` operand |
+| `!door_closed` | no value | `!` rejects a `null` operand. A missing flag doesn't become `true` |
+| `false && null` | `false` | `&&` stops at the first `false` and never reads the right operand |
+| `true && null` | no value | `&&` reads the right operand and rejects the `null` |
+| `null && true` | no value | `&&` rejects the `null` that it reads first |
+| `true || null` | `true` | `||` stops at the first `true` and never reads the right operand |
+| `false || null` | no value | `||` reads the right operand and rejects the `null` |
+| `null || true` | no value | `||` rejects the `null` that it reads first |
+| `(temperature + 10) > 30` | no value | The whole formula stops, so the result is not `false` either |
+| `math:round(temperature)` | no value | A `math:` function stops on a `null` argument |
+| `util:hex(temperature)` | `null` | A `util:` function returns `null` instead |
 
 {% hint style="warning" %}
-The relational operators diverge from stock Apache Commons JEXL here. In the [Apache Commons JEXL reference](https://commons.apache.org/proper/commons-jexl/reference/syntax.html) and its `JexlArithmetic` implementation, `lessThan`, `greaterThan`, `lessThanOrEqual`, and `greaterThanOrEqual` return `false` when either operand is null. IoT Logic returns `null` instead, confirmed by testing against the live platform. Equality and the pattern-matching operators match stock JEXL's documented null behavior. Only the relational family differs.
+The `JexlArithmetic` methods in [Apache Commons JEXL](https://commons.apache.org/proper/commons-jexl/reference/syntax.html) return `false` for a `null` operand in `lessThan`, `greaterThan`, `lessThanOrEqual`, and `greaterThanOrEqual`. Those methods are not what you observe, because the engine's null check runs first and stops the evaluation. What reaches the data is an attribute with no value, never `false`.
+
+The check consults `JexlArithmetic.isStrict(JexlOperator)`, which exempts `EQ` and `CONTAINS`. That is why `==`, `!=`, `=~` and `!~` accept a `null` operand while the relational, arithmetic and bitwise operators and `!` do not. `STARTSWITH` and `ENDSWITH` are not exempt either, but the check reaches them only on one of the two code paths, which is why those four operators depend on the syntax. Confirmed by testing against the live platform for `+`, `-`, `*`, `/`, `&`, `<`, `<=`, `!`, `=^`, `!^`, `=$`, `!$`, `=~`, `!~`, `==` and `!=`, in both syntaxes.
 {% endhint %}
 
-For how these results affect branching in a Logic node's condition, see [IF/THEN Logic node](../../technical-details/nodes.md#logic-node-logic).
+For how these results affect branching in a Logic node's condition, see [IF/THEN Logic node](../../technical-details/nodes.md#logic-node-logic). For what happens to the attribute itself, see [When a saved formula fails on a message](formula-errors.md#when-a-saved-formula-fails-on-a-message). For the same behavior written for the flow builder rather than the API, see [Missing values in expressions](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/iot-logic/nodes/missing-values-in-expressions) in the Navixy user documentation.
 
-#### Error conditions resulting in null
+#### Attribute name versus value()
 
-| Condition               | Expression example                 | Result                         |
-| ----------------------- | ---------------------------------- | ------------------------------ |
-| Invalid function input  | `util:hexToLong("invalid")`        | `null`                         |
-| Invalid BCD             | `util:fromBcd(0x99A0)`             | `null`                         |
-| Missing historical data | `value('temperature', 5, 'valid')` | `null` (if < 5 valid readings) |
-| Type mismatch           | `"text" + 123`                     | `null`                         |
+`=^`, `!^`, `=$` and `!$` give different results for the same missing attribute, depending on how the formula reads it:
+
+| Expression | Result | Why |
+| --- | --- | --- |
+| `driver_id =^ 'AB'` | no value | The engine resolves the name, finds `null`, and checks the parent operator. `STARTSWITH` is strict, so it stops there |
+| `value('driver_id',0,'all') =^ 'AB'` | `false` | The `null` is a method return, so no name resolution happens. `JexlArithmetic.startsWith` runs and reports no match |
+| `value('driver_id',0,'all') !^ 'AB'` | `true` | The negated form of the same result |
+
+No other operator behaves this way. Arithmetic, bitwise, relational and `!` run the null check on both paths, so they stop in either syntax, and `==`, `!=`, `=~` and `!~` are exempt on both.
+
+The two fallback forms split the same way, because each catches only the failure that the method path raises. `(value('x',0,'all') + 1) ?? 0` returns `0`, while `(x + 1) ?? 0` produces no value. A fallback applied directly to a name, such as `x ?? 0`, works in both forms, because no operator runs before it.
+
+Short syntax is what the attribute picker inserts in the flow builder, so a saved flow is more likely to hold the first form than the second.
+
+#### Functions that return null
+
+These functions return `null` as a normal result rather than stopping the evaluation. The `null` then behaves like any other `null`, and the operator that reads it decides what happens next.
+
+`genTime()` and `srvTime()` are not in this group. An index above the supported range makes them stop the evaluation instead, so `genTime('speed', 12, 'all') == null` produces no value, while `inGeofence(123, 12) == null` returns `true`. Either way the attribute stays empty for every message.
+
+| Condition                       | Expression example                   | Result                         |
+| ------------------------------- | ------------------------------------ | ------------------------------ |
+| Invalid function input          | `util:hexToLong("invalid")`          | `null`                         |
+| Invalid BCD                     | `util:fromBcd(0x99A0)`               | `null`                         |
+| Missing historical data         | `value('temperature', 5, 'valid')`   | `null` (if < 5 valid readings) |
+| Index above the supported range | `inGeofence(123, 12)`, `geofenceName('', 12)` | `null` for every message |
+| No position in the message      | `inGeofence(123)`, `geofenceName()`  | `null`                         |
 
 {% hint style="danger" %}
-Mismatched attribute names prevent calculation execution (no null returned; calculation skipped).
+An attribute name that doesn't match the name that the device sends resolves to `null`, exactly like a name that the message happens to be missing. Nothing reports the mismatch, at save time or at runtime, and the operator that reads the `null` then stops the whole formula. Check the name against Data Stream Analyzer before you rely on it. Names are case-sensitive.
 {% endhint %}
 
 ## Expression patterns

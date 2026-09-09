@@ -26,7 +26,7 @@ For how missing values affect routing, see [Missing values and null routing](#mi
 
 ### Logical operators
 
-<table><thead><tr><th width="139.45458984375">Operator</th><th>Description</th></tr></thead><tbody><tr><td><code>&#x26;&#x26;</code> or <code>and</code></td><td>Logical AND - checks if two conditions are true. Returns true if both conditions are true</td></tr><tr><td><code>|</code> or <code>or</code></td><td>Logical OR - checking for the truth of at least one of the two conditions</td></tr><tr><td><code>!</code> or <code>not</code></td><td>Logical NOT - converts the result of the condition to the opposite value</td></tr></tbody></table>
+<table><thead><tr><th width="139.45458984375">Operator</th><th>Description</th></tr></thead><tbody><tr><td><code>&#x26;&#x26;</code> or <code>and</code></td><td>Logical AND - checks if two conditions are true. Returns true if both conditions are true</td></tr><tr><td><code>&#x7C;&#x7C;</code> or <code>or</code></td><td>Logical OR - checking for the truth of at least one of the two conditions</td></tr><tr><td><code>!</code> or <code>not</code></td><td>Logical NOT - converts the result of the condition to the opposite value</td></tr></tbody></table>
 
 ### Pattern matching operators
 
@@ -52,7 +52,7 @@ The geofence name appears as a comment for readability and has no effect on eval
 inGeofence(35229 /* Delivery zone #4 */, 1, 'valid')
 ```
 
-The second parameter is the index of the data packet (0 for the current one, 1 for the previous one, up to 11), and the third is the validity filter, following the same convention as `value()`. Both are optional. Don't wrap a geofence function inside `value()`: the first parameter of `value()` is an attribute name, not an expression.
+The second parameter is the index of the data packet (0 for the current one, 1 for the previous one, up to 11), and the third is the validity filter, following the same convention as `value()`. Both are optional, and both apply to `inGeofence()` only. `enterGeofence()` and `leaveGeofence()` take the geofence ID and nothing else. Don't wrap a geofence function inside `value()`: the first parameter of `value()` is an attribute name, not an expression.
 
 ## Expression examples
 
@@ -235,7 +235,7 @@ You can create complex expressions by combining multiple conditions with parenth
 **Complex safety validation**:
 
 ```
-!driver_identified && (vibration_active || speed > 3)
+driver_identified == false && (vibration_active == true || speed > 3)
 ```
 
 **Multi-parameter equipment check**:
@@ -261,6 +261,8 @@ A referenced attribute resolves to `null` in four cases:
 
 JEXL treats all four the same way, as `null`, so an operator's behavior on a missing value doesn't depend on which of the four caused it. A never-sent attribute doesn't error the flow. For the 30-day retention of stored values, see [Full syntax](../initiate-attribute-node/managing-attributes.md#full-syntax).
 
+For why a missing value stops an expression, and for the comparison patterns that prevent it in both node types, see [Missing values in expressions](../missing-values-in-expressions.md).
+
 Every incoming message leaves the Logic node through exactly one branch, THEN or ELSE, even when the condition references missing data. If the condition's overall result is anything other than `true` (including `null`, or a value the node can't evaluate), the message routes to ELSE. The ELSE path therefore carries both "condition is false" and "condition could not be satisfied from available data."
 
 ### Null-safe condition patterns
@@ -277,7 +279,7 @@ value('temperature', 0, 'all') != null && value('temperature', 0, 'all') > 50
 value('attribute', 0, 'all') == null
 ```
 
-**`||` chain ordering**: Put the term that may be null last.
+**`||` chain ordering**: Put the term that may be null last. Ordering helps only on packets where the left operand is true, so treat it as an improvement rather than a fix.
 
 Unsafe: the null left operand routes to ELSE even though `speed > 50` is true on the same packet.
 
@@ -285,11 +287,13 @@ Unsafe: the null left operand routes to ELSE even though `speed > 50` is true on
 value('attribute', 0, 'all') > 5 || value('speed', 0, 'all') > 50
 ```
 
-Safe: the true left operand short-circuits before the null right operand is evaluated.
+Better: a true left operand short-circuits before the null right operand is evaluated. On a packet where the speed is 20, the null right operand is still evaluated, and the condition still routes to ELSE.
 
 ```jexl
 value('speed', 0, 'all') > 50 || value('attribute', 0, 'all') > 5
 ```
+
+For a form that works on every packet, compare each term explicitly. See [Compare a value explicitly](../missing-values-in-expressions.md#compare-a-value-explicitly).
 
 **Don't rely on `!()` to detect missing data**: When `x` is null, both `x > 5` and `!(x > 5)` route to ELSE.
 
@@ -305,8 +309,11 @@ value('speed', 0, 'all') > 50 || value('attribute', 0, 'all') > 5
 | `== null` against a missing value | THEN | `true` |
 | `!= null` when the attribute is absent | ELSE | `false` |
 | `!= null` when the attribute is present | THEN | `true` |
-| `=~`, `=^`, or `=$` against a missing value and a string literal | ELSE | `false` |
-| `!~`, `!^`, or `!$` against a missing value and a string literal | THEN | `true` |
+| `=~` against a missing value and a string literal or a list | ELSE | `false` |
+| `!~` against a missing value and a string literal or a list | THEN | `true` |
+| `=^` or `=$` against a missing `value()` result | ELSE | `false` |
+| `!^` or `!$` against a missing `value()` result | THEN | `true` |
+| `=^`, `!^`, `=$`, or `!$` against a missing attribute referenced by name | ELSE | `null` |
 
 {% hint style="warning" %}
 `!=` against a missing value and a non-null literal evaluates to `true` and routes to THEN. A condition like `value('attribute', 1, 'all') != 1` can fire on a device's first packets, before that attribute has any history. This can happen even when the intent is to route unknown values to ELSE.
@@ -321,7 +328,13 @@ value('attribute', 1, 'all') != null && value('attribute', 1, 'all') != 1
 {% endhint %}
 
 {% hint style="warning" %}
-The pattern-matching operators resolve to a real `true`/`false` on a missing value, never `null` like the relational operators. The negated forms (`!~`, `!^`, `!$`) land on THEN because a missing value counts as "not a match" on the positive form. That's a different mechanism from `!=`, which lands on THEN because a missing value is "unequal" to the literal. The two operator families reach THEN for different reasons, so don't assume one explains the other.
+`=~` and `!~` resolve to a real `true` or `false` on a missing value, whichever syntax you use. On a missing value, `=~` counts as "not a match" and lands on ELSE, and `!~` lands on THEN.
+
+The starts-with and ends-with operators (`=^`, `!^`, `=$`, `!$`) are the one place where the two syntax options differ. With `value()`, they behave like `=~` and `!~`: `value('a', 0, 'all') =^ 'AB'` resolves to `false` and lands on ELSE, and `!^` resolves to `true` and lands on THEN. With the attribute referenced by name, `a =^ 'AB'` resolves to `null` instead, and both the positive and the negated form land on ELSE.
+
+The short-hand form is what [autofill](../initiate-attribute-node/managing-attributes.md#autofill-attribute-names) inserts, so a condition built with the attribute picker takes the second path. Write the comparison with `value()` when you need `!^` or `!$` to fire on a packet that doesn't carry the attribute.
+
+`!~` reaching THEN is a different mechanism from `!=` reaching THEN. `!~` lands there because a missing value counts as "not a match", and `!=` lands there because a missing value is "unequal" to the literal. Don't assume that one explains the other.
 {% endhint %}
 
 ### Logical operators with null operands
@@ -332,8 +345,12 @@ The pattern-matching operators resolve to a real `true`/`false` on a missing val
 | Null operand in `||` evaluated before a true operand on the same packet | ELSE | `null` |
 | True operand in `||` evaluated before a null operand (short-circuits) | THEN | `true` |
 | Null operand in `&&` with a true operand, either order | ELSE | `null` |
+| `false` operand in `&&` evaluated before a null operand (short-circuits) | ELSE | `false` |
+| `false` operand in `||` evaluated before a null operand | ELSE | `null` |
 
-Unlike `||`, operand order doesn't change the outcome for `&&`. A true operand can't short-circuit past a null one, since AND still needs to know whether the null side would fail the condition.
+Order matters for both operators. Each one evaluates the left operand first and stops there when the left operand already settles the result. A `false` left operand settles `&&`, and a `true` left operand settles `||`. In every other combination the null operand is evaluated, the condition resolves to `null`, and the message routes to ELSE.
+
+A true operand can't short-circuit past a null one in `&&`, since AND still needs to know whether the null side would fail the condition. A `false` operand can, and the node then stores a real `false` rather than `null`. For the same rule applied to attribute formulas, and for the comparison patterns that avoid it, see [Missing values in expressions](../missing-values-in-expressions.md).
 
 ## Error handling scenarios
 
@@ -350,6 +367,8 @@ Unlike `||`, operand order doesn't change the outcome for `&&`. A true operand c
 
 {% hint style="warning" %}
 A row that routes to ELSE doesn't always mean the attribute is stored as `false`. A bare null reference and the relational operators (`<`, `<=`, `>`, `>=`) route to ELSE but store the attribute as `null`. A downstream expression that checks the attribute directly (`my_flag == false` or `my_flag == 0`) needs a null-safe guard to catch that case, since it won't match a `null` value.
+
+In an **Initiate Attribute** node the same failures leave the attribute out of the outgoing data packet instead. See [Missing values in expressions](../missing-values-in-expressions.md).
 {% endhint %}
 
 ## Practical implementation examples
@@ -406,10 +425,12 @@ value('engine_temperature', 0, 'valid') > 95 && value('oil_pressure', 0, 'valid'
 **Business requirement**: Ensure vehicles operate within authorized areas during business hours
 
 ```jexl
-inGeofence(51577 /* Austin Warehouse */) && value('business_hours', 0, 'valid') == true
+inGeofence(51577 /* Austin Warehouse */) == true && value('business_hours', 0, 'valid') == true
 ```
 
 This expression uses the `inGeofence()` function to check whether a device is inside a named geofence, combined with a business-hours attribute. The geofence boundaries are managed in the Navixy geofences interface, so no coordinate values need to be maintained in the expression.
+
+The `== true` comparison keeps the condition working on packets where the geofence function can't decide, such as a packet that carries no position. Without it, one empty value stops the whole condition and the message routes to ELSE.
 
 * **THEN path**: Continue normal operations; device is in the authorized area during working hours.
 * **ELSE path**: Generate an unauthorized location alert, notify security, and log the violation.
@@ -417,9 +438,9 @@ This expression uses the `inGeofence()` function to check whether a device is in
 To detect the moment a vehicle leaves the authorized area rather than checking continuously, use `leaveGeofence()` instead:
 
 ```jexl
-leaveGeofence(51577 /* Austin Warehouse */) && value('business_hours', 0, 'valid') == true
+leaveGeofence(51577 /* Austin Warehouse */) == true && value('business_hours', 0, 'valid') == true
 ```
 
-For the full reference on geofence functions including `enterGeofence()`, `geofenceName()`, and testing an earlier position, see [Geofence functions](../geofence-functions.md).
+For the full reference on geofence functions including `enterGeofence()`, `geofenceName()`, and testing an earlier position with `inGeofence()`, see [Geofence functions](../geofence-functions.md).
 
 </details>

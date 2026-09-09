@@ -27,7 +27,7 @@ Contact your service provider to have it switched on. See [Before you start](geo
 
 ## Reacting to one geofence
 
-Use these three functions when you already know which geofence matters. Each one answers yes or no for every data packet the device sends, so a flow can send that data down one branch or another.
+Use these three functions when you already know which geofence matters. Each one answers yes or no for most data packets that the device sends, so a flow can send that data down one branch or another. On some packets a function can't answer, and it returns an empty value instead. See [When a geofence function gives no answer](geofence-functions.md#when-a-geofence-function-gives-no-answer).
 
 | Function            | Answers yes when                                     |
 | ------------------- | ---------------------------------------------------- |
@@ -36,6 +36,21 @@ Use these three functions when you already know which geofence matters. Each one
 | `leaveGeofence(id)` | The device has just crossed out of the geofence      |
 
 You add them to the condition of an **IF/THEN Logic** node. The `id` is the numeric ID of the geofence in your Navixy account, and a picker fills it in for you, so you rarely type it by hand. See [How to add a geofence condition](geofence-functions.md#how-to-add-a-geofence-condition).
+
+### When a geofence function gives no answer
+
+`inGeofence()`, `enterGeofence()`, and `leaveGeofence()` return an empty value instead of yes or no when they can't answer. A function can't answer in these cases:
+
+* The data packet carries no coordinates. A position of poor quality is still tested, so a weak GPS fix gives a real yes or no.
+* The geofence was deleted from your Navixy account, or became inaccessible, after the flow was saved. A geofence that is already missing when you save the flow is rejected at save time instead.
+
+An empty value stops the condition that it is part of. When the function is the whole condition, the data goes to the ELSE path. That routing is usually what you want. When the function is combined with anything else, the empty value can stop the whole condition, including the terms that did have values. To keep the rest of the condition working, compare the function with `== true`:
+
+```jexl
+leaveGeofence(51577 /* Austin Warehouse */) == true || leaveGeofence(85269 /* Construction site 1 */) == true
+```
+
+For the full rule, see [Missing values in expressions](missing-values-in-expressions.md).
 
 ### Syntax
 
@@ -51,7 +66,7 @@ leaveGeofence(85269 /* Construction site 1 */)
 {% endtab %}
 
 {% tab title="Historical position" %}
-Each of the three functions accepts two more parameters, so it can test an earlier position instead of the current one:
+`inGeofence()` accepts two more parameters, so it can test an earlier position instead of the current one:
 
 ```jexl
 inGeofence(35229 /* Delivery zone #4 */, 1)
@@ -60,6 +75,10 @@ inGeofence(35229 /* Delivery zone #4 */, 'valid')
 ```
 
 The second parameter says which data packet to take the position from, counting back from the current one. The third says whether to count packets that carry no position. Both are optional, and they follow the same convention as the `value()` function.
+
+`enterGeofence()` and `leaveGeofence()` take the geofence ID and nothing else. Both compare the current position with the previous one, so there is no index to choose. A flow that passes a second parameter to either function can't be saved, and the error names the function.
+
+Keep the index in the range 0 to 11. `inGeofence()` accepts a higher index, saves without an error, and then returns an empty value for every packet.
 
 Don't wrap a geofence function inside `value()`. The first parameter of `value()` is an attribute name, not an expression, so a call such as `value("inGeofence(35229)", 1, 'valid')` looks for an attribute with that literal name and always returns an empty value.
 
@@ -158,7 +177,7 @@ enterGeofence(85269 /* Construction site 1 */)
 Detect when a vehicle leaves an authorized service area during business hours:
 
 ```jexl
-leaveGeofence(51577 /* Austin Warehouse */) && value('business_hours', 0, 'valid') == true
+leaveGeofence(51577 /* Austin Warehouse */) == true && value('business_hours', 0, 'valid') == true
 ```
 
 * **THEN path**: Send an alert via a **Webhook** node to a dispatch system.
@@ -173,8 +192,10 @@ leaveGeofence(51577 /* Austin Warehouse */) && value('business_hours', 0, 'valid
 Check whether a device is inside any of several restricted zones:
 
 ```jexl
-inGeofence(35229 /* Delivery zone #4 */) || inGeofence(85269 /* Construction site 1 */)
+inGeofence(35229 /* Delivery zone #4 */) == true || inGeofence(85269 /* Construction site 1 */) == true
 ```
+
+Each function is compared with `== true`, so a packet where one of them can't decide doesn't stop the whole condition. Without the comparison, the first function that returns an empty value stops the condition, and the other zones are never tested. See [When a geofence function gives no answer](geofence-functions.md#when-a-geofence-function-gives-no-answer).
 
 * **THEN path**: Apply zone-specific rules or notifications.
 * **ELSE path**: Process data from devices outside all listed zones.
@@ -188,7 +209,7 @@ inGeofence(35229 /* Delivery zone #4 */) || inGeofence(85269 /* Construction sit
 Detect speeding within a specific urban zone:
 
 ```jexl
-inGeofence(84762 /* destination1 */) && value('speed', 0, 'valid') > 50
+inGeofence(84762 /* destination1 */) == true && value('speed', 0, 'valid') > 50
 ```
 
 * **THEN path**: Log a speed violation scoped to that zone, or send a targeted alert.
@@ -203,10 +224,12 @@ inGeofence(84762 /* destination1 */) && value('speed', 0, 'valid') > 50
 Detect a transition from outside to inside by comparing the current position with the previous one:
 
 ```jexl
-inGeofence(35229 /* Delivery zone #4 */) && !inGeofence(35229 /* Delivery zone #4 */, 1, 'valid')
+inGeofence(35229 /* Delivery zone #4 */) == true && inGeofence(35229 /* Delivery zone #4 */, 1, 'valid') == false
 ```
 
 This expression returns `true` only on the first packet after a device enters the geofence. `enterGeofence()` does the same thing in one call, so use this form only when you need a different index than the previous packet.
+
+The second call is compared with `== false`, so the expression fires only when the earlier position is known and was outside the geofence. A device with no earlier valid position doesn't match. Don't write the second term as `!inGeofence(...)`, which produces no result at all when there is no earlier position to test.
 
 </details>
 
@@ -352,7 +375,7 @@ The geofence picker displays each geofence's name and numeric ID in the list. Yo
 
 #### Can I store a geofence check in an attribute?
 
-Yes. All four functions work in an attribute formula as well as in a routing condition. `geofenceName()` is the natural choice, because it gives you readable text. The other three give you a yes or no value, which is usually more useful for routing than for storing.
+Yes. All four functions work in an attribute formula as well as in a routing condition. `geofenceName()` is the natural choice, because it gives you readable text. The other three give you a yes or no value, or an empty value when the position is unknown. A yes or no value is usually more useful for routing than for storing.
 
 The geofence picker appears only in the **IF/THEN Logic** node, so in an attribute formula you type the function and the geofence ID yourself.
 
@@ -362,17 +385,17 @@ The geofence picker appears only in the **IF/THEN Logic** node, so in an attribu
 
 #### What happens if the referenced geofence is deleted?
 
-If a geofence referenced in an expression is deleted from your Navixy account, the function cannot be evaluated. In an **IF/THEN Logic** node the result is treated as `false`, and data flows through the ELSE connection. In an **Initiate Attribute** node the attribute gets an empty value.
+If a geofence referenced in an expression is deleted from your Navixy account, the function can no longer answer and returns an empty value. In an **IF/THEN Logic** node that uses the function on its own, data flows through the ELSE connection. The node stores its own attribute as an empty value, not as `false`. In a condition that combines the function with other terms, the empty value can stop the whole condition. In an **Initiate Attribute** node the attribute has no value for that packet. See [Missing values in expressions](missing-values-in-expressions.md).
 
 The flow keeps running, but you can no longer save it until you fix the expression. Saving it again fails with `Node "<node title>" (#<node id>) contains nonexistent or inaccessible geozones`. Update or remove the expression to restore both the routing and the ability to save.
 
 #### Does inGeofence evaluate the current GPS position of the device?
 
-Yes. `inGeofence()` checks the position reported in the current data packet against the geofence boundaries. Each packet is evaluated independently, so the result reflects the device's reported position at the time that packet was received.
+Yes. `inGeofence()` checks the position reported in the current data packet against the geofence boundaries. Each packet is evaluated independently, so the result reflects the position of the device at the time that packet was received. A packet that carries no position gets an empty value instead of `true` or `false`.
 
 #### What is the difference between inGeofence and enterGeofence?
 
-`inGeofence()` returns `true` for every packet received while the device is inside the geofence. `enterGeofence()` returns `true` only for the packet that records the moment the device crossed into the geofence. Use `inGeofence` when you need to apply logic to all data from inside the area. Use `enterGeofence` when you need to react specifically to the boundary crossing event.
+`inGeofence()` returns `true` for every packet that reports a position inside the geofence. `enterGeofence()` returns `true` only for the packet that records the moment the device crossed into the geofence. Use `inGeofence` when you need to apply logic to all data from inside the area. Use `enterGeofence` when you need to react specifically to the event of crossing the boundary.
 
 #### Why is my geofenceName attribute always empty?
 
