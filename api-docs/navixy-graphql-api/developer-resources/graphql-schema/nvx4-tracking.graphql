@@ -34,6 +34,7 @@
 # 1. VALUE MODEL  (NTF SPEC §3)
 # =============================================================================
 
+# @category: tracking/readings
 """
 How a reading is encoded. Mirrors `navixy.telemetry.v1.Value.value` — eight scalar variants,
 two composite ones, and an explicit clear.
@@ -65,11 +66,14 @@ union TrackingValue =
   | TrackingStructValue
   | TrackingClearedValue
 
+# @category: tracking/readings
 type TrackingBoolValue { boolValue: Boolean! }
 
+# @category: tracking/readings
 "Signed integer of any width (int8…int64)."
 type TrackingIntValue { intValue: Long! }
 
+# @category: tracking/readings
 """
 Unsigned integer of any width (uint8…uint64). Values above 2^63-1 — bitmasks, odometer-style
 counters, identifiers — do not fit `Long`, so the value rides the kernel's `Decimal` scalar,
@@ -78,14 +82,20 @@ parse onto the client with nothing checking it.
 """
 type TrackingUIntValue { uintValue: Decimal! }
 
+# @category: tracking/readings
 type TrackingFloatValue { floatValue: Float! }
+
+# @category: tracking/readings
 type TrackingStringValue { stringValue: String! }
 
+# @category: tracking/readings
 "Opaque binary payload (raw CAN frame, RFID key), Base64-encoded."
 type TrackingBytesValue { bytesValue: String! }
 
+# @category: tracking/readings
 type TrackingTimestampValue { timestampValue: DateTime! }
 
+# @category: tracking/readings
 """
 A duration. Carried by the kernel's `Duration` scalar, which this module introduces to
 `nvx4-common.graphql` — see the note at the head of this file. Every duration in this schema uses
@@ -94,18 +104,22 @@ not check.
 """
 type TrackingDurationValue { durationValue: Duration! }
 
+# @category: tracking/readings
 "Homogeneous list (DTC codes, tachograph cards, acceleration vector)."
 type TrackingArrayValue { values: [TrackingValue!]! }
 
+# @category: tracking/readings
 "Nested structure whose members are full readings (decoded J1939 frame, tachograph block)."
 type TrackingStructValue { fields: [TrackingReading!]! }
 
+# @category: tracking/readings
 """
 The value was explicitly cleared. Its own variant so that "nothing was said" and "this no longer
 holds" can never be confused (NTF SPEC §3.3).
 """
 type TrackingClearedValue { cleared: Boolean! }
 
+# @category: tracking/readings
 "Declared type of a value in terms of the *source* register. `navixy.telemetry.v1.ValueType`."
 enum TrackingValueType {
   BOOL
@@ -115,6 +129,7 @@ enum TrackingValueType {
   STRING BYTES TIMESTAMP DURATION ARRAY STRUCT JSON
 }
 
+# @category: tracking/readings
 """
 What kind of quantity a field is, which decides how it may be aggregated (NTF SPEC §5.2).
 Dictionary metadata, not carried by the message.
@@ -142,6 +157,7 @@ enum TrackingFieldNature {
   SETTING
 }
 
+# @category: tracking/readings
 "Application-level quantity, from the field dictionary. Drives unit conversion and formatting."
 enum TrackingQuantity {
   MILEAGE DURATION VOLTAGE RATIO TEMPERATURE VOLUME SPEED FREQUENCY
@@ -152,6 +168,7 @@ enum TrackingQuantity {
 # 2. READINGS  (NTF SPEC §4, Appendix A)
 # =============================================================================
 
+# @category: tracking/readings
 """
 One named field of a state — a sensor reading, a device state, a counter, an identity.
 There is exactly one such list per state: NTF v1 has no inputs/states split.
@@ -201,6 +218,7 @@ type TrackingReading {
   definition: TrackingFieldDefinition
 }
 
+# @category: tracking/readings
 """
 A field dictionary entry (NTF SPEC §5). Entries are never renamed, retyped or deleted — only
 deprecated with a pointer to the replacement, because an entry describes every value ever
@@ -242,12 +260,14 @@ type TrackingFieldDefinition {
   aliases: [Code!]!
 }
 
+# @category: tracking/readings
 enum TrackingCounterScope { LIFETIME TRIP IGNITION_CYCLE SINCE_RESET }
 
 # =============================================================================
 # 3. POSITION, CONNECTIVITY, MOTION, EVENTS
 # =============================================================================
 
+# @category: tracking/state
 type TrackingPosition {
   "WGS-84 point."
   point: GeoPoint!
@@ -295,6 +315,7 @@ type TrackingPosition {
   fixedAt: DateTime
 }
 
+# @category: tracking/state
 """
 Kind of fix, as `navixy.telemetry.v1.FixType`. The correction axis (DGPS, RTK) is not in it.
 
@@ -316,6 +337,7 @@ enum TrackingFixType {
   LAST_KNOWN
 }
 
+# @category: tracking/state
 """
 Where a message's event time came from, as `navixy.telemetry.v1.TimeSource`. Decides how far the
 order of points can be trusted: `GNSS` depends on neither the device clock nor the network, while
@@ -340,6 +362,7 @@ enum TrackingTimeSource {
   DEVICE_CORRECTED
 }
 
+# @category: tracking/state
 "Where the position came from, as `navixy.telemetry.v1.PositionSource`."
 enum TrackingPositionSource {
   GNSS
@@ -360,6 +383,7 @@ enum TrackingPositionSource {
   FUSED
 }
 
+# @category: tracking/state
 """
 Suitability of a point, decided once by the writer rather than by each reader
 (contracts/clickhouse/telemetry/v1/STORAGE.md §"Как отобрать пригодные точки").
@@ -381,6 +405,7 @@ enum TrackingFitness {
   UNKNOWN_SRC
 }
 
+# @category: tracking/state
 """
 Link state of a device. Named `Connectivity`, not `Connection`, so it is not mistaken for a
 Relay connection type.
@@ -427,6 +452,7 @@ type TrackingConnectivity {
   identifierType: DeviceIdType
 }
 
+# @category: tracking/state
 """
 Channel a message arrived over, as `telemetry.records.transport`. A closed list — the archive's
 daily "values outside the enumeration" check is written against exactly these — so it is an enum
@@ -450,6 +476,7 @@ enum TrackingTransport {
   WEBSOCKET_CLIENT
 }
 
+# @category: tracking/state
 """
 Whether a device is currently reporting. Derived from the time of its last message and never
 stored.
@@ -471,14 +498,17 @@ enum TrackingConnectivityStatus {
   NEVER_REPORTED
 }
 
+# @category: tracking/state
 type TrackingMotion {
   status: TrackingMotionStatus!
   "When the current status began."
   since: DateTime
 }
 
+# @category: tracking/state
 enum TrackingMotionStatus { MOVING STOPPED PARKED UNKNOWN }
 
+# @category: tracking/state
 "An event carried by a message (NTF SPEC §6.5)."
 type TrackingEvent {
   "Canonical platform code, e.g. `sos`, `harsh_braking`. Null when the vendor code is unmapped."
@@ -540,6 +570,7 @@ type TrackingEvent {
   since: DateTime
 }
 
+# @category: tracking/state
 """
 Why the device sent this point, as `telemetry.records.report_reason`. A closed list, same as
 `TrackingTransport`; `UNSPECIFIED` maps to null.
@@ -565,6 +596,7 @@ enum TrackingReportReason {
 # 4. STATE
 # =============================================================================
 
+# @category: tracking/state
 """
 Last known state of one device: position, link, motion and every reading, each as of the
 message it last arrived in.
@@ -651,6 +683,7 @@ type TrackingDeviceState {
   lastEvents("Limit to these event codes. All when omitted." codes: [Code!]): [TrackingEvent!]!
 }
 
+# @category: tracking/state
 """
 Tracking state of an asset: the states of the devices linked to it, side by side.
 
@@ -672,6 +705,7 @@ type TrackingAssetState {
   primaryDevice: TrackingDeviceState
 }
 
+# @category: tracking/state/streams
 """
 What a subscription emits for one device. Field for field the same state as
 `TrackingDeviceState`; the only difference is that nothing here takes arguments — what a caller
@@ -722,6 +756,7 @@ type TrackingDeviceStateSnapshot {
   lastEvents: [TrackingEvent!]!
 }
 
+# @category: tracking/state/streams
 """
 What a subscription emits for one asset: every device's snapshot, unmerged, on the same terms as
 `TrackingAssetState`.
@@ -749,6 +784,7 @@ type TrackingAssetStateSnapshot {
 # additive and could have waited; the removal signal would not have been, which is why they landed
 # together. See §Extending this contract at the end of the file for the rule that follows from it.
 
+# @category: tracking/state/streams
 """
 One emission on an asset-state stream.
 
@@ -777,6 +813,7 @@ type TrackingAssetStateBatch {
   initialSnapshotComplete: Boolean!
 }
 
+# @category: tracking/state/streams
 """
 What happened to one asset in a batch: either its current full state, or the news that it is gone.
 
@@ -797,6 +834,7 @@ type TrackingAssetStateChange {
   removal: TrackingStreamRemoval
 }
 
+# @category: tracking/state/streams
 "The same, for a device-state stream."
 type TrackingDeviceStateBatch {
   changes: [TrackingDeviceStateChange!]!
@@ -806,6 +844,7 @@ type TrackingDeviceStateBatch {
   initialSnapshotComplete: Boolean!
 }
 
+# @category: tracking/state/streams
 "Exactly one of `state` and `removal` is non-null, as in `TrackingAssetStateChange`."
 type TrackingDeviceStateChange {
   deviceId: ID!
@@ -813,6 +852,7 @@ type TrackingDeviceStateChange {
   removal: TrackingStreamRemoval
 }
 
+# @category: tracking/state/streams
 """
 Why an entity left a subscription. Without this a client cannot tell "gone" from "quiet": an
 entity that stops being emitted looks exactly like one that simply has not reported.
@@ -823,6 +863,7 @@ type TrackingStreamRemoval {
   at: DateTime!
 }
 
+# @category: tracking/state/streams
 """
 A client must treat an unrecognised value as a plain removal and drop the entity — the list will
 grow, and the safe default is the one every member already shares. Do not switch exhaustively over
@@ -839,6 +880,7 @@ enum TrackingStreamRemovalReason {
   UNLINKED
 }
 
+# @category: tracking/state
 type TrackingAssetStateConnection implements Connection {
   edges: [TrackingAssetStateEdge!]!
   nodes: [TrackingAssetState!]!
@@ -847,11 +889,13 @@ type TrackingAssetStateConnection implements Connection {
   total: CountInfo
 }
 
+# @category: tracking/state
 type TrackingAssetStateEdge implements Edge {
   cursor: String!
   node: TrackingAssetState!
 }
 
+# @category: tracking/state
 """
 Filters over asset states. Since an asset's state is a list, every device-level condition here
 matches when **any** of the asset's devices satisfies it.
@@ -872,6 +916,7 @@ input TrackingAssetStateFilter {
   within: GeoJSON
 }
 
+# @category: tracking/state
 """
 Order of an asset-state page. Only asset-side keys are offered as stable orders; `UPDATED_AT`
 moves with every message, so a page boundary read under it may not hold on the next request — use
@@ -882,6 +927,7 @@ input TrackingAssetStateOrder {
   direction: OrderDirection!
 }
 
+# @category: tracking/state
 enum TrackingAssetStateOrderField {
   "By `Asset.title`, then by asset id as the tie-breaker."
   ASSET_TITLE
@@ -902,6 +948,7 @@ enum TrackingAssetStateOrderField {
 # that every call re-reads the window's points, so the window is what has to be bounded — see
 # `TrackingTimeline.truncated`.
 
+# @category: tracking/trips
 """
 How a device's message stream is cut into trips and stops.
 
@@ -924,6 +971,7 @@ input TrackingSegmentationInput {
   movingSpeedThreshold: Float
 }
 
+# @category: tracking/trips
 "The segmentation policy that actually produced the result, and where it came from."
 type TrackingSegmentationApplied {
   minStopDuration: Duration!
@@ -932,6 +980,7 @@ type TrackingSegmentationApplied {
   source: TrackingSegmentationSource!
 }
 
+# @category: tracking/trips
 enum TrackingSegmentationSource {
   "The device carries its own segmentation policy, which overrides the request."
   DEVICE
@@ -941,6 +990,7 @@ enum TrackingSegmentationSource {
   PLATFORM_DEFAULT
 }
 
+# @category: tracking/trips
 """
 A trip — a movement segment between two stops.
 
@@ -989,6 +1039,7 @@ type TrackingTrack {
   events: [TrackingEvent!]!
 }
 
+# @category: tracking/trips
 """
 A stop — the device stayed within `stopRadius` for at least `minStopDuration`.
 `id` is response-scoped, and `String!` rather than `ID!`, on the same terms as `TrackingTrack.id`.
@@ -1024,6 +1075,7 @@ type TrackingStop {
   events: [TrackingEvent!]!
 }
 
+# @category: tracking/trips
 type TrackingTrackPoint {
   at: DateTime!
   point: GeoPoint!
@@ -1042,6 +1094,7 @@ type TrackingTrackPoint {
   events: [TrackingEvent!]!
 }
 
+# @category: tracking/trips
 "Trips and stops of one device over a window, plus the policy that produced them."
 type TrackingTimeline {
   device: Device!
@@ -1071,6 +1124,7 @@ type TrackingTimeline {
   continueFrom: DateTime
 }
 
+# @category: tracking/trips
 input TrackingTrackOptions {
   """
   Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`.
@@ -1104,9 +1158,11 @@ Tracking module queries — live state of assets and their devices, and their tr
 Reached through `Query.tracking` (docs/reference/graphql-conventions.md §Module namespacing).
 """
 type TrackingQuery {
+  # @category: tracking/state
   "Tracking state of one asset. Null when the asset does not exist or is not visible."
   assetState("The asset." assetId: ID!): TrackingAssetState
 
+  # @category: tracking/state
   "Tracking state of the workspace's assets."
   assetStates(
     workspaceId: ID!
@@ -1118,12 +1174,15 @@ type TrackingQuery {
     before: String
   ): TrackingAssetStateConnection!
 
+  # @category: tracking/state
   "Last known state of one device."
   deviceState("The device." deviceId: ID!): TrackingDeviceState
 
+  # @category: tracking/state
   "Last known state of several devices, in the order requested. Null for one not visible."
   deviceStates("The devices." deviceIds: [ID!]!): [TrackingDeviceState]!
 
+  # @category: tracking/trips
   """
   Trips and stops of one device over a window.
 
@@ -1138,6 +1197,7 @@ type TrackingQuery {
     options: TrackingTrackOptions
   ): TrackingTimeline
 
+  # @category: tracking/trips
   """
   Trips and stops of an asset over a window, per device.
   An asset with several devices yields one timeline per device — the same no-merge rule as state.
@@ -1154,6 +1214,7 @@ type TrackingQuery {
   # nothing to address it by later — points come from the same call, via
   # `TrackingTrackOptions.includePoints`, or from a narrower window.
 
+  # @category: tracking/readings
   """
   The fields the service keeps hot — the ones `TrackingDeviceState.readings` returns when no
   `codes` argument is given, and the ones a subscription can deliver on every message.
@@ -1165,6 +1226,7 @@ type TrackingQuery {
   """
   hotFieldCodes: [Code!]!
 
+  # @category: tracking/readings
   """
   The field dictionary. Needed by any UI that renders readings: without it a client has a name
   and a number but no title, unit or nature.
@@ -1255,6 +1317,7 @@ type TrackingQuery {
 #     not this case: that is a per-entity `TrackingStreamRemoval` with `ACCESS_REVOKED`, and the
 #     stream stays open.
 
+# @category: tracking/state/streams
 input TrackingAssetStateSubscriptionInput {
   workspaceId: ID!
   """
@@ -1298,6 +1361,7 @@ input TrackingAssetStateSubscriptionInput {
   batchWindowMs: Int = 1000
 }
 
+# @category: tracking/state/streams
 input TrackingDeviceStateSubscriptionInput {
   workspaceId: ID!
   """

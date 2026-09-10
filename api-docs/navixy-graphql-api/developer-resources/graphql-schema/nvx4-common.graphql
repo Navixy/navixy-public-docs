@@ -86,14 +86,14 @@ Uniqueness:
 
 Examples: DEVICE_TYPE, vehicle_car, status.active, sensor-v2, ABC123
 """
-scalar Code @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#code")
+scalar Code @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#code")
 
 # @category: common
 """
 Signed 64-bit integer in the range [-9223372036854775808, 9223372036854775807].
 Encoded as a JSON number.
 """
-scalar Long @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#long")
+scalar Long @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#long")
 
 # @category: common
 """
@@ -110,11 +110,10 @@ falls inside it. A caller that means a calendar step asks for a date range inste
 
 `@specifiedBy` points at the Navixy page rather than at ISO 8601 or RFC 3339, because the full
 grammar in either is precisely what this scalar does not accept — a pointer to it would describe
-the wrong type. The anchor is not published yet
-(`docs/todo/tracking-api-design-followups.md`); the paragraphs above, and
-`ScalarCoercingTest.DurationCoercingTest`, are the contract until it is.
+the wrong type. The page restates the paragraphs above; those paragraphs and
+`ScalarCoercingTest.DurationCoercingTest` are the contract.
 """
-scalar Duration @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#duration")
+scalar Duration @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#duration")
 
 # @category: common
 "An ISO 8601 date string without time component (RFC 3339). Example: `2024-01-15`."
@@ -147,7 +146,7 @@ most 10 follow the decimal point (so up to 18 digits before). Values
 exceeding this envelope (e.g. more than 18 integer digits) are rejected
 as `VALIDATION_ERROR` at the API layer.
 """
-scalar Decimal @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/common#decimal")
+scalar Decimal @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#decimal")
 
 # =============================================================================
 # 3. ENUMS
@@ -173,7 +172,7 @@ enum CountPrecision {
   AT_LEAST
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "The data type of a custom field, determining validation rules and UI rendering."
 enum FieldType {
   "Single-line text input. At most 255 characters."
@@ -216,7 +215,7 @@ enum FieldType {
   REFERENCE
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Controls the behavior when deleting a custom field definition that has existing values.
 
@@ -230,7 +229,7 @@ enum CustomFieldDefinitionDeleteBehavior {
   CASCADE
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Comparison operators for filtering by custom field values."
 enum FieldOperator {
   "Value equals the specified value."
@@ -255,7 +254,7 @@ enum FieldOperator {
   IS_NOT_NULL
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "The type of GeoJSON geometry."
 enum GeoJsonGeometryType {
   "A single geographic point."
@@ -344,7 +343,7 @@ interface Customizable implements Node {
   ): [CustomFieldValue!]!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 A typed custom-field value on an entity. The concrete type matches the custom field's
 declared `FieldType`. `isPrimary` is present only on the primary-capable types
@@ -431,39 +430,39 @@ type Money {
 # they name BDR entity types (Device, CatalogItem) and would make the kernel depend on BDR. They
 # implement CustomFieldValue / FieldParams from that file instead; see the comment on each there.
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "STRING / TEXT custom-field value."
 type StringCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: String! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "DECIMAL custom-field value (arbitrary precision, string-encoded)."
 type DecimalCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Decimal! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "INTEGER custom-field value (signed 64-bit)."
 type IntegerCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Long! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "BOOLEAN custom-field value."
 type BooleanCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Boolean! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "DATE custom-field value."
 type DateCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: Date! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "DATETIME custom-field value."
 type DateTimeCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: DateTime! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "GEOJSON custom-field value."
 type GeoJsonCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, value: GeoJSON! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "OPTIONS custom-field value (one or more option codes)."
 type OptionsCustomFieldValue implements CustomFieldValue { code: Code!, isDefault: Boolean!, values: [Code!]! }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "REFERENCE custom-field value (one or more referenced entities; primary-capable)."
 type ReferenceCustomFieldValue implements CustomFieldValue {
   code: Code!
@@ -483,7 +482,7 @@ type ReferenceCustomFieldValue implements CustomFieldValue {
   isPrimary: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 A custom field definition that specifies the metadata for a custom field.
 
@@ -522,7 +521,7 @@ type CustomFieldDefinition implements Titled {
   isArchived: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "One custom-field type that may be defined on a given owner, and what it may point at."
 type FieldTypeAvailability {
   "The field type."
@@ -534,14 +533,14 @@ type FieldTypeAvailability {
   referenceableEntityTypes: [Code!]!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "The base interface for field parameters."
 interface FieldParams {
   "Whether a value is required for this field."
   isRequired: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for STRING field type."
 type FieldParamsString implements FieldParams {
   isRequired: Boolean!
@@ -555,7 +554,7 @@ type FieldParamsString implements FieldParams {
   trim: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for TEXT field type."
 type FieldParamsText implements FieldParams {
   isRequired: Boolean!
@@ -567,7 +566,7 @@ type FieldParamsText implements FieldParams {
   trim: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DECIMAL field type."
 type FieldParamsDecimal implements FieldParams {
   isRequired: Boolean!
@@ -584,7 +583,7 @@ type FieldParamsDecimal implements FieldParams {
   defaultDecimal: Decimal
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for INTEGER field type."
 type FieldParamsInteger implements FieldParams {
   isRequired: Boolean!
@@ -596,7 +595,7 @@ type FieldParamsInteger implements FieldParams {
   defaultInteger: Long
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for BOOLEAN field type."
 type FieldParamsBoolean implements FieldParams {
   isRequired: Boolean!
@@ -604,7 +603,7 @@ type FieldParamsBoolean implements FieldParams {
   defaultBoolean: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DATE field type."
 type FieldParamsDate implements FieldParams {
   isRequired: Boolean!
@@ -612,7 +611,7 @@ type FieldParamsDate implements FieldParams {
   defaultDate: Date
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DATETIME field type."
 type FieldParamsDatetime implements FieldParams {
   isRequired: Boolean!
@@ -620,7 +619,7 @@ type FieldParamsDatetime implements FieldParams {
   defaultDatetime: DateTime
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for GEOJSON field type."
 type FieldParamsGeojson implements FieldParams {
   isRequired: Boolean!
@@ -628,7 +627,7 @@ type FieldParamsGeojson implements FieldParams {
   allowedTypes: [GeoJsonGeometryType!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for OPTIONS field type."
 type FieldParamsOptions implements FieldParams & MultiValue {
   isRequired: Boolean!
@@ -639,7 +638,7 @@ type FieldParamsOptions implements FieldParams & MultiValue {
   defaultOptions: Code
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "A single option in an OPTIONS field."
 type FieldOption {
   "The unique code for this option within the field."
@@ -656,7 +655,7 @@ type FieldOption {
 # 8. CUSTOM FIELD INPUTS
 # =============================================================================
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Typed filter value for custom fields. Exactly one field must be set (`@oneOf`).
 Choose the variant that matches the custom field's data type:
@@ -695,7 +694,7 @@ input CustomFieldFilterValue @oneOf {
   idList: [ID!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 A filter condition for a custom field value.
 
@@ -731,7 +730,7 @@ input CustomFieldFilter {
 # Invalid `value` format returns VALIDATION_ERROR with status 400.
 #
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Input for updating custom field values using a patch model.
 
@@ -746,7 +745,7 @@ input CustomFieldsPatchInput {
   unset: [Code!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 A single custom-field value to set, addressed by code.
 
@@ -766,7 +765,7 @@ input CustomFieldValueInput {
   isDefault: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Typed custom-field value. Exactly one variant must be set (`@oneOf`), matching the custom
 field's declared FieldType:
@@ -813,7 +812,7 @@ input CustomFieldValueDataInput @oneOf {
   options: [Code!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "DEVICE custom-field value."
 input DeviceValueInput {
   "The device to assign."
@@ -832,7 +831,7 @@ input DeviceValueInput {
   reassign: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "REFERENCE custom-field value for a single-value field."
 input ReferenceValueInput {
   "The referenced entity ID."
@@ -841,7 +840,7 @@ input ReferenceValueInput {
   isPrimary: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "REFERENCE custom-field value for an isMulti field."
 input ReferenceListValueInput {
   "The referenced entity IDs, in the order they are stored."
@@ -850,7 +849,7 @@ input ReferenceListValueInput {
   isPrimary: Boolean!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 A single operation on a custom field definition within the parent catalog item.
 Exactly one action must be provided.
@@ -868,7 +867,7 @@ input CustomFieldDefinitionInput @oneOf {
   restore: CustomFieldDefinitionRestoreData
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Data for creating a custom field definition within its parent catalog item.
 
@@ -908,7 +907,7 @@ input CustomFieldDefinitionCreateData {
   isDefault: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Data for updating an existing custom field definition. Note: `fieldType` cannot be changed."
 input CustomFieldDefinitionUpdateData {
   "The code of the field definition to update."
@@ -925,7 +924,7 @@ input CustomFieldDefinitionUpdateData {
   isDefault: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Data for permanently deleting a custom field definition.
 
@@ -944,7 +943,7 @@ input CustomFieldDefinitionDeleteData {
   onValues: CustomFieldDefinitionDeleteBehavior = REJECT
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Data for archiving or restoring a custom field definition.
 
@@ -958,7 +957,7 @@ input CustomFieldDefinitionArchiveData {
   code: Code!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Data for restoring a previously archived custom field definition.
 
@@ -974,7 +973,7 @@ input CustomFieldDefinitionRestoreData {
   code: Code!
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Field parameters input. Exactly one field must be provided."
 input FieldParamsInput @oneOf {
   "Parameters for STRING field type."
@@ -1001,7 +1000,7 @@ input FieldParamsInput @oneOf {
   reference: ReferenceFieldParamsInput
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for STRING field type."
 input StringFieldParamsInput {
   "Whether a value is required."
@@ -1016,7 +1015,7 @@ input StringFieldParamsInput {
   trim: Boolean = true
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for TEXT field type."
 input TextFieldParamsInput {
   "Whether a value is required."
@@ -1029,7 +1028,7 @@ input TextFieldParamsInput {
   trim: Boolean = false
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DECIMAL field type."
 input DecimalFieldParamsInput {
   "Whether a value is required."
@@ -1047,7 +1046,7 @@ input DecimalFieldParamsInput {
   defaultDecimal: Decimal
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for INTEGER field type."
 input IntegerFieldParamsInput {
   "Whether a value is required."
@@ -1060,7 +1059,7 @@ input IntegerFieldParamsInput {
   defaultInteger: Long
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for BOOLEAN field type."
 input BooleanFieldParamsInput {
   "Whether a value is required."
@@ -1069,7 +1068,7 @@ input BooleanFieldParamsInput {
   defaultBoolean: Boolean
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DATE field type."
 input DateFieldParamsInput {
   "Whether a value is required."
@@ -1078,7 +1077,7 @@ input DateFieldParamsInput {
   defaultDate: Date
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DATETIME field type."
 input DateTimeFieldParamsInput {
   "Whether a value is required."
@@ -1087,7 +1086,7 @@ input DateTimeFieldParamsInput {
   defaultDatetime: DateTime
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for GEOJSON field type."
 input GeoJsonFieldParamsInput {
   "Whether a value is required."
@@ -1096,7 +1095,7 @@ input GeoJsonFieldParamsInput {
   allowedTypes: [GeoJsonGeometryType!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for OPTIONS field type."
 input OptionsFieldParamsInput {
   "Whether a value is required."
@@ -1109,7 +1108,7 @@ input OptionsFieldParamsInput {
   defaultOptions: Code
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 """
 Input for an option definition.
 When updating options: if an entry without `code` is provided, a new option is created.
@@ -1126,7 +1125,7 @@ input FieldOptionInput {
   isArchived: Boolean = false
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DEVICE field type."
 input DeviceFieldParamsInput {
   "Whether a value is required."
@@ -1135,7 +1134,7 @@ input DeviceFieldParamsInput {
   refSubtypeIds: [ID!]
 }
 
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for REFERENCE field type."
 input ReferenceFieldParamsInput {
   "Whether a value is required."

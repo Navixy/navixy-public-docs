@@ -52,6 +52,10 @@
 ## Tracking
 
 * [Tracking overview](tracking/overview.md "Overview")
+* [Live state](tracking/api-reference/state/README.md)
+  * [State streams](tracking/api-reference/state/streams.md)
+* [Readings and the field dictionary](tracking/api-reference/readings.md)
+* [Trips and stops](tracking/api-reference/trips.md)
 
 ## Developer resources
 

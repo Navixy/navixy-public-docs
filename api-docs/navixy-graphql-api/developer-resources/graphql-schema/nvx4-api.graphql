@@ -340,7 +340,7 @@
 #   | SERVICE_UNAVAILABLE | .../errors/service-unavailable | 503 | Downstream service unavailable    |
 #
 #   Base URI: https://api.navixy.com — these are stable problem-type identifiers, not documentation
-#   links. The human-readable docs live at https://www.navixy.com/docs/navixy-repository-api.
+#   links. The human-readable docs live at https://www.navixy.com/docs/navixy-graphql-api.
 #
 # -----------------------------------------------------------------------------
 # ERROR EXAMPLES
@@ -667,7 +667,7 @@ scalar CountryCode
 # `Decimal` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
 # (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
-# @category: schedules
+# @category: bdr/schedules
 """
 Schedule configuration as a JSON object — time intervals and recurrence. Backs the `Schedule`
 entity's `scheduleData`. Custom fields that need a schedule reference the entity instead.
@@ -717,13 +717,13 @@ Numeric recurrence domains follow RFC 5545 §3.3.10. Maps to a `VEVENT` per `eve
 `.ics` export (post-MVP). See `@specifiedBy`.
 """
 scalar ScheduleData
-  @specifiedBy(url: "https://www.navixy.com/docs/navixy-repository-api/core-api-reference/schedules#scheduledata")
+  @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/business-data-repository/api-reference/schedules#scheduledata")
 
 # =============================================================================
 # 8. ENUMS
 # =============================================================================
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "The origin of a catalog item, indicating how it was created."
 enum CatalogItemOrigin {
   "Predefined by platform. Immutable and available to all workspaces."
@@ -735,7 +735,7 @@ enum CatalogItemOrigin {
 # `FieldType` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
 # (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
-# @category: devices
+# @category: bdr/devices
 "The type of hardware identifier used to identify a device."
 enum DeviceIdType {
   "A GUID/UUID identifier."
@@ -754,7 +754,7 @@ enum DeviceIdType {
   CUSTOM
 }
 
-# @category: audit
+# @category: bdr/audit
 "The source type identifying the origin of an API request."
 enum SourceType {
   "Request originated from a web browser application."
@@ -769,7 +769,7 @@ enum SourceType {
   INTEGRATION
 }
 
-# @category: audit
+# @category: bdr/audit
 "The type of event recorded in the audit log."
 enum AuditEventType {
   # Authentication events
@@ -833,7 +833,7 @@ enum AuditEventType {
 # a kernel type fails the gate
 # (docs/adr/015-api-module-namespacing.md §Decision item 3;
 # docs/reference/graphql-conventions.md §Module namespacing).
-# @category: custom-fields
+# @category: bdr/custom-fields
 "DEVICE custom-field value (primary-capable)."
 type DeviceCustomFieldValue implements CustomFieldValue {
   code: Code!
@@ -853,7 +853,7 @@ type DeviceCustomFieldValue implements CustomFieldValue {
 # `MultiValue` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
 # (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "An object that can be assigned to an inventory."
 interface InventoryItem implements Node {
   "A globally unique identifier."
@@ -862,7 +862,7 @@ interface InventoryItem implements Node {
   inventory: Inventory
 }
 
-# @category: actors
+# @category: bdr/actors
 "An entity that can perform actions."
 interface Actor implements Node & Titled {
   "A globally unique identifier."
@@ -871,7 +871,7 @@ interface Actor implements Node & Titled {
   title: String!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "A dictionary item that provides reference data for the system."
 interface CatalogItem implements Node & Versioned & Titled {
   "A globally unique identifier."
@@ -892,7 +892,7 @@ interface CatalogItem implements Node & Versioned & Titled {
   meta: CatalogItemMeta!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Metadata about a catalog item."
 type CatalogItemMeta {
   "A description of the catalog item. Can be localized."
@@ -905,7 +905,7 @@ type CatalogItemMeta {
   hidden: Boolean!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "A catalog item that supports parent-child hierarchy."
 interface HierarchicalCatalogItem {
   "The parent item in the hierarchy. Null for root items."
@@ -918,7 +918,7 @@ interface HierarchicalCatalogItem {
 
 # --- CatalogItem Connection ---
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "A paginated list of CatalogItem items."
 type CatalogItemConnection implements Connection {
   "A list of edges."
@@ -931,7 +931,7 @@ type CatalogItemConnection implements Connection {
   total: CountInfo
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "An edge in the CatalogItem connection."
 type CatalogItemEdge implements Edge {
   "An opaque cursor for this edge."
@@ -942,7 +942,7 @@ type CatalogItemEdge implements Edge {
 
 # --- UserCatalogItem Connection ---
 
-# @category: actors/users
+# @category: bdr/actors/users
 "A paginated list of UserCatalogItem items."
 type UserCatalogItemConnection implements Connection {
   "A list of edges."
@@ -955,7 +955,7 @@ type UserCatalogItemConnection implements Connection {
   total: CountInfo
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "An edge in the UserCatalogItem connection."
 type UserCatalogItemEdge implements Edge {
   "An opaque cursor for this edge."
@@ -966,7 +966,7 @@ type UserCatalogItemEdge implements Edge {
 
 # --- Workspace Connection ---
 
-# @category: workspaces
+# @category: bdr/workspaces
 "A paginated list of Workspace items."
 type WorkspaceConnection implements Connection {
   "A list of edges."
@@ -979,7 +979,7 @@ type WorkspaceConnection implements Connection {
   total: CountInfo
 }
 
-# @category: workspaces
+# @category: bdr/workspaces
 "An edge in the Workspace connection."
 type WorkspaceEdge implements Edge {
   "An opaque cursor for this edge."
@@ -990,7 +990,7 @@ type WorkspaceEdge implements Edge {
 
 # --- User Connection ---
 
-# @category: actors/users
+# @category: bdr/actors/users
 "A paginated list of User items."
 type UserConnection implements Connection {
   "A list of edges."
@@ -1003,7 +1003,7 @@ type UserConnection implements Connection {
   total: CountInfo
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "An edge in the User connection."
 type UserEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1014,7 +1014,7 @@ type UserEdge implements Edge {
 
 # --- Member Connection ---
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "A paginated list of Member items."
 type MemberConnection implements Connection {
   "A list of edges."
@@ -1027,7 +1027,7 @@ type MemberConnection implements Connection {
   total: CountInfo
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "An edge in the Member connection."
 type MemberEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1038,7 +1038,7 @@ type MemberEdge implements Edge {
 
 # --- Integration Connection ---
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "A paginated list of Integration items."
 type IntegrationConnection implements Connection {
   "A list of edges."
@@ -1051,7 +1051,7 @@ type IntegrationConnection implements Connection {
   total: CountInfo
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "An edge in the Integration connection."
 type IntegrationEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1062,7 +1062,7 @@ type IntegrationEdge implements Edge {
 
 # --- Device Connection ---
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of Device items."
 type DeviceConnection implements Connection {
   "A list of edges."
@@ -1075,7 +1075,7 @@ type DeviceConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the Device connection."
 type DeviceEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1086,7 +1086,7 @@ type DeviceEdge implements Edge {
 
 # --- Asset Connection ---
 
-# @category: assets
+# @category: bdr/assets
 "A paginated list of Asset items."
 type AssetConnection implements Connection {
   "A list of edges."
@@ -1099,7 +1099,7 @@ type AssetConnection implements Connection {
   total: CountInfo
 }
 
-# @category: assets
+# @category: bdr/assets
 "An edge in the Asset connection."
 type AssetEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1110,7 +1110,7 @@ type AssetEdge implements Edge {
 
 # --- AssetGroup Connection ---
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A paginated list of AssetGroup items."
 type AssetGroupConnection implements Connection {
   "A list of edges."
@@ -1123,7 +1123,7 @@ type AssetGroupConnection implements Connection {
   total: CountInfo
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "An edge in the AssetGroup connection."
 type AssetGroupEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1134,7 +1134,7 @@ type AssetGroupEdge implements Edge {
 
 # --- AssetGroupItem Connection ---
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A paginated list of AssetGroupItem items."
 type AssetGroupItemConnection implements Connection {
   "A list of edges."
@@ -1147,7 +1147,7 @@ type AssetGroupItemConnection implements Connection {
   total: CountInfo
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "An edge in the AssetGroupItem connection."
 type AssetGroupItemEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1158,7 +1158,7 @@ type AssetGroupItemEdge implements Edge {
 
 # --- Inventory Connection ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "A paginated list of Inventory items."
 type InventoryConnection implements Connection {
   "A list of edges."
@@ -1171,7 +1171,7 @@ type InventoryConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "An edge in the Inventory connection."
 type InventoryEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1182,7 +1182,7 @@ type InventoryEdge implements Edge {
 
 # --- GeoObject Connection ---
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "A paginated list of GeoObject items."
 type GeoObjectConnection implements Connection {
   "A list of edges."
@@ -1195,7 +1195,7 @@ type GeoObjectConnection implements Connection {
   total: CountInfo
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "An edge in the GeoObject connection."
 type GeoObjectEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1206,7 +1206,7 @@ type GeoObjectEdge implements Edge {
 
 # --- Schedule Connection ---
 
-# @category: schedules
+# @category: bdr/schedules
 "A paginated list of Schedule items."
 type ScheduleConnection implements Connection {
   "A list of edges."
@@ -1219,7 +1219,7 @@ type ScheduleConnection implements Connection {
   total: CountInfo
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "An edge in the Schedule connection."
 type ScheduleEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1230,7 +1230,7 @@ type ScheduleEdge implements Edge {
 
 # --- AuditEvent Connection ---
 
-# @category: audit
+# @category: bdr/audit
 "A paginated list of AuditEvent items."
 type AuditEventConnection implements Connection {
   "A list of edges."
@@ -1243,7 +1243,7 @@ type AuditEventConnection implements Connection {
   total: CountInfo
 }
 
-# @category: audit
+# @category: bdr/audit
 "An edge in the AuditEvent connection."
 type AuditEventEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1254,7 +1254,7 @@ type AuditEventEdge implements Edge {
 
 # --- DeviceInventoryRelation Connection ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "A paginated list of DeviceInventoryRelation items."
 type DeviceInventoryRelationConnection implements Connection {
   "A list of edges."
@@ -1267,7 +1267,7 @@ type DeviceInventoryRelationConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "An edge in the DeviceInventoryRelation connection."
 type DeviceInventoryRelationEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1278,7 +1278,7 @@ type DeviceInventoryRelationEdge implements Edge {
 
 # --- Catalog-specific type connections ---
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "A paginated list of Catalog items."
 type CatalogConnection implements Connection {
   "A list of edges."
@@ -1291,7 +1291,7 @@ type CatalogConnection implements Connection {
   total: CountInfo
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "An edge in the Catalog connection."
 type CatalogEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1300,7 +1300,7 @@ type CatalogEdge implements Edge {
   node: Catalog!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of DeviceType items."
 type DeviceTypeConnection implements Connection {
   "A list of edges."
@@ -1313,7 +1313,7 @@ type DeviceTypeConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the DeviceType connection."
 type DeviceTypeEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1322,7 +1322,7 @@ type DeviceTypeEdge implements Edge {
   node: DeviceType!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of DeviceStatus items."
 type DeviceStatusConnection implements Connection {
   "A list of edges."
@@ -1335,7 +1335,7 @@ type DeviceStatusConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the DeviceStatus connection."
 type DeviceStatusEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1344,7 +1344,7 @@ type DeviceStatusEdge implements Edge {
   node: DeviceStatus!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of DeviceModel items."
 type DeviceModelConnection implements Connection {
   "A list of edges."
@@ -1357,7 +1357,7 @@ type DeviceModelConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the DeviceModel connection."
 type DeviceModelEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1366,7 +1366,7 @@ type DeviceModelEdge implements Edge {
   node: DeviceModel!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of DeviceVendor items."
 type DeviceVendorConnection implements Connection {
   "A list of edges."
@@ -1379,7 +1379,7 @@ type DeviceVendorConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the DeviceVendor connection."
 type DeviceVendorEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1388,7 +1388,7 @@ type DeviceVendorEdge implements Edge {
   node: DeviceVendor!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A paginated list of DeviceRelationType items."
 type DeviceRelationTypeConnection implements Connection {
   "A list of edges."
@@ -1401,7 +1401,7 @@ type DeviceRelationTypeConnection implements Connection {
   total: CountInfo
 }
 
-# @category: devices
+# @category: bdr/devices
 "An edge in the DeviceRelationType connection."
 type DeviceRelationTypeEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1410,7 +1410,7 @@ type DeviceRelationTypeEdge implements Edge {
   node: DeviceRelationType!
 }
 
-# @category: assets
+# @category: bdr/assets
 "A paginated list of AssetType items."
 type AssetTypeConnection implements Connection {
   "A list of edges."
@@ -1423,7 +1423,7 @@ type AssetTypeConnection implements Connection {
   total: CountInfo
 }
 
-# @category: assets
+# @category: bdr/assets
 "An edge in the AssetType connection."
 type AssetTypeEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1432,7 +1432,7 @@ type AssetTypeEdge implements Edge {
   node: AssetType!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A paginated list of AssetGroupType items."
 type AssetGroupTypeConnection implements Connection {
   "A list of edges."
@@ -1445,7 +1445,7 @@ type AssetGroupTypeConnection implements Connection {
   total: CountInfo
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "An edge in the AssetGroupType connection."
 type AssetGroupTypeEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1454,7 +1454,7 @@ type AssetGroupTypeEdge implements Edge {
   node: AssetGroupType!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "A paginated list of GeoObjectType items."
 type GeoObjectTypeConnection implements Connection {
   "A list of edges."
@@ -1467,7 +1467,7 @@ type GeoObjectTypeConnection implements Connection {
   total: CountInfo
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "An edge in the GeoObjectType connection."
 type GeoObjectTypeEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1476,7 +1476,7 @@ type GeoObjectTypeEdge implements Edge {
   node: GeoObjectType!
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "A paginated list of Tag items."
 type TagConnection implements Connection {
   "A list of edges."
@@ -1489,7 +1489,7 @@ type TagConnection implements Connection {
   total: CountInfo
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "An edge in the Tag connection."
 type TagEdge implements Edge {
   "An opaque cursor for this edge."
@@ -1502,7 +1502,7 @@ type TagEdge implements Edge {
 # 11. CATALOG ITEM TYPES
 # =============================================================================
 
-# @category: catalogs/system
+# @category: bdr/catalogs/system
 """
 A system module that groups related functionality.
 Examples: repo (core), fleet_management (FSM), iot (devices), reports, billing.
@@ -1518,7 +1518,7 @@ type Module implements CatalogItem & Node & Versioned & Titled {
   meta: CatalogItemMeta!
 }
 
-# @category: catalogs/system
+# @category: bdr/catalogs/system
 "A definition of an entity type in the system."
 type EntityType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1537,7 +1537,7 @@ type EntityType implements CatalogItem & Node & Versioned & Titled {
   customFieldDefinitions: [CustomFieldDefinition!]!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A device manufacturer or vendor."
 type DeviceVendor implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1552,20 +1552,20 @@ type DeviceVendor implements CatalogItem & Node & Versioned & Titled {
   models(
     "Filtering options for the returned models."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned models."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
   ): DeviceModelConnection!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A specific device model produced by a vendor."
 type DeviceModel implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1580,7 +1580,7 @@ type DeviceModel implements CatalogItem & Node & Versioned & Titled {
   vendor: DeviceVendor!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A classification type for devices."
 type DeviceType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1593,7 +1593,7 @@ type DeviceType implements CatalogItem & Node & Versioned & Titled {
   meta: CatalogItemMeta!
 }
 
-# @category: devices
+# @category: bdr/devices
 "An operational status for devices."
 type DeviceStatus implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1606,7 +1606,7 @@ type DeviceStatus implements CatalogItem & Node & Versioned & Titled {
   meta: CatalogItemMeta!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A type of relationship between two devices."
 type DeviceRelationType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1619,7 +1619,7 @@ type DeviceRelationType implements CatalogItem & Node & Versioned & Titled {
   meta: CatalogItemMeta!
 }
 
-# @category: assets
+# @category: bdr/assets
 "A classification type for assets."
 type AssetType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1634,7 +1634,7 @@ type AssetType implements CatalogItem & Node & Versioned & Titled {
   customFieldDefinitions: [CustomFieldDefinition!]!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A type for asset groups with membership constraints."
 type AssetGroupType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1649,7 +1649,7 @@ type AssetGroupType implements CatalogItem & Node & Versioned & Titled {
   allowedAssetTypes: [AssetGroupTypeConstraint!]!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A constraint defining which asset types can be included in an asset group type."
 type AssetGroupTypeConstraint {
   "The asset type allowed in the group."
@@ -1658,7 +1658,7 @@ type AssetGroupTypeConstraint {
   maxItems: Int
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "A classification type for geographic objects."
 type GeoObjectType implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1673,7 +1673,7 @@ type GeoObjectType implements CatalogItem & Node & Versioned & Titled {
   customFieldDefinitions: [CustomFieldDefinition!]!
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "A tag for labeling and categorizing entities."
 type Tag implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1688,7 +1688,7 @@ type Tag implements CatalogItem & Node & Versioned & Titled {
   entityTypes: [EntityType!]!
 }
 
-# @category: catalogs/system
+# @category: bdr/catalogs/system
 "A country reference data item."
 type Country implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1703,7 +1703,7 @@ type Country implements CatalogItem & Node & Versioned & Titled {
   alpha2Code: CountryCode!
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "A user-defined catalog item that supports hierarchical workspace."
 type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1720,20 +1720,20 @@ type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & V
   children(
     "Filtering options for the returned children."
     filter: CatalogItemChildrenFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned children."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): UserCatalogItemConnection!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "A catalog definition that contains catalog items. Catalogs are themselves catalog items."
 type Catalog implements CatalogItem & Node & Versioned & Titled {
   id: ID!
@@ -1751,13 +1751,13 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
   items(
     "Filtering options for the returned items."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned items."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -1768,7 +1768,7 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
 # 12. WORKSPACE
 # =============================================================================
 
-# @category: workspaces
+# @category: bdr/workspaces
 "A workspace that owns entities and users."
 type Workspace implements Node & Versioned & Titled {
   id: ID!
@@ -1787,13 +1787,13 @@ type Workspace implements Node & Versioned & Titled {
   members(
     "Filtering options for the returned members."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned members."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
@@ -1802,13 +1802,13 @@ type Workspace implements Node & Versioned & Titled {
   devices(
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
@@ -1817,13 +1817,13 @@ type Workspace implements Node & Versioned & Titled {
   assets(
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
@@ -1832,13 +1832,13 @@ type Workspace implements Node & Versioned & Titled {
   geoObjects(
     "Filtering options for the returned geo objects."
     filter: GeoObjectFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned geo objects."
     orderBy: GeoObjectOrder = { field: TITLE, direction: ASC }
@@ -1847,13 +1847,13 @@ type Workspace implements Node & Versioned & Titled {
   schedules(
     "Filtering options for the returned schedules."
     filter: ScheduleFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned schedules."
     orderBy: ScheduleOrder = { field: TITLE, direction: ASC }
@@ -1863,7 +1863,7 @@ type Workspace implements Node & Versioned & Titled {
 # 13. ACTORS
 # =============================================================================
 
-# @category: actors
+# @category: bdr/actors
 """
 Structured person name components following W3C Personal Names guidance.
 See: https://www.w3.org/International/questions/qa-personal-names
@@ -1886,14 +1886,14 @@ type PersonName {
   fullName: String!
 }
 
-# @category: actors
+# @category: bdr/actors
 "The built-in system actor used for automated operations."
 type SystemActor implements Actor & Node & Titled {
   id: ID!
   title: String!
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "A human user account authenticated via an identity provider."
 type User implements Actor & Node & Versioned & Titled {
   id: ID!
@@ -1916,20 +1916,20 @@ type User implements Actor & Node & Versioned & Titled {
   memberships(
     "Filtering options for the returned memberships."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned memberships."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
   ): MemberConnection!
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "A user's membership in a workspace."
 type Member implements Node & Versioned {
   id: ID!
@@ -1944,7 +1944,7 @@ type Member implements Node & Versioned {
   assignedAt: DateTime!
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "An external system integration with API access."
 type Integration implements Actor & Node & Versioned & Titled {
   id: ID!
@@ -1962,7 +1962,7 @@ type Integration implements Actor & Node & Versioned & Titled {
 # 14. BUSINESS ENTITIES
 # =============================================================================
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "A geographic coordinate point."
 type GeoPoint {
   "The latitude coordinate in decimal degrees."
@@ -1975,7 +1975,7 @@ type GeoPoint {
   accuracy: Float
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for a geographic coordinate point."
 input GeoPointInput {
   "The latitude coordinate (-90 to 90 degrees)."
@@ -1988,7 +1988,7 @@ input GeoPointInput {
   accuracy: Float
 }
 
-# @category: devices
+# @category: bdr/devices
 "A tracking device such as a GPS tracker, sensor, or beacon."
 type Device implements Node & Titled & Versioned & InventoryItem {
   id: ID!
@@ -2014,13 +2014,13 @@ type Device implements Node & Titled & Versioned & InventoryItem {
   relationsTo: [DeviceRelation!]!
   "The history of inventory assignments for this device."
   inventoryHistory(
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned history."
     orderBy: DeviceInventoryRelationOrder = {
@@ -2030,7 +2030,7 @@ type Device implements Node & Titled & Versioned & InventoryItem {
   ): DeviceInventoryRelationConnection!
 }
 
-# @category: devices
+# @category: bdr/devices
 "A hardware identifier for a device."
 type DeviceIdentifier implements Node {
   id: ID!
@@ -2044,7 +2044,7 @@ type DeviceIdentifier implements Node {
   namespace: Code
 }
 
-# @category: devices
+# @category: bdr/devices
 "A relationship between two devices."
 type DeviceRelation implements Node {
   id: ID!
@@ -2056,7 +2056,7 @@ type DeviceRelation implements Node {
   type: DeviceRelationType!
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "A record of a device's assignment to an inventory."
 type DeviceInventoryRelation implements Node {
   id: ID!
@@ -2070,7 +2070,7 @@ type DeviceInventoryRelation implements Node {
   assignedBy: Actor
 }
 
-# @category: assets
+# @category: bdr/assets
 "A physical or logical asset being tracked."
 type Asset implements Node & Titled & Customizable & Versioned {
   id: ID!
@@ -2090,20 +2090,20 @@ type Asset implements Node & Titled & Customizable & Versioned {
   groups(
     "Filtering options for the returned groups."
     filter: AssetGroupFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned groups."
     orderBy: AssetGroupOrder = { field: TITLE, direction: ASC }
   ): AssetGroupConnection!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A group of assets."
 type AssetGroup implements Node & Versioned & Titled {
   id: ID!
@@ -2119,13 +2119,13 @@ type AssetGroup implements Node & Versioned & Titled {
   currentAssets(
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
@@ -2134,20 +2134,20 @@ type AssetGroup implements Node & Versioned & Titled {
   history(
     "Filtering options for the returned history."
     filter: AssetGroupItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned history."
     orderBy: AssetGroupItemOrder = { field: ATTACHED_AT, direction: DESC }
   ): AssetGroupItemConnection!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "A record of an asset's membership in a group."
 type AssetGroupItem implements Node {
   id: ID!
@@ -2161,7 +2161,7 @@ type AssetGroupItem implements Node {
   detachedAt: DateTime
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "An inventory or warehouse record for device stock management."
 type Inventory implements Node & Versioned & Titled {
   id: ID!
@@ -2173,20 +2173,20 @@ type Inventory implements Node & Versioned & Titled {
   devices(
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
   ): DeviceConnection!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "A geographic object such as a geofence, point of interest, or route."
 type GeoObject implements Node & Titled & Customizable & Versioned {
   id: ID!
@@ -2213,7 +2213,7 @@ type GeoObject implements Node & Titled & Customizable & Versioned {
   ): [PointContainmentResult!]!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "The result of checking whether a point is contained within a geometry."
 type PointContainmentResult {
   "The index of the point in the input array (0-based)."
@@ -2224,7 +2224,7 @@ type PointContainmentResult {
   isContained: Boolean!
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "A schedule definition for work hours, maintenance windows, or other time-based rules."
 type Schedule implements Node & Titled & Versioned {
   id: ID!
@@ -2253,7 +2253,7 @@ type Schedule implements Node & Titled & Versioned {
 # GraphQL; see the note on `DeviceCustomFieldValue` in §9 above, and
 # docs/reference/graphql-conventions.md §Module namespacing, for why `extend`ing a kernel type
 # from a module file is forbidden — and, unlike a plain reference, fails the closure gate.
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for DEVICE field type."
 type FieldParamsDevice implements FieldParams {
   isRequired: Boolean!
@@ -2272,7 +2272,7 @@ type FieldParamsDevice implements FieldParams {
 # file — legal GraphQL; see the note on `DeviceCustomFieldValue` in §9 above, and
 # docs/reference/graphql-conventions.md §Module namespacing, for why `extend`ing a kernel type
 # from a module file is forbidden — and, unlike a plain reference, fails the closure gate.
-# @category: custom-fields
+# @category: bdr/custom-fields
 "Parameters for REFERENCE field type."
 type FieldParamsReference implements FieldParams & MultiValue {
   isRequired: Boolean!
@@ -2306,7 +2306,7 @@ type FieldParamsReference implements FieldParams & MultiValue {
 # 16. AUDIT
 # =============================================================================
 
-# @category: audit
+# @category: bdr/audit
 "An audit log entry recording an event that occurred in the system."
 type AuditEvent implements Node {
   id: ID!
@@ -2358,7 +2358,7 @@ type AuditEvent implements Node {
 
 # --- Catalog Item ---
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Filtering options for catalog items."
 input CatalogItemFilter {
   "Partial match on title (case-insensitive contains)."
@@ -2367,14 +2367,14 @@ input CatalogItemFilter {
   codes: [Code!]
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Filtering options for catalog item children."
 input CatalogItemChildrenFilter {
   "Partial match on title (case-insensitive contains)."
   titleContains: String @trim
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Ordering options for catalog items."
 input CatalogItemOrder {
   "The field to order by."
@@ -2383,7 +2383,7 @@ input CatalogItemOrder {
   direction: OrderDirection!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Fields available for ordering catalog items."
 enum CatalogItemOrderField {
   "Order by display order."
@@ -2398,14 +2398,14 @@ enum CatalogItemOrderField {
 
 # --- Workspace ---
 
-# @category: workspaces
+# @category: bdr/workspaces
 "Filtering options for workspaces."
 input WorkspaceFilter {
   "Filter by active status."
   isActive: Boolean
 }
 
-# @category: workspaces
+# @category: bdr/workspaces
 "Ordering options for workspaces."
 input WorkspaceOrder {
   "The field to order by."
@@ -2414,7 +2414,7 @@ input WorkspaceOrder {
   direction: OrderDirection!
 }
 
-# @category: workspaces
+# @category: bdr/workspaces
 "Fields available for ordering workspaces."
 enum WorkspaceOrderField {
   "Order by title."
@@ -2423,7 +2423,7 @@ enum WorkspaceOrderField {
 
 # --- Member ---
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Filtering options for members."
 input MemberFilter {
   "Filter by users (OR within field)."
@@ -2432,7 +2432,7 @@ input MemberFilter {
   isActive: Boolean
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Ordering options for members."
 input MemberOrder {
   "The field to order by."
@@ -2441,7 +2441,7 @@ input MemberOrder {
   direction: OrderDirection!
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Fields available for ordering members."
 enum MemberOrderField {
   "Order by assignment date."
@@ -2450,14 +2450,14 @@ enum MemberOrderField {
 
 # --- Integration ---
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Filtering options for integrations."
 input IntegrationFilter {
   "Filter by active status."
   isActive: Boolean
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Ordering options for integrations."
 input IntegrationOrder {
   "The field to order by."
@@ -2466,7 +2466,7 @@ input IntegrationOrder {
   direction: OrderDirection!
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Fields available for ordering integrations."
 enum IntegrationOrderField {
   "Order by title."
@@ -2475,7 +2475,7 @@ enum IntegrationOrderField {
 
 # --- Device ---
 
-# @category: devices
+# @category: bdr/devices
 "Filtering options for devices."
 input DeviceFilter {
   "Filter by device types (OR within field)."
@@ -2494,7 +2494,7 @@ input DeviceFilter {
   titleContains: String @trim
 }
 
-# @category: devices
+# @category: bdr/devices
 "Ordering options for devices."
 input DeviceOrder {
   "The field to order by."
@@ -2503,7 +2503,7 @@ input DeviceOrder {
   direction: OrderDirection!
 }
 
-# @category: devices
+# @category: bdr/devices
 "Fields available for ordering devices."
 enum DeviceOrderField {
   "Order by title."
@@ -2512,7 +2512,7 @@ enum DeviceOrderField {
 
 # --- DeviceInventoryRelation ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Ordering options for device inventory relations."
 input DeviceInventoryRelationOrder {
   "The field to order by."
@@ -2521,7 +2521,7 @@ input DeviceInventoryRelationOrder {
   direction: OrderDirection!
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Fields available for ordering device inventory relations."
 enum DeviceInventoryRelationOrderField {
   "Order by assignment date."
@@ -2530,7 +2530,7 @@ enum DeviceInventoryRelationOrderField {
 
 # --- Asset ---
 
-# @category: assets
+# @category: bdr/assets
 "Filtering options for assets."
 input AssetFilter {
   "Filter by asset types (OR within field)."
@@ -2547,7 +2547,7 @@ input AssetFilter {
   customFields: [CustomFieldFilter!]
 }
 
-# @category: assets
+# @category: bdr/assets
 "Ordering options for assets."
 input AssetOrder {
   "The standard field to order by. Mutually exclusive with `customFieldCode`."
@@ -2565,7 +2565,7 @@ input AssetOrder {
   direction: OrderDirection!
 }
 
-# @category: assets
+# @category: bdr/assets
 "Fields available for ordering assets."
 enum AssetOrderField {
   "Order by title."
@@ -2574,7 +2574,7 @@ enum AssetOrderField {
 
 # --- AssetGroup ---
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Filtering options for asset groups."
 input AssetGroupFilter {
   "Filter by group types (OR within field)."
@@ -2583,7 +2583,7 @@ input AssetGroupFilter {
   titleContains: String @trim
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Ordering options for asset groups."
 input AssetGroupOrder {
   "The field to order by."
@@ -2592,7 +2592,7 @@ input AssetGroupOrder {
   direction: OrderDirection!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Fields available for ordering asset groups."
 enum AssetGroupOrderField {
   "Order by title."
@@ -2601,14 +2601,14 @@ enum AssetGroupOrderField {
 
 # --- AssetGroupItem ---
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Filtering options for asset group items."
 input AssetGroupItemFilter {
   "If true, return only currently attached items."
   activeOnly: Boolean
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Ordering options for asset group items."
 input AssetGroupItemOrder {
   "The field to order by."
@@ -2617,7 +2617,7 @@ input AssetGroupItemOrder {
   direction: OrderDirection!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Fields available for ordering asset group items."
 enum AssetGroupItemOrderField {
   "Order by attachment date."
@@ -2626,14 +2626,14 @@ enum AssetGroupItemOrderField {
 
 # --- Inventory ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Filtering options for inventories."
 input InventoryFilter {
   "Partial match on title (case-insensitive contains)."
   titleContains: String @trim
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Ordering options for inventories."
 input InventoryOrder {
   "The field to order by."
@@ -2642,7 +2642,7 @@ input InventoryOrder {
   direction: OrderDirection!
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Fields available for ordering inventories."
 enum InventoryOrderField {
   "Order by title."
@@ -2651,7 +2651,7 @@ enum InventoryOrderField {
 
 # --- GeoObject ---
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Filtering options for geo objects."
 input GeoObjectFilter {
   "Filter by geo object types (OR within field)."
@@ -2666,7 +2666,7 @@ input GeoObjectFilter {
   customFields: [CustomFieldFilter!]
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Ordering options for geo objects."
 input GeoObjectOrder {
   "The standard field to order by. Mutually exclusive with `customFieldCode`."
@@ -2684,7 +2684,7 @@ input GeoObjectOrder {
   direction: OrderDirection!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Fields available for ordering geo objects."
 enum GeoObjectOrderField {
   "Order by title."
@@ -2693,14 +2693,14 @@ enum GeoObjectOrderField {
 
 # --- Schedule ---
 
-# @category: schedules
+# @category: bdr/schedules
 "Filtering options for schedules."
 input ScheduleFilter {
   "Partial match on title (case-insensitive contains)."
   titleContains: String @trim
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "Ordering options for schedules."
 input ScheduleOrder {
   "The standard field to order by."
@@ -2709,7 +2709,7 @@ input ScheduleOrder {
   direction: OrderDirection!
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "Fields available for ordering schedules."
 enum ScheduleOrderField {
   "Order by title."
@@ -2718,7 +2718,7 @@ enum ScheduleOrderField {
 
 # --- DeviceModel ---
 
-# @category: devices
+# @category: bdr/devices
 "Filtering options for device models."
 input DeviceModelFilter {
   "Filter by vendors (OR within field)."
@@ -2731,7 +2731,7 @@ input DeviceModelFilter {
 
 # --- Tag ---
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "Filtering options for tags."
 input TagFilter {
   "Partial match on title (case-insensitive contains)."
@@ -2740,7 +2740,7 @@ input TagFilter {
 
 # --- AuditEvent ---
 
-# @category: audit
+# @category: bdr/audit
 "Filtering options for audit events."
 input AuditEventFilter {
   "Filter by actors (OR within field)."
@@ -2761,7 +2761,7 @@ input AuditEventFilter {
   to: DateTime
 }
 
-# @category: audit
+# @category: bdr/audit
 "Ordering options for audit events."
 input AuditEventOrder {
   "The field to order by."
@@ -2770,7 +2770,7 @@ input AuditEventOrder {
   direction: OrderDirection!
 }
 
-# @category: audit
+# @category: bdr/audit
 "Fields available for ordering audit events."
 enum AuditEventOrderField {
   "Order by occurrence date."
@@ -2792,7 +2792,7 @@ enum AuditEventOrderField {
 
 # --- Device ---
 
-# @category: devices
+# @category: bdr/devices
 "Input for creating a new device."
 input DeviceCreateInput {
   "The workspace that will own the device."
@@ -2822,7 +2822,7 @@ input DeviceCreateInput {
   inventoryId: ID
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for updating an existing device."
 input DeviceUpdateInput {
   "The device ID to update."
@@ -2835,7 +2835,7 @@ input DeviceUpdateInput {
   title: String @trim
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for deleting a device."
 input DeviceDeleteInput {
   "The device ID to delete."
@@ -2844,7 +2844,7 @@ input DeviceDeleteInput {
   version: Int
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for a device identifier."
 input DeviceIdentifierInput {
   "The type of identifier."
@@ -2861,7 +2861,7 @@ input DeviceIdentifierInput {
   namespace: Code
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for adding an identifier to a device."
 input DeviceIdentifierAddInput {
   "The device ID."
@@ -2870,7 +2870,7 @@ input DeviceIdentifierAddInput {
   identifier: DeviceIdentifierInput!
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for removing an identifier from a device."
 input DeviceIdentifierRemoveInput {
   "The identifier ID to remove."
@@ -2879,7 +2879,7 @@ input DeviceIdentifierRemoveInput {
 
 # --- Asset ---
 
-# @category: assets
+# @category: bdr/assets
 "Input for creating a new asset."
 input AssetCreateInput {
   "The workspace that will own the asset."
@@ -2892,7 +2892,7 @@ input AssetCreateInput {
   customFields: CustomFieldsPatchInput
 }
 
-# @category: assets
+# @category: bdr/assets
 "Input for updating an existing asset."
 input AssetUpdateInput {
   "The asset ID to update."
@@ -2905,7 +2905,7 @@ input AssetUpdateInput {
   customFields: CustomFieldsPatchInput
 }
 
-# @category: assets
+# @category: bdr/assets
 "Input for deleting an asset."
 input AssetDeleteInput {
   "The asset ID to delete."
@@ -2916,7 +2916,7 @@ input AssetDeleteInput {
 
 # --- AssetGroup ---
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for creating a new asset group."
 input AssetGroupCreateInput {
   "The workspace that will own the group."
@@ -2931,7 +2931,7 @@ input AssetGroupCreateInput {
   assetIds: [ID!]
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for updating an existing asset group."
 input AssetGroupUpdateInput {
   "The asset group ID to update."
@@ -2946,7 +2946,7 @@ input AssetGroupUpdateInput {
   assetIds: [ID!]
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for deleting an asset group."
 input AssetGroupDeleteInput {
   "The asset group ID to delete."
@@ -2955,7 +2955,7 @@ input AssetGroupDeleteInput {
   version: Int
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for adding assets to a group."
 input AssetGroupItemsAddInput {
   "The group ID."
@@ -2964,7 +2964,7 @@ input AssetGroupItemsAddInput {
   assetIds: [ID!]!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for removing assets from a group."
 input AssetGroupItemsRemoveInput {
   "The group ID."
@@ -2975,7 +2975,7 @@ input AssetGroupItemsRemoveInput {
 
 # --- GeoObject ---
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for creating a new geo object."
 input GeoObjectCreateInput {
   "The workspace that will own the geo object."
@@ -2990,7 +2990,7 @@ input GeoObjectCreateInput {
   customFields: CustomFieldsPatchInput
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for updating an existing geo object."
 input GeoObjectUpdateInput {
   "The geo object ID to update."
@@ -3005,7 +3005,7 @@ input GeoObjectUpdateInput {
   customFields: CustomFieldsPatchInput
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for deleting a geo object."
 input GeoObjectDeleteInput {
   "The geo object ID to delete."
@@ -3016,7 +3016,7 @@ input GeoObjectDeleteInput {
 
 # --- Schedule ---
 
-# @category: schedules
+# @category: bdr/schedules
 "Input for creating a new schedule."
 input ScheduleCreateInput {
   "The workspace that will own the schedule."
@@ -3027,7 +3027,7 @@ input ScheduleCreateInput {
   scheduleData: ScheduleData!
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "Input for updating an existing schedule."
 input ScheduleUpdateInput {
   "The schedule ID to update."
@@ -3040,7 +3040,7 @@ input ScheduleUpdateInput {
   scheduleData: ScheduleData
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "Input for deleting a schedule."
 input ScheduleDeleteInput {
   "The schedule ID to delete."
@@ -3051,7 +3051,7 @@ input ScheduleDeleteInput {
 
 # --- Inventory ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Input for creating a new inventory."
 input InventoryCreateInput {
   "The workspace that will own the inventory."
@@ -3060,7 +3060,7 @@ input InventoryCreateInput {
   title: String! @trim
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Input for updating an existing inventory."
 input InventoryUpdateInput {
   "The inventory ID to update."
@@ -3071,7 +3071,7 @@ input InventoryUpdateInput {
   title: String @trim
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Input for deleting an inventory."
 input InventoryDeleteInput {
   "The inventory ID to delete."
@@ -3082,7 +3082,7 @@ input InventoryDeleteInput {
 
 # --- Member ---
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Input for creating a membership."
 input MemberCreateInput {
   "The workspace ID."
@@ -3091,7 +3091,7 @@ input MemberCreateInput {
   userId: ID!
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Input for updating a membership."
 input MemberUpdateInput {
   "The membership ID to update."
@@ -3102,7 +3102,7 @@ input MemberUpdateInput {
   isActive: Boolean
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "Input for removing a membership."
 input MemberRemoveInput {
   "The membership ID to remove."
@@ -3113,7 +3113,7 @@ input MemberRemoveInput {
 
 # --- Integration ---
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Input for creating a new integration."
 input IntegrationCreateInput {
   "The workspace that will own the integration."
@@ -3124,7 +3124,7 @@ input IntegrationCreateInput {
   credentialRef: String
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Input for updating an existing integration."
 input IntegrationUpdateInput {
   "The integration ID to update."
@@ -3139,7 +3139,7 @@ input IntegrationUpdateInput {
   isActive: Boolean
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "Input for deleting an integration."
 input IntegrationDeleteInput {
   "The integration ID to delete."
@@ -3150,7 +3150,7 @@ input IntegrationDeleteInput {
 
 # --- Device Relations ---
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Input for linking a device to an inventory. Both device and inventory must belong to the same workspace."
 input DeviceInventoryLinkInput {
   "The device ID."
@@ -3159,14 +3159,14 @@ input DeviceInventoryLinkInput {
   inventoryId: ID!
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "Input for unlinking a device from an inventory."
 input DeviceInventoryUnlinkInput {
   "The device ID to unlink."
   deviceId: ID!
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for creating a relationship between devices."
 input DeviceRelationCreateInput {
   "The first device ID."
@@ -3177,7 +3177,7 @@ input DeviceRelationCreateInput {
   typeId: ID!
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for removing a device relationship."
 input DeviceRelationRemoveInput {
   "The relationship ID to remove."
@@ -3196,7 +3196,7 @@ input DeviceRelationRemoveInput {
 
 # --- Catalog Item CRUD Inputs ---
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Display properties for catalog items."
 input CatalogItemMetaInput {
   "The description."
@@ -3205,7 +3205,7 @@ input CatalogItemMetaInput {
   hidden: Boolean
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Input for creating a user-defined catalog (a container for user catalog items)."
 input CatalogCreateInput {
   "The workspace that will own the catalog."
@@ -3222,7 +3222,7 @@ input CatalogCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Input for updating a user-defined catalog."
 input CatalogUpdateInput {
   "The catalog ID to update."
@@ -3237,7 +3237,7 @@ input CatalogUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Input for deleting a user-defined catalog."
 input CatalogDeleteInput {
   "The catalog ID to delete."
@@ -3246,7 +3246,7 @@ input CatalogDeleteInput {
   version: Int
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "Input for creating a user catalog item."
 input UserCatalogItemCreateInput {
   "The workspace that will own the item."
@@ -3265,7 +3265,7 @@ input UserCatalogItemCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "Input for updating a user catalog item."
 input UserCatalogItemUpdateInput {
   "The item ID to update."
@@ -3282,7 +3282,7 @@ input UserCatalogItemUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for creating a device type."
 input DeviceTypeCreateInput {
   "The workspace that will own the item."
@@ -3297,7 +3297,7 @@ input DeviceTypeCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for updating a device type."
 input DeviceTypeUpdateInput {
   "The item ID to update."
@@ -3312,7 +3312,7 @@ input DeviceTypeUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for creating a device status."
 input DeviceStatusCreateInput {
   "The workspace that will own the item."
@@ -3327,7 +3327,7 @@ input DeviceStatusCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: devices
+# @category: bdr/devices
 "Input for updating a device status."
 input DeviceStatusUpdateInput {
   "The item ID to update."
@@ -3342,7 +3342,7 @@ input DeviceStatusUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: assets
+# @category: bdr/assets
 "Input for creating an asset type."
 input AssetTypeCreateInput {
   "The workspace that will own the item."
@@ -3362,7 +3362,7 @@ input AssetTypeCreateInput {
   customFieldDefinitions: [CustomFieldDefinitionInput!]
 }
 
-# @category: assets
+# @category: bdr/assets
 "Input for updating an asset type."
 input AssetTypeUpdateInput {
   "The item ID to update."
@@ -3379,7 +3379,7 @@ input AssetTypeUpdateInput {
   customFieldDefinitions: [CustomFieldDefinitionInput!]
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for creating an asset group type."
 input AssetGroupTypeCreateInput {
   "The workspace that will own the item."
@@ -3396,7 +3396,7 @@ input AssetGroupTypeCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for updating an asset group type."
 input AssetGroupTypeUpdateInput {
   "The item ID to update."
@@ -3413,7 +3413,7 @@ input AssetGroupTypeUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "Input for a constraint defining allowed asset types in an asset group type."
 input AssetGroupTypeConstraintInput {
   "The asset type ID."
@@ -3422,7 +3422,7 @@ input AssetGroupTypeConstraintInput {
   maxItems: Int
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for creating a geo object type."
 input GeoObjectTypeCreateInput {
   "The workspace that will own the item."
@@ -3442,7 +3442,7 @@ input GeoObjectTypeCreateInput {
   customFieldDefinitions: [CustomFieldDefinitionInput!]
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "Input for updating a geo object type."
 input GeoObjectTypeUpdateInput {
   "The item ID to update."
@@ -3459,7 +3459,7 @@ input GeoObjectTypeUpdateInput {
   customFieldDefinitions: [CustomFieldDefinitionInput!]
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "Input for creating a tag."
 input TagCreateInput {
   "The workspace that will own the item."
@@ -3476,7 +3476,7 @@ input TagCreateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "Input for updating a tag."
 input TagUpdateInput {
   "The item ID to update."
@@ -3493,7 +3493,7 @@ input TagUpdateInput {
   meta: CatalogItemMetaInput
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "Input for deleting a catalog item."
 input CatalogItemDeleteInput {
   "The catalog item ID to delete."
@@ -3543,7 +3543,7 @@ users, devices, assets, geo objects, schedules and the catalogs behind them.
 See docs/reference/graphql-conventions.md §Module namespacing.
 """
 type BdrQuery {
-  # @category: custom-fields
+  # @category: bdr/custom-fields
   """
   Lists the custom-field types that may be defined on the given owner catalog item,
   together with what a `REFERENCE` field defined there may point at. Creating a definition
@@ -3557,24 +3557,24 @@ type BdrQuery {
 
   # --- Catalogs ---
 
-  # @category: catalogs/catalog-items
+  # @category: bdr/catalogs/catalog-items
   "Retrieves a catalog by its ID."
   catalog("The ID of the catalog to retrieve." id: ID!): Catalog
 
-  # @category: catalogs/catalog-items
+  # @category: bdr/catalogs/catalog-items
   "Lists catalogs for a workspace."
   catalogs(
     "The workspace to retrieve catalogs for."
     workspaceId: ID!
     "Filtering options for the returned catalogs."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned catalogs."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
@@ -3582,172 +3582,172 @@ type BdrQuery {
 
   # --- Org-scoped Catalog Items ---
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists device types for a workspace."
   deviceTypes(
     "The workspace to retrieve device types for."
     workspaceId: ID!
     "Filtering options for the returned device types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned device types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceTypeConnection!
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists device statuses for a workspace."
   deviceStatuses(
     "The workspace to retrieve device statuses for."
     workspaceId: ID!
     "Filtering options for the returned device statuses."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned device statuses."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceStatusConnection!
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists device models with optional vendor filter."
   deviceModels(
     "The workspace to retrieve device models for."
     workspaceId: ID!
     "Filtering options for the returned device models."
     filter: DeviceModelFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned device models."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
   ): DeviceModelConnection!
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists device vendors for a workspace."
   deviceVendors(
     "The workspace to retrieve device vendors for."
     workspaceId: ID!
     "Filtering options for the returned device vendors."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned device vendors."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceVendorConnection!
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists device relation types for a workspace."
   deviceRelationTypes(
     "The workspace to retrieve device relation types for."
     workspaceId: ID!
     "Filtering options for the returned device relation types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned device relation types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): DeviceRelationTypeConnection!
 
-  # @category: assets
+  # @category: bdr/assets
   "Lists asset types for a workspace."
   assetTypes(
     "The workspace to retrieve asset types for."
     workspaceId: ID!
     "Filtering options for the returned asset types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned asset types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): AssetTypeConnection!
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Lists asset group types for a workspace."
   assetGroupTypes(
     "The workspace to retrieve asset group types for."
     workspaceId: ID!
     "Filtering options for the returned asset group types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned asset group types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): AssetGroupTypeConnection!
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Lists geo object types for a workspace."
   geoObjectTypes(
     "The workspace to retrieve geo object types for."
     workspaceId: ID!
     "Filtering options for the returned geo object types."
     filter: CatalogItemFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned geo object types."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): GeoObjectTypeConnection!
 
-  # @category: catalogs/tags
+  # @category: bdr/catalogs/tags
   "Lists tags for a workspace."
   tags(
     "The workspace to retrieve tags for."
     workspaceId: ID!
     "Filtering options for the returned tags."
     filter: TagFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned tags."
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
@@ -3755,22 +3755,22 @@ type BdrQuery {
 
   # --- Workspaces ---
 
-  # @category: workspaces
+  # @category: bdr/workspaces
   "Retrieves a workspace by its ID."
   workspace("The ID of the workspace to retrieve." id: ID!): Workspace
 
-  # @category: workspaces
+  # @category: bdr/workspaces
   "Lists workspaces."
   workspaces(
     "Filtering options for the returned workspaces."
     filter: WorkspaceFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned workspaces."
     orderBy: WorkspaceOrder = { field: TITLE, direction: ASC }
@@ -3778,47 +3778,47 @@ type BdrQuery {
 
   # --- Actors ---
 
-  # @category: workspaces/members
+  # @category: bdr/workspaces/members
   "Retrieves a member by its ID."
   member("The ID of the member to retrieve." id: ID!): Member
 
-  # @category: workspaces/members
+  # @category: bdr/workspaces/members
   "Lists members of a workspace."
   members(
     "The workspace to retrieve members for."
     workspaceId: ID!
     "Filtering options for the returned members."
     filter: MemberFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned members."
     orderBy: MemberOrder = { field: ASSIGNED_AT, direction: DESC }
   ): MemberConnection!
 
-  # @category: actors/integrations
+  # @category: bdr/actors/integrations
   "Retrieves an integration by its ID."
   integration("The ID of the integration to retrieve." id: ID!): Integration
 
-  # @category: actors/integrations
+  # @category: bdr/actors/integrations
   "Lists integrations for a workspace."
   integrations(
     "The workspace to retrieve integrations for."
     workspaceId: ID!
     "Filtering options for the returned integrations."
     filter: IntegrationFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned integrations."
     orderBy: IntegrationOrder = { field: TITLE, direction: ASC }
@@ -3826,139 +3826,139 @@ type BdrQuery {
 
   # --- Business Entities ---
 
-  # @category: devices
+  # @category: bdr/devices
   "Retrieves a device by its ID."
   device("The ID of the device to retrieve." id: ID!): Device
 
-  # @category: devices
+  # @category: bdr/devices
   "Lists devices for a workspace."
   devices(
     "The workspace to retrieve devices for."
     workspaceId: ID!
     "Filtering options for the returned devices."
     filter: DeviceFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
   ): DeviceConnection!
 
-  # @category: assets
+  # @category: bdr/assets
   "Retrieves an asset by its ID."
   asset("The ID of the asset to retrieve." id: ID!): Asset
 
-  # @category: assets
+  # @category: bdr/assets
   "Lists assets for a workspace."
   assets(
     "The workspace to retrieve assets for."
     workspaceId: ID!
     "Filtering options for the returned assets."
     filter: AssetFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned assets."
     orderBy: AssetOrder = { field: TITLE, direction: ASC }
   ): AssetConnection!
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Retrieves an asset group by its ID."
   assetGroup("The ID of the asset group to retrieve." id: ID!): AssetGroup
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Lists asset groups for a workspace."
   assetGroups(
     "The workspace to retrieve asset groups for."
     workspaceId: ID!
     "Filtering options for the returned asset groups."
     filter: AssetGroupFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned asset groups."
     orderBy: AssetGroupOrder = { field: TITLE, direction: ASC }
   ): AssetGroupConnection!
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   "Retrieves an inventory by its ID."
   inventory("The ID of the inventory to retrieve." id: ID!): Inventory
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   "Lists inventories for a workspace."
   inventories(
     "The workspace to retrieve inventories for."
     workspaceId: ID!
     "Filtering options for the returned inventories."
     filter: InventoryFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned inventories."
     orderBy: InventoryOrder = { field: TITLE, direction: ASC }
   ): InventoryConnection!
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Retrieves a geo object by its ID."
   geoObject("The ID of the geo object to retrieve." id: ID!): GeoObject
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Lists geo objects for a workspace."
   geoObjects(
     "The workspace to retrieve geo objects for."
     workspaceId: ID!
     "Filtering options for the returned geo objects."
     filter: GeoObjectFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned geo objects."
     orderBy: GeoObjectOrder = { field: TITLE, direction: ASC }
   ): GeoObjectConnection!
 
-  # @category: schedules
+  # @category: bdr/schedules
   "Retrieves a schedule by its ID."
   schedule("The ID of the schedule to retrieve." id: ID!): Schedule
 
-  # @category: schedules
+  # @category: bdr/schedules
   "Lists schedules for a workspace."
   schedules(
     "The workspace to retrieve schedules for."
     workspaceId: ID!
     "Filtering options for the returned schedules."
     filter: ScheduleFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned schedules."
     orderBy: ScheduleOrder = { field: TITLE, direction: ASC }
@@ -3966,26 +3966,26 @@ type BdrQuery {
 
   # --- Audit ---
 
-  # @category: audit
+  # @category: bdr/audit
   "Lists audit events for a workspace."
   auditEvents(
     "The workspace to retrieve audit events for."
     workspaceId: ID!
     "Filtering options for the returned audit events."
     filter: AuditEventFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned audit events."
     orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
   ): AuditEventConnection!
 
-  # @category: audit
+  # @category: bdr/audit
   "Retrieves the change history for any entity within a workspace."
   entityHistory(
     "The workspace that owns the entity."
@@ -3994,13 +3994,13 @@ type BdrQuery {
     entityId: ID!
     "Filtering options for the returned audit events."
     filter: AuditEventFilter
-    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     first: Int
-    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     after: String
-    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
     last: Int
-    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-repository-api/pagination)."
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
     before: String
     "The ordering options for the returned audit events."
     orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
@@ -4019,63 +4019,63 @@ type DeletePayload {
   deletedId: ID!
 }
 
-# @category: devices
+# @category: bdr/devices
 "The result of a device mutation."
 type DevicePayload {
   "The created or updated device."
   device: Device!
 }
 
-# @category: assets
+# @category: bdr/assets
 "The result of an asset mutation."
 type AssetPayload {
   "The created or updated asset."
   asset: Asset!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "The result of an asset group mutation."
 type AssetGroupPayload {
   "The created or updated asset group."
   assetGroup: AssetGroup!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "The result of a geo object mutation."
 type GeoObjectPayload {
   "The created or updated geo object."
   geoObject: GeoObject!
 }
 
-# @category: schedules
+# @category: bdr/schedules
 "The result of a schedule mutation."
 type SchedulePayload {
   "The created or updated schedule."
   schedule: Schedule!
 }
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "The result of an inventory mutation."
 type InventoryPayload {
   "The created or updated inventory."
   inventory: Inventory!
 }
 
-# @category: workspaces/members
+# @category: bdr/workspaces/members
 "The result of a membership mutation."
 type MemberPayload {
   "The created or updated membership."
   member: Member!
 }
 
-# @category: actors/integrations
+# @category: bdr/actors/integrations
 "The result of an integration mutation."
 type IntegrationPayload {
   "The created or updated integration."
   integration: Integration!
 }
 
-# @category: devices
+# @category: bdr/devices
 "The result of a device identifier mutation."
 type DeviceIdentifierPayload {
   "The added device identifier."
@@ -4083,14 +4083,14 @@ type DeviceIdentifierPayload {
 }
 
 
-# @category: devices/inventory
+# @category: bdr/devices/inventory
 "The result of a device inventory link mutation."
 type DeviceInventoryRelationPayload {
   "The created inventory assignment."
   deviceInventoryRelation: DeviceInventoryRelation!
 }
 
-# @category: devices
+# @category: bdr/devices
 "The result of a device relation mutation."
 type DeviceRelationPayload {
   "The created device relationship."
@@ -4099,56 +4099,56 @@ type DeviceRelationPayload {
 
 # --- Catalog Item Payloads ---
 
-# @category: devices
+# @category: bdr/devices
 "The result of a device type mutation."
 type DeviceTypePayload {
   "The created or updated device type."
   deviceType: DeviceType!
 }
 
-# @category: devices
+# @category: bdr/devices
 "The result of a device status mutation."
 type DeviceStatusPayload {
   "The created or updated device status."
   deviceStatus: DeviceStatus!
 }
 
-# @category: assets
+# @category: bdr/assets
 "The result of an asset type mutation."
 type AssetTypePayload {
   "The created or updated asset type."
   assetType: AssetType!
 }
 
-# @category: assets/groups
+# @category: bdr/assets/groups
 "The result of an asset group type mutation."
 type AssetGroupTypePayload {
   "The created or updated asset group type."
   assetGroupType: AssetGroupType!
 }
 
-# @category: geo-objects
+# @category: bdr/geo-objects
 "The result of a geo object type mutation."
 type GeoObjectTypePayload {
   "The created or updated geo object type."
   geoObjectType: GeoObjectType!
 }
 
-# @category: catalogs/tags
+# @category: bdr/catalogs/tags
 "The result of a tag mutation."
 type TagPayload {
   "The created or updated tag."
   tag: Tag!
 }
 
-# @category: catalogs/catalog-items
+# @category: bdr/catalogs/catalog-items
 "The result of a catalog mutation."
 type CatalogPayload {
   "The created or updated catalog."
   catalog: Catalog!
 }
 
-# @category: actors/users
+# @category: bdr/actors/users
 "The result of a user catalog item mutation."
 type UserCatalogItemPayload {
   "The created or updated user catalog item."
@@ -4173,21 +4173,21 @@ domain. See docs/reference/graphql-conventions.md §Module namespacing.
 type BdrMutation {
   # --- Devices ---
 
-  # @category: devices
+  # @category: bdr/devices
   "Creates a new device."
   deviceCreate(
     "The input fields for creating the device."
     input: DeviceCreateInput!
   ): DevicePayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Updates an existing device."
   deviceUpdate(
     "The input fields for updating the device."
     input: DeviceUpdateInput!
   ): DevicePayload
 
-  # @category: devices
+  # @category: bdr/devices
   """
   Deletes a device.
 
@@ -4203,7 +4203,7 @@ type BdrMutation {
     input: DeviceDeleteInput!
   ): DeletePayload
 
-  # @category: devices
+  # @category: bdr/devices
   """
   Adds an identifier to a device.
 
@@ -4217,7 +4217,7 @@ type BdrMutation {
     input: DeviceIdentifierAddInput!
   ): DeviceIdentifierPayload
 
-  # @category: devices
+  # @category: bdr/devices
   """
   Removes an identifier from a device.
 
@@ -4231,21 +4231,21 @@ type BdrMutation {
 
   # --- Assets ---
 
-  # @category: assets
+  # @category: bdr/assets
   "Creates a new asset."
   assetCreate(
     "The input fields for creating the asset."
     input: AssetCreateInput!
   ): AssetPayload
 
-  # @category: assets
+  # @category: bdr/assets
   "Updates an existing asset."
   assetUpdate(
     "The input fields for updating the asset."
     input: AssetUpdateInput!
   ): AssetPayload
 
-  # @category: assets
+  # @category: bdr/assets
   "Deletes an asset."
   assetDelete(
     "The input fields for deleting the asset."
@@ -4254,35 +4254,35 @@ type BdrMutation {
 
   # --- Asset Groups ---
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Creates a new asset group."
   assetGroupCreate(
     "The input fields for creating the asset group."
     input: AssetGroupCreateInput!
   ): AssetGroupPayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Updates an existing asset group."
   assetGroupUpdate(
     "The input fields for updating the asset group."
     input: AssetGroupUpdateInput!
   ): AssetGroupPayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Deletes an asset group."
   assetGroupDelete(
     "The input fields for deleting the asset group."
     input: AssetGroupDeleteInput!
   ): DeletePayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Adds assets to a group."
   assetGroupItemsAdd(
     "The input fields for adding assets to the group."
     input: AssetGroupItemsAddInput!
   ): AssetGroupPayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Removes assets from a group."
   assetGroupItemsRemove(
     "The input fields for removing assets from the group."
@@ -4291,21 +4291,21 @@ type BdrMutation {
 
   # --- GeoObjects ---
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Creates a new geo object."
   geoObjectCreate(
     "The input fields for creating the geo object."
     input: GeoObjectCreateInput!
   ): GeoObjectPayload
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Updates an existing geo object."
   geoObjectUpdate(
     "The input fields for updating the geo object."
     input: GeoObjectUpdateInput!
   ): GeoObjectPayload
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Deletes a geo object."
   geoObjectDelete(
     "The input fields for deleting the geo object."
@@ -4314,21 +4314,21 @@ type BdrMutation {
 
   # --- Schedules ---
 
-  # @category: schedules
+  # @category: bdr/schedules
   "Creates a new schedule."
   scheduleCreate(
     "The input fields for creating the schedule."
     input: ScheduleCreateInput!
   ): SchedulePayload
 
-  # @category: schedules
+  # @category: bdr/schedules
   "Updates an existing schedule."
   scheduleUpdate(
     "The input fields for updating the schedule."
     input: ScheduleUpdateInput!
   ): SchedulePayload
 
-  # @category: schedules
+  # @category: bdr/schedules
   "Deletes a schedule."
   scheduleDelete(
     "The input fields for deleting the schedule."
@@ -4337,21 +4337,21 @@ type BdrMutation {
 
   # --- Inventories ---
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   "Creates a new inventory."
   inventoryCreate(
     "The input fields for creating the inventory."
     input: InventoryCreateInput!
   ): InventoryPayload
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   "Updates an existing inventory."
   inventoryUpdate(
     "The input fields for updating the inventory."
     input: InventoryUpdateInput!
   ): InventoryPayload
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   "Deletes an inventory."
   inventoryDelete(
     "The input fields for deleting the inventory."
@@ -4362,21 +4362,21 @@ type BdrMutation {
 
   # --- Members ---
 
-  # @category: workspaces/members
+  # @category: bdr/workspaces/members
   "Adds a user to a workspace as a member."
   memberCreate(
     "The input fields for creating the membership."
     input: MemberCreateInput!
   ): MemberPayload
 
-  # @category: workspaces/members
+  # @category: bdr/workspaces/members
   "Updates a membership."
   memberUpdate(
     "The input fields for updating the membership."
     input: MemberUpdateInput!
   ): MemberPayload
 
-  # @category: workspaces/members
+  # @category: bdr/workspaces/members
   "Removes a user from a workspace."
   memberRemove(
     "The input fields for removing the membership."
@@ -4385,21 +4385,21 @@ type BdrMutation {
 
   # --- Integrations ---
 
-  # @category: actors/integrations
+  # @category: bdr/actors/integrations
   "Creates a new integration."
   integrationCreate(
     "The input fields for creating the integration."
     input: IntegrationCreateInput!
   ): IntegrationPayload
 
-  # @category: actors/integrations
+  # @category: bdr/actors/integrations
   "Updates an existing integration."
   integrationUpdate(
     "The input fields for updating the integration."
     input: IntegrationUpdateInput!
   ): IntegrationPayload
 
-  # @category: actors/integrations
+  # @category: bdr/actors/integrations
   "Deletes an integration."
   integrationDelete(
     "The input fields for deleting the integration."
@@ -4408,7 +4408,7 @@ type BdrMutation {
 
   # --- Device Relations ---
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   """
   Links a device to an inventory.
 
@@ -4422,7 +4422,7 @@ type BdrMutation {
     input: DeviceInventoryLinkInput!
   ): DeviceInventoryRelationPayload
 
-  # @category: devices/inventory
+  # @category: bdr/devices/inventory
   """
   Unlinks a device from an inventory.
 
@@ -4435,7 +4435,7 @@ type BdrMutation {
     input: DeviceInventoryUnlinkInput!
   ): DeletePayload
 
-  # @category: devices
+  # @category: bdr/devices
   """
   Creates a relationship between devices.
 
@@ -4448,7 +4448,7 @@ type BdrMutation {
     input: DeviceRelationCreateInput!
   ): DeviceRelationPayload
 
-  # @category: devices
+  # @category: bdr/devices
   """
   Removes a device relationship.
 
@@ -4462,168 +4462,168 @@ type BdrMutation {
 
   # --- Catalog Item CRUD ---
 
-  # @category: devices
+  # @category: bdr/devices
   "Creates a new device type."
   deviceTypeCreate(
     "The input fields for creating the device type."
     input: DeviceTypeCreateInput!
   ): DeviceTypePayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Updates a device type."
   deviceTypeUpdate(
     "The input fields for updating the device type."
     input: DeviceTypeUpdateInput!
   ): DeviceTypePayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Deletes a device type."
   deviceTypeDelete(
     "The input fields for deleting the device type."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Creates a new device status."
   deviceStatusCreate(
     "The input fields for creating the device status."
     input: DeviceStatusCreateInput!
   ): DeviceStatusPayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Updates a device status."
   deviceStatusUpdate(
     "The input fields for updating the device status."
     input: DeviceStatusUpdateInput!
   ): DeviceStatusPayload
 
-  # @category: devices
+  # @category: bdr/devices
   "Deletes a device status."
   deviceStatusDelete(
     "The input fields for deleting the device status."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: assets
+  # @category: bdr/assets
   "Creates a new asset type."
   assetTypeCreate(
     "The input fields for creating the asset type."
     input: AssetTypeCreateInput!
   ): AssetTypePayload
 
-  # @category: assets
+  # @category: bdr/assets
   "Updates an asset type."
   assetTypeUpdate(
     "The input fields for updating the asset type."
     input: AssetTypeUpdateInput!
   ): AssetTypePayload
 
-  # @category: assets
+  # @category: bdr/assets
   "Deletes an asset type."
   assetTypeDelete(
     "The input fields for deleting the asset type."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Creates a new asset group type."
   assetGroupTypeCreate(
     "The input fields for creating the asset group type."
     input: AssetGroupTypeCreateInput!
   ): AssetGroupTypePayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Updates an asset group type."
   assetGroupTypeUpdate(
     "The input fields for updating the asset group type."
     input: AssetGroupTypeUpdateInput!
   ): AssetGroupTypePayload
 
-  # @category: assets/groups
+  # @category: bdr/assets/groups
   "Deletes an asset group type."
   assetGroupTypeDelete(
     "The input fields for deleting the asset group type."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Creates a new geo object type."
   geoObjectTypeCreate(
     "The input fields for creating the geo object type."
     input: GeoObjectTypeCreateInput!
   ): GeoObjectTypePayload
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Updates a geo object type."
   geoObjectTypeUpdate(
     "The input fields for updating the geo object type."
     input: GeoObjectTypeUpdateInput!
   ): GeoObjectTypePayload
 
-  # @category: geo-objects
+  # @category: bdr/geo-objects
   "Deletes a geo object type."
   geoObjectTypeDelete(
     "The input fields for deleting the geo object type."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: catalogs/tags
+  # @category: bdr/catalogs/tags
   "Creates a new tag."
   tagCreate(
     "The input fields for creating the tag."
     input: TagCreateInput!
   ): TagPayload
 
-  # @category: catalogs/tags
+  # @category: bdr/catalogs/tags
   "Updates a tag."
   tagUpdate(
     "The input fields for updating the tag."
     input: TagUpdateInput!
   ): TagPayload
 
-  # @category: catalogs/tags
+  # @category: bdr/catalogs/tags
   "Deletes a tag."
   tagDelete(
     "The input fields for deleting the tag."
     input: CatalogItemDeleteInput!
   ): DeletePayload
 
-  # @category: catalogs/catalog-items
+  # @category: bdr/catalogs/catalog-items
   "Creates a new user-defined catalog."
   catalogCreate(
     "The input fields for creating the catalog."
     input: CatalogCreateInput!
   ): CatalogPayload
 
-  # @category: catalogs/catalog-items
+  # @category: bdr/catalogs/catalog-items
   "Updates a user-defined catalog."
   catalogUpdate(
     "The input fields for updating the catalog."
     input: CatalogUpdateInput!
   ): CatalogPayload
 
-  # @category: catalogs/catalog-items
+  # @category: bdr/catalogs/catalog-items
   "Deletes a user-defined catalog."
   catalogDelete(
     "The input fields for deleting the catalog."
     input: CatalogDeleteInput!
   ): DeletePayload
 
-  # @category: actors/users
+  # @category: bdr/actors/users
   "Creates a new user catalog item."
   userCatalogItemCreate(
     "The input fields for creating the item."
     input: UserCatalogItemCreateInput!
   ): UserCatalogItemPayload
 
-  # @category: actors/users
+  # @category: bdr/actors/users
   "Updates a user catalog item."
   userCatalogItemUpdate(
     "The input fields for updating the item."
     input: UserCatalogItemUpdateInput!
   ): UserCatalogItemPayload
 
-  # @category: actors/users
+  # @category: bdr/actors/users
   "Deletes a user catalog item."
   userCatalogItemDelete(
     "The input fields for deleting the item."
@@ -4646,7 +4646,7 @@ type BdrMutation {
 
 "The root subscription type."
 type Subscription {
-  # @category: tracking
+  # @category: tracking/state/streams
   """
   Full state of each followed asset, re-emitted whenever any of its devices reports.
 
@@ -4660,7 +4660,7 @@ type Subscription {
     input: TrackingAssetStateSubscriptionInput!
   ): TrackingAssetStateBatch!
 
-  # @category: tracking
+  # @category: tracking/state/streams
   "Full state of each followed device, re-emitted whenever it reports."
   trackingDeviceStates(
     "What to follow, and how much of each state to deliver."

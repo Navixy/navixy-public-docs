@@ -22,8 +22,8 @@ integration(id: ID!): Integration
 
 **Arguments**
 
-| Name | Type  | Description                            |
-| ---- | ----- | -------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `id` | `ID!` | The ID of the integration to retrieve. |
 
 **Output types:**
@@ -34,20 +34,20 @@ integration(id: ID!): Integration
 
 An external system integration with API access.
 
-**Implements:** [Actor](./#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+**Implements:** [Actor](README.md#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
 
-| Field           | Type                                   | Description                                                                                                                                                                                               |
-| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`                                  | A globally unique identifier.                                                                                                                                                                             |
-| `version`       | `Int!`                                 | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`         | `String!`                              | The display name of the actor.                                                                                                                                                                            |
-| `workspace`     | [Workspace](../workspaces/#workspace)! | The workspace this integration belongs to.                                                                                                                                                                |
-| `credentialRef` | `String`                               | A reference to credentials stored in a secure vault.                                                                                                                                                      |
-| `isActive`      | `Boolean!`                             | Whether this integration is active.                                                                                                                                                                       |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The display name of the actor. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
+| `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
+| `isActive` | `Boolean!` | Whether this integration is active. |
 
 </details>
 
-***
+---
 
 ### integrations
 
@@ -67,15 +67,15 @@ integrations(
 
 **Arguments**
 
-| Name          | Type                | Description                                                                                                     |
-| ------------- | ------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `workspaceId` | `ID!`               | The workspace to retrieve integrations for.                                                                     |
-| `filter`      | `IntegrationFilter` | Filtering options for the returned integrations.                                                                |
-| `first`       | `Int`               | The first `n` elements from the [paginated list](../../../pagination.md).     |
-| `after`       | `String`            | The elements that come after the specified [cursor](../../../pagination.md).  |
-| `last`        | `Int`               | The last `n` elements from the [paginated list](../../../pagination.md).      |
-| `before`      | `String`            | The elements that come before the specified [cursor](../../../pagination.md). |
-| `orderBy`     | `IntegrationOrder`  | The ordering options for the returned integrations.                                                             |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace to retrieve integrations for. |
+| `filter` | `IntegrationFilter` | Filtering options for the returned integrations. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | `IntegrationOrder` | The ordering options for the returned integrations. |
 
 **Input types:**
 
@@ -85,8 +85,8 @@ integrations(
 
 Filtering options for integrations.
 
-| Field      | Type      | Description              |
-| ---------- | --------- | ------------------------ |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `isActive` | `Boolean` | Filter by active status. |
 
 </details>
@@ -97,9 +97,9 @@ Filtering options for integrations.
 
 Ordering options for integrations.
 
-| Field       | Type                                                                    | Description             |
-| ----------- | ----------------------------------------------------------------------- | ----------------------- |
-| `field`     | [IntegrationOrderField](integrations.md#integrationorderfield)!         | The field to order by.  |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `field` | [IntegrationOrderField](#integrationorderfield)! | The field to order by. |
 | `direction` | [OrderDirection](../../../core-api-reference/common.md#orderdirection)! | The direction to order. |
 
 </details>
@@ -114,16 +114,16 @@ A paginated list of Integration items.
 
 **Implements:** [Connection](../../../core-api-reference/common.md#connection)
 
-| Field      | Type                                                         | Description                                                |
-| ---------- | ------------------------------------------------------------ | ---------------------------------------------------------- |
-| `edges`    | \[[IntegrationEdge](integrations.md#integrationedge)!]!      | A list of edges.                                           |
-| `nodes`    | \[[Integration](integrations.md#integration)!]!              | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../../../core-api-reference/common.md#pageinfo)!  | Information about the current page.                        |
-| `total`    | [CountInfo](../../../core-api-reference/common.md#countinfo) | The total count of items matching the filter.              |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `edges` | [[IntegrationEdge](#integrationedge)!]! | A list of edges. |
+| `nodes` | [[Integration](#integration)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../../../core-api-reference/common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../../../core-api-reference/common.md#countinfo) | The total count of items matching the filter. |
 
 </details>
 
-***
+---
 
 ## Mutations
 
@@ -139,8 +139,8 @@ integrationCreate(
 
 **Arguments**
 
-| Name    | Type                      | Description                                    |
-| ------- | ------------------------- | ---------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `IntegrationCreateInput!` | The input fields for creating the integration. |
 
 **Input types:**
@@ -151,11 +151,11 @@ integrationCreate(
 
 Input for creating a new integration.
 
-| Field           | Type      | Description                                   |
-| --------------- | --------- | --------------------------------------------- |
-| `workspaceId`   | `ID!`     | The workspace that will own the integration.  |
-| `title`         | `String!` | The display name.                             |
-| `credentialRef` | `String`  | A reference to credentials in a secure vault. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace that will own the integration. |
+| `title` | `String!` | The display name. |
+| `credentialRef` | `String` | A reference to credentials in a secure vault. |
 
 </details>
 
@@ -167,9 +167,9 @@ Input for creating a new integration.
 
 The result of an integration mutation.
 
-| Field         | Type                                        | Description                         |
-| ------------- | ------------------------------------------- | ----------------------------------- |
-| `integration` | [Integration](integrations.md#integration)! | The created or updated integration. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
 </details>
 
@@ -179,20 +179,20 @@ The result of an integration mutation.
 
 An external system integration with API access.
 
-**Implements:** [Actor](./#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+**Implements:** [Actor](README.md#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
 
-| Field           | Type                                   | Description                                                                                                                                                                                               |
-| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`                                  | A globally unique identifier.                                                                                                                                                                             |
-| `version`       | `Int!`                                 | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`         | `String!`                              | The display name of the actor.                                                                                                                                                                            |
-| `workspace`     | [Workspace](../workspaces/#workspace)! | The workspace this integration belongs to.                                                                                                                                                                |
-| `credentialRef` | `String`                               | A reference to credentials stored in a secure vault.                                                                                                                                                      |
-| `isActive`      | `Boolean!`                             | Whether this integration is active.                                                                                                                                                                       |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The display name of the actor. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
+| `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
+| `isActive` | `Boolean!` | Whether this integration is active. |
 
 </details>
 
-***
+---
 
 ### integrationUpdate
 
@@ -206,8 +206,8 @@ integrationUpdate(
 
 **Arguments**
 
-| Name    | Type                      | Description                                    |
-| ------- | ------------------------- | ---------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `IntegrationUpdateInput!` | The input fields for updating the integration. |
 
 **Input types:**
@@ -218,13 +218,13 @@ integrationUpdate(
 
 Input for updating an existing integration.
 
-| Field           | Type      | Description                                                                                     |
-| --------------- | --------- | ----------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`     | The integration ID to update.                                                                   |
-| `version`       | `Int`     | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
-| `title`         | `String`  | The new display name.                                                                           |
-| `credentialRef` | `String`  | The new credential reference.                                                                   |
-| `isActive`      | `Boolean` | The new active status.                                                                          |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The integration ID to update. |
+| `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
+| `title` | `String` | The new display name. |
+| `credentialRef` | `String` | The new credential reference. |
+| `isActive` | `Boolean` | The new active status. |
 
 </details>
 
@@ -236,9 +236,9 @@ Input for updating an existing integration.
 
 The result of an integration mutation.
 
-| Field         | Type                                        | Description                         |
-| ------------- | ------------------------------------------- | ----------------------------------- |
-| `integration` | [Integration](integrations.md#integration)! | The created or updated integration. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
 </details>
 
@@ -248,20 +248,20 @@ The result of an integration mutation.
 
 An external system integration with API access.
 
-**Implements:** [Actor](./#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+**Implements:** [Actor](README.md#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
 
-| Field           | Type                                   | Description                                                                                                                                                                                               |
-| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`                                  | A globally unique identifier.                                                                                                                                                                             |
-| `version`       | `Int!`                                 | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`         | `String!`                              | The display name of the actor.                                                                                                                                                                            |
-| `workspace`     | [Workspace](../workspaces/#workspace)! | The workspace this integration belongs to.                                                                                                                                                                |
-| `credentialRef` | `String`                               | A reference to credentials stored in a secure vault.                                                                                                                                                      |
-| `isActive`      | `Boolean!`                             | Whether this integration is active.                                                                                                                                                                       |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The display name of the actor. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
+| `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
+| `isActive` | `Boolean!` | Whether this integration is active. |
 
 </details>
 
-***
+---
 
 ### integrationDelete
 
@@ -275,8 +275,8 @@ integrationDelete(
 
 **Arguments**
 
-| Name    | Type                      | Description                                    |
-| ------- | ------------------------- | ---------------------------------------------- |
+| Name | Type | Description |
+| ---- | ---- | ----------- |
 | `input` | `IntegrationDeleteInput!` | The input fields for deleting the integration. |
 
 **Input types:**
@@ -287,9 +287,9 @@ integrationDelete(
 
 Input for deleting an integration.
 
-| Field     | Type  | Description                                                                                     |
-| --------- | ----- | ----------------------------------------------------------------------------------------------- |
-| `id`      | `ID!` | The integration ID to delete.                                                                   |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The integration ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
 </details>
@@ -302,116 +302,134 @@ Input for deleting an integration.
 
 The result of a delete mutation.
 
-| Field       | Type  | Description                   |
-| ----------- | ----- | ----------------------------- |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `deletedId` | `ID!` | The ID of the deleted entity. |
 
 </details>
 
-***
+---
 
 ## Objects
+
+<a id="integration"></a>
 
 ### Integration
 
 An external system integration with API access.
 
-**Implements:** [Actor](./#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
+**Implements:** [Actor](README.md#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
 
-| Field           | Type                                   | Description                                                                                                                                                                                               |
-| --------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`                                  | A globally unique identifier.                                                                                                                                                                             |
-| `version`       | `Int!`                                 | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title`         | `String!`                              | The display name of the actor.                                                                                                                                                                            |
-| `workspace`     | [Workspace](../workspaces/#workspace)! | The workspace this integration belongs to.                                                                                                                                                                |
-| `credentialRef` | `String`                               | A reference to credentials stored in a secure vault.                                                                                                                                                      |
-| `isActive`      | `Boolean!`                             | Whether this integration is active.                                                                                                                                                                       |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | A globally unique identifier. |
+| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
+| `title` | `String!` | The display name of the actor. |
+| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace this integration belongs to. |
+| `credentialRef` | `String` | A reference to credentials stored in a secure vault. |
+| `isActive` | `Boolean!` | Whether this integration is active. |
 
-***
+---
+
+<a id="integrationpayload"></a>
 
 ### IntegrationPayload
 
 The result of an integration mutation.
 
-| Field         | Type                                        | Description                         |
-| ------------- | ------------------------------------------- | ----------------------------------- |
-| `integration` | [Integration](integrations.md#integration)! | The created or updated integration. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `integration` | [Integration](#integration)! | The created or updated integration. |
 
-***
+---
 
 ## Inputs
+
+<a id="integrationfilter"></a>
 
 ### IntegrationFilter
 
 Filtering options for integrations.
 
-| Field      | Type      | Description              |
-| ---------- | --------- | ------------------------ |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `isActive` | `Boolean` | Filter by active status. |
 
-***
+---
+
+<a id="integrationorder"></a>
 
 ### IntegrationOrder
 
 Ordering options for integrations.
 
-| Field       | Type                                                                    | Description             |
-| ----------- | ----------------------------------------------------------------------- | ----------------------- |
-| `field`     | [IntegrationOrderField](integrations.md#integrationorderfield)!         | The field to order by.  |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `field` | [IntegrationOrderField](#integrationorderfield)! | The field to order by. |
 | `direction` | [OrderDirection](../../../core-api-reference/common.md#orderdirection)! | The direction to order. |
 
-***
+---
+
+<a id="integrationcreateinput"></a>
 
 ### IntegrationCreateInput
 
 Input for creating a new integration.
 
-| Field           | Type      | Description                                   |
-| --------------- | --------- | --------------------------------------------- |
-| `workspaceId`   | `ID!`     | The workspace that will own the integration.  |
-| `title`         | `String!` | The display name.                             |
-| `credentialRef` | `String`  | A reference to credentials in a secure vault. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `workspaceId` | `ID!` | The workspace that will own the integration. |
+| `title` | `String!` | The display name. |
+| `credentialRef` | `String` | A reference to credentials in a secure vault. |
 
-***
+---
+
+<a id="integrationupdateinput"></a>
 
 ### IntegrationUpdateInput
 
 Input for updating an existing integration.
 
-| Field           | Type      | Description                                                                                     |
-| --------------- | --------- | ----------------------------------------------------------------------------------------------- |
-| `id`            | `ID!`     | The integration ID to update.                                                                   |
-| `version`       | `Int`     | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
-| `title`         | `String`  | The new display name.                                                                           |
-| `credentialRef` | `String`  | The new credential reference.                                                                   |
-| `isActive`      | `Boolean` | The new active status.                                                                          |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The integration ID to update. |
+| `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
+| `title` | `String` | The new display name. |
+| `credentialRef` | `String` | The new credential reference. |
+| `isActive` | `Boolean` | The new active status. |
 
-***
+---
+
+<a id="integrationdeleteinput"></a>
 
 ### IntegrationDeleteInput
 
 Input for deleting an integration.
 
-| Field     | Type  | Description                                                                                     |
-| --------- | ----- | ----------------------------------------------------------------------------------------------- |
-| `id`      | `ID!` | The integration ID to delete.                                                                   |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The integration ID to delete. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 
-***
+---
 
 ## Enums
+
+<a id="integrationorderfield"></a>
 
 ### IntegrationOrderField
 
 Fields available for ordering integrations.
 
-| Value   | Description     |
-| ------- | --------------- |
+| Value | Description |
+| ----- | ----------- |
 | `TITLE` | Order by title. |
 
-***
+---
 
 ## Pagination types
+
+<a id="integrationconnection"></a>
 
 ### IntegrationConnection
 
@@ -419,14 +437,16 @@ A paginated list of Integration items.
 
 **Implements:** [Connection](../../../core-api-reference/common.md#connection)
 
-| Field      | Type                                                         | Description                                                |
-| ---------- | ------------------------------------------------------------ | ---------------------------------------------------------- |
-| `edges`    | \[[IntegrationEdge](integrations.md#integrationedge)!]!      | A list of edges.                                           |
-| `nodes`    | \[[Integration](integrations.md#integration)!]!              | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../../../core-api-reference/common.md#pageinfo)!  | Information about the current page.                        |
-| `total`    | [CountInfo](../../../core-api-reference/common.md#countinfo) | The total count of items matching the filter.              |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `edges` | [[IntegrationEdge](#integrationedge)!]! | A list of edges. |
+| `nodes` | [[Integration](#integration)!]! | A list of nodes in the connection (without edge metadata). |
+| `pageInfo` | [PageInfo](../../../core-api-reference/common.md#pageinfo)! | Information about the current page. |
+| `total` | [CountInfo](../../../core-api-reference/common.md#countinfo) | The total count of items matching the filter. |
 
-***
+---
+
+<a id="integrationedge"></a>
 
 ### IntegrationEdge
 
@@ -434,9 +454,17 @@ An edge in the Integration connection.
 
 **Implements:** [Edge](../../../core-api-reference/common.md#edge)
 
-| Field    | Type                                        | Description                             |
-| -------- | ------------------------------------------- | --------------------------------------- |
-| `cursor` | `String!`                                   | An opaque cursor for this edge.         |
-| `node`   | [Integration](integrations.md#integration)! | The integration at the end of the edge. |
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `cursor` | `String!` | An opaque cursor for this edge. |
+| `node` | [Integration](#integration)! | The integration at the end of the edge. |
 
-***
+---
+
+## See also
+
+* [Pagination](../../../pagination.md)
+* [Filtering and sorting](../../../filtering-and-sorting/README.md)
+* [Error handling](../../../error-handling.md)
+* [Optimistic locking](../../../optimistic-locking.md)
+* [Limits](../../../limits.md)

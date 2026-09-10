@@ -94,3 +94,5 @@ redirects:
   business-data-repository/api-reference: core-api-reference/README.md
   # @specifiedBy target baked into the published GraphQL schema; the page never lived at this path
   core-api-reference/schedules: business-data-repository/api-reference/schedules.md
+  # the one tracking reference page became four, one per concept (2026-09-10)
+  tracking/api-reference/tracking: tracking/api-reference/state/README.md
