@@ -54,4 +54,8 @@ If vehicle power is disconnected, the JC261 goes offline. There is no Jimi backu
 
 Jimi markets the JC261 as an upgrade of the JC400, but the external 450 mAh battery interface was not carried over.
 
-<br>
+\
+Links:
+
+[JC400 Configuration](https://navixy.com/docs/expert-center/vehicle-telematics-technology/video-telematics/configuration-guides/jimi-iot/jimi-jc400-troubleshooting)
+
