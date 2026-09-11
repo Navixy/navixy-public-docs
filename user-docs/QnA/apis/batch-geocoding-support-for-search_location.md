@@ -1,5 +1,7 @@
 ---
-description: Loop through coordinates in your code to call search_location for each pair. Batch geocoding is not supported by the geocoder endpoint
+description: >-
+  Loop through coordinates in your code to call search_location for each pair.
+  Batch geocoding is not supported by the geocoder endpoint
 ---
 
 # Batch geocoding support for search\_location
@@ -22,4 +24,4 @@ If you need to process multiple coordinates, do it in your code:
 
 ## Linksss
 
-* [`geocoder/search_location`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/geocoder#search_location)
+* [`geocoder/search_location`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/geocoder#search_location)

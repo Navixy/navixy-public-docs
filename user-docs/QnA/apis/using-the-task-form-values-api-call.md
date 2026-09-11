@@ -1,5 +1,7 @@
 ---
-description: Submit and update form values for active tasks via the API. Task must be assigned and form submitted; completed or delayed tasks prevent modifications
+description: >-
+  Submit and update form values for active tasks via the API. Task must be
+  assigned and form submitted; completed or delayed tasks prevent modifications
 ---
 
 # Using the Task Form Values API call
@@ -10,4 +12,4 @@ A crucial factor is the task status. Once a task is marked as completed, failed,
 
 In short, the API works effectively for updates only when the task is active and the form has already been submitted. Otherwise, modifications aren't allowed.
 
-**Links:** [Form/Value/Update API call](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/field-service/task/form/values)
+**Links:** [Form/Value/Update API call](/broken/spaces/6dtcPLayxXVB2qaaiuIL/pages/cDufzorcKR1OYHErQYqO)

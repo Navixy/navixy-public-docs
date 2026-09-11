@@ -1,5 +1,8 @@
 ---
-description: Find platform error codes with their HTTP status equivalents in the Error codes reference. Includes endpoint-specific error codes for detailed troubleshooting
+description: >-
+  Find platform error codes with their HTTP status equivalents in the Error
+  codes reference. Includes endpoint-specific error codes for detailed
+  troubleshooting
 ---
 
 # API error codes and HTTP statuses
@@ -22,4 +25,4 @@ Many endpoints also list endpoint-specific error codes.
 
 ## Linksss
 
-* [Error codes reference](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/errors)
+* [Error codes reference](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/general/errors)

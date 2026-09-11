@@ -1,6 +1,8 @@
 ---
 title: Bulk upload devices
-description: "Activate multiple devices in bulk by uploading CSV-XLSX to Support or using the tracker/register API endpoint with device specifications"
+description: >-
+  Activate multiple devices in bulk by uploading CSV-XLSX to Support or using
+  the tracker/register API endpoint with device specifications
 ---
 
 # Bulk upload devices
@@ -44,6 +46,6 @@ curl -X POST 'https://api.us.navixy.com/v2/tracker/register' \
 
 ## Links
 
-* [API: tracker/register](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker#register)
+* [API: tracker/register](/broken/spaces/6dtcPLayxXVB2qaaiuIL/pages/DKGv1OcjSTBwHwbWSEw0#register)
 * [Bulk activation](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/bulk-activation)
 * [Automatic device activation](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/quick-start/activate-gps-device#activate-gps-device-automatically)

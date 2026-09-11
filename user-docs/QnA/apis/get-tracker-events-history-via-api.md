@@ -1,5 +1,7 @@
 ---
-description: Retrieve tracker event history by calling unread events endpoints or filtering by event type codes and time period. Supports geofence, bracelet removal
+description: >-
+  Retrieve tracker event history by calling unread events endpoints or filtering
+  by event type codes and time period. Supports geofence, bracelet removal
 ---
 
 # Get tracker events history via API
@@ -14,9 +16,9 @@ Yes.
 
 Options:
 
-* **Unread events only:** [Get all unread events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/guides/rules-notifications/work-with-notifications)
-* **All events for a tracker over a time period:** [Events for specific trackers and time period](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/guides/rules-notifications/work-with-notifications#events-for-specific-trackers-and-time-period)
-* **All events for a user over a time period:** [All user events for a time period](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/guides/rules-notifications/work-with-notifications#all-events-of-a-user-for-a-specific-time-period)
+* **Unread events only:** [Get all unread events](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/rules-notifications/work-with-notifications)
+* **All events for a tracker over a time period:** [Events for specific trackers and time period](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/rules-notifications/work-with-notifications#events-for-specific-trackers-and-time-period)
+* **All events for a user over a time period:** [All user events for a time period](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/rules-notifications/work-with-notifications#all-events-of-a-user-for-a-specific-time-period)
 
 You can filter by event type codes, for example:
 
@@ -26,7 +28,7 @@ You can filter by event type codes, for example:
 
 Call the event types list endpoint:
 
-* [Event types list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/history/history_type)
+* [Event types list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/history/history_type)
 
 Tips:
 
@@ -43,5 +45,5 @@ If you want to build something like a live event feed, you can implement simple 
 
 ## Links
 
-* [Work with notifications](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/guides/rules-notifications/work-with-notifications)
-* [Event types list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/history/history_type)
+* [Work with notifications](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/rules-notifications/work-with-notifications)
+* [Event types list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/history/history_type)

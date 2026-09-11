@@ -11,7 +11,7 @@ description: >-
 
 What does the green "We'll be back soon" maintenance page mean?
 
-![](<../.gitbook/assets/Unknown image (57) (1)>)
+![](<../.gitbook/assets/Unknown image (57)>)
 
 ## Answer
 

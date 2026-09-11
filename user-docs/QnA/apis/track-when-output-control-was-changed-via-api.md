@@ -1,5 +1,7 @@
 ---
-description: Query audit logs via user/audit/log/list to track output control changes, or create state change alerts and read notification history
+description: >-
+  Query audit logs via user/audit/log/list to track output control changes, or
+  create state change alerts and read notification history
 ---
 
 # Track when output control was changed via API
@@ -30,6 +32,6 @@ Summary:
 
 ## Links
 
-* [Audit log list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/user/audit/audit_log)
+* [Audit log list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/user/audit/audit_log)
 * [Output triggering (UI)](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/output-triggering)
-* [History user list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/history/history-user#list)
+* [History user list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/history/history-user#list)

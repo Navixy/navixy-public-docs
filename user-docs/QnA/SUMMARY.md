@@ -147,3 +147,5 @@
   * [Slight difference between GPS CAN mileage and physical odometer](device-related-questions/slight-difference-between-gps-can-mileage-and-physical-odometer.md)
   * [Coban Devices SMS and GPRS differences](device-related-questions/coban-devices-sms-and-gprs-differences.md)
   * [How to Control and Read Digital Inputs/Outputs on Starlink Devices](device-related-questions/how-to-control-and-read-digital-inputs-outputs-on-starlink-devices.md)
+  * [External Battery Options for JC261 and JC400 Cameras](device-related-questions/external-battery-options-for-jc261-and-jc400-cameras.md)
+  * [Configuring COBAN Family Devices to Receive GPRS Commands](device-related-questions/configuring-coban-family-devices-to-receive-gprs-commands.md)

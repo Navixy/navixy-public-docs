@@ -69,4 +69,4 @@ Press ‘Save’.
 
 3. If you need to automate the entire process, you can create an API script to update the calibration table settings via the API:
 
-Here is the link to the API call that should be used in this case: [Link](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/sensor/calibration_data#update).
+Here is the link to the API call that should be used in this case: [Link](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/sensor/calibration_data#update).

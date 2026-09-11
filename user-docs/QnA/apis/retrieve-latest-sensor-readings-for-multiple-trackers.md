@@ -1,5 +1,7 @@
 ---
-description: Call batch_list with a list of tracker IDs to retrieve latest sensor readings. Get all trackers first, then filter for those with data
+description: >-
+  Call batch_list with a list of tracker IDs to retrieve latest sensor readings.
+  Get all trackers first, then filter for those with data
 ---
 
 # Retrieve latest sensor readings for multiple trackers
@@ -24,5 +26,5 @@ To build a list of trackers that have readings:
 
 ## Links
 
-* [`tracker/sensor/readings/batch_list`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/tracking/tracker/readings#batch_list)
-* [Sensor data guide](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/guides/data-retrieval/sensor-data)
+* [`tracker/sensor/readings/batch_list`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/readings#batch_list)
+* [Sensor data guide](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/data-retrieval/sensor-data)
