@@ -16,22 +16,22 @@ In Navixy, select **Recurso Confiable** in the **Protocol** dropdown.
 
 Navixy sends one SOAP request per message to the `GPSAssetTracking` method. The request contains these fields:
 
-| Field | Contents |
-| ----- | -------- |
-| `code` | The AVL event code for this message. See [Recurso Confiable event codes](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes). |
-| `asset` | The license plate, from the first part of External ID |
-| `shipment` | The shipment id, from the second part of External ID |
-| `customer` | The customer id and customer name, from the third and fourth parts of External ID |
-| `serialNumber` | The Navixy device id |
-| `date` | When the device recorded the message |
-| `latitude`, `longitude`, `altitude` | Position in degrees, altitude in meters |
-| `speed`, `course`, `direction` | Speed, heading in degrees, and heading as a compass direction |
-| `ignition` | Whether the ignition is on |
-| `odometer` | Distance traveled |
-| `battery` | Battery level |
-| `temperature` | Cargo temperature, when the device reports it |
-| `humidity` | Cargo humidity, when the device reports it |
-| `vehicleType`, `vehicleBrand`, `vehicleModel` | Vehicle details from Fleet management |
+| Field                                         | Contents                                                                                                                                                             |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `code`                                        | The AVL event code for this message. See [Recurso Confiable event codes](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/recurso-confiable-event-codes). |
+| `asset`                                       | The license plate, from the first part of External ID                                                                                                                |
+| `shipment`                                    | The shipment id, from the second part of External ID                                                                                                                 |
+| `customer`                                    | The customer id and customer name, from the third and fourth parts of External ID                                                                                    |
+| `serialNumber`                                | The Navixy device id                                                                                                                                                 |
+| `date`                                        | When the device recorded the message                                                                                                                                 |
+| `latitude`, `longitude`, `altitude`           | Position in degrees, altitude in meters                                                                                                                              |
+| `speed`, `course`, `direction`                | Speed, heading in degrees, and heading as a compass direction                                                                                                        |
+| `ignition`                                    | Whether the ignition is on                                                                                                                                           |
+| `odometer`                                    | Distance traveled                                                                                                                                                    |
+| `battery`                                     | Battery level                                                                                                                                                        |
+| `temperature`                                 | Cargo temperature, when the device reports it                                                                                                                        |
+| `humidity`                                    | Cargo humidity, when the device reports it                                                                                                                           |
+| `vehicleType`, `vehicleBrand`, `vehicleModel` | Vehicle details from Fleet management                                                                                                                                |
 
 {% hint style="info" %}
 Temperature and humidity make this protocol usable for cold-chain monitoring. Navixy reads whichever sensor is available, in this order of preference:
@@ -60,21 +60,18 @@ Navixy authenticates by calling `GetUserToken` with the user id and password, th
 
 {% stepper %}
 {% step %}
-
 ### Open the Data forwarding block
 
 Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
 {% endstep %}
 
 {% step %}
-
 ### Open the protocol list
 
 Click **Protocols**, then click **+** to add a configuration.
 {% endstep %}
 
 {% step %}
-
 ### Enter the Recurso Confiable settings
 
 Fill in the fields as follows:
@@ -88,21 +85,18 @@ Fill in the fields as follows:
 {% endstep %}
 
 {% step %}
-
 ### Enable and save
 
 Switch on **Enabled**, then click **Save**. A retranslator that isn't enabled sends nothing.
 {% endstep %}
 
 {% step %}
-
 ### Link the retranslator to a device
 
 In the device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**.
 {% endstep %}
 
 {% step %}
-
 ### Set the External ID
 
 Click the link icon at the right of the retranslator row, then enter up to four values joined by pipe characters, in this order:
@@ -112,6 +106,8 @@ licensePlate|shipmentId|customerId|customerName
 ```
 
 For example, `ABC123|1|123|John`.
+
+<figure><img src="../../../../.gitbook/assets/image (53).png" alt=""><figcaption></figcaption></figure>
 
 Only the license plate is required, and it must be 5 to 7 characters:
 
@@ -124,6 +120,8 @@ When you skip a value in the middle, keep its pipe so the remaining values stay 
 ```
 ABC123||123|
 ```
+
+<figure><img src="../../../../.gitbook/assets/image (54).png" alt=""><figcaption></figcaption></figure>
 
 Repeat this step and the previous one for every device that forwards to Recurso Confiable. The retranslator configuration is shared across the account, but External ID is set per device.
 {% endstep %}

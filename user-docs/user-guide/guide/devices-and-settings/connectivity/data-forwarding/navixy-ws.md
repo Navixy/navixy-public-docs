@@ -22,19 +22,19 @@ In Navixy, select **Navixy Web Service** in the **Protocol** dropdown.
 
 The endpoint returns one record per stored position, with these fields:
 
-| Field | Contents |
-| ----- | -------- |
-| `deviceId` | The device id as given in the request |
-| `dateGps` | When the device recorded the position, in UTC |
-| `latitude` and `longitude` | Position in degrees |
-| `altitude` | Altitude in meters |
-| `speedGps` | Speed in kilometers per hour |
-| `course` | Heading as a compass direction, such as `N`, `SE`, or `O` |
-| `ignition` | Whether the ignition was on |
-| `numSat` | Number of satellites the device was using |
-| `odometer` | The odometer reading reported by the device, in kilometers |
-| `unitPlate` | The registration number of the vehicle linked to the device |
-| `eventId` | The event code, following [Navixy Generic Protocol event identifiers](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-generic-protocol/navixy-generic-protocol-10/predefined-event-identifiers) |
+| Field                      | Contents                                                                                                                                                                                |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `deviceId`                 | The device id as given in the request                                                                                                                                                   |
+| `dateGps`                  | When the device recorded the position, in UTC                                                                                                                                           |
+| `latitude` and `longitude` | Position in degrees                                                                                                                                                                     |
+| `altitude`                 | Altitude in meters                                                                                                                                                                      |
+| `speedGps`                 | Speed in kilometers per hour                                                                                                                                                            |
+| `course`                   | Heading as a compass direction, such as `N`, `SE`, or `O`                                                                                                                               |
+| `ignition`                 | Whether the ignition was on                                                                                                                                                             |
+| `numSat`                   | Number of satellites the device was using                                                                                                                                               |
+| `odometer`                 | The odometer reading reported by the device, in kilometers                                                                                                                              |
+| `unitPlate`                | The registration number of the vehicle linked to the device                                                                                                                             |
+| `eventId`                  | The event code, following [Navixy Generic Protocol event identifiers](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-generic-protocol/predefined-event-identifiers) |
 
 Two fields depend on data outside the device. `unitPlate` is empty when the device isn't linked to a vehicle, and Navixy shortens the registration number by removing spaces and hyphens and keeping the first six characters. A device that isn't permitted to connect returns no records at all rather than an error.
 
@@ -57,21 +57,18 @@ Pick a login that no other retranslator in your account already uses, because Na
 
 {% stepper %}
 {% step %}
-
 ### Open the Data forwarding block
 
 Go to **Devices and settings**, select a device, then find the **Data forwarding** block.
 {% endstep %}
 
 {% step %}
-
 ### Open the protocol list
 
 Click **Protocols**, then click **+** to add a configuration.
 {% endstep %}
 
 {% step %}
-
 ### Enter the Navixy Web Service settings
 
 Fill in the fields as follows:
@@ -87,14 +84,12 @@ Give the login and password to the party that will query the endpoint.
 {% endstep %}
 
 {% step %}
-
 ### Enable and save
 
 Switch on **Enabled**, then click **Save**.
 {% endstep %}
 
 {% step %}
-
 ### Link the retranslator to your devices
 
 In each device's **Data forwarding** block, switch on the toggle for the retranslator you created, then click **Save**. Only linked devices return data. External ID isn't used by this protocol.
@@ -105,10 +100,10 @@ In each device's **Data forwarding** block, switch on the toggle for the retrans
 
 The WSDL address depends on which platform hosts your account:
 
-| Platform | WSDL |
-| -------- | ---- |
-| EU | [https://soap.navixy.com/LocationDataService?wsdl](https://soap.navixy.com/LocationDataService?wsdl) |
-| US | [https://soap.us.navixy.com/LocationDataService?wsdl](https://soap.us.navixy.com/LocationDataService?wsdl) |
+| Platform | WSDL                                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------------------- |
+| EU       | [https://soap.navixy.com/LocationDataService?wsdl](https://soap.navixy.com/LocationDataService?wsdl)       |
+| US       | [https://soap.us.navixy.com/LocationDataService?wsdl](https://soap.us.navixy.com/LocationDataService?wsdl) |
 
 Send a request in this form, with the login and password in the SOAP header and the device ids and date range in the body. Device ids are the IMEI values of the devices:
 
