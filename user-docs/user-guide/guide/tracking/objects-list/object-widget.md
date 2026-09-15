@@ -90,6 +90,8 @@ To use the playback feature, follow these steps:
 3. Select your desired date to access the hourly timeline.
 4. Choose specific time segments from the fragment line for playback
 
+The date selector covers the last 30 days, and shows only the recordings that the camera still stores. Cameras overwrite their own memory as they record, so a date within those 30 days can still show no dot. For the full rules, including how long Navixy keeps a recording after you upload it, see [Data retention](../../account/data-retention.md#video-recordings).
+
 {% hint style="danger" %}
 Consider data usage implications when downloading multiple fragments
 {% endhint %}

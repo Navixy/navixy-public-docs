@@ -10,6 +10,7 @@
   * [User account](guide/account/README.md)
     * [Profile](guide/account/profile.md)
     * [Balance](guide/account/balance.md)
+    * [Data retention](guide/account/data-retention.md)
     * [Users and roles](guide/account/users-and-roles/README.md)
       * [User administration](guide/account/users-and-roles/user-administration.md)
       * [Role management](guide/account/users-and-roles/role-management.md)

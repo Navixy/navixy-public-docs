@@ -12,6 +12,8 @@ Explore each section in the menu to maximize the benefits of your Navixy user ac
   Learn how to customize your account settings, including language preferences, measurement systems, time zones, and date formats.
 * [**Balance**](balance.md)\
   Manage your payment methods, set up AutoPay, configure low balance alerts, and view your transaction history.
+* [**Data retention**](data-retention.md)\
+  Find out how long Navixy keeps your tracking history, events, and video recordings, and how far back you can request a recording from a camera.
 * [**Users and roles**](users-and-roles/)\
   Manage your account by adding new users, defining user roles to control access and permissions, and setting up access controls to ensure users only see information relevant to their roles.
 * [**Two-factor authentication**](two-factor-authentication.md)\

@@ -46,7 +46,7 @@ This window contains the following settings:
 * **Rates:** Rates for various services used by your users. Includes the option to forbid some of them.
 * **Plan options:**
   * **Maximum number of devices:** If a user reaches this limit, they aren't able to add or track any additional assets. If a user has assets under different plans, the plan with the minimum value is applied.
-  * **Store history:** Users can also set up a period for which data is stored in the system, ranging from one or several days to months or years.
+  * **Store history:** How far back users on this plan can look, ranging from one or several days to months or years. It limits what they can open in reports and history views. It doesn't change how long Navixy keeps their data. For the retention period, see [Data retention](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/account/data-retention).
 * **Available maps:** Select which maps are available to users who track devices under this plan.
 * **Available features:** Plan settings also include the range of additional applications, such as Reports, Field service, and Fleet, as well as other features and miscellaneous options.
 * **Plan availability:** Group similar plans to organize your offerings and enable user self-service. Plans within the same group allow users to switch between them independently, provided the **User are allowed to select this plan** checkbox is enabled. Nesting similar plans into groups ensures account compatibility and prevents users from mixing incompatible plans on a single account, which can cause map or feature errors, while maintaining control over your pricing structure.

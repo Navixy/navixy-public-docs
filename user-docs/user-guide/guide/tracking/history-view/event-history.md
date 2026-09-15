@@ -67,6 +67,8 @@ To watch event recordings, follow these steps:
 
 During video playback, the device's movement pattern displays on the right side of the video module, providing comprehensive spatial context that combines visual events with corresponding vehicle location and movement data.
 
+An event and the recording attached to it are kept separately. The event stays in your history for the full retention period, while the recording follows the rules for video recordings. An older event can therefore appear in the list without a recording to play. For details, see [Data retention](../../account/data-retention.md#video-events).
+
 {% hint style="danger" %}
 Video monitoring requires compatible devices with camera support and may consume significant bandwidth during streaming and download operations.
 {% endhint %}

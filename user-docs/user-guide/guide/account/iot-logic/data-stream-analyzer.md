@@ -115,4 +115,4 @@ When a device sends nothing for longer than 30 days, Navixy drops all of the cac
 
 IoT Logic formulas read the same cached values, so a device that returns after more than 30 days of silence starts with no history. For details, see [Full syntax](nodes/initiate-attribute-node/managing-attributes.md#full-syntax).
 
-The 30-day window applies only to the values that Data Stream Analyzer shows. It doesn't limit the history of tracks and events in your account. For the retention of that history, see [Data retention period](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/admin-panel/data-retention-period-increase-from-1-year).
+The 30-day window applies only to the values that Data Stream Analyzer shows. It doesn't limit the history of tracks and events in your account. For the retention of that history, see [Data retention](../data-retention.md).
