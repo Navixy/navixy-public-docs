@@ -4,11 +4,11 @@ description: >-
   entityHistory and auditEvents queries.
 ---
 
-# Tracking changes with audit
+# Investigating changes with audit logs
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Business Data Repository (BDR) records every create, update, and delete request on the entities it manages. You read that record through two queries. This scenario walks you through a compliance investigation: an asset's configuration changed unexpectedly, and you need to establish who changed it, what the old and new values were, and what else that actor touched in the same session.
+Business Data Repository records every create, update, and delete request on the entities it manages. You read that record through two queries. This scenario walks you through a compliance investigation: an asset's configuration changed unexpectedly, and you need to establish who changed it, what the old and new values were, and what else that actor touched in the same session.
 
 By the end, you'll be able to read one entity's full change history, decode the stored before-and-after values, widen the search across a whole workspace, and tie an audit entry back to your own application logs.
 
@@ -18,7 +18,7 @@ You need an authenticated session (see [Authentication](../../authentication.md)
 
 The workspace ID comes with your access credentials and is carried in your access token. See [Authentication](../../authentication.md) for how tokens work and where the workspace ID comes from.
 
-You also need an audited entity that has been changed at least once. The first step below shows how to find its ID, including when the entity was already deleted. See [Which entities are audited](tracking-changes-with-audit.md#which-entities-are-audited) for the list of audited entities.
+You also need an audited entity that has been changed at least once. The first step below shows how to find its ID, including when the entity was already deleted. See [Which entities are audited](investigating-changes-with-audit-logs.md#which-entities-are-audited) for the list of audited entities.
 
 ## How audit works
 
@@ -458,9 +458,11 @@ The same ID appears in your own logs and tracing tools, so it's the shared value
 {% endstep %}
 {% endstepper %}
 
-## Audit-related operations
+{% hint style="success" %}
+You now have the change history of one entity with its before and after values, the changes made across the whole workspace in the period, and the trace IDs that connect each audit event to your own application logs.
+{% endhint %}
 
-### Filtering
+## Filtering
 
 [AuditEventFilter](../api-reference/audit.md#auditeventfilter) applies to both queries. Values within one field are combined with OR, and separate fields are combined with AND. Empty arrays are ignored.
 
@@ -505,7 +507,7 @@ query DeletionsToday {
 }
 ```
 
-### Ordering and pagination
+## Ordering and pagination
 
 `OCCURRED_AT` is the only field you can order by, in either direction. Both queries return an [AuditEventConnection](../api-reference/audit.md#auditeventconnection) and follow the standard cursor pagination described in [Pagination](../../pagination.md):
 
@@ -560,7 +562,7 @@ Audit queries are read-only, so they return the standard errors documented in [E
 
 An empty `nodes` array is a normal response, not an error. Work through the likely causes in this order:
 
-1. The event type isn't recorded yet. Check your `eventTypes` and `sourceTypes` filters against the [warning above](tracking-changes-with-audit.md#which-entities-are-audited). Authentication and relationship event types never match, and `sourceTypes` only ever matches `API`.
+1. The event type isn't recorded yet. Check your `eventTypes` and `sourceTypes` filters against the [warning above](investigating-changes-with-audit-logs.md#which-entities-are-audited). Authentication and relationship event types never match, and `sourceTypes` only ever matches `API`.
 2. The entity type isn't audited. Only the eleven types listed above produce events. A change to a user account or an asset group membership leaves no entry.
 3. The period is wrong. `from` and `to` are compared against `occurredAt` in UTC. Make sure your values are in UTC too.
 4. The entity belongs to another workspace. `entityHistory` only searches the workspace whose `workspaceId` you provide, so an entity from a different workspace returns nothing.

@@ -2,11 +2,11 @@
 description: Create geofences, POIs, and routes in different shapes using GeoJSON geometry.
 ---
 
-# Working with geo objects
+# Creating geofences, POIs, and routes
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Geo objects in Business Data Repository (BDR) represent geographic features like geofences, points of interest, and routes. They store location data in GeoJSON format, making them useful for defining delivery zones, marking important locations, creating routes, and managing areas where your fleet operates.
+Geo objects in Business Data Repository represent geographic features like geofences, points of interest, and routes. They store location data in GeoJSON format, making them useful for defining delivery zones, marking important locations, creating routes, and managing areas where your fleet operates.
 
 This guide walks you through creating, updating, and managing geo objects with different geometry types.
 
@@ -145,7 +145,7 @@ Inside a GraphQL mutation, you write the same structure with one difference: the
 Send the geometry object itself, not the `Feature` or `FeatureCollection` wrappers some GeoJSON tooling produces. In particular, `GEOJSON` custom fields that restrict geometry types reject wrapped values.
 {% endhint %}
 
-More examples of different geometry types can be found in the [Common GeoJSON patterns](working-with-geo-objects.md#common-geojson-patterns) section.
+More examples of different geometry types can be found in the [Common GeoJSON patterns](creating-geofences-pois-and-routes.md#common-geojson-patterns) section.
 
 ### Supported geometry types
 
@@ -180,7 +180,7 @@ Geo objects support custom fields. You might want to add fields for:
 * Operational metadata (zone manager contact, capacity limits)
 * Business attributes (pricing tier, priority level)
 
-See [Implementing custom fields](implementing-custom-fields.md) for details on defining and using custom fields.
+See [Defining and using custom fields](defining-and-using-custom-fields.md) for details on defining and using custom fields.
 
 ## Example scenario: Delivery service zones
 
@@ -525,40 +525,11 @@ The response shows the incremented version:
 }
 ```
 {% endstep %}
-
-{% step %}
-### Delete the geo object
-
-When you restructure your delivery zones and no longer need this geo object, you can delete it:
-
-```graphql
-mutation DeleteDeliveryZone {
-  bdr {
-    geoObjectDelete(input: {
-      id: "019a6b30-8a4f-807b-8001-666456630c55"
-      version: 2
-    }) {
-      deletedId
-    }
-  }
-}
-```
-
-The response confirms deletion:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "geoObjectDelete": {
-        "deletedId": "019a6b30-8a4f-807b-8001-666456630c55"
-      }
-    }
-  }
-}
-```
-{% endstep %}
 {% endstepper %}
+
+{% hint style="success" %}
+You now have two geo objects, an arrival zone around the warehouse and a polygon delivery zone, a containment check that says which test points fall inside the zone, and a zone boundary updated under its version.
+{% endhint %}
 
 ## Common GeoJSON patterns
 
@@ -831,8 +802,41 @@ To resolve this:
 
 For more details on version conflicts, see [Optimistic locking](../../optimistic-locking.md).
 
+## Deleting a geo object
+
+When you restructure your delivery zones and no longer need this geo object, you can delete it:
+
+```graphql
+mutation DeleteDeliveryZone {
+  bdr {
+    geoObjectDelete(input: {
+      id: "019a6b30-8a4f-807b-8001-666456630c55"
+      version: 2
+    }) {
+      deletedId
+    }
+  }
+}
+```
+
+The response confirms deletion:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "geoObjectDelete": {
+        "deletedId": "019a6b30-8a4f-807b-8001-666456630c55"
+      }
+    }
+  }
+}
+```
+
 ## See also
 
 * [Geo objects](../api-reference/geo-objects.md): Complete reference for all geo object operations and types
 * [Filtering and sorting](../../filtering-and-sorting/): Narrow list queries and control result order
 * [Optimistic locking](../../optimistic-locking.md): Prevent concurrent updates from overwriting each other with `version`
+* [Building a live fleet map](../../tracking/guides/building-a-live-fleet-map.md): Check which assets are inside a geofence right now, using the geometry you drew here
+* [Reading a vehicle trip history](../../tracking/guides/reading-a-vehicle-trip-history.md): Test whether a vehicle stopped inside one of these zones

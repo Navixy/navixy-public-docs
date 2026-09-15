@@ -2,11 +2,11 @@
 description: Define and use custom fields to attach domain-specific data to entities.
 ---
 
-# Implementing custom fields
+# Defining and using custom fields
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-In Business Data Repository (BDR), assets and geo objects each come with a set of built-in fields such as `title`, `workspace`, and `type`. Custom fields let you store your own data in these entities, such as a VIN number, a fuel type, an inspection date, or an access level, without any changes to the platform schema.
+In Business Data Repository, assets and geo objects each come with a set of built-in fields such as `title`, `workspace`, and `type`. Custom fields let you store your own data in these entities, such as a VIN number, a fuel type, an inspection date, or an access level, without any changes to the platform schema.
 
 ## How custom fields work
 
@@ -35,7 +35,7 @@ Every custom field has a [FieldType](../api-reference/custom-fields.md#fieldtype
 | `REFERENCE` | Links to any other entity, including catalog items and tags | `isRequired`, `isMulti`, `refEntityTypeCode`, `refSubtypeIds`, `defaultRefIds`                                                        | `{ reference: { id: "...", isPrimary: false } }` or `{ references: { ids: [...], isPrimary: false } }` |
 
 {% hint style="info" %}
-There is no separate field type for schedules, catalog items, or tags. Use `REFERENCE` and fix the target with `refEntityTypeCode`, for example `schedule`, `tag`, or `user_catalog_item`. Devices are the exception: they keep their own `DEVICE` type. To find out which types a given owner accepts, and which entity types its `REFERENCE` fields may point at, query [customFieldTypes](implementing-custom-fields.md#discovering-available-field-types).
+There is no separate field type for schedules, catalog items, or tags. Use `REFERENCE` and fix the target with `refEntityTypeCode`, for example `schedule`, `tag`, or `user_catalog_item`. Devices are the exception: they keep their own `DEVICE` type. To find out which types a given owner accepts, and which entity types its `REFERENCE` fields may point at, query [customFieldTypes](defining-and-using-custom-fields.md#discovering-available-field-types).
 {% endhint %}
 
 Each field is defined by [CustomFieldDefinition](../api-reference/custom-fields.md#customfielddefinition), a metadata record that specifies the field's code, display title, type, and validation rules. When you create or update an entity, you supply field values through the `customFields` field in the mutation input, and the API validates each value against the corresponding definition.
@@ -63,7 +63,7 @@ customFields: {
 
 Omitting `customFields` altogether leaves all existing values untouched.
 
-## Scenario: Enriching fleet records with metadata
+## Example scenario: Enriching fleet records with metadata
 
 A logistics company needs to store operational metadata on their vehicle assets: a VIN number for compliance, a fuel type for route planning, and a next service date for maintenance management. All examples in this guide use these three fields.
 
@@ -73,7 +73,7 @@ Adding this metadata requires the following steps:
 {% step %}
 #### Choose a field type
 
-Before creating a definition, pick the `fieldType` that best matches your data. See the [field type reference](implementing-custom-fields.md#field-type-reference).
+Before creating a definition, pick the `fieldType` that best matches your data. See the [field type reference](defining-and-using-custom-fields.md#field-type-reference).
 
 {% hint style="warning" %}
 `fieldType` is immutable after creation. If you need to change a field's type, delete the definition and create a new one. Deleting a definition that still has stored values is rejected by default (`onValues: REJECT`); set `onValues: CASCADE` to remove the definition together with all its stored values.
@@ -687,6 +687,10 @@ Omit `value` (or set it to `null`) when using the `IS_NULL` and `IS_NOT_NULL` op
 {% endstep %}
 {% endstepper %}
 
+{% hint style="success" %}
+You now have three custom field definitions, a VIN, a fuel type, and a next service date, values set and updated on assets, those values read back in queries, and filters that select assets by them.
+{% endhint %}
+
 ## Discovering available field types
 
 Not every field type can be defined on every owner. `DEVICE` fields, for example, may only be defined on an `AssetType`, and a `REFERENCE` field can only point at the entity types the platform accepts for that owner. Rather than hardcoding those rules, ask the API with [customFieldTypes](../api-reference/custom-fields.md#customfieldtypes):
@@ -853,7 +857,7 @@ mutation RestoreVinField {
 
 ### How to delete a custom field definition
 
-Deletion is permanent and cannot be undone. Use [archiving](implementing-custom-fields.md#how-to-archive-and-restore-a-custom-field-definition) instead unless you explicitly need to remove the field and its data.
+Deletion is permanent and cannot be undone. Use [archiving](defining-and-using-custom-fields.md#how-to-archive-and-restore-a-custom-field-definition) instead unless you explicitly need to remove the field and its data.
 
 By default, deletion is rejected if any entity currently has a value for the field. Pass `onValues: CASCADE` to force deletion along with all associated values across every entity record:
 

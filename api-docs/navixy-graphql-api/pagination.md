@@ -34,7 +34,7 @@ Using cursors instead of page numbers enables the following:
 ## Paginated query structure
 
 {% hint style="info" %}
-Examples on this page use Business Data Repository (BDR) queries. The same pattern applies to every product served by Navixy GraphQL API.
+Examples on this page use Business Data Repository queries. The same pattern applies to every product served by Navixy GraphQL API.
 {% endhint %}
 
 Every paginated query returns a **Connection** type with this structure (we're using the `device` entity as an example, but the principle is the same):

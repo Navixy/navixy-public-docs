@@ -4,11 +4,11 @@ description: >-
   RFC 5545 (iCalendar).
 ---
 
-# Managing schedules
+# Defining recurring schedules
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Schedules in Business Data Repository (BDR) define time-based rules for your fleet operations, maintenance windows, work hours, restrictions, and more.
+Schedules in Business Data Repository define time-based rules for your fleet operations, maintenance windows, work hours, restrictions, and more.
 
 The schedule data structure follows [JSCalendar (RFC 8984)](https://www.rfc-editor.org/rfc/rfc8984.html), a JSON format for calendar data, and converts to [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545) (iCalendar) and back without losing information. If you've worked with iCalendar concepts like RRULE, EXDATE, and VTIMEZONE, the model will be familiar: the field names and JSON structure come from JSCalendar, while the repeat rules behave as in iCalendar. If you haven't, that's fine. This guide explains everything you need.
 
@@ -334,42 +334,11 @@ mutation SplitMaintenanceWindow {
 
 The schedule's version is now 4.
 {% endstep %}
-
-{% step %}
-#### Delete the schedule
-
-When the contract ends and you no longer need the schedule, run this mutation to delete it:
-
-```graphql
-mutation DeleteMaintenanceSchedule {
-  bdr {
-    scheduleDelete(input: {
-      id: "019a6b2f-793e-807b-8001-555345529b44"
-      version: 4
-    }) {
-      deletedId
-    }
-  }
-}
-```
-
-Response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "scheduleDelete": {
-        "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
-      }
-    }
-  }
-}
-```
-
-Including `version` ensures you don't accidentally delete a schedule that someone else has modified. If the version doesn't match, you'll receive a [conflict error](../../error-handling.md#version-conflict-409). See [Optimistic locking](../../optimistic-locking.md) for details on when to omit it.
-{% endstep %}
 {% endstepper %}
+
+{% hint style="success" %}
+You now have a weekly maintenance schedule that excludes holidays, ends on a set date, and is split into two windows, with every change made under the schedule's version.
+{% endhint %}
 
 ## Listing schedules
 
@@ -602,13 +571,13 @@ Non-recurring schedule for specific rental dates:
 
 ## Attaching schedules to other entities
 
-A schedule on its own is just calendar data. To put it to work, link it to the entity it governs, such as the asset it defines maintenance windows for. The link is a `REFERENCE` [custom field](implementing-custom-fields.md) on the asset type, with `refEntityTypeCode: "schedule"` fixing what the field may point at. The same pattern links entities to tags and catalog items — only the `refEntityTypeCode` changes.
+A schedule on its own is just calendar data. To put it to work, link it to the entity it governs, such as the asset it defines maintenance windows for. The link is a `REFERENCE` [custom field](defining-and-using-custom-fields.md) on the asset type, with `refEntityTypeCode: "schedule"` fixing what the field may point at. The same pattern links entities to tags and catalog items — only the `refEntityTypeCode` changes.
 
 {% stepper %}
 {% step %}
 ### Define the reference field
 
-Add the field definition to the asset type. See [Implementing custom fields](implementing-custom-fields.md) for the full definition workflow:
+Add the field definition to the asset type. See [Defining and using custom fields](defining-and-using-custom-fields.md) for the full definition workflow:
 
 ```graphql
 mutation AddMaintenanceScheduleField {
@@ -737,10 +706,43 @@ Response:
 {% endstep %}
 {% endstepper %}
 
-To detach the schedule, remove the field with `unset: ["cf_maintenance_schedule"]` in `assetUpdate`, the same way device fields are unlinked in [Working with assets](working-with-assets.md#linking-devices).
+To detach the schedule, remove the field with `unset: ["cf_maintenance_schedule"]` in `assetUpdate`, the same way device fields are unlinked in [Assigning assets to devices](creating-assets-and-assigning-devices.md#assigning-assets-to-devices).
+
+## Deleting a schedule
+
+When the contract ends and you no longer need the schedule, run this mutation to delete it:
+
+```graphql
+mutation DeleteMaintenanceSchedule {
+  bdr {
+    scheduleDelete(input: {
+      id: "019a6b2f-793e-807b-8001-555345529b44"
+      version: 4
+    }) {
+      deletedId
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "scheduleDelete": {
+        "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
+      }
+    }
+  }
+}
+```
+
+Including `version` ensures you don't accidentally delete a schedule that someone else has modified. If the version doesn't match, you'll receive a [conflict error](../../error-handling.md#version-conflict-409). See [Optimistic locking](../../optimistic-locking.md) for details on when to omit it.
 
 ## See also
 
 * [Schedules](../api-reference/schedules.md): Complete reference for all schedule operations and types
-* [Implementing custom fields](implementing-custom-fields.md): Define custom fields and store your own data on entities
-* [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment
+* [Defining and using custom fields](defining-and-using-custom-fields.md): Define custom fields and store your own data on entities
+* [Creating assets and assigning devices](creating-assets-and-assigning-devices.md): Create and manage assets such as vehicles and equipment

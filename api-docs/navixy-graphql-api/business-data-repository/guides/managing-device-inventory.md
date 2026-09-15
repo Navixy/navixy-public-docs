@@ -8,13 +8,13 @@ description: >-
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-An inventory in Business Data Repository (BDR) is a named container that represents a physical location where devices are stored: a warehouse, a service depot, a regional office, or any other place your workspace keeps hardware. Inventories show you where each device physically is at any point in time, and the assignment history lets you trace where it has been.
+An inventory in Business Data Repository is a named container that represents a physical location where devices are stored: a warehouse, a service depot, a regional office, or any other place your workspace keeps hardware. Inventories show you where each device physically is at any point in time, and the assignment history lets you trace where it has been.
 
 A device can be assigned to at most one inventory at a time. To move a device, unlink it from its current inventory first, then link it to the new one.
 
-Unlinking doesn't erase the past. Every assignment a device has ever had stays on the device, readable through its [`inventoryHistory`](managing-device-inventory.md#view-assignment-history) field. This is a dedicated inventory history, separate from the [audit trail](tracking-changes-with-audit.md): inventory assignments produce no audit events, so `inventoryHistory` is the only place to find them.
+Unlinking doesn't erase the past. Every assignment a device has ever had stays on the device, readable through its [`inventoryHistory`](managing-device-inventory.md#view-assignment-history) field. This is a dedicated inventory history, separate from the [audit trail](investigating-changes-with-audit-logs.md): inventory assignments produce no audit events, so `inventoryHistory` is the only place to find them.
 
-This guide continues the FleetOps Ltd scenario from [Working with devices](working-with-devices.md). The company has registered a batch of Teltonika FMB003 trackers. Now the hardware operations team needs to track which warehouse holds each device as units move from central stock to regional depots ahead of installation.
+This guide continues the FleetOps Ltd scenario from [Managing device records and identifiers](managing-device-records-and-identifiers.md). The company has registered a batch of Teltonika FMB003 trackers. Now the hardware operations team needs to track which warehouse holds each device as units move from central stock to regional depots ahead of installation.
 
 ## Prerequisites
 
@@ -377,7 +377,7 @@ inventoryHistory(
 {% endstep %}
 
 {% step %}
-### Update or delete an inventory
+### Update an inventory
 
 To rename an inventory, use `inventoryUpdate` with its current version:
 
@@ -394,33 +394,12 @@ mutation RenameInventory {
   }
 }
 ```
-
-To delete an inventory that is no longer needed, use `inventoryDelete`:
-
-```graphql
-mutation DeleteInventory {
-  bdr {
-    inventoryDelete(input: {
-      id: "a1b2c3d4-1234-5678-abcd-111222333444"
-      version: 2
-    }) {
-      deletedId
-    }
-  }
-}
-```
-
-{% hint style="danger" %}
-Unassign every device before deleting an inventory. `inventoryDelete` doesn't check for assigned devices and doesn't return an error, but the devices are left in a broken state:
-
-* `Device.inventory` returns `null`, so the device looks unassigned.
-* The assignment is still active underneath, so `deviceInventoryLink` refuses to assign the device to any other inventory until you call `deviceInventoryUnlink` on it.
-* `Device.inventoryHistory` fails for that device, because each history record must resolve the inventory it points to and the deleted one no longer resolves.
-
-Unlink the devices first, then delete the inventory. There's no way to reverse the delete through the API.
-{% endhint %}
 {% endstep %}
 {% endstepper %}
+
+{% hint style="success" %}
+You now have two inventories, one in Berlin and one in Amsterdam, devices assigned to Berlin, one device transferred to Amsterdam, the assignment history that records that transfer, and an inventory renamed under its version.
+{% endhint %}
 
 ## Listing inventories
 
@@ -485,7 +464,34 @@ To resolve this, fetch the inventory again to get its current version and retry.
 
 For a full explanation of how versioning works, see [Optimistic locking](../../optimistic-locking.md).
 
+## Deleting an inventory
+
+To delete an inventory that is no longer needed, use `inventoryDelete`:
+
+```graphql
+mutation DeleteInventory {
+  bdr {
+    inventoryDelete(input: {
+      id: "a1b2c3d4-1234-5678-abcd-111222333444"
+      version: 2
+    }) {
+      deletedId
+    }
+  }
+}
+```
+
+{% hint style="danger" %}
+Unassign every device before deleting an inventory. `inventoryDelete` doesn't check for assigned devices and doesn't return an error, but the devices are left in a broken state:
+
+* `Device.inventory` returns `null`, so the device looks unassigned.
+* The assignment is still active underneath, so `deviceInventoryLink` refuses to assign the device to any other inventory until you call `deviceInventoryUnlink` on it.
+* `Device.inventoryHistory` fails for that device, because each history record must resolve the inventory it points to and the deleted one no longer resolves.
+
+Unlink the devices first, then delete the inventory. There's no way to reverse the delete through the API.
+{% endhint %}
+
 ## See also
 
-* [Working with devices](working-with-devices.md): Register GPS devices and manage their identifiers and relations
+* [Managing device records and identifiers](managing-device-records-and-identifiers.md): Register GPS devices and manage their identifiers and relations
 * [Inventory](../api-reference/devices/inventory.md): Complete reference for all inventory operations and types

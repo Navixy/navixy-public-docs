@@ -8,7 +8,7 @@ description: >-
 
 {% include "../../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Catalogs are the reference data system of Business Data Repository (BDR). They provide structured, reusable lookup values (such as asset types or geo object types) that classify and annotate entities throughout the API. Rather than allowing freeform text, catalogs enforce standardized values, keeping data consistent, supporting filtering and reporting, and enabling localized display names.
+Catalogs are the reference data system of Business Data Repository. They provide structured, reusable lookup values (such as asset types or geo object types) that classify and annotate entities throughout the API. Rather than allowing freeform text, catalogs enforce standardized values, keeping data consistent, supporting filtering and reporting, and enabling localized display names.
 
 Catalogs can be system (predefined) and user-created.
 

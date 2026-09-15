@@ -2,11 +2,11 @@
 description: Register and manage GPS trackers, sensors, and other hardware devices.
 ---
 
-# Working with devices
+# Managing device records and identifiers
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-A device in Business Data Repository (BDR) represents a physical hardware unit: a GPS tracker, sensor, beacon, or any other piece of trackable hardware. Devices hold the identifying information, such as IMEI numbers and serial numbers, that connects physical hardware to the rest of your platform data. When linked to an asset through a `DEVICE`-type custom field, a device lets tracking data flow from the hardware into the platform. The link works in both directions: on the asset, `primaryDevice` returns the primary device and `customFields` returns every linked device, while on the device, the `asset` field returns the asset it belongs to.
+A device in Business Data Repository represents a physical hardware unit: a GPS tracker, sensor, beacon, or any other piece of trackable hardware. Devices hold the identifying information, such as IMEI numbers and serial numbers, that connects physical hardware to the rest of your platform data. When linked to an asset through a `DEVICE`-type custom field, a device lets tracking data flow from the hardware into the platform. The link works in both directions: on the asset, `primaryDevice` returns the primary device and `customFields` returns every linked device, while on the device, the `asset` field returns the asset it belongs to.
 
 This guide covers the full device lifecycle: looking up the required catalog records, registering a device, managing its identifiers, creating device relations, updating device properties, and decommissioning it.
 
@@ -84,11 +84,11 @@ An identifier must be unique. Uniqueness is checked on the combination of `type`
 
 ### Device status and properties
 
-Devices don't support [custom fields](implementing-custom-fields.md). The only properties you can change are `title` and `modelId`. Device status is controlled by the platform: every new device starts with the system status `Not Activated`. The platform provides three built-in statuses (`Not Activated`, `Active`, `Inactive`) visible to all workspaces. You can create additional custom statuses with [deviceStatusCreate](../api-reference/devices/#devicestatuscreate), but status cannot be changed through the public API.
+Devices don't support [custom fields](defining-and-using-custom-fields.md). The only properties you can change are `title` and `modelId`. Device status is controlled by the platform: every new device starts with the system status `Not Activated`. The platform provides three built-in statuses (`Not Activated`, `Active`, `Inactive`) visible to all workspaces. You can create additional custom statuses with [deviceStatusCreate](../api-reference/devices/#devicestatuscreate), but status cannot be changed through the public API.
 
 #### Asset link
 
-The `asset` field returns the linked asset as a full [Asset](../api-reference/assets/#asset) object, so you can query any of its fields directly, or `null` if the device isn't assigned to any asset. This is the same link seen from the device side: assets link to devices through custom fields of type `DEVICE`, and `Device.asset` follows that link back. The link is managed entirely from the asset side. See [Working with assets](working-with-assets.md) for details.
+The `asset` field returns the linked asset as a full [Asset](../api-reference/assets/#asset) object, so you can query any of its fields directly, or `null` if the device isn't assigned to any asset. This is the same link seen from the device side: assets link to devices through custom fields of type `DEVICE`, and `Device.asset` follows that link back. The link is managed entirely from the asset side. See [Creating assets and assigning devices](creating-assets-and-assigning-devices.md) for details.
 
 ### Device relations
 
@@ -254,7 +254,7 @@ mutation RemoveIdentifier {
 {% step %}
 ### Assign device to an asset
 
-FMB003 Unit 001 will track delivery truck DE-1049. To link the device, update the asset's `DEVICE`-type custom field. This example assumes the asset's type already has a custom field definition of the `DEVICE` type. See [Implementing custom fields](implementing-custom-fields.md) for instructions on setting it up.
+FMB003 Unit 001 will track delivery truck DE-1049. To link the device, update the asset's `DEVICE`-type custom field. This example assumes the asset's type already has a custom field definition of the `DEVICE` type. See [Defining and using custom fields](defining-and-using-custom-fields.md) for instructions on setting it up.
 
 ```graphql
 mutation AssignDeviceToAsset {
@@ -465,53 +465,14 @@ Response:
 ```
 
 {% hint style="info" %}
-Providing `version` turns on optimistic locking: if the device changed since you last fetched it, the API returns a [409 Conflict](../../error-handling.md#version-conflict-409) error instead of overwriting the change without warning. Without `version`, the update always applies. See [Handling version conflicts](working-with-devices.md#handling-version-conflicts) for details.
-{% endhint %}
-{% endstep %}
-
-{% step %}
-### Delete a device
-
-When a tracker reaches end of life and needs to be permanently removed, use `deviceDelete`.
-
-Deleting a device automatically detaches it from every `DEVICE`-type custom field that points at it, on assets and geo objects alike, in the same transaction as the delete. The one exception is a required field: if any `DEVICE` field holding this device is `isRequired`, the delete is rejected with a [validation error](../../error-handling.md#validation-error-400). In that case, unlink the device first by updating the asset's custom fields:
-
-```graphql
-mutation UnlinkBeforeDelete {
-  bdr {
-    assetUpdate(input: {
-      id: "a4c9d5e6-6d8f-4a1b-b234-777888999000"
-      version: 2
-      customFields: {
-        unset: ["cf_tracker"]
-      }
-    }) {
-      asset { id primaryDevice { id } }
-    }
-  }
-}
-```
-
-Then delete the device:
-
-```graphql
-mutation DecommissionDevice {
-  bdr {
-    deviceDelete(input: {
-      id: "e1b6f4a3-4a5d-7b8e-cf10-444555666777"
-      version: 2
-    }) {
-      deletedId
-    }
-  }
-}
-```
-
-{% hint style="warning" %}
-A device delete can fail because of a required `DEVICE` field on an entirely different entity. The validation error names the field, so unlink the device there and retry.
+Providing `version` turns on optimistic locking: if the device changed since you last fetched it, the API returns a [409 Conflict](../../error-handling.md#version-conflict-409) error instead of overwriting the change without warning. Without `version`, the update always applies. See [Handling version conflicts](managing-device-records-and-identifiers.md#handling-version-conflicts) for details.
 {% endhint %}
 {% endstep %}
 {% endstepper %}
+
+{% hint style="success" %}
+You now have a device record with several identifiers, assigned to an asset, related to a companion beacon, and updated with its status after installation.
+{% endhint %}
 
 ## Listing devices
 
@@ -624,8 +585,49 @@ To resolve this, fetch the device again to get its current version and state, re
 
 For a full explanation of how versioning works, see [Optimistic locking](../../optimistic-locking.md).
 
+## Deleting a device
+
+When a tracker reaches end of life and needs to be permanently removed, use `deviceDelete`.
+
+Deleting a device automatically detaches it from every `DEVICE`-type custom field that points at it, on assets and geo objects alike, in the same transaction as the delete. The one exception is a required field: if any `DEVICE` field holding this device is `isRequired`, the delete is rejected with a [validation error](../../error-handling.md#validation-error-400). In that case, unlink the device first by updating the asset's custom fields:
+
+```graphql
+mutation UnlinkBeforeDelete {
+  bdr {
+    assetUpdate(input: {
+      id: "a4c9d5e6-6d8f-4a1b-b234-777888999000"
+      version: 2
+      customFields: {
+        unset: ["cf_tracker"]
+      }
+    }) {
+      asset { id primaryDevice { id } }
+    }
+  }
+}
+```
+
+Then delete the device:
+
+```graphql
+mutation DecommissionDevice {
+  bdr {
+    deviceDelete(input: {
+      id: "e1b6f4a3-4a5d-7b8e-cf10-444555666777"
+      version: 2
+    }) {
+      deletedId
+    }
+  }
+}
+```
+
+{% hint style="warning" %}
+A device delete can fail because of a required `DEVICE` field on an entirely different entity. The validation error names the field, so unlink the device there and retry.
+{% endhint %}
+
 ## See also
 
 * [Devices](../api-reference/devices/): Complete reference for all device operations and types
 * [Managing device inventory](managing-device-inventory.md): Assign devices to inventories and track assignment history
-* [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment
+* [Creating assets and assigning devices](creating-assets-and-assigning-devices.md): Create and manage assets such as vehicles and equipment

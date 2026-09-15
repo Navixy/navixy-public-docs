@@ -93,7 +93,7 @@ Every request â€” reading data, creating something, or subscribing to updates â€
 
 ## Product namespaces
 
-Navixy GraphQL API serves more than one product through this endpoint, and each product has its own entry point. All Business Data Repository (BDR) operations are nested under the `bdr` field, so every query and mutation in these docs starts the same way:
+Navixy GraphQL API serves more than one product through this endpoint, and each product has its own entry point. All Business Data Repository operations are nested under the `bdr` field, so every query and mutation in these docs starts the same way:
 
 ```graphql
 query {

@@ -92,7 +92,7 @@ Response:
 }
 ```
 
-Every Business Data Repository (BDR) operation is nested inside the `bdr` field, and the response has the same shape under `data.bdr`. The steps below show only the GraphQL document and its variables. Send each one in the `query` and `variables` fields of the same POST request.
+Every Business Data Repository operation is nested inside the `bdr` field, and the response has the same shape under `data.bdr`. The steps below show only the GraphQL document and its variables. Send each one in the `query` and `variables` fields of the same POST request.
 
 If the response has an `errors` array instead of `data`, the token or the request is wrong. An `UNAUTHORIZED` error means that the token is missing, expired, or invalid. See [Error handling](error-handling.md) for the error format and every error code.
 
@@ -349,8 +349,8 @@ You sent authenticated requests to Navixy GraphQL API, read your workspace, and 
 
 ## Next steps
 
-* [Working with devices](business-data-repository/guides/working-with-devices.md): Update and delete the device, manage its identifiers, and link it to other devices.
-* [Working with assets](business-data-repository/guides/working-with-assets.md): Create the vehicles and equipment that devices track, and link a device to an asset.
+* [Managing device records and identifiers](business-data-repository/guides/managing-device-records-and-identifiers.md): Update and delete the device, manage its identifiers, and link it to other devices.
+* [Creating assets and assigning devices](business-data-repository/guides/creating-assets-and-assigning-devices.md): Create the vehicles and equipment that devices track, and link a device to an asset.
 * [Optimistic locking](optimistic-locking.md): Use the `version` field to keep concurrent updates from overwriting each other.
 * [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting/): Page through long lists and narrow them down.
 * [Error handling](error-handling.md): The error format, every error code, and how to handle each one.

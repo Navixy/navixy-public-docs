@@ -2,11 +2,11 @@
 description: 'Create and manage assets: vehicles, equipment, and other tracked objects.'
 ---
 
-# Working with assets
+# Creating assets and assigning devices
 
 {% include "../../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-Assets in Business Data Repository (BDR) represent the objects your workspace tracks and manages. The most common example is a vehicle, but assets can be anything you need to monitor: construction equipment, forklifts, generators, shipping containers, leased machinery, or fixed infrastructure. If your workspace has a reason to record it, assign attributes to it, or link a GPS device to it, it's a good candidate for an asset.
+Assets in Business Data Repository represent the objects your workspace tracks and manages. The most common example is a vehicle, but assets can be anything you need to monitor: construction equipment, forklifts, generators, shipping containers, leased machinery, or fixed infrastructure. If your workspace has a reason to record it, assign attributes to it, or link a GPS device to it, it's a good candidate for an asset.
 
 Each asset is defined by the **asset type**, which acts as a template: it classifies the asset and determines which custom fields are available for it. For example, a "Delivery Truck" type might have fields for license plate, fuel capacity, and assigned driver, while a "Generator" type might have fields for power output, last service date, and installation site.
 
@@ -56,7 +56,7 @@ You'll get an array of types, if any exist:
 }
 ```
 
-If you need a type that doesn't exist yet, you can create it as described in [the scenario below](working-with-assets.md#create-an-asset-type).
+If you need a type that doesn't exist yet, you can create it as described in [the scenario below](creating-assets-and-assigning-devices.md#create-an-asset-type).
 
 If you're working with an existing type and need to know which custom fields it has, query [customFieldDefinitions](../api-reference/custom-fields.md#customfielddefinition) on the type:
 
@@ -121,7 +121,7 @@ Response:
 }
 ```
 
-The `code` values here are exactly what you use as `code` in `customFields.set` entries when creating or updating assets of this type. For type-specific parameters like maximum string length or the list of valid options, see [Implementing custom fields](implementing-custom-fields.md).
+The `code` values here are exactly what you use as `code` in `customFields.set` entries when creating or updating assets of this type. For type-specific parameters like maximum string length or the list of valid options, see [Defining and using custom fields](defining-and-using-custom-fields.md).
 
 ## How assets work
 
@@ -172,17 +172,17 @@ Assets store your own data, such as a license plate or a fuel capacity, in the `
 
 `customFields` is always a patch operation: fields you don't mention are left unchanged. To update one field without touching others, include only that field in `set`. To remove a value entirely, list its code in `unset`. Each entry in `set` has a `code` and a `value`. Inside `value`, provide exactly one of its options, the one matching the field's declared type.
 
-See [Implementing custom fields](implementing-custom-fields.md) for details on defining field definitions and the supported field types.
+See [Defining and using custom fields](defining-and-using-custom-fields.md) for details on defining field definitions and the supported field types.
 
-### Linking devices
+### Assigning assets to devices
 
-Assets connect to devices through custom fields of `DEVICE` type. Unlike the built-in `geojson_data` field, device fields are user-defined: you create them as custom field definitions for the asset type, which means you control the field code, can have multiple device fields per type, and can mark one as primary.
+Assets connect to devices through custom fields of the `DEVICE` type. Unlike the built-in `geojson_data` field, device fields are user-defined: you create them as custom field definitions for the asset type, which means you control the field code, can have multiple device fields per type, and can mark one as primary.
 
 The `Asset` type has one shortcut field for the primary device. To read every linked device, request `customFields` and use an inline fragment on `DeviceCustomFieldValue`, the `... on` syntax shown in the verify step below.
 
 <table><thead><tr><th width="169.88885498046875">Field</th><th width="126.333251953125">Type</th><th>Description</th></tr></thead><tbody><tr><td><code>primaryDevice</code></td><td><a href="../api-reference/devices/#device">Device</a></td><td>The device whose <code>DEVICE</code>-type field is marked as primary. <code>null</code> if no primary device is set.</td></tr></tbody></table>
 
-To link a device, set the value of your `DEVICE`-type custom field. You can also mark it as primary if you wish:
+To assign a device, set the value of your `DEVICE`-type custom field. You can also mark it as primary if you wish:
 
 ```graphql
 customFields: {
@@ -193,7 +193,7 @@ customFields: {
 }
 ```
 
-To unlink a device, remove the field. That clears its primary status too:
+To unassign a device, remove the field. That clears its primary status too:
 
 ```graphql
 customFields: {
@@ -205,7 +205,7 @@ Here, `cf_tracker` is the code you chose when creating the `DEVICE`-type custom 
 
 Each device can be linked to only one asset. Assigning a device that is already linked elsewhere fails with a validation error, unless you add `reassign: true`, which detaches it from the other asset and attaches it here in one step: either both happen or neither does.
 
-The link works in both directions: `Device.asset` returns the asset a device is linked to. See [Working with devices](working-with-devices.md) for details.
+The link works in both directions: `Device.asset` returns the asset a device is linked to. See [Managing device records and identifiers](managing-device-records-and-identifiers.md) for details.
 
 ## Example scenario: Registering a logistics fleet
 
@@ -213,6 +213,7 @@ TransLog GmbH is setting up their asset registry. They need to track both their 
 
 {% stepper %}
 {% step %}
+
 ### Create an asset type
 
 Start by creating a "Delivery Truck" asset type for your workspace. Be careful when choosing the `code`, because it's immutable after creation and is used to reference this type in integrations and filters.
@@ -273,6 +274,7 @@ The `order` field controls how types appear in UI lists. Lower numbers appear fi
 {% endstep %}
 
 {% step %}
+
 ### Define custom fields
 
 With the type created, add custom fields to be used by the assets of this type. Each delivery truck needs a license plate and a linked GPS device. Add both definitions in a single [assetTypeUpdate](../api-reference/assets/#assettypeupdate) call:
@@ -347,10 +349,11 @@ Response:
 
 Save the `version`. You'll need it if you later update or delete the type. The `code` values in `customFieldDefinitions` are exactly what you'll use as `code` in `customFields.set` when creating or updating assets of this type. The `cf_tracker` field is the one you'll use later to link a GPS device to the truck.
 
-For the full list of supported field types and their parameters, see [Implementing custom fields](implementing-custom-fields.md).
+For the full list of supported field types and their parameters, see [Defining and using custom fields](defining-and-using-custom-fields.md).
 {% endstep %}
 
 {% step %}
+
 ### Create an asset
 
 Create the first truck in the registry. Add custom field values to the `set` list inside `customFields`, one entry per field. In this example, the "Delivery Truck" type has a `cf_license_plate` field.
@@ -402,6 +405,7 @@ Save the `id` and `version`. You'll need them for updates.
 {% endstep %}
 
 {% step %}
+
 ### Verify the asset
 
 Query the asset to confirm it was created correctly:
@@ -478,14 +482,16 @@ query GetTruckLicensePlate {
   }
 }
 ```
+
 {% endstep %}
 
 {% step %}
+
 ### Assign a device
 
-A GPS unit has been installed in the truck. To link it, you need a `DEVICE`-type custom field on the asset type. If you haven't created one yet, add it via `assetTypeUpdate` (see [Implementing custom fields](implementing-custom-fields.md)). In this example, the "Delivery Truck" type has a field with the code `cf_tracker`.
+A GPS unit has been installed in the truck. To link it, you need a `DEVICE`-type custom field on the asset type. If you haven't created one yet, add it via `assetTypeUpdate` (see [Defining and using custom fields](defining-and-using-custom-fields.md)). In this example, the "Delivery Truck" type has a field with the code `cf_tracker`.
 
-To learn how to create a device or find its id, see [Working with devices](working-with-devices.md).
+To learn how to create a device or find its id, see [Managing device records and identifiers](managing-device-records-and-identifiers.md).
 
 Assign the device using `assetUpdate` with the device ID in `customFields.set`. `isPrimary` is required on every `DEVICE` value, so state explicitly whether this device is the asset's primary one:
 
@@ -571,46 +577,11 @@ mutation UnlinkForkliftDevice {
 
 After unlinking, `primaryDevice` returns `null`. Removing the field with `unset` clears its primary status at the same time, so there's no separate call for that.
 {% endstep %}
-
-{% step %}
-### Delete the asset
-
-{% hint style="danger" %}
-Asset deletion is permanent. Unlike some other entity types in the API, assets don't support soft delete and cannot be restored after deletion. Make sure you no longer need the record before proceeding.
-{% endhint %}
-
-When the truck is decommissioned and you no longer need its record, run the [assetDelete](../api-reference/assets/#assetdelete) mutation:
-
-```graphql
-mutation DecommissionTruck {
-  bdr {
-    assetDelete(input: {
-      id: "019a6b2f-793e-807b-8001-555345529b44"
-      version: 2
-    }) {
-      deletedId
-    }
-  }
-}
-```
-
-Response:
-
-```json
-{
-  "data": {
-    "bdr": {
-      "assetDelete": {
-        "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
-      }
-    }
-  }
-}
-```
-
-Including `version` ensures you don't accidentally delete an asset that someone else has modified. It's optional, but recommended. For more information on versioning, see [Optimistic locking](../../optimistic-locking.md).
-{% endstep %}
 {% endstepper %}
+
+{% hint style="success" %}
+You now have an asset type with its custom field definitions, an asset created from that type and read back to verify it, and a GPS device assigned to the asset as its primary device.
+{% endhint %}
 
 ## Listing assets
 
@@ -780,8 +751,45 @@ To resolve this, query the asset to get its current version and state, merge you
 
 For a full explanation of how versioning works, see [Optimistic locking](../../optimistic-locking.md).
 
+## Deleting an asset
+
+{% hint style="danger" %}
+Asset deletion is permanent. Unlike some other entity types in the API, assets don't support soft delete and cannot be restored after deletion. Make sure you no longer need the record before proceeding.
+{% endhint %}
+
+When the truck is decommissioned and you no longer need its record, run the [assetDelete](../api-reference/assets/#assetdelete) mutation:
+
+```graphql
+mutation DecommissionTruck {
+  bdr {
+    assetDelete(input: {
+      id: "019a6b2f-793e-807b-8001-555345529b44"
+      version: 2
+    }) {
+      deletedId
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "assetDelete": {
+        "deletedId": "019a6b2f-793e-807b-8001-555345529b44"
+      }
+    }
+  }
+}
+```
+
+Including `version` ensures you don't accidentally delete an asset that someone else has modified. It's optional, but recommended. For more information on versioning, see [Optimistic locking](../../optimistic-locking.md).
+
 ## See also
 
-* [Assets](../api-reference/assets/): Complete reference for all asset operations and types
-* [Organizing assets into groups](organizing-assets-into-groups.md): Collect assets into named groups by depot, project, or any other dimension
-* [Implementing custom fields](implementing-custom-fields.md): Define custom fields and store your own data on entities
+- [Assets](../api-reference/assets/): Complete reference for all asset operations and types
+- [Organizing assets into groups](organizing-assets-into-groups.md): Collect assets into named groups by depot, project, or any other dimension
+- [Defining and using custom fields](defining-and-using-custom-fields.md): Define custom fields and store your own data on entities

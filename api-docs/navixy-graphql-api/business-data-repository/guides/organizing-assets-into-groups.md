@@ -14,7 +14,7 @@ The grouping system has two layers. An **asset group type** acts as a template: 
 
 The API also maintains a full membership **history**: every time an asset joins or leaves a group, the event is recorded with timestamps. This lets you look up past assignments, for example to find which depot a truck belonged to during a specific period.
 
-If you haven't created assets yet, start with [Working with assets](working-with-assets.md).
+If you haven't created assets yet, start with [Creating assets and assigning devices](creating-assets-and-assigning-devices.md).
 
 ### Prerequisites
 
@@ -577,9 +577,130 @@ history(
 )
 ```
 {% endstep %}
+{% endstepper %}
 
-{% step %}
-### Delete the group
+{% hint style="success" %}
+You now have a Depot group type that accepts only delivery trucks, a Hamburg Depot group with trucks as members, one membership removed, an updated group, and the membership history that records every change.
+{% endhint %}
+
+## Listing asset groups
+
+To list all groups for a workspace:
+
+```graphql
+query ListAssetGroups {
+  bdr {
+    assetGroups(workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7", first: 20) {
+      nodes {
+        id
+        title
+        color
+        type {
+          code
+          title
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      total {
+        count
+      }
+    }
+  }
+}
+```
+
+### Filtering
+
+Use `AssetGroupFilter` to narrow results by type or title. To list only depot-type groups, filter by the group type ID:
+
+```graphql
+query ListDepotGroups {
+  bdr {
+    assetGroups(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      filter: {
+        typeIds: ["f3a1cc20-8b2e-4d91-a73f-1ec8d0bc4e55"]
+        titleContains: "hamburg"
+      }
+      first: 20
+    ) {
+      nodes {
+        id
+        title
+      }
+    }
+  }
+}
+```
+
+Multiple values in `typeIds` are combined with OR, so you can retrieve groups matching any of the specified types in a single query. The `typeIds` and `titleContains` conditions are combined with AND.
+
+### Listing available group types
+
+To see which group types are available in your workspace before creating groups:
+
+```graphql
+query ListGroupTypes {
+  bdr {
+    assetGroupTypes(
+      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      first: 20
+    ) {
+      nodes {
+        id
+        code
+        title
+        allowedAssetTypes {
+          assetType {
+            code
+            title
+          }
+          maxItems
+        }
+      }
+    }
+  }
+}
+```
+
+Like asset types, group types originate either from the platform (`SYSTEM`) or from your workspace (`WORKSPACE`), visible as `meta.origin`. You can only create, update, and delete types with `WORKSPACE` origin. System types are read-only.
+
+For details on pagination, see [Pagination](../../pagination.md).
+
+## Handling version conflicts
+
+If you include `version` in your mutation and the entity has been modified since you last fetched it, the API returns a [conflict error](../../error-handling.md#version-conflict-409):
+
+```json
+{
+  "errors": [
+    {
+      "message": "Entity has been modified by another request",
+      "path": ["bdr", "assetGroupUpdate"],
+      "extensions": {
+        "type": "https://api.navixy.com/errors/conflict",
+        "title": "Optimistic Lock Conflict",
+        "status": 409,
+        "code": "CONFLICT",
+        "entityType": "AssetGroup",
+        "entityId": "a9d4f810-3c67-4b02-b891-2d47e0fa3c11",
+        "expectedVersion": 1,
+        "currentVersion": 2,
+        "traceId": "0af7651916cd43dd8448eb211c80319c"
+      }
+    }
+  ]
+}
+```
+
+To resolve this: re-fetch the group to get its current `version` and state, merge your intended changes, and retry the mutation with the updated version.
+
+For a full explanation of how versioning works, see [Optimistic locking](../../optimistic-locking.md).
+
+## Deleting a group
 
 When a depot closes and you no longer need the group, delete it using its current `version`.
 
@@ -612,127 +733,8 @@ Response:
 {% hint style="warning" %}
 Deleting a group also puts its membership history out of reach. The records aren't erased, but they can only be read through the group's `history` field, and a deleted group can no longer be queried. If you need the history, fetch it before deleting. Deletion can't be reversed through the API.
 {% endhint %}
-{% endstep %}
-{% endstepper %}
-
-### Listing asset groups
-
-To list all groups for a workspace:
-
-```graphql
-query ListAssetGroups {
-  bdr {
-    assetGroups(workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7", first: 20) {
-      nodes {
-        id
-        title
-        color
-        type {
-          code
-          title
-        }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      total {
-        count
-      }
-    }
-  }
-}
-```
-
-#### Filtering
-
-Use `AssetGroupFilter` to narrow results by type or title. To list only depot-type groups, filter by the group type ID:
-
-```graphql
-query ListDepotGroups {
-  bdr {
-    assetGroups(
-      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-      filter: {
-        typeIds: ["f3a1cc20-8b2e-4d91-a73f-1ec8d0bc4e55"]
-        titleContains: "hamburg"
-      }
-      first: 20
-    ) {
-      nodes {
-        id
-        title
-      }
-    }
-  }
-}
-```
-
-Multiple values in `typeIds` are combined with OR, so you can retrieve groups matching any of the specified types in a single query. The `typeIds` and `titleContains` conditions are combined with AND.
-
-#### Listing available group types
-
-To see which group types are available in your workspace before creating groups:
-
-```graphql
-query ListGroupTypes {
-  bdr {
-    assetGroupTypes(
-      workspaceId: "7c9e6679-7425-40de-944b-e07fc1f90ae7"
-      first: 20
-    ) {
-      nodes {
-        id
-        code
-        title
-        allowedAssetTypes {
-          assetType {
-            code
-            title
-          }
-          maxItems
-        }
-      }
-    }
-  }
-}
-```
-
-Like asset types, group types originate either from the platform (`SYSTEM`) or from your workspace (`WORKSPACE`), visible as `meta.origin`. You can only create, update, and delete types with `WORKSPACE` origin. System types are read-only.
-
-For details on pagination, see [Pagination](../../pagination.md).
-
-### Handling version conflicts
-
-If you include `version` in your mutation and the entity has been modified since you last fetched it, the API returns a [conflict error](../../error-handling.md#version-conflict-409):
-
-```json
-{
-  "errors": [
-    {
-      "message": "Entity has been modified by another request",
-      "path": ["bdr", "assetGroupUpdate"],
-      "extensions": {
-        "type": "https://api.navixy.com/errors/conflict",
-        "title": "Optimistic Lock Conflict",
-        "status": 409,
-        "code": "CONFLICT",
-        "entityType": "AssetGroup",
-        "entityId": "a9d4f810-3c67-4b02-b891-2d47e0fa3c11",
-        "expectedVersion": 1,
-        "currentVersion": 2,
-        "traceId": "0af7651916cd43dd8448eb211c80319c"
-      }
-    }
-  ]
-}
-```
-
-To resolve this: re-fetch the group to get its current `version` and state, merge your intended changes, and retry the mutation with the updated version.
-
-For a full explanation of how versioning works, see [Optimistic locking](../../optimistic-locking.md).
 
 ## See also
 
 * [Asset groups](../api-reference/assets/groups.md): Complete reference for all asset group operations and types
-* [Working with assets](working-with-assets.md): Create and manage assets such as vehicles and equipment
+* [Creating assets and assigning devices](creating-assets-and-assigning-devices.md): Create and manage assets such as vehicles and equipment

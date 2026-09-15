@@ -1,6 +1,6 @@
 ---
 description: >-
-  Business Data Repository (BDR) manages assets, devices, geo objects,
+  Business Data Repository manages assets, devices, geo objects,
   schedules, custom fields, and catalogs through Navixy GraphQL API.
 ---
 
@@ -8,9 +8,9 @@ description: >-
 
 {% include "../.gitbook/includes/navixy-graphql-api-is-a-....md" %}
 
-**Business Data Repository (BDR)** is the product that manages the business entities of the Navixy platform. It is one of the products served by [Navixy GraphQL API](../). It defines what you track (assets), how data is collected (devices), where important points are located (geo objects), and when things happen (schedules).
+**Business Data Repository** is the product that manages the business entities of the Navixy platform. It is one of the products served by [Navixy GraphQL API](../). It defines what you track (assets), how data is collected (devices), where important points are located (geo objects), and when things happen (schedules).
 
-All BDR operations are nested under the `bdr` field of the `Query` and `Mutation` types. The shared pages of this space cover the request format, [authentication](../authentication.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
+All Business Data Repository operations are nested under the `bdr` field of the `Query` and `Mutation` types. The shared pages of this space cover the request format, [authentication](../authentication.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
 
 ## Purpose and capabilities
 
@@ -36,12 +36,12 @@ The Business Data Repository documentation has two sections: guides and the API 
 
 Step-by-step walkthroughs of the most common scenarios:
 
-* [Working with devices](guides/working-with-devices.md) and [Managing device inventory](guides/managing-device-inventory.md)
-* [Working with assets](guides/working-with-assets.md) and [Organizing assets into groups](guides/organizing-assets-into-groups.md)
-* [Implementing custom fields](guides/implementing-custom-fields.md), with [Custom field filtering and sorting](../filtering-and-sorting/custom-field-filtering.md) for queries by custom field values
-* [Managing schedules](guides/managing-schedules.md)
-* [Working with geo objects](guides/working-with-geo-objects.md)
-* [Tracking changes with audit](guides/tracking-changes-with-audit.md)
+* [Managing device records and identifiers](guides/managing-device-records-and-identifiers.md) and [Managing device inventory](guides/managing-device-inventory.md)
+* [Creating assets and assigning devices](guides/creating-assets-and-assigning-devices.md) and [Organizing assets into groups](guides/organizing-assets-into-groups.md)
+* [Defining and using custom fields](guides/defining-and-using-custom-fields.md), with [Custom field filtering and sorting](../filtering-and-sorting/custom-field-filtering.md) for queries by custom field values
+* [Defining recurring schedules](guides/defining-recurring-schedules.md)
+* [Creating geofences, POIs, and routes](guides/creating-geofences-pois-and-routes.md)
+* [Investigating changes with audit logs](guides/investigating-changes-with-audit-logs.md)
 
 ### API reference
 
@@ -57,7 +57,7 @@ The API reference gives the complete technical specification for the GraphQL typ
 * [Audit](api-reference/audit.md)
 * [Catalogs](api-reference/catalogs/)
 
-For the types that BDR shares with the other products, and for an index of the whole API, see the [Core API reference](../core-api-reference/README.md).
+For the types that Business Data Repository shares with the other products, and for an index of the whole API, see the [Core API reference](../core-api-reference/README.md).
 
 {% hint style="warning" %}
 The API supports [GraphQL introspection](../graphql-basics/#introspection) for authenticated users. You can also check the public [GraphQL schema](../developer-resources/public-graphql-schema.md).

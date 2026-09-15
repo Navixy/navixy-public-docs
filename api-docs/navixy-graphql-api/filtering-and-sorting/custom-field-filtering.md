@@ -145,4 +145,4 @@ Use either `field` or `customFieldCode` in your `orderBy` input, not both — th
 ## See also
 
 * [Filtering and sorting](./): Narrow list queries and control result order
-* [Implementing custom fields](../business-data-repository/guides/implementing-custom-fields.md): Define custom fields and store your own data on entities
+* [Defining and using custom fields](../business-data-repository/guides/defining-and-using-custom-fields.md): Define custom fields and store your own data on entities

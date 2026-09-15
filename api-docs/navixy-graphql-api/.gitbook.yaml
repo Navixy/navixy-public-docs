@@ -35,14 +35,14 @@ redirects:
   custom-fields: business-data-repository/api-reference/custom-fields.md
   audit: business-data-repository/api-reference/audit.md
   guides: business-data-repository/guides/README.md
-  guides/working-with-devices: business-data-repository/guides/working-with-devices.md
+  guides/working-with-devices: business-data-repository/guides/managing-device-records-and-identifiers.md
   guides/managing-device-inventory: business-data-repository/guides/managing-device-inventory.md
-  guides/working-with-assets: business-data-repository/guides/working-with-assets.md
+  guides/working-with-assets: business-data-repository/guides/creating-assets-and-assigning-devices.md
   guides/organizing-assets-into-groups: business-data-repository/guides/organizing-assets-into-groups.md
-  guides/implementing-custom-fields: business-data-repository/guides/implementing-custom-fields.md
-  guides/managing-schedules: business-data-repository/guides/managing-schedules.md
-  guides/working-with-geo-objects: business-data-repository/guides/working-with-geo-objects.md
-  guides/tracking-changes-with-audit: business-data-repository/guides/tracking-changes-with-audit.md
+  guides/implementing-custom-fields: business-data-repository/guides/defining-and-using-custom-fields.md
+  guides/managing-schedules: business-data-repository/guides/defining-recurring-schedules.md
+  guides/working-with-geo-objects: business-data-repository/guides/creating-geofences-pois-and-routes.md
+  guides/tracking-changes-with-audit: business-data-repository/guides/investigating-changes-with-audit-logs.md
   workspaces: business-data-repository/api-reference/workspaces/README.md
   workspaces/members: business-data-repository/api-reference/workspaces/members.md
   actors: business-data-repository/api-reference/actors/README.md
@@ -60,14 +60,14 @@ redirects:
   # bdr/ paths, published briefly between MR !66 and the GitBook restructure (2026-09-08 to 2026-09-09)
   bdr: business-data-repository/overview.md
   bdr/guides: business-data-repository/guides/README.md
-  bdr/guides/working-with-devices: business-data-repository/guides/working-with-devices.md
+  bdr/guides/working-with-devices: business-data-repository/guides/managing-device-records-and-identifiers.md
   bdr/guides/managing-device-inventory: business-data-repository/guides/managing-device-inventory.md
-  bdr/guides/working-with-assets: business-data-repository/guides/working-with-assets.md
+  bdr/guides/working-with-assets: business-data-repository/guides/creating-assets-and-assigning-devices.md
   bdr/guides/organizing-assets-into-groups: business-data-repository/guides/organizing-assets-into-groups.md
-  bdr/guides/implementing-custom-fields: business-data-repository/guides/implementing-custom-fields.md
-  bdr/guides/managing-schedules: business-data-repository/guides/managing-schedules.md
-  bdr/guides/working-with-geo-objects: business-data-repository/guides/working-with-geo-objects.md
-  bdr/guides/tracking-changes-with-audit: business-data-repository/guides/tracking-changes-with-audit.md
+  bdr/guides/implementing-custom-fields: business-data-repository/guides/defining-and-using-custom-fields.md
+  bdr/guides/managing-schedules: business-data-repository/guides/defining-recurring-schedules.md
+  bdr/guides/working-with-geo-objects: business-data-repository/guides/creating-geofences-pois-and-routes.md
+  bdr/guides/tracking-changes-with-audit: business-data-repository/guides/investigating-changes-with-audit-logs.md
   bdr/core-api-reference: core-api-reference/README.md
   bdr/custom-field-filtering: filtering-and-sorting/custom-field-filtering.md
   bdr/common: core-api-reference/common.md
@@ -96,3 +96,10 @@ redirects:
   core-api-reference/schedules: business-data-repository/api-reference/schedules.md
   # the one tracking reference page became four, one per concept (2026-09-10)
   tracking/api-reference/tracking: tracking/api-reference/state/README.md
+  # guide filenames aligned with page titles (2026-09-14)
+  business-data-repository/guides/working-with-devices: business-data-repository/guides/managing-device-records-and-identifiers.md
+  business-data-repository/guides/working-with-assets: business-data-repository/guides/creating-assets-and-assigning-devices.md
+  business-data-repository/guides/implementing-custom-fields: business-data-repository/guides/defining-and-using-custom-fields.md
+  business-data-repository/guides/managing-schedules: business-data-repository/guides/defining-recurring-schedules.md
+  business-data-repository/guides/working-with-geo-objects: business-data-repository/guides/creating-geofences-pois-and-routes.md
+  business-data-repository/guides/tracking-changes-with-audit: business-data-repository/guides/investigating-changes-with-audit-logs.md
