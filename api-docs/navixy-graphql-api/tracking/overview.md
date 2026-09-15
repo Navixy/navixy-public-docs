@@ -44,7 +44,7 @@ The guides cover the two views that a fleet application builds from Tracking:
 - [Building a live fleet map](guides/building-a-live-fleet-map.md) reads the state of every asset in a workspace, places each asset on the map, renders its readings with the field dictionary, and keeps the map current with a state stream.
 - [Reading a vehicle trip history](guides/reading-a-vehicle-trip-history.md) requests the trips and stops of one device for a period, with totals, the route of each trip, and the continuation of a partial result.
 
-The API reference documents the operations and types:
+The [Tracking API reference](api-reference/README.md) documents the operations and types, one page per concept:
 
 - [Live state](api-reference/state/README.md) documents the state of a device and the state of an asset, with the queries that read them.
 - [State streams](api-reference/state/streams.md) documents the subscriptions that push state as it changes, and what each message contains.

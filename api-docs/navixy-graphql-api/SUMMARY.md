@@ -11,12 +11,9 @@
 * [Error handling](error-handling.md)
 * [Optimistic locking](optimistic-locking.md)
 * [Limits](limits.md)
-
-## Core API reference
-
 * [Core API reference](core-api-reference/README.md)
-* [Common resources](core-api-reference/common.md)
-* [Directives](core-api-reference/directives.md)
+  * [Common resources](core-api-reference/common.md)
+  * [Directives](core-api-reference/directives.md)
 
 ## Business Data Repository
 
@@ -30,24 +27,25 @@
   * [Defining recurring schedules](business-data-repository/guides/defining-recurring-schedules.md)
   * [Creating geofences, POIs, and routes](business-data-repository/guides/creating-geofences-pois-and-routes.md)
   * [Investigating changes with audit logs](business-data-repository/guides/investigating-changes-with-audit-logs.md)
-* [Workspaces](business-data-repository/api-reference/workspaces/README.md)
-  * [Members](business-data-repository/api-reference/workspaces/members.md)
-* [Actors](business-data-repository/api-reference/actors/README.md)
-  * [Users](business-data-repository/api-reference/actors/users.md)
-  * [Integrations](business-data-repository/api-reference/actors/integrations.md)
-* [Devices](business-data-repository/api-reference/devices/README.md)
-  * [Inventory](business-data-repository/api-reference/devices/inventory.md)
-* [Assets](business-data-repository/api-reference/assets/README.md)
-  * [Asset groups](business-data-repository/api-reference/assets/groups.md)
-* [Geo objects](business-data-repository/api-reference/geo-objects.md)
-* [Schedules](business-data-repository/api-reference/schedules.md)
-* [Custom fields](business-data-repository/api-reference/custom-fields.md)
-* [Audit](business-data-repository/api-reference/audit.md)
-* [Catalogs](business-data-repository/api-reference/catalogs/README.md)
-  * [Catalog items](business-data-repository/api-reference/catalogs/catalog-items.md)
-  * [Catalog reference](business-data-repository/api-reference/catalogs/catalog-reference.md)
-  * [Tags](business-data-repository/api-reference/catalogs/tags.md)
-  * [System catalogs](business-data-repository/api-reference/catalogs/system.md)
+* [Business Data Repository API reference](business-data-repository/api-reference/README.md "API reference")
+  * [Workspaces](business-data-repository/api-reference/workspaces/README.md)
+    * [Members](business-data-repository/api-reference/workspaces/members.md)
+  * [Actors](business-data-repository/api-reference/actors/README.md)
+    * [Users](business-data-repository/api-reference/actors/users.md)
+    * [Integrations](business-data-repository/api-reference/actors/integrations.md)
+  * [Devices](business-data-repository/api-reference/devices/README.md)
+    * [Inventory](business-data-repository/api-reference/devices/inventory.md)
+  * [Assets](business-data-repository/api-reference/assets/README.md)
+    * [Asset groups](business-data-repository/api-reference/assets/groups.md)
+  * [Geo objects](business-data-repository/api-reference/geo-objects.md)
+  * [Schedules](business-data-repository/api-reference/schedules.md)
+  * [Custom fields](business-data-repository/api-reference/custom-fields.md)
+  * [Audit](business-data-repository/api-reference/audit.md)
+  * [Catalogs](business-data-repository/api-reference/catalogs/README.md)
+    * [Catalog items](business-data-repository/api-reference/catalogs/catalog-items.md)
+    * [Catalog reference](business-data-repository/api-reference/catalogs/catalog-reference.md)
+    * [Tags](business-data-repository/api-reference/catalogs/tags.md)
+    * [System catalogs](business-data-repository/api-reference/catalogs/system.md)
 
 ## Tracking
 
@@ -55,10 +53,11 @@
 * [Guides](tracking/guides/README.md)
   * [Building a live fleet map](tracking/guides/building-a-live-fleet-map.md)
   * [Reading a vehicle trip history](tracking/guides/reading-a-vehicle-trip-history.md)
-* [Live state](tracking/api-reference/state/README.md)
-  * [State streams](tracking/api-reference/state/streams.md)
-* [Readings and the field dictionary](tracking/api-reference/readings.md)
-* [Trips and stops](tracking/api-reference/trips.md)
+* [Tracking API reference](tracking/api-reference/README.md "API reference")
+  * [Live state](tracking/api-reference/state/README.md)
+    * [State streams](tracking/api-reference/state/streams.md)
+  * [Readings and the field dictionary](tracking/api-reference/readings.md)
+  * [Trips and stops](tracking/api-reference/trips.md)
 
 ## Developer resources
 

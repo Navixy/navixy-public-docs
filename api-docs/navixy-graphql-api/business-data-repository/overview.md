@@ -45,7 +45,7 @@ Step-by-step walkthroughs of the most common scenarios:
 
 ### API reference
 
-The API reference gives the complete technical specification for the GraphQL types and operations of Business Data Repository, one page per category:
+The [Business Data Repository API reference](api-reference/README.md) gives the complete technical specification for the GraphQL types and operations of Business Data Repository, one page per category:
 
 * [Workspaces](api-reference/workspaces/)
 * [Actors](api-reference/actors/)

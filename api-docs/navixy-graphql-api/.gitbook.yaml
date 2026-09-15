@@ -90,8 +90,6 @@ redirects:
   bdr/catalogs/catalog-reference: business-data-repository/api-reference/catalogs/catalog-reference.md
   bdr/catalogs/tags: business-data-repository/api-reference/catalogs/tags.md
   bdr/catalogs/system: business-data-repository/api-reference/catalogs/system.md
-  # reference hub moved to the space root (2026-09-09)
-  business-data-repository/api-reference: core-api-reference/README.md
   # @specifiedBy target baked into the published GraphQL schema; the page never lived at this path
   core-api-reference/schedules: business-data-repository/api-reference/schedules.md
   # the one tracking reference page became four, one per concept (2026-09-10)
@@ -103,3 +101,27 @@ redirects:
   business-data-repository/guides/managing-schedules: business-data-repository/guides/defining-recurring-schedules.md
   business-data-repository/guides/working-with-geo-objects: business-data-repository/guides/creating-geofences-pois-and-routes.md
   business-data-repository/guides/tracking-changes-with-audit: business-data-repository/guides/investigating-changes-with-audit-logs.md
+  # reference pages folded under one API reference page per product; Core API reference became a top-level page (2026-09-15)
+  tracking/state: tracking/api-reference/state/README.md
+  tracking/state/streams: tracking/api-reference/state/streams.md
+  tracking/readings: tracking/api-reference/readings.md
+  tracking/trips: tracking/api-reference/trips.md
+  business-data-repository/workspaces: business-data-repository/api-reference/workspaces/README.md
+  business-data-repository/workspaces/members: business-data-repository/api-reference/workspaces/members.md
+  business-data-repository/actors: business-data-repository/api-reference/actors/README.md
+  business-data-repository/actors/users: business-data-repository/api-reference/actors/users.md
+  business-data-repository/actors/integrations: business-data-repository/api-reference/actors/integrations.md
+  business-data-repository/devices: business-data-repository/api-reference/devices/README.md
+  business-data-repository/devices/inventory: business-data-repository/api-reference/devices/inventory.md
+  business-data-repository/assets: business-data-repository/api-reference/assets/README.md
+  business-data-repository/assets/groups: business-data-repository/api-reference/assets/groups.md
+  business-data-repository/geo-objects: business-data-repository/api-reference/geo-objects.md
+  business-data-repository/schedules: business-data-repository/api-reference/schedules.md
+  business-data-repository/custom-fields: business-data-repository/api-reference/custom-fields.md
+  business-data-repository/audit: business-data-repository/api-reference/audit.md
+  business-data-repository/catalogs: business-data-repository/api-reference/catalogs/README.md
+  business-data-repository/catalogs/catalog-items: business-data-repository/api-reference/catalogs/catalog-items.md
+  business-data-repository/catalogs/catalog-reference: business-data-repository/api-reference/catalogs/catalog-reference.md
+  business-data-repository/catalogs/tags: business-data-repository/api-reference/catalogs/tags.md
+  business-data-repository/catalogs/system: business-data-repository/api-reference/catalogs/system.md
+  core-api-reference/core-api-reference: core-api-reference/README.md
