@@ -15,7 +15,7 @@ This block contains the following fields:
 * **Object label:** This is where you assign a name to the device (up to **60 characters**). The name can be anything that helps you identify the device easily, such as the vehicle's make and model, the owner's name, or any other descriptor that suits your needs.
 * **Group:** This field lets you assign the device to a specific group. Grouping devices can be useful for organizing your fleet by department, function, or location.
 * **Tags:** Tags provide an additional way to categorize and search for devices within the Navixy platform, making it easier to manage large fleets with specific tagging criteria.
-* **Model:** The model of the device currently in use, shown at the top right corner along with the device’s IMEI or ID number.
+* **Model:** The model of the device currently in use, shown at the top right corner. The device’s IMEI or ID number is shown next to it, unless your [service provider](../../quick-start/about-service-providers.md) has chosen to hide device IMEIs.
 
 After making any changes, click **Save** to apply them. This block appears for all non-blocked devices. Label, group, and tags can each be copied to many devices at once.
 

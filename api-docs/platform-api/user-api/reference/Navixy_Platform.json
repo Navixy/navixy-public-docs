@@ -420,6 +420,10 @@
                     "premium_gis": {
                       "type": "boolean",
                       "description": "Whether the premium GIS package is active."
+                    },
+                    "hide_device_id": {
+                      "type": "boolean",
+                      "description": "Whether the web interface hides device IMEIs from this user. For a sub-user, the value of their master account."
                     }
                   }
                 }

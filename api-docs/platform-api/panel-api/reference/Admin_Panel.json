@@ -5089,6 +5089,11 @@
             "type": "boolean",
             "description": "When `true`, transliterates SMS text, replacing national alphabet characters with close Latin ones to reduce message length.",
             "example": false
+          },
+          "default_hide_device_id": {
+            "type": "boolean",
+            "description": "When `true`, the web interface hides device IMEIs from the dealer's end users. Applies to every user who has no `hide_device_id` of their own, including users created before this value was changed.",
+            "example": false
           }
         }
       },
@@ -6533,6 +6538,11 @@
             "description": "ID of the menu preset assigned to this user.",
             "example": 346
           },
+          "hide_device_id": {
+            "type": "boolean",
+            "description": "When `true`, the web interface hides device IMEIs from this user. Falls back to `default_hide_device_id` in the dealer's service settings when the user has no value of their own.",
+            "example": false
+          },
           "mfa_allowed": {
             "type": "boolean",
             "description": "`true` if multi-factor authentication is permitted for this user.",
@@ -6682,6 +6692,11 @@
             ],
             "description": "ID of the menu preset to assign. See the menu preset operations."
           },
+          "hide_device_id": {
+            "type": "boolean",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "example": false
+          },
           "activated": {
             "type": "boolean",
             "description": "Whether the account is activated. Mandatory on update."
@@ -6793,6 +6808,11 @@
               "null"
             ],
             "description": "ID of the menu preset to assign. See the menu preset operations."
+          },
+          "hide_device_id": {
+            "type": "boolean",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "example": false
           },
           "activated": {
             "type": "boolean",
@@ -6957,6 +6977,11 @@
               "null"
             ],
             "description": "ID of the menu preset to assign. See the menu preset operations."
+          },
+          "hide_device_id": {
+            "type": "boolean",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "example": false
           },
           "activated": {
             "type": "boolean",

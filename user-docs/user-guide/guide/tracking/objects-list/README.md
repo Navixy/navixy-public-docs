@@ -35,7 +35,7 @@ Grouping can be disabled by the **Do not group** option. For details, see [Addit
 
 The **Objects list** includes several features to help you navigate your fleet:
 
-* **Quick search** ![image-20250129-102418.png](../../../.gitbook/assets/image-20250129-102418.png) : Allows you to find specific objects by entering their name, [tag](../../account/tags.md), or IMEI.
+* **Quick search** ![image-20250129-102418.png](../../../.gitbook/assets/image-20250129-102418.png) : Allows you to find specific objects by entering their name, [tag](../../account/tags.md), or IMEI. Search by IMEI works even when your [service provider](../../quick-start/about-service-providers.md) has chosen to hide device IMEIs and the platform no longer displays them.
 * **Filter** ![image-20250129-103218.png](../../../.gitbook/assets/image-20250129-103218.png) : Allows you to display only specific objects depending on their **movement status** (e.g., show only moving or stationary objects).
 * **Sorting options**![image-20250129-103257.png](../../../.gitbook/assets/image-20250129-103257.png) : Changes the order of entries in the list based on certain parameters:
   * By name (A to Z or Z to A)

@@ -23,6 +23,7 @@ Definitions the response refers to but does not repeat:
 * `privileges.rights` - string array. The rights granted to a sub-user, described in [security group rights](../subuser/security_group.md#security-group-rights).
 * `user_menu` - a [menu preset](../../../../panel-api/resources/user/preset.md#menu-preset). Its `account`, `main`, `applications`, and `footer.items` entries are [menu item](../../../../panel-api/resources/user/preset.md#menu-item) arrays.
 * `tariff_restrictions` - the tariff restrictions object, which [`user/get_tariff_restrictions`](README.md#post-user-get_tariff_restrictions) also returns on its own.
+* `hide_device_id` - boolean. `true` when the web interface hides device IMEIs from this user. It resolves to the user's own value, or to `default_hide_device_id` in the platform's [service settings](../../../../panel-api/resources/dealer/settings/service.md) when the user has none of their own. A sub-user always gets the value of their master account.
 
 ## API actions
 

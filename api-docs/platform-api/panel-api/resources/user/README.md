@@ -20,6 +20,8 @@ The read operations return this flat form, with every legal field present regard
 
 The create and update operations take a different and stricter shape that varies by `legal_type`. It is documented as `UserEditForm` on those two operations below, and the three variants are cumulative: a sole trader is an individual plus registration details, and a legal entity is a sole trader plus a company name and interbranch code. The legal variants also tighten the postal fields, which may be empty for an individual but not for a sole trader or legal entity.
 
+`hide_device_id` behaves unlike the other fields, because the user does not always own its value. A user carries a value of their own only while it differs from `default_hide_device_id` in the dealer's [service settings](../dealer/settings/service.md#service-settings-object); otherwise they follow that default, and follow it again whenever it changes. So sending a value equal to the current default clears the user's own value rather than pinning it, and a read of a user who has no value of their own returns the default. Omitting the field on update leaves whatever the user has.
+
 ## Discount Object Structure
 
 {% openapi-schemas spec="admin-panel" schemas="UserDiscount" grouped="true" %}

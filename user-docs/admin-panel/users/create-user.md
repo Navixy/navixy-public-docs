@@ -14,6 +14,8 @@ To add a new user to the Admin panel, click <img src="../.gitbook/assets/image (
 
 Enter an email address that is used as the user's login to the Navixy platform and a password. Depending on the user's legal status (individual, legal entity, or sole trader), the required fields may also include their name, contact details, and legal and postal address.
 
+The **UI settings** section of the window contains the **Hide device IMEI** checkbox, which is preselected according to the platform default. Clear or select it to give this user a different value from the rest of the platform. For what the checkbox controls, see [User defaults](../settings/user-defaults.md#ui-settings).
+
 ## How to import user data
 
 To add multiple new users at once, you can use the **Import user data** feature in the [User toolbar](./#user-toolbar). Click <img src="../.gitbook/assets/image (15) (1).png" alt="Import user data" data-size="line"> and upload an XLSX or CSV file no larger than 10 Mb. To ensure that the file is properly formatted, download a template by clicking the link.

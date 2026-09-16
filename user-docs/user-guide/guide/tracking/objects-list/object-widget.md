@@ -41,6 +41,8 @@ The **Object widget** organizes crucial information through specialized data blo
 
 {% hint style="info" %}
 The blocks' availability and content depend on the GPS device assigned to the selected object. They display only the information transmitted by the device or sensors connected to it. You can also customize their appearance. For details, see [Customization options](object-widget.md#customization).
+
+If your [service provider](../../quick-start/about-service-providers.md) has chosen to hide device IMEIs, the blocks do not show the device's IMEI and the **Device ID** entry is unavailable.
 {% endhint %}
 
 Here's a detailed overview of the available blocks:
@@ -54,7 +56,7 @@ The **Object list** can display not only the objects' names and connection statu
 1. Hover the cursor over the desired data block inside the **Object widget**.
 2. Click the appearing <img src="../../../.gitbook/assets/image-20250129-163848.png" alt="image-20250129-163848.png" data-size="line"> button to mark it as **Favorite**.
 
-Once marked as **Favorite**, the selected data entry appears under the corresponding object in the **Object list**, ensuring quick and easy access. To remove a block from the list display, click <img src="../../../.gitbook/assets/image-20250129-163848.png" alt="image-20250129-163848.png" data-size="line">
+Once marked as **Favorite**, the selected data entry appears under the corresponding object in the **Object list**, ensuring quick and easy access. A **Device ID** entry is an exception: it is not shown in the **Object list** if your service provider has chosen to hide device IMEIs. To remove a block from the list display, click <img src="../../../.gitbook/assets/image-20250129-163848.png" alt="image-20250129-163848.png" data-size="line">
 
 again.
 

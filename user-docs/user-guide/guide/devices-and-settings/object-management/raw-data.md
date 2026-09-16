@@ -72,7 +72,7 @@ A count of selected parameters is displayed, and each chosen parameter will add 
 After selecting the necessary parameters, click **Download CSV** to download the file.
 
 * The file can be opened with any text editor or table viewer that supports CSV format. Columns are separated by commas.
-* The file name includes the device ID, device label, and the specified date and time range.
+* The file name includes the device ID, device label, and the specified date and time range. The device ID is the device’s IMEI, or the object’s platform ID if your [service provider](../../quick-start/about-service-providers.md) has chosen to hide device IMEIs.
 * Each row (starting from the second row) represents a message sent from the device to the platform. The first row contains the message time in the chosen timezone, followed by the selected parameters.
 
 <figure><img src="../../../.gitbook/assets/{7B6F0062-D451-460D-AD1B-054ADB34A6DE}.png" alt="Raw data file columns example" width="563"><figcaption><p>Raw data file columns example</p></figcaption></figure>

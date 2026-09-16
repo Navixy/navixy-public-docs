@@ -19,6 +19,7 @@ Notes on individual fields:
 * Branding image paths, that is `favicon`, `logo`, `app_logo`, `document_logo`, `monitoring_logo`, `login_wallpaper`, and `desktop_wallpaper`, are read-only here. Change them through the [branding image](image.md) operations.
 * `default_user_time_zone` is a [time zone ID](../../timezone.md) applied to users created via [user/upload](../../user/README.md#post-panel-user-upload).
 * `email_special` is the same underlying value as `email_special` in the [notification settings](notification.md#notification-settings-object).
+* `default_user_settings.default_hide_device_id` is not limited to new users. Every end user who has no `hide_device_id` of their own follows it, so changing it here changes what those users already see. A user keeps a value of their own only while it differs from this default. See [`hide_device_id`](../../user/README.md#user-object-structure) on the user object.
 
 ## API actions
 

@@ -14,9 +14,9 @@ To learn how to download this information, you see [Save IoT data to CSV file](.
 
 ## Opening a file
 
-The filename always contains the following:
+The filename contains the following:
 
-* Device ID: The device ID number, often representing its IMEI.
+* Device ID: The device ID number, usually the device’s IMEI. If your service provider has chosen to hide device IMEIs, the object’s platform ID is used instead.
 * Device’s label on the platform: A label to help file searching.
 * From and to time: Representing the start and end of the file in the format day\_month\_year\_hours\_minutes\_AM/PM.
 * Timezone in UTC format.

@@ -1,7 +1,7 @@
 ---
 description: >-
   Set default profile settings for new users, including time zone, date/time
-  formats, units, and menu preset
+  formats, units, menu preset, and whether device IMEIs are shown
 ---
 
 # User defaults
@@ -40,4 +40,18 @@ You may choose from the following measurement systems:
 
 ## UI settings
 
-Here you can choose a default menu preset created using the menu editor. For more information about creating presets, see [Menu editor](custom-menu-editor.md).
+Here you can choose a default menu preset created using the menu editor. The preset list appears only when the menu editor is enabled for your platform. For more information about creating presets, see [Menu editor](custom-menu-editor.md).
+
+Select **Hide device IMEI** to stop the platform from showing device IMEIs to your users. The IMEI then no longer appears in:
+
+* The **Model** and **Device** widgets of the object information panel, and the **Device ID** mini-widget in the object list.
+* The header of the device settings page.
+* The lists for choosing and filtering objects, such as the object list of a report.
+
+Raw data files are also named after the object's platform ID instead of its IMEI.
+
+Unlike the other settings on this page, this one is not limited to new accounts. It applies to every user who does not have the opposite value selected in their own user form, including users created before you changed it. A sub-user follows the setting of their master account.
+
+{% hint style="info" %}
+The IMEI is hidden from view, not blocked. Users can still find an object by typing its IMEI in the search field, and they still enter the IMEI themselves when they activate a device or connect a mobile tracker. Reports and other files that the server generates keep showing it.
+{% endhint %}
