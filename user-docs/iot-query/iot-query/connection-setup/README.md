@@ -17,8 +17,8 @@ When your **IoT Query** instance is set up, you'll receive these connection para
 
 Your **IoT Query** organizes data in specific schemas:
 
-* [`raw_business_data`](../schema-overview/bronze-layer.md#raw_business_data-structure) - Contains business data tables (users, objects, tasks, etc.)
-* [`raw_telematics_data`](../schema-overview/bronze-layer.md#raw_telematics_data-structure) - Contains telematics data from client devices (GPS tracks, sensor readings)
+* [`raw_business_data`](../schema-overview/bronze-layer/raw-business-data.md) - Contains business data tables (users, objects, tasks, etc.)
+* [`raw_telematics_data`](../schema-overview/bronze-layer/raw-telematics-data.md) - Contains telematics data from client devices (GPS tracks, sensor readings)
 
 {% hint style="info" %}
 When querying data, you must specify both the schema (e.g. `raw_business_data`) and table (e.g. `objects`) name: `SELECT * FROM raw_business_data.objects LIMIT 10;`

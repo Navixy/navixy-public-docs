@@ -172,7 +172,7 @@ If your operational scenario needs different fixed thresholds, contact **iotquer
 * [**Common transformations**](./): Back to the transformation index.
 * [**Trips**](trips.md): A sibling transformation that produces vehicle trip records from raw telematics data.
 * [**Sensor data aggregation**](sensor-data-aggregation.md): A sibling transformation that aggregates sensor readings into time buckets.
-* [**Raw data layer**](../../bronze-layer.md): Explore `tracking_data_core`, `states`, and `inputs`, the source tables that feed Rule-based driver events.
+* [**Raw data layer**](../../bronze-layer/README.md): Explore `tracking_data_core`, `states`, and `inputs`, the source tables that feed Rule-based driver events.
 * [**Transformation Builder**](../transformation-builder/): Learn how to build a customized version of this transformation.
 * [**Driving Score Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/12-driver-performance-dashboard.md): Uses Rule-based driver events for fleet-wide driving safety scoring.
 * [**Behavior Impact Dashboard**](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/13-behavior-impact-dashboard.md): Uses Rule-based driver events to track behavior trends over time.

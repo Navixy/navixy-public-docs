@@ -78,6 +78,6 @@ WHERE device_time >= CURRENT_DATE - INTERVAL '7 days';
 ## Next steps
 
 * [**Transformation Builder**](transformation-builder/): Design custom analytical entities using the visual workflow interface.
-* [**Raw data layer**](../bronze-layer.md): Explore the source schemas (`raw_telematics_data` and `raw_business_data`) that feed into transformations.
+* [**Raw data layer**](../bronze-layer/README.md): Explore the source schemas (`raw_telematics_data` and `raw_business_data`) that feed into transformations.
 * [**SQL Recipe Book**](../../../example-queries/): Learn query patterns and best practices for working with Transformation layer tables in Dashboard Studio.
 * [**Common transformations**](common-transformations/): Explore the ready-made analytical entities available in `processed_common_data`, including output schemas, query examples, and Transformation Builder templates.

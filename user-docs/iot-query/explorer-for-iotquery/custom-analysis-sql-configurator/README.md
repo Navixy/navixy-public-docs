@@ -164,7 +164,7 @@ ORDER BY last_seen DESC NULLS LAST;
 
 * [Create custom visualizations](creating-custom-visualizations.md) - Complete process for creating charts and visual analysis
 * [SQL Recipe Book](../../example-queries/) - Advanced query patterns organized by analytical scenario
-* [Bronze layer documentation](../../iot-query/schema-overview/bronze-layer.md) - Complete database schema reference and field definitions
+* [Raw data layer](../../iot-query/schema-overview/bronze-layer/README.md) - Complete database schema reference and field definitions
 
 {% hint style="info" %}
 **Production analytics**: For enterprise-scale reporting and dashboards, consider dedicated BI tools that connect directly to your PTL instance for enhanced scalability and collaboration features. Learn more in [Selecting BI tools](../../iot-query/connection-setup/selecting-bi-tools/).

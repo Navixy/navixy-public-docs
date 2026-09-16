@@ -30,7 +30,7 @@ The **IoT Query** uses a multi-layered storage architecture to organize your dat
 
 The system follows a three-layered model for data organization:
 
-#### [**Raw data layer**](bronze-layer.md)
+#### [**Raw data layer**](bronze-layer/README.md)
 
 * Raw data with minimal transformation
 * Direct ingestion from business and telematics data sources
@@ -57,7 +57,7 @@ Further in this documentation section, you will find more detailed data schemas 
 
 Each client has a dedicated database instance to ensure data isolation and security. Within this database:
 
-<table><thead><tr><th width="189.9090576171875">Schema</th><th width="225.3636474609375">Description</th><th>Content</th></tr></thead><tbody><tr><td><a href="bronze-layer.md#raw_business_data-structure"><strong><code>raw_business_data</code></strong></a></td><td>Business entities and operational data</td><td>Core entity tables, operational data, reference data, history data, relationship tables</td></tr><tr><td><a href="bronze-layer.md#raw_telematics_data-structure"><strong><code>raw_telematics_data</code></strong></a></td><td>Device tracking and sensor data</td><td>Core tracking data, input data, state data</td></tr><tr><td><a href="bronze-layer.md#repo-data-structure"><strong><code>repo</code></strong></a></td><td>Asset and inventory management</td><td>Asset type definitions, custom fields, asset instances, asset relationships, inventory hierarchies, geospatial data</td></tr><tr><td><strong>Meta data</strong></td><td>System reference data</td><td>description_parameters table</td></tr></tbody></table>
+<table><thead><tr><th width="189.9090576171875">Schema</th><th width="225.3636474609375">Description</th><th>Content</th></tr></thead><tbody><tr><td><a href="bronze-layer/raw-business-data.md"><strong><code>raw_business_data</code></strong></a></td><td>Business entities and operational data</td><td>Core entity tables, operational data, reference data, history data, relationship tables</td></tr><tr><td><a href="bronze-layer/raw-telematics-data.md"><strong><code>raw_telematics_data</code></strong></a></td><td>Device tracking and sensor data</td><td>Core tracking data, input data, state data</td></tr><tr><td><a href="bronze-layer/bdr.md"><strong>BDR</strong></a></td><td>Asset and inventory management</td><td>Asset type definitions, custom fields, asset instances, asset relationships, inventory hierarchies, geospatial data</td></tr><tr><td><strong>Meta data</strong></td><td>System reference data</td><td>description_parameters table</td></tr></tbody></table>
 
 When querying data, you must specify both the schema (e.g. `raw_business_data`) and table (e.g. `objects`) name:
 

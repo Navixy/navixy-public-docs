@@ -308,4 +308,4 @@ Transformation Builder is currently in its initial release, and several constrai
 * [**Templates**](templates.md): Pre-built workflow configurations you can import and adapt in Transformation Builder.
 * [**Transformation layer**](../): Learn how the Transformation layer organizes processed data into schemas and how to query it.
 * [**Workflow YAML reference**](workflow-yaml-reference.md): Review the full specification for the YAML export and import format.
-* [**Raw data layer**](../../bronze-layer.md): Explore the source schemas (`raw_telematics_data` and `raw_business_data`) that provide input data for your workflows.
+* [**Raw data layer**](../../bronze-layer/README.md): Explore the source schemas (`raw_telematics_data` and `raw_business_data`) that provide input data for your workflows.

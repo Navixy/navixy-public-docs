@@ -122,5 +122,5 @@ Input change events isn't customized through a Transformation Builder workflow t
 * [**Common transformations**](./): Back to the transformation index.
 * [**Trips**](trips.md): A sibling transformation that also runs on a schedule against raw telematics data.
 * [**Rule-based driver events**](rule-based-driver-events.md): A sibling transformation that records driving violations on the same 15-minute schedule.
-* [**Raw data layer**](../../bronze-layer.md): Explore `additional_data`, the source table that feeds Input change events.
+* [**Raw data layer**](../../bronze-layer/README.md): Explore `additional_data`, the source table that feeds Input change events.
 * [**Input triggering**](../../../../../user-guide/guide/events-and-notifications/inputs-and-outputs/input-triggering.md): Configure the `input_change` rules that determine which input changes are recorded here.

@@ -259,4 +259,4 @@ See the [Templates](../transformation-builder/templates.md) page for the downloa
 * [**Common transformations**](./): Back to the transformation index.
 * [**Templates**](../transformation-builder/templates.md): Download the Trips workflow template and import it into Transformation Builder.
 * [**Transformation Builder**](../transformation-builder/): Learn how to work with the visual workflow editor, add nodes, and preview results.
-* [**Raw data layer**](../../bronze-layer.md): Explore the source tables that feed into the Trips transformation: `tracking_data_core`, `states`, and `zones_geom`.
+* [**Raw data layer**](../../bronze-layer/README.md): Explore the source tables that feed into the Trips transformation: `tracking_data_core`, `states`, and `zones_geom`.

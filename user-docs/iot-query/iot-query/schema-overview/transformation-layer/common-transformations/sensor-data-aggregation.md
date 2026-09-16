@@ -330,5 +330,5 @@ See the [Templates](../transformation-builder/templates.md) page for the downloa
 * [**Common transformations**](./): Back to the transformation index.
 * [**Templates**](../transformation-builder/templates.md): Download the Sensor data aggregation workflow template and import it into Transformation Builder.
 * [**Transformation Builder**](../transformation-builder/): Learn how to work with the visual workflow editor, add nodes, and preview results.
-* [**Raw data layer**](../../bronze-layer.md): Explore the source tables that feed into the Sensor data aggregation: `raw_telematics_data.inputs`, `raw_business_data.sensor_description`, and `raw_business_data.objects`.
+* [**Raw data layer**](../../bronze-layer/README.md): Explore the source tables that feed into the Sensor data aggregation: `raw_telematics_data.inputs`, `raw_business_data.sensor_description`, and `raw_business_data.objects`.
 * [**Trips**](trips.md): A sibling transformation that produces vehicle trip records from raw telematics data.
