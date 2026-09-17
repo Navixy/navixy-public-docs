@@ -45,16 +45,16 @@ Stat tiles display single numeric values. Statements must return exactly one row
 {% code title="Total trips in current month" overflow="wrap" %}
 ```sql
 SELECT COUNT(*) as value
-FROM silver.trips
-WHERE start_time >= DATE_TRUNC('month', CURRENT_DATE);
+FROM processed_common_data.trips
+WHERE trip_start_time >= DATE_TRUNC('month', CURRENT_DATE);
 ```
 {% endcode %}
 
 {% code title="Total distance traveled (km)" overflow="wrap" %}
 ```sql
-SELECT SUM(distance_km) as value
-FROM silver.trips
-WHERE start_time >= CURRENT_DATE - INTERVAL '7 days';
+SELECT ROUND(SUM(trip_distance_meters) / 1000.0, 1) as value
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '7 days';
 ```
 {% endcode %}
 
@@ -68,26 +68,37 @@ The column name doesn't matter, only that the result is a single numeric value. 
 
 Bar charts require exactly two columns: category (text or date) and value (numeric). The first column becomes the X-axis, the second becomes bar heights:
 
-{% code title="Trips per vehicle type" overflow="wrap" %}
+{% code title="Trips per object" overflow="wrap" %}
 ```sql
+WITH device_owner AS (
+  SELECT DISTINCT ON (o.device_id) o.device_id, o.object_label
+  FROM raw_business_data.objects o
+  WHERE o.is_deleted IS NOT TRUE
+  ORDER BY o.device_id, o.object_id
+)
 SELECT 
-  vehicle_type as category,
+  d.object_label as category,
   COUNT(*) as value
-FROM silver.trips
-WHERE start_time >= DATE_TRUNC('month', CURRENT_DATE)
-GROUP BY vehicle_type
+FROM processed_common_data.trips t
+LEFT JOIN device_owner d ON d.device_id = t.device_id
+WHERE t.trip_start_time >= DATE_TRUNC('month', CURRENT_DATE)
+GROUP BY d.object_label
 ORDER BY value DESC;
 ```
 {% endcode %}
 
+Group by a text column. `raw_business_data.vehicles.vehicle_type` holds an integer code rather than a name, so grouping by it labels the bars `1`, `2`, `3`.
+
+The `device_owner` block at the top is not optional whenever you join object labels onto trips or events. See [How to join object labels](#how-to-join-object-labels).
+
 {% code title="Daily trip counts" overflow="wrap" %}
 ```sql
 SELECT 
-  DATE_TRUNC('day', start_time)::date as category,
+  DATE_TRUNC('day', trip_start_time)::date as category,
   COUNT(*) as value
-FROM silver.trips
-WHERE start_time >= CURRENT_DATE - INTERVAL '30 days'
-GROUP BY DATE_TRUNC('day', start_time)
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '30 days'
+GROUP BY DATE_TRUNC('day', trip_start_time)
 ORDER BY category;
 ```
 {% endcode %}
@@ -102,14 +113,15 @@ Use `ORDER BY` to control the bar sequence. Sort by value for ranked comparisons
 
 Pie charts require exactly two columns: label (text) and value (numeric). The first column becomes slice labels, the second determines slice sizes:
 
-{% code title="Trip distribution by zone" %}
+{% code title="Trips by starting zone" %}
 ```sql
 SELECT 
-  zone_name as label,
+  start_zone as label,
   COUNT(*) as value
-FROM silver.zone_visits
-WHERE enter_time >= DATE_TRUNC('month', CURRENT_DATE)
-GROUP BY zone_name
+FROM processed_common_data.trips
+WHERE trip_start_time >= DATE_TRUNC('month', CURRENT_DATE)
+  AND start_zone IS NOT NULL
+GROUP BY start_zone
 ORDER BY value DESC
 LIMIT 10;
 ```
@@ -129,19 +141,19 @@ Tables accept any number of columns with any data types. Select the columns you 
 ```sql
 SELECT 
   device_id,
-  start_time,
-  end_time,
-  distance_km,
-  duration_minutes,
-  max_speed_kmh
-FROM silver.trips
-WHERE start_time >= CURRENT_DATE - INTERVAL '7 days'
-ORDER BY start_time DESC
+  trip_start_time,
+  trip_end_time,
+  ROUND(trip_distance_meters / 1000.0, 1) as distance_km,
+  ROUND(trip_duration_seconds / 60.0) as duration_minutes,
+  max_speed
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '7 days'
+ORDER BY trip_start_time DESC
 LIMIT 100;
 ```
 {% endcode %}
 
-Column names become table headers. Use aliases with spaces for readable headers: `distance_km as "Distance (km)"`.
+Column names become table headers. Use aliases with spaces for readable headers: `ROUND(trip_distance_meters / 1000.0, 1) as "Distance (km)"`.
 
 </details>
 
@@ -169,14 +181,25 @@ Map panels plot one marker per row. Statements must return a latitude column and
 
 {% code title="Latest vehicle positions" overflow="wrap" %}
 ```sql
-SELECT
-  object_label,
-  latitude / 1e7 AS latitude,
-  longitude / 1e7 AS longitude
-FROM bronze.tracking_data_core
-WHERE latitude <> 0 AND longitude <> 0;
+WITH device_owner AS (
+  SELECT DISTINCT ON (o.device_id) o.device_id, o.object_label
+  FROM raw_business_data.objects o
+  WHERE o.is_deleted IS NOT TRUE
+  ORDER BY o.device_id, o.object_id
+)
+SELECT DISTINCT ON (t.device_id)
+  d.object_label,
+  t.latitude / 1e7 AS latitude,
+  t.longitude / 1e7 AS longitude
+FROM raw_telematics_data.tracking_data_core t
+LEFT JOIN device_owner d ON d.device_id = t.device_id
+WHERE t.device_time >= NOW() - INTERVAL '24 hours'
+  AND t.latitude <> 0 AND t.longitude <> 0
+ORDER BY t.device_id, t.device_time DESC;
 ```
 {% endcode %}
+
+`DISTINCT ON` with the matching `ORDER BY` keeps one row per device, the newest. Without it, the query plots every historical point the device ever sent.
 
 Dashboard Studio detects coordinate columns automatically when they use common names such as `latitude`, `lat`, or `gps_lat` for latitude and `longitude`, `lon`, or `lng` for longitude. If your columns use different names, select them manually in Visualization Settings.
 
@@ -209,15 +232,21 @@ A query that returns only the columns needed for a chart (two columns: category 
 The following example returns columns for all three components: a time column and numeric column for the chart, coordinate columns for the location map, and additional attributes that appear in the data table.
 
 ```sql
+WITH device_owner AS (
+  SELECT DISTINCT ON (o.device_id) o.device_id, o.object_label
+  FROM raw_business_data.objects o
+  WHERE o.is_deleted IS NOT TRUE
+  ORDER BY o.device_id, o.object_id
+)
 SELECT
     t.device_id,
-    o.object_label,
+    d.object_label,
     t.device_time,
     t.latitude::float / 10000000 AS latitude,
     t.longitude::float / 10000000 AS longitude,
     t.speed::float / 100 AS speed
 FROM raw_telematics_data.tracking_data_core t
-JOIN raw_business_data.objects o ON t.device_id = o.device_id
+LEFT JOIN device_owner d ON d.device_id = t.device_id
 WHERE t.device_time >= NOW() - INTERVAL '24 hours'
 ORDER BY t.device_time DESC
 LIMIT 1000
@@ -235,7 +264,7 @@ Any panel query from a dashboard is a valid starting point for a report. The adj
 
 If the panel query is already a table visualization returning multiple columns, it may already include everything needed. Add coordinate columns if the location map is required.
 
-If the panel query is a bar chart or stat tile query returning aggregated results, it likely lacks the row-level detail needed for the data table and location map. In that case, remove the aggregation and work from the underlying raw or Silver layer data instead.
+If the panel query is a bar chart or stat tile query returning aggregated results, it likely lacks the row-level detail needed for the data table and location map. In that case, remove the aggregation and work from the underlying Raw data layer or Transformation layer tables instead.
 
 [SQL Recipe Book](../example-queries/) contains ready-to-use query examples for common fleet analyses. Recipes from the book can be adapted for reports by adding coordinate columns where the location map is needed. The core WHERE and JOIN logic transfers directly; adjust only the SELECT clause to cover all required components.
 
@@ -250,12 +279,12 @@ Define variables for values that change periodically but remain consistent acros
 {% code title="Using date range variables" %}
 ```sql
 SELECT 
-  DATE_TRUNC('day', start_time)::date as category,
+  DATE_TRUNC('day', trip_start_time)::date as category,
   COUNT(*) as value
-FROM silver.trips
-WHERE start_time >= '${analysis_start_date}'::date
-  AND start_time < '${analysis_end_date}'::date
-GROUP BY DATE_TRUNC('day', start_time)
+FROM processed_common_data.trips
+WHERE trip_start_time >= '${analysis_start_date}'::date
+  AND trip_start_time < '${analysis_end_date}'::date
+GROUP BY DATE_TRUNC('day', trip_start_time)
 ORDER BY category;
 ```
 {% endcode %}
@@ -267,50 +296,101 @@ For statement-specific parameters that change frequently, you can use CTE parame
 ```sql
 WITH params AS (
   SELECT 
-    5 as min_idle_minutes,
+    300 as min_idle_seconds,
     10 as max_idle_speed_kmh,
     '${analysis_start_date}'::date as date_from,
     '${analysis_end_date}'::date as date_to
 )
 
 SELECT 
-  device_id,
+  e.device_id,
   COUNT(*) as idle_count,
-  SUM(duration_minutes) as total_idle_minutes
-FROM silver.idle_events e
+  ROUND(SUM(e.duration_sec) / 60.0) as total_idle_minutes
+FROM processed_common_data.rule_based_driver_events e
 CROSS JOIN params p
-WHERE e.event_time >= p.date_from
-  AND e.event_time < p.date_to
+WHERE e.event_type = 'idling_soft'
+  AND e.device_time >= p.date_from
+  AND e.device_time < p.date_to
   AND e.speed_kmh <= p.max_idle_speed_kmh
-  AND e.duration_minutes >= p.min_idle_minutes
-GROUP BY device_id
+  AND e.duration_sec >= p.min_idle_seconds
+GROUP BY e.device_id
 ORDER BY total_idle_minutes DESC;
 ```
 
 This pattern combines global variables (date ranges) with statement-specific parameters (thresholds), keeping all adjustable values at the top for easy maintenance.
 
+### How to join object labels
+
+`raw_business_data.objects.device_id` is not unique. One device can carry several object records, because a device reassigned between objects leaves the earlier rows behind. Fact tables such as `processed_common_data.trips` key on `device_id` alone, so a plain join to `objects` multiplies every fact row by the number of matching object records. Counts and sums then come out too high, with no error to tell you.
+
+Filtering on `is_deleted` isn't enough on its own, because more than one record can survive that filter. Pick one row per device first, then join that:
+
+{% code title="The object-label join" %}
+```sql
+WITH device_owner AS (
+  SELECT DISTINCT ON (o.device_id) o.device_id, o.object_id, o.object_label
+  FROM raw_business_data.objects o
+  WHERE o.is_deleted IS NOT TRUE
+  ORDER BY o.device_id, o.object_id
+)
+SELECT d.object_label, COUNT(*) AS trips
+FROM processed_common_data.trips t
+LEFT JOIN device_owner d ON d.device_id = t.device_id
+WHERE t.trip_start_time >= CURRENT_DATE - INTERVAL '30 days'
+GROUP BY d.object_label;
+```
+{% endcode %}
+
+Use `LEFT JOIN` rather than an inner join, so that a device with no surviving object record still appears rather than dropping out of the result.
+
+`processed_common_data.rule_based_driver_events` is the exception. It already carries `object_id` and `object_label`, and its coordinates are in degrees, so it needs neither this join nor the `/1e7` conversion.
+
 ### How to access IoT Query schemas
 
-IoT Query organizes data in Raw data, Transformation, and Insight layers. Understanding which layer to use saves time and improves SQL clarity. For complete schema details, see the [IoT Query Schema Overview](https://www.navixy.com/docs/analytics/iotquery/schema-overview).
+IoT Query organizes data in Raw data, Transformation, and Insight layers. The Raw data and Transformation layers each hold two PostgreSQL schemas, and you reference a table by its schema name rather than by the layer. Choosing the right layer saves time and keeps SQL clear. For complete schema details, see the [IoT Query Schema Overview](../iot-query/schema-overview/).
 
-**Raw data layer** contains raw tracking points from devices: `bronze.tracking_data_core` stores every GPS position with timestamps, coordinates, and sensor readings. Use Raw data for point-level analysis or when you need raw sensor values not processed into higher layers.
+**Raw data layer** holds what devices and the Navixy platform recorded, in two schemas. `raw_telematics_data` holds tracking, input, and state data: `raw_telematics_data.tracking_data_core` stores every GPS position with timestamps, coordinates, and sensor readings. `raw_business_data` holds business entities such as `raw_business_data.objects`, `raw_business_data.vehicles`, and `raw_business_data.zones`. Use the Raw data layer for point-level analysis, for raw sensor values, and for the labels and attributes you join onto processed data.
 
-**Transformation layer** provides processed entities: `silver.trips` aggregates tracking points into trip records with start/end times, distance, and duration. `silver.zone_visits` records when devices enter and exit geofences. `silver.idle_events` identifies periods when vehicles remain stationary with engines running. Use Transformation for most visualization needs since it provides analysis-ready structures.
+**Transformation layer** holds processed entities in two schemas. `processed_common_data` holds the transformations Navixy maintains, which are available without configuration: `trips`, `sensors_data_by_hours`, `rule_based_driver_events`, and `input_change_events`. `processed_custom_data` holds the transformations you build yourself in Transformation Builder. Use the Transformation layer for most visualization needs, because it provides analysis-ready structures. See [Common transformations](../iot-query/schema-overview/transformation-layer/common-transformations/) for each table's columns.
 
-**Insight layer** offers pre-aggregated metrics and dimensional models for complex analytics. Use Insight for fleet-wide statistics or multi-dimensional analysis that would require complex joins against Silver tables.
+**Insight layer** offers pre-aggregated metrics and dimensional models for complex analytics. Use it for fleet-wide statistics or multi-dimensional analysis that would otherwise need complex joins against Transformation layer tables.
 
-Reference tables using `schema.table` format: `silver.trips`, not just `trips`. Include date range filters in WHERE clauses to limit data scanned:
+{% hint style="warning" %}
+The layer names Bronze, Silver, and Gold describe the medallion architecture the layers follow. They aren't schema names, and `silver.trips` isn't a table you can query. Use the schema names above.
+{% endhint %}
+
+Reference tables using `schema.table` format: `processed_common_data.trips`, not just `trips`. Include date range filters in WHERE clauses to limit data scanned:
 
 {% code title="Always filter by time ranges" %}
 ```sql
 SELECT device_id, COUNT(*) as trip_count
-FROM silver.trips
-WHERE start_time >= CURRENT_DATE - INTERVAL '30 days'
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '30 days'
 GROUP BY device_id;
 ```
 {% endcode %}
 
 Most SQL statements filter by device, time range, or both. Add these filters early in WHERE clauses to reduce data volume processed.
+
+### Units of measurement in query results
+
+IoT Query stores every measurement in one fixed unit, and Dashboard Studio renders whatever the query returns. It doesn't convert values into the measurement system set on the Navixy account, the way the pre-built Dashboards app does. Two people with different account settings see the same numbers on the same panel.
+
+Each column's unit is documented in the [IoT Query Schema Overview](../iot-query/schema-overview/), and many columns name it directly. `trip_distance_meters` holds meters, `avg_speed` and `max_speed` hold km/h, and `altitude_start` and `altitude_end` hold meters above sea level. Check the column before you label a panel.
+
+Convert in the query when your readers work in other units, and name the unit in the column alias so the panel labels itself correctly:
+
+{% code title="Returning distance in miles rather than meters" %}
+```sql
+SELECT device_id,
+       ROUND(SUM(trip_distance_meters) / 1609.344, 1) as "Distance (mi)"
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '7 days'
+GROUP BY device_id;
+```
+{% endcode %}
+
+Divide meters by 1,609.344 for miles, km/h by 1.609344 for mph, and meters by 0.3048 for feet.
 
 ### How to use the SQL Editor
 
@@ -329,33 +409,33 @@ Exploration pattern for new data:
 {% code expandable="true" %}
 ```sql
 -- 1. Examine table structure
-SELECT * FROM silver.trips LIMIT 10;
+SELECT * FROM processed_common_data.trips LIMIT 10;
 
 -- 2. Check date range coverage
 SELECT 
-  MIN(start_time) as earliest,
-  MAX(start_time) as latest,
+  MIN(trip_start_time) as earliest,
+  MAX(trip_start_time) as latest,
   COUNT(*) as total_trips
-FROM silver.trips;
+FROM processed_common_data.trips;
 
 -- 3. Test filtering logic
 SELECT 
   device_id,
-  start_time,
-  distance_km
-FROM silver.trips
-WHERE start_time >= '2024-01-01'
+  trip_start_time,
+  trip_distance_meters
+FROM processed_common_data.trips
+WHERE trip_start_time >= '2024-01-01'
   AND device_id = 12345
-ORDER BY start_time;
+ORDER BY trip_start_time;
 
 -- 4. Adapt for visualization (2 columns for bar chart)
 SELECT 
-  DATE_TRUNC('day', start_time)::date as day,
+  DATE_TRUNC('day', trip_start_time)::date as day,
   COUNT(*) as trips
-FROM silver.trips
-WHERE start_time >= '2024-01-01'
+FROM processed_common_data.trips
+WHERE trip_start_time >= '2024-01-01'
   AND device_id = 12345
-GROUP BY DATE_TRUNC('day', start_time)
+GROUP BY DATE_TRUNC('day', trip_start_time)
 ORDER BY day;
 ```
 {% endcode %}
@@ -370,11 +450,11 @@ Most visualization SQL follows similar patterns. Copy these structures and adjus
 
 ```sql
 SELECT 
-  DATE_TRUNC('hour', start_time) as time_bucket,
+  DATE_TRUNC('hour', trip_start_time) as time_bucket,
   COUNT(*) as event_count
-FROM silver.trips
-WHERE start_time >= CURRENT_DATE - INTERVAL '24 hours'
-GROUP BY DATE_TRUNC('hour', start_time)
+FROM processed_common_data.trips
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '24 hours'
+GROUP BY DATE_TRUNC('hour', trip_start_time)
 ORDER BY time_bucket;
 ```
 
@@ -403,11 +483,11 @@ LIMIT 15;
 
 ```sql
 SELECT 
-  SUM(distance_km) as total_distance,
-  AVG(duration_minutes) as avg_duration,
+  ROUND(SUM(trip_distance_meters) / 1000.0, 1) as total_distance_km,
+  ROUND(AVG(trip_duration_seconds) / 60.0) as avg_duration_minutes,
   COUNT(*) as trip_count
-FROM silver.trips
-WHERE start_time >= DATE_TRUNC('week', CURRENT_DATE);
+FROM processed_common_data.trips
+WHERE trip_start_time >= DATE_TRUNC('week', CURRENT_DATE);
 ```
 
 </details>
@@ -420,12 +500,12 @@ WHERE start_time >= DATE_TRUNC('week', CURRENT_DATE);
 SELECT 
   device_id,
   COUNT(*) as trips,
-  SUM(distance_km) as total_km
-FROM silver.trips
-WHERE start_time >= '${period_start}'::date
-  AND start_time < '${period_end}'::date
-  AND distance_km >= 5
-  AND duration_minutes >= 10
+  ROUND(SUM(trip_distance_meters) / 1000.0, 1) as total_km
+FROM processed_common_data.trips
+WHERE trip_start_time >= '${period_start}'::date
+  AND trip_start_time < '${period_end}'::date
+  AND trip_distance_meters >= 5000
+  AND trip_duration_seconds >= 600
 GROUP BY device_id
 HAVING COUNT(*) >= 5
 ORDER BY total_km DESC;
@@ -443,15 +523,15 @@ Occur when results don't match visualization expectations. If you selected a bar
 
 ```sql
 -- Wrong: three columns
-SELECT device_id, start_time, COUNT(*) FROM silver.trips GROUP BY device_id, start_time;
+SELECT device_id, trip_start_time, COUNT(*) FROM processed_common_data.trips GROUP BY device_id, trip_start_time;
 
 -- Correct: two columns
-SELECT device_id, COUNT(*) as trips FROM silver.trips GROUP BY device_id;
+SELECT device_id, COUNT(*) as trips FROM processed_common_data.trips GROUP BY device_id;
 ```
 
 #### **SQL syntax errors**&#x20;
 
-Show specific error messages. Common issues include missing schema prefixes (`trips` instead of `silver.trips`), typos in column names, or incorrect date casting. Test statements in SQL Editor to see detailed error messages with line numbers.
+Show specific error messages. Common issues include missing schema prefixes (`trips` instead of `processed_common_data.trips`), typos in column names, or incorrect date casting. Test statements in SQL Editor to see detailed error messages with line numbers.
 
 #### **Empty results**&#x20;
 
@@ -463,12 +543,12 @@ If statements execute slowly or timeout, add date range filters to WHERE clauses
 
 ```sql
 -- Slow: no date filter
-SELECT device_id, COUNT(*) FROM silver.trips GROUP BY device_id;
+SELECT device_id, COUNT(*) FROM processed_common_data.trips GROUP BY device_id;
 
 -- Fast: date range filter
 SELECT device_id, COUNT(*) 
-FROM silver.trips 
-WHERE start_time >= CURRENT_DATE - INTERVAL '30 days'
+FROM processed_common_data.trips 
+WHERE trip_start_time >= CURRENT_DATE - INTERVAL '30 days'
 GROUP BY device_id;
 ```
 
@@ -488,4 +568,4 @@ You just need to:
 
 The core WHERE and JOIN logic remains the same; you adjust only the output structure.
 
-For schema details, see the [IoT Query Schema Overview](https://www.navixy.com/docs/analytics/iotquery/schema-overview). This reference explains available tables, column definitions, and relationships between Raw data, Transformation, and Insight layers.
+For schema details, see the [IoT Query Schema Overview](../iot-query/schema-overview/). This reference explains available tables, column definitions, and relationships between Raw data, Transformation, and Insight layers.

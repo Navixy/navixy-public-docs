@@ -1,9 +1,9 @@
 # Technical conditions dashboard
 
-The **Technical Conditions Dashboard** is the third tab of the Dashboards app, and it answers "how well is the fleet's hardware performing, and what needs attention?" (the [Fleet Live Status Dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?" and the [Trips Dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It pulls GPS quality, power supply, mileage, fault codes, engine RPM, and safety events into a single view. That way, you can spot deteriorating devices and vehicles before they cause downtime.
+**Conditions** is the third tab of the Dashboards app, and it answers "how well is the fleet's hardware performing, and what needs attention?" (the [Live status dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?" and the [Trips dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It pulls GPS quality, power supply, mileage, fault codes, engine RPM, and safety events into a single view. That way, you can spot deteriorating devices and vehicles before they cause downtime.
 
 {% hint style="info" %}
-The Technical Conditions Dashboard is currently in beta (v1.0.0), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send Feedback** button at the top of the tab. The four dashboards version independently, so the Fleet Live Status, Trips, Technical Conditions, and IoT Logic tabs may show different version numbers.
+The Conditions dashboard is currently in beta (v1.0.0), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send feedback** button at the top of the tab. Each dashboard versions independently, so the **Live status**, **Trips**, **Conditions**, **IoT Logic**, and **Fuel** tabs may show different version numbers.
 {% endhint %}
 
 Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended template to start with: [Fleet Anomaly Monitor](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/01-fleet-anomaly-monitor.md).
@@ -111,10 +111,10 @@ Two panels track odometer activity across the fleet, both using the hardware odo
 
 | Panel                                             | What it shows                                                                                                          |
 | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **Top 10 objects by mileage (km)** (table)        | The 10 objects with the highest current odometer readings, plus the timestamp of the message that produced each value. |
+| **Top 10 objects by mileage** (table)        | The 10 objects with the highest current odometer readings, plus the timestamp of the message that produced each value. |
 | **Mileage trend for top 10 objects** (line chart) | Odometer readings over time for those same 10 objects.                                                                 |
 
-Unlike the rest of this dashboard, mileage isn't a fault signal. It's a service-planning view. **Top 10 objects by mileage (km)** names the vehicles that have accumulated the most distance, the usual starting point for distance-based service planning, not the ones with a technical problem.
+Unlike the rest of this dashboard, mileage isn't a fault signal. It's a service-planning view. **Top 10 objects by mileage** names the vehicles that have accumulated the most distance, the usual starting point for distance-based service planning, not the ones with a technical problem.
 
 Objects without a hardware odometer sensor don't appear in either panel, even if they have other telemetry.
 
@@ -179,4 +179,4 @@ The table shows up to 600 objects, ordered by most recently updated first. If yo
 
 ## Exporting panel data
 
-Every panel here, both charts and tables, has the same CSV and PDF export options described in [Exporting data](README.md#exporting-data).
+Every panel here, both charts and tables, has the same CSV, Excel, and PDF export options described in [Exporting data](README.md#exporting-data).

@@ -1,9 +1,9 @@
 # Trips dashboard
 
-The **Trips Dashboard** is the second tab of the Dashboards app, and it answers "what did the fleet do over the past week?" (the [Fleet Live Status Dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?"). It pulls completed trips together into a single view of utilization, distance, duration, and per-object performance. That way, you can spot under-used vehicles, over-worked ones, and unusual driving behavior without building a report.
+**Trips** is the second tab of the Dashboards app, and it answers "what did the fleet do over the past week?" (the [Live status dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?"). It pulls completed trips together into a single view of utilization, distance, duration, and per-object performance. That way, you can spot under-used vehicles, over-worked ones, and unusual driving behavior without building a report.
 
 {% hint style="info" %}
-The Trips Dashboard is currently in beta (v1.0.1), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send Feedback** button at the top of the tab. The four dashboards version independently, so the Fleet Live Status, Trips, Technical Conditions, and IoT Logic tabs may show different version numbers.
+The Trips dashboard is currently in beta (v1.0.1), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send feedback** button at the top of the tab. Each dashboard versions independently, so the **Live status**, **Trips**, **Conditions**, **IoT Logic**, and **Fuel** tabs may show different version numbers.
 {% endhint %}
 
 Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [HM Trip Operations Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/04-hm-trip-operations-dashboard.md) and [Trips Dashboard (Yesterday)](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/08-trips-dashboard-yesterday.md).
@@ -11,6 +11,10 @@ Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s
 ## What counts as a trip
 
 Every number on this dashboard is built from trips, so it helps to know what the Navixy platform treats as a trip before reading the panels. What follows is a short summary of that same trip-building logic, used elsewhere on the platform too.
+
+{% hint style="info" %}
+The thresholds below are stated in metric units, because that is how the Navixy platform defines them. They don't change with your account's measurement system. The distances and speeds shown on the dashboard itself do follow it. See [Units of measurement](README.md#units-of-measurement).
+{% endhint %}
 
 The platform processes incoming GPS data every minute and stitches points into trips. Only well-formed points are eligible: a point needs an event ID, valid coordinates, and satellite information. Points that look like GPS jumps (more than 5 km from the previous point) and points that arrive out of order are discarded.
 
@@ -27,7 +31,7 @@ Trips that fail any of these checks are discarded. That's why some very short jo
 
 ## Data window and refresh
 
-The Trips Dashboard always shows the last 7 days of trip data. There is no date picker, and the window can't be changed. For trip data over a different period, use the [Trips and parkings report](../reports/specific-report-details/trip-report.md).
+The Trips dashboard always shows the last 7 days of trip data. There is no date picker, and the window can't be changed. For trip data over a different period, use the [Trips and parkings report](../reports/specific-report-details/trip-report.md).
 
 The dashboard refreshes automatically every **90 seconds** while the browser tab is in focus, and the **Update** button in the top-right corner forces an immediate refresh.
 
@@ -84,4 +88,4 @@ The address columns are best-effort. Start and end addresses are resolved by rev
 
 ## Exporting panel data
 
-Every panel here, both charts and tables, has the same CSV and PDF export options described in [Exporting data](README.md#exporting-data).
+Every panel here, both charts and tables, has the same CSV, Excel, and PDF export options described in [Exporting data](README.md#exporting-data).

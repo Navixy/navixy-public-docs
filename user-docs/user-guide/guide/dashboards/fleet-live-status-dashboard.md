@@ -1,9 +1,9 @@
 # Fleet live status dashboard
 
-The **Fleet Live Status Dashboard** is the first tab of the Dashboards app, and it answers "what is the fleet doing right now?" (the [Trips Dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It brings connection status, movement state, speed, and location data together into a single view. That way, you can assess your fleet's current situation without switching between the Objects list, the map, and individual reports.
+**Live status** is the first tab of the Dashboards app, and it answers "what is the fleet doing right now?" (the [Trips dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It brings connection status, movement state, speed, and location data together into a single view. That way, you can assess your fleet's current situation without switching between the Objects list, the map, and individual reports.
 
 {% hint style="info" %}
-The Fleet Live Status Dashboard is currently in beta (v1.0.3), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send Feedback** button at the top of the tab. The four dashboards version independently, so the Fleet Live Status, Trips, Technical Conditions, and IoT Logic tabs may show different version numbers.
+The Live status dashboard is currently in beta (v1.0.3), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send feedback** button at the top of the tab. Each dashboard versions independently, so the **Live status**, **Trips**, **Conditions**, **IoT Logic**, and **Fuel** tabs may show different version numbers.
 {% endhint %}
 
 Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data. Recommended templates to start with: [Object Status Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/07-object-status-dashboard.md) and [Fleet Reports Dashboard](https://github.com/Navixy/navixy-iot-query-dashboard/blob/main/schemas/03-fleet-reports-dashboard.md).
@@ -12,12 +12,16 @@ Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s
 
 The dashboard uses five movement states to classify what each object is doing. These states appear in the Movement chart and in the Fleet details table, color-coded as shown below.
 
+{% hint style="info" %}
+The thresholds below are stated in metric units, and the panel descriptions in the app state them the same way on every account. The speeds in the tables and charts do follow your account's measurement system. See [Units of measurement](README.md#units-of-measurement).
+{% endhint %}
+
 | State      | Color  | Condition                                    |
 | ---------- | ------ | -------------------------------------------- |
 | 🟢 Moving  | Green  | Speed above 2 km/h                           |
 | 🟣 Stopped | Violet | No message received for more than 10 minutes |
 | 🟠 Parked  | Orange | Device is stationary                         |
-| 🔵 Idling  | Blue   | Engine is on, speed is 0 km/h                |
+| 🔵 Idle    | Blue   | Engine is on and speed is 0                  |
 | ⚪ Unknown | Gray   | No data available                            |
 
 <details>
@@ -41,7 +45,7 @@ The dashboard uses four connection states, defined below. For how connection sta
 
 ## Data window and refresh
 
-The Fleet Live Status Dashboard shows the current state of your fleet rather than a historical window, with one exception: the Speed panels plot a rolling 24-hour trend. Connection and movement states are computed as new telemetry arrives, typically within seconds of a device reporting.
+The Live status dashboard shows the current state of your fleet rather than a historical window, with one exception: the Speed panels plot a rolling 24-hour trend. Connection and movement states are computed as new telemetry arrives, typically within seconds of a device reporting.
 
 The dashboard refreshes automatically every **90 seconds** while the browser tab is in focus. When you switch away from the tab, updates pause, and they resume when you return. Use the **Update** button in the top-right corner to force an immediate refresh at any time.
 
@@ -78,7 +82,7 @@ The movement section tells you what your fleet is actually doing, not just wheth
 
 <summary>Reading the movement distribution</summary>
 
-The balance of states shifts predictably through the day. A fleet showing most objects as Parked early in the morning is normal before a shift starts. The same picture at midday suggests routes aren't running on schedule. A high Idling count at any time of day is worth noting: idling while stationary with the engine on accumulates fuel cost and engine wear that doesn't appear in trip distance or duration figures.
+The balance of states shifts predictably through the day. A fleet showing most objects as Parked early in the morning is normal before a shift starts. The same picture at midday suggests routes aren't running on schedule. A high Idle count at any time of day is worth noting: running the engine while stationary accumulates fuel cost and engine wear that doesn't appear in trip distance or duration figures.
 
 </details>
 
@@ -132,4 +136,4 @@ A low satellite count or a high HDOP value alongside an unexpected location ofte
 
 ## Exporting panel data
 
-Every panel here, both charts and tables, has the same CSV and PDF export options described in [Exporting data](README.md#exporting-data).
+Every panel here, both charts and tables, has the same CSV, Excel, and PDF export options described in [Exporting data](README.md#exporting-data).

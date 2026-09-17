@@ -1,9 +1,9 @@
 # IoT Logic dashboard
 
-The **IoT Logic Dashboard** is the fourth tab of the Dashboards app, and it answers "how is IoT Logic being used across the fleet?" (the [Technical Conditions Dashboard](technical-conditions-dashboard.md) covers "how well is the fleet's hardware performing, and what needs attention?"). It pulls flow and node execution activity into a single view. That way, you can see which devices, flows, and nodes are actually processing data without opening [IoT Logic](../account/iot-logic/README.md) itself.
+**IoT Logic** is the fourth tab of the Dashboards app, and it answers "how is IoT Logic being used across the fleet?" (the [Conditions dashboard](technical-conditions-dashboard.md) covers "how well is the fleet's hardware performing, and what needs attention?"). It pulls flow and node execution activity into a single view. That way, you can see which devices, flows, and nodes are actually processing data without opening [IoT Logic](../account/iot-logic/README.md) itself.
 
 {% hint style="info" %}
-The IoT Logic Dashboard is currently in beta (v1.0.0), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send Feedback** button at the top of the tab. The four dashboards version independently, so the Fleet Live Status, Trips, Technical Conditions, and IoT Logic tabs may show different version numbers.
+The IoT Logic dashboard is currently in beta (v1.0.0), an early version released to be shaped by real feedback. If something is missing, confusing, or could be more useful, use the **Send feedback** button at the top of the tab. Each dashboard versions independently, so the **Live status**, **Trips**, **Conditions**, **IoT Logic**, and **Fuel** tabs may show different version numbers.
 {% endhint %}
 
 Want more customization and detail? [Dashboard Studio](https://app.gitbook.com/s/oFNFEIINiGFbhi3Px3dE/dashboard-studio) lets you build fleet analytics tailored to your own KPIs using IoT Query data.
@@ -28,7 +28,7 @@ Three KPI tiles frame how much of the fleet and how many flows were involved in 
 
 <summary>What the gap between Total objects and Objects active in IoT logic means</summary>
 
-The gap between these two is your automation coverage. Check it after rolling out a new flow to confirm every device you intended to include is actually feeding it. A device that shows Online on the [Fleet Live Status Dashboard](fleet-live-status-dashboard.md) but is absent from this count is connected to the Navixy platform without being connected to your logic.
+The gap between these two is your automation coverage. Check it after rolling out a new flow to confirm every device you intended to include is actually feeding it. A device that shows Online on the [Live status dashboard](fleet-live-status-dashboard.md) but is absent from this count is connected to the Navixy platform without being connected to your logic.
 
 </details>
 
@@ -54,4 +54,4 @@ When the table is empty, it shows "No IoT Logic usage found for the last 7 days.
 
 ## Exporting panel data
 
-Every panel here, both charts and tables, has the same CSV and PDF export options described in [Exporting data](README.md#exporting-data).
+Every panel here, both charts and tables, has the same CSV, Excel, and PDF export options described in [Exporting data](README.md#exporting-data).

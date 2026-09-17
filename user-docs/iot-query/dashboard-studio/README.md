@@ -17,10 +17,6 @@ The visual editor separates dashboard design from SQL knowledge. Advanced users 
 
 Dashboard Studio also provides [Reports](creating-reports.md): a format that generates a data table, chart, and location map from a single SQL query, with export to HTML, Excel, and PDF.
 
-{% hint style="info" %}
-You can test the Dashboard Studio's functionality on mock data yourselves, <a href="https://demo.tools.iotquery.navixy.com/" class="button primary">Try demo</a>
-{% endhint %}
-
 ## What are the key benefits?
 
 Dashboard Studio addresses common analytics challenges faced by fleet operations. The platform combines direct database access with visual simplicity, creating an analytics environment that serves both technical and operational users.
@@ -94,7 +90,7 @@ Ensure that IoT Query is enabled in your environment.
 5. Save.
 
 {% hint style="info" %}
-Dashboard Studio requires IoT Query access to be functional. You can test the integration and the app functionality on mock data by using this link in application URL - [https://demo.tools.iotquery.navixy.com/](https://demo.tools.iotquery.navixy.com/)
+Dashboard Studio requires IoT Query access to be functional. Enable IoT Query before you add the application, because the app has nothing to query without it.
 {% endhint %}
 {% endstep %}
 
@@ -126,7 +122,7 @@ Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-a
 
 [Creating dashboards](creating-dashboards.md) - Understand the dashboard editor interface and panel configuration workflow. Learn how to add panels, configure visualizations, and arrange dashboard layouts.
 
-[Building dashboards with AI](ai-dashboards.md) - Describe what you want to monitor in plain language and let the assistant generate the panels and SQL. Preview the result against your own data before saving it.
+[Building dashboards with AI](ai-dashboards.md) - Describe what you want to monitor in plain language and let the assistant generate the panels and SQL. The result opens on a canvas and runs against your own data before you save it.
 
 [Creating reports](creating-reports.md): Learn how to build a report from a single SQL query with coordinated data table, chart, and location map views. Export results to HTML, Excel, or PDF.
 

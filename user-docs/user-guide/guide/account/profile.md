@@ -13,7 +13,7 @@ The **User preferences** section located in the **Account settings → Profile**
 ## General settings
 
 1. **Default language:** Set the default language for your account. For example, English is the default language in a new account.
-2. **Measurement system:** Choose your preferred measurement system. Options include Metric (km, liter) or Imperial (miles, gallons).
+2. **Measurement system:** Choose your preferred measurement system. Five are available: Metric (km, liter), Metric with US gallons (km, US gallon), Imperial (mile, imperial gallon), US (mile, US gallon), and Nautical (nautical mile, knot, liter).
 3. **Local time zone:** Set the local time zone for your account. This setting is crucial for accurate time tracking and reporting.
 4. **Date format:** Select the format for displaying dates. The available formats help ensure that dates are shown in a way that is most familiar to you, such as DD/MM/YYYY.
 5. **Time format:** Choose the format for displaying time. The default is typically in a 12-hour format.

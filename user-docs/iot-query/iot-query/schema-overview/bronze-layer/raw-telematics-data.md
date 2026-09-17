@@ -142,7 +142,7 @@ Each table serves a specific purpose in capturing different aspects of device in
 <table><thead><tr><th width="182">Attribute</th><th>Details</th></tr></thead><tbody><tr><td><strong>Key fields</strong></td><td><code>input_id</code>, <code>device_id</code>, <code>device_time</code>, <code>sensor_name</code>, <code>value</code></td></tr><tr><td><strong>Content</strong></td><td>Analog readings (fuel level, temperature, voltage), calculated values (engine RPM)</td></tr><tr><td><strong>Relationships</strong></td><td><pre data-overflow="wrap"><code>FROM raw_telematics_data.inputs AS i
 JOIN raw_business_data.sensor_description AS sd
     ON i.device_id = sd.device_id AND i.sensor_name = sd.input_label
-JOIN raw_telematics_data.tacking_data_core AS tdc
+JOIN raw_telematics_data.tracking_data_core AS tdc
     ON i.device_id = tdc.device_id AND i.device_time = tdc.device_time
 </code></pre></td></tr></tbody></table>
 
