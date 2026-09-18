@@ -16,6 +16,8 @@ To access File Manager, navigate to **Account settings → File Manager**.
 
 Files are automatically stored when users upload attachments through these features. File Manager organizes uploaded files into four sections based on their source:
 
+**All:** All file types, including video files from GPS devices that don't have a dedicated section.
+
 **Places:** Files attached to [Places (POIs)](../tracking/map-tools/places-pois.md), including location photos and reference materials. To attach a file to a POI, you need to add a **File** or **Image** custom field while [creating or editing the POI](../tracking/map-tools/places-pois.md#creating-and-editing-places).
 
 **Forms:** Attachments from [forms submitted through X-GPS Tracker](../x-gps-mobile-apps/x-gps-tracker/check-ins.md#forms-in-check-ins), such as signatures and inspection reports.
@@ -30,13 +32,13 @@ Not all feature usage requires file uploads. For example, you can create a servi
 
 ## File management and operations
 
-File Manager includes standard search and filtering capabilities, column sorting and customization options, and a grid/list view toggle for organizing your stored files. Advanced filtering allows search by name, date range, file format, size, and uploading user.
+File Manager includes standard search and filtering capabilities, column sorting and customization options, and a grid/list view toggle for organizing your stored files. Advanced filtering allows searching by name, date range, file format, size, and uploader.
 
 The list view automatically displays all file details, including creation date, size, file type, and the uploading user. In the grid view, this information is available upon clicking the ⓘ button. This mode also lets you select multiple files without additional clicks.
 
 Pagination controls at the bottom of the interface show the total file count and allow you to customize the number of files displayed per page.
 
-Files can be downloaded individually or selected for bulk download in a ZIP archive. When downloading files exceeding 1 GB, File Manager automatically creates multiple archives to accommodate all selected content.
+Files can be downloaded individually or selected for bulk download in a ZIP archive. When downloading files that exceed 1 GB, File Manager automatically creates multiple archives to accommodate all selected content.
 
 Files can also be deleted individually or in bulk.
 
