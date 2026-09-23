@@ -25,6 +25,14 @@ It produces the same visualization types you can add from the panel gallery: sin
 
 Every dashboard is a starting point, not a finished result. The assistant generates SQL from a description without checking your column names first. A panel can therefore reference a column that doesn't exist in your data. The canvas runs each panel so that you catch these errors before you save.
 
+### What it doesn't do
+
+The assistant builds dashboards. It doesn't answer one-off questions about your fleet in the chat. Ask it for what you want to watch over time, then read the answer from the panels it builds. A question like "which vehicles are offline right now" becomes a panel rather than a chat reply.
+
+Every query it writes reads your data. The assistant never changes, adds, or deletes anything in your IoT Query database.
+
+It works only on the dashboard currently on the canvas. The assistant builds and revises that one dashboard through the conversation, and it can't open a dashboard you saved in an earlier conversation to change it. Edit those in the dashboard editor instead.
+
 ## Before you start
 
 You need the following:
