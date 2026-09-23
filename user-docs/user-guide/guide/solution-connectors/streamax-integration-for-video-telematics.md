@@ -8,7 +8,7 @@ description: >-
 
 Streamax is a leading MDVR manufacturer, well-proven in the global market. With their devices, you can enable 24/7 video recording from your vehicles, collect telematics data, remotely access video footage, and monitor driving safety using ADAS (Advanced Driver Assistance Systems) and DSM (Driver Status Monitoring) technologies.
 
-By integrating Streamax with Navixy, you get comprehensive video monitoring combined with advanced fleet management in a single interface. Let's take a closer look at how to implement this powerful combination and embed Streamax daashboard into Navixy interface.
+By integrating Streamax with Navixy, you get comprehensive video monitoring combined with advanced fleet management in a single interface. Let's take a closer look at how to implement this powerful combination and embed Streamax dashboard into Navixy interface.
 
 {% stepper %}
 {% step %}
@@ -18,25 +18,25 @@ To establish the integration, you'll need to obtain API credentials from your St
 
 **Get API credentials from Streamax**
 
-1. **Obtain Tenant Name and Secret**: Follow the authentication process as described in the [Streamax Sign Authentication documentation](https://ftcloud.streamax.com:20002/DOC/Sign%20Authentication) to obtain your API key and secret.
-2. **Obtain Tenant ID**:
-   1. Open your browser and press F12 on keyboard, the console opens.
-   2. In the console, select the **Network** tab
-   3. Open the **FTCloud** (your Streamax account) and go to **My subscription** page.
-   4. In Network tab you will see `query?tenantId=....` - this is your `tenantId` which we will use for getting data via APIs. Copy the numeric value after "=".\
-      ![](../../.gitbook/assets/TenantID.png)
-3. **Contact Navixy**: Once you have your API credentials, contact your Customer Success Manager or use [this form](https://www.navixy.com/contact/). Send a request to integrate Streamax with your Navixy account, containing the following information:
+1. **Copy the Secret Key**: Streamax stores API secrets as named keys. The integration uses the **Default Secret**, the key that has full access to your data and to all APIs. A key you create yourself can be limited to certain fleets or certain APIs, and the integration does not work with a limited key.
+   1. In FTCloud, open **FT Manager**.
+   2. In the sidebar, select **General Setting**, then **Whitelist Key**.
+   3. Open the **Default Secret** entry.
+   4. Copy its **Secret Key**, a 32-character value. The [Streamax Sign Authentication documentation](https://ftcloud.streamax.com:20002/DOC/Sign%20Authentication) calls this value `tenantSecret`.
+2. **Find the Tenant ID**:
+   1. Open your Streamax account in a browser and press F12. The developer tools open.
+   2. Select the **Network** tab.
+   3. Go to the **My subscription** page.
+   4. In the **Network** tab, find a request that has `tenantId=` in its address. Your tenant ID is the number after the equals sign. Copy it.
+3. **Contact Navixy**: Once you have your API credentials, contact your Customer Success Manager or use [this form](https://www.navixy.com/contact/). Ask to integrate Streamax with your Navixy account, and include:
    1. Streamax connection details for your account
       1. **Full Streamax account URL**\
          (e.g. `https://{your_streamax_instance}.ifleetvision.com`)
       2. **Tenant Name**
       3. **Tenant ID**
-      4. **Secret**
+      4. **Secret Key**
    2. Your Navixy account details
-
-* Request for Streamax integration activation
-
-3. **Wait for confirmation**: Our specialists will configure the integration in 1-3 days on our side and confirm when it's ready for use.
+4. **Wait for confirmation**: Our specialists will configure the integration in 1-3 days on our side and confirm when it's ready for use.
 
 {% hint style="success" %}
 After you receive the confirmation from our support, your Streamax account is ready for the integration!
@@ -72,7 +72,7 @@ Your device and Navixy account are ready for the integration!
 **Embedding Streamax in Navixy UI**
 
 At this step, we perform the actual integration by embedding the Streamax dashboard into your Navixy interface.\
-Navixy offers [User applications](../account/user-applications/) functionality that allows embedding 3rd-party apps directly in the platform’s interface. We will use it to embed Mettax.
+Navixy offers [User applications](../account/user-applications/) functionality that allows embedding 3rd-party apps directly in the platform’s interface. We will use it to embed Streamax.
 
 {% hint style="info" %}
 **Navigation**
