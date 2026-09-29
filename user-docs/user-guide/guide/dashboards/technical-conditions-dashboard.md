@@ -39,6 +39,8 @@ The "latest" values shown in the health monitor tables and in **Latest diagnosti
 
 The dashboard refreshes automatically every **90 seconds** while the browser tab is in focus, and the **Update** button in the top-right corner forces an immediate refresh.
 
+Tables show times in your browser's time zone, but the four trend charts show their hours in UTC. See [Dates and times](README.md#dates-and-times).
+
 ## Fleet summary
 
 The top row of three KPI tiles frames the overall size and activity of your fleet: **Total objects**, **Active objects**, and **Inactive objects**. Total objects is every device registered in your account, whether or not it has ever reported data. Active objects follows the active definition above, and Inactive objects is the difference between the two.
@@ -128,9 +130,11 @@ A line that stays flat indicates a vehicle that has been parked or whose sensor 
 
 ## Fault codes
 
-The **Objects with active fault codes** table lists every hourly record in which one or more active diagnostic trouble codes (DTCs) were reported by the vehicle's OBD interface. Each row is one hourly record, not one object. The same vehicle may appear multiple times if it reported fault codes in different hours.
+The **Objects with active fault codes** table lists the active diagnostic trouble codes (DTCs) that vehicles reported through their OBD interface. Each row is one code from one hourly record, newest first. A vehicle that reported three codes in one hour takes three rows. A vehicle that reported fault codes in several hours appears in each of those hours.
 
-Codes appear as raw strings (for example, `P0300`). The dashboard doesn't decode them, so look up an unfamiliar code against your vehicle's OBD reference. When the table is empty, it shows "No DTC events found for the last 7 days." That message can mean either that no faults occurred or that none of your devices report DTCs over OBD at all. Check whether any object has ever populated the DTC columns in Latest diagnostics before concluding the fleet is clean.
+The table has four columns: **Object label**, **Created at**, **DTC code**, and **Error description**. **Error description** gives the standard OBD-II meaning of the code, for example "Cylinder 1 Misfire" for `P0301`. Navixy takes the description from its own list of OBD-II codes. When a code isn't on that list, **Error description** stays empty. Look up such a code in your vehicle manufacturer's reference.
+
+When the table is empty, it shows "No DTC events found for the last 7 days." That message can mean either that no faults occurred or that none of your devices report DTCs over OBD at all. Check whether any object has ever populated the DTC columns in Latest diagnostics before concluding the fleet is clean.
 
 <details>
 

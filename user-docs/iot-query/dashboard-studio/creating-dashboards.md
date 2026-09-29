@@ -83,7 +83,7 @@ Let's walk through the steps from an empty canvas to a structured and informativ
 * Click <img src="../.gitbook/assets/image (1).png" alt="" data-size="line"> in the lower-left corner of the app and select **New dashboard**.
 * Add **Title**.
 * Click **Create dashboard**, a **Get Started** message appears.
-* Select **Start with Blank Dashboard** to open an empty canvas.
+* Select **Start with a blank dashboard** to open an empty canvas in edit mode.
 {% endstep %}
 
 {% step %}
@@ -132,6 +132,35 @@ Drag panels to reposition them on the canvas. Panels snap to a grid that keeps e
 
 Group related panels into rows for organization. Drag a panel to the canvas edge until a blue line appears, then release to create a new row. Add more panels to the row by dragging them beside existing ones. Collapse rows using the arrow icon at the row's left edge.
 
+### How to undo layout changes
+
+In edit mode, the editing toolbar on the right edge of the screen has **Undo** and **Redo** buttons, right below **Exit edit mode**. **Undo** reverses your last change to the layout, and **Redo** restores a change that you undid. A button is dimmed when there is nothing to undo or redo.
+
+You can also use keyboard shortcuts:
+
+| Action | Windows and Linux      | macOS |
+| ------ | ---------------------- | ----- |
+| Undo   | Ctrl+Z                 | ⌘Z    |
+| Redo   | Ctrl+Shift+Z or Ctrl+Y | ⇧⌘Z   |
+
+The shortcuts don't work while a dialog is open or while you type in a text field or in the SQL editor.
+
+**Undo** covers the changes you make on the canvas:
+
+* Moving and resizing panels and rows
+* Adding panels and rows, including charts from the **Chart library**
+* Duplicating and deleting panels
+* Renaming, packing, and deleting rows
+* **Tidy up layout**
+
+**Undo** doesn't cover changes that you save in a dialog: panel settings in the panel editor, **Dashboard filters**, and the dashboard title. Saving the panel editor or the dashboard filters also clears the undo history. After that save, you can't undo the layout changes you made before it.
+
+Dashboard Studio remembers up to 50 changes. The history is cleared when you exit edit mode or reload the page.
+
+{% hint style="info" %}
+Dashboard Studio saves each layout change as soon as you make it, including each undo and redo. The layout has no separate **Save** or **Cancel** button, so use **Undo** to go back before you exit edit mode.
+{% endhint %}
+
 ### How to customize visualization appearance
 
 Configure visualization-specific options in the **Visualization Settings** tab:
@@ -158,9 +187,28 @@ Use the menu editing mode to create sections, drag reports between them, and reo
 {% endcolumn %}
 {% endcolumns %}
 
+### How to find a dashboard
+
+The search box at the top of Dashboard Studio finds dashboards and reports by their content, not only by their names. Type one or more words, and the list shows up to eight dashboards and reports that contain all of them.
+
+Search looks in:
+
+* Dashboard and report names
+* Dashboard descriptions
+* Panel titles
+* The SQL queries of panels and filters, if you have the admin or editor role
+
+Search isn't case-sensitive, and each word can match in a different place of the same dashboard. For example, `fuel` also finds a dashboard that has a panel titled "Fuel consumption per vehicle". Each result shows its section and what matched: panel titles or a part of the SQL query.
+
+Search covers only your own dashboards and reports, and skips the ones in the trash. It doesn't search the names of IoT Query tables and columns.
+
+Use the arrow keys to move through the results, press Enter to open one, and press Esc to close the list.
+
+To filter the sidebar menu instead, type in the **Search…** box above the menu. It matches dashboard and section names only.
+
 ### How to save and share dashboards
 
-Save your dashboard to store it in your menu. Dashboard Studio prompts for a name and section location. Reports save automatically as you work.
+Dashboard Studio adds a dashboard to your menu as soon as you create it, with the title and section you choose. After that, layout changes save automatically as you make them. Changes in the panel editor, the dashboard filters, the dashboard title, and the Full Schema window take effect when you save them in that window. Reports save automatically as you work.
 
 Dashboard Studio offers two ways to export a dashboard.
 

@@ -106,6 +106,21 @@ The Dashboards app converts distance, speed, altitude, and volume, and nothing e
 
 Panel titles and panel descriptions aren't converted. They state thresholds in metric units, because that is how the calculation behind the panel defines them, and they read the same on every account. A tile titled **Below 20 L** keeps that title on an Imperial account, while the volumes in the tables and charts around it appear in gallons.
 
+## Dates and times
+
+The dashboards show dates and times in the time zone of your browser, not the time zone set on your Navixy account. The format follows your Navixy language. In English, a time reads like "Sep 29, 2026, 11:05 AM". Table columns, chart tooltips, CSV and Excel exports, and the creation date on a PDF export all use this format.
+
+When an object hasn't reported for more than 30 days, its **Last updated** value reads **1 month+** instead of a date.
+
+The four trend charts on the [Conditions](technical-conditions-dashboard.md) tab are the exception and show their hours in UTC:
+
+* **Battery voltage trend for top 10 objects**
+* **Mileage trend for top 10 objects**
+* **Board voltage trend for top 10 objects**
+* **Speed trend for top 10 objects**
+
+On a browser two hours ahead of UTC, the hour that **Latest diagnostics** shows as 10:00 AM appears at 8:00 AM in these charts.
+
 ## Exporting data
 
 Every panel in the Dashboards app, both charts and tables, has a download icon in its top-right corner. Click it and choose **Export to CSV** or **Export to Excel**. The export reflects the panel's state at the moment you click, including your column choices. Use it to capture a snapshot for a handover, a weekly summary, or further analysis in a spreadsheet.
@@ -128,7 +143,11 @@ Three messages explain a dashboard that doesn't open, beyond the permission mess
 
 ## Sending feedback
 
-The **Send feedback** button in the top-right corner of any dashboard tab opens a short form. You can select the specific widget your feedback relates to (or the dashboard as a whole), write a message up to 399 characters, and send it directly to the product team.
+The **Send feedback** button in the top-right corner of any dashboard tab opens a short form. In **Panel**, select the panel your feedback relates to, or **General (entire dashboard)**. Then write a message of up to 399 characters and click **Send feedback**.
+
+The feedback goes to the Navixy product team and, as a separate copy, to your service provider. It includes the name and email of your account.
+
+The button is disabled when the dashboards were opened without a Navixy session, with the tooltip "Sending feedback requires an active session". Open the dashboards from the Navixy sidebar to send feedback.
 
 During the beta, the **Send feedback** button is the most direct channel for influencing how the dashboards evolve. Feedback about a specific panel is more actionable than a general comment, though both are welcome. For example: "the Top 10 longest unreported table would be more useful if it showed the last known location".
 
