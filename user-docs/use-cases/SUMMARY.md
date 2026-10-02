@@ -3,3 +3,4 @@
 * [Use cases](README.md)
   * [Customizing trip detection in telematics software](customizing-trip-detection-for-your-business.md)
   * [Building a sensor monitoring application on IoT Query](building-a-custom-sensor-monitoring-application-on-iot-query.md)
+  * [Modeling trips through thresholds and moving status](modeling-trips-through-thresholds-and-moving-status.md)

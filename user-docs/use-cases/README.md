@@ -8,3 +8,4 @@ This section collects detailed, expert-level articles that show how a specific t
 
 * [Customizing trip detection in telematics software](customizing-trip-detection-for-your-business.md): Adjust the built-in trip-detection logic, visually in Transformation Builder or directly as YAML, for courier delivery, heavy equipment, and dispatch scheduling.
 * [Building a sensor monitoring application on IoT Query](building-a-custom-sensor-monitoring-application-on-iot-query.md): Build a zone-based sensor monitoring application on IoT Query, from App Connect authentication and direct SQL access to threshold logic, history, and reporting.
+* [Modeling trips through thresholds and moving status](modeling-trips-through-thresholds-and-moving-status.md): See how a trip is built point by point from speed, ignition, and sensor thresholds, and how to version that model as YAML instead of hardcoding it.
