@@ -1,27 +1,28 @@
 ---
-description: Add team members to your Navixy account, assign roles with specific permissions, and control which devices and data each user can access.
+description: >-
+  Add team members to your Navixy account, decide what each can do with roles,
+  and choose which objects, POI, and geofences each can see.
 ---
 
 # Users and roles
 
-Managing movable assets in large organizations presents unique challenges, especially when dealing with multiple company units (e.g., regional divisions) and various roles (e.g. fleet managers, logisticians, accountants, drivers, etc). The complexity increases with the need to provide different access levels and permissions tailored to each role, ensuring that employees can perform their tasks efficiently without compromising sensitive data.
+One person rarely runs a fleet. Dispatchers, regional managers, and accountants all need Navixy, but each of them needs different data and different tools. With **Users and roles**, the account owner gives each team member their own sign-in and access to only the data and actions that they need.
 
-Navixy addresses these challenges by offering tools that allow organizations to integrate multiple users, assign specific roles, and control access to the organization’s data.
+For example, you can:
 
-## User administration
+* Give the dispatcher of a regional branch the vehicles, depots, and delivery zones of that branch only.
+* Let an accountant make payments and view transactions, without access to device settings.
+* Check what a user sees by opening their account without their password.
 
-The hierarchy of accounts within Navixy includes the Owner and Users. The Owner has the ability to limit the operations available to Users, ensuring that each User has access only to the tools and data necessary for their role.
+The access of each user has two parts:
 
-* [Add users to account](user-administration.md#viewing-and-editing-the-user-list)
+* The [role](role-management.md) decides what the user can do: change device settings, edit geofences, build reports, and so on. One role applies to many users.
+* The [assigned items](restricting-access.md) decide which objects (GPS devices), POI, and geofences the user sees. You choose them for each user.
 
-## Role management
+Only the account owner can add users and change their access. **Users and roles** is available when the tariff plan of every device in the account includes it.
 
-User roles in Navixy allow you to define different access levels and permissions for users based on their roles within the organization. These roles determine what actions users can perform and which data they can view and modify within the Navixy platform. This customization ensures that employees have the appropriate level of access needed to perform their tasks without compromising security.
+## Where to start
 
-* [Define user roles](role-management.md)
-
-## Limiting user access to relevant information
-
-In organizations with multiple divisions (such as business units operating in different regions), controlling access to information is crucial. Navixy enables you to grant user access to specific assets only. This means that users from one business unit can access information related only to the assets that pertain to their division, ensuring that sensitive data is protected and users can focus on relevant information.
-
-* [Restrict access to information](restricting-access.md)
+* [Restricting access](restricting-access.md): Choose which objects, POI, and geofences each user can see.
+* [User administration](user-administration.md): Add, edit, deactivate, and delete users.
+* [Roles](role-management.md): Learn what each right allows and how to limit the history that users can view.

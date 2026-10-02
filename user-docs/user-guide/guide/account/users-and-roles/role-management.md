@@ -1,72 +1,85 @@
 ---
 description: >-
-  Create and manage user roles in Navixy to define what each team member can
-  view and manage, from vehicle tracking to reporting and geofence editing.
+  Create roles in Navixy to decide what users can do, from device settings and
+  rules to reports, and how far back they can view object history.
 ---
 
-# Role management
+# Roles
 
-A **User role** in Navixy is a set of permissions and access rights assigned to a user, defining what they can view and manage within the Navixy platform. User roles are customizable and allow the owner to control the level of access each user has to different features and data. Roles determine a user’s ability to:
+Roles decide what the users of your Navixy account can do. Instead of setting rights for every person, you create a role once for a type of work and give it to everyone who does that work. For example:
 
-* Manage vehicles, employees, and assets
-* View telematics data from GPS devices and sensors
-* Work with geofences and points of interest/Places (POIs)
-* Generate reports, use specific app plugins and tools
+* Dispatcher: Creates tasks and alert rules, but can't change device settings.
+* Accountant: Makes payments and views the transaction history, and nothing else.
+* Technician: Changes device settings and controls vehicle outputs.
 
-By assigning roles, the owner can ensure that users have the appropriate access needed to perform their tasks without compromising the security or integrity of the business data and operations. Each role can include basic rights available to all users, as well as additional rights tailored to the specific needs and responsibilities of different users.
+A role decides what a user can do. You choose the objects, POI, and geofences of each user separately. See [Restricting access](restricting-access.md).
 
-## Adding and managing roles
+{% hint style="info" %}
+**Navigation**
 
-To add a new role, navigate to **Account Settings → Users** and roles and select the **Role management** tab. Click the **Add role** button (the button with the **+** sign).
+Click your account name at the top of the sidebar, click **Users and roles**, and then click the **Roles** tab. Only the account owner can open this screen.
+{% endhint %}
 
-![](../../../.gitbook/assets/image-20240718-043236.png)
+<figure><img src="../../../.gitbook/assets/users-roles-roles-tab.png" alt="Roles tab. The Roles list has one role, User, marked with a star and one user. The Permissions panel shows the role name, the assigned user Test Dispatcher, Available object history set to 3 years, and 18 rights with checkboxes."><figcaption><p>A role with its users, history period, and rights.</p></figcaption></figure>
 
-2. **Create a new role**:
+## How to create a role
 
-* Think of a name for the role.
-* Select the necessary access rights for this role.
-* Click Save to create the role.
+To create a role, follow these steps:
 
-### Types of rights
+1. On the **Roles** tab, click **+**.
+2. Enter a **Role name** and click **Save**.
+3. Select the new role in the list.
+4. Under **Permissions**, select the rights that the users of the role need.
+5. In **Available object history**, choose how far back the users can view trips, events, and other history of objects.
+6. In **Assigned users**, select the users who get the role.
+7. Click **Save**.
 
-All rights are divided into three categories: **Owner**, **Basic**, and **Additional**.
+To change a role later, select it in the list, make your changes, and click **Save**. The changes apply to every user who has the role.
 
-#### Owner rights
+## Rights
 
-Owner rights are available only to the account owner (main user) and can't be assigned to other roles. These include:
+Without any rights, a user can view the items assigned to them, but can't change anything. Each right adds one area of work:
 
-* Add and edit users
-* Manage object groups
-* Configure data forwarding
-* Change plan
+| Right                              | What the user can do                                                                                   |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Device settings (platform related) | Change device settings that Navixy stores: name, working statuses, LBS radius, sensors and buttons, parking detection, and others. |
+| Device settings (hardware related) | Change settings of the device itself: tracking mode, phone number, harsh driving, ignition source, and others. |
+| Vehicle systems control            | Control vehicle systems through the **Outputs** widget, such as engine cut-off, car alarm, and doors.   |
+| Device activation                  | Add and activate GPS devices. A device that the user activates is visible to that user and to the owner. |
+| Reports                            | Build, view, and change reports and scheduled reports. Each user sees only their own reports.          |
+| Alert rules                        | Create and change rules, and assign them to objects.                                                   |
+| Tags                               | Create and edit tags.                                                                                   |
+| Tasks                              | Create and change tasks and scheduled tasks, and edit the forms submitted for tasks.                   |
+| Forms                              | Create and change form templates for field employees.                                                  |
+| Geofences                          | Create, change, and delete geofences.                                                                  |
+| POI                                | Create, change, and delete POI.                                                                        |
+| Employees                          | Create and edit employees, drivers, and departments.                                                   |
+| Vehicles                           | Create and edit vehicles, and assign drivers to them.                                                  |
+| Billing and payments               | Make payments, view the transaction history, and set up low balance alerts.                            |
+| Custom fields in Places            | Add custom fields to POI and fill them.                                                                |
+| Video telematics                   | Watch live video, event videos, and recordings from dash cams and MDVRs.                               |
+| Geo links                          | Share the real-time location of objects with people outside the account.                              |
+| Courier on the map                 | Let customers follow their order and its courier on a website.                                         |
 
-**Basic rights**
+{% hint style="warning" %}
+A right applies to every item that the user sees. For example, a user with the **Geofences** right who sees all geofences can edit and delete any geofence in the account, including yours. To prevent this, give the user selected geofences only. See [Restricting access](restricting-access.md#how-to-limit-poi-and-geofences).
+{% endhint %}
 
-Basic rights are available to all roles and can't be disabled. These include:
+Some actions are for the owner only, and no role can give them: managing users and roles, managing object groups, and working with IoT Logic.
 
-* Map tools (layers, route planning, etc.)
-* Trip and event history
-* Service operations
-* Interactive widgets (change work status, change output states, etc.)
-* Access to linked data (assigned tasks, control rules, etc.)
+## Available object history
 
-**Additional rights**
+**Available object history** limits how far back the users of a role can view trips, events, and other history of objects. For example, give contractors access to the last month only, and keep the full history for managers. The period can't be longer than the history included in the tariff plan of the device.
 
-Additional Rights are configured individually for each role. These include:
+## Default role
 
-* **Device settings (software side)**: Modify device settings related to software, including name, work status, LBS radius, sensors and buttons, parking detection, and more.
-* **Device settings (hardware side)**: Edit settings for specific devices, such as tracking mode, phone number, special parameters like harsh driving, ignition source, and others.
-* **Vehicle systems control**: Control various vehicle states through the **Outputs** widget, including engine shutdown, car alarm, doors, and other systems.
-* **Device activation**: Add and activate new tracking devices. After activation, GPS devices are enabled for both the current user’s account and the owner’s account.
-* **Reports**: Create, view, and configure standard or scheduled reports. Each user can only view their individual reports.
-* **Alert rules**: Create, modify, and assign rules to objects to maintain efficient operations and tracking protocols.
-* **Tags**: Create and edit tags. Assign and use tags to search for various elements, including objects, geofences, drivers, vehicles, and more.
-* **Tasks**: Create and modify individual and scheduled tasks. This option also grants the right to edit data in forms attached to tasks.
-* **Geofences**: Create and edit circular, route, and polygonal geofences, a key mapping tool for tracking objects and ensuring security.
-* **Places**: Create and edit points of interest (POI), a map function that allows managing important locations and improving delivery control operations.
-* **Employees**: Manage the organizational structure, create and edit employee and driver profiles, and create departments.
-* **Vehicles**: Create, modify, and distribute fleet profiles by department. This option also allows assigning drivers to specific vehicles.
-* **Billing and payments**: Provide financial and accounting groups access to payment management, transaction history, and low balance alert settings.
-* **Video telematics**: Access live streams, view events, and play videos from DVRs and MDVRs, enhancing road safety and fleet security.
-* **Weblocator**: Share the real-time location of tracked objects with third parties through a plugin that can be embedded in a website or application.
-* **Courier on the map**: Allow customers to track their orders on the website, offering real-time location updates and courier route progress.
+The default role is marked with a star in the **Roles** list. Navixy selects it when you add a new user, so most users get the right role without extra steps. To make another role the default, click the gray star next to it and click **Set**.
+
+{% hint style="info" %}
+You can't delete the default role or a role that has users. Make another role the default, or move the users to another role first.
+{% endhint %}
+
+## See also
+
+* [User administration](user-administration.md): Add, edit, deactivate, and delete users.
+* [Restricting access](restricting-access.md): Choose which objects, POI, and geofences each user can see.

@@ -1,56 +1,65 @@
 ---
 description: >-
-  Add and manage sub-accounts in Navixy. The Owner has full control; Users
-  receive specific roles that define their access to tracking data and features.
+  Give each team member their own sign-in to your Navixy account. Add, edit,
+  deactivate, and delete users, and check what each user sees.
 ---
 
 # User administration
 
-The users of the organization’s account include the **owner** and the **users**. The owner is the main account holder with full control and administrative rights, while users are additional accounts with specific roles and permissions assigned by the owner.
+User administration lets the account owner give each team member their own sign-in to the Navixy account. Dispatchers, managers, accountants, and contractors work in one account, each with their own tools and data. The owner keeps full control over who sees and does what.
 
-<figure><img src="../../../.gitbook/assets/image (47).png" alt="User administration page in Account settings. Shows an owner and a user account."><figcaption><p>User administration</p></figcaption></figure>
+Each user gets two kinds of limits:
+
+* A [role](role-management.md) decides what the user can do, for example, change device settings or build reports.
+* [Assigned items](restricting-access.md) decide which objects, POI, and geofences the user can see.
+
+{% hint style="info" %}
+**Navigation**
+
+Click your account name at the top of the sidebar, then click **Users and roles**. The **User administration** tab opens. Only the account owner can open this screen.
+{% endhint %}
+
+<figure><img src="../../../.gitbook/assets/users-roles-user-administration.png" alt="User administration tab. The Users list shows the owner, Demo User, in the Owner group and Test Dispatcher in the User group. Test Dispatcher is selected, and the Assigned items panel shows its three objects on the Objects tab."><figcaption><p>The Users list, grouped by role, and the items assigned to the selected user.</p></figcaption></figure>
 
 ## Owner and users
 
-The owner in Navixy is the main account holder with full access and control over the Navixy platform. This account has the highest level of permissions and can perform all administrative tasks. The owner has exclusive rights that cannot be transferred to other accounts, ensuring they maintain ultimate control over the account.
+The owner is the main account holder. The owner sees every item in the account, has every right, and is the only one who can manage users. You can't deactivate, delete, or restrict the owner.
 
-The owner can limit the operations available to users by:
+A user signs in with their own email and password. The user sees only the items that the owner assigns and does only what their role allows.
 
-* [Defining user roles](role-management.md), specifying what actions users can perform
-* [Limiting user access to information](restricting-access.md), controlling which GPS devices and data users can access
+## How to add a user
 
-Users are additional accounts granted access by the owner. As a subordinate account, a user can't have specific owner rights, including:
+To add a user, follow these steps:
 
-* Creating, editing, or removing other users
-* Editing GPS devices, geofences, or Places that aren't accessible to them
-* Limiting the owner’s access to their account
+1. On the **User administration** tab, click **+**.
+2. Enter the **First name**, **Email**, and **Password** of the user. The password needs at least 6 characters.
+3. In **Role**, select the role that the user needs. Navixy selects the default role for you.
+4. Click **Save**.
 
-### **Viewing and editing the user list**
+<figure><img src="../../../.gitbook/assets/users-roles-new-user.png" alt="New user form with the fields First name, Middle name, Last name, Email, Password, Phone, and Role. The Role field shows the default role, User."><figcaption><p>The New user form. First name, Email, and Password are required.</p></figcaption></figure>
 
-To add a new user or edit the list of users, navigate to **Account Settings** → **Users** **and Roles** in the main menu.
+Give the user the email and password that you entered. Then choose what the user can see: a new user sees no objects, but all POI and geofences. See [Restricting access](restricting-access.md).
 
-<figure><img src="../../../.gitbook/assets/image-20240718-041947.png" alt="New user creation menu in User administration"><figcaption><p>User creation dialogue</p></figcaption></figure>
+## Managing users
 
-1. **To add a new user**:
+Point to a user in the list to see the quick actions:
 
-* Click the **+** button to add a new user.
-* Fill in the required fields:
-  * **First name**
-  * **Middle name**
-  * **Last name**
-  * **Email**
-  * **Password**
-  * **Phone**
-  * [Role](role-management.md)
-* Click **Save** to create the new user.
+* **Log in as user**: Open the account of the user without their password and check what they see. To go back, click **Return to master account**.
+* **Change password**: Set a new password for the user.
+* **Edit**: Change the name, email, phone, or role of the user.
+* **Delete**: Delete the user.
 
-2. **To edit user information**:
+To change the role or the status of several users at once, select them and click **Change role** or **Change status** in the toolbar.
 
-* Select a user from the list to view their details.
-* Modify the necessary fields and update the user’s information.
-* Click **Save** to apply the changes.
+## How to deactivate or delete a user
 
-3. **To assign items to users**:
+To stop a user from signing in, turn off their **Activation** switch. The role and assigned items of the user stay, and they work again when you turn the switch back on.
 
-* After selecting a user, you can [assign specific objects, POIs, and geofences](restricting-access.md) to them.
-* Choose the items from the respective tabs (**Objects**, **POI**, **Geofences**) and assign them to the user.
+{% hint style="danger" %}
+You can't restore a deleted user. Navixy deletes the reports of the user and the rules that they hid from other users. Everything else that they created stays in your account: objects that they activated, other rules, POI, geofences, employees, vehicles, and tasks.
+{% endhint %}
+
+## See also
+
+* [Restricting access](restricting-access.md): Choose which objects, POI, and geofences each user can see.
+* [Roles](role-management.md): Learn what each right allows and how far back a user can view history.

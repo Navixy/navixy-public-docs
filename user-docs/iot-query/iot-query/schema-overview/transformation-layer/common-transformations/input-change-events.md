@@ -97,7 +97,7 @@ Each device's current `discrete_inputs` and `discrete_outputs` bit strings are c
 {% step %}
 #### Matching against rules
 
-A flipped bit becomes a candidate event if its input number and new value match the condition configured on an `input_change` rule. See [Input triggering](../../../../../user-guide/guide/events-and-notifications/inputs-and-outputs/input-triggering.md) for how these rules are configured, and the [Rule types reference](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/rules/rule_types) for the full list of rule types.
+A flipped bit becomes a candidate event if its input number and new value match the condition configured on an `input_change` rule. See [Input triggering](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/input-triggering) for how these rules are configured, and the [Rule types reference](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/rules/rule_types) for the full list of rule types.
 {% endstep %}
 
 {% step %}
@@ -115,7 +115,7 @@ Once a refresh completes, each device's latest bit state is recorded for compari
 
 ## Customizing
 
-Input change events isn't customized through a Transformation Builder workflow the way Trips is. The rows that appear here directly reflect whichever `input_change` rules are configured on your account: to change what gets recorded, add, edit, or remove the corresponding rules rather than a transformation template. See [Input triggering](../../../../../user-guide/guide/events-and-notifications/inputs-and-outputs/input-triggering.md) for how to configure these rules.
+Input change events isn't customized through a Transformation Builder workflow the way Trips is. The rows that appear here directly reflect whichever `input_change` rules are configured on your account: to change what gets recorded, add, edit, or remove the corresponding rules rather than a transformation template. See [Input triggering](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/input-triggering) for how to configure these rules.
 
 ## Next steps
 
@@ -123,4 +123,4 @@ Input change events isn't customized through a Transformation Builder workflow t
 * [**Trips**](trips.md): A sibling transformation that also runs on a schedule against raw telematics data.
 * [**Rule-based driver events**](rule-based-driver-events.md): A sibling transformation that records driving violations on the same 15-minute schedule.
 * [**Raw data layer**](../../bronze-layer/README.md): Explore `additional_data`, the source table that feeds Input change events.
-* [**Input triggering**](../../../../../user-guide/guide/events-and-notifications/inputs-and-outputs/input-triggering.md): Configure the `input_change` rules that determine which input changes are recorded here.
+* [**Input triggering**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/input-triggering): Configure the `input_change` rules that determine which input changes are recorded here.
