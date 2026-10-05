@@ -66,7 +66,9 @@ Both APIs write a date and time as a string in `YYYY-MM-DD HH:MM:SS` format, for
 
 ## Request rate limits
 
-The platform limits API requests to 50 requests per second. The limit is applied per user, and also per IP address, which is what constrains an application serving many users from one host. It applies to every Navixy RESTful API, and is counted against the credential a request carries.
+The platform limits API requests to 50 requests per second. The limit is applied per user, and also per IP address, which is what constrains an application serving many users from one host. It applies to every Navixy RESTful API except the Admin Panel API, and is counted against the credential a request carries.
+
+**Admin Panel API:** the limit is 10 requests per second per dealer. All Admin Panel sessions of one dealer share it.
 
 **Platform API only:** an API key has its own rate-limit counter, so an integration that exhausts its limit does not block the account's ordinary users. The Admin Panel API has no API keys, and authenticates with a panel session hash only.
 
