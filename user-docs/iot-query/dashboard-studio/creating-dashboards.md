@@ -167,11 +167,72 @@ Configure visualization-specific options in the **Visualization Settings** tab:
 
 * **Bar charts:** horizontal or vertical orientation
 * **Pie charts:** standard or donut modes
-* **Tables:** sortable columns, pagination, row highlighting
+* **Tables:** sortable columns, pagination, row highlighting, visible columns
 
 These settings control how data appears visually but don't change what data is displayed. The available options depend on your panel type.
 
 <figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption><p>Table Visualization Settings example</p></figcaption></figure>
+
+To hide a table column, clear its checkbox in **Visible columns**, in the **Table configuration** section. To show the column again, select the checkbox. A hidden column stays in the query, so dashboard filters can still use it. Viewers don't see the column in the table, and the files from **Export CSV**, **Export Excel**, and **Export as PDF** don't include it. At least one column stays visible.
+
+**Visible columns** lists the columns from the panel's last result. For a new panel, or after you change the query, click **Test query** on the **SQL query** tab first.
+
+### How to add dashboard filters
+
+A dashboard filter lets dashboard viewers narrow the panels without editing the dashboard. A date filter selects a period, for example, the last 7 days. A value filter selects values in one column, for example, a few vehicles. Viewers find the filters in **Parameters**, change them, and click **Apply**.
+
+You add, change, and delete filters in the **Dashboard filters** window. Open it from the editing toolbar in edit mode.
+
+A date filter changes only the panels that use it. A filter with the variable name `period` gives the panel queries two parameters: `${period_from}` and `${period_to}`.
+
+To add a date filter, follow these steps:
+
+1. In the editing toolbar, click **Dashboard filters**.
+2. Click **Add date filter**.
+3. Enter a **Label** and a **Variable name**.
+4. In **Default range**, select the period that the dashboard opens with.
+   The options are **Today**, **Yesterday**, **Last 7 days**, **Last 30 days**, **Last 90 days**, and **This month**.
+5. Click **Add filter**.
+6. Click **Save changes**.
+
+To make a panel use a date filter, do one of the following:
+
+* Write the filter's parameters in the panel query, for example, `WHERE trip_start_time BETWEEN ${period_from} AND ${period_to}`.
+* Open the panel editor, go to the **Filters** tab, turn on the filter, and select the result column that it filters.
+
+The variable name starts with a letter and has only letters, digits, and underscores. Each filter needs its own variable name. The label can have up to 120 characters, and the variable name can have up to 63 characters.
+
+A value filter applies to the panels whose result has the filter's column when you add the filter. Panels that show one number don't get value filters. Viewers select one or more of the values that the panels return when the dashboard opens. **All**, the default, shows every row.
+
+To add a value filter, follow these steps:
+
+1. In the editing toolbar, click **Dashboard filters**.
+2. Click **Add value filter**.
+3. In **Column**, select the column that viewers filter on.
+   Dashboard Studio fills in **Label** and **Variable name** from the column name. You can change them.
+4. Click **Add filter**.
+5. Click **Save changes**.
+
+To stop a panel from using a value filter, open the panel editor, go to the **Filters** tab, and turn off the filter.
+
+A panel that you add later doesn't use an existing value filter. To include the panel, open the filter with the edit icon in **Dashboard filters**, click **Update filter**, and click **Save changes**. When you update a value filter this way or change its column, the filter applies again to every panel that has the column, including panels where you turned it off.
+
+### How to change or delete a dashboard filter
+
+To change a filter, follow these steps:
+
+1. In the editing toolbar, click **Dashboard filters**.
+2. Click the edit icon next to the filter.
+3. Make the change and click **Update filter**.
+4. Click **Save changes**.
+
+To delete a filter, click the delete icon next to it. The row then says that the filter was deleted and shows **Undo**, which brings the filter back to its place. The row's **Undo** stays until you save or close the window.
+
+Changes in the **Dashboard filters** window reach the dashboard only when you click **Save changes**. Dashboard Studio saves them immediately, and **Undo** in the editing toolbar can't reverse them. To leave without saving, click **Cancel** and confirm with **Discard**. **Discard** removes every change that you made in the window since the last save. Filters that you deleted come back.
+
+{% hint style="warning" %}
+When you delete a filter, the panels stop using it. Dashboard Studio doesn't warn about a panel query that still contains the deleted filter's parameters, such as `${period_from}`. Viewers then see that parameter in **Parameters** as a text field, and the panel shows an error until someone enters a value. Remove the parameter from each query that contains it.
+{% endhint %}
 
 ### How to organize dashboards in sections
 

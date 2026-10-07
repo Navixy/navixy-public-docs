@@ -161,6 +161,10 @@ The Chart section renders below the data table. It inherits the settings you app
 
 The chart displays an auto-generated title describing the current axis and grouping selection, for example: `speed over device_time (grouped by object_label)`. When you modify axis settings without saving, an **Unsaved changes** indicator appears next to the **Save Chart Settings** button. Click it to keep the configuration changes in the report.
 
+When **Group by** splits the chart into groups, the chart plots the first 10 groups. To choose other groups, click **Groups**, which shows how many groups are plotted out of the total. In the list, click a group to plot it or to remove it from the chart. To find a group, search for it by name.
+
+Rows with no value in the **Group by** column belong to no group, and the chart leaves them out. **Select all** and **Clear** apply to the groups that match the search. **Select all** isn't available when it would plot more than 1,000 groups in total. The list shows up to 100 groups that aren't plotted, so search to find the others. To go back to the first 10 groups, click **Reset to default**. Dashboard Studio doesn't save the group selection. The selection resets when you open the report again or select another **Group by** column.
+
 ### Location map
 
 The **Location Map** section displays each query row as a point at its GPS coordinates. The section header shows the number of points plotted. GPS columns are defined upon report creation (automatically or manually), it's not possible to edit them afterwards. If the query returns no recognized coordinate columns, the section shows "No GPS coordinates detected in query results."
@@ -189,6 +193,8 @@ Use the buttons in the report header to export all components together.
 | Excel → CSV (.csv)    | Comma-separated values file with the complete data table      |
 | HTML                  | Interactive file with the data table, chart, and location map |
 | PDF                   | Static document with the data table, chart, and location map  |
+
+The chart in an HTML or PDF file plots the same groups as the chart on screen. When the chart plots only some of the groups, the file gives the number of plotted groups and the total number of groups.
 
 {% hint style="info" %}
 The exported HTML file preserves interactivity: the chart supports hover tooltips and the location map supports zoom and pan.
