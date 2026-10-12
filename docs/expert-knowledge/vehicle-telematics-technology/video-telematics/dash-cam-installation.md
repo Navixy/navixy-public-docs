@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: >-
   Install a dashcam in a fleet vehicle by selecting the mounting position,
   wiring power through the fuse box, and calibrating ADAS sensors.

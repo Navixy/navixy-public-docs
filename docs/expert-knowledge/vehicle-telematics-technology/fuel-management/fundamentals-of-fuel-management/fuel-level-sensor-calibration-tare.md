@@ -14,9 +14,11 @@ This page is for installers and fleet managers who plan a fuel level sensor inst
 
 ## Where the conversion to liters happens
 
-Navixy stores fuel level values as the device sends them. The Navixy platform has no calibration table of its own, so the conversion from a sensor reading to liters happens in the sensor or in the GPS device.
+Navixy stores fuel level values as the device sends them. The Navixy platform has no calibration table of its own, so a conversion that follows a calibration table happens in the sensor or in the GPS device.
 
 Some fuel level sensors report the level in their own counts, not in liters. A count is a number on the sensor's own scale, and the `lls_level` value is an example. If neither the sensor nor the device converts the counts, the values that Navixy stores are counts too. To get liters, load the calibration table into the sensor or the device, with the tools that the manufacturer provides.
+
+When one coefficient is enough to convert counts to liters, an IoT Logic flow can do the conversion instead. Its [Initiate Attribute](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute) node calculates the liters from the count, for example `lls_level * 0.1`, and adds the value to the message next to the original reading. A tank whose shape needs a calibration table with many points still needs the table in the sensor or the device.
 
 Because Navixy uses the level values without changes, an error in the calibration stays in the fuel data.
 

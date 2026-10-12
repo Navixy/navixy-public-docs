@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: HVIDEO vs EVIDEO commands
 description: "Choose video retrieval source: HVIDEO pulls lower-quality sub-stream footage faster, while EVIDEO extracts higher-quality SD card video with more data usage"
 tags:

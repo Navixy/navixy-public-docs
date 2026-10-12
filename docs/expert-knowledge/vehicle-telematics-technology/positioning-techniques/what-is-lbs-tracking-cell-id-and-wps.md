@@ -55,8 +55,8 @@ A device that sends only LBS positions for a long time has a satellite receiver 
 
 ## How Navixy handles cell and Wi-Fi positions
 
-When a GPS device sends a position that it resolved from cells or Wi-Fi, Navixy accepts the position together with the accuracy radius that the device reports. Navixy stores the radius with the position.
+When a GPS device marks a position as resolved from cells or Wi-Fi, Navixy stores this source with the position, together with the accuracy radius that the device reports. Teltonika devices don't mark the source of a position, so Navixy records each Teltonika position as a satellite position. Navixy stores the cell data that a Teltonika device sends, such as the cell ID, as readings.
 
 Tracking treats a cell or Wi-Fi position like a GPS position. It shows the position on the map and uses it for the asset's motion status and for Trip history. Reports leave cell and Wi-Fi positions out when they build trips.
 
-The accuracy figures on this page describe the technologies in general. The accuracy of a specific position is the radius that the device reports with it.
+The accuracy figures on this page describe the technologies in general. The accuracy of a specific position is the radius that the device reports with it, when the device reports one.

@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: >-
   SoC architecture determines dashcam AI, compression, and feature capabilities.
   Compares budget Novatek and premium Ambarella chips used in fleet cameras.

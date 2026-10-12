@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: >-
   Evaluate dashcam reliability by benchmarking driver monitoring sensitivity,
   HDR performance, and low-light handling under real fleet conditions.

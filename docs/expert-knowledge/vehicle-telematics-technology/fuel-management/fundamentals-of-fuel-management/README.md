@@ -60,12 +60,12 @@ When conducting calibrations, it is crucial to follow the fuel level gauge manuf
 Achieve greater precision in fuel level readings by utilizing a tailored system. Customizing the system involves considering additional sensor parameters and defining events. Depending on your chosen model, supplementary sensor or device settings may also contribute to the fuel calculation process.
 
 {% hint style="info" %}
-When considering fuel data, it is crucial to pay attention not only to the sensor's settings and parameters but also to the parameters and settings that define events. It is important to keep in mind that the accuracy of calculation results in reports depends on additional parameters in the report settings. These parameters help minimize data "noise" and account for small volume fluctuations caused by external factors.
+When considering fuel data, pay attention not only to the sensor's settings and parameters but also to the rules that define events, such as a refill or a drain. In Navixy, you build these rules as IoT Logic flows. A flow can compare a fuel reading with the earlier values of the same reading, so you can tell a real change from data "noise" and from small volume fluctuations caused by external factors.
 {% endhint %}
 
 ### Data checking
 
-Examine, analyze, and consider supplementary factors. Generate essential reports and utilize additional tools for meticulous data analysis. Reports have the potential to uncover errors, including those made by the panel administrator during data entry, that may compromise measurement accuracy. These errors could include incorrect billing or irrelevant parameters in the settings.
+Examine, analyze, and consider supplementary factors. The Sensor readings report shows the values exactly as the device sent them, so you can check them for errors that compromise measurement accuracy, such as an incorrect calibration or wrong parameters in the sensor or device settings.
 
 {% hint style="info" %}
 We highly recommend conducting comprehensive testing of the installed equipment and system settings once all work is finished. It is also advisable to perform these tests annually to ensure optimal performance. Any anomalies detected during testing should undergo further analysis using raw data to identify the root cause and mitigate their impact on the calculations.
@@ -73,8 +73,8 @@ We highly recommend conducting comprehensive testing of the installed equipment 
 
 ### Conclusion
 
-Extensive laboratory studies conducted by the Navixy team have revealed that the utilization of a high-quality digital fuel level sensor, expertly installed following the manufacturer's guidelines, along with accurate calibration and meticulous system settings, enables an accurate detection of drain volume and fuel consumption with an impressive error rate of less than 0.5%.
+Laboratory studies by the Navixy team have shown that a high-quality digital fuel level sensor, installed following the manufacturer's guidelines and accurately calibrated, measures drain volume and fuel consumption with an error of less than 0.5%.
 
 However, it's important to anticipate the possibility of errors in event detection and calculations, which can potentially reach up to 20%. This likelihood arises when using a standard fuel control sensor with data transmission via OBD/CAN, and when installation of a fuel level sensor may not be feasible due to concerns regarding potential voiding of the manufacturer's warranty.
 
-At the outset, fleet managers have the opportunity to make a crucial decision - whether to embrace digital remote control and tailor the system accordingly (including billing, event detection, and additional parameters for reporting) to achieve utmost precision and calculation quality. Alternatively, they can opt for conventional vehicle means and compromise on the accuracy of calculations.
+At the outset, fleet managers have the opportunity to make a crucial decision - whether to embrace digital remote control and tailor the system accordingly (including calibration and the IoT Logic flows that detect events) to achieve utmost precision and calculation quality. Alternatively, they can opt for conventional vehicle means and compromise on the accuracy of calculations.

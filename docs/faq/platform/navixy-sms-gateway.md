@@ -1,9 +1,10 @@
 ---
+hidden: true
+noIndex: true
 title: Navixy SMS gateway
 description: Use the built-in SMS gateway to send commands and alerts for a limited time and message volume; contact Support to configure a custom gateway
 tags:
   - reference
-noIndex: true
 ---
 
 # Navixy SMS gateway

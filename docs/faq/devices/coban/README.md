@@ -1,8 +1,9 @@
 ---
+hidden: true
+noIndex: true
 description: "Questions about Coban devices, such as why a command works over SMS but not from the server."
 tags:
   - overview
-noIndex: true
 ---
 
 # Coban

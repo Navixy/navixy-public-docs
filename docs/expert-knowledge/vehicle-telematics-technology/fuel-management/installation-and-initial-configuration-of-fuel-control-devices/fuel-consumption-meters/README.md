@@ -39,7 +39,7 @@ Flow meter operation is primarily founded upon the measurement of fuel volume tr
 
 The manufacturer's guidelines typically indicate the number of impulses needed for 1 liter or 0.26 US gallons of fuel to pass through the device. Each impulse corresponds to the fuel consumption equivalent to the volume of the measurement chamber. Therefore, the calculation involves determining the difference between the chamber volume and one liter of fuel. This information allows for a precise understanding of the required fuel flow.
 
-For instance, let's consider the Technoton DFM 100D flow meter. In this case, every 1 liter corresponds to 200 pulses. Thus, the measurement chamber volume for this flow meter will be 5 ml, which is 1/200th of a liter. We then input this data as a coefficient for the measuring sensor in the "Sensors and Buttons" section of the telematics platform. Using this coefficient, the impulses are accurately converted into liters. The telematics platform then processes the data received, breaking down the consumed fuel information and presenting it to users in a convenient table format.
+For instance, let's consider the Technoton DFM 100D flow meter. In this case, every 1 liter corresponds to 200 pulses. Thus, the measurement chamber volume for this flow meter will be 5 ml, which is 1/200th of a liter. Using this data as a coefficient, the impulses are accurately converted into liters: one impulse is 0.005 liters. In Navixy, an IoT Logic flow applies the coefficient. Its [Initiate Attribute](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute) node multiplies the impulse count by 0.005 and adds the liters to the message, next to the original reading.
 
 ## Application
 

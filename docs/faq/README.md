@@ -9,16 +9,16 @@ noIndex: true
 
 # FAQ
 
-FAQ collects the questions customers ask Navixy Support and the answers that hold for the current platform: how a device behaves, what a command does, why data looks the way it does. Each page is one question and its answer, with the device or feature named in the title so a search finds it.
+FAQ collects the questions customers ask Navixy Support and the answers that hold for the current platform: how a device behaves, how to set it up, why data looks the way it does. Each page is one question and its answer, with the device or feature named in the title so a search finds it.
 
 The section grows from Support cases. Questions are grouped by what they are about: a technology, a device, a product, or the platform as a whole. Questions about one product, such as how a setting or a node behaves, get a section for that product, and the product's guide links to it.
 
 ## Section contents
 
 * **Technologies**: whether a device can resist jamming, and why CAN mileage and the odometer differ.
-* **Devices**: questions grouped by manufacturer. LED indicators, calibration and video retrieval commands on [Jimi IoT](devices/jimi-iot/README.md) cameras; event sensitivity and the device ID on [Howen](devices/howen/README.md) cameras; input and output capabilities, BLE sensors and static navigation on [Teltonika](devices/teltonika/README.md); inputs, outputs and commands on [ERM](devices/erm/README.md) and [Coban](devices/coban/README.md) devices.
+* **Devices**: questions grouped by manufacturer. Input and output capabilities, BLE sensors, static navigation and I/O elements on [Teltonika](devices/teltonika/README.md) devices.
 * **Products**: how [IoT Logic](products/iot-logic/README.md) flows handle devices, attributes, conditions, and outputs, grouped by node.
-* **Platform**: when Navixy provides an SMS gateway, how to get raw device data, and what to check when a device stops transmitting.
+* **Platform**: how to get raw device data, and what to check when a device stops transmitting.
 
 ## Still need a hand?
 

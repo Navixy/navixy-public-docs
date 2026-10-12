@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: Howen device ID configuration for Navixy activation
 description: >-
   Configure Device ID in Howen iTools via System > Terminal, then verify it

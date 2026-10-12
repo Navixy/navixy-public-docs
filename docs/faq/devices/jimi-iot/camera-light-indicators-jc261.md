@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: Camera light indicators (JC261)
 description: >-
   Diagnose JC261 LED status: red indicates power, green shows GPS lock, and

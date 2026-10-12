@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: 'Coban devices: SMS and GPRS command differences'
 description: >-
   Why a Coban output command works over SMS but not from the server: the two

@@ -1,8 +1,9 @@
 ---
+hidden: true
+noIndex: true
 description: "Questions about Jimi IoT cameras: LED indicators, sensor calibration, and video retrieval commands."
 tags:
   - overview
-noIndex: true
 ---
 
 # Jimi IoT

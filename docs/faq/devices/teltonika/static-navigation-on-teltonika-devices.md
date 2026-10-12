@@ -15,4 +15,4 @@ My Teltonika device stays connected, but its position doesn't change. Why?
 
 The device may be in static navigation mode. In this mode, a Teltonika device keeps sending data over the mobile network, but it stops updating its coordinates when it decides that it isn't moving or that the ignition is off. It decides this from its own movement or ignition source settings. In Navixy, the device stays connected while its position on the map stays the same.
 
-The configuration SMS that Navixy sends at activation sets only the APN, the server address, and the reporting intervals. It doesn't change static navigation. To fix this, turn static navigation off, or change its movement or ignition source, in Teltonika Configurator. The settings are described in the Teltonika documentation of your model.
+The configuration SMS that Navixy sends at activation sets the mobile network, the server address and protocol, and for most models the reporting intervals. It doesn't change static navigation. To fix this, turn static navigation off, or change its movement or ignition source, in Teltonika Configurator. The settings are described in the Teltonika documentation of your model.

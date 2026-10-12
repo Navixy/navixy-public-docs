@@ -16,6 +16,8 @@ Fuel sensors are devices designed to make accurate measurements of the fuel leve
 * average fuel consumption. e.g. miles per gallon (mpg)
 * fuel refills or drains
 
+In Navixy, the [Sensor readings](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings) report shows the fuel level over a period. An [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic) flow can compare a level with its earlier values to find a refill or a drain.
+
 Fuel sensors are used on stationary units, such as fuel tanks at gas stations, and on vehicles: cars, locomotives, ships, etc.
 
 ## Types of fuel sensors
@@ -117,9 +119,9 @@ Different manufacturers of fuel sensors can offer different size ranges, however
 
 One might need to consider a few fuel sensors for one vehicle, if it falls into one of the following cases:
 
-* **The vehicle has two or more fuel tanks.** Generally, a heavy-duty vehicle (a truck or an off-road vehicle) will have two or more fuel tanks. Installing a fuel sensor on each tank will provide a full picture of the fuel level. In a GPS tracking system it can be displayed separately for each sensor and as an aggregate value of all the fuel sensors.
-* **The fuel tank of the vehicle has a complex shape.** As it is often the case with agricultural equipment, a fuel tank might have a customized shape or consist of two different sections. In this case, it requires two or more fuel sensors to provide for precise measurements. The GPS tracking and telematics system will show an average value of all the fuel sensors.
-* **The fuel tank of the vehicle is extra long.** Such tanks can be usually found on campers or trains. In this case, as you can imagine, even minor fluctuations in the tank will affect the sensor readings. Using two sensors and installing them diagonally at the opposite sides will help to eliminate the problem. The GPS tracking system will show an average value of the both fuel sensors. Extra long tanks (long and only 4-6”/ 10-15 cm high) are often used in cars. In this case it might be most efficient to consider fuel level monitoring via CAN-data.
+* **The vehicle has two or more fuel tanks.** Generally, a heavy-duty vehicle (a truck or an off-road vehicle) will have two or more fuel tanks. Installing a fuel sensor on each tank will provide a full picture of the fuel level. In Navixy, the Sensor readings report shows each sensor separately, and an IoT Logic flow can calculate the sum of all the fuel sensors.
+* **The fuel tank of the vehicle has a complex shape.** As it is often the case with agricultural equipment, a fuel tank might have a customized shape or consist of two different sections. In this case, it requires two or more fuel sensors to provide for precise measurements. An IoT Logic flow can calculate the average value of all the fuel sensors.
+* **The fuel tank of the vehicle is extra long.** Such tanks can be usually found on campers or trains. In this case, as you can imagine, even minor fluctuations in the tank will affect the sensor readings. Using two sensors and installing them diagonally at the opposite sides will help to eliminate the problem. An IoT Logic flow can calculate the average value of both fuel sensors. Extra long tanks (long and only 4-6”/ 10-15 cm high) are often used in cars. In this case it might be most efficient to consider fuel level monitoring via CAN-data.
 
 {% hint style="info" %}
 Fuel tankers have 2 or 3 tanks, each of them having at least 3 sections. For maximum accuracy each tank and each section should be equipped with a fuel level sensor. Make sure, that the sensor has an RS-485 output. An RS-232 won’t provide data for multiple sensors to be connected to the same device.
@@ -129,7 +131,7 @@ Fuel tankers have 2 or 3 tanks, each of them having at least 3 sections. For max
 
 ### Fuel sensor outputs
 
-If your client’s vehicle is already equipped with a device, the first task will be to ask for the device’s make and model. Once you’ve cleared that up, go to Navixy [Devices](https://www.navixy.com/devices/) to check available outputs for the device and to select the fuel sensor that fits. If the device supports both analog and digital signals (just like [Teltonika FMB 125](https://www.navixy.com/devices/teltonika/teltonika-fmb125/)), a fuel sensor with a digital interface (e.g. RS-485) should be favored.
+If your client’s vehicle is already equipped with a device, the first task will be to ask for the device’s make and model. Once you’ve cleared that up, check the device manufacturer's specifications for available outputs and to select the fuel sensor that fits. If the device supports both analog and digital signals (just like Teltonika FMB125), a fuel sensor with a digital interface (e.g. RS-485) should be favored.
 
 If a client needs both a fuel sensor and a device, we would definitely recommend a digital interface (e.g. RS-485) in both cases.
 

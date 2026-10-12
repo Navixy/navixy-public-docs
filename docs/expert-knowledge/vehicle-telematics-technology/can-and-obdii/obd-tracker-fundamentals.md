@@ -13,7 +13,7 @@ In this guide, you’ll learn what an OBD device is, how these devices work, and
 
 Tracking providers have a number of options to consider when choosing a GPS device. OBD devices (also referred to as OBD2 or OBDII) are an option that are affordable, convenient, and accessible for a variety of users. These plug-and-play devices are simple to install and provide fleets with rich vehicle data, helping them take advantage of intelligent telematics.
 
-In this document, we’ll explain how these devices work, what functions they provide, and how they’re used. Navixy supports OBD devices from a multitude of manufacturers and with over 15 years of experience and hundreds of partners worldwide, we have significant knowledge of the telematics and fleet management industry.
+In this document, we’ll explain how these devices work, what functions they provide, and how they’re used. With over 15 years of experience and hundreds of partners worldwide, we have significant knowledge of the telematics and fleet management industry.
 
 ![OBD port location](../../.gitbook/assets/obdii-connector-location-2.png)
 
@@ -108,8 +108,6 @@ Many businesses use [geofences](https://www.navixy.com/blog/improve-fleet-oversi
 ### Driver behavior monitoring
 
 Many fleets are concerned with safety, which is why OBD devices are often used to improve driver behavior behind the wheel. For instance, many of these devices can detect harsh braking events, which a fleet manager can use to both monitor vehicle wear and determine which drivers have the most violations. Certain OBD devices are even capable of monitoring speed and detecting crashes for additional alerts.
-
-Navixy’s Eco Driving system offers adjustable penalty settings for speeding and harsh driving to help companies score employees on safety. They can then address which drivers need coaching in which areas.
 
 ### Harsh driving
 
@@ -247,4 +245,4 @@ GPS device certification documents describe which carriers a device can operate 
 
 ## Navixy-supported OBD devices
 
-Learn more about our supported OBD devices by visiting our dedicated OBD device page.
+Navixy supports Teltonika OBD devices, such as FMB001 and FMB003. To see every model that Navixy can activate, see the model list in [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).

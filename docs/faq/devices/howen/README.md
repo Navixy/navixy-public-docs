@@ -1,8 +1,9 @@
 ---
+hidden: true
+noIndex: true
 description: "Questions about Howen cameras: event sensitivity and the device ID used for activation."
 tags:
   - overview
-noIndex: true
 ---
 
 # Howen

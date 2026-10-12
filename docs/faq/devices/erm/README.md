@@ -1,8 +1,9 @@
 ---
+hidden: true
+noIndex: true
 description: "Questions about ERM Starlink devices, such as how to control outputs and read input and output states."
 tags:
   - overview
-noIndex: true
 ---
 
 # ERM

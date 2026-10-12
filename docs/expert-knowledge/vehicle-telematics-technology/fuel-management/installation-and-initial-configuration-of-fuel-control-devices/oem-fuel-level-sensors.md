@@ -19,7 +19,7 @@ CAN (Controller Area Network) and OBDII (On-Board Diagnostics 2) are two differe
 * CAN is a standard data bus that enables communication between various components and devices of a vehicle. It is used to transfer data between different systems such as engine, transmission, safety systems, and more. CAN provides high data transfer speed and fault tolerance, making it ideal for use in automobiles.
 * OBDII, on the other hand, is a vehicle diagnostic standard that uses communication protocols, including CAN, to exchange information between the vehicle computer and external diagnostic tools. OBDII provides access to various vehicle parameters such as engine speed, coolant temperature, fuel level and more.
 
-To get fuel data using CAN and OBDII, you need a GPS device that supports these protocols. The choice of such GPS devices is quite large. You can see the list of more than a thousand devices supported by the Navixy platform to select GPS devices based on your needs at the following link: [https://www.navixy.com/devices/](https://www.navixy.com/devices/) .
+To get fuel data using CAN and OBDII, you need a GPS device that supports these protocols. Navixy receives data from Teltonika GPS devices. To see the models that Navixy can activate, see the model list in [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).
 
 It should be noted that CAN-based GPS devices transmit more telemetry information that can be used for complex and detailed fleet management scenarios. On the other hand, OBDII devices have a more convenient installation process. Let's take a look at the simplest option of connecting the device via the OBDII connector. For this, you need to follow the steps below:
 

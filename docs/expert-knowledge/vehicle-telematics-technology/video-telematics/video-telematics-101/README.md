@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: Technical guides on dashcam hardware, codec selection, and video quality benchmarking for evaluating and deploying fleet camera systems.
 tags:
   - overview

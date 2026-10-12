@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: GSENSOR calibration failure on JC261
 description: The GCALIBRAT command is unsupported on JC261. Firmware v1.8.1.3+ performs automatic sensor calibration on power-on to reduce false events
 tags:

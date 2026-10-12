@@ -149,7 +149,7 @@ GPS devices will transmit the values to the GPS tracking system in volts (e.g. 6
 
 ### Frequency signal
 
-**Equipment:** fuel sensor with frequency output, GPS device with frequency input (e.g. [BCE Blue](https://www.navixy.com/devices/bce/bce-fm-500-blue/)).
+**Equipment:** fuel sensor with frequency output, GPS device with frequency input (e.g. BCE Blue).
 
 **Specifications:** in this case fuel level data is transmitted to the GPS device as an impulse frequency (for instance, in the range from 30 Hz to 2000 Hz). The higher the fuel level, the higher the frequency is.
 
@@ -207,7 +207,7 @@ Many fuel sensor manufacturers provide their devices with additional features. S
 
 **Remote power monitoring**
 
-If a fuel sensor suddenly goes offline, the first thing to do will be to check if it is connected to any power supply. Some sensors, e.g. manufactured by Siensor, allow for remote power monitoring. These fuel sensors have one extra wire connected to an analogue or discrete input of the device. Add a new discrete or measuring sensor on the platform and stay aware.
+If a fuel sensor suddenly goes offline, the first thing to do will be to check if it is connected to any power supply. Some sensors, e.g. manufactured by Siensor, allow for remote power monitoring. These fuel sensors have one extra wire connected to an analogue or discrete input of the device. Watch the value of that input on the platform to stay aware.
 
 **Fuel temperature monitoring**
 

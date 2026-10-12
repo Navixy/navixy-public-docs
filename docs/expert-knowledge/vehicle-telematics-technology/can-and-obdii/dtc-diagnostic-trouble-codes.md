@@ -68,9 +68,9 @@ A code tells you which test failed, not which part to replace. A misfire code, f
 
 A GPS device that is connected to the vehicle reads the codes and sends them to the Navixy platform. No sensor setup is needed. Which codes the device reads, for example only confirmed codes or pending codes too, depends on the GPS device and its settings.
 
-Navixy stores the codes exactly as the device sends them. It doesn't filter or decode the codes and has no list of code meanings. To learn what a code means, look it up as described in [Where to find what a code means](#where-to-find-what-a-code-means).
+Navixy stores the codes as the device sends them, separated by commas. It doesn't filter or decode the codes and has no list of code meanings. To learn what a code means, look it up as described in [Where to find what a code means](#where-to-find-what-a-code-means).
 
-The **Conditions, 14 days** dashboard lists the fault codes of the last 14 days, without a description. When several codes are active, the dashboard shows them together in one **DTC code** cell, separated by commas. When a GPS device sends J1939 codes, they appear in the form SPN:FMI:OC, for example `110:0:3`, not in the five-character OBD-II form. To learn what the dashboard shows, see [Fault codes](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/dashboards/conditions#fault-codes).
+The **Conditions, 14 days** dashboard lists the fault codes of the last 14 days, without a description. When several codes are active, the dashboard shows them together in one **DTC code** cell, separated by commas. To learn what the dashboard shows, see [Fault codes](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/dashboards/conditions#fault-codes).
 
 ## See also
 

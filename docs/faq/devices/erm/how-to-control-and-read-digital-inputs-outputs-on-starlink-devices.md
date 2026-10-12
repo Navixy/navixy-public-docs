@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 title: How to control and read digital inputs and outputs on Starlink devices
 description: >-
   Output command structure, checksum formula and status request for ERM

@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: >-
   Set up a video telematics test lab using a projector, windshield mount,
   lighting controls, and steering wheel rig to evaluate dashcam performance.

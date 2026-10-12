@@ -1,4 +1,6 @@
 ---
+hidden: true
+noIndex: true
 description: Dashcam integration with GPS tracking enables driver safety monitoring, incident footage capture, and real-time event alerts for fleet managers.
 tags:
   - overview

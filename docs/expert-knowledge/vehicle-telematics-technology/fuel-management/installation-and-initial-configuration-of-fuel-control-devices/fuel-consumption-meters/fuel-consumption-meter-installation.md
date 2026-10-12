@@ -272,11 +272,11 @@ As of 2018, the following interfaces were used to connect a flow meter to a GPS 
 
 ### Analog interface
 
-**Equipment:** Flow meter with an impulse output, a GPS device with an impulse input (for example, [Wonde Proud VT350](https://www.navixy.com/devices/wonde-proud/wonde-proud-vt350/)).
+**Equipment:** Flow meter with an impulse output, a GPS device with an impulse input (for example, Wonde Proud VT350).
 
 **Specifications:** From the GPS device to the monitoring platform, the impulse value (raw data) is transmitted in the form of equal impulses.
 
-In order to convert impulses to liters, it is necessary to enter a special coefficient into a monitoring platform (to do it, head to the Measurement Sensor settings). The coefficient is calculated based on the number of impulses corresponding to one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 impulses.
+To convert impulses to liters, multiply them by a special coefficient. In Navixy, an IoT Logic flow does this with an [Initiate Attribute](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute) node. The coefficient is calculated based on the number of impulses corresponding to one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 impulses, so the coefficient is 0.005.
 
 **Advantages:** It can be used with relatively old models of GPS devices
 
@@ -290,7 +290,7 @@ In order to convert impulses to liters, it is necessary to enter a special coeff
 
 **Specifications:** From the GPS device to the monitoring platform, the impulse value (raw data) is transmitted as digital signals (human readable values without units of measurement) over wiring, all in digital form.
 
-To convert the received values to liters, it is necessary to enter a special coefficient into the monitoring platform (to do it, head to the Measurement Sensor settings). The coefficient is calculated based on the conventional numbers corresponding to one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 received units.
+To convert the received values to liters, multiply them by a special coefficient. In Navixy, an IoT Logic flow does this with an [Initiate Attribute](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute) node. The coefficient is calculated based on the conventional numbers corresponding to one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 received units, so the coefficient is 0.005.
 
 **Advantages:** Wires help to achieve an ultimate noise immunity during signal transmission. You will also be able to connect more than one sensor on one device (through RS-485 interface, RS-232 allows to connect only one sensor). Check the GPS device manufacturer's website to see the number of fuel sensors to be connected via RS-485.
 
@@ -304,7 +304,7 @@ To convert the received values to liters, it is necessary to enter a special coe
 
 **Specifications:** Technoton, a world-famous Belarus-based manufacturer, promotes the idea of a universal interface for factory-installed and additional sensors (including flow meters). Technoton offers CAN 2.0 for this purpose. Its operating principle is the following: the raw data is first sent to the CAN bus network, then it is read by a CAN module and transferred to the monitoring platform.
 
-In order to convert the received raw data to liters, it is necessary to enter a special coefficient into the monitoring platform. The coefficient is calculated based on the number of CAN units in one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 CAN units.
+To convert the received raw data to liters, multiply it by a special coefficient, for example in an IoT Logic [Initiate Attribute](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute) node. The coefficient is calculated based on the number of CAN units in one liter. You can find this data in your manufacturer's guidelines. For example, for a Technoton DFM 100D flow meter, one liter corresponds to 200 CAN units.
 
 **Advantages:** This approach yields a few benefits. Mainly it removes any limitations on the number of devices to be connected to one device.
 
