@@ -1,0 +1,18 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Add a redirect whenever a published page moves or is renamed.
+# Keys are old published paths; values are current files. Read the gitbook skill first.
+redirects:
+  # 2026-09-21: the plan catalogue page was dropped before release.
+  # 2026-09-22: so was How billing works. Billing is not documented as a
+  # surface, so both land on the Billing section.
+  billing/choose-tariff-plan: billing/README.md
+  billing/how-billing-works: billing/README.md
+  # 2026-09-22: the channel partner guide became a subpage of Getting started.
+  set-up-navixy-for-your-customers: getting-started/set-up-navixy-for-your-customers.md
+  # 2026-09-25: Configure organization became Create organization.
+  organization/configure-organization: organization/create-organization.md

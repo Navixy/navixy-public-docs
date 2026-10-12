@@ -1,0 +1,501 @@
+# =============================================================================
+# NAVIXY 4 - GraphQL Schema — IAM module
+# Version: 0.3.0
+# =============================================================================
+#
+# The roles of the caller's organization and who holds them, as IAM's own gRPC `RoleService` and
+# `RoleAssignmentService` hold them. The gateway calls both with the caller's own context token,
+# forwarded as it came, and IAM authorizes the call itself (IAM ADR-032,
+# `specs/decisions/032-role-management-authorized-in-iam.md` in the `iam` repository): the caller
+# needs a role scoping product `iam`, and cannot create, change, assign or revoke a role granting
+# more than their own roles do. The organization and the workspace these fields act in are always
+# the token's `organization_id` and `workspace_id` claims; no field here takes either.
+#
+# Module prefix `Iam` on every declaration
+# (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — `Query.iam` and
+# `Mutation.iam` — lives in nvx4-bdr.graphql, which owns the roots.
+#
+# Types it references but does not declare: the kernel's `Connection`, `Edge`, `PageInfo`,
+# `CountInfo`, `UUID`, `DateTime`, `Duration`, `Long`.
+#
+# IDENTITY
+# --------
+# `IamRole.id` and every `roleId` are `ID`: IAM mints role ids in the UuidV8 layout with the `IROL`
+# discriminator, and nvx4 checks that structure (not the deployment or region, which are IAM's).
+# `IamRole` does not implement `Node`: a role is reached only through this namespace. `actorId` is a
+# `UUID`: Console mints actor ids under its own scheme, as for `ConsoleWorkspaceOperation.actorUserId`.
+# `IamRole.organizationId` is an `ID` like `ConsoleOrganization.id`: Console's organization id, with
+# the `ORGN` discriminator nvx4 checks (nvx4-console.graphql §Identity). Product, feature and
+# data-resource codes, actions and data-resource item ids are IAM's own vocabulary and stay `String`.
+#
+# PAGINATION
+# ----------
+# `roles` takes the same arguments and rules as the `console` connections (nvx4-console.graphql
+# §Pagination: default 50, 1-100, `last` only with `before`, `before` only with `last`). IAM answers
+# an organization's roles in one response, so nvx4 pages them itself: ordered by id, `edge.cursor`
+# is the role's id, and `total` is `EXACT`. `roleHolders` pages forward only, over IAM's own page
+# token: `last` and `before` are refused with VALIDATION_ERROR, and `total` is always null.
+#
+# ERRORS
+# ------
+# IAM's refusals carry `extensions.dependency = "iam"`, IAM's own reason in `dependencyCode`
+# (`GRANT_CEILING_EXCEEDED`, `NOT_A_MEMBER`, `LAST_OWNER`, ...), `entityType` `IamRole` or
+# `IamMemberRoleAssignment`, and the role id in `entityId` where the request named one. A deployment
+# without `nvx4.gateway.iam.roles-target` answers every field with SERVICE_UNAVAILABLE.
+
+# =============================================================================
+# 1. ROLES
+# =============================================================================
+
+# @category: iam/role-access
+"""
+A choice among a set of items: every current and future item when `all` is true, exactly `items`
+otherwise. What an item is depends on the field: a workspace id for `IamRole.workspaces`, a
+feature code for `IamRoleProductScope.features`, a data-resource item id for
+`IamRoleDataResourceGrant.items`.
+"""
+type IamSelection {
+  "Whether every current and future item is selected. `items` is empty when this is true."
+  all: Boolean!
+  "The selected items when `all` is false."
+  items: [String!]!
+}
+
+# @category: iam/role-access
+"The actions a role grants on one data-resource item, in place of its grant's `actions`."
+type IamRoleItemActions {
+  "IAM's id for the data-resource item."
+  itemId: String!
+  "The actions granted on this item."
+  actions: [String!]!
+}
+
+# @category: iam/role-access
+"What a role grants on one data-resource type of a product."
+type IamRoleDataResourceGrant {
+  "IAM's code for the data-resource type."
+  resourceType: Code!
+  "The items of this type the grant covers."
+  items: IamSelection!
+  "The actions granted on every covered item, unless `itemActions` names the item."
+  actions: [String!]!
+  "Per-item overrides: an item listed here gets these actions instead of `actions`."
+  itemActions: [IamRoleItemActions!]!
+}
+
+# @category: iam/role-access
+"The data resources a role grants within one product."
+type IamRoleDataResources {
+  "Whether every data resource of the product is granted. `byType` is empty when this is true."
+  all: Boolean!
+  "One grant per data-resource type when `all` is false, ordered by `resourceType`."
+  byType: [IamRoleDataResourceGrant!]!
+}
+
+# @category: iam/role-access
+"What a role grants within one product."
+type IamRoleProductScope {
+  "IAM's code for the product, such as `bdr` or `iam`."
+  productCode: Code!
+  "The product's features the role grants, by feature code."
+  features: IamSelection!
+  "The product's data resources the role grants."
+  dataResources: IamRoleDataResources!
+}
+
+# @category: iam/role-access
+"The products a role grants."
+type IamRoleProductScopes {
+  "Whether the role grants every product. `specific` is empty when this is true."
+  all: Boolean!
+  "One scope per product when `all` is false."
+  specific: [IamRoleProductScope!]!
+}
+
+# @category: iam/roles
+"A role of the caller's organization. A role belongs to one organization and reaches no other."
+type IamRole {
+  "IAM's id for the role. See the file header §Identity."
+  id: ID!
+  "The organization the role belongs to, by the same id as `ConsoleOrganization.id`. See the file header §Identity."
+  organizationId: ID!
+  "The role's name."
+  title: String!
+  "The role's description. Null when it has none."
+  description: String
+  "Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing."
+  isActive: Boolean!
+  """
+  Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and
+  `roleDelete` refuse such a role with CONFLICT.
+  """
+  isSystem: Boolean!
+  "The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`."
+  version: Int!
+  "The workspaces of the organization the role reaches, by workspace id."
+  workspaces: IamSelection!
+  "The products the role grants."
+  productScopes: IamRoleProductScopes!
+  """
+  How many actors hold the role now, as IAM counts them: every principal type and every holder
+  whose assignment has not expired, including people who have since left the organization or were
+  invited and never joined. IAM holds assignments, not memberships. It can therefore be larger
+  than the number of members a member list shows. 0 for an inactive role, which IAM does not count.
+  """
+  holderCount: Long!
+}
+
+# @category: iam/roles
+"A page of the roles of the caller's organization."
+type IamRoleConnection implements Connection {
+  edges: [IamRoleEdge!]!
+  nodes: [IamRole!]!
+  pageInfo: PageInfo!
+  "The number of roles in the caller's organization, inactive ones included."
+  total: CountInfo
+}
+
+# @category: iam/roles
+"An edge in an IamRoleConnection."
+type IamRoleEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  node: IamRole!
+}
+
+# @category: iam/role-assignments
+"One role a member holds in the caller's organization."
+type IamMemberRoleAssignment {
+  "Console's id for the actor holding the role. See the file header §Identity."
+  actorId: UUID!
+  "The role held."
+  role: IamRole!
+  "When the assignment expires. Null for a permanent one."
+  expiresAt: DateTime
+}
+
+# @category: iam/role-assignments
+"""
+What kind of principal holds a role, as IAM derives it from the actor id. UNKNOWN is a kind this
+schema does not name yet; treat it as not a person.
+"""
+enum IamRolePrincipalType {
+  "A person."
+  USER
+  "An integration acting for itself."
+  INTEGRATION
+  "IAM itself, for work that no person or integration started."
+  SYSTEM
+  "A kind of principal this schema does not name yet."
+  UNKNOWN
+}
+
+# @category: iam/role-assignments
+"One holder of a role."
+type IamRoleHolder {
+  "Console's id for the actor holding the role. See the file header §Identity."
+  actorId: UUID!
+  "What kind of principal the actor is."
+  principalType: IamRolePrincipalType!
+  "When the assignment expires. Null for a permanent one."
+  expiresAt: DateTime
+}
+
+# @category: iam/role-assignments
+"A page of the holders of one role."
+type IamRoleHolderConnection implements Connection {
+  edges: [IamRoleHolderEdge!]!
+  nodes: [IamRoleHolder!]!
+  pageInfo: PageInfo!
+  "Always null: IAM reports no total for this list. See `IamRole.holderCount` for its raw count."
+  total: CountInfo
+}
+
+# @category: iam/role-assignments
+"An edge in an IamRoleHolderConnection."
+type IamRoleHolderEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  node: IamRoleHolder!
+}
+
+# @category: iam/role-access
+"A selection to store: every current and future item when `all` is true, exactly `items` otherwise."
+input IamSelectionInput {
+  "Whether every current and future item is selected. `items` must then be empty."
+  all: Boolean!
+  "The selected items when `all` is false."
+  items: [String!]!
+}
+
+# @category: iam/role-access
+"The actions to grant on one data-resource item, in place of its grant's `actions`."
+input IamRoleItemActionsInput {
+  "IAM's id for the data-resource item. At most once per grant."
+  itemId: String!
+  "The actions to grant on this item."
+  actions: [String!]!
+}
+
+# @category: iam/role-access
+"What to grant on one data-resource type of a product."
+input IamRoleDataResourceGrantInput {
+  "IAM's code for the data-resource type. At most once per product."
+  resourceType: Code!
+  "The items of this type to cover."
+  items: IamSelectionInput!
+  "The actions to grant on every covered item, unless `itemActions` names the item."
+  actions: [String!]!
+  "Per-item overrides."
+  itemActions: [IamRoleItemActionsInput!]!
+}
+
+# @category: iam/role-access
+"The data resources to grant within one product."
+input IamRoleDataResourcesInput {
+  "Whether to grant every data resource of the product. `byType` must then be empty."
+  all: Boolean!
+  "One grant per data-resource type when `all` is false."
+  byType: [IamRoleDataResourceGrantInput!]!
+}
+
+# @category: iam/role-access
+"What to grant within one product."
+input IamRoleProductScopeInput {
+  "IAM's code for the product. At most once per role."
+  productCode: Code!
+  "The features to grant, by feature code."
+  features: IamSelectionInput!
+  "The data resources to grant."
+  dataResources: IamRoleDataResourcesInput!
+}
+
+# @category: iam/role-access
+"The products to grant."
+input IamRoleProductScopesInput {
+  "Whether to grant every product. `specific` must then be empty."
+  all: Boolean!
+  "One scope per product when `all` is false."
+  specific: [IamRoleProductScopeInput!]!
+}
+
+# @category: iam/roles
+"""
+A new role, homed in the caller's organization. IAM refuses a role granting more than the caller's
+own roles do with PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED.
+"""
+input IamRoleCreateInput {
+  "The role's name."
+  title: String!
+  "The role's description. Omitted or null for none."
+  description: String
+  "Whether the role can be assigned and grants anything."
+  isActive: Boolean!
+  "The workspaces of the organization the role reaches, by workspace id."
+  workspaces: IamSelectionInput!
+  "The products the role grants."
+  productScopes: IamRoleProductScopesInput!
+}
+
+# @category: iam/roles
+"""
+The whole new document of a role: every field replaces the stored one, so an omitted description
+removes it and an empty list empties it. There is no partial update. Refused with CONFLICT when
+`version` is not the stored one, or when the role is a system role.
+"""
+input IamRoleUpdateInput {
+  "The role to replace."
+  id: ID!
+  "The role's version as last read."
+  version: Int!
+  "The role's name."
+  title: String!
+  "The role's description. Omitted or null removes it."
+  description: String
+  "Whether the role can be assigned and grants anything."
+  isActive: Boolean!
+  "The workspaces of the organization the role reaches, by workspace id."
+  workspaces: IamSelectionInput!
+  "The products the role grants."
+  productScopes: IamRoleProductScopesInput!
+}
+
+# @category: iam/roles
+"""
+A role to delete. Refused with CONFLICT when `version` is not the stored one, or when the role is
+a system role. Deleting a role also revokes every assignment of it.
+"""
+input IamRoleDeleteInput {
+  "The role to delete."
+  id: ID!
+  "The role's version as last read."
+  version: Int!
+}
+
+# @category: iam/role-assignments
+"""
+A role to give a member in the caller's organization and workspace. At most one of `expiresAt` and
+`ttl`; neither makes the assignment permanent. Assigning a role the actor already holds replaces
+its expiry.
+"""
+input IamMemberRoleAssignInput {
+  "Console's id for the actor. IAM refuses an actor who is not a member of the organization."
+  actorId: UUID!
+  "The role to assign. It must be active and reach the caller's workspace."
+  roleId: ID!
+  "When the assignment expires. Must be in the future."
+  expiresAt: DateTime
+  "How long the assignment lasts from now. Must be positive."
+  ttl: Duration
+}
+
+# @category: iam/role-assignments
+"A role to take from a member in the caller's organization."
+input IamMemberRoleRevokeInput {
+  "Console's id for the actor."
+  actorId: UUID!
+  "The role to revoke."
+  roleId: ID!
+}
+
+# @category: iam/roles
+"The role as IAM stored it."
+type IamRolePayload {
+  "The role as IAM answered the write, not read back."
+  role: IamRole!
+}
+
+# @category: iam/roles
+"The result of deleting a role."
+type IamRoleDeletePayload {
+  "The id of the deleted role."
+  deletedId: ID!
+}
+
+# @category: iam/role-assignments
+"The assignment as IAM stored it."
+type IamMemberRoleAssignPayload {
+  "Console's id for the actor."
+  actorId: UUID!
+  "The id of the assigned role."
+  roleId: ID!
+  "When the assignment expires, as IAM resolved `expiresAt` or `ttl`. Null for a permanent one."
+  expiresAt: DateTime
+}
+
+# @category: iam/role-assignments
+"The result of revoking a role."
+type IamMemberRoleRevokePayload {
+  "Console's id for the actor."
+  actorId: UUID!
+  "The id of the revoked role."
+  roleId: ID!
+}
+
+# =============================================================================
+# 2. QUERY
+# =============================================================================
+
+"IAM module queries: the roles of the caller's organization and who holds them. Reached through `Query.iam`."
+type IamQuery {
+  # @category: iam/roles
+  "The roles of the caller's organization, inactive ones included, ordered by id."
+  roles(
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `before`."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `last`."
+    before: String
+  ): IamRoleConnection!
+
+  # @category: iam/roles
+  "One role of the caller's organization. Null when IAM has no such role there, or it was deleted."
+  role(
+    "IAM's id for the role."
+    id: ID!
+  ): IamRole
+
+  # @category: iam/roles
+  """
+  The active roles that can be assigned in the caller's workspace, ordered by id. A role created or
+  changed moments ago can be missing for about a second.
+  """
+  workspaceRoles: [IamRole!]!
+
+  # @category: iam/role-assignments
+  """
+  The roles an actor holds in the caller's organization, in any of its workspaces. Expired
+  assignments and roles since deactivated or deleted are left out. Empty for an actor holding none.
+  """
+  memberRoles(
+    "Console's id for the actor."
+    actorId: UUID!
+  ): [IamMemberRoleAssignment!]!
+
+  # @category: iam/role-assignments
+  """
+  Who holds a role, ordered by actor id, forward only. IAM does not know memberships, so the list
+  includes every principal type and people who have since left or never joined; filter on
+  `principalType` and on the organization's members as needed. Empty for a role that is inactive,
+  deleted, or of another organization.
+  """
+  roleHolders(
+    "IAM's id for the role."
+    roleId: ID!
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "Refused with VALIDATION_ERROR: this list pages forward only."
+    last: Int
+    "Refused with VALIDATION_ERROR: this list pages forward only."
+    before: String
+  ): IamRoleHolderConnection!
+}
+
+"IAM module mutations: creating, replacing, and deleting the roles of the caller's organization, and assigning and revoking them. Reached through `Mutation.iam`."
+type IamMutation {
+  # @category: iam/roles
+  "Creates a role in the caller's organization."
+  roleCreate(
+    "The input fields for the new role."
+    input: IamRoleCreateInput!
+  ): IamRolePayload
+
+  # @category: iam/roles
+  "Replaces a role's whole document: every field of the input replaces the stored one. See `IamRoleUpdateInput`."
+  roleUpdate(
+    "The input fields for the role's new document."
+    input: IamRoleUpdateInput!
+  ): IamRolePayload
+
+  # @category: iam/roles
+  "Deletes a role and every assignment of it."
+  roleDelete(
+    "The input fields for the role to delete."
+    input: IamRoleDeleteInput!
+  ): IamRoleDeletePayload
+
+  # @category: iam/role-assignments
+  """
+  Assigns a role to a member. Refused with CONFLICT, `dependencyCode` NOT_A_MEMBER, when the actor
+  is not a member of the caller's organization.
+  """
+  memberRoleAssign(
+    "The input fields for the assignment."
+    input: IamMemberRoleAssignInput!
+  ): IamMemberRoleAssignPayload
+
+  # @category: iam/role-assignments
+  """
+  Revokes a role from a member. NOT_FOUND when the actor does not hold it; CONFLICT,
+  `dependencyCode` LAST_OWNER, when it would leave the organization without an Owner.
+  """
+  memberRoleRevoke(
+    "The input fields for the revocation."
+    input: IamMemberRoleRevokeInput!
+  ): IamMemberRoleRevokePayload
+}

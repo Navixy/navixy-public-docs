@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="880" height="460" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>The parts of Navixy GraphQL API</title>
+  <desc>Navixy GraphQL API has two groups of parts. Products: Business Data Repository, Tracking, and IoT Logic, which a workspace has only when its plan includes them. Tracking uses assets and devices from Business Data Repository, and IoT Logic uses devices from it. Platform services: Console, IAM, and Billing, which work in every workspace.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050B1F"/>
+      <stop offset="1" stop-color="#0B1E4F"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0 H0 V32" fill="none" stroke="#3D6FD0" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5AA2FF"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="460" fill="url(#bg)"/>
+  <rect width="880" height="460" fill="url(#grid)"/>
+
+  <!-- Entry -->
+  <path d="M440 56 V76 M290 76 H720 M290 76 V100 M720 76 V100" fill="none" stroke="#4D9BFF" stroke-width="2" filter="url(#glow)"/>
+  <rect x="290" y="14" width="300" height="42" rx="21" fill="#10275E" stroke="#5AA2FF" stroke-width="2" filter="url(#glow)"/>
+  <text x="440" y="41" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">Navixy GraphQL API</text>
+  <circle cx="440" cy="76" r="4" fill="#9CC8FF" filter="url(#glow)"/>
+  <circle cx="290" cy="100" r="4" fill="#9CC8FF" filter="url(#glow)"/>
+  <circle cx="720" cy="100" r="4" fill="#9CC8FF" filter="url(#glow)"/>
+
+  <!-- Products -->
+  <rect x="20" y="100" width="540" height="340" rx="16" fill="#0B1C47" fill-opacity="0.75" stroke="#3D7BE8" stroke-opacity="0.7" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <text x="40" y="132" font-size="18" font-weight="700" fill="#FFFFFF">Products</text>
+  <text x="40" y="155" font-size="14" fill="#A9BEE8">Your workspace has only the products its plan includes.</text>
+  <text x="40" y="174" font-size="14" fill="#A9BEE8">Each product is billed separately.</text>
+
+  <path d="M150 268 L236 344" fill="none" stroke="#4D9BFF" stroke-width="2" marker-end="url(#arrow)" filter="url(#glow)"/>
+  <text x="178" y="314" text-anchor="end" font-size="13" fill="#9CC8FF">uses assets and</text>
+  <text x="178" y="331" text-anchor="end" font-size="13" fill="#9CC8FF">devices from</text>
+  <path d="M430 268 L324 344" fill="none" stroke="#4D9BFF" stroke-width="2" marker-end="url(#arrow)" filter="url(#glow)"/>
+  <text x="392" y="314" font-size="13" fill="#9CC8FF">uses devices</text>
+  <text x="392" y="331" font-size="13" fill="#9CC8FF">from</text>
+
+  <rect x="40" y="198" width="220" height="70" rx="12" fill="#122C6B" stroke="#5AA2FF" stroke-width="2" filter="url(#glow)"/>
+  <text x="150" y="229" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">Tracking</text>
+  <text x="150" y="251" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">tracking</text>
+
+  <rect x="320" y="198" width="220" height="70" rx="12" fill="#122C6B" stroke="#5AA2FF" stroke-width="2" filter="url(#glow)"/>
+  <text x="430" y="229" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">IoT Logic</text>
+  <text x="430" y="251" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">iotLogic</text>
+
+  <rect x="150" y="346" width="260" height="70" rx="12" fill="#122C6B" stroke="#5AA2FF" stroke-width="2" filter="url(#glow)"/>
+  <text x="280" y="377" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">Business Data Repository</text>
+  <text x="280" y="399" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">bdr</text>
+
+  <!-- Platform services -->
+  <rect x="580" y="100" width="280" height="340" rx="16" fill="#0B1C47" fill-opacity="0.75" stroke="#3D7BE8" stroke-opacity="0.7" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <text x="600" y="132" font-size="18" font-weight="700" fill="#FFFFFF">Platform services</text>
+  <text x="600" y="155" font-size="14" fill="#A9BEE8">Work in every workspace,</text>
+  <text x="600" y="174" font-size="14" fill="#A9BEE8">whatever its plan.</text>
+
+  <rect x="600" y="198" width="240" height="62" rx="12" fill="#0F2358" stroke="#3D7BE8" stroke-width="2"/>
+  <text x="720" y="225" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">Console</text>
+  <text x="720" y="246" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">console</text>
+
+  <rect x="600" y="276" width="240" height="62" rx="12" fill="#0F2358" stroke="#3D7BE8" stroke-width="2"/>
+  <text x="720" y="303" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">IAM</text>
+  <text x="720" y="324" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">iam</text>
+
+  <rect x="600" y="354" width="240" height="62" rx="12" fill="#0F2358" stroke="#3D7BE8" stroke-width="2"/>
+  <text x="720" y="381" text-anchor="middle" font-size="16" font-weight="600" fill="#FFFFFF">Billing</text>
+  <text x="720" y="402" text-anchor="middle" font-size="13" font-family="Consolas, 'Courier New', monospace" fill="#9CC8FF">billing</text>
+</svg>

@@ -1,0 +1,27 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Add a redirect whenever a published page moves or is renamed.
+# Keys are old published paths; values are current files. Read the gitbook skill first.
+redirects:
+  # 2026-09-17: product chapters moved up from products/ to sit beside tracking/ and iot-logic/.
+  products/bdr: bdr/README.md
+  products/bdr/assets: bdr/assets/README.md
+  products/bdr/assets/create-asset: bdr/assets/create-asset.md
+  products/bdr/assets/manage-assets: bdr/assets/manage-assets.md
+  products/bdr/geo-objects: bdr/geo-objects/README.md
+  products/bdr/geo-objects/create-geo-object: bdr/geo-objects/create-geo-object.md
+  products/bdr/geo-objects/manage-geo-objects: bdr/geo-objects/manage-geo-objects.md
+  products/bdr/schedules: bdr/schedules/README.md
+  products/bdr/schedules/set-up-schedule: bdr/schedules/set-up-schedule.md
+  products/devices: device-management/README.md
+  products/devices/manage-devices: device-management/manage-devices.md
+  # 2026-09-23: the predefined and custom asset guides merged back into Create asset.
+  bdr/assets/create-predefined-asset: bdr/assets/create-asset.md
+  bdr/assets/create-custom-asset: bdr/assets/create-asset.md
+  # 2026-09-28: the Devices chapter took the product name the interface shows, Device Management.
+  devices: device-management/README.md
+  devices/manage-devices: device-management/manage-devices.md

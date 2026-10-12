@@ -1,0 +1,770 @@
+# =============================================================================
+# Billing public schema — exposed through the SDK
+# Version: 0.12.0
+# =============================================================================
+#
+# What a customer's own token may do in billing: read its usage-metric and invoice-line-item
+# submissions with the reference types they denormalize (BillingProductDomain, BillingMetric), and —
+# since 0.6.0 — `myAvailablePlans` and `mySubscribe`, with the catalogue and pricing vocabulary they
+# need. Every operation here acts on the workspace the token names and accepts no workspace argument.
+#
+# Submissions are written by product services over billing's gRPC `SubmissionService`
+# (`com.navixy:billing-client`), not through this contract (since 0.9.0).
+# Money and Currency are used here too but declared in nvx4-common.graphql — see below.
+#
+# Plan administration is not part of this contract. A workspace sees a subscription as
+# BillingWorkspaceSubscription: the same row with the plan and branch as ids.
+#
+# Other contract files in this directory merge with this one at runtime; the root schema reaches its
+# operations through `Query.billing` and `Mutation.billing`.
+#
+# Relies on shared infrastructure from nvx4-common.graphql: Node, Versioned, DateTime, JSON,
+# Connection, Edge, PageInfo, CountInfo, Money, Currency, Code, Long, OrderDirection, @trim —
+# plus GraphQL's built-in ID scalar.
+#
+# VERSIONING
+# ----------
+# The `Version:` above is the billing schema's own version, maintained
+# independently of the core schema version in nvx4-bdr.graphql (started at
+# 0.1.0). Follow the evolutionary versioning & deprecation policy documented in nvx4-bdr.graphql
+# (§VERSIONING & DEPRECATION). This is NOT the per-entity `version` field,
+# which is optimistic-locking concurrency control.
+
+# =============================================================================
+# REFERENCE TYPES
+# =============================================================================
+
+# @category: billing/plan
+"A billable product in the billing catalog."
+type BillingProductDomain implements Node & Versioned {
+  id: ID!
+  "The version number for optimistic locking."
+  version: Int!
+  "Machine-readable product code."
+  code: Code!
+  "Optional human-readable title."
+  title: String
+  "Optional description."
+  description: String
+  "Whether this product is active."
+  isActive: Boolean!
+  """
+  Whether this product may take part in plans. True by default.
+
+  When false, no new plan may include the product. Plans that already include it stay in force,
+  but an update that resends their pricing schemas is refused.
+  """
+  isBillable: Boolean!
+  "The product's user-facing address: an absolute http or https URL. Null when not set."
+  productUrl: String
+  "The product's internal path: starts with a single '/', no scheme or host. Null when not set."
+  internalPath: String
+}
+
+# @category: billing/plan
+"A billable metric."
+type BillingMetric implements Node & Versioned {
+  id: ID!
+  "The version number for optimistic locking."
+  version: Int!
+  "Machine-readable metric code."
+  code: Code!
+  "Optional human-readable title."
+  title: String
+  "Optional description."
+  description: String
+  "Optional measurement unit (for example: count, GB, requests)."
+  unit: String
+  "Whether this metric is active."
+  isActive: Boolean!
+}
+
+# =============================================================================
+# PRICING VOCABULARY (moved here in 0.6.0)
+# =============================================================================
+#
+# Types declared here may reference only this file and nvx4-common.graphql.
+
+# @category: billing/plan
+"Function used to aggregate metric values over a billing period."
+enum BillingAggregationFunction {
+  SUM
+  MAX
+  MIN
+  AVG
+  LAST
+}
+
+# @category: billing/plan
+"The pricing model for a metric."
+enum BillingPricingModel {
+  "Fixed price per unit."
+  FLAT
+  "Usage is split across tiers; each tier has its own price."
+  TIERED
+  "All usage is priced at the tier the total falls into."
+  VOLUME
+  "Included in the subscription fee; no per-unit charge."
+  SUBSCRIPTION
+}
+
+# @category: billing/plan
+"Final usage pricing for a plan item. Fields depend on the parent pricingModel."
+type BillingUsagePricing {
+  "Price per unit in minor currency units (FLAT model)."
+  price: Long
+  "Pricing tiers (TIERED and VOLUME models)."
+  tiers: [BillingUsagePricingTier!]
+  "Attribute used to select the pricing tier, for example: device_count (VOLUME)."
+  pricingDimension: String
+  "How pricing dimension values are aggregated (VOLUME)."
+  pricingDimensionAggregation: BillingAggregationFunction
+}
+
+# @category: billing/plan
+"A tier in a plan's tiered or volume pricing."
+type BillingUsagePricingTier {
+  "Lower bound of the tier (inclusive)."
+  from: Float!
+  "Upper bound of the tier (inclusive, null means unlimited)."
+  to: Float
+  "Price for this tier in minor currency units."
+  price: Long!
+}
+
+# =============================================================================
+# PLANS A WORKSPACE MAY TAKE (moved here in 0.6.0)
+# =============================================================================
+
+# @category: billing/plan
+"A plan or branch available to a workspace. When branchId is null this is a base plan; when set it represents a branch override."
+type BillingAvailablePlan {
+  "The base plan ID."
+  planId: ID!
+  "The branch ID (null for base plans)."
+  branchId: ID
+  "Human-readable title."
+  title: String!
+  "Optional description."
+  description: String
+  "ISO 4217 currency."
+  currency: Currency!
+  """
+  What the plan charges per billing period regardless of usage, in `currency`. The sum of its
+  per-schema fees — a branch's overrides where it sets them, the base plan's fee elsewhere.
+  """
+  periodFee: Money!
+  "Must be a positive integer if provided; null means no trial."
+  trialDays: Int
+  "Pricing items. For base plans — plan items; for branches — branch override items."
+  items: [BillingAvailablePlanItem!]!
+  """
+  The workspace's own subscription to this exact plan and branch, or null when it holds none.
+
+  Only an `ACTIVE` subscription counts: a cancelled one must not render as subscribed. Matched on the
+  pair — a subscription to a branch does not mark the base plan as taken, and the reverse.
+  """
+  subscription: BillingWorkspaceSubscription
+}
+
+# @category: billing/plan
+"A pricing item in the available-plans list. For base plan items branchItemId is null; for branch overrides it is set and planItemId references the base plan item."
+type BillingAvailablePlanItem {
+  "The base plan item ID."
+  planItemId: ID!
+  "The branch item ID (null for base plan items)."
+  branchItemId: ID
+  "The metric being priced."
+  metric: BillingMetric!
+  "How metric values are aggregated."
+  aggregationFunction: BillingAggregationFunction!
+  "Free usage included in the period fee."
+  includedLimit: Float
+  "Soft usage limit."
+  quota: Float
+  "Percentage thresholds for quota warnings."
+  warningThresholds: [Int!]
+  "The pricing model."
+  pricingModel: BillingPricingModel!
+  "Usage pricing details (base or custom override)."
+  usagePricing: BillingUsagePricing!
+}
+
+# @category: billing/subscription
+"Lifecycle status of a workspace's subscription."
+enum BillingSubscriptionStatus {
+  "The subscription is currently in effect."
+  ACTIVE
+  "The subscription has been cancelled (replaced by another or stopped explicitly)."
+  CANCELLED
+}
+
+# @category: billing/subscription
+"""
+A workspace's own view of one of its subscriptions: the plan and branch as ids, and the dates.
+
+Not a `Node`. Read a subscription through `mySubscriptions`. `myAvailablePlans` shows an active
+subscription on the row of its exact plan and branch, for as long as the catalogue still offers
+that row.
+"""
+type BillingWorkspaceSubscription {
+  "The identifier of the subscription."
+  id: ID!
+  "The workspace holding it."
+  workspaceId: ID!
+  "The plan subscribed to."
+  planId: ID!
+  "The branch, when the subscription is to one rather than to the base plan."
+  branchId: ID
+  "Current lifecycle status."
+  status: BillingSubscriptionStatus!
+  "When the workspace subscribed."
+  subscribedAt: DateTime!
+  "When it expires; null while it does not."
+  expiresAt: DateTime
+  "When it was cancelled; null while it is in effect."
+  cancelledAt: DateTime
+  "When the trial granted on it expires; null when no trial was granted."
+  trialExpiresAt: DateTime
+}
+
+# @category: billing/subscription
+"What `mySubscribe` answers with."
+type BillingWorkspaceSubscribePayload {
+  "The subscription as taken."
+  subscription: BillingWorkspaceSubscription!
+}
+
+# @category: billing/subscription
+"A page of the caller's own subscriptions."
+type BillingWorkspaceSubscriptionConnection implements Connection {
+  "A list of edges."
+  edges: [BillingWorkspaceSubscriptionEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [BillingWorkspaceSubscription!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: billing/subscription
+"An edge in the BillingWorkspaceSubscription connection."
+type BillingWorkspaceSubscriptionEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The subscription at the end of the edge."
+  node: BillingWorkspaceSubscription!
+}
+
+# @category: billing/subscription
+"""
+Filtering options for the caller's own subscriptions. Fields combine with AND.
+
+No workspace field: the workspace is the caller's own and is never accepted from outside.
+"""
+input BillingWorkspaceSubscriptionFilter {
+  "Filter by plan."
+  planId: ID
+  "Filter by status. Omitted returns both active and cancelled."
+  status: BillingSubscriptionStatus
+}
+
+# @category: billing/subscription
+"""
+Input for subscribing the caller's own workspace to a plan.
+
+It has no workspace field: the workspace is the one the caller's token names.
+"""
+input BillingMySubscribeInput {
+  "The plan to subscribe to."
+  planId: ID!
+  "Optional plan branch (null = subscribe to the base plan)."
+  branchId: ID
+}
+
+# @category: billing/balance
+"""
+The prepaid balance a workspace holds. A workspace holds exactly one, in USD.
+
+`amount` is signed: negative means the workspace owes. It is a running total kept in step with the
+workspace's posting journal, and the journal — the balance's statement entries — stays the source of
+truth for how the total was reached.
+"""
+type BillingBalance implements Node {
+  id: ID!
+  "The workspace this balance belongs to."
+  workspaceId: ID!
+  "The current total, signed. Negative means the workspace owes."
+  amount: Money!
+  "When the balance was opened: on the workspace's creation, its first read, or its first posting, whichever came first."
+  createdAt: DateTime!
+  "When the balance last moved."
+  updatedAt: DateTime!
+}
+
+# @category: billing/balance
+"What moved a balance."
+enum BillingBalanceEntryType {
+  "A charge issued against the balance."
+  INVOICE
+  "A staff-authored correction, in either direction."
+  CORRECTION
+  """
+  Money the customer sent, credited to the balance. Distinct from a correction on purpose: one is
+  cash taken in, the other is revenue given away, and a statement that called both a correction
+  would make the two impossible to tell apart.
+  """
+  TOP_UP
+}
+
+# @category: billing/balance
+"""
+One movement of a workspace's balance, as a line on a statement.
+
+Not a stored row: an entry is a posting joined to the document that justifies it, and `balanceAfter`
+is derived at read time rather than stored against the posting. A payment whose `valueDate` falls
+before existing entries therefore shifts every line after it, the way a statement should, instead of
+leaving a stale snapshot behind.
+
+An entry is identified but not addressable — there is no `node(id:)` lookup for one, because a line
+only means anything within the statement that produced it.
+"""
+type BillingBalanceEntry {
+  "The identifier of the posting behind this entry."
+  id: ID!
+  "When the posting happened."
+  createdAt: DateTime!
+  "What moved the balance."
+  type: BillingBalanceEntryType!
+  "Signed from the workspace's side: positive credits the balance, negative debits it."
+  amount: Money!
+  "The balance total immediately after this entry. Independent of the ordering you requested."
+  balanceAfter: Money!
+  """
+  What the justifying document has to say for itself: a correction's reason, an invoice's number, a
+  payment's note. Null whenever that document has nothing to say, which is routine for a `TOP_UP` --
+  the line is labelled by its `type`, so there is nothing the accountant has to type.
+
+  Not a ready-to-display label. The label belongs to `type` and needs translating; this is the
+  operator's or the document's own words and does not.
+  """
+  description: String
+  """
+  The actor on whose authority the posting was made — the staff member behind a correction, the
+  accountant who entered a top-up, or the service account behind a charge. Never absent: every posting
+  is attributable. An id, not a name: billing does not hold actors, so rendering a person needs a
+  second lookup.
+  """
+  authoredBy: ID!
+}
+
+# @category: billing/balance
+"A page of balance entries."
+type BillingBalanceEntryConnection implements Connection {
+  "A list of edges."
+  edges: [BillingBalanceEntryEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [BillingBalanceEntry!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: billing/balance
+"An edge in the BillingBalanceEntry connection."
+type BillingBalanceEntryEdge implements Edge {
+  "The balance entry at the end of the edge."
+  node: BillingBalanceEntry!
+  "A cursor for use in pagination."
+  cursor: String!
+}
+
+# @category: billing/balance
+"""
+Filtering options for balance entries.
+
+Narrowing a statement to a period does not restart its running totals: `balanceAfter` still
+accumulates over the whole journal, so the first line of a period carries the balance carried into
+that period rather than the period's own subtotal.
+
+Only time is filterable, and that is a constraint rather than an oversight — a statement window has
+to stay a contiguous run of the journal for its running totals to mean anything. Dropping, say,
+every charge and keeping the corrections would leave each surviving line with a total that no
+sequence of shown lines adds up to.
+"""
+input BillingBalanceEntryFilter {
+  "Keep only entries posted at or after this instant."
+  createdAtFrom: DateTime
+  "Keep only entries posted at or before this instant."
+  createdAtTo: DateTime
+}
+
+# @category: billing/balance
+"Ordering options for balance entries."
+input BillingBalanceEntryOrder {
+  "The field to order by."
+  field: BillingBalanceEntryOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: billing/balance
+"Fields available for ordering balance entries."
+enum BillingBalanceEntryOrderField {
+  "Order by the time the posting happened."
+  CREATED_AT
+}
+
+# @category: billing/subscription
+"Ordering options for subscriptions."
+input BillingSubscriptionOrder {
+  "The field to order by."
+  field: BillingSubscriptionOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: billing/subscription
+"Fields available for ordering subscriptions."
+enum BillingSubscriptionOrderField {
+  "Order by when the workspace subscribed."
+  SUBSCRIBED_AT
+}
+
+# =============================================================================
+# SUBMISSIONS
+# =============================================================================
+
+# @category: billing/submission
+"Raw usage measurement submitted by a product service. Aggregated later into invoice line items."
+type BillingUsageMetricSubmission implements Node {
+  id: ID!
+  "The workspace the usage belongs to."
+  workspaceId: ID!
+  "The product domain the usage was reported for."
+  productDomain: BillingProductDomain!
+  "The metric whose value is reported."
+  metric: BillingMetric!
+  "External idempotency key (per producer scope)."
+  externalId: String
+  "The metric value reported for the period."
+  metricValue: Float!
+  "Inclusive lower bound of the reporting window."
+  periodStart: DateTime!
+  "Exclusive upper bound of the reporting window."
+  periodEnd: DateTime!
+  "Pricing dimension values used for VOLUME pricing tier resolution (key/value JSON)."
+  pricingDimensions: JSON
+  "Modifier values used for FLAT pricing multipliers (key/value JSON)."
+  usageModifiers: JSON
+  "Arbitrary justification metadata; not regulated."
+  extraData: JSON
+  "Identifier of the invoice this submission has been claimed by; null while in the unbilled pool."
+  invoiceId: ID
+  "When the submission was claimed onto an invoice; null iff invoiceId is null."
+  invoicedAt: DateTime
+  "When billing accepted the submission, from the server clock. A producer cannot supply its own."
+  submittedAt: DateTime!
+  "The actor that sent the submission, or `system` when billing could not attribute it. Resolved server-side; a producer cannot supply its own."
+  submittedBy: String!
+}
+
+# @category: billing/submission
+"Pre-built invoice line item submitted externally (no aggregation, one row = one line)."
+type BillingInvoiceLineItemSubmission implements Node {
+  id: ID!
+  "The workspace the line item belongs to."
+  workspaceId: ID!
+  "The product domain the line item was reported for."
+  productDomain: BillingProductDomain!
+  "External idempotency key (per producer scope)."
+  externalId: String
+  "Human-readable line description (will appear on the invoice)."
+  description: String!
+  "Quantity reported for the period."
+  quantity: Float!
+  "Unit price for this line."
+  unitPrice: Money!
+  "Optional total amount; if null, the invoicer derives it from quantity * unitPrice."
+  amount: Money
+  "Inclusive lower bound of the reporting window."
+  periodStart: DateTime!
+  "Exclusive upper bound of the reporting window."
+  periodEnd: DateTime!
+  "Arbitrary justification metadata; not regulated."
+  extraData: JSON
+  "Identifier of the invoice this submission has been claimed by; null while in the unbilled pool."
+  invoiceId: ID
+  "When the submission was claimed onto an invoice; null iff invoiceId is null."
+  invoicedAt: DateTime
+  "When billing accepted the submission, from the server clock. A producer cannot supply its own."
+  submittedAt: DateTime!
+  "The actor that sent the submission, or `system` when billing could not attribute it. Resolved server-side; a producer cannot supply its own."
+  submittedBy: String!
+}
+
+# =============================================================================
+# LIST / PAGINATION TYPES
+# =============================================================================
+
+# @category: billing/submission
+"A paginated list of BillingUsageMetricSubmission items."
+type BillingUsageMetricSubmissionConnection implements Connection {
+  "A list of edges."
+  edges: [BillingUsageMetricSubmissionEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [BillingUsageMetricSubmission!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: billing/submission
+"An edge in the BillingUsageMetricSubmission connection."
+type BillingUsageMetricSubmissionEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The usage-metric submission at the end of the edge."
+  node: BillingUsageMetricSubmission!
+}
+
+# @category: billing/submission
+"Filtering options for the caller's own usage-metric submissions. Fields combine with AND. No workspace field: the workspace is the one the token names."
+input BillingUsageMetricSubmissionFilter {
+  "Filter by the metric the usage was reported against."
+  metricId: ID
+  "Filter by the product domain the usage belongs to."
+  productDomainId: ID
+  "Filter by invoicing state: `false` = unaccounted (not yet rolled into an invoice), `true` = accounted (already invoiced), omitted = both."
+  accounted: Boolean
+  "Return submissions whose `submittedAt` is at or after this timestamp (inclusive)."
+  submittedAtFrom: DateTime
+  "Return submissions whose `submittedAt` is at or before this timestamp (inclusive)."
+  submittedAtTo: DateTime
+}
+
+# @category: billing/submission
+"Ordering options for usage-metric submissions."
+input BillingUsageMetricSubmissionOrder {
+  "The field to order by."
+  field: BillingUsageMetricSubmissionOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: billing/submission
+"Fields available for ordering usage-metric submissions."
+enum BillingUsageMetricSubmissionOrderField {
+  "Order by when billing recorded the submission."
+  SUBMITTED_AT
+  "Order by the start of the usage period."
+  PERIOD_START
+  "Order by the reported metric value."
+  VALUE
+  "Order by the code of the referenced metric."
+  METRIC
+}
+
+# @category: billing/submission
+"A paginated list of BillingInvoiceLineItemSubmission items."
+type BillingInvoiceLineItemSubmissionConnection implements Connection {
+  "A list of edges."
+  edges: [BillingInvoiceLineItemSubmissionEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [BillingInvoiceLineItemSubmission!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: billing/submission
+"An edge in the BillingInvoiceLineItemSubmission connection."
+type BillingInvoiceLineItemSubmissionEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The invoice-line-item submission at the end of the edge."
+  node: BillingInvoiceLineItemSubmission!
+}
+
+# @category: billing/submission
+"Filtering options for the caller's own invoice-line-item submissions. Fields combine with AND. No workspace field: the workspace is the one the token names."
+input BillingInvoiceLineItemSubmissionFilter {
+  "Filter by the product domain the line item belongs to."
+  productDomainId: ID
+  "Filter by invoicing state: `false` = unaccounted (not yet rolled into an invoice), `true` = accounted (already invoiced), omitted = both."
+  accounted: Boolean
+  "Return submissions whose `submittedAt` is at or after this timestamp (inclusive)."
+  submittedAtFrom: DateTime
+  "Return submissions whose `submittedAt` is at or before this timestamp (inclusive)."
+  submittedAtTo: DateTime
+}
+
+# @category: billing/submission
+"Ordering options for invoice-line-item submissions."
+input BillingInvoiceLineItemSubmissionOrder {
+  "The field to order by."
+  field: BillingInvoiceLineItemSubmissionOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: billing/submission
+"Fields available for ordering invoice-line-item submissions."
+enum BillingInvoiceLineItemSubmissionOrderField {
+  "Order by when billing recorded the submission."
+  SUBMITTED_AT
+  "Order by the start of the billing period."
+  PERIOD_START
+}
+
+# =============================================================================
+# QUERIES
+# =============================================================================
+
+# Declares the base type, which other contract files extend. The SDK's code generator reads this
+# file but not every file that extends it, so the base type has to be declared here.
+"Billing module queries: the caller's own workspace's plan catalogue, subscriptions, balances, and the usage-metric and invoice-line-item submissions product services reported for it. Reached through `Query.billing`."
+type BillingQuery {
+  # @category: billing/plan
+  """
+  Lists the plans and branches the caller's own workspace may subscribe to, with the subscription it
+  already holds on each.
+
+  **The workspace is not an argument.** It is the one the caller's token names, so this operation
+  cannot be pointed at a tenant the token does not name. A token carrying no workspace claim is
+  refused rather than answered: see [Authentication](https://navixy.com/docs/navixy-graphql-api/authentication).
+
+  Unpaginated: the answer is bounded by the catalogue a single workspace can see.
+  """
+  myAvailablePlans: [BillingAvailablePlan!]!
+
+  # @category: billing/subscription
+  """
+  The caller's own workspace's subscriptions, most recent first.
+
+  Answers where `myAvailablePlans` cannot: a subscription to a plan that has since been archived, or
+  whose active window closed, or whose target list no longer includes the workspace, is absent from
+  the catalogue but still in effect. This is the query for "what am I on".
+  """
+  mySubscriptions(
+    "Filtering options for the returned subscriptions."
+    filter: BillingWorkspaceSubscriptionFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned subscriptions."
+    orderBy: BillingSubscriptionOrder = { field: SUBSCRIBED_AT, direction: DESC }
+  ): BillingWorkspaceSubscriptionConnection!
+
+  # @category: billing/balance
+  "The caller's own workspace's balance. Opened at zero if nothing has opened it yet."
+  myBalance: BillingBalance!
+
+  # @category: billing/balance
+  """
+  The movements of the caller's own workspace's balance, newest first, as a statement.
+
+  `balanceAfter` is a property of the journal, not of this ordering: an entry carries the same running
+  total whichever direction you read in. Reversing the direction reverses the order lines arrive in
+  and nothing else.
+  """
+  myBalanceEntries(
+    "Filtering options for the returned entries."
+    filter: BillingBalanceEntryFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned entries."
+    orderBy: BillingBalanceEntryOrder = { field: CREATED_AT, direction: DESC }
+  ): BillingBalanceEntryConnection!
+
+  # @category: billing/submission
+  """
+  The usage-metric submissions reported for the caller's own workspace, newest first by default.
+
+  **The workspace is not an argument.** It is the one the caller's token names; a token carrying no
+  workspace claim is refused.
+  """
+  myUsageMetricSubmissions(
+    "Filtering options for the returned submissions."
+    filter: BillingUsageMetricSubmissionFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned submissions."
+    orderBy: BillingUsageMetricSubmissionOrder = { field: SUBMITTED_AT, direction: DESC }
+  ): BillingUsageMetricSubmissionConnection!
+
+  # @category: billing/submission
+  """
+  The invoice-line-item submissions reported for the caller's own workspace, newest first by default.
+
+  **The workspace is not an argument.** It is the one the caller's token names; a token carrying no
+  workspace claim is refused.
+  """
+  myInvoiceLineItemSubmissions(
+    "Filtering options for the returned submissions."
+    filter: BillingInvoiceLineItemSubmissionFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned submissions."
+    orderBy: BillingInvoiceLineItemSubmissionOrder = { field: SUBMITTED_AT, direction: DESC }
+  ): BillingInvoiceLineItemSubmissionConnection!
+}
+
+# =============================================================================
+# MUTATIONS
+# =============================================================================
+
+# Base type — see the note on BillingQuery above.
+"Billing module mutations: subscribing the caller's own workspace to a plan. Reached through `Mutation.billing`."
+type BillingMutation {
+  # @category: billing/subscription
+  """
+  Subscribes the caller's own workspace to a plan, optionally on a branch.
+
+  **The workspace is not in the input.** It is the one the caller's token names, so this mutation
+  cannot put a tenant the token does not name onto a paid plan. A token carrying no workspace claim
+  is refused.
+
+  With IAM method security enabled, the caller also needs a role that grants the `billing` product;
+  otherwise the call fails with `PERMISSION_DENIED`. With it disabled, any token naming a workspace can
+  put that workspace on a paid plan.
+
+  The plan is validated before the subscription is taken: the plan, or the branch, must be a row
+  that `myAvailablePlans` offers the workspace; the branch must belong to the plan; and no product
+  of the plan may be covered by one of the workspace's active subscriptions. A token whose workspace
+  claim names no workspace in this deployment fails with `VALIDATION_ERROR`. A workspace gets at
+  most one trial per plan: once a subscription to the plan or to one of its branches has carried a
+  trial, later ones start without.
+  """
+  mySubscribe(
+    "The plan, and optionally the branch. The workspace is the caller's own and is not passed in."
+    input: BillingMySubscribeInput!
+  ): BillingWorkspaceSubscribePayload
+}

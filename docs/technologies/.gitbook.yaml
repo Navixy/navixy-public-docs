@@ -1,0 +1,9 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Add a redirect whenever a published page moves or is renamed.
+# Keys are old published paths; values are current files. Read the gitbook skill first.
+redirects: {}

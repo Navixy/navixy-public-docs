@@ -1,0 +1,20 @@
+# Document type: one per page, two when the page does two jobs.
+# Slugs are fixed by the writing guide (user-facing/user-conventions.md, "GitBook tags").
+- tag: overview
+  label: Overview
+  icon: flag
+- tag: reference
+  label: Reference
+  icon: table-list
+- tag: guide
+  label: Guide
+  icon: map
+- tag: how-to
+  label: How-to
+  icon: list-check
+- tag: fundamentals
+  label: Fundamentals
+  icon: book-open
+- tag: troubleshooting
+  label: Troubleshooting
+  icon: wrench

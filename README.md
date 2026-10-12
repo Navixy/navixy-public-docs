@@ -6,8 +6,9 @@ It is updated automatically on each merge to the source repositories. Direct edi
 
 ## Contents
 
-- `user-docs/` — Navixy user guide documentation
-- `api-docs/` — Navixy API reference documentation, including OpenAPI specifications and public LLM skills
+- `docs/`: Navixy documentation: one directory per documentation space, including the Navixy GraphQL API with its schema files
+- `legacy/user-docs/`: user documentation of the previous generation of the Navixy platform, kept for reference and no longer updated
+- `legacy/api-docs/`: API documentation of the previous generation of the Navixy platform, including its OpenAPI specifications, kept for reference and no longer updated
 
 ## Feedback
 

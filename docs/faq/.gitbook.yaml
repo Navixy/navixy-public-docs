@@ -1,0 +1,50 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Add a redirect whenever a published page moves or is renamed.
+# Keys are old published paths; values are current files. Read the gitbook skill first.
+redirects:
+  # ToC regrouped into Technologies, Devices, Products and Platform (2026-09-28)
+  devices-and-hardware/coban-devices-sms-and-gprs-differences: devices/coban/coban-devices-sms-and-gprs-differences.md
+  devices-and-hardware/how-to-control-and-read-digital-inputs-outputs-on-starlink-devices: devices/erm/how-to-control-and-read-digital-inputs-outputs-on-starlink-devices.md
+  devices-and-hardware/howen-device-id-configuration-navixy-activation: devices/howen/howen-device-id-configuration-navixy-activation.md
+  devices-and-hardware/mc40-02-howen-event-sensitivity: devices/howen/mc40-02-howen-event-sensitivity.md
+  devices-and-hardware/camera-light-indicators-jc261: devices/jimi-iot/camera-light-indicators-jc261.md
+  devices-and-hardware/gsensor-calibration-failure-on-jc261: devices/jimi-iot/gsensor-calibration-failure-on-jc261.md
+  devices-and-hardware/hvideo-vs-evideo-commands: devices/jimi-iot/hvideo-vs-evideo-commands.md
+  devices-and-hardware/fmc150-qjibo-qkibo-input-and-output-capabilities: devices/teltonika/fmc150-qjibo-qkibo-input-and-output-capabilities.md
+  data-and-connectivity/determining-why-a-device-stopped-transmitting: platform/determining-why-a-device-stopped-transmitting.md
+  data-and-connectivity/navixy-sms-gateway: platform/navixy-sms-gateway.md
+  data-and-connectivity/typical-use-cases-for-raw-data-export: platform/typical-use-cases-for-raw-data-export.md
+  iot-logic/overview: products/iot-logic/README.md
+  iot-logic/attributes-that-read-attributes-in-same-node: products/iot-logic/attributes-that-read-attributes-in-same-node.md
+  iot-logic/branches-without-output-endpoint: products/iot-logic/branches-without-output-endpoint.md
+  iot-logic/calculated-values-and-original-readings: products/iot-logic/calculated-values-and-original-readings.md
+  iot-logic/chained-conditions: products/iot-logic/chained-conditions.md
+  iot-logic/current-time-in-conditions: products/iot-logic/current-time-in-conditions.md
+  iot-logic/data-from-sources-other-than-devices: products/iot-logic/data-from-sources-other-than-devices.md
+  iot-logic/device-action-commands-for-offline-devices: products/iot-logic/device-action-commands-for-offline-devices.md
+  iot-logic/device-commands-through-webhook: products/iot-logic/device-commands-through-webhook.md
+  iot-logic/devices-available-in-iot-logic: products/iot-logic/devices-available-in-iot-logic.md
+  iot-logic/flows-after-device-deletion: products/iot-logic/flows-after-device-deletion.md
+  iot-logic/format-of-messages-at-destination: products/iot-logic/format-of-messages-at-destination.md
+  iot-logic/formulas-that-cant-be-calculated: products/iot-logic/formulas-that-cant-be-calculated.md
+  iot-logic/how-often-webhook-nodes-fire: products/iot-logic/how-often-webhook-nodes-fire.md
+  iot-logic/message-values-in-device-action-commands: products/iot-logic/message-values-in-device-action-commands.md
+  iot-logic/messages-on-if-then-logic-branches: products/iot-logic/messages-on-if-then-logic-branches.md
+  iot-logic/nodes-after-device-action: products/iot-logic/nodes-after-device-action.md
+  iot-logic/one-device-in-several-flows: products/iot-logic/one-device-in-several-flows.md
+  iot-logic/output-endpoint-in-command-only-flows: products/iot-logic/output-endpoint-in-command-only-flows.md
+  iot-logic/output-to-navixy-and-your-own-system: products/iot-logic/output-to-navixy-and-your-own-system.md
+  iot-logic/same-attribute-name-in-two-flows: products/iot-logic/same-attribute-name-in-two-flows.md
+  iot-logic/several-commands-in-one-device-action-node: products/iot-logic/several-commands-in-one-device-action-node.md
+  iot-logic/several-data-source-nodes-in-one-flow: products/iot-logic/several-data-source-nodes-in-one-flow.md
+  iot-logic/two-branches-into-one-output-endpoint: products/iot-logic/two-branches-into-one-output-endpoint.md
+  iot-logic/two-branches-into-one-webhook: products/iot-logic/two-branches-into-one-webhook.md
+  iot-logic/webhook-calls-to-unavailable-systems: products/iot-logic/webhook-calls-to-unavailable-systems.md
+  iot-logic/webhook-responses: products/iot-logic/webhook-responses.md
+  tracking-and-positioning/is-there-an-anti-jammer-device: technologies/is-there-an-anti-jammer-device.md
+  tracking-and-positioning/slight-difference-between-gps-can-mileage-and-physical-odometer: technologies/slight-difference-between-gps-can-mileage-and-physical-odometer.md

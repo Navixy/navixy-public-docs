@@ -1,0 +1,1593 @@
+# =============================================================================
+# NAVIXY 4 - GraphQL Schema — Tracking module
+# Version: 0.15.0
+# =============================================================================
+#
+# Live state of assets and the devices linked to them, a subscription over that state, and trips
+# and stops derived from the message archive.
+#
+# Module prefix `Tracking` on every declaration except one
+# (docs/reference/graphql-conventions.md §Module namespacing). The exception is `type Subscription`,
+# the GraphQL root this file declares as of 0.11.0, beside the stream it carries — one root holds
+# every module's subscription fields, so its name is module-neutral by construction (§7).
+# `Query.tracking` and the `schema { … }` block live in nvx4-bdr.graphql, which owns root wiring.
+#
+# The data model follows the telemetry contracts and does not restate them:
+#   contracts/proto/navixy/telemetry/v1/SPEC.md      — NTF 1.2, the wire format
+#   contracts/clickhouse/telemetry/v1/schema.sql     — telemetry.records, the archive
+#   contracts/clickhouse/telemetry/v1/STORAGE.md     — what the archive can and cannot answer
+#
+# ONE STATE, NOT TWO
+# ------------------
+# nvx3 split the same picture across a beacon state (gps, connection, movement, ignition,
+# input/output bitmasks) and a separate readings channel (inputs / states / virtualSensors /
+# counters), which is why the battery level exists twice there and virtual sensors have to look in
+# both places. NTF §5.2 collapsed that split in the wire format: one namespace of named fields
+# whose *nature* (GAUGE / COUNTER / STATE / BITSET / …) is dictionary metadata. This schema keeps
+# it collapsed — exactly one reading list per state, sensors and device states alike.
+#
+# WHAT THIS MODULE ASSUMES OF OTHERS
+# ----------------------------------
+# Types it references but does not declare: `Asset`, `Device`, `GeoPoint`, `DeviceIdType` from
+# nvx4-bdr.graphql, and the kernel's `Code`, `DateTime`, `Decimal`, `Duration`, `Long`, `GeoJSON`,
+# `Connection`, `Edge`, `PageInfo`, `CountInfo`.
+
+# =============================================================================
+# 1. VALUE MODEL  (NTF SPEC §3)
+# =============================================================================
+
+# @category: tracking/readings
+"""
+How a reading is encoded. Mirrors `navixy.telemetry.v1.Value.value` — eight scalar variants,
+two composite ones, and an explicit clear.
+
+An absent variant means the sender had nothing to say and the previous value stands;
+`TrackingClearedValue` is the opposite — an assertion that the value no longer holds (driver key
+pulled, trailer detached). NTF SPEC §3.3.
+
+Each scalar variant names its field after the type — `boolValue`, `intValue`, … — instead of all
+sharing `value`. A selection set that reads `value` from two members with different scalars fails
+validation (`FieldsInSetCanMerge`, GraphQL spec §5.3.2), so a client rendering readings would have
+to alias the occurrences. docs/reference/graphql-conventions.md §Interface field naming resolves
+the same conflict for interfaces with `<semantic><Variant>` (`minDecimal`); here the order inside a
+name is the wire's — `bool_value`, `int_value`, … in `value.proto` — so a schema name matches the
+JSON member name in the NTF SPEC §9 examples, except that `double_value` is `floatValue`, after the
+GraphQL scalar and this type's name. `GraphqlSchemaValidationTest$UnionMemberFieldShapes` enforces
+the distinct-name half for every union.
+"""
+union TrackingValue =
+    TrackingBoolValue
+  | TrackingIntValue
+  | TrackingUIntValue
+  | TrackingFloatValue
+  | TrackingStringValue
+  | TrackingBytesValue
+  | TrackingTimestampValue
+  | TrackingDurationValue
+  | TrackingArrayValue
+  | TrackingStructValue
+  | TrackingClearedValue
+
+# @category: tracking/readings
+type TrackingBoolValue { boolValue: Boolean! }
+
+# @category: tracking/readings
+"Signed integer of any width (int8…int64)."
+type TrackingIntValue { intValue: Long! }
+
+# @category: tracking/readings
+"""
+Unsigned integer of any width (uint8…uint64). Values above 2^63-1 — bitmasks, odometer-style
+counters, identifiers — do not fit `Long`, so the value rides the kernel's `Decimal` scalar,
+which already exists with a coercion and a validation path. A bare `String` would push the same
+parse onto the client with nothing checking it.
+"""
+type TrackingUIntValue { uintValue: Decimal! }
+
+# @category: tracking/readings
+type TrackingFloatValue { floatValue: Float! }
+
+# @category: tracking/readings
+type TrackingStringValue { stringValue: String! }
+
+# @category: tracking/readings
+"Opaque binary payload (raw CAN frame, RFID key), Base64-encoded."
+type TrackingBytesValue { bytesValue: String! }
+
+# @category: tracking/readings
+type TrackingTimestampValue { timestampValue: DateTime! }
+
+# @category: tracking/readings
+"""
+A duration. Carried by the kernel's `Duration` scalar, which this module introduces to
+`nvx4-common.graphql` — see the note at the head of this file. Every duration in this schema uses
+it, so `"5m"` instead of `PT5M` is rejected by coercion rather than by a resolver that may or may
+not check.
+"""
+type TrackingDurationValue { durationValue: Duration! }
+
+# @category: tracking/readings
+"Homogeneous list (DTC codes, tachograph cards, acceleration vector)."
+type TrackingArrayValue { values: [TrackingValue!]! }
+
+# @category: tracking/readings
+"Nested structure whose members are full readings (decoded J1939 frame, tachograph block)."
+type TrackingStructValue { fields: [TrackingReading!]! }
+
+# @category: tracking/readings
+"""
+The value was explicitly cleared. Its own variant so that "nothing was said" and "this no longer
+holds" can never be confused (NTF SPEC §3.3).
+"""
+type TrackingClearedValue { cleared: Boolean! }
+
+# @category: tracking/readings
+"Declared type of a value in terms of the *source* register. `navixy.telemetry.v1.ValueType`."
+enum TrackingValueType {
+  BOOL
+  INT8 INT16 INT24 INT32 INT64
+  UINT8 UINT16 UINT24 UINT32 UINT64
+  FLOAT32 FLOAT64
+  STRING BYTES TIMESTAMP DURATION ARRAY STRUCT JSON
+}
+
+# @category: tracking/readings
+"""
+What kind of quantity a field is, which decides how it may be aggregated (NTF SPEC §5.2).
+Dictionary metadata, not carried by the message.
+"""
+enum TrackingFieldNature {
+  "Instantaneous measurement — averaging and medians are meaningful."
+  GAUGE
+  "Monotonic accumulator; see `counterScope` and `resettable`."
+  COUNTER
+  "Increment since the previous report."
+  DELTA
+  "Holds until it changes — ignition, doors. Averaging is meaningless."
+  STATE
+  "Raw bitmask as sent by the device; bit layout belongs to the device model, not the field."
+  BITSET
+  "Identity — VIN, driver card, ICCID."
+  IDENTITY
+  "Free-form text."
+  TEXT
+  "Summary over an interval whose bounds the device does not report."
+  SUMMARY_MIN
+  SUMMARY_MAX
+  SUMMARY_AVG
+  "Device configuration value."
+  SETTING
+}
+
+# @category: tracking/readings
+"Application-level quantity, from the field dictionary. Drives unit conversion and formatting."
+enum TrackingQuantity {
+  MILEAGE DURATION VOLTAGE RATIO TEMPERATURE VOLUME SPEED FREQUENCY
+  CONSUMPTION SIGNAL_LEVEL MASS PRESSURE ANGLE CUSTOM
+}
+
+# =============================================================================
+# 2. READINGS  (NTF SPEC §4, Appendix A)
+# =============================================================================
+
+# @category: tracking/readings
+"""
+One named field of a state — a sensor reading, a device state, a counter, an identity.
+There is exactly one such list per state: NTF v1 has no inputs/states split.
+"""
+type TrackingReading {
+  "Dictionary name of the field, e.g. `lls_level`, `ignition`, `hw_mileage`."
+  code: Code!
+  "Channel number for multi-channel fields (`lls_level` on tank 2), in `0..4294967295`. Null when the field has none."
+  channel: Long
+  value: TrackingValue!
+  """
+  Unit of this value (UCUM, e.g. `km`, `Cel`, `L/h`), by the rules of NTF SPEC §3.2: the unit the
+  message carried. For the four legacy fields the format names — `board_voltage`,
+  `battery_voltage`, `battery_level`, `hw_mileage` — a message without a unit means the
+  dictionary's unit by contract, and this field carries it. For every other field a message
+  without a unit means "unknown", and this field is null: a dictionary `Cel` on `temperature` does
+  not make a number that arrived without a unit degrees Celsius.
+
+  So null covers both "dimensionless" and "unknown". `definition.unit` tells the two apart when the
+  code is in the dictionary — a dimensionless field has none there. For a code the dictionary does
+  not know, `definition` is null as well and the two cannot be told apart: the value has no unit a
+  client may rely on. `definition.unit` is a reference value — the unit the quantity is customarily
+  shown in — never a default for this one.
+  """
+  unit: String
+  """
+  Source-register type: the sender's own `Field.declared_type`, or the type NTF SPEC Appendix A
+  pins for this name when the sender declared none. Shown only when that type differs from the one
+  `value`'s own member already implies, or when it equals the Appendix A pin regardless — a sender
+  that declares exactly the implied type, for a name Appendix A does not pin, reads as null either
+  way, the same as declaring none at all.
+  """
+  declaredType: TrackingValueType
+  # No per-value `computed` flag. NTF carries one (`Field.computed`, "the sender computed this
+  # rather than observing it"), but the archive does not store it and cannot reconstruct it
+  # (schema.sql §readings, STORAGE.md §"Что формат передаёт, а хранилище не сохраняет": "признак
+  # теряется, и это осознанная потеря"). A field that is present on live values and invented for
+  # archived ones is worse than an absent one. What survives is the dictionary-level statement —
+  # `TrackingFieldDefinition.computed`, "this field is always computed by the platform" — and
+  # SPEC §5.4 is explicit that the two are not the same claim.
+  #
+  # This is the current state, not the intended end state: the decision is that the archive should
+  # store the flag the wire already carries, so that a stream's opening load and its later updates
+  # describe a value the same way. The field returns here, nullable, once storage keeps it
+  # (docs/todo/tracking/tracking-api-design-followups.md).
+  """
+  When this value was last received. Per NTF SPEC §3.5 a field carries no timestamp of its own —
+  this is the event time of the message it last arrived in, which across a last-known state is
+  *not* the same for every reading.
+  """
+  updatedAt: DateTime!
+  """
+  Dictionary entry behind `code`: title, nature, quantity, deprecation.
+
+  Always null today: the field dictionary is not populated yet (NTF SPEC §5.4), so no code has an
+  entry. `TrackingQuery.fieldDefinitions` returns an empty list for the same reason.
+  """
+  definition: TrackingFieldDefinition
+}
+
+# @category: tracking/readings
+"""
+A field dictionary entry (NTF SPEC §5). Entries are never renamed, retyped or deleted — only
+deprecated with a pointer to the replacement, because an entry describes every value ever
+recorded under that name, not just new ones.
+"""
+type TrackingFieldDefinition {
+  code: Code!
+  """
+  Human-readable name of the field, for a UI that renders readings.
+
+  Localized by design: the language comes from the request, not from an argument — `X-Locale` or
+  `Accept-Language`, with English as the fallback, per §3 Localization in nvx4-bdr.graphql. Those
+  headers are not honoured yet, so today the text does not vary by caller. Once they are, this
+  field is the one part of a dictionary entry that is not stable across callers, and a client
+  caching the dictionary caches it per locale.
+  """
+  title: String!
+  "Longer explanation of the field, localized on the same terms as `title`."
+  description: String
+  valueType: TrackingValueType!
+  """
+  Reference unit (UCUM): the one the quantity is customarily shown and stored in (NTF SPEC §3.2).
+  Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands
+  in. Null for dimensionless fields.
+  """
+  unit: String
+  quantity: TrackingQuantity
+  nature: TrackingFieldNature!
+  "Whether values of this field can carry a channel number."
+  channelled: Boolean!
+  "Always computed by the platform rather than measured (e.g. `mileage`)."
+  computed: Boolean!
+  "For COUNTER fields: what the count runs from."
+  counterScope: TrackingCounterScope
+  "For COUNTER fields: whether the counter can legitimately be reset (vs. wrapping around)."
+  resettable: Boolean
+  deprecated: Boolean!
+  replacedBy: Code
+  "Field names this entry absorbed on the nvx3 → NTF migration."
+  aliases: [Code!]!
+}
+
+# @category: tracking/readings
+enum TrackingCounterScope { LIFETIME TRIP IGNITION_CYCLE SINCE_RESET }
+
+# =============================================================================
+# 3. POSITION, CONNECTIVITY, MOTION, EVENTS
+# =============================================================================
+
+# @category: tracking/state
+type TrackingPosition {
+  "WGS-84 point."
+  point: GeoPoint!
+  "Metres above sea level."
+  altitude: Float
+  "Ground speed, km/h."
+  speed: Float
+  "Course over ground, degrees clockwise from north."
+  heading: Float
+  "Reported horizontal accuracy, metres."
+  accuracy: Float
+  satellites: Int
+  hdop: Float
+  vdop: Float
+  pdop: Float
+  "Kind of fix the device reported."
+  fixType: TrackingFixType
+  source: TrackingPositionSource
+  "Whether the point may be used for a track, and how (telemetry.records.track_fitness)."
+  fitness: TrackingFitness!
+  """
+  Where `at` came from (`telemetry.records.event_time_source`). `fitness` grades the coordinates,
+  this grades the time: a point can be a clean satellite fix whose time the receiver replaced
+  (`DEVICE_CORRECTED`) or a buffered record that had no time of its own (`SERVER`), and both then
+  sit on the axis at the moment of upload rather than of observation (NTF SPEC §6.3). Null where
+  the archive holds `UNSPECIFIED`.
+  """
+  timeSource: TrackingTimeSource
+  """
+  Event time of the message this position came from — the moment the position is claimed for
+  (NTF SPEC §6.3), and the time to age it by on a map. Always present: a message with a position
+  has an event time by definition. In a state it equals `updatedAt` when the newest message
+  carried a position, and lags it when heartbeats or readings-only reports came after.
+  """
+  at: DateTime!
+  """
+  When the fix was taken, as the device reported it — a raw observation, not a decoder's
+  inference (NTF SPEC §6.3).
+
+  For a fresh fix it simply equals `at`; for a repeated last-known point it is the time of that
+  old fix, and for dead reckoning the time of the anchor. Null means one thing only: the protocol
+  sent no separate fix time. So `fixedAt != null` says nothing about staleness — compare it with
+  `at` for that.
+  """
+  fixedAt: DateTime
+}
+
+# @category: tracking/state
+"""
+Kind of fix, as `navixy.telemetry.v1.FixType`. The correction axis (DGPS, RTK) is not in it.
+
+Names differ from the archive's on two members and only because GraphQL forbids a leading digit:
+the column holds `2D` and `3D`, this enum has `FIX_2D` and `FIX_3D`. The mapping is a named
+artifact of the implementation, not something a resolver improvises — `valueOf(row)` on a 3D fix
+would throw. `UNSPECIFIED` maps to null here and in `TrackingPositionSource`.
+"""
+enum TrackingFixType {
+  "The device tried and failed."
+  NO_FIX
+  "A fix whose dimensionality the protocol does not say."
+  FIX
+  FIX_2D
+  FIX_3D
+  "Position carried forward by dead reckoning."
+  DEAD_RECKONING
+  "A repeat of the last known point."
+  LAST_KNOWN
+}
+
+# @category: tracking/state
+"""
+Where a message's event time came from, as `navixy.telemetry.v1.TimeSource`. Decides how far the
+order of points can be trusted: `GNSS` depends on neither the device clock nor the network, while
+`SERVER` and `DEVICE_CORRECTED` mean the time on the axis is the receiver's, not the observation's.
+`UNSPECIFIED` maps to null.
+"""
+enum TrackingTimeSource {
+  "The device's own clock."
+  DEVICE
+  "Time from the satellite solution."
+  GNSS
+  "Operator network or NTP on the device."
+  NETWORK
+  "Set by the receiver because the device sent no time. The point sits at its moment of upload."
+  SERVER
+  "Tachograph clock, a subsystem with its own drift and offset."
+  TACHOGRAPH
+  """
+  The device sent a time and the receiver replaced it — a clock out of the plausibility window, or
+  a rolled-over protocol counter. The point sits at its moment of upload, whatever the fix quality.
+  """
+  DEVICE_CORRECTED
+}
+
+# @category: tracking/state
+"Where the position came from, as `navixy.telemetry.v1.PositionSource`."
+enum TrackingPositionSource {
+  GNSS
+  "The device resolved its own position from radio surroundings."
+  DEVICE_LBS
+  "The platform resolved it, method unstated."
+  LBS
+  LBS_CELL
+  LBS_WIFI
+  IRIDIUM
+  LORAWAN
+  "Reported by the network the device is attached to."
+  NETWORK
+  "Position of a BLE gateway that saw the tag."
+  BLE
+  MANUAL
+  "Fused from several sources by the device."
+  FUSED
+}
+
+# @category: tracking/state
+"""
+Suitability of a point, decided once by the writer rather than by each reader
+(contracts/clickhouse/telemetry/v1/STORAGE.md §"Как отобрать пригодные точки").
+"""
+enum TrackingFitness {
+  "No position in the message at all — heartbeat, readings-only report."
+  NO_POSITION
+  "The device tried and failed to get a fix."
+  NO_FIX
+  "A repeat of the last known point — legitimate on a map, must not enter distance maths."
+  LAST_KNOWN
+  "A satellite-receiver solution below track grade: fewer than three satellites, no fix, or dead reckoning."
+  WEAK_GNSS
+  "Usable GNSS fix."
+  GNSS
+  "A usable non-GNSS radio solution: cells, Wi-Fi, operator network, LoRaWAN, BLE, satellite Doppler such as Iridium."
+  NETWORK
+  "A source the platform does not grade: unnamed, or manual."
+  UNKNOWN_SRC
+}
+
+# @category: tracking/state
+"""
+Link state of a device. Named `Connectivity`, not `Connection`, so it is not mistaken for a
+Relay connection type.
+"""
+type TrackingConnectivity {
+  status: TrackingConnectivityStatus!
+  "Event time of the most recent message of any kind."
+  lastMessageAt: DateTime
+  """
+  Event time of the most recent message that carried a position fit for a track — fitness `GNSS`
+  or `NETWORK`, the archive's track filter (STORAGE.md §"Как отобрать пригодные точки"). A
+  `LAST_KNOWN` repeat or a `WEAK_GNSS` fix moves `position.at` but not this.
+  """
+  lastPositionAt: DateTime
+  "Arrival time of the most recent message (`UUIDv7ToDateTime(message_id)`)."
+  lastReceivedAt: DateTime
+  """
+  Protocol code with generation, as stored: `teltonika_codec8e`, not the model family. Left as
+  `Code` rather than an enum on purpose — there are over a hundred and the list grows with every
+  new device model (NTF SPEC §5.3), which is exactly why the format keeps it a string too.
+  """
+  protocol: Code
+  "Channel the message arrived over."
+  transport: TrackingTransport
+  """
+  The identifier value as the device presented it, with its case preserved.
+
+  The archive stores value and uniqueness namespace packed into one column with escaping
+  (`schema.sql` §identifier); this field is the unpacked value, and `identifierNamespace` the
+  unpacked namespace. Returning the packed form would hand callers a string that does not match
+  the IMEI on the sticker for the minority of devices that have a namespace.
+  """
+  identifier: String
+  """
+  Namespace the identifier is unique within. Null when the identifier is globally unique.
+
+  `String`, not `Code`: NTF permits `$` anywhere in either half of the packed identifier (SPEC
+  §8.2, receiver obligations) and `Code` allows only letters, digits, `_`, `.` and `-`. A single
+  device with an exotic namespace would otherwise fail coercion — and through the non-null chain
+  `connectivity` → `devices` → `nodes`, take the whole page of states down with it.
+  """
+  identifierNamespace: String
+  "Kind of identifier. Null where the archive holds `UNSPECIFIED`."
+  identifierType: DeviceIdType
+}
+
+# @category: tracking/state
+"""
+Channel a message arrived over, as `telemetry.records.transport`. A closed list — the archive's
+daily "values outside the enumeration" check is written against exactly these — so it is an enum
+rather than a `Code`. `UNSPECIFIED` maps to null.
+"""
+enum TrackingTransport {
+  TCP
+  UDP
+  HTTP
+  GRPC
+  MQTT
+  WEBSOCKET
+  SMS
+  SATELLITE
+  "Raised inside the platform rather than received."
+  INTERNAL
+  "Channels where the platform goes after the data rather than receiving it."
+  HTTP_POLLING
+  KAFKA_CLIENT
+  RABBITMQ_CLIENT
+  WEBSOCKET_CLIENT
+}
+
+# @category: tracking/state
+"""
+Whether a device is currently connected. Derived from the time of its last message and never
+stored. Two values are connected and not connected: `ONLINE` is the first, `OFFLINE` and
+`NEVER_REPORTED` are the second (`meta/core-meta` ADR-0020).
+
+Not to be confused with `Device.status` (`DeviceStatus`), which is the administrative lifecycle of
+the device — registered, active, retired — held as a catalog item in BDR, changing rarely and
+deliberately. This one changes whenever a device goes quiet, which is why it is computed rather
+than written: making "online" a lifecycle value would have every device write to BDR each time its
+link flapped.
+"""
+enum TrackingConnectivityStatus {
+  """
+  Connected: a message arrived within `TrackingStatusThresholds.offlineAfter`. Measured from the
+  arrival of the last message of any kind (`TrackingConnectivity.lastReceivedAt`), not from the last
+  one that carried coordinates.
+  """
+  ONLINE
+  """
+  Not connected: nothing has arrived for `TrackingStatusThresholds.offlineAfter` or longer, measured
+  from the same moment as `ONLINE`. It labels connectivity only; a held alarm ends on a separate
+  setting (`TrackingEvent.since`).
+  """
+  OFFLINE
+  """
+  Not connected: the device has never sent a message, so there is no last message to measure from.
+  A client shows it as not connected, the same as `OFFLINE`.
+  """
+  NEVER_REPORTED
+}
+
+# @category: tracking/state
+type TrackingMotion {
+  status: TrackingMotionStatus!
+  "When the current status began."
+  since: DateTime
+}
+
+# @category: tracking/state
+enum TrackingMotionStatus { MOVING STOPPED PARKED UNKNOWN }
+
+# @category: tracking/state
+"Tracking settings of one workspace."
+type TrackingWorkspaceSettings {
+  """
+  The thresholds that derive `TrackingConnectivity.status` and `TrackingMotion.status` in this
+  workspace (`meta/core-meta` ADR-0020). The same values apply to every device of the workspace,
+  and today to every workspace. The timeline's `PLATFORM_DEFAULT` segmentation is these values too.
+  """
+  statusThresholds: TrackingStatusThresholds!
+}
+
+# @category: tracking/state
+"The values a device's connectivity and motion status are derived with. Read-only."
+type TrackingStatusThresholds {
+  "Silent this long or longer since the last received message → `OFFLINE`."
+  offlineAfter: Duration!
+  "Standing still this long or longer → `PARKED`; shorter → `STOPPED`."
+  minStopDuration: Duration!
+  "Speed above this, km/h → `MOVING`."
+  movingSpeedThreshold: Float!
+  "Radius, metres, within which points count as the same place rather than movement."
+  stopRadius: Float!
+}
+
+# @category: tracking/state
+"An event carried by a message (NTF SPEC §6.5)."
+type TrackingEvent {
+  "Canonical platform code, e.g. `sos`, `harsh_braking`. Null when the vendor code is unmapped."
+  code: Code
+  """
+  The code the device sent, verbatim. Null means the platform itself raised the event
+  (NTF SPEC §6.5) — there is no separate origin flag.
+
+  `String` for the same reason as `identifierNamespace`: SPEC §6.5 requires storing exactly what
+  the device sent, and that alphabet is open, while `Code`'s is not.
+  """
+  vendorCode: String
+  """
+  When the event occurred. Equal to the message's event time unless the protocol reported a
+  separate moment for the event — a fault code carries the time the fault was recorded.
+  """
+  occurredAt: DateTime!
+  """
+  Where the event happened: the position of the message that carried it, since an event has no
+  place of its own (NTF SPEC §6.5). Null when that message carried no coordinates. On
+  `TrackingTrackPoint.events` it equals the point; on `lastEvents`, `TrackingTrack.events` and
+  `TrackingStop.events` it is what lets an SOS stay on the map after the device has moved on.
+  """
+  point: GeoPoint
+  """
+  Event parameters — triggering input, threshold, duration — as readings, not as opaque JSON.
+  The archive already stores them as a canonical `StructValue` with each parameter's name, type
+  and unit, and NTF SPEC §6.5 calls them "ordinary fields, as everywhere else". Returning `JSON`
+  here would force a client that already renders `TrackingReading` to write a second renderer,
+  which is the split this schema exists to avoid.
+  """
+  params: [TrackingReading!]!
+  "Free-form text, including a device's reply to a command."
+  text: String
+  """
+  The command this event answers, when the receiver matched one.
+
+  The platform's command service mints command ids, so this is an `ID` like any other. No type in
+  this API is a command, since commands are a separate surface this contract does not create (§8),
+  so `node(id:)` answers null for it.
+  """
+  commandId: ID
+  """
+  For a level alarm — an event a device re-sends in every message while the condition holds —
+  the moment it started. `occurredAt` then carries the latest repeat, and the repeats in between
+  are collapsed into this one object rather than returned individually (SPEC §6.5: collapsing "is
+  the job of a consumer that holds state", and this service is that consumer). Null for a
+  one-shot event.
+
+  A held alarm stops being reported once a message arrives without it — protocols of this family
+  send no paired `*_END` code, so absence is the only signal there is. It also stops once nothing
+  has been received from the device for the alarm reset gap, a deployment setting
+  (`nvx4.tracking.fold.alarm-reset-gap`): otherwise a truck that raised an alarm and then lost its
+  link would show that alarm burning for a week while nothing at all was heard from it. The gap is
+  independent of the `OFFLINE` threshold, so a device can read `OFFLINE` with its alarm still held.
+  Which of the two ended it shows in the device's connectivity: a message without the alarm
+  arrived when `connectivity.lastMessageAt` is later than the alarm's last `occurredAt`; nothing was
+  received for the gap when `connectivity.lastReceivedAt` is older than the gap.
+  """
+  since: DateTime
+}
+
+# @category: tracking/state
+"""
+Why the device sent this point, as `telemetry.records.report_reason`. A closed list, same as
+`TrackingTransport`; `UNSPECIFIED` maps to null.
+"""
+enum TrackingReportReason {
+  "Reporting timer elapsed."
+  TIME
+  "Distance since the last point exceeded the threshold."
+  DISTANCE
+  "Course change exceeded the threshold."
+  ANGLE
+  IGNITION
+  HEARTBEAT
+  ALARM
+  "Repeat of the last known position while stationary."
+  STATIC_REPEAT
+  POWER_ON
+  MANUAL
+  NETWORK_RECOVERED
+}
+
+# =============================================================================
+# 4. STATE
+# =============================================================================
+
+# @category: tracking/state
+"""
+Last known state of one device: position, link, motion and every reading, each as of the
+message it last arrived in.
+"""
+type TrackingDeviceState {
+  device: Device!
+  """
+  For a device that does not report on its own — a BLE tag seen by a tracker — the device whose
+  message carried the latest observation. Null for a device that reports on its own.
+
+  A tag is its own `Device` in BDR, linked to the tracker it rides with through `DeviceRelation`
+  (`Device.relationsFrom` / `relationsTo`), and it has a state of its own: NTF keeps a tag's
+  readings in the carrier message's `ble_tags`, apart from the carrier's own fields (SPEC §6.6),
+  and this schema keeps them apart the same way — a tag's temperature is `readings` on the tag's
+  state, never on the tracker's. Its `position` is a carrier's position with `source: BLE`, chosen
+  by the ordinary rule on `position`: the most recent carrying message that had coordinates. That
+  is not always the latest observation — a stationary gateway reports tags in messages without a
+  position (SPEC §6.4.3) — so `position.at` can lag `updatedAt`, and the position can come from an
+  earlier message through a different tracker than `carrier` names. Its `connectivity` describes
+  the latest carrier's link, and its `identifier` is the tag's own. This field says which carrier
+  the latest observation came through, which the static relation cannot: a tag that rides between
+  two trackers has two relations and one current carrier.
+
+  Where it comes from: every observation carries it. On the wire it is the `device` of the message
+  whose `ble_tags` held the tag; in the archive it is `telemetry.ble_tags.device_id`, the device
+  that saw the tag. The tag's own `Device` is in the same observation: the receiver resolves it
+  against BDR at identification, by the tag's registered identifiers and the carrier's
+  `DeviceRelation`s, into `BleTag.device_id` (NTF 1.2), stored as `ble_tags.tag_device_id`. Both
+  are values as of the observation, so a tag registered later leaves its earlier observations
+  unattributed.
+  """
+  carrier: Device
+  """
+  Event time of the most recent message — the newest `updatedAt` across this state.
+  Null for a device that has never reported (`TrackingConnectivityStatus.NEVER_REPORTED`), which
+  is why it is nullable: a freshly registered tracker inside a page of asset states would
+  otherwise null out the whole response through the non-null chain above it.
+  """
+  updatedAt: DateTime
+  connectivity: TrackingConnectivity!
+  """
+  The most recent position of any fitness except `NO_POSITION` and `NO_FIX`, the two that carry
+  no coordinates — so a `LAST_KNOWN` repeat or a `WEAK_GNSS` fix is shown rather than nothing
+  (STORAGE.md §"Как отобрать пригодные точки", the "where is the device now" query; equal event
+  times are broken by fitness rank, then by message id). Null for a device that has never sent
+  one. Its age is `position.at`, not `updatedAt`: a heartbeat after it moves the latter and leaves
+  the former.
+  """
+  position: TrackingPosition
+  motion: TrackingMotion
+  """
+  Readings of this device: the newest value of every `(code, channel)` it has reported within the
+  archive's retention, each with its own `updatedAt`. A client that does not know which fields a
+  device has calls it without `codes` and gets all of them. Nothing is backfilled: a field the
+  device reported only before the service began recording last values is absent until the device
+  sends it again.
+
+  `codes` narrows the list to those codes, every channel included. `maxAge` drops readings whose
+  message is older than that; it is never required.
+
+  A reading appears once the archive has stored the message that carried it, so it can trail
+  `position` and `connectivity`, which come from the service's memory.
+
+  Null, with a `SERVICE_UNAVAILABLE` error at this path, when `readings_last` cannot be read for this
+  device; a retry may succeed. The rest of the state is still served, which is why the field is
+  nullable while `TrackingDeviceStateSnapshot.readings` is not.
+  """
+  readings(codes: [Code!], maxAge: Duration): [TrackingReading!]
+  """
+  The one-shot events of the most recent message that carried one, plus every level alarm still
+  holding — those arrive collapsed, with `TrackingEvent.since` giving the moment the condition
+  started rather than one object per repeat.
+
+  Two retention rules, one per kind. A one-shot event stays until a message with another one-shot
+  event replaces it; messages without events, and the repeats of a held alarm, leave it in place —
+  otherwise a held overspeed alarm would evict an SOS within one report interval. A held alarm
+  stays until a message arrives without it or nothing has been received for the alarm reset gap
+  (`TrackingEvent.since`); reaching `OFFLINE` alone does not end it.
+  """
+  lastEvents("Limit to these event codes. All when omitted." codes: [Code!]): [TrackingEvent!]!
+}
+
+# @category: tracking/state
+"""
+Tracking state of an asset: the states of the devices linked to it, side by side.
+
+Deliberately NOT merged into one state. An asset can carry several devices reporting the same
+field — two temperature sensors, two trackers — and any merge policy (primary wins, newest wins)
+either hides a value or makes it jump between sources. The asset exposes the list and the client
+decides.
+"""
+type TrackingAssetState {
+  asset: Asset!
+  "Newest `updatedAt` across the asset's devices. Null when no device has ever reported."
+  updatedAt: DateTime
+  "State of every device linked to the asset."
+  devices: [TrackingDeviceState!]!
+  """
+  State of `Asset.primaryDevice`, for the common case of one tracker per asset. The same object
+  also appears in `devices`; this is a pointer, not a second state.
+  """
+  primaryDevice: TrackingDeviceState
+}
+
+# @category: tracking/state/streams
+"""
+What the subscription emits for one of an asset's devices, under
+`TrackingAssetStateSnapshot.devices`. Field for field the same state as `TrackingDeviceState`, with
+two differences: nothing here takes arguments — what a caller would have narrowed per field is
+narrowed once, in the subscription input — and `readings` is never null (see that field).
+
+A separate type, not the query one, so that what a stream delivers is fixed when it opens: the
+subscription input narrows readings once, in `readingCodes`, and nothing on this type takes
+arguments. `TrackingDeviceState.readings(codes:, maxAge:)` is an ordinary field with arguments; if a
+stream emitted that type, every selection and alias could ask for its own codes and age on every
+message, a choice the input never sees. Two types cost some duplication.
+
+`device: Device!` stays a full BDR object rather than a bare id, deliberately: the stream is what
+a map renders from, and re-fetching titles over a second channel for every asset defeats that.
+The cost is that `Device`'s own collection fields (`inventoryHistory`, and `groups`/`customFields`
+on `Asset`) are reachable from a subscription's selection set, where they execute per emission —
+and the gateway's complexity limit cannot see it, being computed from the document alone. The
+per-emission budget is therefore part of the subscription implementation, not of the query limits.
+"""
+type TrackingDeviceStateSnapshot {
+  device: Device!
+  "See `TrackingDeviceState.carrier`."
+  carrier: Device
+  "Event time of the most recent message. Null for a device that has never reported."
+  updatedAt: DateTime
+  connectivity: TrackingConnectivity!
+  "Selected on the same terms as `TrackingDeviceState.position`; its age is `position.at`."
+  position: TrackingPosition
+  motion: TrackingMotion
+  """
+  Every reading of the device, each with its own `updatedAt`, narrowed by the subscription's
+  `readingCodes`. A field the device sent once stays in every later emission, whether or not the
+  message behind that emission carried it. Never null: a stream whose readings cannot be loaded is
+  closed, not served device by device as a query is.
+  """
+  readings: [TrackingReading!]!
+  """
+  Same content and same retention as `TrackingDeviceState.lastEvents`, narrowed by the
+  subscription's `eventCodes`. Not "the events of the message that triggered this emission": under
+  `batchWindowMs` several messages collapse into one emission, so that message is not well-defined,
+  and an emission caused by a heartbeat would clear an SOS the client may not have rendered yet.
+  Whether a one-shot event is new is read from `code` and `occurredAt` against what the client last
+  showed. A held alarm is the same object across emissions — identified by `code` and `since`, with
+  `occurredAt` advancing on every repeat — so a changed `occurredAt` on it means a repeat, not a new
+  event. A held alarm leaves the list once nothing has been received for the alarm reset gap, not
+  when `connectivity.status` reaches `OFFLINE` (`TrackingEvent.since`); the stream emits the changed
+  state when that moment passes.
+
+  The initial snapshot carries the same list, so a client reconnecting after an alarm sees it
+  before the next repeat — "a reconnect needs no reconciliation" is why full state was chosen over
+  deltas. The limit of full state applies here too: two one-shot events in one coalescing window
+  leave only the later message's in the emission. A consumer that must see every event needs an
+  event stream, which this contract does not declare.
+  """
+  lastEvents: [TrackingEvent!]!
+}
+
+# @category: tracking/state/streams
+"""
+What a subscription emits for one asset: every device's snapshot, unmerged, on the same terms as
+`TrackingAssetState`.
+"""
+type TrackingAssetStateSnapshot {
+  "Full BDR object, on the same terms and at the same cost as `TrackingDeviceStateSnapshot.device`."
+  asset: Asset!
+  "Newest `updatedAt` across the asset's devices."
+  updatedAt: DateTime
+  """
+  The asset's devices. On a subscription that selects `readings`, a device linked to the asset while
+  the stream is open appears from the stream's next membership refresh, once its readings are
+  loaded; until then it is left out, not shown with empty readings.
+  """
+  devices: [TrackingDeviceStateSnapshot!]!
+  """
+  Snapshot of `Asset.primaryDevice`; the same object also appears in `devices`. Null when there is
+  none or `devices` leaves it out.
+  """
+  primaryDevice: TrackingDeviceStateSnapshot
+}
+
+# =============================================================================
+# 4b. WHAT A STREAM EMITS
+# =============================================================================
+#
+# The subscription emits a *batch*, not a bare list of states, because two of the three things a
+# stream has to say are properties of the emission rather than of any one entity: "this belongs to
+# the opening snapshot" and "the opening snapshot is now complete". The third — "this entity left
+# the subscription" — is per entity and has, by construction, no state to travel in.
+#
+# Both were missing from the first draft of this contract. The batch marker would have been
+# additive and could have waited; the removal signal would not have been, which is why they landed
+# together. See §Extending this contract at the end of the file for the rule that follows from it.
+
+# @category: tracking/state/streams
+"""
+One emission on an asset-state stream.
+
+An empty `changes` is legitimate and carries meaning: a subscription that matches nothing still
+receives one batch with `initialSnapshotComplete: true`, so a client's loading state always ends.
+"""
+type TrackingAssetStateBatch {
+  changes: [TrackingAssetStateChange!]!
+  """
+  True while the opening snapshot is being delivered, false for every batch after it. The opening
+  snapshot may span several batches; the client learns it is done from
+  `initialSnapshotComplete`, not from this turning false.
+
+  Always false on a subscription opened with `includeInitialState: false` — there is no opening
+  snapshot for a batch to belong to.
+  """
+  fromInitialSnapshot: Boolean!
+  """
+  True on the last batch of the opening snapshot and on that batch only. Clear a loading state
+  here. Never true again for the life of the subscription — a reconnect opens a new one.
+
+  With `includeInitialState: false` the stream still opens with one empty batch carrying this
+  true, for the same reason a subscription matching nothing does: a client ends its loading state
+  on this flag alone, and should not have to special-case how the subscription was opened.
+  """
+  initialSnapshotComplete: Boolean!
+}
+
+# @category: tracking/state/streams
+"""
+What happened to one asset in a batch: either its current full state, or the news that it is gone.
+
+Exactly one of `state` and `removal` is non-null. `assetId` is present in both cases, because a
+client removing an entity from a view needs its id and no longer has a state to read it from.
+
+A pair of nullable fields rather than a `TrackingAssetStateSnapshot | TrackingStreamRemoval`
+union, for handling: the id sits in one place for both outcomes, and a client reads two fields
+instead of switching on `__typename` across fragments. Not for extensibility — a third outcome
+would leave both fields null on a client built against this version, which the sentence above
+forbids, so it is a breaking change of the same kind as a new union member (§9).
+"""
+type TrackingAssetStateChange {
+  assetId: ID!
+  "Full state as of this emission. Null when, and only when, `removal` is set."
+  state: TrackingAssetStateSnapshot
+  "Why the asset stopped being followed. Null while it is still followed."
+  removal: TrackingStreamRemoval
+}
+
+# @category: tracking/state/streams
+"""
+Why an entity left a subscription. Without this a client cannot tell "gone" from "quiet": an
+entity that stops being emitted looks exactly like one that simply has not reported.
+"""
+type TrackingStreamRemoval {
+  reason: TrackingStreamRemovalReason!
+  "When the server stopped following it."
+  at: DateTime!
+}
+
+# @category: tracking/state/streams
+"""
+A client must treat an unrecognised value as a plain removal and drop the entity — the list will
+grow, and the safe default is the one every member already shares. Do not switch exhaustively over
+it without that fallback.
+"""
+enum TrackingStreamRemovalReason {
+  "The subscriber lost the right to see it."
+  ACCESS_REVOKED
+  "The asset was deleted."
+  DELETED
+  """
+  The asset's last device was unlinked, so nothing can report for it any more.
+
+  The mirror of `linked` in `TrackingAssetStateSubscriptionInput.assetIds`: a device link is one of
+  the three things that bring an asset into a subscription, and losing the last link is what takes
+  it back out. Re-linking a device returns the asset as an ordinary change carrying its full state,
+  with no "added" marker, exactly as it arrived the first time.
+
+  An asset with no devices is not an error and not invisible — `TrackingQuery.assetStates` still
+  returns it, with an empty `devices` and a null `updatedAt`. It is the *stream* it leaves: a
+  stream carries reports, and an asset with no device has none to carry. A client that wants such
+  assets on screen reads them from the query side, which is where the no-longer-reporting case has
+  an answer.
+  """
+  UNLINKED
+}
+
+# @category: tracking/state
+type TrackingAssetStateConnection implements Connection {
+  edges: [TrackingAssetStateEdge!]!
+  nodes: [TrackingAssetState!]!
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: tracking/state
+type TrackingAssetStateEdge implements Edge {
+  cursor: String!
+  node: TrackingAssetState!
+}
+
+# @category: tracking/state
+"""
+Filters over asset states. Since an asset's state is a list, every device-level condition here
+matches when **any** of the asset's devices satisfies it.
+"""
+input TrackingAssetStateFilter {
+  assetIds: [ID!]
+  assetGroupIds: [ID!]
+  connectivityStatus: [TrackingConnectivityStatus!]
+  motionStatus: [TrackingMotionStatus!]
+  "Only assets where some device reported at or after this moment."
+  updatedSince: DateTime
+  """
+  Only assets where some device's `position` falls inside this area — the same position the map
+  shows, selected by the rule on `TrackingDeviceState.position`, so a `LAST_KNOWN` repeat inside
+  the area matches. The filter answers where the device says it is, not where a track-grade fix
+  last put it; for the latter compare `connectivity.lastPositionAt`.
+
+  A `Polygon` or a `MultiPolygon`; a `MultiPolygon` matches a position inside any of its polygons.
+  Any other GeoJSON type fails with `VALIDATION_ERROR` (field `filter.within`), as do malformed
+  coordinates — a `Polygon` is a non-empty list of rings, a ring has at least four positions and a
+  position at least two numbers — whether or not any device has a position.
+  """
+  within: GeoJSON
+}
+
+# @category: tracking/state
+"""
+Order of an asset-state page. Only asset-side keys are offered as stable orders; `UPDATED_AT`
+moves with every message, so a page boundary read under it may not hold on the next request — use
+it for a one-shot "most recently active" list, not for walking a large set page by page.
+
+A cursor under `UPDATED_AT` carries the anchor asset's `(updatedAt, assetId)`, and the next page
+starts after that pair in the requested order. It never fails because the anchor asset has moved or
+left the set since the last request; an asset that moved between requests may be skipped or
+returned twice. A cursor issued under another field or direction, or one that cannot be parsed,
+still fails with `VALIDATION_ERROR`.
+"""
+input TrackingAssetStateOrder {
+  field: TrackingAssetStateOrderField!
+  direction: OrderDirection!
+}
+
+# @category: tracking/state
+enum TrackingAssetStateOrderField {
+  "By `Asset.title`, then by asset id as the tie-breaker."
+  ASSET_TITLE
+  "By `TrackingAssetState.updatedAt`; assets that never reported sort as null (`OrderDirection`)."
+  UPDATED_AT
+}
+
+# =============================================================================
+# 5. TRIPS AND STOPS
+# =============================================================================
+#
+# nvx4 stores no track entity — there is no `track_id` the way nvx3 had one, and no separate
+# track table (STORAGE.md §"Отдельной таблицы под треки нет"). Segments are derived from
+# telemetry.records on read, under a segmentation policy.
+#
+# Always computed on read, never precomputed. That is what makes a request-level policy possible
+# at all: precomputed segments carry one policy, and no override could apply to them. The cost is
+# that every call re-reads the window's points, so the window is what has to be bounded — see
+# `TrackingTimeline.continueFrom`.
+
+# @category: tracking/trips
+"""
+How a device's message stream is cut into trips and stops.
+
+Resolution order per device: the device's own policy, else the policy supplied with the request,
+else the platform default. `TrackingSegmentationApplied.source` reports which one was used, so a
+caller never has to guess whether its request-level policy took effect.
+
+The platform default is a deployment setting, the same one the live `motion` status is folded with
+(`nvx4.tracking.fold.stop-radius-meters`, `moving-speed-threshold-kmh` and `min-stop-duration`), so
+a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides it.
+
+Values are validated before any data is read: a non-positive `minStopDuration`, or a negative or
+non-finite `stopRadius` or `movingSpeedThreshold`, fails with `VALIDATION_ERROR` naming the field
+(`segmentation.minStopDuration`, `segmentation.stopRadius`, `segmentation.movingSpeedThreshold`).
+Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
+"""
+input TrackingSegmentationInput {
+  """
+  How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter
+  pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the
+  window, no pause qualifies: `stops` is empty and whatever movement the window holds is one trip,
+  the shape nvx3's `split: false` returned. A window without movement yields no trip either way,
+  and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive.
+  """
+  minStopDuration: Duration
+  "Radius, metres, within which points count as the same place rather than movement. Not negative."
+  stopRadius: Float
+  "Speed at or below which the device counts as not moving, km/h. Not negative."
+  movingSpeedThreshold: Float
+}
+
+# @category: tracking/trips
+"The segmentation policy that actually produced the result, and where it came from."
+type TrackingSegmentationApplied {
+  minStopDuration: Duration!
+  stopRadius: Float!
+  movingSpeedThreshold: Float!
+  source: TrackingSegmentationSource!
+}
+
+# @category: tracking/trips
+enum TrackingSegmentationSource {
+  "The device carries its own segmentation policy, which overrides the request."
+  DEVICE
+  "The policy supplied with the request applied — the device has none of its own."
+  REQUEST
+  """
+  Neither device nor request supplied one; the platform default applied. The values are
+  `TrackingWorkspaceSettings.statusThresholds` (`minStopDuration`, `stopRadius`,
+  `movingSpeedThreshold`).
+  """
+  PLATFORM_DEFAULT
+}
+
+# @category: tracking/trips
+"""
+A trip — a movement segment between two stops.
+
+`id` identifies the trip **within one response**, nothing more. It is a hash over the device, the
+request's parameters and the segment's bounds, so an identical request reproduces it, and any
+change to the window or the segmentation policy does not. The device is part of the hash because
+`assetTimeline` returns one timeline per device from a single request: two trackers on the same
+vehicle, parked together, produce trips with identical bounds, and without the device in the hash
+a UI holding a selection by id would highlight both.
+
+Nothing stores it, `Query.node` does not resolve it, and no query takes it as an argument — use it
+to correlate a trip with a client-side selection inside a single answer, not to link to a trip
+later.
+
+`endedAt` is the last point's own time when the trip simply ends there — the device stopped, or
+the requested window ended with nothing left to cut. A server-side budget (`TrackingTimeline.continueFrom`)
+that lands inside the trip instead moves `endedAt` to `continueFrom` itself, one moment past that
+last point; `endPoint` still names the last point's own coordinates. That is what makes the next
+page's first trip — which starts at `from`, itself set to that same `continueFrom` — touch this one
+exactly, with no gap and no overlap; `id` differs per part because the bounds differ. The same
+rule, for stops, is on `TrackingStop.duration`.
+
+Figures summed across pages equal a one-page answer only in two cases: the cut falls while the
+device is moving, or it falls inside a stop whose parts on both sides of the cut each last at least
+`minStopDuration`. When the still period that crosses the cut is shorter than `minStopDuration` on
+either side, each page classifies its part on its own: a page can end a trip at the cut that a
+one-page answer continues through a pause, or split a stop into parts too short to count as one, so
+`stops`, the number of trips, `duration` and `pointCount` can differ from the one-page answer.
+A caller that needs figures independent of paging requests windows short enough for `continueFrom`
+to stay null.
+
+Typed `String!`, not `ID!`, and that is not cosmetic: the gateway's DGS codegen maps **every**
+`ID` in the schema to `com.navixy.uuid.UuidV8` (`api-gateway/build.gradle.kts` `typeMapping`),
+a value class with a fixed layout — 48 time bits, version, counter, a four-character entity
+discriminator. A content hash is not expressible in it, and squeezing one into the deterministic
+constructor's 16-bit suffix would collide inside a single response, destroying the very
+distinction the device-in-the-hash rule above exists to make.
+"""
+type TrackingTrack {
+  id: String!
+  startedAt: DateTime!
+  endedAt: DateTime!
+  """
+  Trip length, km. Includes the leg from the last still point before the trip to its first moving
+  point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from
+  the sum (STORAGE.md §Как отобрать).
+  """
+  distance: Float!
+  "Wall-clock duration."
+  duration: Duration!
+  maxSpeed: Float
+  avgSpeed: Float
+  startPoint: GeoPoint!
+  endPoint: GeoPoint!
+  pointCount: Int!
+  "Points of the trip. Empty unless the query asked for them."
+  points: [TrackingTrackPoint!]!
+  "True when `points` was thinned to fit `TrackingTrackOptions.maxPoints`."
+  simplified: Boolean!
+  "Events that occurred within the trip."
+  events: [TrackingEvent!]!
+}
+
+# @category: tracking/trips
+"""
+A stop — the device stayed within `stopRadius` for at least `minStopDuration`.
+`id` is response-scoped, and `String!` rather than `ID!`, on the same terms as `TrackingTrack.id`.
+"""
+type TrackingStop {
+  id: String!
+  startedAt: DateTime!
+  """
+  When the stop ended. Null for a stop still in progress at the end of the requested window —
+  including the current one, which is the usual case for `to = now`.
+  """
+  endedAt: DateTime
+  """
+  How long the stop lasted. For a finished stop, `endedAt - startedAt`.
+
+  For one still in progress — `endedAt: null` — it is measured to the end of what this answer
+  actually covers: `min(to, now)`, or `continueFrom` when a server-side budget cut the window
+  short. That is not the same bound as `to`, because truncation can land inside a stop. Never past
+  the end of the requested window and never into the future, so the same `to` in the past yields
+  the same duration on every call.
+
+  A stop the truncation cut continues in the next page as a stop of its own, starting where that
+  page starts: the parts are adjacent rather than overlapping, and when each part lasts at least
+  `minStopDuration` the stop time summed across pages is the total. A part shorter than that does
+  not count as a stop on its page, so the stop can be missing there and the sum falls short; see
+  `TrackingTrack` for the cases. Separately, the case that does not settle is a `to` in the
+  future — the window has not closed, `min(to, now)` is `now`, and the duration grows between
+  calls. That is the honest answer for an open window rather than a defect.
+  """
+  duration: Duration!
+  "Representative point of the stop (centroid of its points)."
+  point: GeoPoint!
+  "Number of messages received during the stop."
+  messageCount: Int!
+  events: [TrackingEvent!]!
+}
+
+# @category: tracking/trips
+type TrackingTrackPoint {
+  at: DateTime!
+  point: GeoPoint!
+  altitude: Float
+  speed: Float
+  heading: Float
+  satellites: Int
+  fitness: TrackingFitness!
+  "Where `at` came from; see `TrackingPosition.timeSource`. A `SERVER` or `DEVICE_CORRECTED` point stands at its upload moment."
+  timeSource: TrackingTimeSource
+  "Why the device sent this point."
+  reportReason: TrackingReportReason
+  "Readings from the message this point came from, when the query asked for them."
+  readings: [TrackingReading!]!
+  "Events carried by that message."
+  events: [TrackingEvent!]!
+}
+
+# @category: tracking/trips
+"Trips and stops of one device over a window, plus the policy that produced them."
+type TrackingTimeline {
+  device: Device!
+  from: DateTime!
+  to: DateTime!
+  segmentation: TrackingSegmentationApplied!
+  tracks: [TrackingTrack!]!
+  stops: [TrackingStop!]!
+  "Sum of `TrackingTrack.distance`, km."
+  totalDistance: Float!
+  "Sum of trip durations."
+  totalDrivingTime: Duration!
+  """
+  Sum of stop durations, an unfinished stop counted per `TrackingStop.duration` — which bounds it
+  by what this answer covers, not by `to`, when `continueFrom` is set.
+  Stable for a `to` in the past; grows between calls for a `to` in the future, for the same reason.
+  """
+  totalStopTime: Duration!
+  """
+  Where the answer stops when a server-side budget cut the window short — pass it back as the
+  next call's `from`. Null means the whole window was covered. Figures summed across the pages of
+  a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the
+  still period crossing a cut, and the trips beside it, can be classified and measured differently.
+
+  A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty
+  with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget
+  itself exists because segmentation re-reads the window's raw points on every call.
+  """
+  continueFrom: DateTime
+}
+
+# @category: tracking/trips
+input TrackingTrackOptions {
+  """
+  Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`.
+  Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it
+  never enters `distance`, whatever this argument says, because a stop in a tunnel would
+  otherwise read as a trip (STORAGE.md §Как отобрать пригодные точки).
+  """
+  fitness: [TrackingFitness!] = [GNSS, NETWORK]
+  "Return the points of each trip, not just its summary. Off by default — points dominate the payload."
+  includePoints: Boolean = false
+  """
+  Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning;
+  zero or negative fails with `VALIDATION_ERROR`.
+  """
+  maxPoints: Int = 5000
+  "Include these readings on every point."
+  readingCodes: [Code!]
+  """
+  Include only these event codes on segments and points. Empty list — the default — includes
+  none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every
+  message while it holds (SPEC §6.5), so a day of a stuck input is thousands of identical
+  objects. The service collapses a repeated level alarm into one event with `since` set; this
+  argument is the second lever.
+  """
+  eventCodes: [Code!] = []
+}
+
+# =============================================================================
+# 6. QUERY
+# =============================================================================
+
+"""
+Tracking module queries — live state of assets and their devices, and their trips and stops.
+Reached through `Query.tracking` (docs/reference/graphql-conventions.md §Module namespacing).
+"""
+type TrackingQuery {
+  # @category: tracking/state
+  "Tracking state of one asset. Null when the asset does not exist or is not visible."
+  assetState("The asset." assetId: ID!): TrackingAssetState
+
+  # @category: tracking/state
+  "Tracking state of the caller's assets."
+  assetStates(
+    filter: TrackingAssetStateFilter
+    orderBy: TrackingAssetStateOrder = { field: ASSET_TITLE, direction: ASC }
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): TrackingAssetStateConnection!
+
+  # @category: tracking/state
+  "Last known state of one device."
+  deviceState("The device." deviceId: ID!): TrackingDeviceState
+
+  # @category: tracking/state
+  "Last known state of several devices, in the order requested. Null for one not visible."
+  deviceStates("The devices." deviceIds: [ID!]!): [TrackingDeviceState]!
+
+  # @category: tracking/trips
+  """
+  Trips and stops of one device over a window.
+
+  `segmentation` applies only to devices that carry no policy of their own; the result reports
+  which policy actually applied.
+
+  Fails with `VALIDATION_ERROR`, before any data is read, when `from` is not before `to` (field
+  `to`), when `options.maxPoints` is zero or negative (field `options.maxPoints`), or when
+  `segmentation` holds an invalid value (`TrackingSegmentationInput`). The check does not depend on the device: an
+  invalid request fails the same way for a device the caller cannot see.
+  """
+  deviceTimeline(
+    deviceId: ID!
+    from: DateTime!
+    to: DateTime!
+    segmentation: TrackingSegmentationInput
+    options: TrackingTrackOptions
+  ): TrackingTimeline
+
+  # @category: tracking/trips
+  """
+  Trips and stops of an asset over a window, per device.
+  An asset with several devices yields one timeline per device — the same no-merge rule as state.
+
+  Validated as `deviceTimeline` is, including for an asset without devices, which would otherwise
+  answer `[]`.
+  """
+  assetTimeline(
+    assetId: ID!
+    from: DateTime!
+    to: DateTime!
+    segmentation: TrackingSegmentationInput
+    options: TrackingTrackOptions
+  ): [TrackingTimeline!]!
+
+  # No `track(trackId:)` query. A trip id is response-scoped (see `TrackingTrack.id`), so there is
+  # nothing to address it by later — points come from the same call, via
+  # `TrackingTrackOptions.includePoints`, or from a narrower window.
+
+  # @category: tracking/state
+  "Tracking settings of the caller's workspace. Read-only."
+  workspaceSettings: TrackingWorkspaceSettings!
+
+  # @category: tracking/readings
+  """
+  The field dictionary. Needed by any UI that renders readings: without it a client has a name
+  and a number but no title, unit or nature.
+
+  Returns an empty list today, whatever `codes` and `includeDeprecated` say: the dictionary is not
+  populated yet (NTF SPEC §5.4). The rest of this description is the contract once it is.
+
+  Cacheable, but not immutable. What NTF freezes is an entry's identity — SPEC §5.4 forbids
+  changing a type, unit or nature, and an entry is never renamed — so a cached entry never starts
+  meaning something else. What it does not freeze is the dictionary's composition: SPEC §5.1 says
+  it changes by design, and an existing entry can still gain `deprecated` and a `replacedBy`. So a
+  held copy goes stale in one direction only — it can lack an entry, or miss a deprecation, never
+  misdescribe a field it already has. Refetch when a reading arrives whose `code` is not in the
+  cache. The locale is separate: it comes from the request headers rather than an argument here, so
+  a client that switches language re-fetches, and a shared cache is keyed per locale or holds only
+  the locale-independent fields. The headers are not honoured yet (`TrackingFieldDefinition.title`).
+  """
+  fieldDefinitions(
+    "Limit to these field names. All entries when omitted."
+    codes: [Code!]
+    "Include entries marked deprecated."
+    includeDeprecated: Boolean = false
+  ): [TrackingFieldDefinition!]!
+}
+
+# A device's own segmentation policy — the one `TrackingSegmentationSource.DEVICE` reports — has no
+# storage and no mutation in this contract yet. Until it does, `DEVICE` is a value the resolution
+# order reserves rather than one a caller can produce: every result reports `REQUEST` or
+# `PLATFORM_DEFAULT`. The order has room for a fourth level (per device model, say) without a
+# contract change.
+
+# =============================================================================
+# 7. SUBSCRIPTIONS
+# =============================================================================
+#
+# Deliberately NOT namespaced behind a `Subscription.tracking` wrapper, unlike Query/Mutation.
+# A subscription's root field is the event source and must resolve to a stream; a wrapper object
+# would have to emit one object and then stream from a nested field, which the spec does not
+# provide for. Module ownership therefore lives in the field name — `trackingAssetStates`, not
+# `tracking { assetStates }`. A stated exception to §Module namespacing that has to be written
+# into docs/reference/graphql-conventions.md rather than left implicit.
+#
+# `type Subscription` is declared here, in the module that owns the only stream, while
+# `schema { … subscription: Subscription }` stays in nvx4-bdr.graphql with the other root wiring.
+# Declared, not `extend`ed, so the closure test's stricter rule for extend targets never comes into
+# it. That split is deliberate: the schema block is the contract's single entry point and belongs
+# with the roots, while a root field's signature belongs beside the types it emits. Until 0.11.0
+# the field sat in nvx4-bdr.graphql and everything it returns sat here.
+#
+# One root field, `trackingAssetStates`. A device-level stream was declared in 0.9.0 and removed in
+# 0.11.0: an asset's batch already carries each of its devices
+# (`TrackingAssetStateSnapshot.devices`), so the device stream delivered a subset of the same
+# telemetry through a second code path, with a second ceiling and a second set of removal rules to
+# keep in step. A caller following devices rather than assets follows their assets and reads
+# `devices`. Nothing served either stream when it was removed.
+#
+# The guards that enumerate the roots, or that assumed all three are declared in one file, are held
+# to this arrangement:
+#   SchemaNamingConventionTest.`Subscription is declared once, in the module that owns the stream`
+#     — and its `MustStartWith` exemption, which lets this file carry that one unprefixed name
+#   GraphqlSchemaValidationTest$SubscriptionRootName
+#   GraphqlSchemaValidationTest$NamespaceWrappers.`subscription root is exactly the one tracking
+#     stream` (an exact set, so a second module's field cannot appear unnoticed)
+#   GraphqlSchemaValidationTest$StandaloneFileClosure — its walk reads the `schema { … }` block as
+#     of 0.11.0, which is what makes nvx4-bdr.graphql's reference to a type it no longer declares a
+#     checked exception rather than an unnoticed one
+#   GraphqlSchemaValidationTest$MergedSchemaSnapshot (baseline regenerated)
+#   GraphqlSchemaValidationTest.allQueryFields() (walks the subscription root too)
+#
+# THE WORKSPACE IS NOT AN ARGUMENT
+# -------------------------------
+# Neither the query side nor this input names a workspace. The request acts on the workspace the
+# caller's token names, resolved once per request by `CallerWorkspaceResolver` and carried on
+# `RequestContext.orgId`, exactly as `BdrQuery` has done since 0.10.0
+# (docs/adr/025-iam-integration-for-bdr.md §2). Taking it as an argument scopes the query and not
+# the caller, which is a cross-tenant read for anyone who can name an id.
+#
+# A subscription outlives the request that opened it, so the workspace is **captured when the
+# stream opens and held for its life**, not re-read per emission: there is no request context on
+# the emitting side to re-read it from. The consequence a client sees is already stated below under
+# credential expiry — the token is checked for the stream's whole life, and a stream does not
+# migrate to another workspace because a later token says so.
+#
+# Full state per message, never a delta: the client holds no state machine, and a reconnect
+# needs no reconciliation. The cost is real and worth stating — an asset with three devices and
+# forty readings each re-sends all three states when one input bit flips. `readingCodes` and
+# `batchWindowMs` are the two levers against it.
+#
+# What travels is a batch (`TrackingAssetStateBatch`, §4b), not a bare list of states. "Full state"
+# describes each entity in it; the batch adds the two things no state can say — that the opening
+# snapshot is still arriving, and that it is complete — and each change inside adds the one thing a
+# *missing* state has to say, that the entity is gone.
+#
+# "Full state" includes every reading the device has sent, each as of the message it last arrived
+# in. A VIN sent once stays in every later emission although the device does not resend it, so a
+# client that replaces its model wholesale — which is the entire point of full state — loses
+# nothing. The server holds that per-field state for the client: when a stream that selects
+# `readings` opens, the service loads the latest readings of its devices from the archive and
+# keeps them current from the messages it receives. The opening snapshot waits for that load; when
+# the archive cannot be read, or the service already holds readings for as many devices as it
+# takes, the subscription is refused, or later closed, with `SERVICE_UNAVAILABLE`, and a reconnect
+# may succeed. A stream that does not select `readings` loads nothing.
+#
+# Three things end a stream from the server side, and all are recovered the same way — reconnect,
+# and the opening snapshot restores the picture, which is what full state was chosen for.
+#
+#   * A slow consumer. `batchWindowMs` already collapses updates for the same entity; a consumer
+#     that still falls behind is coalesced further, since the newest state supersedes the ones it
+#     has not read. When even that exceeds the server-side buffer the stream is closed with an
+#     error rather than kept alive on a growing backlog: states are never dropped in the middle
+#     of a live stream while it is open.
+#   * Credential expiry. The token the subscription was opened with is checked for its whole
+#     life; when it expires the stream is closed with `UNAUTHORIZED`, and there is no in-band
+#     refresh — a client renews the token and subscribes again. Access revoked for one entity is
+#     not this case: that is a per-entity `TrackingStreamRemoval` with `ACCESS_REVOKED`, and the
+#     stream stays open.
+#   * A silent WebSocket client. `/graphql/ws` closes a connection whose client has stopped
+#     answering the server's pings (nvx4-bdr.graphql §5 WEBSOCKET), and its streams end with it.
+
+"""
+The root subscription type. One field, and it is this module's.
+
+The type lives here rather than with the other roots because its only field streams tracking
+state; `schema { … subscription: Subscription }` remains in nvx4-bdr.graphql.
+"""
+type Subscription {
+  # @category: tracking/state/streams
+  """
+  Full state of each followed asset, re-emitted whenever any of its devices reports.
+
+  Every message carries the whole state rather than a delta, so a client holds no state machine
+  and a reconnect needs no reconciliation. The emission is a batch — see
+  `TrackingAssetStateBatch` — which is what carries the opening-snapshot markers and lets an
+  asset report that it has left the subscription.
+
+  Acts on the workspace the caller's token names, captured when the stream opens.
+
+  The workspace needs Tracking enabled in Console; otherwise the subscription is refused with
+  `PRODUCT_DISABLED` before the stream opens.
+
+  A caller that already has as many streams open as its concurrent stream limit allows is refused
+  with `RATE_LIMITED`. A slot frees when the server ends one of the caller's streams; for a
+  connection that dropped without closing, that happens only once the server notices the silence.
+  Retry with a backoff.
+
+  Each subscription spends one request from the caller's rate limit, the same budget its HTTP
+  requests to `/graphql` spend. Over it the subscription is refused with `RATE_LIMITED`; retry
+  with a backoff.
+  """
+  trackingAssetStates(
+    "What to follow, and how much of each state to deliver."
+    input: TrackingAssetStateSubscriptionInput!
+  ): TrackingAssetStateBatch!
+}
+
+# @category: tracking/state/streams
+input TrackingAssetStateSubscriptionInput {
+  """
+  Assets to follow. Null means every asset visible to the caller in its workspace, up to a
+  server-side ceiling on how many one subscription may follow; over it the subscription is
+  refused with `VALIDATION_ERROR` rather than silently truncated. The query side paginates the
+  same data, and a stream has no cursor to paginate with, so the ceiling is where that bound goes.
+
+  The set is live in both directions. An asset that becomes visible after the subscription opened
+  — created, linked, or access granted — joins it, and its first appearance is an ordinary change
+  carrying its full `state`; there is no separate "added" marker, because a state a client has not
+  seen before is that marker. Growing past the ceiling this way closes the stream with
+  `VALIDATION_ERROR`, the same answer the same size gets at open. An explicit id the caller cannot
+  see at open is not refused: it emits nothing until it becomes visible, symmetric to
+  `ACCESS_REVOKED` on the way out.
+  """
+  assetIds: [ID!]
+  """
+  Narrow the delivered readings to these codes, every channel included; any code can be named.
+  Null — the default — delivers every reading the device has sent; an empty list delivers none.
+  """
+  readingCodes: [Code!]
+  """
+  Deliver only these event codes. Empty list — the default — delivers none; null delivers all,
+  which a stuck level alarm turns into a repeated object in every batch. The emitted snapshot type
+  carries no arguments, so this input is the only place the filter can live.
+  """
+  eventCodes: [Code!] = []
+  """
+  Emit the current state of everything followed before live updates begin, so a client does not
+  have to query and subscribe separately and race between the two. Delivered in the same batches
+  as live updates, not as one frame — a workspace-wide subscription would otherwise serialise its
+  entire fleet into a single message.
+  """
+  includeInitialState: Boolean = true
+  """
+  Coalescing window in milliseconds. Updates for the same asset within one window collapse into
+  one message, and messages are delivered as a batch — nvx3's `state_batch` broadcaster, made
+  explicit. The server sets a minimum and a maximum, 1 000 and 5 000 ms by default; a value outside
+  them refuses the subscription with `VALIDATION_ERROR` on `batchWindowMs`.
+  """
+  batchWindowMs: Int = 2000
+}
+
+# =============================================================================
+# 8. WHAT THIS MODULE DOES NOT DECLARE
+# =============================================================================
+#
+# `Query.tracking` and the `schema { … }` block live in nvx4-bdr.graphql, which owns root wiring
+# for every module (`Query.billing` is the precedent). `type Subscription` is the one root type
+# this module declares itself, for the reason in §7.
+#
+# There is no `Mutation.tracking`. Commands to devices — send a command, toggle an output — are a
+# separate surface; `TrackingEvent.commandId` points at one without creating it. The one write
+# this schema implies is the per-device segmentation policy behind
+# `TrackingSegmentationSource.DEVICE`, which has no storage or mutation yet (see §6).
+#
+# `Device.status` is untouched. The device's administrative lifecycle is a BDR catalog item;
+# whether a first message should move it from `not_activated` to `active` is a question for core,
+# which owns that rule. Connectivity here is computed and unstored — see
+# `TrackingConnectivityStatus`.
+
+# =============================================================================
+# 9. EXTENDING THIS CONTRACT
+# =============================================================================
+#
+# Written down because the removal signal in §4b was nearly deferred on the grounds that "adding
+# it later is cheap" — true of the batch marker beside it, false of the removal signal, and the
+# difference is not a matter of judgement. In GraphQL the additive changes are: a new field on an
+# object type, a new optional argument, a new type, a new input field that is nullable or carries
+# a default. None disturbs an existing client, because a client receives only what its own
+# document selects.
+#
+# Exactly two constructs break one, and this file uses both:
+#
+#   * a new member on a **union** — a client whose selection set has no `... on NewType` and no
+#     `__typename` fallback receives an object it cannot read;
+#   * a new value on an **enum in output position** — a client switching exhaustively over it has
+#     no branch for the value that just arrived.
+#
+# So each union and each output enum is a place where this contract's future is decided now, not
+# later. The inventory, with how likely each is to grow:
+#
+#   TrackingValue               mirrors `Value.oneof` in the proto, so it grows only when NTF
+#                               gains a wire representation — a change to the format, not to this
+#                               schema. Least likely to move, widest blast radius: every reading
+#                               passes through it.
+#   TrackingStreamRemovalReason will grow; it enumerates operational causes. §4b already tells
+#                               clients to treat an unrecognised value as a plain removal.
+#   TrackingTransport           grows with new link types.
+#   TrackingReportReason        grows as decoders learn why a device sent a point.
+#   TrackingQuantity            grows with the field dictionary.
+#   TrackingValueType           tracks the proto enum; moves only with it.
+#   TrackingTimeSource          tracks the proto enum; moves only with it.
+#   TrackingFieldNature         closed by SPEC §5.2.
+#   TrackingFixType, TrackingPositionSource, TrackingFitness, TrackingConnectivityStatus,
+#   TrackingMotionStatus, TrackingCounterScope, TrackingSegmentationSource
+#                               small and closed by their own definitions today.
+#
+# The rule for anything added here later: where a wrong branch would be harmful, give the output
+# enum a documented fallback at the point of use, as `TrackingStreamRemovalReason` has.
+#
+# A pair of nullable fields in place of a union buys no extensibility, and this file once said it
+# did. The two constructs above are the ones GraphQL itself lets grow; this pair adds a promise of
+# the schema's own making. `TrackingAssetStateChange` promises exactly one of `state` and `removal`
+# non-null; a third outcome would leave both null on every client built against this version,
+# breaking that promise as a new union member breaks a client with no `... on NewType` branch and
+# no `__typename` fallback. The pair was chosen for handling — `assetId` in one place, no fragments
+# — and a third outcome, should one be needed, is a versioned change whose rule for old clients is
+# written down when it is designed. changelog_v0.9.0.md claimed the third outcome would be
+# additive; changelog_v0.9.1.md withdraws it.

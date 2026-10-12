@@ -1,0 +1,625 @@
+# =============================================================================
+# NAVIXY 4 - GraphQL Schema — IoT Logic module
+# Version: 0.15.0
+# =============================================================================
+#
+# Flow authoring: the node graphs a user draws on the canvas, which the engine evaluates per
+# device message, and the debugger's read of the values a flow's devices recently produced. The
+# ingest and side-effect contexts are not exposed here.
+#
+# Module prefix `Iot` on every declaration
+# (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — `Query.iotLogic` and
+# `Mutation.iotLogic` — lives in nvx4-bdr.graphql, which owns the roots.
+#
+# Types it references but does not declare: `Device` and `DeviceOrder` from nvx4-bdr.graphql, and
+# the kernel's `Node`, `Titled`, `Versioned`, `Connection`, `Edge`, `PageInfo`, `CountInfo`,
+# `DateTime`, `JSON`, `OrderDirection`, `@trim`.
+#
+# DEVICE MEMBERSHIP
+# -----------------
+# Which devices enter a flow belongs to a data source node and is stored as rows in
+# `iotlogic.device_flow_links`, not inside the graph. A data source may hold up to 25 000 devices,
+# which is why no read returns the list inline. Link rows outlive the devices they name — nothing
+# prunes them — and the fields below say where that shows; see
+# docs/todo/iot-logic/device-counts-include-stale-links.md.
+#
+# ACCESS
+# ------
+# Root fields require `iot_logic.flow` with the matching action; devices follow `bdr.device` read.
+#
+# NODE IDENTITY ON WRITES
+# -----------------------
+# Node ids are `UuidV8` values minted server-side from the `IOT_LOGIC_FLOW_NODE` discriminator, so a
+# client cannot produce one for a node it is adding. Every node in a write therefore carries a
+# `key` — a handle scoped to that one request — and edges reference nodes by key.
+#
+# VALIDATION
+# ----------
+# Per-field limits are on the input fields themselves. Two rules span the whole write:
+#
+# - Authored text is printable ASCII (U+0020-U+007E); descriptions also admit newline, nothing
+#   admits tab. The error names the offending code point and its index, since Cyrillic and Latin
+#   homoglyphs look identical. Device data is exempt — this covers what a user types.
+# - The graph must be acyclic, reach every node from some data source, have at least one data source
+#   with no incoming edge, and declare each attribute at most once per run (THEN and ELSE may each
+#   declare it). A logic node leaves only by THEN or ELSE, any other node only by SIMPLE. No two
+#   flows may produce the same attribute for the same device.
+#
+# A write that breaks any of these fails with EVERY violation at once, under
+# `extensions.violations`. Each entry carries `constraint` (see below), `message`, the `nodeIds` it
+# concerns, and `fields` — input paths such as `input.nodes[3].condition` for the canvas to mark.
+#
+# Constraints: NON_LATIN_INPUT, DESCRIPTION_TOO_LONG, EXPRESSION_TOO_LONG, NODES_PER_FLOW_EXCEEDED,
+# EDGES_PER_FLOW_EXCEEDED, ATTRIBUTES_PER_NODE_EXCEEDED, ATTRIBUTES_PER_FLOW_EXCEEDED,
+# DEVICES_PER_FLOW_EXCEEDED, DUPLICATE_NODE_ID, UNKNOWN_EDGE_ENDPOINT, CYCLE_DETECTED,
+# UNREACHABLE_NODE, MISSING_DATA_SOURCE, DATA_SOURCE_HAS_INCOMING_EDGE, NO_EDGES,
+# DUPLICATE_ATTRIBUTE_IN_FLOW, UNKNOWN_DEVICE, SIMULTANEOUS_PATHS, OVERLAPPING_ENTRY_PATHS,
+# ATTRIBUTE_ALREADY_PRODUCED, INVALID_EXPRESSION, RESERVED_ATTRIBUTE_NAME,
+# ATTRIBUTE_REPORTED_BY_DEVICE, EDGE_TYPE_MISMATCH.
+#
+# A title or attribute name that is malformed rather than merely too long is rejected on parse and
+# comes back as a single VALIDATION_ERROR, not in this list.
+
+# =============================================================================
+# 1. FLOW
+# =============================================================================
+
+# @category: iot-logic/flows
+"A user-authored graph that enriches the messages of the devices attached to its data sources."
+type IotLogicFlow implements Node & Titled & Versioned {
+  id: ID!
+  version: Int!
+  title: String!
+  "Free-form notes. Printable ASCII and newlines."
+  description: String
+  "Whether the engine evaluates this flow. A flow is created disabled."
+  isEnabled: Boolean!
+  "The nodes of the graph, in declaration order."
+  nodes: [IotLogicFlowNode!]!
+  "The edges of the graph, in declaration order."
+  transitions: [IotLogicFlowTransition!]!
+  """
+  Link rows across every data source, counting a device once per data source it enters at.
+  Includes links whose device has been deleted. Counts only devices the caller may read.
+  """
+  deviceCount: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# @category: iot-logic/flows
+"""
+One device's recent values, as the flow debugger shows them. Both maps are keyed by attribute name,
+channel included (`lls_level_0`), and hold at most 12 entries per attribute, newest first. Each
+entry is `{ "value": number | boolean | string | null, "messageTime": DateTime, "serverTime": DateTime }`:
+`messageTime` is when the device produced the message, `serverTime` when the server received it.
+Integers beyond ±2^53 − 1, times, and byte arrays arrive as strings; durations as milliseconds.
+Attributes holding arrays or objects are not shown.
+"""
+type IotLogicFlowDebugValues {
+  deviceId: ID!
+  """
+  One entry per recent message of the device. A message that did not carry the attribute, or
+  carried it empty, is an entry with `value: null` and that message's `messageTime`. When the message
+  did not carry the attribute, its `serverTime` equals `messageTime`: the receipt time of such a
+  message is not recorded.
+  """
+  allFields: JSON!
+  """
+  The attribute's own recent non-null values. It can reach further back than `allFields`, so it is
+  not a subset of it. An attribute with no such value is left out.
+  """
+  nonNullFields: JSON!
+}
+
+# @category: iot-logic/flows
+"The attribute names known for one device."
+type IotLogicDeviceAttributes {
+  deviceId: ID!
+  "Each name once, sorted by name and then channel (`analog_2` before `analog_10`)."
+  attributes: [IotLogicDeviceAttribute!]!
+}
+
+# @category: iot-logic/flows
+"""
+One attribute name. Names a device reported are never forgotten, so one may outlive the sensor
+that sent it.
+"""
+type IotLogicDeviceAttribute {
+  "Channel included (`lls_level_0`), the form flow expressions and assignments use."
+  name: String!
+  "The device reported it, or a flow computed it for this device."
+  received: Boolean!
+  "A flow declares it, as an initiate-attributes assignment or a logic node's `expressionName`."
+  inFlow: Boolean!
+}
+
+# @category: iot-logic/flows
+"One device entering one flow at one data source."
+type IotLogicDeviceFlowLink {
+  "Null when the device was deleted or moved to another workspace."
+  device: Device
+  deviceId: ID!
+  flow: IotLogicFlow!
+  entryNode: IotLogicFlowDataSourceNode!
+  createdAt: DateTime!
+}
+
+# =============================================================================
+# 2. GRAPH
+# =============================================================================
+
+# @category: iot-logic/flows
+"""
+A node of a flow's graph. Not the Relay `Node` interface — these are the boxes on the canvas, and
+they are reachable only through their flow.
+"""
+interface IotLogicFlowNode {
+  "Unique within its flow. Stable across edits."
+  id: ID!
+  "English letters, digits, underscore and dash."
+  name: String!
+  description: String
+  "Where the canvas draws the node. Absent for a graph that was never laid out."
+  position: IotLogicFlowNodePosition
+}
+
+# @category: iot-logic/flows
+"An entry point: the devices whose messages enter the graph here."
+type IotLogicFlowDataSourceNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+  """
+  Every device attached here that the caller may read, in device-id order — iot-logic holds ids,
+  not titles, so it cannot honour `DeviceOrder`. Unpaginated, bounded by the 25 000-per-flow cap.
+
+  Shorter than `IotLogicFlow.deviceCount` by however many links have outlived their device. For a
+  count alone, read `deviceCount` rather than hydrating this.
+  """
+  devices: [Device!]!
+}
+
+# @category: iot-logic/flows
+"A branch: messages satisfying `condition` leave by THEN, the rest by ELSE."
+type IotLogicFlowLogicNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+  "A JEXL expression evaluated against the message."
+  condition: String!
+  "The attribute the condition's result is stored under. Null means the node only routes."
+  expressionName: String
+}
+
+# @category: iot-logic/flows
+"Computes attributes and merges them into the message."
+type IotLogicFlowInitiateAttributesNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+  attributes: [IotLogicFlowAttributeAssignment!]!
+}
+
+# @category: iot-logic/flows
+"Where the enriched message leaves the flow."
+type IotLogicFlowOutputEndpointNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+}
+
+# @category: iot-logic/flows
+"A device command. Carries no configuration yet."
+type IotLogicFlowActionNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+}
+
+# @category: iot-logic/flows
+"An outbound HTTP call. Carries no configuration yet."
+type IotLogicFlowWebhookNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+}
+
+# @category: iot-logic/flows
+"One `name = <JEXL>` assignment inside an initiate-attributes node."
+type IotLogicFlowAttributeAssignment {
+  "The attribute name the expression writes to."
+  name: String!
+  "A JEXL expression evaluated against the message."
+  expression: String!
+}
+
+# @category: iot-logic/flows
+"Canvas coordinates of a node."
+type IotLogicFlowNodePosition {
+  x: Int!
+  y: Int!
+}
+
+# The domain calls this an edge. The API cannot: `IotLogicFlowEdge` is the Relay edge of
+# `IotLogicFlowConnection` below, and a second type ending in `Edge` that carries no `node`/`cursor`
+# fails `GraphqlSchemaValidationTest`. Transition is the same thing under a name Relay has not taken.
+# @category: iot-logic/flows
+"A directed connection between two nodes of the graph."
+type IotLogicFlowTransition {
+  "The node the transition leaves."
+  from: ID!
+  "The node the transition enters."
+  to: ID!
+  type: IotLogicFlowTransitionType!
+}
+
+# @category: iot-logic/flows
+"Which outcome of the source node a transition carries."
+enum IotLogicFlowTransitionType {
+  "The only outgoing path of a node that does not branch."
+  SIMPLE
+  "Taken when a logic node's condition holds."
+  THEN
+  "Taken when a logic node's condition does not hold."
+  ELSE
+}
+
+# @category: iot-logic/flows
+"The kinds of node a flow's graph may hold."
+enum IotLogicFlowNodeType {
+  DATA_SOURCE
+  LOGIC
+  INITIATE_ATTRIBUTES
+  OUTPUT_ENDPOINT
+  ACTION
+  WEBHOOK
+}
+
+# =============================================================================
+# 3. PAGINATION, FILTERING, ORDERING
+# =============================================================================
+
+# @category: iot-logic/flows
+"A paginated list of IotLogicFlow items."
+type IotLogicFlowConnection implements Connection {
+  "A list of edges."
+  edges: [IotLogicFlowEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [IotLogicFlow!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: iot-logic/flows
+"An edge in the IotLogicFlow connection."
+type IotLogicFlowEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The flow at the end of the edge."
+  node: IotLogicFlow!
+}
+
+# @category: iot-logic/flows
+"Filtering options for flows. All criteria are ANDed."
+input IotLogicFlowFilter {
+  "Partial match on title (case-insensitive contains)."
+  titleContains: String @trim
+  "Only enabled, or only disabled, flows."
+  isEnabled: Boolean
+  "Only flows one of whose data sources this device enters at. None for a device the caller may not read."
+  deviceId: ID
+}
+
+# @category: iot-logic/flows
+"Ordering options for flows."
+input IotLogicFlowOrder {
+  "The standard field to order by."
+  field: IotLogicFlowOrderField
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: iot-logic/flows
+"Fields available for ordering flows."
+enum IotLogicFlowOrderField {
+  "Order by title."
+  TITLE
+  "Order by creation time."
+  CREATED_AT
+  "Order by last modification time."
+  UPDATED_AT
+}
+
+# @category: iot-logic/flows
+"A paginated list of IotLogicDeviceFlowLink items."
+type IotLogicDeviceFlowLinkConnection implements Connection {
+  "A list of edges."
+  edges: [IotLogicDeviceFlowLinkEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [IotLogicDeviceFlowLink!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: iot-logic/flows
+"An edge in the IotLogicDeviceFlowLink connection."
+type IotLogicDeviceFlowLinkEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The link at the end of the edge."
+  node: IotLogicDeviceFlowLink!
+}
+
+# @category: iot-logic/flows
+"Filtering options for device flow links. All criteria are ANDed."
+input IotLogicDeviceFlowLinkFilter {
+  flowId: ID
+  "At most 1000. An empty list matches nothing."
+  deviceIds: [ID!]
+}
+
+# @category: iot-logic/flows
+"Ordering options for device flow links."
+input IotLogicDeviceFlowLinkOrder {
+  "The standard field to order by."
+  field: IotLogicDeviceFlowLinkOrderField
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: iot-logic/flows
+"Fields available for ordering device flow links."
+enum IotLogicDeviceFlowLinkOrderField {
+  CREATED_AT
+  FLOW_TITLE
+}
+
+# =============================================================================
+# 4. INPUTS
+# =============================================================================
+
+# @category: iot-logic/flows
+"""
+A node in a write. `key` is a handle scoped to this request that the edges reference; `id` names
+the stored node the key stands for and is omitted for a node being added.
+
+The payload fields below belong to one node type each and must be absent for the others:
+`deviceIds` to DATA_SOURCE, `condition` and `expressionName` to LOGIC, `attributes` to
+INITIATE_ATTRIBUTES. OUTPUT_ENDPOINT, ACTION and WEBHOOK carry none.
+"""
+input IotLogicFlowNodeInput {
+  "Handle for this node within the request. Unique per request."
+  key: String! @trim
+  "The stored node this key stands for. Omit for a node being added."
+  id: ID
+  type: IotLogicFlowNodeType!
+  """
+  English letters, digits, underscore, dash, slash, and spaces between words. Tab and newline
+  rejected.
+  """
+  name: String! @trim
+  "Printable ASCII and newline, at most 4000 characters. Not trimmed."
+  description: String
+  position: IotLogicFlowNodePositionInput
+  """
+  DATA_SOURCE. Omitted keeps the current membership, `[]` detaches every device the caller may
+  read, anything else replaces the set of devices the caller may read. Attached devices outside the
+  caller's grant stay attached either way. A node being added treats omitted as no devices. At most
+  25 000 devices per flow, counting a device once per data source it enters at.
+
+  Adding a device outside the caller's grant fails as UNKNOWN_DEVICE, the same answer as an absent
+  one. Validation judges the whole resulting set, so a device the caller cannot see still counts
+  toward the cap and toward attribute clashes.
+  """
+  deviceIds: [ID!]
+  """
+  LOGIC. A JEXL expression evaluated against the message. Printable ASCII, single line, at most
+  480 characters.
+  """
+  condition: String
+  """
+  LOGIC. The attribute the condition's result is stored under. `^[a-z0-9]+(_[a-z0-9]+)*$`,
+  optionally ending in `_<digits>` for a channel.
+  """
+  expressionName: String
+  "INITIATE_ATTRIBUTES. At most 50 per node, and 200 across the flow counting LOGIC's."
+  attributes: [IotLogicFlowAttributeAssignmentInput!]
+}
+
+# @category: iot-logic/flows
+"One `name = <JEXL>` assignment in a write."
+input IotLogicFlowAttributeAssignmentInput {
+  "`^[a-z0-9]+(_[a-z0-9]+)*$`, optionally ending in `_<digits>` for a channel. NTF's naming rule."
+  name: String! @trim
+  "Printable ASCII, single line, at most 960 characters."
+  expression: String! @trim
+}
+
+# @category: iot-logic/flows
+"A transition in a write. `from` and `to` are node keys, not ids."
+input IotLogicFlowTransitionInput {
+  "The `key` of the node the transition leaves."
+  from: String! @trim
+  "The `key` of the node the transition enters."
+  to: String! @trim
+  type: IotLogicFlowTransitionType!
+}
+
+# @category: iot-logic/flows
+"Canvas coordinates in a write."
+input IotLogicFlowNodePositionInput {
+  x: Int!
+  y: Int!
+}
+
+# @category: iot-logic/flows
+"Input for creating a flow. The flow is created disabled."
+input IotLogicFlowCreateInput {
+  "Printable ASCII, non-blank, at most 255 characters."
+  title: String! @trim
+  "Printable ASCII and newline, at most 4000 characters. Not trimmed."
+  description: String
+  "At most 64."
+  nodes: [IotLogicFlowNodeInput!]!
+  "At most 96."
+  transitions: [IotLogicFlowTransitionInput!]!
+}
+
+# @category: iot-logic/flows
+"""
+Input for updating a flow. `nodes` and `transitions` are the whole graph, not a patch over it — a
+node the list omits is removed, along with its device links.
+"""
+input IotLogicFlowUpdateInput {
+  "The flow to update."
+  id: ID!
+  "The current version for optimistic locking."
+  version: Int!
+  "Printable ASCII, non-blank, at most 255 characters."
+  title: String @trim
+  "Printable ASCII and newline, at most 4000 characters. Not trimmed."
+  description: String
+  "At most 64."
+  nodes: [IotLogicFlowNodeInput!]
+  "At most 96."
+  transitions: [IotLogicFlowTransitionInput!]
+  "Enabling validates the whole graph; disabling validates nothing."
+  isEnabled: Boolean
+}
+
+# @category: iot-logic/flows
+"Input for deleting a flow."
+input IotLogicFlowDeleteInput {
+  "The flow to delete."
+  id: ID!
+  "The current version for optimistic locking."
+  version: Int!
+}
+
+# =============================================================================
+# 5. PAYLOADS
+# =============================================================================
+
+# @category: iot-logic/flows
+"The flow a write produced."
+type IotLogicFlowPayload {
+  flow: IotLogicFlow!
+}
+
+# @category: iot-logic/flows
+"The outcome of deleting a flow."
+type IotLogicFlowDeletePayload {
+  "The id of the deleted flow."
+  id: ID!
+}
+
+# =============================================================================
+# 6. NAMESPACE
+# =============================================================================
+
+"""
+IoT Logic module queries — the flow graphs users author for their devices.
+See docs/reference/graphql-conventions.md §Module namespacing.
+"""
+type IotLogicQuery {
+  # @category: iot-logic/flows
+  "Reads one flow. Null when no live flow of the caller's workspace has that id."
+  flow("The flow to read." id: ID!): IotLogicFlow
+
+  # @category: iot-logic/flows
+  "Lists the flows of the caller's workspace."
+  flows(
+    "Filtering options for the returned flows."
+    filter: IotLogicFlowFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned flows."
+    orderBy: IotLogicFlowOrder = { field: TITLE, direction: ASC }
+  ): IotLogicFlowConnection!
+
+  # @category: iot-logic/flows
+  "Lists device-to-flow links across the caller's workspace."
+  deviceFlowLinks(
+    "Filtering options for the returned links."
+    filter: IotLogicDeviceFlowLinkFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned links."
+    orderBy: IotLogicDeviceFlowLinkOrder = { field: CREATED_AT, direction: DESC }
+  ): IotLogicDeviceFlowLinkConnection!
+
+  # @category: iot-logic/flows
+  """
+  The recent values of the given devices as they leave the flow: in each message, the value the flow
+  produced for an attribute replaces the device's, and the device's stands where the flow produced
+  none. One snapshot per device, in request order. Devices not attached to the flow, or not readable
+  by the caller, are left out; an attached device with no values yet comes back with empty maps. A
+  disabled flow still returns what was recorded while it ran. Null when no live flow of the caller's
+  workspace has that id.
+  """
+  flowDebugValues(
+    "The flow to read."
+    flowId: ID!
+    "The devices to read, 1 to 10."
+    deviceIds: [ID!]!
+  ): [IotLogicFlowDebugValues!]
+
+  # @category: iot-logic/flows
+  """
+  The attribute names a flow editor can offer for the given devices: what each device reported, what
+  flows computed for it, and what flows declare. One entry per device, in request order. Devices not
+  readable by the caller are left out; a device with nothing comes back with an empty list.
+  """
+  deviceAttributes(
+    "The devices to read, at most 1000. An empty list returns an empty list."
+    deviceIds: [ID!]!
+    """
+    Narrows the flow side to this flow: its declared and computed attributes are added to every
+    device, linked or not, and no other flow's are. Without it, every flow linked to the device adds
+    its own. A flow that does not exist in the caller's workspace, or was deleted, adds nothing.
+    Disabled flows count.
+    """
+    flowId: ID
+  ): [IotLogicDeviceAttributes!]!
+}
+
+"""
+IoT Logic module mutations.
+See docs/reference/graphql-conventions.md §Module namespacing.
+"""
+type IotLogicMutation {
+  # @category: iot-logic/flows
+  "Creates a disabled flow. Fails with every violation at once when the graph is invalid."
+  flowCreate("The input fields for creating the flow." input: IotLogicFlowCreateInput!): IotLogicFlowPayload!
+
+  # @category: iot-logic/flows
+  "Updates a flow. Fails with every violation at once when the resulting graph is invalid."
+  flowUpdate("The input fields for updating the flow." input: IotLogicFlowUpdateInput!): IotLogicFlowPayload!
+
+  # @category: iot-logic/flows
+  "Soft-deletes a flow and removes its device links. Succeeds even when the stored graph is invalid."
+  flowDelete("The input fields for deleting the flow." input: IotLogicFlowDeleteInput!): IotLogicFlowDeletePayload!
+}

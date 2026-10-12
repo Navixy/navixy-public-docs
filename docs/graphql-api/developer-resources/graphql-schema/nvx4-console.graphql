@@ -1,0 +1,570 @@
+# =============================================================================
+# NAVIXY 4 - GraphQL Schema — Console module
+# Version: 0.16.0
+# =============================================================================
+#
+# The organizations and workspaces a caller can reach, their own IAM-visible roles, the members of
+# the caller's organization, the products a workspace may or does have enabled, and the operations
+# Console tracks toggling them, as Console's own REST API (`GET /v1/me/accessible-orgs`,
+# `GET /v1/me/accessible-workspaces`, `GET /v1/organizations/{id}/members`,
+# `GET /v1/workspaces/{id}/products`, `GET /v1/product-catalog`, `GET /v1/workspace-operations/{id}`)
+# reports, and `POST`/`DELETE /v1/workspaces/{id}/products[/{productId}]` mutate. nvx4 wraps these
+# endpoints rather than reimplementing Console's authorization — see
+# docs/adr/028-console-rest-behind-graphql.md, decision 4.
+#
+# Module prefix `Console` on every declaration
+# (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — both `Query.console`
+# and `Mutation.console` — lives in nvx4-bdr.graphql, which owns the root.
+#
+# Types it references but does not declare: the kernel's `Node`, `Connection`, `Edge`, `PageInfo`,
+# `CountInfo`, `UUID`, `DateTime`, `Long`.
+#
+# IDENTITY
+# --------
+# Every organization id here is an `ID`: `ConsoleOrganization.id`, `ConsoleWorkspace.organizationId`,
+# `ConsoleWorkspaceOperation.organizationId` and the `organizationId` argument of
+# `accessibleWorkspaces`. Console mints organization ids in the UuidV8 layout with the `ORGN`
+# discriminator (Console ADR-009), and nvx4 checks that structure (not the deployment or region,
+# which are Console's); it is the same id as `Workspace.organizationId` and `AccessibleOrganization.id`.
+# An argument that is not one is refused with VALIDATION_ERROR; an answer from Console naming one
+# that is not is Console's fault and fails with SERVICE_UNAVAILABLE. `ConsoleWorkspace.id` is `ID`: nvx4
+# validates Console's workspace ids as `WorkspaceId`, the same `WSPC`-discriminated type `Workspace.id`
+# uses — one tenant id, ADR-027 §1 revision 2026-09-26 (see `WorkspaceProjectionService.parseWorkspaceId`
+# in the billing module). Console keeps plain-v4 workspaces from before `WSPC` readable; a workspace
+# whose id is not a `WorkspaceId` is left out of `accessibleWorkspaces`, as it is of the workspaces
+# `me.organizations` lists (`AccessibleWorkspace.id`). `ConsoleOrganization` implements `Node`:
+# `node(id:)` and `nodes(ids:)` resolve an organization id among the caller's own organizations, the
+# ones `accessibleOrganizations` lists (see the type's description). `ConsoleWorkspace` does not:
+# `node(id:)` resolves a workspace id to the BDR `Workspace`.
+#
+# `status`, `orgType` and `roles` are plain strings. They are Console's own vocabulary, not a set
+# nvx4 branches on — this facade relays them rather than re-modeling Console's domain, so an enum
+# here would only be able to drift from Console's actual values.
+#
+# `ConsoleWorkspaceProduct.productId`, `ConsoleProductCatalogEntry.id`,
+# `ConsoleWorkspaceProduct.coveredBySubscriptionId` and the `productId` on
+# `ConsoleWorkspaceProductDisableInput` are `ID`, not `UUID`, and not Console's own scheme: these are
+# nvx4 billing's own ids — `ProductDomainId` (`BPRD`) and `SubscriptionId` (`BSUB`) — which Console
+# relays rather than mints, so a `productId` value is byte-identical whether read from
+# `console.workspaceProducts` or from billing's own `BillingProductDomain.id`.
+# `ConsoleWorkspaceOperation.id`, `ConsoleWorkspaceOperationReceipt.id` and the `id` argument of
+# `workspaceOperation` are `ID`: Console mints operation ids in the UuidV8 layout with the `WSOP`
+# discriminator, and nvx4 checks that structure, as for organization ids. An argument that is not one
+# is refused with VALIDATION_ERROR before Console is asked; an answer from Console naming one that is
+# not, a toggle's receipt included, is Console's fault and fails with SERVICE_UNAVAILABLE. No type in
+# this API is an operation, so `node(id:)` answers null for an operation id.
+# `ConsoleWorkspaceOperation.workspaceId` and the two mutation inputs' `workspaceId` are `ID`,
+# validated as `WorkspaceId` like `ConsoleWorkspace.id`.
+# `ConsoleMember.actorId`, `ConsoleWorkspaceOperation.actorUserId` and `actorAgentId` are `UUID`: they
+# are actor ids, a person's (`user_id`) or an agent's (`agent_id`), which `node(id:)` cannot resolve.
+# Console gives a person an id with the same `USER` type nvx4 gives its own users, who are a different
+# set of rows, and an agent a plain v4 id. `ConsoleMember.actorId` is the `actorId` `iam.memberRoles`
+# and `iam.memberRoleAssign` take. `idempotencyKey` is also `UUID`, for another reason: it is a dedup
+# key a caller chooses, not one Console mints — a product toggle leaves it null, since Console never
+# asks for one on that request. `members` reads the organization from the token's `organization_id`
+# claim and takes no organization argument.
+# `ConsoleWorkspaceProduct.state` is the one field in this namespace modeled as a GraphQL enum:
+# Console defines it as a closed set (`WorkspaceProductState`) and nvx4 mirrors it here as
+# `ConsoleWorkspaceProductState`. `ConsoleWorkspaceOperation.operationType` and `.status` are also
+# closed sets on Console's side (`OperationType`/`OperationStatus` in its OpenAPI), but stay `String`
+# here like `orgType`/`status` above: this facade relays Console's vocabulary rather than
+# re-modeling it, and `workspaceOperation` answers for any operation Console tracks, not only a
+# product toggle, so nvx4 does not own how either vocabulary grows.
+#
+# PAGINATION
+# ----------
+# Console's own REST pagination differs from nvx4's usual `PageRequest` convention in three ways:
+# default page size is 50, not nvx4's usual 20; backward paging requires `last` and `before`
+# together, where nvx4's usual convention allows `last` alone; and `edge.cursor` is per-item
+# (Console's own `item_cursors[i]`), not derived from a row's own fields. The rules this facade
+# enforces, in the order it checks them:
+#   - `first` and `last` are mutually exclusive.
+#   - `after` and `before` are mutually exclusive.
+#   - `first` cannot combine with `before`.
+#   - `last` cannot combine with `after`.
+#   - `last` requires `before` — Console pages backward only from a cursor.
+#   - `before` requires `last` — a lone `before` has no direction to page in.
+#   - Whichever of `first`/`last` is given (or the default, when neither is) must be 1-100.
+# `edge.cursor` is Console's own `item_cursors[i]`, one per item; `startCursor`/`endCursor` are
+# Console's own first/last item cursor for the page — not derived from the edges themselves, so they
+# still bound the page even when this facade drops every edge on it (see `ConsoleWorkspace.id` in
+# §Identity above). `hasNextPage` is Console's `has_more`, `hasPreviousPage` is its `has_previous`.
+# `total` is `CountInfo(count, EXACT)` on `ConsoleOrganizationConnection`;
+# `ConsoleWorkspaceConnection.total` is `APPROXIMATE` instead — see its own field description for why.
+# `members` is the exception to Console-side paging: Console answers the whole member list at once,
+# so nvx4 pages it, ordered by `actorId`, with the actor id as `edge.cursor`, and `total` is `EXACT`.
+# A cursor naming a member removed since still anchors; one that is not an actor id is refused with
+# VALIDATION_ERROR.
+# Treat a cursor as opaque and pass it back only to the field that returned it: Console's codec does
+# not tie a cursor to the field that produced it, so passing one to a different connection decodes
+# without error and returns an unrelated page, not a refusal.
+
+# =============================================================================
+# 1. ORGANIZATIONS
+# =============================================================================
+
+# @category: console/organizations
+"""
+An organization the caller can access, as Console reports it.
+
+`node(id:)` and `nodes(ids:)` resolve an organization id only among the caller's own organizations, the ones
+`console.accessibleOrganizations` lists. Any other organization id resolves to null, and so does every organization
+id when the token does not carry the organization and workspace a call to Console needs, or Console refuses the
+caller. When Console cannot answer (not configured on the deployment, unreachable or failing), the organization
+resolves to null and an error with `extensions.code` SERVICE_UNAVAILABLE and `extensions.dependency` `console` names
+its path; the other ids of the same `nodes(ids:)` call resolve as usual.
+"""
+type ConsoleOrganization implements Node {
+  "Console's own organization id. See the file header §Identity."
+  id: ID!
+  "Console's URL-safe slug for the organization."
+  slug: String!
+  "Human-readable organization name."
+  displayName: String!
+  "Console's own organization-type vocabulary (e.g. \"customer\", \"partner\")."
+  orgType: String!
+  "The caller's own roles in this organization, as Console reports them."
+  roles: [String!]!
+}
+
+# @category: console/organizations
+"A page of organizations the caller can access."
+type ConsoleOrganizationConnection implements Connection {
+  edges: [ConsoleOrganizationEdge!]!
+  nodes: [ConsoleOrganization!]!
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: console/organizations
+"An edge in a ConsoleOrganizationConnection."
+type ConsoleOrganizationEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  node: ConsoleOrganization!
+}
+
+# =============================================================================
+# 2. WORKSPACES
+# =============================================================================
+
+# @category: console/workspaces
+"A workspace the caller can access, as Console reports it."
+type ConsoleWorkspace {
+  "The workspace id. See the file header §Identity."
+  id: ID!
+  "Human-readable workspace name."
+  workspaceName: String!
+  "The id of the organization this workspace belongs to. See the file header §Identity."
+  organizationId: ID!
+  "Human-readable name of the organization this workspace belongs to."
+  organizationDisplayName: String!
+  "Console's own workspace-status vocabulary (e.g. \"active\", \"suspended\")."
+  status: String!
+  "Human-readable name of the zone (region/cluster) this workspace is hosted in."
+  zoneDisplayName: String!
+  "Console's own region code for the zone this workspace is hosted in. Null when the zone has none."
+  zoneRegion: String
+}
+
+# @category: console/workspaces
+"A page of workspaces the caller can access."
+type ConsoleWorkspaceConnection implements Connection {
+  edges: [ConsoleWorkspaceEdge!]!
+  nodes: [ConsoleWorkspace!]!
+  pageInfo: PageInfo!
+  """
+  The total count of items matching the filter, with precision APPROXIMATE: Console's count includes
+  every raw row, including a workspace whose id this facade cannot validate as a WorkspaceId
+  and therefore drops from edges/nodes (see §Identity above), so it can overcount what this
+  connection actually returns.
+  """
+  total: CountInfo
+}
+
+# @category: console/workspaces
+"An edge in a ConsoleWorkspaceConnection."
+type ConsoleWorkspaceEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  node: ConsoleWorkspace!
+}
+
+# =============================================================================
+# 3. MEMBERS
+# =============================================================================
+
+# @category: console/members
+"""
+A person or agent in the caller's organization, as Console's `GET /v1/organizations/{id}/members`
+reports it. Reading members needs Console administration; without it the field answers
+PERMISSION_DENIED.
+"""
+type ConsoleMember {
+  "Console's id for the actor. The `actorId` of `iam.memberRoles`. See the file header §Identity."
+  actorId: UUID!
+  "Console's own principal vocabulary: \"human\" or \"agent\"."
+  principalType: String!
+  "Console's own vocabulary for the kind of agent (e.g. \"integration\", \"ai_agent\"). Null for a person."
+  principalSubtype: String
+  "Human-readable name. Null when Console has none."
+  displayName: String
+  "Email address. Null for an agent, or when Console has none."
+  email: String
+  "Avatar URL. Null when Console has none."
+  avatarUrl: String
+  "Console's own role-preset vocabulary (e.g. \"owner\"). What the organization granted, not what the caller may do."
+  rolePreset: String!
+  "Console's own membership-status vocabulary: invited, active, suspended or removed."
+  status: String!
+  "When the member joined the organization. Null while invited."
+  joinedAt: DateTime
+  "The assurance profile IAM holds for the member. Null when IAM has no access record for them, not a default profile."
+  assuranceProfileCode: String
+  """
+  What the caller may do to the organization's members, and why not when they can't. Console decides
+  it once per organization, so every member carries the same list. An action the
+  caller's role does not grant is absent from the list, rather than present with allowed: false.
+  """
+  allowedActions: [ConsoleActionAffordance!]!
+}
+
+# @category: console/members
+"A page of the members of the caller's organization."
+type ConsoleMemberConnection implements Connection {
+  edges: [ConsoleMemberEdge!]!
+  nodes: [ConsoleMember!]!
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: console/members
+"An edge in a ConsoleMemberConnection."
+type ConsoleMemberEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  node: ConsoleMember!
+}
+
+# =============================================================================
+# 4. WORKSPACE PRODUCTS
+# =============================================================================
+
+# @category: console/products
+"""
+Console's own workspace-product toggle state (`WorkspaceProductState.resolve`), derived from whether
+a subscription the workspace holds covers the product and what Console last asked for (desired)
+versus what it has last observed.
+"""
+enum ConsoleWorkspaceProductState {
+  "No active subscription of the workspace covers this product; Console does not check that another plan offers it."
+  AVAILABLE_ON_OTHER_PLANS
+  "Covered by a subscription the workspace holds, but not toggled on."
+  NOT_ENABLED
+  """
+  Covered, desired is enabled, and Console has not yet observed it ready — including a product a
+  covering plan turns on at workspace creation.
+  """
+  ENABLING
+  "Covered, desired is enabled, and Console has observed it ready."
+  ENABLED
+  "A workspaceProductDisable is in flight."
+  DISABLING
+  "The last toggle did not reach the desired state; see ConsoleWorkspaceProduct.lastFailureCode."
+  FAILED
+}
+
+# @category: console/products
+"Whether the caller may take one action on a workspace product, and why not when they can't."
+type ConsoleActionAffordance {
+  "The action this affordance is about, e.g. \"attach_product\" or \"detach_product\"."
+  action: String!
+  "Whether the caller may take this action right now."
+  allowed: Boolean!
+  "Why not, when allowed is false. Null when allowed is true."
+  reason: String
+}
+
+# @category: console/products
+"One product a workspace may or does have enabled, as Console's WorkspaceProductDto reports it."
+type ConsoleWorkspaceProduct {
+  "nvx4 billing's own id for the product (ProductDomainId, BPRD), relayed by Console. See the file header §Identity."
+  productId: ID!
+  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
+  code: String!
+  "Human-readable product name."
+  displayName: String!
+  "Human-readable product description. Null when Console has none."
+  description: String
+  "Whether the workspace's current plan covers this product."
+  covered: Boolean!
+  "Whether the plan covering this product turned it on by default when this workspace was created."
+  isDefault: Boolean!
+  """
+  Whether the covering plan requires this product: Console refuses both enabling and disabling it
+  (PRODUCT_MANAGED_BY_PLAN), except re-enabling it after FAILED.
+  """
+  isRequired: Boolean!
+  """
+  nvx4 billing's own id for the subscription covering this product (SubscriptionId, BSUB). Non-null
+  exactly when covered is true: Console's coverage comes only from subscriptions. See the file
+  header §Identity.
+  """
+  coveredBySubscriptionId: ID
+  "The name of the plan covering this product, when covered by a plan."
+  coveredByPlanName: String
+  "When coverage from a plan or subscription lapsed, if it ever did. Null while still covered, or never covered."
+  coverageLostAt: DateTime
+  """
+  What Console converges the product to, set by a toggle or by a plan that installs the product.
+  Null when the product was never installed in this workspace.
+  """
+  desiredState: String
+  """
+  When a user last set desiredState. Null when no user ever has, including a product a plan
+  installed.
+  """
+  intentSetAt: DateTime
+  "What Console has last observed the product's actual state to be, independent of what was asked for."
+  observedState: String!
+  """
+  Bumped whenever Console sends a new command for the installation, including on coverage loss;
+  distinguishes a stale observation from a fresh one.
+  """
+  generation: Long!
+  "Console's own code for why the last toggle did not reach the desired state. Null otherwise."
+  lastFailureCode: String
+  "The product's current toggle state."
+  state: ConsoleWorkspaceProductState!
+  """
+  What the caller may do next, and why not when they can't. An action the caller's role does not
+  grant is absent from the list, rather than present with allowed: false.
+  """
+  allowedActions: [ConsoleActionAffordance!]!
+}
+
+# @category: console/products
+"One entry of Console's own product catalog, as ProductCatalogEntryDto reports it."
+type ConsoleProductCatalogEntry {
+  "nvx4 billing's own id for the product (ProductDomainId, BPRD), relayed by Console. See the file header §Identity."
+  id: ID!
+  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
+  code: String!
+  "Human-readable product name. Null when Console has none."
+  displayName: String
+  "Human-readable product description. Null when Console has none."
+  description: String
+  "Whether the product is currently offered. productCatalog(activeOnly: true) excludes the rest."
+  isActive: Boolean!
+  "Whether the default plan turns this product on when a workspace is created."
+  isDefault: Boolean!
+  "Whether the default plan requires this product."
+  isRequired: Boolean!
+  """
+  The product's user-facing URL, read from nvx4 billing's product domain of this id
+  (BillingProductDomain.productUrl) rather than from Console. Null when billing has none or has no
+  product domain of this id.
+  """
+  productUrl: String
+  """
+  The product's internal path, read from nvx4 billing's product domain of this id
+  (BillingProductDomain.internalPath) rather than from Console. Null when billing has none or has no
+  product domain of this id.
+  """
+  internalPath: String
+}
+
+# @category: console/products
+"One workspace operation Console tracked, as its full operation.WorkspaceOperationDto reports it."
+type ConsoleWorkspaceOperation {
+  "Console's own operation id. See the file header §Identity."
+  id: ID!
+  "The workspace the operation acted on. See the file header §Identity."
+  workspaceId: ID!
+  "The organization the workspace belongs to. See the file header §Identity."
+  organizationId: ID!
+  """
+  Console's own operation-type vocabulary: provision, update, stop, start, delete, product_attach
+  or product_detach.
+  """
+  operationType: String!
+  "Console's own operation-status vocabulary: accepted, in_progress, completed, failed or cancelled."
+  status: String!
+  """
+  The idempotency key the request carried, if any. Always null for product_attach/product_detach:
+  Console does not record one for a product toggle. Null on other operation types when none was given.
+  """
+  idempotencyKey: UUID
+  "The user who requested the operation, if any. Null when it was not a user."
+  actorUserId: UUID
+  "The agent that requested the operation, if any. Null when it was not an agent."
+  actorAgentId: UUID
+  """
+  For a product_attach/product_detach operation, Console's own id for the underlying product
+  installation it is tracking. Null on other operation types, or when Console recorded none.
+  """
+  externalOperationId: String
+  "Console's own code for why the operation failed. Null unless status is failed."
+  failureReason: String
+  "When Console created the operation record."
+  createdAt: DateTime!
+  "When Console last updated the operation record."
+  updatedAt: DateTime!
+}
+
+# @category: console/products
+"Input for enabling a product on a workspace."
+input ConsoleWorkspaceProductEnableInput {
+  "The workspace to enable the product on. See the file header §Identity."
+  workspaceId: ID!
+  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
+  productCode: Code!
+}
+
+# @category: console/products
+"Input for disabling a product on a workspace."
+input ConsoleWorkspaceProductDisableInput {
+  "The workspace to disable the product on. See the file header §Identity."
+  workspaceId: ID!
+  "nvx4 billing's own id for the product to disable (ProductDomainId, BPRD). See the file header §Identity."
+  productId: ID!
+}
+
+# @category: console/products
+"""
+The short receipt Console answers a toggle request with (its 202 body), not the operation read
+back in full. The change is accepted and runs asynchronously; follow it with
+`console.workspaceOperation(id)` for the outcome. `status` starts as `"accepted"`.
+"""
+type ConsoleWorkspaceOperationReceipt {
+  """
+  Console's own operation id. Pass this to workspaceOperation to follow the toggle to completion. See the file
+  header §Identity.
+  """
+  id: ID!
+  "The workspace the operation acts on. See the file header §Identity."
+  workspaceId: ID!
+  "Console's own operation-type vocabulary: for a toggle, product_attach or product_detach."
+  operationType: String!
+  "Console's own operation-status vocabulary. Starts as \"accepted\" on this receipt."
+  status: String!
+  "When Console created the operation record."
+  createdAt: DateTime!
+}
+
+# @category: console/products
+"The result of toggling a workspace product."
+type ConsoleWorkspaceOperationPayload {
+  "The receipt Console answered the toggle request with. Follow it with workspaceOperation for the outcome."
+  operation: ConsoleWorkspaceOperationReceipt!
+}
+
+# =============================================================================
+# 5. QUERY
+# =============================================================================
+
+"""
+Console module queries — the organizations and workspaces a caller can reach, the members of their
+organization, and workspace products, as Console's own REST API reports them. See docs/reference/graphql-conventions.md §Module namespacing.
+"""
+type ConsoleQuery {
+  # @category: console/organizations
+  "Organizations the caller can access."
+  accessibleOrganizations(
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `before` — Console pages backward only from a cursor."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `last`."
+    before: String
+  ): ConsoleOrganizationConnection!
+
+  # @category: console/workspaces
+  "Workspaces the caller can access, optionally narrowed to one organization."
+  accessibleWorkspaces(
+    """
+    Restrict to workspaces of this organization. Omitted means every accessible organization. A value
+    that is not an organization id is refused with VALIDATION_ERROR naming `organizationId`.
+    """
+    organizationId: ID
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `before` — Console pages backward only from a cursor."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `last`."
+    before: String
+  ): ConsoleWorkspaceConnection!
+
+  # @category: console/members
+  "Members of the caller's organization, the one the token's `organization_id` claim names, ordered by actorId."
+  members(
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `before`."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination). Requires `last`."
+    before: String
+  ): ConsoleMemberConnection!
+
+  # @category: console/products
+  "Every product the workspace may or does have enabled."
+  workspaceProducts(
+    "The workspace to list products for. See the file header §Identity."
+    workspaceId: ID!
+  ): [ConsoleWorkspaceProduct!]!
+
+  # @category: console/products
+  "Console's own product catalog."
+  productCatalog(
+    "Restrict to products Console currently offers. Defaults to true."
+    activeOnly: Boolean! = true
+  ): [ConsoleProductCatalogEntry!]!
+
+  # @category: console/products
+  """
+  One workspace operation Console tracked, of any type. Null only when Console answers 404: no such
+  operation is visible in the caller's organization. A caller without the view action on the
+  workspace gets PERMISSION_DENIED instead.
+  """
+  workspaceOperation(
+    """
+    Console's own id for the operation. A value that is not an operation id is refused with VALIDATION_ERROR
+    naming `id`. See the file header §Identity.
+    """
+    id: ID!
+  ): ConsoleWorkspaceOperation
+}
+
+"""
+Console module mutations — writes against Console's own `/v1` workspace-product endpoints.
+See docs/reference/graphql-conventions.md §Module namespacing.
+"""
+type ConsoleMutation {
+  # @category: console/products
+  """
+  Enables a product on a workspace. Answers once Console accepts the request; the toggle itself
+  completes asynchronously — poll `workspaceOperation` or `workspaceProducts` for the outcome.
+  """
+  workspaceProductEnable(
+    "The input fields for enabling the product."
+    input: ConsoleWorkspaceProductEnableInput!
+  ): ConsoleWorkspaceOperationPayload
+
+  # @category: console/products
+  """
+  Disables a product on a workspace. Answers once Console accepts the request; the toggle itself
+  completes asynchronously — poll `workspaceOperation` or `workspaceProducts` for the outcome.
+  """
+  workspaceProductDisable(
+    "The input fields for disabling the product."
+    input: ConsoleWorkspaceProductDisableInput!
+  ): ConsoleWorkspaceOperationPayload
+}
