@@ -37,7 +37,7 @@ All requests require authentication using an API key with the `NVX ` prefix in t
 
 ### OpenAPI spec <a href="#openapi-spec" id="openapi-spec"></a>
 
-Under this section you can find a complete and interactive API reference generated from an up-to-date OpenAPI specification. There you can discover endpoint paths, parameters, object schemas (models), and test API calls right from the documentation. You can also download the raw OpenAPI specification as [JSON](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/iot-logic-api/resources/api-reference/IoT_Logic.json).
+Under this section you can find a complete and interactive API reference generated from an up-to-date OpenAPI specification. There you can discover endpoint paths, parameters, object schemas (models), and test API calls right from the documentation. You can also download the raw OpenAPI specification as [JSON](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/legacy/api-docs/iot-logic-api/resources/api-reference/IoT_Logic.json).
 
 ### Quick endpoint reference
 

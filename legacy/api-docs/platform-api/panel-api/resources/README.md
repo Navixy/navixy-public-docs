@@ -24,7 +24,7 @@ The query-string and form-encoded body transports both percent-encode their valu
 
 Every operation on every family page is generated from a single OpenAPI 3.1 specification, so the parameter tables, response schemas, and status codes are the specification rendered rather than prose written by hand.
 
-You can download the raw specification as [JSON](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/panel-api/reference/Admin_Panel.json) to generate a client, load into an API tool, or hand to an AI agent. Treat it as the technical source of truth.
+You can download the raw specification as [JSON](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/legacy/api-docs/platform-api/panel-api/reference/Admin_Panel.json) to generate a client, load into an API tool, or hand to an AI agent. Treat it as the technical source of truth.
 
 ## Resource families
 

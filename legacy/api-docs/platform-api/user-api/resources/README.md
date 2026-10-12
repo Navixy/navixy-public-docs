@@ -43,9 +43,9 @@ For the data types and the date and time format that apply throughout, see [API 
 
 Every operation on every page is generated from an OpenAPI 3.1 specification, so the parameter tables, response schemas, and status codes are the specification rendered rather than prose written by hand. Download the raw JSON to generate a client, load into an API tool, or hand to an AI agent, and treat it as the technical source of truth.
 
-* [Navixy Platform](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/user-api/reference/Navixy_Platform.json): every operation in this section except the two below.
-* [Raw IoT Data](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/user-api/reference/Raw_IoT_Data.json): the Raw IoT Data API.
-* [Eco Fleet](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/api-docs/platform-api/user-api/reference/Eco_Fleet.json): the Eco Fleet API, whose error model is RFC 7807 problem details rather than the numeric codes everything else uses.
+* [Navixy Platform](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/legacy/api-docs/platform-api/user-api/reference/Navixy_Platform.json): every operation in this section except the two below.
+* [Raw IoT Data](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/legacy/api-docs/platform-api/user-api/reference/Raw_IoT_Data.json): the Raw IoT Data API.
+* [Eco Fleet](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/legacy/api-docs/platform-api/user-api/reference/Eco_Fleet.json): the Eco Fleet API, whose error model is RFC 7807 problem details rather than the numeric codes everything else uses.
 
 ## Support
 
