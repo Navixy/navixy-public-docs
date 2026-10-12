@@ -65,7 +65,7 @@ See [Flow monitoring](monitoring.md).
 
 ## For developers
 
-Whatever protocol a device uses, Navixy Generic Protocol converts its data into one common format before a flow receives the data. A single set of rules therefore covers every device that you own. See [Navixy Generic Protocol](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/overview) for the message structure, the data types, and the transport layer.
+Whatever protocol a device uses, Navixy converts its data into one common format before a flow receives the data. A single set of rules therefore covers every device that you own.
 
 You can create and manage flows through the Navixy GraphQL API as well as on the canvas. See the [Navixy GraphQL API documentation](https://navixy.com/docs/navixy-graphql-api). Through the API, your role allows the same actions on flows as on the canvas. See [Access to flows](flow-management/README.md#access-to-flows).
 
