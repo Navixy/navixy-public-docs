@@ -21,7 +21,7 @@ A flow is also a `Node`, so the common [`node` and `nodes`](../../core-api-refer
 
 ## Pages
 
-<table><thead><tr><th width="186">Page</th><th>Covers</th></tr></thead><tbody><tr><td><a href="flows.md">Flows</a></td><td><code>IotLogicFlow</code>, the <code>IotLogicFlowNode</code> interface with its node types, <code>IotLogicFlowTransition</code>, the <code>flow</code> and <code>flows</code> queries with their filter and order inputs, the <code>deviceFlowLinks</code> query with <code>IotLogicDeviceFlowLink</code> and its filter and order inputs, the <code>deviceAttributes</code> query with <code>IotLogicDeviceAttributes</code> and <code>IotLogicDeviceAttribute</code>, the <code>flowDebugValues</code> query with <code>IotLogicFlowDebugValues</code>, and the <code>flowCreate</code>, <code>flowUpdate</code>, and <code>flowDelete</code> mutations with their inputs.</td></tr></tbody></table>
+<table><thead><tr><th width="186">Page</th><th>Covers</th></tr></thead><tbody><tr><td><a href="flows.md">Flows</a></td><td><code>IotLogicFlow</code>, the <code>IotLogicFlowNode</code> interface with its node types, <code>IotLogicFlowTransition</code>, the <code>flow</code> and <code>flows</code> queries with their filter and order inputs, the <code>deviceFlowLinks</code> query with <code>IotLogicDeviceFlowLink</code> and its filter and order inputs, the <code>flowDebugValues</code> query with <code>IotLogicFlowDebugValues</code>, and the <code>flowCreate</code>, <code>flowUpdate</code>, and <code>flowDelete</code> mutations with their inputs.</td></tr></tbody></table>
 
 ## Shared types
 

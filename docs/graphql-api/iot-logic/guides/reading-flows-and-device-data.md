@@ -1,8 +1,7 @@
 ---
 description: >-
-  Read IoT Logic data through Navixy GraphQL API: the attribute names of your
-  devices, what a flow calculated, the flows of your workspace, and the flows
-  that a device is in.
+  Read IoT Logic data through Navixy GraphQL API: what a flow calculated, the
+  flows of your workspace, and the flows that a device is in.
 tags:
   - guide
   - beta
@@ -10,88 +9,13 @@ tags:
 
 # Reading flows and device data
 
-This guide shows the queries that read IoT Logic data without changing it. Use them to find the attribute names to write expressions with, to check what a flow calculated, to list your flows, and to find the flows that a device is in before you delete the device.
+This guide shows the queries that read IoT Logic data without changing it. Use them to check what a flow calculated, to list your flows, and to find the flows that a device is in before you delete the device.
 
 The examples use the two refrigerated trucks and the cold chain flow from [Creating and updating flows](creating-and-updating-flows.md). The guide is for developers who are comfortable with GraphQL.
 
 ## Prerequisites
 
 You need an access token for the workspace you work in, and a role with the `read` action on IoT Logic flows. Every query on this page is sent as an HTTP POST request with a JSON body, as shown in [Prerequisites](creating-and-updating-flows.md#prerequisites) of Creating and updating flows. The steps below show only the document and its variables.
-
-## Find the attribute names of your devices
-
-Expressions read the attributes of a device message by name, and the names depend on the device model. One model can report ignition as `din1` and another as `avl_2`. To list the names of your devices, use the `deviceAttributes` query. It takes up to 1,000 device IDs:
-
-```graphql
-query DeviceAttributes($deviceIds: [ID!]!) {
-  iotLogic {
-    deviceAttributes(deviceIds: $deviceIds) {
-      deviceId
-      attributes {
-        name
-        received
-        inFlow
-      }
-    }
-  }
-}
-```
-
-Variables:
-
-```json
-{
-  "deviceIds": [
-    "019dbec6-d380-8000-801f-44455643e216",
-    "00000000-0000-8000-801f-444556430003"
-  ]
-}
-```
-
-Response:
-
-```json
-{
-  "data": {
-    "iotLogic": {
-      "deviceAttributes": [
-        {
-          "deviceId": "019dbec6-d380-8000-801f-44455643e216",
-          "attributes": [
-            { "name": "din1", "received": true, "inFlow": false },
-            { "name": "speed", "received": true, "inFlow": false },
-            { "name": "temperature", "received": true, "inFlow": false }
-          ]
-        },
-        {
-          "deviceId": "00000000-0000-8000-801f-444556430003",
-          "attributes": [
-            { "name": "speed", "received": true, "inFlow": false },
-            { "name": "temperature", "received": true, "inFlow": false }
-          ]
-        }
-      ]
-    }
-  }
-}
-```
-
-Both trucks report `temperature`, so the cold chain flow can read it in an expression. Only Reefer truck 12 reports `din1`, so an expression that reads `din1` would get no value for the messages of Reefer truck 17.
-
-Use the two flags of each name to decide what your flow can do with it:
-
-| `received` | `inFlow` | What it means for your flow |
-| --- | --- | --- |
-| `true` | `false` | The device reports the attribute. Your flow can read it. A calculated attribute can't have this name: the write fails with `ATTRIBUTE_REPORTED_BY_DEVICE`. |
-| `true` or `false` | `true` | A flow declares the attribute. With `flowId` set to your flow, these are the names of your flow. Without `flowId`, they can come from other flows. Your flow can't read the attributes of another flow, and it can't calculate them for the same devices (`ATTRIBUTE_ALREADY_PRODUCED`). |
-
-When you change a flow that already exists, send its ID as `flowId`. The list then shows the names that the devices report and the names of that flow only. A name of the flow has `received: false` for a device that the flow hasn't processed yet.
-
-Check every name that an expression reads against this list. Validation doesn't compare the names in an expression with the data of the devices, so a misspelled name saves without an error and never gets a value.
-
-The query needs the `read` action on IoT Logic flows. A name includes its channel number, such as `lls_level_0`, which is the form that expressions use. The result lists each device once, in the order of `deviceIds`. For the other rules, such as the sort order and the devices that are left out, see [deviceAttributes](../api-reference/flows.md#deviceattributes) in the reference.
-
-The query returns names, not values. To see the values through the API, read them with `flowDebugValues` after the devices are in a flow. See [Checking what a flow calculated](#checking-what-a-flow-calculated). In the IoT Logic interface, Data Stream Analyzer shows the values of the devices of the flow that you open.
 
 ## Checking what a flow calculated
 
@@ -372,7 +296,7 @@ The queries on this page return few errors. These are the common ones:
 
 | Error | Cause | How to fix |
 | --- | --- | --- |
-| `VALIDATION_ERROR` | A list of IDs is too long: more than 1,000 different devices in `deviceAttributes` or in the `deviceFlowLinks` filter, or more than 10 different devices in `flowDebugValues`. Or a page asks for more than 100 items | Split the request into smaller ones. |
+| `VALIDATION_ERROR` | A list of IDs is too long: more than 1,000 different devices in the `deviceFlowLinks` filter, or more than 10 different devices in `flowDebugValues`. Or a page asks for more than 100 items | Split the request into smaller ones. |
 | `VALIDATION_ERROR` | An ID in the request isn't a valid ID | Correct the ID. |
 | `PERMISSION_DENIED` | Your roles don't have the `read` action on IoT Logic flows | Ask an administrator for a role with the action. See [Authentication](../../authentication.md). |
 

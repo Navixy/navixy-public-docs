@@ -17,7 +17,7 @@ The guide is for developers who have built a first flow. If you haven't, start w
 
 You need an access token for the workspace you work in, and the ID of a device that reports a fuel sensor value. See [Find the devices for the flow](creating-and-updating-flows.md#find-the-devices-for-the-flow).
 
-You also need the name of the attribute that the fuel sensor reports. The name depends on the device model. The example uses `analog_1`, the voltage of the first analog input in millivolts. See [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
+You also need the name of the attribute that the fuel sensor reports. The name depends on the device model. The example uses `analog_1`, the voltage of the first analog input in millivolts. Data Stream Analyzer shows the names that the devices of a flow report.
 
 ## Why a chain of nodes
 

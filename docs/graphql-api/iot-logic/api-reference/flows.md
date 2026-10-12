@@ -243,41 +243,6 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 
 ---
 
-### deviceAttributes
-
-Lists the attribute names of up to 1,000 devices: the names that each device reported, the names that flows calculated for it, and the names that flows declare. Check the names that your expressions read against this list. The query needs the `read` action on IoT Logic flows. The result has one entry for each device, in the order of `deviceIds`, and lists each device once. Devices that your roles don't let you read, or that aren't in your workspace, are left out. A device without names has an empty `attributes` list. See [Find the attribute names of your devices](../guides/reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
-
-```graphql
-deviceAttributes(
-    deviceIds: [ID!]!
-    flowId: ID
-  ): [IotLogicDeviceAttributes!]!
-```
-
-**Arguments**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `deviceIds` | `[ID!]!` | The devices to read, at most 1,000 different IDs. An empty list returns an empty list. |
-| `flowId` | `ID` | Optional. Only this flow adds its names: the names that it declares and the names that it calculated, to every device in `deviceIds`, whether a data source of the flow lists the device or not. Without it, every flow that lists the device in a data source adds its own names. Disabled flows count. A deleted flow, or a flow that isn't in your workspace, adds nothing. Reported names are listed either way. |
-
-**Output types:**
-
-<details>
-
-<summary>IotLogicDeviceAttributes</summary>
-
-The attribute names of one device.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `deviceId` | `ID!` | The ID of the device. |
-| `attributes` | [[IotLogicDeviceAttribute](#iotlogicdeviceattribute)!]! | Each name once, sorted by name and then by channel number, so `analog_2` comes before `analog_10`. |
-
-</details>
-
----
-
 ## Mutations
 
 ### flowCreate
@@ -632,33 +597,6 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 | `deviceId` | `ID!` | The ID of the device. |
 | `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` of that message. For a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy doesn't record when such a message arrived. |
 | `nonNullFields` | [JSON](../../core-api-reference/common.md#json)! | The recent values of the attribute that aren't `null`. They can be older than the messages in `allFields`, so this map isn't part of `allFields`. An attribute with no such value isn't in the map. |
-
----
-
-<a id="iotlogicdeviceattributes"></a>
-
-### IotLogicDeviceAttributes
-
-The attribute names of one device.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `deviceId` | `ID!` | The ID of the device. |
-| `attributes` | [[IotLogicDeviceAttribute](#iotlogicdeviceattribute)!]! | Each name once, sorted by name and then by channel number, so `analog_2` comes before `analog_10`. |
-
----
-
-<a id="iotlogicdeviceattribute"></a>
-
-### IotLogicDeviceAttribute
-
-One attribute name of a device. A name that the device reported stays in the list after the device stops sending it, for example after a sensor is removed. A name that a flow calculated stays only while the flow still declares it.
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `name` | `String!` | The name with its channel number, such as `lls_level_0`. This is the form that expressions and attribute names in a flow use. |
-| `received` | `Boolean!` | `true` when the device reported the attribute, or a flow calculated it for this device. A name of a flow that hasn't processed the device yet has `false`. |
-| `inFlow` | `Boolean!` | `true` when a flow declares the attribute, in an Initiate Attribute node or as the `expressionName` of an IF/THEN Logic node. |
 
 ---
 

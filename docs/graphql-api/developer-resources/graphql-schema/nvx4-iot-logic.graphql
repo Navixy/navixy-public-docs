@@ -113,28 +113,6 @@ type IotLogicFlowDebugValues {
 }
 
 # @category: iot-logic/flows
-"The attribute names known for one device."
-type IotLogicDeviceAttributes {
-  deviceId: ID!
-  "Each name once, sorted by name and then channel (`analog_2` before `analog_10`)."
-  attributes: [IotLogicDeviceAttribute!]!
-}
-
-# @category: iot-logic/flows
-"""
-One attribute name. Names a device reported are never forgotten, so one may outlive the sensor
-that sent it.
-"""
-type IotLogicDeviceAttribute {
-  "Channel included (`lls_level_0`), the form flow expressions and assignments use."
-  name: String!
-  "The device reported it, or a flow computed it for this device."
-  received: Boolean!
-  "A flow declares it, as an initiate-attributes assignment or a logic node's `expressionName`."
-  inFlow: Boolean!
-}
-
-# @category: iot-logic/flows
 "One device entering one flow at one data source."
 type IotLogicDeviceFlowLink {
   "Null when the device was deleted or moved to another workspace."
@@ -586,24 +564,6 @@ type IotLogicQuery {
     "The devices to read, 1 to 10."
     deviceIds: [ID!]!
   ): [IotLogicFlowDebugValues!]
-
-  # @category: iot-logic/flows
-  """
-  The attribute names a flow editor can offer for the given devices: what each device reported, what
-  flows computed for it, and what flows declare. One entry per device, in request order. Devices not
-  readable by the caller are left out; a device with nothing comes back with an empty list.
-  """
-  deviceAttributes(
-    "The devices to read, at most 1000. An empty list returns an empty list."
-    deviceIds: [ID!]!
-    """
-    Narrows the flow side to this flow: its declared and computed attributes are added to every
-    device, linked or not, and no other flow's are. Without it, every flow linked to the device adds
-    its own. A flow that does not exist in the caller's workspace, or was deleted, adds nothing.
-    Disabled flows count.
-    """
-    flowId: ID
-  ): [IotLogicDeviceAttributes!]!
 }
 
 """
