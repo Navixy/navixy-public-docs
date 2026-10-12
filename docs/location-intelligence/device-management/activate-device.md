@@ -59,7 +59,7 @@ At the top, the **Details** step shows the vendor and the model that you selecte
 1. Optional: in **Device name (optional)**, enter a name for the device.
    If you leave the field empty, Navixy names the device after its model and IMEI, for example `FMB920 356938035643809`.
 2. In **Phone number**, enter the phone number of the SIM card, with the country code.
-   The number has 5 to 15 digits. You can type it with spaces, brackets, dashes, or a plus sign, for example `+1 (201) 555-0123`: the form keeps only the digits. When you leave the field, the form shows "Failed to detect the mobile carrier. Enter the values in the "GPRS settings" section manually." and expands **GPRS settings**.
+   The number has 5 to 15 digits. You can type it with spaces, brackets, dashes, or a plus sign, for example `+1 (201) 555-0123`: the form keeps only the digits. A number with letters shows "Phone number can't contain letters". When you leave the field, the form shows "Failed to detect the mobile carrier. Enter the values in the "GPRS settings" section manually." and expands **GPRS settings**.
 3. If **GPRS settings** is closed, expand it.
 4. In **APN**, enter the access point name of the mobile carrier.
 5. Optional: enter the **APN username (optional)** and the **APN password (optional)**, if the carrier uses them.
