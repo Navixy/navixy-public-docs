@@ -58,7 +58,7 @@ Every product works inside a workspace, and every workspace belongs to one organ
 
 ## Section contents
 
-* [Getting started](getting-started/): Register, add your data, create a role, and invite your colleagues.
+* [Getting started](getting-started/): Register, add your data, invite your colleagues, and create roles for other access.
   * [Set up Navixy for your customers](getting-started/set-up-navixy-for-your-customers.md): Create an organization and a workspace for each customer, and give your team access.
 * [Organization](organization/): Learn how organizations, workspaces, and child organizations work.
   * [Create organization](organization/create-organization.md): Create an independent organization or a child organization.

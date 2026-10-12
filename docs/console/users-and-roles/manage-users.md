@@ -14,17 +14,18 @@ tags:
 
 An invitation reserves a place in the organization for an email address and stores the roles that the person receives.
 
-Before you invite a person, make sure that the organization has a role to give them. An invitation can't be sent without a role, and the Owner role can't be given in an invitation. A new organization also has the Admin role, which gives full access. To give a person less access, create a role for them first. See [Roles that Navixy creates](README.md#roles-that-navixy-creates) and [Create a role](manage-roles.md#create-a-role).
+Every invitation includes at least one role. A new organization has the Admin role, which gives full access, so you can invite the people who manage the organization with you right away. To give a person less access, create a role for them first. See [Create a role](manage-roles.md#create-a-role). The Owner role can't be given in an invitation. See [Roles that Navixy creates](README.md#roles-that-navixy-creates).
 
 To invite a user, follow these steps:
 
 1. Go to **Users and roles** and click **Invite user**. The **Invite user** page opens.
 2. In **Email addresses**, enter the address of each person that you want to invite. Put each address on its own line, or separate the addresses with commas. You can invite up to 100 addresses at once.
 3. Under **Access**, select one or more **Roles**. Every person that you invite at once receives all the selected roles. The list shows only active roles that give no more access than your own roles.
-4. Under **Security profile**, keep **Standard** for your own employees. For contractors and for people from other companies, select **Limited** or **Protected**.
-5. Click **Send invitation**.
+4. Under **Product to open**, select the product that opens when the person accepts the invitation. The list shows the products that the selected roles give access to. Later sign-ins aren't affected.
+5. Under **Security profile**, keep **Standard** for your own employees. For contractors and for people from other companies, select **Limited** or **Protected**.
+6. Click **Send invitation**.
 
-The page shows the result for each address. An address that already belongs to a member or already has a pending invitation can't be invited. The people that you invited appear under **Recently invited**. To invite more people, repeat steps 2 to 5. When you finish, click **Done**.
+The page shows the result for each address. An address that already belongs to a member or already has a pending invitation can't be invited. The people that you invited appear under **Recently invited**. To invite more people, repeat steps 2 to 6. When you finish, click **Done**.
 
 The invitation appears on the **Invitations** tab with the status **Pending**, and the person appears on the **Users** tab with the status **Invited**. Navixy sends the person an email with a link to accept the invitation. When they accept, their status changes to **Active**.
 
@@ -57,13 +58,13 @@ To assign a role, follow these steps:
 1. Go to **Users and roles** and open the **Users** tab.
 2. Click the person's name to open their details.
 3. Click **Assign role**. The **Assigned roles** window opens.
-4. Under **Available roles**, click **Assign** next to the role.
+4. Under **Available roles**, click **Assign** next to the role. The list shows the roles that apply to the workspace selected in the top navigation bar.
 
 The Owner role isn't offered, because only one person can have it.
 
 ## Set role expiration date
 
-A role assignment can have an expiration date. On that date, the role stops applying, and the person loses the access that it gives without any action from you. Use it for contractors and for temporary work. You set the date on the role's page, where you can also assign the role to several people at once.
+A role assignment can have an expiration date. On that date, the role stops applying, and the person loses the access that it gives without any action from you. Use it for contractors and for temporary work. You set the date on the role's page, where you can also assign the role to several people at once. You can assign a role there only while one of its workspaces is selected in the top navigation bar. Otherwise, select one of the role's workspaces first.
 
 To set a role expiration date, follow these steps:
 

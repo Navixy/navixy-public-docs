@@ -62,7 +62,7 @@ To copy a role, follow these steps:
 3. Change the name and the settings that you need.
 4. Click **Save role**.
 
-The copy has no users. Assign it under **Assign to users** before you save, or later. You can also copy a role marked **System**, although the role itself can't be edited.
+The copy has no users. Assign it under **Assign to users** before you save, or later. A role marked **System** can't be copied. To start from full access, copy the Admin role.
 
 ## Edit a role
 

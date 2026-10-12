@@ -1,7 +1,7 @@
 ---
 description: >-
   Register with Navixy, check your first workspace's products, add your data,
-  create a role, and invite the people who work with you.
+  invite the people who work with you, and create roles for other access.
 tags:
   - guide
   - beta
@@ -114,11 +114,34 @@ To add your data, follow these steps:
 2. Next to a product under **My products**, click **Open**. The product opens in a new tab, in the same workspace.
 3. Add your data in the product, such as your GPS devices, the vehicles that they track, and the places that matter to your work.
 
-## 4. Create a role
+## 4. Invite a user
+
+An invitation reserves a place in the organization for one email address and stores the roles the person receives. Every invitation includes at least one role.
+
+Your organization already has the Admin role. It gives full access to every product and workspace, so you can invite the colleagues who manage the organization with you right away. The Owner role can't be given in an invitation, because only one person can have it. For people who need less access, create a role in the next step and invite them with it.
+
+To invite a user, follow these steps:
+
+1. Go to **Users and roles** and click **Invite user**. The **Invite user** page opens.
+2. Enter the **Email addresses** to invite, one per line or separated by commas.
+3. Under **Access**, select one or more **Roles** that every invited person receives, such as **Admin**.
+4. Under **Product to open**, select the product that opens when the person accepts the invitation. The list shows the products that the selected roles give access to. Later sign-ins aren't affected.
+5.  Under **Security profile**, keep **Standard** for your own employees, or select **Limited** or **Protected** for contractors.
+
+    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><p>A security profile sets how strict the sign-in rules are for that person, such as how long a session lasts. To change it after the person accepts the invitation, open their details on the <strong>Users</strong> tab and select a profile under <strong>Security profile</strong>.</p></div>
+6. Click **Send invitation**, then click **Done**.
+
+The invitation appears on the **Invitations** tab with the status **Pending**, and the person appears on the **Users** tab with the status **Invited**. They become a member when they accept, and their status changes to **Active**.
+
+To accept, the person should click the link in the invitation email. A person without a Navixy account will fill in their profile and create a password on the **Set up your Console account** page, and a person with an account will sign in. Either way, the product selected under **Product to open** will open, without the registration steps.
+
+An address that already belongs to a member of the organization or already has a pending invitation won't receive another invitation.
+
+## 5. Create a role for other access
 
 A role is what an organization grants to a user. It sets which workspaces the person can access, which products they use, and what they may do with the data. A role applies only in the organization where it's created.
 
-An invitation must include a role, and the Owner role can't be given in an invitation, because only one person can have it. To invite a colleague who manages the organization with you, you can give them the Admin role and skip this step. For everyone else, create a role that gives only the access they need.
+Most people need less access than the Admin role gives, such as a dispatcher who sees only one depot's vehicles. Create a role that gives only the access they need.
 
 To create a role, follow these steps:
 
@@ -128,7 +151,7 @@ To create a role, follow these steps:
 
 Go to **Users and roles** and click **Create role**.
 
-To start from an existing role instead, open the **Roles** tab and click <picture><source srcset="../.gitbook/assets/icons/content_copy-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/content_copy.svg" alt="Duplicate" data-size="line"></picture> next to it. Console opens a copy with **Copy** added to its name.
+To start from an existing role instead, such as Admin, open the **Roles** tab and click <picture><source srcset="../.gitbook/assets/icons/content_copy-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/content_copy.svg" alt="Duplicate" data-size="line"></picture> next to it. Console opens a copy with **Copy** added to its name.
 {% endstep %}
 
 {% step %}
@@ -164,7 +187,7 @@ Some products have **Features**. Set them to **All** or **Specific**. **All** me
 
 Click **Save role**. The role becomes active immediately. There is no separate publishing step.
 
-You can also assign the role to members of the organization on this page, under **Assign to users**. Your colleagues aren't members yet, so assign the role in the invitation instead.
+You can also assign the role to members of the organization on this page, under **Assign to users**. To give the role to someone who isn't a member yet, invite them with it.
 {% endstep %}
 {% endstepper %}
 
@@ -174,25 +197,7 @@ Some roles manage the organization itself: its workspaces, users, and roles. Sel
 
 You can't grant more access than you have yourself. A role with wider access than your own is rejected when you save it.
 
-## 5. Invite a user
-
-An invitation reserves a place in the organization for one email address and stores the roles the person receives. An invitation can't be created without a role. You can give the role that you created in the previous step, or the Admin role.
-
-To invite a user, follow these steps:
-
-1. Go to **Users and roles** and click **Invite user**. The **Invite user** page opens.
-2. Enter the **Email addresses** to invite, one per line or separated by commas.
-3. Under **Access**, select one or more **Roles** that every invited person receives.
-4.  Under **Security profile**, keep **Standard** for your own employees, or select **Limited** or **Protected** for contractors.
-
-    <div data-gb-custom-block data-tag="hint" data-style="info" class="hint hint-info"><p>A security profile sets how strict the sign-in rules are for that person, such as how long a session lasts. To change it after the person accepts the invitation, open their details on the <strong>Users</strong> tab and select a profile under <strong>Security profile</strong>.</p></div>
-5. Click **Send invitation**, then click **Done**.
-
-The invitation appears on the **Invitations** tab with the status **Pending**, and the person appears on the **Users** tab with the status **Invited**. They become a member when they accept, and their status changes to **Active**.
-
-To accept, the person should click the link in the invitation email. A person without a Navixy account will fill in their profile and create a password on the **Set up your Console account** page, and a person with an account will sign in. Either way, Console will open without the registration steps.
-
-An address that already belongs to a member of the organization or already has a pending invitation won't receive another invitation.
+When the role is saved, invite the people who need it. Follow the steps in [4. Invite a user](#id-4.-invite-a-user), and select this role under **Roles**.
 
 ## 6. Assign a role to a member
 

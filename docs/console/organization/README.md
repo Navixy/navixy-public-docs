@@ -26,9 +26,9 @@ This page describes the **Organization** page, organization details, and workspa
 
 Here's what you can do:
 
-- Switch organizations and workspaces: The left dropdown menu of the top navigation bar selects the organization you work in, and the right one selects the workspace. Both are available on every page of Console. The menu icon next to each dropdown copies the ID or the name of the organization or workspace.
+- Switch organizations and workspaces: The left dropdown menu of the top navigation bar selects the organization you work in, and the right one selects the workspace. The workspace list shows only the workspaces that your roles give access to. Both are available on every page of Console. The menu icon next to each dropdown copies the ID or the name of the organization or workspace.
 - Create workspaces and organizations: Click **Create workspace** or **Create organization**. **Change owner** is unavailable: transferring the Owner role in Console is planned and coming soon.
-- See a summary of the organization: The header shows the organization's status and your role in it. **Members** counts the members and how many of them are administrators, and **Invite a user** opens the **Users** tab of **Users and roles**. **Assets** counts the tracked assets, **Billing** shows the balance and the plan for new workspaces, and **Workspaces** counts the workspaces. A card that Console can't fill says that its data is unavailable.
+- See a summary of the organization: The header shows the organization's status and your role in it. **Members** counts the current members and the pending invitations, and **Invite a user** opens the **Users** tab of **Users and roles**. **Assets** counts the tracked assets, **Billing** shows the balance and the plan for new workspaces, and **Workspaces** counts the workspaces. A card that Console can't fill says that its data is unavailable.
 - Browse workspaces and child organizations: **Workspaces** lists the organization's workspaces with their products, region, status, and creation date. Click a workspace's name to open its [details](#workspace-details). **Child organizations** lists the organizations under yours with their users, devices, assets, balance, plan, and status.
 - Open the organization details: Click **See details**.
 
