@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — IoT Logic module
-# Version: 0.15.0
+# Version: 0.14.0
 # =============================================================================
 #
 # Flow authoring: the node graphs a user draws on the canvas, which the engine evaluates per

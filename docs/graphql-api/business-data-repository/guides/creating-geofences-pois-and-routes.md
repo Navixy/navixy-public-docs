@@ -147,11 +147,11 @@ More examples of different geometry types can be found in the [Common GeoJSON pa
 
 ### Supported geometry types
 
-<table><thead><tr><th width="143.4888916015625">Geometry type</th><th width="385.0889892578125">Use case</th><th>Example</th></tr></thead><tbody><tr><td>Point</td><td>A single coordinate marker. To check which vehicles are at the place, draw a Polygon around the point instead.</td><td>Warehouse pin on a map</td></tr><tr><td>Polygon</td><td>Area boundary. One of the two types that the Tracking <code>within</code> filter accepts.</td><td>Geofence</td></tr><tr><td>LineString</td><td>A straight or curved line passing through specific points. Useful for visual map overlays, but has no area, so the Tracking <code>within</code> filter rejects it.</td><td>Road segment, boundary line</td></tr><tr><td>MultiPoint</td><td>Multiple separate coordinate markers</td><td>Distribution network</td></tr><tr><td>MultiLineString</td><td>Multiple line sequences</td><td>Multiple road segments</td></tr><tr><td>MultiPolygon</td><td>Multiple areas treated as a single geo object. The other type that the Tracking <code>within</code> filter accepts.</td><td>Separate zones that don't touch, city districts</td></tr><tr><td>GeometryCollection</td><td>A mixed collection of geometry objects of different types</td><td>A route line together with its checkpoint markers</td></tr></tbody></table>
+<table><thead><tr><th width="143.4888916015625">Geometry type</th><th width="385.0889892578125">Use case</th><th>Example</th></tr></thead><tbody><tr><td>Point</td><td>A single coordinate marker. To check which vehicles are at the place, draw a Polygon around the point instead.</td><td>Warehouse pin on a map</td></tr><tr><td>Polygon</td><td>Area boundary. One of the two types that have an area, so <code>containsPoint</code> can test a point against it.</td><td>Geofence</td></tr><tr><td>LineString</td><td>A straight or curved line passing through specific points. Useful for visual map overlays, but has no area, so <code>containsPoint</code> returns <code>false</code> for it.</td><td>Road segment, boundary line</td></tr><tr><td>MultiPoint</td><td>Multiple separate coordinate markers</td><td>Distribution network</td></tr><tr><td>MultiLineString</td><td>Multiple line sequences</td><td>Multiple road segments</td></tr><tr><td>MultiPolygon</td><td>Multiple areas treated as a single geo object. The other type that has an area.</td><td>Separate zones that don't touch, city districts</td></tr><tr><td>GeometryCollection</td><td>A mixed collection of geometry objects of different types</td><td>A route line together with its checkpoint markers</td></tr></tbody></table>
 
 **Routes and detecting deviation:** A GeoJSON `LineString` represents a line with no width. In fleet management, route monitoring works by detecting whether a vehicle leaves a defined corridor: a `Polygon` drawn as a band around the intended path. A line can't do this job because it has no area. Use `LineString` only for drawing on a map, and `Polygon` whenever you need to check what's inside.
 
-**Points and GPS presence detection:** A `Point` geometry has no area, so no vehicle can be inside it. To find out whether a GPS device is near a specific location, create a small `Polygon` around that location instead of a `Point`. Then send that polygon as the `within` filter of the Tracking `assetStates` query, as [Checking which assets are inside a geofence](../../tracking/guides/building-a-live-fleet-map.md#checking-which-assets-are-inside-a-geofence) shows.
+**Points and GPS presence detection:** A `Point` geometry has no area, so no vehicle can be inside it. To find out whether a GPS device is near a specific location, create a small `Polygon` around that location instead of a `Point`. Then test the device's position against the polygon with `containsPoint`, as [Checking which geo objects cover a point](creating-geofences-pois-and-routes.md#checking-which-geo-objects-cover-a-point) shows.
 
 ### Coordinate format
 
@@ -169,6 +169,16 @@ Always double-check coordinate order when converting from other formats. Swapped
 {% endhint %}
 
 For details on geometry structure, winding order for polygons, and coordinate reference systems, see [RFC 7946 Section 3.1](https://www.rfc-editor.org/rfc/rfc7946#section-3.1).
+
+### Valid areas
+
+A `Polygon` or a `MultiPolygon` must describe a well-formed area. When it doesn't, `geoObjectCreate` and `geoObjectUpdate` fail with a [validation error](../../error-handling.md#validation-error-400), usually on `input.geojsonData`, and save nothing. An area is well formed when it follows these rules:
+
+* A `Polygon` is a non-empty array of rings, and a `MultiPolygon` is a non-empty array of such polygons.
+* A ring has at least four positions, and its first and last positions have the same longitude and latitude.
+* A position has at least two elements, and every element is a number: a longitude from -180 to 180, then a latitude from -90 to 90.
+
+The API doesn't check the winding order of a ring. A third number in a position, the altitude, doesn't change the area. Other geometry types are saved without these checks. An update without `geojsonData` keeps the stored geometry and doesn't check it. A stored polygon that breaks these rules has no area, so `containsPoint` returns `false` for it.
 
 ### Custom fields
 
@@ -188,7 +198,7 @@ A delivery company needs to define service areas and mark important locations. T
 {% step %}
 ### Create the arrival zone
 
-Rather than a `Point`, draw the warehouse as a small `Polygon` around the building. A polygon has an area, so the Tracking `within` filter can list the vehicles inside it.
+Rather than a `Point`, draw the warehouse as a small `Polygon` around the building. A polygon has an area, so `containsPoint` can tell whether a vehicle's position is inside it.
 
 {% hint style="info" %}
 `version` is optional. If you leave it out, an update always applies, even when someone else changed the record after you last read it. Include it to catch such conflicts, as the examples in this scenario do. See [Optimistic locking](../../optimistic-locking.md) for details.
@@ -528,7 +538,7 @@ Use a wider corridor for highways where minor deviations are acceptable, and a n
 
 ### Line overlay (visual display only)
 
-Use `LineString` when you need to draw a line on a map for display purposes, for example to show the planned path of a delivery or the boundary between two zones. A `LineString` has no area, so the Tracking `within` filter rejects it.
+Use `LineString` when you need to draw a line on a map for display purposes, for example to show the planned path of a delivery or the boundary between two zones. A `LineString` has no area, so `containsPoint` returns `false` for it.
 
 ```graphql
 {
@@ -591,26 +601,6 @@ The response returns a paginated list:
       "geoObjects": {
         "nodes": [
           {
-            "id": "019a6b2f-793e-807b-8001-47454f420001",
-            "title": "Main Warehouse - Mitte",
-            "type": {
-              "code": "poi",
-              "title": "Point of Interest"
-            },
-            "geojsonData": {
-              "type": "Polygon",
-              "coordinates": [
-                [
-                  [13.404754, 52.519808],
-                  [13.405154, 52.519808],
-                  [13.405154, 52.520208],
-                  [13.404754, 52.520208],
-                  [13.404754, 52.519808]
-                ]
-              ]
-            }
-          },
-          {
             "id": "019a6b2f-793e-807b-8001-47454f420002",
             "title": "Central Berlin Zone",
             "type": {
@@ -629,11 +619,31 @@ The response returns a paginated list:
                 ]
               ]
             }
+          },
+          {
+            "id": "019a6b2f-793e-807b-8001-47454f420001",
+            "title": "Main Warehouse - Mitte",
+            "type": {
+              "code": "poi",
+              "title": "Point of Interest"
+            },
+            "geojsonData": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [13.404754, 52.519808],
+                  [13.405154, 52.519808],
+                  [13.405154, 52.520208],
+                  [13.404754, 52.520208],
+                  [13.404754, 52.519808]
+                ]
+              ]
+            }
           }
         ],
         "pageInfo": {
           "hasNextPage": false,
-          "endCursor": "VElUTEU6QVNDOkNlbnRyYWwgQmVybGluIFpvbmV8MDE5YTZiMmYtNzkzZS04MDdiLTgwMDEtNDc0NTRmNDIwMDAy"
+          "endCursor": "VElUTEU6QVNDOk1haW4gV2FyZWhvdXNlIC0gTWl0dGV8MDE5YTZiMmYtNzkzZS04MDdiLTgwMDEtNDc0NTRmNDIwMDAx"
         }
       }
     }
@@ -682,6 +692,80 @@ The response returns only matching geo objects:
 ```
 
 For more on filtering and pagination, see [Filtering and sorting](../../filtering-and-sorting/) and [Pagination](../../pagination.md).
+
+## Checking which geo objects cover a point
+
+A geo object covers a point when the point is inside its area or on the boundary of the area. Only a well-formed `Polygon` or `MultiPolygon` has an area. A point inside a hole of a polygon isn't covered, and a point on the boundary of the hole is.
+
+To find the geo objects that cover a point, add `containsPoint` to the filter. This query lists the zones that cover a delivery address in Berlin:
+
+```graphql
+query ZonesAtAddress {
+  bdr {
+    geoObjects(filter: { containsPoint: { lat: 52.5201, lng: 13.4050 } }, first: 20) {
+      nodes {
+        id
+        title
+      }
+    }
+  }
+}
+```
+
+The address is inside both zones of the example scenario, so the response lists both, sorted by title:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "geoObjects": {
+        "nodes": [
+          {
+            "id": "019a6b2f-793e-807b-8001-47454f420002",
+            "title": "Central Berlin Zone"
+          },
+          {
+            "id": "019a6b2f-793e-807b-8001-47454f420001",
+            "title": "Main Warehouse - Mitte"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+The `containsPoint` condition combines with `typeIds`, `titleContains`, and the custom field conditions, and all of them must match. Sorting, paging, and `total` work as with any other filter.
+
+To test one geo object against one or more points, select its `containsPoint` field with a point. The field returns `true` or `false`. A geo object without an area returns `false` for every point. To test several points in one request, give each point its own alias:
+
+```graphql
+query ZoneCoversPoints {
+  bdr {
+    geoObject(id: "019a6b2f-793e-807b-8001-47454f420001") {
+      gate: containsPoint(point: { lat: 52.5201, lng: 13.4050 })
+      parking: containsPoint(point: { lat: 52.5230, lng: 13.4100 })
+    }
+  }
+}
+```
+
+The response has one value for each alias:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "geoObject": {
+        "gate": true,
+        "parking": false
+      }
+    }
+  }
+}
+```
+
+Edges of an area are straight lines in longitude and latitude. Longitude 180 and -180 are different points, so draw an area that crosses the 180th meridian as two polygons. To check which of your assets are inside a geofence now, combine this test with the positions from Tracking, as [Checking which assets are inside a geofence](../../tracking/guides/building-a-live-fleet-map.md#checking-which-assets-are-inside-a-geofence) shows.
 
 ## Handling version conflicts
 

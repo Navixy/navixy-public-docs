@@ -94,7 +94,6 @@ matches when **any** of the asset's devices satisfies it.
 | `connectivityStatus` | [[TrackingConnectivityStatus](#trackingconnectivitystatus)!] |  |
 | `motionStatus` | [[TrackingMotionStatus](#trackingmotionstatus)!] |  |
 | `updatedSince` | [DateTime](../../../core-api-reference/common.md#datetime) | Only assets where some device reported at or after this moment. |
-| `within` | [GeoJSON](../../../core-api-reference/common.md#geojson) | Only assets where some device's `position` falls inside this area — the same position the map shows, selected by the rule on `TrackingDeviceState.position`, so a `LAST_KNOWN` repeat inside the area matches. The filter answers where the device says it is, not where a track-grade fix last put it; for the latter compare `connectivity.lastPositionAt`. A `Polygon` or a `MultiPolygon`; a `MultiPolygon` matches a position inside any of its polygons. Any other GeoJSON type fails with `VALIDATION_ERROR` (field `filter.within`), as do malformed coordinates — a `Polygon` is a non-empty list of rings, a ring has at least four positions and a position at least two numbers — whether or not any device has a position. |
 
 </details>
 
@@ -398,7 +397,6 @@ matches when **any** of the asset's devices satisfies it.
 | `connectivityStatus` | [[TrackingConnectivityStatus](#trackingconnectivitystatus)!] |  |
 | `motionStatus` | [[TrackingMotionStatus](#trackingmotionstatus)!] |  |
 | `updatedSince` | [DateTime](../../../core-api-reference/common.md#datetime) | Only assets where some device reported at or after this moment. |
-| `within` | [GeoJSON](../../../core-api-reference/common.md#geojson) | Only assets where some device's `position` falls inside this area — the same position the map shows, selected by the rule on `TrackingDeviceState.position`, so a `LAST_KNOWN` repeat inside the area matches. The filter answers where the device says it is, not where a track-grade fix last put it; for the latter compare `connectivity.lastPositionAt`. A `Polygon` or a `MultiPolygon`; a `MultiPolygon` matches a position inside any of its polygons. Any other GeoJSON type fails with `VALIDATION_ERROR` (field `filter.within`), as do malformed coordinates — a `Polygon` is a non-empty list of rings, a ring has at least four positions and a position at least two numbers — whether or not any device has a position. |
 
 ---
 

@@ -346,7 +346,7 @@ A product the caller may use, as billing's catalogue describes it.
 | `title` | `String!` | Billing's title for the product, or its code while billing holds none. |
 | `description` | `String` |  |
 | `url` | `String` | The product's user-facing address. |
-| `internalPath` | `String` | The product's internal path: starts with a single `/`, no scheme or host. Null while billing holds none. |
+| `internalPath` | `String` | The product's internal path: an absolute http or https URL, or a path starting with a single `/`. Null while billing holds none. |
 | `isActive` | `Boolean!` | Whether billing has the product switched on. Carried, not filtered on. |
 
 ---

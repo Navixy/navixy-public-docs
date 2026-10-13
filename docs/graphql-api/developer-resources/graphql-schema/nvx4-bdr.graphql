@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Business Data Repository
-# Version: 0.16.1
+# Version: 0.16.4
 # =============================================================================
 #
 # TABLE OF CONTENTS
@@ -2140,7 +2140,7 @@ type MeProduct implements Titled {
   description: String
   "The product's user-facing address."
   url: String
-  "The product's internal path: starts with a single `/`, no scheme or host. Null while billing holds none."
+  "The product's internal path: an absolute http or https URL, or a path starting with a single `/`. Null while billing holds none."
   internalPath: String
   "Whether billing has the product switched on. Carried, not filtered on."
   isActive: Boolean!
@@ -2202,6 +2202,18 @@ type GeoPoint {
   altitude: Float
   "The horizontal accuracy in meters."
   accuracy: Float
+}
+
+# @category: bdr/geo-objects
+"""
+A point to test against geo object areas: WGS 84 latitude and longitude in decimal degrees. Longitude 180 and -180
+are different points.
+"""
+input GeoPointInput {
+  "The latitude coordinate (-90 to 90 degrees)."
+  lat: Latitude!
+  "The longitude coordinate (-180 to 180 degrees)."
+  lng: Longitude!
 }
 
 # @category: bdr/devices
@@ -2445,6 +2457,16 @@ type GeoObject implements Node & Titled & Customizable & Versioned {
   type: GeoObjectType!
   "The geographic shape of this object as GeoJSON geometry."
   geojsonData: GeoJSON!
+  """
+  Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside
+  a hole (a hole's boundary counts as covered). Edges are straight lines in longitude/latitude. The area is the
+  `geojsonData` geometry when it is a well-formed `Polygon` or `MultiPolygon`; any other geometry has no area and
+  answers `false`.
+  """
+  containsPoint(
+    "The point to test."
+    point: GeoPointInput!
+  ): Boolean!
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
@@ -2869,6 +2891,11 @@ input GeoObjectFilter {
   a single condition matches.
   """
   customFields: [CustomFieldFilter!]
+  """
+  Only geo objects whose area covers this point, as `GeoObject.containsPoint` answers it. A geo object without an
+  area (a geometry other than a well-formed `Polygon` or `MultiPolygon`) never matches.
+  """
+  containsPoint: GeoPointInput
 }
 
 # @category: bdr/geo-objects
@@ -3217,7 +3244,14 @@ input GeoObjectCreateInput {
   typeId: ID!
   "The geo object display name."
   title: String! @trim
-  "The GeoJSON geometry."
+  """
+  The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with
+  `VALIDATION_ERROR` on `geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of
+  such polygons; a ring has at least four positions, and its first and last positions have equal longitude and
+  latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in
+  [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not
+  checked.
+  """
   geojsonData: GeoJSON!
   "The custom field values."
   customFields: CustomFieldsPatchInput
@@ -3232,7 +3266,10 @@ input GeoObjectUpdateInput {
   version: Int
   "The new display name."
   title: String @trim
-  "The new geometry."
+  """
+  The new geometry; omitted keeps the stored one. A `Polygon` or `MultiPolygon` must be a well-formed area, as
+  `GeoObjectCreateInput.geojsonData` states.
+  """
   geojsonData: GeoJSON
   "The custom field changes."
   customFields: CustomFieldsPatchInput

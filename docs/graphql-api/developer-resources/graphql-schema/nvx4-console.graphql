@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Console module
-# Version: 0.16.0
+# Version: 0.16.3
 # =============================================================================
 #
 # The organizations and workspaces a caller can reach, their own IAM-visible roles, the members of

@@ -1,6 +1,6 @@
 # =============================================================================
 # Billing public schema — exposed through the SDK
-# Version: 0.12.0
+# Version: 0.12.1
 # =============================================================================
 #
 # What a customer's own token may do in billing: read its usage-metric and invoice-line-item
@@ -57,7 +57,7 @@ type BillingProductDomain implements Node & Versioned {
   isBillable: Boolean!
   "The product's user-facing address: an absolute http or https URL. Null when not set."
   productUrl: String
-  "The product's internal path: starts with a single '/', no scheme or host. Null when not set."
+  "The product's internal path: an absolute http or https URL, or a path starting with a single '/'. Null when not set."
   internalPath: String
 }
 

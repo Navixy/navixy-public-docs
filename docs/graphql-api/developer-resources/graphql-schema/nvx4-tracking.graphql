@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Tracking module
-# Version: 0.15.0
+# Version: 0.16.2
 # =============================================================================
 #
 # Live state of assets and the devices linked to them, a subscription over that state, and trips
@@ -29,7 +29,7 @@
 # WHAT THIS MODULE ASSUMES OF OTHERS
 # ----------------------------------
 # Types it references but does not declare: `Asset`, `Device`, `GeoPoint`, `DeviceIdType` from
-# nvx4-bdr.graphql, and the kernel's `Code`, `DateTime`, `Decimal`, `Duration`, `Long`, `GeoJSON`,
+# nvx4-bdr.graphql, and the kernel's `Code`, `DateTime`, `Decimal`, `Duration`, `Long`,
 # `Connection`, `Edge`, `PageInfo`, `CountInfo`.
 
 # =============================================================================
@@ -206,8 +206,8 @@ type TrackingReading {
   declaredType: TrackingValueType
   # No per-value `computed` flag. NTF carries one (`Field.computed`, "the sender computed this
   # rather than observing it"), but the archive does not store it and cannot reconstruct it
-  # (schema.sql §readings, STORAGE.md §"Что формат передаёт, а хранилище не сохраняет": "признак
-  # теряется, и это осознанная потеря"). A field that is present on live values and invented for
+  # (STORAGE.md §"Что формат передаёт, а хранилище не сохраняет": "признак теряется, и это
+  # осознанная потеря"). A field that is present on live values and invented for
   # archived ones is worse than an absent one. What survives is the dictionary-level statement —
   # `TrackingFieldDefinition.computed`, "this field is always computed by the platform" — and
   # SPEC §5.4 is explicit that the two are not the same claim.
@@ -960,18 +960,6 @@ input TrackingAssetStateFilter {
   motionStatus: [TrackingMotionStatus!]
   "Only assets where some device reported at or after this moment."
   updatedSince: DateTime
-  """
-  Only assets where some device's `position` falls inside this area — the same position the map
-  shows, selected by the rule on `TrackingDeviceState.position`, so a `LAST_KNOWN` repeat inside
-  the area matches. The filter answers where the device says it is, not where a track-grade fix
-  last put it; for the latter compare `connectivity.lastPositionAt`.
-
-  A `Polygon` or a `MultiPolygon`; a `MultiPolygon` matches a position inside any of its polygons.
-  Any other GeoJSON type fails with `VALIDATION_ERROR` (field `filter.within`), as do malformed
-  coordinates — a `Polygon` is a non-empty list of rings, a ring has at least four positions and a
-  position at least two numbers — whether or not any device has a position.
-  """
-  within: GeoJSON
 }
 
 # @category: tracking/state

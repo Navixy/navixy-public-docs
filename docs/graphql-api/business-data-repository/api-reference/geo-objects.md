@@ -120,6 +120,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -165,6 +166,7 @@ Filtering options for geo objects.
 | `typeIds` | `[ID!]` | Filter by geo object types (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
 | `customFields` | [[CustomFieldFilter](custom-fields.md#customfieldfilter)!] | Filter by custom field values. Unlike the ID list filter above, the conditions in this list combine with AND: a geo object must satisfy every one of them. See `CustomFieldFilter` for how a single condition matches. |
+| `containsPoint` | [GeoPointInput](#geopointinput) | Only geo objects whose area covers this point, as `GeoObject.containsPoint` answers it. A geo object without an area (a geometry other than a well-formed `Polygon` or `MultiPolygon`) never matches. |
 
 </details>
 
@@ -233,6 +235,20 @@ Choose the variant that matches the custom field's data type:
 
 <details>
 
+<summary>GeoPointInput</summary>
+
+A point to test against geo object areas: WGS 84 latitude and longitude in decimal degrees. Longitude 180 and -180
+are different points.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `lat` | [Latitude](../../core-api-reference/common.md#latitude)! | The latitude coordinate (-90 to 90 degrees). |
+| `lng` | [Longitude](../../core-api-reference/common.md#longitude)! | The longitude coordinate (-180 to 180 degrees). |
+
+</details>
+
+<details>
+
 <summary>GeoObjectOrder</summary>
 
 Ordering options for geo objects.
@@ -296,7 +312,7 @@ Input for creating a new geo object.
 | ----- | ---- | ----------- |
 | `typeId` | `ID!` | The geo object type ID. |
 | `title` | `String!` | The geo object display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 </details>
@@ -446,6 +462,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -481,7 +498,7 @@ Input for updating an existing geo object.
 | `id` | `ID!` | The geo object ID to update. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson) | The new geometry. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson) | The new geometry; omitted keeps the stored one. A `Polygon` or `MultiPolygon` must be a well-formed area, as `GeoObjectCreateInput.geojsonData` states. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field changes. |
 
 </details>
@@ -631,6 +648,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -1605,6 +1623,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
+| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 ---
@@ -1635,6 +1654,20 @@ The result of a geo object type mutation.
 
 ## Inputs
 
+<a id="geopointinput"></a>
+
+### GeoPointInput
+
+A point to test against geo object areas: WGS 84 latitude and longitude in decimal degrees. Longitude 180 and -180
+are different points.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `lat` | [Latitude](../../core-api-reference/common.md#latitude)! | The latitude coordinate (-90 to 90 degrees). |
+| `lng` | [Longitude](../../core-api-reference/common.md#longitude)! | The longitude coordinate (-180 to 180 degrees). |
+
+---
+
 <a id="geoobjectfilter"></a>
 
 ### GeoObjectFilter
@@ -1646,6 +1679,7 @@ Filtering options for geo objects.
 | `typeIds` | `[ID!]` | Filter by geo object types (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
 | `customFields` | [[CustomFieldFilter](custom-fields.md#customfieldfilter)!] | Filter by custom field values. Unlike the ID list filter above, the conditions in this list combine with AND: a geo object must satisfy every one of them. See `CustomFieldFilter` for how a single condition matches. |
+| `containsPoint` | [GeoPointInput](#geopointinput) | Only geo objects whose area covers this point, as `GeoObject.containsPoint` answers it. A geo object without an area (a geometry other than a well-formed `Polygon` or `MultiPolygon`) never matches. |
 
 ---
 
@@ -1673,7 +1707,7 @@ Input for creating a new geo object.
 | ----- | ---- | ----------- |
 | `typeId` | `ID!` | The geo object type ID. |
 | `title` | `String!` | The geo object display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 ---
@@ -1689,7 +1723,7 @@ Input for updating an existing geo object.
 | `id` | `ID!` | The geo object ID to update. |
 | `version` | `Int` | The current version for optimistic locking. If omitted, auto-increments without conflict check. |
 | `title` | `String` | The new display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson) | The new geometry. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson) | The new geometry; omitted keeps the stored one. A `Polygon` or `MultiPolygon` must be a well-formed area, as `GeoObjectCreateInput.geojsonData` states. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field changes. |
 
 ---

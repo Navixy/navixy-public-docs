@@ -73,7 +73,7 @@ A billable product in the billing catalog.
 | `isActive` | `Boolean!` | Whether this product is active. |
 | `isBillable` | `Boolean!` | Whether this product may take part in plans. True by default. When false, no new plan may include the product. Plans that already include it stay in force, but an update that resends their pricing schemas is refused. |
 | `productUrl` | `String` | The product's user-facing address: an absolute http or https URL. Null when not set. |
-| `internalPath` | `String` | The product's internal path: starts with a single '/', no scheme or host. Null when not set. |
+| `internalPath` | `String` | The product's internal path: an absolute http or https URL, or a path starting with a single '/'. Null when not set. |
 
 ---
 

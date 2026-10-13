@@ -753,52 +753,24 @@ The filter has these fields:
 | `connectivityStatus` | Assets where some device has one of these connectivity values.                                                                                                                            |
 | `motionStatus`       | Assets where some device has one of these motion values.                                                                                                                                  |
 | `updatedSince`       | Assets where some device reported at or after this moment.                                                                                                                                |
-| `within`             | Assets where some device's `position` is inside this GeoJSON `Polygon` or `MultiPolygon`. A `LAST_KNOWN` repeat inside the area matches, because the filter uses where the device last reported itself to be. |
 
-Use `within` with a polygon to list the vehicles in a depot or a city. For the rules of the `GeoJSON` scalar, see [Common resources](../../core-api-reference/common.md#geojson).
+The filter has no area condition. To find the assets inside a depot or a city, see [Checking which assets are inside a geofence](building-a-live-fleet-map.md#checking-which-assets-are-inside-a-geofence).
 
 ## Checking which assets are inside a geofence
 
-A geofence is a geo object in Business Data Repository whose `geojsonData` contains a `Polygon` or a `MultiPolygon`. Read that geometry with `geoObject(id:)`, as [Creating geofences, POIs, and routes](../../business-data-repository/guides/creating-geofences-pois-and-routes.md) shows, then send it as the `within` filter. Inside a GraphQL document the keys have no quotes:
+A geofence is a geo object in Business Data Repository whose `geojsonData` is a `Polygon` or a `MultiPolygon`. Tracking has no area filter. To find the assets inside a geofence, read their positions from Tracking, then ask Business Data Repository whether the geofence covers each position.
+
+First, read the positions, as in [Read the state of every asset in the workspace](building-a-live-fleet-map.md#read-the-state-of-every-asset-in-the-workspace). The `point` of each device's `position` is the point to test.
+
+Then send the positions to the geofence's `containsPoint` field. The field takes one point, so give each position its own alias. This query tests two trucks against the depot:
 
 ```graphql
-query AssetsInDepot {
-  tracking {
-    assetStates(
-      filter: {
-        within: {
-          type: "Polygon"
-          coordinates: [
-            [
-              [10.0400, 53.5170],
-              [10.0500, 53.5170],
-              [10.0500, 53.5240],
-              [10.0400, 53.5240],
-              [10.0400, 53.5170]
-            ]
-          ]
-        }
-      }
-      first: 50
-    ) {
-      nodes {
-        asset {
-          title
-        }
-        primaryDevice {
-          position {
-            point {
-              lat
-              lng
-            }
-            at
-            fitness
-          }
-        }
-      }
-      total {
-        count
-      }
+query DepotCoversTrucks {
+  bdr {
+    geoObject(id: "019d48ea-0752-8000-801f-47454f420c41") {
+      title
+      truck2041: containsPoint(point: { lat: 53.5201, lng: 10.0448 })
+      truck2042: containsPoint(point: { lat: 53.5302, lng: 10.0611 })
     }
   }
 }
@@ -809,33 +781,46 @@ Response:
 ```json
 {
   "data": {
-    "tracking": {
-      "assetStates": {
-        "nodes": [
-          {
-            "asset": { "title": "HH-TL 2041" },
-            "primaryDevice": {
-              "position": {
-                "point": { "lat": 53.5201, "lng": 10.0448 },
-                "at": "2026-09-14T08:03:47Z",
-                "fitness": "GNSS"
-              }
-            }
-          }
-        ],
-        "total": { "count": 1 }
+    "bdr": {
+      "geoObject": {
+        "title": "Hamburg depot",
+        "truck2041": true,
+        "truck2042": false
       }
     }
   }
 }
 ```
 
-The filter matches on the same position that the map shows, so a `LAST_KNOWN` repeat inside the area counts as inside. The match is deliberate: the filter uses where the device last reported itself to be.
+The position of `truck2041` is inside the depot, and the position of `truck2042` is outside. One request can test many positions, up to the [query complexity limit](../../limits.md#query-complexity): each alias counts as one field.
 
-A `MultiPolygon` matches a position inside any of its polygons. Any other geometry type fails with `VALIDATION_ERROR` on the field `filter.within`. Malformed coordinates fail the same way: a polygon needs at least one ring, and a ring needs at least four positions.
+To ask the other way round, which geofences one asset is in, filter the geo objects by its position:
+
+```graphql
+query GeofencesOfTruck {
+  bdr {
+    geoObjects(filter: { containsPoint: { lat: 53.5201, lng: 10.0448 } }, first: 20) {
+      nodes {
+        id
+        title
+      }
+    }
+  }
+}
+```
+
+The response lists every geo object that you can read whose area covers the point, in the same shape as any other `geoObjects` query.
+
+These rules decide what a geofence covers:
+
+* A point on the boundary of the area is inside. A point inside a hole of a polygon is outside, and a point on the boundary of the hole is inside.
+* Only a well-formed `Polygon` or `MultiPolygon` has an area. A geo object with any other geometry, such as a `Point`, a `LineString`, or a `GeometryCollection`, covers no point: `containsPoint` returns `false`, and the filter never selects it.
+* Edges are straight lines in longitude and latitude. Longitude 180 and -180 are different points, so draw an area that crosses the 180th meridian as two polygons.
+
+The test uses the position that you send. Tracking's `position` is where the device last reported itself to be, including a `LAST_KNOWN` repeat. Check `fitness` and `at` before you count an old position as inside.
 
 {% hint style="warning" %}
-The filter returns the result for the moment when you run it, because Tracking sends no geofence event. An app that needs entry and exit alerts runs the query on a schedule and compares each result with the previous one.
+The result is true for the moment when you run the queries, because Navixy doesn't send an event when an asset enters or leaves a geo object. An app that needs entry and exit alerts runs the queries on a schedule and compares each result with the previous one.
 {% endhint %}
 
 ## Reading one asset or one device
@@ -850,7 +835,6 @@ The Tracking queries and subscriptions return errors in the shared format. See [
 
 | Code                  | When it occurs                                                                                                              | Resolution                                                                                                         |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `VALIDATION_ERROR`    | `within` has a geometry other than `Polygon` or `MultiPolygon`, or malformed coordinates. The error names `filter.within`.  | Send the `geojsonData` of a geofence, or build a valid polygon.                                                    |
 | `VALIDATION_ERROR`    | A subscription follows more assets than the limit allows, at open or after the fleet grew.                                  | Follow a subset with `assetIds`, one subscription per asset group.                                                 |
 | `VALIDATION_ERROR`    | `batchWindowMs` on a subscription is outside 1,000 to 5,000. `0` is refused too.                                           | Leave `batchWindowMs` out for the default of 2,000, or set a value in the range.                                   |
 | `RATE_LIMITED`        | The user or integration already has the maximum number of open streams, or the subscription went over your request rate. Each subscription counts as one request, in the same budget as your HTTP requests. The error has no `field`. | Retry with a backoff: a slot frees when one of your streams ends. Close a stream you no longer need, or follow more assets in one subscription. See [Request rate](../../limits.md#request-rate). |
@@ -873,4 +857,4 @@ A device can lack readings for two reasons, and the response tells them apart:
 - [Readings and the field dictionary](../api-reference/readings.md): Learn how a reading is built and what the dictionary says about it.
 - [Reading a vehicle trip history](reading-a-vehicle-trip-history.md): Find where a vehicle drove and where it stopped over a period.
 - [Creating assets and assigning devices](../../business-data-repository/guides/creating-assets-and-assigning-devices.md): Register assets and link a primary device.
-- [Creating geofences, POIs, and routes](../../business-data-repository/guides/creating-geofences-pois-and-routes.md): Draw the geofences that the `within` filter tests against.
+- [Creating geofences, POIs, and routes](../../business-data-repository/guides/creating-geofences-pois-and-routes.md): Draw the geofences that `containsPoint` tests positions against.
