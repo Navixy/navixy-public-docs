@@ -35,7 +35,6 @@ A device is the hardware. The thing the device is fitted to, such as a vehicle, 
 * **Device model:** the product of one vendor, such as Teltonika FMB920. The model decides which settings Navixy sends to the device during activation.
 * **Device identifier:** the number that the device reports to Navixy, printed on its label. For a GPS device with a SIM card, the identifier is the IMEI, a 15-digit number. Two devices can't have the same identifier, because Navixy uses it to recognize which device sent the data.
 * **Activation:** connecting a device to Navixy. Navixy stores the SIM card details, sends the configuration SMS, and waits for the first data from the device. You activate a device once.
-* **Inventory:** a stock location for devices, such as a warehouse or a branch. A device is in one inventory at a time.
 
 ## How device data reaches Navixy
 

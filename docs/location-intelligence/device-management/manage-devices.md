@@ -40,7 +40,7 @@ You add the device from the asset that it will belong to, in a **Device** field 
 3. In **Model**, select the device model.
 4. Optional: in **Name (optional)**, enter a name. If you leave it empty, Navixy names the device after its vendor, model, and IMEI, for example `Teltonika FMB920 356938035643809`.
 5. In **Device type**, select the type of the device.
-6. In **IMEI**, enter the IMEI of the device. The field accepts digits only, from 15 to 64 of them.
+6. In **IMEI**, enter the 15-digit IMEI of the device.
 7. Click **Save**.
    The **Device** field shows the new device.
 8. Click **Save** to save the asset.

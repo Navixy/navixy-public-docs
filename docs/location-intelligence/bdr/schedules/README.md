@@ -98,4 +98,4 @@ You can assign a schedule to an asset, such as a maintenance period to a vehicle
 
 To learn how to assign schedules, see [Assign a schedule to an asset](manage-schedules.md#assign-a-schedule-to-an-asset).
 
-If you delete a schedule that assets use, the schedule field on those assets shows empty. An asset like this can't be saved again until you clear the field or select another schedule in it.
+You can't delete a schedule while an asset has it in a field, even in a field that was removed from the asset's type. Clear the field on those assets or select another schedule in it, and then delete the schedule.
