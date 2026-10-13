@@ -834,6 +834,28 @@ A group of assets.
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
 | `history` | [AssetGroupItemConnection](#assetgroupitemconnection)! | The full membership history for this group. |
 
+**Arguments of `currentAssets`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [AssetFilter](README.md#assetfilter) | Filtering options for the returned assets. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [AssetOrder](README.md#assetorder) | The ordering options for the returned assets. Default: `{ field: TITLE, direction: ASC }`. |
+
+**Arguments of `history`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [AssetGroupItemFilter](#assetgroupitemfilter) | Filtering options for the returned history. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [AssetGroupItemOrder](#assetgroupitemorder) | The ordering options for the returned history. Default: `{ field: ATTACHED_AT, direction: DESC }`. |
+
 ---
 
 <a id="assetgroupitem"></a>

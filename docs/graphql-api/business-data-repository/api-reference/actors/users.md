@@ -291,6 +291,17 @@ A user-defined catalog item that supports hierarchical workspace.
 | `parent` | [UserCatalogItem](#usercatalogitem) | The parent item in the hierarchy. Null for root items. |
 | `children` | [UserCatalogItemConnection](#usercatalogitemconnection)! | The child items in the hierarchy. |
 
+**Arguments of `children`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [CatalogItemChildrenFilter](../catalogs/catalog-items.md#catalogitemchildrenfilter) | Filtering options for the returned children. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [CatalogItemOrder](../catalogs/catalog-items.md#catalogitemorder) | The ordering options for the returned children. Default: `{ field: ORDER, direction: ASC }`. |
+
 ---
 
 <a id="user"></a>
@@ -313,6 +324,17 @@ A human user account authenticated via an identity provider.
 | `externalId` | `String` | An external system identifier for integration purposes. |
 | `isActive` | `Boolean!` | Whether this user account is active. |
 | `memberships` | [MemberConnection](../workspaces/members.md#memberconnection)! | The workspace memberships for this user. |
+
+**Arguments of `memberships`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [MemberFilter](../workspaces/members.md#memberfilter) | Filtering options for the returned memberships. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [MemberOrder](../workspaces/members.md#memberorder) | The ordering options for the returned memberships. Default: `{ field: ASSIGNED_AT, direction: DESC }`. |
 
 ---
 

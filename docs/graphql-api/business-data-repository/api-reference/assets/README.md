@@ -1595,6 +1595,23 @@ A physical or logical asset being tracked.
 | `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
 | `groups` | [AssetGroupConnection](groups.md#assetgroupconnection)! | The groups this asset belongs to. |
 
+**Arguments of `customFields`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `codes` | [[Code](../../../core-api-reference/common.md#code)!] | Limit returned fields to these codes. Returns all fields if not specified. |
+
+**Arguments of `groups`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [AssetGroupFilter](groups.md#assetgroupfilter) | Filtering options for the returned groups. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [AssetGroupOrder](groups.md#assetgrouporder) | The ordering options for the returned groups. Default: `{ field: TITLE, direction: ASC }`. |
+
 ---
 
 <a id="assetpayload"></a>

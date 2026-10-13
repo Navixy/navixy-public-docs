@@ -1551,6 +1551,17 @@ A device manufacturer or vendor.
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `models` | [DeviceModelConnection](#devicemodelconnection)! | Device models produced by this vendor. |
 
+**Arguments of `models`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [CatalogItemFilter](../catalogs/catalog-items.md#catalogitemfilter) | Filtering options for the returned models. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [CatalogItemOrder](../catalogs/catalog-items.md#catalogitemorder) | The ordering options for the returned models. Default: `{ field: TITLE, direction: ASC }`. |
+
 ---
 
 <a id="devicemodel"></a>
@@ -1664,6 +1675,16 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `relationsFrom` | [[DeviceRelation](#devicerelation)!]! | The outgoing relationships from this device to other devices. |
 | `relationsTo` | [[DeviceRelation](#devicerelation)!]! | The incoming relationships from other devices to this device. |
 | `inventoryHistory` | [DeviceInventoryRelationConnection](inventory.md#deviceinventoryrelationconnection)! | The history of inventory assignments for this device. |
+
+**Arguments of `inventoryHistory`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [DeviceInventoryRelationOrder](inventory.md#deviceinventoryrelationorder) | The ordering options for the returned history. Default: `{ field: ASSIGNED_AT direction: DESC }`. |
 
 ---
 

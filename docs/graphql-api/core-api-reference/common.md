@@ -236,6 +236,12 @@ addressable entity. Selecting `id` on a `Customizable` fragment therefore needs 
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `customFields` | [[CustomFieldValue](../business-data-repository/api-reference/custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
+**Arguments of `customFields`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `codes` | [[Code](#code)!] | Limit returned fields to these codes. Returns all fields if not specified. |
+
 ---
 
 <a id="multivalue"></a>

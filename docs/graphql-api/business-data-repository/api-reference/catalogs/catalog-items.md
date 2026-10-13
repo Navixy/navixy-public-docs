@@ -392,6 +392,17 @@ A catalog definition that contains catalog items. Catalogs are themselves catalo
 | `module` | [Module](system.md#module)! | The module this catalog is associated with. |
 | `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
 
+**Arguments of `items`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [CatalogItemFilter](#catalogitemfilter) | Filtering options for the returned items. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [CatalogItemOrder](#catalogitemorder) | The ordering options for the returned items. Default: `{ field: ORDER, direction: ASC }`. |
+
 ---
 
 <a id="catalogpayload"></a>

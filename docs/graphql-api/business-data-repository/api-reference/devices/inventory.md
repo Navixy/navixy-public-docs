@@ -461,6 +461,17 @@ An inventory or warehouse record for device stock management.
 | `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this inventory. |
 | `devices` | [DeviceConnection](README.md#deviceconnection)! | The devices assigned to this inventory. |
 
+**Arguments of `devices`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [DeviceFilter](README.md#devicefilter) | Filtering options for the returned devices. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [DeviceOrder](README.md#deviceorder) | The ordering options for the returned devices. Default: `{ field: TITLE, direction: ASC }`. |
+
 ---
 
 <a id="inventorypayload"></a>

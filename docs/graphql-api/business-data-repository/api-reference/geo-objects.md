@@ -120,7 +120,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
-| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
+| `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -462,7 +462,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
-| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
+| `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -648,7 +648,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
-| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
+| `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 
 </details>
@@ -1623,8 +1623,20 @@ A geographic object such as a geofence, point of interest, or route.
 | `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
-| `containsPoint` | `Boolean!` | Takes one required argument, `point` ([GeoPointInput](#geopointinput)). Returns whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
+| `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
 | `customFields` | [[CustomFieldValue](custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
+
+**Arguments of `containsPoint`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `point` | [GeoPointInput](#geopointinput)! | The point to test. |
+
+**Arguments of `customFields`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `codes` | [[Code](../../core-api-reference/common.md#code)!] | Limit returned fields to these codes. Returns all fields if not specified. |
 
 ---
 

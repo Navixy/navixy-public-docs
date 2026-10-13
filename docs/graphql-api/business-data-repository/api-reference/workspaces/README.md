@@ -74,6 +74,61 @@ A workspace that owns entities and users.
 | `geoObjects` | [GeoObjectConnection](../geo-objects.md#geoobjectconnection)! | The geographic objects owned by this workspace. |
 | `schedules` | [ScheduleConnection](../schedules.md#scheduleconnection)! | The schedules owned by this workspace. |
 
+**Arguments of `members`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [MemberFilter](members.md#memberfilter) | Filtering options for the returned members. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [MemberOrder](members.md#memberorder) | The ordering options for the returned members. Default: `{ field: ASSIGNED_AT, direction: DESC }`. |
+
+**Arguments of `devices`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [DeviceFilter](../devices/README.md#devicefilter) | Filtering options for the returned devices. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [DeviceOrder](../devices/README.md#deviceorder) | The ordering options for the returned devices. Default: `{ field: TITLE, direction: ASC }`. |
+
+**Arguments of `assets`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [AssetFilter](../assets/README.md#assetfilter) | Filtering options for the returned assets. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [AssetOrder](../assets/README.md#assetorder) | The ordering options for the returned assets. Default: `{ field: TITLE, direction: ASC }`. |
+
+**Arguments of `geoObjects`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [GeoObjectFilter](../geo-objects.md#geoobjectfilter) | Filtering options for the returned geo objects. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [GeoObjectOrder](../geo-objects.md#geoobjectorder) | The ordering options for the returned geo objects. Default: `{ field: TITLE, direction: ASC }`. |
+
+**Arguments of `schedules`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `filter` | [ScheduleFilter](../schedules.md#schedulefilter) | Filtering options for the returned schedules. |
+| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
+| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
+| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
+| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
+| `orderBy` | [ScheduleOrder](../schedules.md#scheduleorder) | The ordering options for the returned schedules. Default: `{ field: TITLE, direction: ASC }`. |
+
 ---
 
 ## See also

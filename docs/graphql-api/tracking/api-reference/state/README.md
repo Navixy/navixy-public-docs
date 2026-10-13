@@ -359,6 +359,19 @@ message it last arrived in.
 | `readings` | [[TrackingReading](../readings.md#trackingreading)!] | Readings of this device: the newest value of every `(code, channel)` it has reported within the archive's retention, each with its own `updatedAt`. A client that does not know which fields a device has calls it without `codes` and gets all of them. Nothing is backfilled: a field the device reported only before the service began recording last values is absent until the device sends it again. `codes` narrows the list to those codes, every channel included. `maxAge` drops readings whose message is older than that; it is never required. A reading appears once the archive has stored the message that carried it, so it can trail `position` and `connectivity`, which come from the service's memory. Null, with a `SERVICE_UNAVAILABLE` error at this path, when the stored readings of this device cannot be read; a retry may succeed. The rest of the state is still served, which is why the field is nullable while `TrackingDeviceStateSnapshot.readings` is not. |
 | `lastEvents` | [[TrackingEvent](#trackingevent)!]! | The one-shot events of the most recent message that carried one, plus every level alarm still holding — those arrive collapsed, with `TrackingEvent.since` giving the moment the condition started rather than one object per repeat. Two retention rules, one per kind. A one-shot event stays until a message with another one-shot event replaces it; messages without events, and the repeats of a held alarm, leave it in place — otherwise a held overspeed alarm would evict an SOS within one report interval. A held alarm stays until a message arrives without it or nothing has been received for the alarm reset gap (`TrackingEvent.since`); reaching `OFFLINE` alone does not end it. |
 
+**Arguments of `readings`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `codes` | [[Code](../../../core-api-reference/common.md#code)!] | Only the readings of these codes, every channel of each code included. All readings when omitted. |
+| `maxAge` | [Duration](../../../core-api-reference/common.md#duration) | Leaves out every reading whose message is older than this. Optional. |
+
+**Arguments of `lastEvents`**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `codes` | [[Code](../../../core-api-reference/common.md#code)!] | Limit to these event codes. All when omitted. |
+
 ---
 
 <a id="trackingassetstate"></a>
