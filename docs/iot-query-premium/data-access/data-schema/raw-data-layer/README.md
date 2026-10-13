@@ -30,11 +30,11 @@ Navixy calculates nothing from other rows in the raw data layer. A position in `
 Query the raw data layer in these cases:
 
 * **You need names, types, or custom fields.** Only `core_bdr` has the names of assets, devices, and geo objects. Join it to any calculated table to show names instead of IDs.
-* **You need every data point.** `telemetry` has each message, while the transformation layer groups them into trips, visits, and 1-minute periods.
+* **You need every data point.** `telemetry` has each message, while the transformation layer groups them into trips, stops, and 1-minute periods.
 * **You need a value that no calculated table has**, such as a sensor that the transformation layer doesn't aggregate.
 * **You define your own rules.** To detect trips with your own speed limit, or to count events that Navixy doesn't calculate, start from `telemetry`.
 
-For totals, durations, and visits, query the transformation layer. Its tables are smaller and are already calculated, so the same question takes less time and less SQL.
+For totals, durations, and time in geo objects, query the transformation layer. Its tables are smaller and are already calculated, so the same question takes less time and less SQL.
 
 ## Databases of the raw data layer
 

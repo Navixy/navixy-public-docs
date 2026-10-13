@@ -10,6 +10,7 @@
       * [telemetry database](data-access/data-schema/raw-data-layer/telemetry.md)
     * [Transformation layer](data-access/data-schema/transformation-layer/README.md)
       * [report database](data-access/data-schema/transformation-layer/report.md)
+      * [agg database](data-access/data-schema/transformation-layer/agg.md)
   * [Transformation Builder](data-access/transformation-builder/README.md)
     * [Workflow YAML reference](data-access/transformation-builder/workflow-yaml-reference.md)
     * [Templates](data-access/transformation-builder/templates.md)

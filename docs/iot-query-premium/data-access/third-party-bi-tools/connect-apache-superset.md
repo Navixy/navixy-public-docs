@@ -143,6 +143,6 @@ The following table lists the most common errors when Superset connects to IoT Q
 
 ## See also
 
-* [report database](../data-schema/transformation-layer/report.md): Find the columns of trips, geo object visits, sensor readings, and device status.
+* [report database](../data-schema/transformation-layer/report.md) and [agg database](../data-schema/transformation-layer/agg.md): Find the columns of trips and stops, sensor values, and positions in geo objects.
 * [core_bdr database](../data-schema/raw-data-layer/core-bdr.md): Find the tables with the names of your assets, devices, and geo objects.
 * [Use third-party BI tools](./): Compare Superset with the other BI tools that connect to IoT Query Premium.

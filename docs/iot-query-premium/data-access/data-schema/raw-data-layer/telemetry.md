@@ -22,16 +22,30 @@ The `telemetry` database has the messages that your GPS devices send to Navixy: 
 | Column | Type | What it contains |
 | --- | --- | --- |
 | `device_id` | `UUID` | The GPS device, the same ID as `core_bdr.device.id` |
-| `device_time` | `DateTime64(3)` | The time when the device recorded the message, in UTC |
-| `latitude` | `Float64` | Latitude in degrees, negative in the southern hemisphere |
-| `longitude` | `Float64` | Longitude in degrees, negative in the western hemisphere |
-| `speed` | `Float32` | Speed in km/h |
-| `hw_mileage_m` | `Nullable(Float64)` | The odometer of the device, in meters. `NULL` if the device doesn't send it |
+| `event_time` | `DateTime64(3, 'UTC')` | The time of the message |
+| `received_time` | `DateTime64(3, 'UTC')` | When Navixy received the message |
+| `message_id` | `UUID` | The ID of the message |
+| `latitude`, `longitude` | `Nullable(Float64)` | The position in degrees, negative in the southern and western hemispheres. `NULL` when the message has no position. Name these columns in the query: `SELECT *` doesn't return them |
+| `speed_e1` | `Nullable(UInt16)` | Speed in tenths of km/h. Divide by 10 for km/h |
+| `heading_e1` | `Nullable(UInt16)` | Direction of travel in tenths of a degree |
+| `altitude_dm` | `Nullable(Int32)` | Altitude in decimeters |
+| `satellites` | `Nullable(UInt8)` | The number of satellites in the position fix |
+| `hdop_e2` | `Nullable(UInt16)` | How precise the position fix is, in hundredths. A lower value is more precise |
+| `fix_type` | `String` | The type of position fix |
+| `hw_mileage_m` | `Nullable(UInt64)` | The odometer of the device, in meters. `NULL` if the device doesn't send it |
+| `battery_level` | `Nullable(UInt8)` | The battery level of the device, in percent |
+| `battery_voltage_mv`, `board_voltage_mv` | `Nullable(UInt32)` | The voltage of the device battery and of the vehicle power supply, in millivolts |
+| `din`, `dout` | `Map(UInt8, UInt8)` | The state of each digital input and output, by its number: `1` for on, `0` for off |
 | `field_float` | `Map(String, Float64)` | Sensor values with a fraction, by signal name |
 | `field_int` | `Map(String, Int64)` | Whole-number sensor values, by signal name |
 | `field_bool` | `Map(String, UInt8)` | On and off values, such as ignition, by signal name: `1` or `0` |
+| `field_str` | `Map(String, String)` | Text values, by signal name |
 | `field_unit` | `Map(String, String)` | The unit of each value, such as `L`, `°C`, or `rpm` |
-| `field_type` | `Map(String, String)` | The type of each signal, as the device declares it: `FLOAT64`, `UINT64`, or `BOOL`. The value itself is stored in `field_float`, `field_int`, or `field_bool` |
+| `field_type` | `Map(String, String)` | The type of each signal, as the device declares it, such as `FLOAT64`, `UINT64`, `BOOL`, or `STRING`. `CLEARED` when the device withdrew the value: the signal then has no value in the other maps |
+
+The table has more columns, such as the events of the message in `events` and the cell towers and Wi-Fi access points in `cell_towers` and `wifi_access_points`.
+
+A message can be stored twice until ClickHouse merges the rows. Read the table with `FINAL` when you count messages.
 
 `telemetry.records` has the device ID but no asset ID. To find the asset of a device, join `core_bdr.custom_field_value_device`, as described in [Data schema](../#how-tables-join).
 
@@ -50,7 +64,7 @@ The signal names come from the GPS device. To find the names that your devices s
 ```sql
 SELECT DISTINCT arrayJoin(mapKeys(field_float)) AS signal
 FROM telemetry.records
-WHERE device_time >= now() - INTERVAL 1 DAY
+WHERE event_time >= now() - INTERVAL 1 DAY
 ORDER BY signal
 ```
 
@@ -58,7 +72,6 @@ The result has one row per signal name:
 
 | signal |
 | --- |
-| `battery_voltage` |
 | `external_voltage` |
 | `lls_level_0` |
 | `temperature_0` |
@@ -74,12 +87,13 @@ The following query returns the latest position of each device that sent a messa
 ```sql
 SELECT
     device_id,
-    max(device_time) AS last_seen,
-    argMax(latitude, device_time) AS latitude,
-    argMax(longitude, device_time) AS longitude,
-    argMax(speed, device_time) AS speed_kmh
+    max(event_time) AS last_seen,
+    argMax(latitude, event_time) AS latitude,
+    argMax(longitude, event_time) AS longitude,
+    argMax(speed_e1, event_time) / 10 AS speed_kmh
 FROM telemetry.records
-WHERE device_time >= now() - INTERVAL 1 HOUR
+WHERE event_time >= now() - INTERVAL 1 HOUR
+  AND latitude IS NOT NULL
 GROUP BY device_id
 ```
 
@@ -90,35 +104,34 @@ The result has one row per device:
 | 5f0c2b8e-1d3a-4c7e-9a41-2e6b7d8f9a10 | 2026-09-28 14:02:31.000 | 52.370216 | 4.895168 | 42 |
 | 9b7e1c4d-6a2f-4e8b-b3c5-0d1f2a3b4c5d | 2026-09-28 14:01:57.000 | 52.090737 | 5.12142 | 0 |
 
-For the current state of every device, including devices that sent nothing recently, read `report.device_status` in the [report database](../transformation-layer/report.md).
-
 ### Values of one sensor over a day
 
 The following query returns every fuel level reading of one device over the last day:
 
 ```sql
 SELECT
-    device_time,
+    event_time,
     field_float['lls_level_0'] AS fuel_level,
     field_unit['lls_level_0'] AS unit
 FROM telemetry.records
 WHERE device_id = toUUID('5f0c2b8e-1d3a-4c7e-9a41-2e6b7d8f9a10')
-  AND device_time >= now() - INTERVAL 1 DAY
+  AND event_time >= now() - INTERVAL 1 DAY
   AND mapContains(field_float, 'lls_level_0')
-ORDER BY device_time
+ORDER BY event_time
 ```
 
 The result has one row per message that has the sensor:
 
-| device_time | fuel_level | unit |
+| event_time | fuel_level | unit |
 | --- | --- | --- |
 | 2026-09-27 14:05:12.000 | 182.4 | L |
 | 2026-09-27 14:06:12.000 | 182.1 | L |
 | 2026-09-27 14:07:12.000 | 181.9 | L |
 
-For values grouped by minute, hour, or day, read `report.sensor_readings` and `report.sensor_readings_rollup` instead. Navixy calculates these tables from the same messages.
+For values grouped by minute, read `agg.sensor_readings_5m` in the [agg database](../transformation-layer/agg.md) instead. Navixy calculates it from the same messages.
 
 ## See also
 
 * [core_bdr database](core-bdr.md): Find the devices and assets that telemetry belongs to.
-* [report database](../transformation-layer/report.md): Find the trips, visits, and sensor periods that Navixy calculates from telemetry.
+* [report database](../transformation-layer/report.md): Find the trips and stops that Navixy calculates from telemetry.
+* [agg database](../transformation-layer/agg.md): Find the sensor values, digital inputs and outputs, and positions in geo objects per minute.

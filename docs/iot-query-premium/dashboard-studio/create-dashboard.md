@@ -194,8 +194,8 @@ Dashboard Studio runs the queries each time that someone opens the dashboard. A 
 To share the dashboard, do one of the following:
 
 * To send a static copy, exit edit mode, wait until the panels load, and click **Export as PDF**.
-* To give the dashboard to another Dashboard Studio user, or to keep a copy, enter edit mode, click **Full schema**, and click **Export**. Dashboard Studio downloads the dashboard as a JSON file, with its panels, queries, and settings. **Import** in the same window loads a JSON file into the dashboard.
-* To export the rows of one panel, point to the panel, click the download icon, and select **Export CSV**. Table panels also have **Export Excel**.
+* To give the dashboard to another Dashboard Studio user, or to keep a copy, enter edit mode, click **Full schema**, and click **Export**. Dashboard Studio downloads the dashboard as a JSON file, with its panels, queries, and settings. To load such a file into a dashboard, click **Import** in the same window, select the file, and click **Save changes**. **Import** replaces the whole dashboard, every panel included, with the contents of the file. To keep the dashboard as it was, click **Cancel**.
+* To export the rows of one panel, point to the panel, click the download icon, and select **Export CSV**. Table panels also have **Export Excel**. In the window that opens, click **Export as .csv** or **Export as .xlsx**. An Excel file can have a header with the title and the description of the panel, as described in [Create report](create-report.md#id-6.-export-the-report).
 
 {% hint style="success" %}
 You have a dashboard with a panel, its query, and a layout, saved in the sidebar.

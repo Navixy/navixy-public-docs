@@ -89,7 +89,7 @@ The **Save** button becomes available when the canvas has run every panel. Faile
 To save the dashboard, follow these steps:
 
 1. To rename the dashboard, click **Rename dashboard** on the canvas and enter the name.
-2. Click **Save**.
+2. Click **Save**. The **Save dashboard** window opens.
 3. In **Section**, select the section for the dashboard. The first entry, **AI Dashboards**, is the default.
 4. Click **Save**.
    A message confirms that the dashboard was saved to the section, with an **Open** button.
@@ -124,7 +124,7 @@ The assistant builds dashboards. Start your request with what to build, for exam
 | --- | --- |
 | Message length | A message can have up to 4,000 characters. |
 | Message rate | You can send up to 20 messages per minute. After that, the assistant asks you to wait. |
-| Conversation length | The chat keeps the newest 100 turns of the conversation. |
+| Conversation length | The chat keeps the newest 100 messages, yours and the assistant's together: about 50 requests with their replies. Older messages are deleted. |
 | One dashboard on the canvas | The canvas shows one dashboard at a time. A saved dashboard changes only through the canvas that saved it, or in the dashboard editor. |
 | Cached results | Panel data on the canvas can be up to 5 minutes old. A query that failed always runs again. |
 | Panel count | The result counts every panel. The status line of the canvas counts only panels that run SQL, so a dashboard with a text panel shows one fewer. |

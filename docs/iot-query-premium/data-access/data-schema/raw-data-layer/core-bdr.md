@@ -97,15 +97,15 @@ Groups collect assets:
 
 * `asset_group` has the groups of a workspace, with `title`, `color`, and `group_type_id`.
 * `asset_group_item` records membership: `group_id`, `asset_id`, `attached_at`, and `detached_at`. A row whose `detached_at` is `NULL` is a current member. The other rows are past memberships, so you can find which group an asset belonged to on a past date.
-* `asset_group_type_to_asset_type_relation` lists the asset types that a group type allows. `max_items` limits how many.
+* `asset_group_type_to_asset_type_relation` lists the asset types that a group type allows. `max_items` is the largest number of assets of that type in one group of that group type. `NULL` means no limit.
 
 ### Geo objects and schedules
 
-A geo object is a zone, a point of interest, or a route. `core_bdr.geo_object` has `id`, `workspace_id`, `title`, `geo_object_type_id`, and `custom_fields_data`. The shape of a geo object is stored in its custom field `geojson_data`, as GeoJSON.
+A geo object is a zone, a point of interest, or a route. `core_bdr.geo_object` has `id`, `workspace_id`, `title`, `geo_object_type_id`, and `custom_fields_data`. The shape of a geo object is stored in its custom field `geojson_data`, as GeoJSON. A circle is a point in `geojson_data`, with its radius in meters in the custom field `cf_radius`.
 
 `core_bdr.schedule` has the schedules of a workspace. `schedule_data` has the definition of the schedule as JSON.
 
-The `geo_object_id` columns of `report` tables contain the `id` of a geo object. So do the `start_geozone_id`, `end_geozone_id`, and `geozone_id` columns of `report.trips_stops`.
+The `geo_object_id` column of `agg.device_geofence_status_hist` contains the `id` of a geo object.
 
 ### Catalogs
 
@@ -259,5 +259,5 @@ The result has one row per asset in the group:
 ## See also
 
 * [telemetry database](telemetry.md): Find the columns that contain positions and sensor values.
-* [report database](../transformation-layer/report.md): Find the calculated tables that you join to `core_bdr` for names.
+* [report database](../transformation-layer/report.md) and [agg database](../transformation-layer/agg.md): Find the calculated tables that you join to `core_bdr` for names.
 * [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/bdr): Learn how assets, geo objects, and schedules work in Location Intelligence.

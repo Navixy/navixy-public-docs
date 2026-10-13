@@ -31,13 +31,14 @@ Store the password in a secret store or an environment variable, not in code or 
 
 ## Databases that one connection reads
 
-One connection reads three ClickHouse databases. In ClickHouse, a database is a named group of tables, like a schema in PostgreSQL. Write each table name with its database, for example `core_bdr.asset`.
+One connection reads four ClickHouse databases. In ClickHouse, a database is a named group of tables, like a schema in PostgreSQL. Write each table name with its database, for example `core_bdr.asset`.
 
 | Database | Layer | What it contains |
 | --- | --- | --- |
 | `core_bdr` | Raw data | Business data from Business Data Repository: workspaces, devices, assets, geo objects, schedules, and custom fields |
 | `telemetry` | Raw data | Positions and sensor values that your GPS devices send |
-| `report` | Transformation | Trips and stops, geo object visits, sensor readings, and device status, calculated by Navixy |
+| `report` | Transformation | Trips and stops, calculated by Navixy |
+| `agg` | Transformation | Sensor values and digital inputs per minute, and positions in geo objects, calculated by Navixy |
 
 See [Data schema](data-schema/) to find the tables of each database.
 

@@ -37,7 +37,7 @@ Analysts, fleet managers and operations teams, and developers each use IoT Query
 * **Private Telematics Lakehouse (PTL):** The data part of IoT Query Premium: your workspace's data as SQL tables, stored in ClickHouse. PTL is a lakehouse in this sense: it keeps raw data as it arrives, together with tables calculated from it.
 * **Dashboard Studio:** The tool for analysis and dashboards, with an AI assistant. It reads the PTL tables.
 * **Raw data layer:** Your business data from Business Data Repository and the positions and sensor values that your GPS devices send, stored as they arrive. Query it when you need every data point.
-* **Transformation layer:** Tables that Navixy calculates from the raw data, such as trips, stops, geo object visits, and sensor readings. Query it for common questions. Telemetry arrives as the GPS devices send it, and Navixy recalculates these tables on a schedule. See [How often the data is updated](data-access/#how-often-the-data-is-updated).
+* **Transformation layer:** Tables that Navixy calculates from the raw data, such as trips, stops, sensor values per minute, and positions in geo objects. Query it for common questions. Telemetry arrives as the GPS devices send it, and Navixy recalculates these tables on a schedule. See [How often the data is updated](data-access/#how-often-the-data-is-updated).
 * **Workspace:** A part of your organization with its own data. Each workspace has its own connection details, and a connection reads the data of that workspace only.
 
 [Data schema](data-access/data-schema/) lists the tables and columns of each layer.

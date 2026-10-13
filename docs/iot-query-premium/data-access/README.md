@@ -1,7 +1,7 @@
 ---
 description: >-
   Query raw and calculated fleet data with SQL from your own tools: trips,
-  stops, geo object visits, sensor readings, assets, and custom fields.
+  stops, sensor values, geo objects, assets, and custom fields.
 tags:
   - overview
   - fundamentals
@@ -23,7 +23,7 @@ Private Telematics Lakehouse (PTL) gives technical teams direct SQL access to th
 
 **Use telematics and business data together.** For example, you can group trips by a custom field that your company keeps on each asset. The positions and sensor values of your GPS devices are in the same place as your assets, geo objects, and custom fields. One query can join them. [Data schema](data-schema/#how-tables-join) shows how the tables join.
 
-**Start from tables that are ready for analysis.** Instead of building trips from positions yourself, start from the calculated tables. Navixy calculates tables of trips, stops, geo object visits, and sensor readings from the raw data, so you don't prepare these values yourself. The [report database](data-schema/transformation-layer/report.md) describes these tables.
+**Start from tables that are ready for analysis.** Instead of building trips from positions yourself, start from the calculated tables. Navixy calculates tables of trips and stops, sensor values per minute, and the positions of devices in geo objects from the raw data, so you don't prepare these values yourself. The [report database](data-schema/transformation-layer/report.md) and the [agg database](data-schema/transformation-layer/agg.md) describe these tables.
 
 ## Who it is for
 
@@ -40,7 +40,7 @@ Analysts who write queries in Dashboard Studio read the same tables, so the fact
 
 * **Lakehouse:** PTL is a lakehouse in this sense: it keeps the raw data as it arrives and the tables calculated from that data, and you query both with SQL. PTL stores the data in ClickHouse, a database built for analytical queries over large tables.
 * **Raw data layer:** The `core_bdr` and `telemetry` databases. They hold business data and telemetry as they arrive, and nothing in them is calculated from other rows.
-* **Transformation layer:** The `report` database. It holds tables that Navixy calculates from the raw data: trips and stops, geo object visits, sensor readings, and device status.
+* **Transformation layer:** The `report` and `agg` databases. They hold tables that Navixy calculates from the raw data: trips and stops, sensor values and digital inputs per minute, and the positions of devices in geo objects.
 
 Query the transformation layer for common questions, such as how far an asset drove. Query the raw data layer when you need every data point or a value that no calculated table has. [Data schema](data-schema/) describes both layers table by table.
 
@@ -63,9 +63,9 @@ Each kind of data is updated in its own way:
 
 * **Business data** is copied automatically. Changes that you make in Business Data Repository are copied to PTL without any action from you. For example, a new asset or a renamed geo object appears in PTL.
 * **Telemetry** is written as the GPS devices send it.
-* **Transformation layer tables** of trips, stops, geo object visits, and sensor readings are recalculated on a schedule. Each recalculation covers a recent period again, for trips the last 12 hours, so a trip or a visit that is still in progress can change until it ends. The device status tables are written as the messages arrive.
+* **Transformation layer tables** are updated on a schedule: sensor values and digital inputs every 5 minutes, positions in geo objects every 15 minutes, and trips and stops every 4 hours. Each update calculates the last 14 days again. A trip or a stop appears after it ends and doesn't change after that.
 
-For a query that must include the latest positions, read `telemetry` or `report.device_status`. For a query about completed trips or visits, read the transformation layer.
+For a query that must include the latest positions, read `telemetry`. For a query about completed trips, sensor values per minute, or time in geo objects, read the transformation layer.
 
 ## Where to start
 

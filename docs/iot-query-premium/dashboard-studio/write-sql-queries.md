@@ -189,25 +189,31 @@ If the chart reads the wrong column as the series, select the column in **Series
 
 <summary>Pie chart</summary>
 
-A pie chart reads the label of each slice from the first column and its size from the second. The following query counts the devices in each motion state:
+A pie chart reads the label of each slice from the first column and its size from the second. The following query splits the distance of the current month by asset:
 
 ```sql
 SELECT
-    motion AS label,
-    count() AS value
-FROM report.device_status FINAL
+    a.title AS label,
+    round(sum(t.distance_m) / 1000) AS value
+FROM report.trips_stops AS t
+INNER JOIN
+(
+    SELECT id, title
+    FROM core_bdr.asset FINAL
+) AS a ON a.id = toUUID(t.asset_id)
+WHERE t.kind = 'trip'
+  AND t.start_time >= toStartOfMonth(now())
 GROUP BY label
 ORDER BY value DESC
 ```
 
-The result has one row per state:
+The result has one row per asset, with the distance in kilometers:
 
 | label | value |
 | --- | --- |
-| parked | 58 |
-| moving | 27 |
-| stopped | 9 |
-| unknown | 2 |
+| Truck 12 | 2104 |
+| Van 3 | 1388 |
+| Truck 7 | 977 |
 
 A pie chart shows the 10 largest slices. Dashboard Studio adds the rest together into one slice named **Other**, so the chart still shows the whole total. Don't add `LIMIT` to a pie chart query: a limit leaves the other categories out of the total.
 
@@ -217,19 +223,18 @@ A pie chart shows the 10 largest slices. Dashboard Studio adds the rest together
 
 <summary>Line chart and time series</summary>
 
-A line chart reads the time from the first column and the value from the second. A third column draws one line for each of its values. The following query returns the average fuel level of each asset for each hour of the last day. It reads sensor values that the `report` database already groups by hour:
+A line chart reads the time from the first column and the value from the second. A third column draws one line for each of its values. The following query returns the average fuel level of each asset for each hour of the last day. It reads sensor values that the `agg` database already groups by minute, and adds the minutes up to hours:
 
 ```sql
 SELECT
-    r.bucket_time AS bucket_start,
+    toStartOfHour(r.bucket_time) AS bucket_start,
     round(sum(r.val_sum) / sum(r.sample_count), 1) AS value,
     a.title AS series
 FROM
 (
     SELECT asset_id, bucket_time, val_sum, sample_count
-    FROM report.sensor_readings_rollup FINAL
-    WHERE interval_sec = 3600
-      AND raw_key = 'lls_level_0'
+    FROM agg.sensor_readings_5m FINAL
+    WHERE raw_key = 'lls_level_0'
       AND bucket_time >= now() - INTERVAL 1 DAY
 ) AS r
 INNER JOIN
@@ -293,33 +298,37 @@ An alias in double quotes can have spaces and capital letters, so the table show
 
 <summary>Map</summary>
 
-A map shows one point for each row. The following query returns the current position of each asset:
+A map shows one point for each row. The following query returns the latest position of each asset that sent a position in the last hour:
 
 ```sql
 SELECT
-    s.latitude AS latitude,
-    s.longitude AS longitude,
+    argMax(t.latitude, t.event_time) AS latitude,
+    argMax(t.longitude, t.event_time) AS longitude,
     a.title AS asset,
-    s.motion AS motion
-FROM
+    round(argMax(t.speed_e1, t.event_time) / 10) AS speed_kmh
+FROM telemetry.records AS t
+INNER JOIN
 (
-    SELECT asset_id, latitude, longitude, motion
-    FROM report.device_status FINAL
-) AS s
+    SELECT entity_id, ref_device_id
+    FROM core_bdr.custom_field_value_device FINAL
+) AS r ON r.ref_device_id = t.device_id
 INNER JOIN
 (
     SELECT id, title
     FROM core_bdr.asset FINAL
     WHERE deleted_at IS NULL
-) AS a ON a.id = toUUID(s.asset_id)
+) AS a ON a.id = r.entity_id
+WHERE t.event_time >= now() - INTERVAL 1 HOUR
+  AND t.latitude IS NOT NULL
+GROUP BY asset
 ```
 
 The result has one row per asset:
 
-| latitude | longitude | asset | motion |
+| latitude | longitude | asset | speed_kmh |
 | --- | --- | --- | --- |
-| 52.370216 | 4.895168 | Truck 12 | moving |
-| 52.090737 | 5.12142 | Van 3 | parked |
+| 52.370216 | 4.895168 | Truck 12 | 42 |
+| 52.090737 | 5.12142 | Van 3 | 0 |
 
 Dashboard Studio finds the coordinates by the column names. It takes the first column whose name contains `lat` as the latitude and the first column whose name contains `lon` as the longitude. It also accepts a name that contains `y` for latitude and `x` for longitude. As a result, Dashboard Studio can take a column such as `type` as the latitude if that column comes first. Name the columns `latitude` and `longitude`, and put them first in the `SELECT` list. The other columns appear in the popup of each point. A row at latitude 0 and longitude 0 isn't shown.
 
@@ -454,7 +463,7 @@ The result has one row per hour that has trips:
 An hour without trips has no row in the result.
 
 
-For sensor values, don't group `telemetry` yourself. The sensor tables of the `report` database already group the values into periods of 1 minute, 10 minutes, 30 minutes, 1 hour, 4 hours, and 1 day. Select the period with `interval_sec`, as in the line chart query in [Match the result to the panel type](#id-2.-match-the-result-to-the-panel-type). Choose the longest period that still gives the chart enough points. The [report database](../data-access/data-schema/transformation-layer/report.md#sensor-readings) page lists the periods.
+For sensor values, don't group `telemetry` yourself. The `agg` database already groups the values of each signal by minute in `agg.sensor_readings_5m`. Group these minutes into longer periods with `toStartOfHour` or `toStartOfDay`, as in the line chart query in [Match the result to the panel type](#id-2.-match-the-result-to-the-panel-type). Choose the longest period that still gives the chart enough points. The [agg database](../data-access/data-schema/transformation-layer/agg.md#sensor-values) page describes the table.
 
 ## 6. Convert units in the query
 

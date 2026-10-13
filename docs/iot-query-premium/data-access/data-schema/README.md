@@ -14,7 +14,7 @@ tags:
 IoT Query Premium is coming soon. This page describes how it works at release. To learn when it becomes available for your organization, [contact Navixy](https://navixy.com/en/contact?utm_source=navixy-docs\&utm_campaign=iot-query-premium).
 {% endhint %}
 
-IoT Query Premium organizes its tables in two layers. The two layers use three ClickHouse databases. This page explains what each layer is for, how the tables of different databases join, and the rules that every query needs. It is step 2 of the developer path through [Private Telematics Lakehouse](../), and it is the reference for anyone who writes SQL in Dashboard Studio. Before you start, connect to IoT Query Premium as described in [Connection setup](../connection-setup.md).
+IoT Query Premium organizes its tables in two layers. The two layers use four ClickHouse databases. This page explains what each layer is for, how the tables of different databases join, and the rules that every query needs. It is step 2 of the developer path through [Private Telematics Lakehouse](../), and it is the reference for anyone who writes SQL in Dashboard Studio. Before you start, connect to IoT Query Premium as described in [Connection setup](../connection-setup.md).
 
 ## Two layers of data
 
@@ -24,29 +24,29 @@ The raw data layer stores the data as it arrives. The transformation layer conta
 | --- | --- | --- | --- |
 | [Raw data layer](raw-data-layer/) | `core_bdr` | Business data from Business Data Repository | Names, types, groups, and custom fields of your assets, devices, and geo objects |
 | [Raw data layer](raw-data-layer/) | `telemetry` | Positions and sensor values from your GPS devices | Every data point and the values that no calculated table has |
-| [Transformation layer](transformation-layer/) | `report` | Trips and stops, geo object visits, sensor readings, and device status | Common questions, such as distance per day or time in a geo object |
+| [Transformation layer](transformation-layer/) | `report`, `agg` | Trips and stops in `report`; sensor values and digital inputs per minute, and positions in geo objects, in `agg` | Common questions, such as distance per day or time in a geo object |
 
 A typical query reads a table of the transformation layer and joins `core_bdr` to get the names of assets, devices, and geo objects.
 
 ## How tables join
 
-The same IDs appear in all three databases. Most queries join tables on four of these IDs:
+The same IDs appear in all four databases. Most queries join tables on four of these IDs:
 
 | ID | Identifies | Where it is defined | Where it is used |
 | --- | --- | --- | --- |
 | `workspace_id` | A workspace of your organization | `core_bdr.workspace.id` | Almost every table |
-| `asset_id` | An asset: a vehicle, a person, or another object that you monitor | `core_bdr.asset.id` | `report` tables |
-| `device_id` | A GPS device | `core_bdr.device.id` | `telemetry` and `report` tables |
-| `geo_object_id` | A geo object: a zone, a point of interest, or a route | `core_bdr.geo_object.id` | `report` geo object tables, and the `geozone_id` columns of `report.trips_stops` |
+| `asset_id` | An asset: a vehicle, a person, or another object that you monitor | `core_bdr.asset.id` | `report` and `agg` tables |
+| `device_id` | A GPS device | `core_bdr.device.id` | `telemetry`, `report`, and `agg` tables |
+| `geo_object_id` | A geo object: a zone, a point of interest, or a route | `core_bdr.geo_object.id` | `agg.device_geofence_status_hist` |
 
 To find the asset that a GPS device is installed on, join these business data tables in order:
 
 1. `core_bdr.custom_field_value_device` links a device to its asset: `ref_device_id` is the device, and `entity_id` is the asset.
 2. `core_bdr.asset` gives the name, the type, and the workspace of the asset.
 
-The tables of the transformation layer already have `asset_id`, `workspace_id`, and `org_id`, the ID of the organization, which is `organization_id` in `core_bdr.workspace`. You need these two joins only when you start from `telemetry`, which has `device_id` alone.
+The tables of the transformation layer already have `asset_id` and `workspace_id`. You need these two joins only when you start from `telemetry`, which has `device_id` alone.
 
-`core_bdr` stores IDs as the ClickHouse type `UUID`. Most `report` tables store the same IDs as `String`. The exceptions are `device_id` in the sensor tables and `geo_object_id` in the geo object tables, which are `UUID`. Convert a `String` side when you join, for example with `toUUID(t.asset_id)`.
+`core_bdr` stores IDs as the ClickHouse type `UUID`. The transformation layer stores `asset_id` and `workspace_id` as `String`. `device_id` is `String` in `report.trips_stops` and `UUID` in the `agg` tables, and `geo_object_id` is `UUID`. Convert a `String` side when you join, for example with `toUUID(t.asset_id)`.
 
 The following query lists the 10 longest trips of the last 7 days with the name of each asset. It doesn't filter out deleted assets, so it also lists the trips of an asset that was deleted since:
 
@@ -93,7 +93,7 @@ SELECT id, title
 FROM core_bdr.asset FINAL
 ```
 
-This rule applies to every `core_bdr` table and to the `report` tables of geo object visits, sensor readings, and current device status. The page of each table says whether it needs `FINAL`. Current geo object status is the exception: read its latest snapshot as described in [report database](transformation-layer/report.md#geo-object-visits).
+This rule applies to every `core_bdr` table, every `agg` table, and `telemetry.records` when you count messages. `report.trips_stops` doesn't need it. The page of each table says whether it needs `FINAL`.
 
 ### Leave out deleted business data
 
@@ -109,4 +109,5 @@ Every time column is in UTC, with millisecond precision. Convert a time to a loc
   * [core_bdr database](raw-data-layer/core-bdr.md): Find the tables of the workspaces, users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields.
   * [telemetry database](raw-data-layer/telemetry.md): Find the columns that store positions and sensor values.
 * [Transformation layer](transformation-layer/): Learn which tables Navixy calculates and when to query them.
-  * [report database](transformation-layer/report.md): Find the columns of trips, geo object visits, sensor readings, and device status.
+  * [report database](transformation-layer/report.md): Find the columns of trips and stops.
+  * [agg database](transformation-layer/agg.md): Find the columns of sensor values, digital inputs and outputs, and positions in geo objects.

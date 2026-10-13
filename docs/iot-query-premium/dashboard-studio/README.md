@@ -53,10 +53,10 @@ You can add these panel types to a dashboard:
 | --- | --- | --- |
 | Stat | One number | Trips this month |
 | Bar chart | Values by category or by date | Distance per asset |
-| Pie chart | How a total splits into parts | Devices by motion state |
+| Pie chart | How a total splits into parts | Distance of the month by asset |
 | Table | Rows with several columns | The last 100 trips |
 | Text | Headings and explanations, without a query | Instructions for readers of the dashboard |
-| Map | Points at their coordinates | The current position of each asset |
+| Map | Points at their coordinates | The latest position of each asset |
 
 A panel can also show a line chart or a time series. You choose these types in **Panel type** on the **Panel properties** tab of the panel editor, after you add the panel.
 

@@ -81,11 +81,10 @@ A Grafana panel that shows a time series needs a query that returns a time colum
 
 ```sql
 SELECT
-    bucket_time AS time,
-    round(val_sum / sample_count, 1) AS fuel_level
-FROM report.sensor_readings_rollup FINAL
-WHERE interval_sec = 3600
-  AND raw_key = 'lls_level_0'
+    toStartOfHour(bucket_time) AS time,
+    round(sum(val_sum) / sum(sample_count), 1) AS fuel_level
+FROM agg.sensor_readings_5m FINAL
+WHERE raw_key = 'lls_level_0'
   AND asset_id IN
   (
       SELECT toString(id)
@@ -93,14 +92,15 @@ WHERE interval_sec = 3600
       WHERE title = 'Truck 12' AND deleted_at IS NULL
   )
   AND $__timeFilter(bucket_time)
+GROUP BY time
 ORDER BY time
 ```
 
 The parts of the query that are specific to Grafana and IoT Query Premium are:
 
 * `$__timeFilter(bucket_time)` is a macro of the plugin. Grafana replaces it with a filter for the time range of the dashboard.
-* `interval_sec = 3600` selects the 1-hour periods of `report.sensor_readings_rollup`. For a range of several weeks, use `86400` to select the 1-day periods.
-* `toString(id)` converts the `UUID` of `core_bdr` to text, because `report` tables store `asset_id` as text.
+* `agg.sensor_readings_5m` has the values of each signal per minute. `toStartOfHour` and `GROUP BY` add the minutes up to hours. For a range of several weeks, use `toStartOfDay` for one point per day.
+* `toString(id)` converts the `UUID` of `core_bdr` to text, because the `agg` tables store `asset_id` as text.
 
 For the last 3 hours, the result is:
 
@@ -136,10 +136,10 @@ The following table lists the most common errors when Grafana connects to IoT Qu
 | SSL error, or the connection closes at once | **Secure connection** is off, or **Protocol** is **Native** | Turn on **Secure connection** and set **Protocol** to **HTTP** |
 | The panel shows no data | The time range has no data, or your devices don't send the signal name in the query | Widen the time range. List the signal names of your devices, and check the asset name |
 | The panel shows a table, not a line | The query has no column named `time`, or **Query type** is **Table** | Name the time column `time` and set **Query type** to **Time series** |
-| `UNKNOWN_TABLE` | The table name has no database | Write the table with its database, for example `report.sensor_readings_rollup` |
+| `UNKNOWN_TABLE` | The table name has no database | Write the table with its database, for example `agg.sensor_readings_5m` |
 
 ## See also
 
-* [report database](../data-schema/transformation-layer/report.md): Find the columns of the sensor tables, trips, geo object visits, and device status.
+* [report database](../data-schema/transformation-layer/report.md) and [agg database](../data-schema/transformation-layer/agg.md): Find the columns of trips and stops, sensor values, and positions in geo objects.
 * [telemetry database](../data-schema/raw-data-layer/telemetry.md): Find the signal names that your GPS devices send.
 * [Use third-party BI tools](./): Compare Grafana with the other BI tools that connect to IoT Query Premium.

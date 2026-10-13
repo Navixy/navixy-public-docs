@@ -83,7 +83,7 @@ The **Components** tab has one section for each view: **Table**, **Chart**, and 
 To set up the views, follow these steps:
 
 1. Go to the **Components** tab.
-2. Under **Table**, set **Page size**, the number of rows on one page of the table. **Max rows** is the highest number of rows that the report reads. To add a total at the bottom, turn on **Show the "Total" row**.
+2. Under **Table**, set **Page size**, the number of rows on one page of the table. **Max rows** is the highest number of rows that the report reads when its query has no `LIMIT`. A `LIMIT` in the query replaces **Max rows**, up to 250,000 rows. To add a total at the bottom, turn on **Show the "Total" row**.
 3. Under **Chart**, select the **Chart type**: **Time series (line)** or **Bar chart**.
 4. In **X-axis column**, select `stop_start`.
 5. In **Y-axis columns**, select `stop_minutes`. You can select more than one column.
@@ -174,13 +174,15 @@ A report exports the complete result, not only the rows on the current page of t
 
 To export, click one of these buttons in the report header:
 
-* **Excel**, then **Excel (.xlsx)** or **CSV (.csv)**, for a file with the rows of the data table.
+* **Excel**, then **Excel (.xlsx)** or **CSV (.csv)**, for a file with the rows of the data table. In the **Export Excel** or **Export CSV** window, click **Export as .xlsx** or **Export as .csv**.
 * **HTML** for a file with the data table, the chart, and the map. The chart and the map in the file stay interactive.
 * **PDF** for a document with the data table, the chart, and the map.
 
 The chart in an HTML or PDF file plots the same groups as the chart on screen. When the chart plots only some of the groups, the file gives the number of plotted groups and the total number of groups.
 
-To export only the data table, click **Download** in the **Data table** section and select **Excel (.xlsx)** or **CSV (.csv)**.
+An Excel file can start with a header above the column names, with the title in the first row and the description in the second. To add it, turn on **Add header** in the **Export Excel** window. **Title** and **Description** start with the title and the description of the report, and **Start column** sets the column where the header starts. A CSV file has no header. To use the same settings for every Excel export of the report, select **Save as default for this item** before you export. Saving the settings needs the Admin or Editor role.
+
+To export only the data table, click **Download** in the **Data table** section and select **Excel (.xlsx)** or **CSV (.csv)**. Then click **Export as .xlsx** or **Export as .csv** in the window that opens.
 
 {% hint style="success" %}
 You have a saved report with parameters, which anyone in Dashboard Studio can run with their own values and export.
