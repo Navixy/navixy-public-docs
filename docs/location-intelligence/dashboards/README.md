@@ -22,7 +22,7 @@ Dashboards answers the questions that a fleet team asks every day about the whol
 
 **Watch the health of vehicles and GPS devices.** When you plan maintenance, [Conditions, 14 days](conditions.md) shows where GPS accuracy is poor and lists the fault codes that vehicles report. It also marks GPS device batteries and vehicle power supplies whose voltage drops below their own 14-day average.
 
-On every dashboard, you can hide and arrange the panels, save the dashboard as a PDF file, and save the data of a panel as a CSV or Excel file. To report a problem or suggest a change, click **Send feedback**. [Search, layout, and export](dashboard-tools.md) describes these tools.
+On every dashboard, you can search the panels, hide and arrange them, print the dashboard or save it as a PDF file, and save the data of a panel as a CSV or Excel file. [Search, layout, and export](dashboard-tools.md) describes these tools.
 
 {% hint style="info" %}
 **Navigation**
@@ -41,7 +41,7 @@ Dashboards is for teams that look after a whole fleet rather than a single vehic
 
 Everyone who works in the same workspace sees the same data, in the office on a computer or in the field on a phone. Each person arranges the panels for their own job, in their own browser.
 
-To choose your own metrics and build your own dashboards, use Dashboard Studio, the AI dashboard builder of [IoT Query Premium](https://app.gitbook.com/s/75iUkTidqKcVcd2J49aB/), which is coming soon. You describe a dashboard in plain language, and its AI assistant builds it, so you can start without writing SQL. You can [request access to Dashboard Studio](dashboard-tools.md#dashboard-studio) from any dashboard.
+To choose your own metrics and build your own dashboards, use Dashboard Studio, the AI dashboard builder of [IoT Query Premium](https://app.gitbook.com/s/75iUkTidqKcVcd2J49aB/), which is coming soon. You describe a dashboard in plain language, and its AI assistant builds it, so you can start without writing SQL.
 
 ## Core concepts
 
@@ -62,7 +62,7 @@ Each of the three dashboards answers its own question:
 
 The language of the dashboards and the measurement units of distance and speed follow your settings in Navixy Console. Times show in the time zone of your browser.
 
-Navixy calculates every value in metric units and converts distance and speed when it shows them. Each value in a table shows its unit, such as 25 mph. The rules on these pages, such as moving above 3 km/h and trips of at least 50 m, are given in metric units, whatever units you use.
+Navixy calculates every value in metric units and converts distance and speed when it shows them. Each value in a table shows its unit. The rules on these pages, such as moving above 3 km/h and trips of at least 50 m, are given in metric units, whatever units you use.
 
 ## How current the data is
 
@@ -92,4 +92,4 @@ Start with [Live status](live-status.md). It shows the current state of the flee
 * [Live status](live-status.md): Learn what each panel on the Live status dashboard shows and what the connection and movement statuses mean.
 * [Trips, 14 days](trips.md): Learn how Navixy detects trips and what the totals, rankings, and trip list on the Trips dashboard show.
 * [Conditions, 14 days](conditions.md): Learn how the Conditions dashboard rates GPS accuracy and power supply and which device data each panel needs.
-* [Search, layout, and export](dashboard-tools.md): Learn how to search a dashboard, hide and arrange panels, export data, send feedback, and request Dashboard Studio.
+* [Search, layout, and export](dashboard-tools.md): Learn how to search a dashboard, hide and arrange panels, sort tables, and export data.
