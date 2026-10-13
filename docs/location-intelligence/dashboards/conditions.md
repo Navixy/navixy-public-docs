@@ -59,7 +59,7 @@ A position without any HDOP value isn't counted.
 
 | Rating | Latest HDOP |
 | --- | --- |
-| ⚫ **No GPS Fix** | Negative, which marks an invalid value. |
+| ⚫ **No GPS fix** | Negative, which marks an invalid value. |
 | 🔴 **Critical** | Above 5. |
 | 🟡 **Warning** | Above 2, up to 5. |
 | 🟢 **Normal** | 2 or less. |
@@ -103,7 +103,7 @@ These panels show odometer readings, engine RPM, and speed:
 * **Top 10 events by RPM:** The 10 highest engine RPM values in the fleet, with the asset and the time. Each row is one 5-minute period, so one asset can fill several rows.
 * **Speed trend for top 10 assets:** The top speed per hour of the 10 assets with the lowest current speed above zero.
 
-Mileage and speed use the units from your settings in Navixy Console: kilometers or miles. The column headers name the unit, such as **Mileage (km)**.
+Mileage and speed use the units from your settings in Navixy Console: kilometers or miles. Each value shows its unit, such as 1,250 km.
 
 ## Fault codes
 
@@ -118,7 +118,7 @@ A fault code, or DTC (diagnostic trouble code), is a code that the vehicle repor
 | Column | What it shows |
 | --- | --- |
 | **Asset label**, **Last update** | The asset, and the time of its latest status update. |
-| **Battery level %**, **Battery voltage** | The charge and the voltage of the built-in battery of the GPS device. |
+| **Battery level**, **Battery voltage** | The charge and the voltage of the built-in battery of the GPS device. |
 | **Board voltage** | The voltage of the vehicle power supply. |
 | **HDOP** | GPS accuracy of the latest position. |
 | **Mileage**, **RPM**, **Max speed** | The latest odometer reading, the latest engine RPM, and the latest speed. |

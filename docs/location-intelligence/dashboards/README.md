@@ -62,7 +62,7 @@ Each of the three dashboards answers its own question:
 
 The language of the dashboards and the measurement units of distance and speed follow your settings in Navixy Console. Times show in the time zone of your browser.
 
-Navixy calculates every value in metric units and converts distance and speed when it shows them. A table column header names the unit, such as **Speed (mph)**. The rules on these pages, such as moving above 3 km/h and trips of at least 50 m, are given in metric units, whatever units you use.
+Navixy calculates every value in metric units and converts distance and speed when it shows them. Each value in a table shows its unit, such as 25 mph. The rules on these pages, such as moving above 3 km/h and trips of at least 50 m, are given in metric units, whatever units you use.
 
 ## How current the data is
 

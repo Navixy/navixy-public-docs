@@ -77,8 +77,7 @@ Five bar charts each show the 10 assets with the highest value:
 | **Asset label** | The name of the asset. |
 | **Starting time**, **Ending time** | The time of the first position above 3 km/h, and the time of the last position above 3 km/h before the asset stopped. So **Ending time** is when the asset stopped, not 5 minutes later when Navixy confirmed the stop. |
 | **Distance**, **Duration** | How far the asset drove and how long the trip took. |
-| **Starting coordinates**, **Ending coordinates** | The positions where the trip started and ended. |
-| **Starting address**, **Ending address** | The street addresses at those positions. The address columns of [Trips & Stops](../reports/trips-and-stops.md) in Reports show the name of a geo object instead. |
+| **Starting latitude**, **Starting longitude**, **Ending latitude**, **Ending longitude** | The positions where the trip started and ended. |
 | **GPS points count** | The number of positions that the GPS device sent during the trip. A low number for a long trip means that the device reported rarely. |
 
 To find a trip, sort the table by a column or use the search, as described in [Search, layout, and export](dashboard-tools.md).

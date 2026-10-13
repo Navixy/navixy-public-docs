@@ -103,7 +103,7 @@ The average counts every status update of the hour, including the updates of ass
 | **Last connection status**, **Last movement status** | The latest connection and movement status of the asset. The values are listed under the table. |
 | **Speed**, **Altitude**, **Heading** | The speed, the height above sea level, and the direction of travel from the latest position. The heading appears as a compass arrow and direction, such as "↗ NE". |
 | **HDOP** | GPS accuracy of the latest position. HDOP (horizontal dilution of precision) is a number that the GPS device reports: the lower it is, the more accurate the position. |
-| **Coordinates**, **Address** | The latest position, and the street address at that position. |
+| **Latitude**, **Longitude**, **Address** | The latest position, and the street address at that position. |
 | **Current geofence** | The geofences that the asset is inside, updated every 30 minutes. |
 
 **Last connection status** shows one of these values:
