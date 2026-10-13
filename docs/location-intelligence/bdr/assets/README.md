@@ -36,7 +36,7 @@ Here's what you can do:
 
 ## Preset asset types
 
-Every new workspace starts with three preset asset types: **Vehicle**, **Workforce**, and **Cargo**. Navixy creates them together with the workspace, so they are there the first time you open **Assets**. A workspace created before Navixy added the preset types doesn't have them, and you can build the same types yourself. Each one is an ordinary asset type in your workspace. You can rename it and add or remove properties (called [custom fields](./#custom-fields) in Navixy). You can't delete an asset type at the moment.
+Every new workspace starts with three preset asset types: **Vehicle**, **Workforce**, and **Cargo**. Navixy creates them together with the workspace, so they are there the first time you open **Assets**. A workspace created before Navixy added the preset types doesn't have them, and you can build the same types yourself. Each one is an ordinary asset type in your workspace. You can rename it and add or remove properties (called [custom fields](./#custom-fields) in Navixy). The **Assets** page has no way to delete an asset type.
 
 Every field is optional except the one that describes the asset: **Vehicle kind** on Vehicle and **Cargo unit** on Cargo. Workforce has no required fields. Every type has a **Device** field for its assigned GPS device.
 

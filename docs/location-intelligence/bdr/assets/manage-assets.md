@@ -93,3 +93,5 @@ A tags field accepts several tags at once, so you don't need to turn on **Multip
 3. Confirm.
 
 A deleted asset can't be restored. Its device is released and can be assigned to another asset.
+
+You can't delete an asset while another asset has it in a field, such as **Driver** or **Transport unit**. Clear the field on the other asset or select another asset in it first.

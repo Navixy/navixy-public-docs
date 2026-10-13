@@ -83,7 +83,7 @@ Deactivate a device when you stop using it, for example when you take it out of 
 
 You can't undo a deactivation. If the device is assigned to an asset, Navixy removes it from the asset.
 
-You can't deactivate a device that an IoT Logic flow uses. Remove the device from every **Data Source** node that has it, or delete the flow, and then deactivate the device. If you try while a flow still uses the device, deactivation fails with the message "Failed to load the data." The same applies when the device is in a required device field of an asset or a geo object: assign another device to the field first.
+You can't deactivate a device that an IoT Logic flow uses, even a disabled flow. Remove the device from every **Data Source** node that has it, or delete the flow, and then deactivate the device. If you try while a flow still uses the device, deactivation fails with the message "Failed to load the data." The same applies when the device is in a required device field of an asset or a geo object: assign another device to the field first. A device in an optional field doesn't block the deactivation: Navixy clears that field.
 
 {% hint style="warning" %}
 After you deactivate a device, Navixy keeps its IMEI in use. You can't add or activate a device with this IMEI again, in this workspace or in any other. To move a device to another vehicle, don't deactivate it: [assign it to the other asset](../bdr/assets/manage-assets.md#assign-a-device-to-an-asset).

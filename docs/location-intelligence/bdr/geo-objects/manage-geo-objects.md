@@ -78,4 +78,4 @@ You assign a geo object to an asset through a [**Reference** field](README.md#cu
 8. In the field, select the geo object. To create one without leaving the asset, use <picture><source srcset="../../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/add.svg" alt="Create" data-size="line"></picture> in the field.
 9. Click **Save**.
 
-A geo object doesn't show which assets it's assigned to. Deleting a geo object leaves the field empty on every asset it was assigned to, without a warning. Before you save one of those assets again, clear the field or select another geo object, or the save fails.
+A geo object doesn't show which assets it's assigned to. You can't delete a geo object while an asset has it in a field, even in a field that was removed from the asset's type. Clear the field on those assets or select another geo object in it, and then delete the geo object.
