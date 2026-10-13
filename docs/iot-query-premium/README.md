@@ -16,6 +16,8 @@ IoT Query Premium is coming soon. This documentation describes the product as it
 
 IoT Query Premium answers the questions about your fleet that no ready-made view does, such as how long each asset group spends in each geo object per week. It gives you your fleet's data as SQL tables, and Dashboard Studio, with an AI assistant that builds dashboards from a request in plain language. Reports and Dashboards in Location Intelligence show fixed views of the same kind of data.
 
+<figure><img src=".gitbook/assets/iot-query-premium-overview.webp" alt="Illustration of IoT Query Premium as a stack of three layers. The bottom layer shows vehicles on a road, the middle layer a map with location pins, and the top layer a bar chart. Above the stack, the text reads IoT Query, Multi-layered analytics stack, Telematics Data Intelligence."><figcaption><p>IoT Query Premium turns the data that your vehicles send into tables for analysis</p></figcaption></figure>
+
 ## What you can do with IoT Query Premium
 
 **Explore the data with an AI assistant.** When a question comes up that no ready-made view answers, describe the dashboard that you need in [Dashboard Studio](dashboard-studio/), and the AI assistant builds its panels and queries. You can also write a SQL query, choose a chart, and place it on a dashboard yourself.
