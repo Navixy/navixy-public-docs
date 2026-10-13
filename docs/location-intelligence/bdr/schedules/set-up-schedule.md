@@ -105,7 +105,7 @@ To add the field, follow these steps:
 1. Open the asset type of your asset.
 2. Under **Custom fields**, click **Add field**.
 3. Select **Schedule** in the list of field types.
-4. Enter a **Name** for the field, for example, Working hours.
+4. In the new field's box, labeled **Schedule**, replace the name **Schedule** with a name for the field, for example, Working hours.
 5. Click **Save**.
 
 Every asset of the type now shows the field.

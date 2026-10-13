@@ -35,7 +35,7 @@ Fix every problem reported, then save again. A second save can report a problem 
 
 ## An attribute name clashes
 
-**The flow produces the same attribute more than once.** Two **Initiate Attribute** nodes that the same message passes through create an attribute with the same name. Rename one of them. The **then** and **else** branches of one **IF/THEN Logic** node can each create the same name, because a message follows only one of them. Two nodes under different **Data Source** nodes with no device in common are allowed. When one device is in two **Data Source** nodes of this flow and both paths produce the name, the message reads "Another flow already produces this attribute", although both nodes are in this flow.
+**The flow produces the same attribute more than once.** Two **Initiate Attribute** nodes that the same message passes through create an attribute with the same name. Rename one of them. The then and else branches of one **IF/THEN Logic** node can each create the same name, because a message follows only one of them. Two nodes under different **Data Source** nodes with no device in common are allowed. When one device is in two **Data Source** nodes of this flow and both paths produce the name, the message reads "Another flow already produces this attribute", although both nodes are in this flow.
 
 **Another flow already produces this attribute.** A different flow creates an attribute with this name on one or more of the devices this flow also covers. Rename it here, remove it from the other flow, or separate the device lists. Two flows with no devices in common may use the same name.
 

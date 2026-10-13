@@ -77,7 +77,7 @@ Which conditions you can add depends on the unit in **Repeat every**. **Week num
 | **Days of the month** | One or more days, 1 to 31.                                           | **First day**, **Last day**, **Day 15**, **Clear all**                                              |
 | **Days of the year**  | Day numbers from 1 to 366, or -1 for the last day of the year.       | None                                                                                                |
 | **Week numbers**      | Week numbers from 1 to 53.                                           | None                                                                                                |
-| **Hours**             | One or more hours of the day.                                        | **All day**, **Working hours** (09:00 to 17:00), **Morning**, **Evening**, **Night**, **Clear all** |
+| **Hours**             | One or more hours of the day.                                        | **All day**, **Working hours** (the hours 9 to 17, so 09:00 to 17:59), **Morning**, **Evening**, **Night**, **Clear all** |
 | **Minutes**           | One or more minutes of the hour.                                     | **Every minute**, **Every 2 minutes**, **Every 5 minutes**, **Every 30 minutes**, **Clear all**     |
 | **Seconds**           | One or more seconds of the minute.                                   | **Every 5 seconds**, **Every 10 seconds**, **Every 30 seconds**, **Clear all**                      |
 | **Week start day**    | The weekday a week begins on. It matters for rules that count weeks. | None                                                                                                |

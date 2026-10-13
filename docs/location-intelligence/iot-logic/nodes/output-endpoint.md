@@ -32,7 +32,7 @@ Every flow needs at least one **Output Endpoint** node. A flow with no **Output 
 
 <figure><img src="../../.gitbook/assets/iot-logic-output-endpoint-in-flow.png" alt="A Data Source node connected directly to an Output Endpoint node."><figcaption>The shortest flow: devices straight to the platform</figcaption></figure>
 
-Several paths can lead into one **Output Endpoint** node if no two of them are [live](../how-flows-work.md#live-paths) for the same message. For example, the **then** and **else** branches of one **IF/THEN Logic** node can share an **Output Endpoint** node.
+Several paths can lead into one **Output Endpoint** node if no two of them are [live](../how-flows-work.md#live-paths) for the same message. For example, the then and else branches of one **IF/THEN Logic** node can share an **Output Endpoint** node.
 
 ## How to configure an Output Endpoint node
 

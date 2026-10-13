@@ -17,7 +17,7 @@ This page says what each node is for. Follow the links for the settings and the 
 
 The **Nodes** panel shows four node types in three groups, in the order that you usually use them. **Start with** and **End with** are required. **Process** is optional: use it when the flow needs it.
 
-<table><thead><tr><th width="161">Node</th><th width="141">Panel group</th><th>What it does</th></tr></thead><tbody><tr><td><a href="data-source.md">Data Source</a></td><td>Start with</td><td>Chooses the devices whose data runs through this flow. Every message they send enters here.</td></tr><tr><td><a href="initiate-attribute.md">Initiate Attribute</a></td><td>Process</td><td>Works out new values from the ones already in the message, such as liters from a raw sensor count, and adds them to it.</td></tr><tr><td><a href="logic.md">IF/THEN Logic</a></td><td>Process</td><td>Checks one condition for every message and sends the message one of two ways: messages that match go to <strong>then</strong>, and the rest go to <strong>else</strong>.</td></tr><tr><td><a href="output-endpoint.md">Output Endpoint</a></td><td>End with</td><td>Finishes a path and sends the result on to the Navixy platform.</td></tr></tbody></table>
+<table><thead><tr><th width="161">Node</th><th width="141">Panel group</th><th>What it does</th></tr></thead><tbody><tr><td><a href="data-source.md">Data Source</a></td><td>Start with</td><td>Chooses the devices whose data runs through this flow. Every message they send enters here.</td></tr><tr><td><a href="initiate-attribute.md">Initiate Attribute</a></td><td>Process</td><td>Works out new values from the ones already in the message, such as liters from a raw sensor count, and adds them to it.</td></tr><tr><td><a href="logic.md">IF/THEN Logic</a></td><td>Process</td><td>Checks one condition for every message and sends the message one of two ways: messages that match go to the then branch, and the rest go to the else branch.</td></tr><tr><td><a href="output-endpoint.md">Output Endpoint</a></td><td>End with</td><td>Finishes a path and sends the result on to the Navixy platform.</td></tr></tbody></table>
 
 Formulas in an **Initiate Attribute** node and conditions in an **IF/THEN Logic** node work on the values that a device sends. A value that the device left out of a message changes where that message goes. See [Missing values](../expressions/missing-values.md) to learn how a flow handles such a message.
 
@@ -34,7 +34,7 @@ Three rules apply to every flow:
 
 When one node connects to two or more paths, all of them are [live](../how-flows-work.md#live-paths) for every message. The flow keeps the work of one path and discards the rest. The flow saves without an error, and nothing reports that the work was lost.
 
-An **IF/THEN Logic** node is safe, because only one of **then** and **else** is live for any message.
+An **IF/THEN Logic** node is safe, because only one of its then and else branches is live for any message.
 {% endhint %}
 
 ## Limits

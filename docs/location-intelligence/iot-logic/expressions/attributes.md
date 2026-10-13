@@ -47,7 +47,7 @@ Avoid ending a base attribute name with a digit. A digit at the end of a name is
 Nothing warns you. When a formula reads a name that isn't in the message, the formula returns nothing, and the result depends on the node:
 
 * In an **Initiate Attribute** node, the attribute isn't produced for that message.
-* In an **IF/THEN Logic** node, the operator decides where the message goes. Most operators send the message to **else**, and `!=` and `!~` send it to **then**. See [Missing values](missing-values.md).
+* In an **IF/THEN Logic** node, the operator decides where the message goes. Most operators send the message to the else branch, and `!=` and `!~` send it to the then branch. See [Missing values](missing-values.md).
 
 The flow keeps running and the message still reaches the Navixy platform. There is no error to find, which is what makes a mistyped name hard to spot. See [Missing values](missing-values.md), which is the same silence from the other direction.
 
@@ -59,7 +59,7 @@ Use the attribute button in an expression field to insert the name of an attribu
 
 When an **Initiate Attribute** node produces a value, you name it. These rules apply on top of the spelling rule.
 
-**The name must be unique for the devices it reaches.** The flow doesn't save when two of its nodes that the same message passes through produce the same name. The **then** and **else** branches of one **IF/THEN Logic** node can each produce it, because a message follows only one of them. It also doesn't save when another flow produces the same name on a device that this flow also covers. Two flows that cover separate fleets may use the same name, because no device receives the value twice.
+**The name must be unique for the devices it reaches.** The flow doesn't save when two of its nodes that the same message passes through produce the same name. The then and else branches of one **IF/THEN Logic** node can each produce it, because a message follows only one of them. It also doesn't save when another flow produces the same name on a device that this flow also covers. Two flows that cover separate fleets may use the same name, because no device receives the value twice.
 
 **A name the devices report stops the save.** A calculated attribute and a reported one share a namespace. The save fails when a device that the flow covers has reported the name, even once. If a device starts reporting the name after the flow is saved, the calculated value replaces that device's reading, and the next save of the flow fails.
 

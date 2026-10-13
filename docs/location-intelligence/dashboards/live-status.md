@@ -67,7 +67,7 @@ A message without a position, such as a sensor reading, doesn't change the movem
 
 **Top 10 longest unreported** lists the 10 assets whose last status update is the oldest, with its time in **Last updated**. It helps you find a device that lost power or connection.
 
-For a silent asset, the last status update is the moment when Navixy marked it **Offline**, about 1 hour after its last message. An asset whose device has never sent a message comes first, with an empty time. When the last status update is more than 30 days old, the table shows "1 month+" instead of the time.
+For a silent asset, the last status update is the moment when Navixy marked it **Offline**, about 1 hour after its last message. An asset whose device has never sent a message comes first. When the last status update is more than 30 days old, the table shows "1 month+" instead of the time.
 
 The usual reasons why a device goes silent are on the device side:
 
@@ -99,7 +99,7 @@ The average counts every status update of the hour, including the updates of ass
 | --- | --- |
 | **Asset label** | The name of the asset. An asset without a name appears as its ID. |
 | **Last updated** | The time of the latest status update: the latest message, or the moment when Navixy changed the connection status because no message arrived. |
-| **Offline category** | How long ago **Last updated** was: "24+hrs", "3+days", "7+days", "14+days", or "30+days". Empty when **Last updated** is less than 24 hours ago. |
+| **Offline category** | How long ago **Last updated** was: "24+hrs", "3+days", "7+days", "14+days", or "30+days". "—" when **Last updated** is less than 24 hours ago. |
 | **Last connection status**, **Last movement status** | The latest connection and movement status of the asset. The values are listed under the table. |
 | **Speed**, **Altitude**, **Heading** | The speed, the height above sea level, and the direction of travel from the latest position. The heading appears as a compass arrow and direction, such as "↗ NE". |
 | **HDOP** | GPS accuracy of the latest position. HDOP (horizontal dilution of precision) is a number that the GPS device reports: the lower it is, the more accurate the position. |
@@ -121,9 +121,9 @@ The average counts every status update of the hour, including the updates of ass
 
 **Last movement status** has no idle value. An asset that idles appears as `stopped` or `parked`. A cell shows "—" when Navixy has no status for the asset.
 
-**Offline category** counts from **Last updated**, which for a silent asset is about 1 hour after its last message. So "24+hrs" appears about 25 hours after the last message, much later than the **Offline** status. An asset that has been silent for a few hours is **Offline**, but its **Offline category** is still empty.
+**Offline category** counts from **Last updated**, which for a silent asset is about 1 hour after its last message. So "24+hrs" appears about 25 hours after the last message, much later than the **Offline** status. An asset that has been silent for a few hours is **Offline**, but its **Offline category** still shows "—".
 
-The table also has a **Satellites** column. To choose which columns you see, use **Columns** in the panel header.
+The table also has a **Satellites** column, which always shows "—". To choose which columns you see, use **Columns** in the panel header.
 
 ## See also
 

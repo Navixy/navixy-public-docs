@@ -33,7 +33,9 @@ Only a flow with the status **Enabled** processes data. Check the **Status** col
 {% step %}
 ### Confirm that the device is attached to this flow
 
-Open the flow's **Data Source** node and check the **Selected** tab. When you save the node, the node's whole device list is replaced. A device can be missing because a later edit replaced the list instead of adding the device to it.
+The fastest check is **Mapping table** on the IoT Logic start page. It lists every device that is selected in a flow, with the flows that it enters. If the device isn't in the list, no flow has it.
+
+Then open the flow's **Data Source** node and check the **Selected** tab. When you save the node, the node's whole device list is replaced. A device can be missing because a later edit replaced the list instead of adding the device to it.
 {% endstep %}
 
 {% step %}
@@ -75,7 +77,7 @@ A formula that reads an earlier value of a calculated attribute produces nothing
 
 An **IF/THEN Logic** node sends messages to a branch that you didn't expect. Most often, every message takes the branch instead of the few messages that you meant.
 
-Check the operator first. A condition that uses `!=` or `!~` returns `true` when the value is missing. A device that never reports the attribute then takes the **then** branch on every message. A condition that uses `>` or `<` fails instead, and the message goes to **else**.
+Check the operator first. A condition that uses `!=` or `!~` returns `true` when the value is missing. A device that never reports the attribute then takes the then branch on every message. A condition that uses `>` or `<` fails instead, and the message goes to the else branch.
 
 Guard the condition with `!= null &&` ahead of the comparison. See [Missing values](../expressions/missing-values.md).
 

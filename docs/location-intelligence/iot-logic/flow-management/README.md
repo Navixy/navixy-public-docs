@@ -28,6 +28,7 @@ A flow with the status **Disabled** isn't processing anything. Its devices still
 | --- | --- |
 | **Create flow** | Opens a form for the flow's name and description |
 | **Upload flow** | Opens a file that was downloaded from another flow. The file opens on the canvas as a new flow, which you then save. See [Downloading and uploading a flow](#downloading-and-uploading-a-flow) |
+| **Mapping table** | Opens **Device mapping**, a list of every device connected to a flow, with the flows that it enters. See [Device mapping](#device-mapping) |
 
 Click a row to open that flow on the canvas.
 
@@ -45,9 +46,27 @@ The same form appears when you create a flow and when you edit its settings.
 **Save** on the **Create flow** form opens an empty canvas. The flow is created the first time you save it there, and it appears in the list from then on. With **Flow enabled** on, that first save also switches the flow on. Saving checks the whole flow. See [Why flows won't save](../troubleshooting/flow-wont-save.md).
 {% endhint %}
 
+## Flow templates
+
+The **Flow templates** gallery above **Created flows** offers prepared flows for common cases. A template gives you a flow that you then connect to your own devices and adjust, which is faster than building the same flow by hand. See [Flow templates](templates.md).
+
+## Device mapping
+
+**Mapping table** opens **Device mapping**, a list of every device that is selected in a flow of the workspace. It shows which flows a device is in without opening the **Data Source** node of every flow.
+
+| Column | What it shows |
+| --- | --- |
+| **Name** | The device's name |
+| **Model** | The device model's code |
+| **Device identifier** | The device's identifier |
+| **Connected flows** | The flow that the device is in. Click the flow's name to open it |
+| **Data Source** | The **Data Source** node through which the device enters that flow |
+
+A device has one row for each **Data Source** node that it is selected in, so a device in two flows has two rows. Search the list by device name, model, or identifier. The list shows **No devices are connected to flows yet.** when no flow has any devices.
+
 ## Row actions
 
-The context menu of each row has three actions.
+Each row has a download icon, which saves the flow to a file, like **Download** in the context menu. The context menu of each row has three actions.
 
 | Action | What it does |
 | --- | --- |
@@ -73,13 +92,13 @@ A flow shows only the devices that your role lets you see. The **Connected devic
 
 ## Downloading and uploading a flow
 
-**Download** saves a flow to a JSON file named after the flow. It is in each row's context menu, and in the toolbar's context menu when the flow is open in the editor. You can download only a saved flow. The file contains the last saved version of the flow, so save your changes before you download it.
+**Download** saves a flow to a JSON file named after the flow. It is in each row's context menu and as the download icon in each row, and in the toolbar's context menu when the flow is open in the editor. You can download only a saved flow. The file contains the last saved version of the flow, so save your changes before you download it.
 
 The file keeps the flow's structure and logic:
 
 * The flow's name and description
 * Every node, with its name, description, and place on the canvas
-* Every connection, including which ones are **then** and which are **else**
+* Every connection, including which ones belong to the then branch and which to the else branch
 * The condition and the **Expression name** of each **IF/THEN Logic** node
 * The attribute names and formulas of each **Initiate Attribute** node
 
@@ -107,3 +126,4 @@ The mark disappears when you open the node. Fill in what is missing, then save t
 * [Flow editor](flow-editor.md): Learn what the canvas and the node palette are for, and how a flow is assembled.
 * [Build conditional flows](conditional-flow.md): Follow a worked example of a flow that branches.
 * [Devices without flows](default-processing.md): Learn what reaches the platform when no flow handles a device.
+* [Flow templates](templates.md): Start from a prepared flow instead of an empty canvas.

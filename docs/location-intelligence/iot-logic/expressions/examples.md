@@ -171,7 +171,7 @@ The flow has four nodes:
 
 1. A **Data Source** node with the whole fleet
 2. An **IF/THEN Logic** node with the condition `fuel_raw != null` and the **Expression name** `has_fuel_probe`
-3. On the **then** branch, an **Initiate Attribute** node with the three attributes below
+3. On the then branch, an **Initiate Attribute** node with the three attributes below
 4. One **Output Endpoint** node, which both branches connect to
 
 The **Initiate Attribute** node calculates its attributes in order, so each attribute can read the attributes above it.

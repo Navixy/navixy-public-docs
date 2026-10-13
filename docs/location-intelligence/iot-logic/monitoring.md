@@ -129,5 +129,5 @@ See [Troubleshooting](troubleshooting/README.md) to learn what to do in each cas
 
 Data Stream Analyzer shows values: what the devices sent and what your flow calculated. Two things don't show in the table directly:
 
-* **Which branch a message took.** Select the attribute that stores the result of the **IF/THEN Logic** node, named in its **Expression name**, such as `over_limit`. `true` means that the message took **then**. `false`, or no value, means **else**.
+* **Which branch a message took.** When the **IF/THEN Logic** node has an **Expression name**, select the attribute with that name, such as `over_limit`. It stores the node's result. `true` means that the message took the then branch. `false`, or no value, means the else branch.
 * **Late messages.** A message that arrives after a newer message is left out, so it never reaches the table. See [How flows work](how-flows-work.md).

@@ -38,7 +38,7 @@ IoT Logic finds every switched-on flow that the device is selected in, and in ea
 Inside a flow, the message moves from its **Data Source** node along the connections that you drew. Each node acts on the message in turn:
 
 * An **Initiate Attribute** node calculates new values and adds them to the message.
-* An **IF/THEN Logic** node evaluates its condition and sends the message down the **then** branch or the **else** branch.
+* An **IF/THEN Logic** node evaluates its condition and sends the message down the then branch or the else branch. On the canvas, a check-mark icon marks the then branch and a cross icon marks the else branch.
 * An **Output Endpoint** node finishes the path and sends the result to the Navixy platform.
 
 When a path reaches an **Output Endpoint** node, the flow keeps what it calculated. A path that finishes anywhere else keeps nothing: the message still reaches the platform, but with only what the device sent. See [IF/THEN Logic](nodes/logic.md).
@@ -63,7 +63,7 @@ One message leaves IoT Logic, with the readings and everything that the flows ad
 
 A path is **live** for a message when the message travels along it.
 
-* The **then** and **else** branches of an **IF/THEN Logic** node are never live for the same message. Each message takes one of them.
+* The then and else branches of an **IF/THEN Logic** node are never live for the same message. Each message takes one of them.
 * Two connections that leave any other node are both live. The message travels along both.
 
 Two live paths must not meet at one node: the flow doesn't save. Two live paths that don't meet save without an error, but the flow keeps the calculated values of only one of them. To process the same messages in two ways, split the path with an **IF/THEN Logic** node. See [Nodes](nodes/README.md).

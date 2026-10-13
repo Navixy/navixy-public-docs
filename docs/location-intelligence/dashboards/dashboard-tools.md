@@ -70,7 +70,7 @@ You can export a whole dashboard or a single panel:
 
 ## Update
 
-Every dashboard reloads its data every 90 seconds. **Update** reloads it immediately. Nothing on the page shows the reload.
+Every dashboard reloads its data every 90 seconds. Nothing on the page shows this automatic reload. **Update** reloads the data immediately. While it reloads, the button shows "Updating…" with a spinning icon.
 
 A panel that fails to load shows "Failed to load panel data" with the reason. When the dashboards receive too many requests in a short time, the panels show "Too many requests. Please wait a moment and refresh." Wait a moment, then click **Update**.
 

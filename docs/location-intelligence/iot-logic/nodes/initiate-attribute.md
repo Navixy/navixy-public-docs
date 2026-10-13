@@ -59,7 +59,7 @@ If you group related attributes into one node, the canvas stays easy to read. Sp
 
 An attribute name uses lowercase Latin letters and digits separated by underscores, such as `fuel_level_percent` or `temp_fahrenheit`.
 
-The name has to be unique for the devices that it is produced on. The flow doesn't save if two of its nodes that the same message passes through produce the name. The **then** and **else** branches of one **IF/THEN Logic** node can each produce it, because a message follows only one of them. The flow also doesn't save if another flow produces the same name on a device that this flow also covers. Two flows that cover different fleets may use the same name. See [Attribute names](../expressions/attributes.md) to learn the full rule.
+The name has to be unique for the devices that it is produced on. The flow doesn't save if two of its nodes that the same message passes through produce the name. The then and else branches of one **IF/THEN Logic** node can each produce it, because a message follows only one of them. The flow also doesn't save if another flow produces the same name on a device that this flow also covers. Two flows that cover different fleets may use the same name. See [Attribute names](../expressions/attributes.md) to learn the full rule.
 
 Choose a name that says what the value is, not which node made it. The name is what appears in Data Stream Analyzer, in Tracking, and in every formula that reads the value afterwards.
 

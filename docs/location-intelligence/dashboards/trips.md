@@ -27,7 +27,7 @@ A trip starts when the speed of an asset goes above 3 km/h. It ends when the spe
 
 Navixy also applies these rules:
 
-* A trip shorter than 50 m doesn't count. Navixy treats it as GPS noise, such as a position that drifts while the vehicle is parked.
+* A trip shorter than 100 m doesn't count. Navixy treats it as GPS noise, such as a position that drifts while the vehicle is parked.
 * When the GPS device sends no position for more than 15 minutes, the trip ends there. The next position starts a new trip or stop. So a drive through a long tunnel can appear as two trips.
 * A trip appears on the dashboard only after it ends. A vehicle that is driving now has no trip for the current drive yet.
 * Navixy builds trips every 4 hours. A trip is complete when the asset has stood still for 5 minutes and the GPS device kept sending positions during that time. Then the trip appears after the next run, up to about 4 hours later.

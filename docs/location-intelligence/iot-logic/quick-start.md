@@ -15,12 +15,13 @@ Before you start, you need at least one device that sends data into your workspa
 
 ## 1. Create the flow
 
-There are two ways to start. This page builds a flow by hand, which is the way that shows you how the parts fit together.
+There are three ways to start. This page builds a flow by hand, which is the way that shows you how the parts fit together.
 
 | Start from | When |
 | --- | --- |
 | **Create flow** | An empty canvas. What this page does |
 | **Upload flow** | A file downloaded from a flow you or a colleague already built |
+| **Flow templates** | A prepared flow for a common case, which you then connect to your own devices. See [Flow templates](flow-management/templates.md) |
 
 1. Open IoT Logic. The **Created flows** table lists the flows in your workspace. The table is empty if you have no flows yet.
 2. Click **Create flow**.

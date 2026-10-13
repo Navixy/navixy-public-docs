@@ -18,7 +18,7 @@ This page describes the **IF/THEN Logic** node: how it splits a flow, how to wri
 {% column %}
 The **IF/THEN Logic** node checks one condition for every message and sends the message one of two ways.
 
-Messages that match the condition leave through the **then** connection. Everything else leaves through **else**. Both connections are real paths: the flow continues on each of them.
+Messages that match the condition leave through the then branch: the upper outgoing point, marked with a check-mark icon. Everything else leaves through the else branch: the lower outgoing point, marked with a cross icon. Both branches are real paths, and the flow continues on each of them.
 {% endcolumn %}
 
 {% column %}
@@ -28,8 +28,8 @@ Messages that match the condition leave through the **then** connection. Everyth
 
 The node has two uses:
 
-* Calculate only when it applies. Put an **Initiate Attribute** node on the **then** branch, and its values appear only on the messages that match. For example, in a fleet where only some trucks have a fuel probe, the flow can calculate liters, a percentage, and the change since the last message for those trucks. The messages from the other trucks stay unchanged.
-* **Mark the matching messages.** The node stores its answer, true or false, under its **Expression name**, on every message where the condition gives an answer. Data Stream Analyzer and Tracking show it like any other attribute.
+* Calculate only when it applies. Put an **Initiate Attribute** node on the then branch, and its values appear only on the messages that match. For example, in a fleet where only some trucks have a fuel probe, the flow can calculate liters, a percentage, and the change since the last message for those trucks. The messages from the other trucks stay unchanged.
+* Mark the matching messages. When you enter an **Expression name**, the node stores its answer, true or false, under that name on every message where the condition gives an answer. Data Stream Analyzer and Tracking show it like any other attribute.
 
 Both branches end at an **Output Endpoint** node, and they can share one **Output Endpoint** node. See [Formula examples](../expressions/examples.md#calculating-a-value-only-for-some-messages) to learn how the complete fuel probe flow is built.
 
@@ -45,7 +45,7 @@ Two branches that are both [live](../how-flows-work.md#live-paths) must not meet
 
 {% columns %}
 {% column width="58%" valign="middle" %}
-The node has one condition. The **Expression name** is the name of its result, and the **Condition expression** is the condition itself.
+The node has one condition. The optional **Expression name** is the name of its result, and the **Condition expression** is the condition itself.
 {% endcolumn %}
 
 {% column width="42%" %}
@@ -56,7 +56,7 @@ The node has one condition. The **Expression name** is the name of its result, a
 | Field | What it does |
 | --- | --- |
 | **Name** | Required. What the node is called on the canvas |
-| **Expression name** | The node stores the condition's result under this name, true or false, which later nodes can read. It arrives pre-filled as `logic_1`, `logic_2`, and so on, numbered within the flow, so a node stores its result unless you clear the field. Rename it when another flow covers the same devices, or the two flows' default names collide. The value is an attribute, so the name follows the [attribute naming rules](../expressions/attributes.md) and has to be unique for the devices it reaches |
+| **Expression name** | Optional. The node stores the condition's result under this name, true or false, which later nodes can read. The field is empty on a new node. When you leave it empty, the node only sends each message to one of its branches and stores no result. The value is an attribute, so the name follows the [attribute naming rules](../expressions/attributes.md) and has to be unique for the devices it reaches. Up to 64 characters |
 | **Condition expression** | Required. The condition. It must return true or false. Up to 480 characters |
 
 **Apply changes** doesn't accept a node with no condition, and the **Condition expression** field shows an error.
@@ -103,7 +103,7 @@ value('fuel_level', 0) < value('fuel_level', 1) - 40
 See [Earlier values](../expressions/history.md) to learn how to read earlier values.
 
 {% hint style="warning" %}
-**A missing value doesn't always send the message down the else branch.** It depends on the operator: `>` and `<` produce nothing, so the message goes to **else** and the node stores no result, but `!=` and `!~` give a real answer of true, so the message goes to **then**. A condition like `speed != 60` fires on every message from a device that reports no speed at all.
+**A missing value doesn't always send the message down the else branch.** It depends on the operator: `>` and `<` produce nothing, so the message goes to the else branch and the node stores no result, but `!=` and `!~` give a real answer of true, so the message goes to the then branch. A condition like `speed != 60` fires on every message from a device that reports no speed at all.
 
 Before you write a condition that could read a missing value, see [Missing values](../expressions/missing-values.md).
 {% endhint %}
@@ -134,7 +134,7 @@ Enter the **Condition expression**. Use the attribute button in the field to ins
 {% step %}
 ### Apply and connect both branches
 
-Click **Apply changes**, then draw the **then** and **else** connections on the canvas to the nodes that handle each case. **then** is the upper outgoing point, marked with a check mark, and **else** is the lower one, marked with a cross.
+Click **Apply changes**, then connect the then and else branches on the canvas to the nodes that handle each case. The then branch starts at the upper outgoing point, marked with a check-mark icon. The else branch starts at the lower one, marked with a cross icon.
 {% endstep %}
 {% endstepper %}
 

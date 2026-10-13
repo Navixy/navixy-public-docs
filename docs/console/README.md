@@ -14,7 +14,7 @@ noIndex: true
 
 A fleet business runs on several Navixy products at once: one stores the vehicles and people, one processes what the devices send, others turn it into reports and dashboards. Someone decides which teams get which products, who may see which data, and what it all costs. Navixy Console is where you make those decisions, for your own company and for every company you serve.
 
-<p align="center"><a href="http://console.navixy.com/signup?utm_source=navixy-docs\&#x26;utm_campaign=console-overview" class="button primary" data-icon="right-to-bracket">Sign in to Console</a></p>
+<p align="center"><a href="http://console.navixy.com/signup?utm_source=navixy-docs\&#x26;utm_campaign=console-overview" class="button primary" data-icon="right-to-bracket">Create a Console account</a></p>
 
 ## What you can do in Navixy Console
 

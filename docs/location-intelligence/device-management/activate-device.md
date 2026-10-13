@@ -89,13 +89,14 @@ Two messages mean that the phone number or the device is already in use. Each sh
 
 After activation, Navixy adds the device to the **Devices** list and queues a configuration SMS to the phone number you entered. The SMS sets the APN in the device and the address that the device sends its data to. The SMS usually arrives in 1–2 minutes.
 
-While the device waits to connect, the device page shows two sections:
+While the device waits to connect, the device page shows three sections:
 
+- **Automatic configuration via SMS**, which says that the configuration SMS is queued and shows the time left until you can retry the activation.
+- **Manual configuration**, with a server address and a port for configuring the device by hand.
 - **Activation progress**, with the steps of the activation:
   - "Device registered, waiting to connect", with the time of the activation
   - "Configuration SMS queued", with the APN you entered
   - "Waiting for the first data packet from the device"
-- **Manual configuration**, with a server address and a port for configuring the device by hand.
 
 The device connects after it receives the SMS, if it's powered on and within cellular coverage. When the first data arrives, the last step changes to "Device connected, activation complete", with the time. If the device page is open at that moment, it shows **Activation complete**: "The device is connected and sending data. It's ready to use."
 
@@ -115,14 +116,15 @@ The causes in the **Device** and **SIM card** groups are on the device or with t
 
 - **Power:** the device is powered off, or its battery is empty.
 - **Sleep mode:** sleep mode or power saving is on, so the device connects rarely or on a schedule.
-- **SMS login or password:** Navixy sends the configuration SMS with an empty SMS login and password. A device that has its own SMS login or password rejects the SMS. So does a device that accepts SMS only from authorized phone numbers. Remove the login, the password, or the restriction on the device, for example in Teltonika Configurator, and retry the activation.
-- **Leading spaces:** the configuration SMS for a Teltonika device starts with two spaces, the place of the empty SMS login and password. If a carrier or an SMS gateway on the way removes these spaces, the device can reject the command.
+- **SMS password:** the device has an SMS password that isn't the default one, so it rejects the configuration commands. Remove the password on the device, for example in Teltonika Configurator, and retry the activation.
 - **Stored data:** the device keeps its data in its internal memory and sends it later.
 - **Firmware:** the firmware is out of date. Update it to the latest version.
-- **SIM card plan:** the plan doesn't include SMS or mobile data, or the data or the balance is used up.
+- **SIM card plan:** the plan doesn't include SMS or mobile data. Also check that the SIM card still has mobile data and balance left.
 - **PIN code:** the SIM card asks for a PIN code. Turn the PIN off.
 - **Roaming:** the SIM card is roaming while data roaming is off.
 - **Carrier:** the carrier blocks connections to the platform server, or it shut down the network standard that the device uses, such as 2G or 3G, in this region.
+
+Other settings on the device can also make it reject the configuration SMS. Navixy sends the SMS with an empty SMS login and password, so a device that has its own SMS login rejects it. So does a device that accepts SMS only from authorized phone numbers. For a Teltonika device, the SMS starts with two spaces, the place of the empty login and password. If a carrier or an SMS gateway on the way removes these spaces, the device can reject the command.
 
 To check the causes and try again, follow these steps:
 

@@ -57,7 +57,7 @@ Enter an **Organization name**. Use your company's name. It is how your organiza
 **Home region** shows where your organization's data is stored. It's where your data is kept, not where your company operates.
 
 {% hint style="info" %}
-Navixy stores data in three regions: the European Union, the United States, and Middle East/North Africa. Only the European Union is available at the moment, so your organization and all its workspaces store their data there. The other regions will be available soon.
+Navixy stores data in three regions: the European Union, the United States, and Saudi Arabia. The **Home region** field shows **European Union** and can't be changed, so your organization and all its workspaces store their data there.
 {% endhint %}
 {% endstep %}
 
@@ -66,12 +66,11 @@ Navixy stores data in three regions: the European Union, the United States, and 
 
 A workspace stores your business data, such as devices and assets. Each workspace has its own products and tariff plan, so you can use separate workspaces for separate fleets, teams, or departments.
 
-The **Set up your workspace** page has multiple steps. The **Launch preview** panel beside them shows what you have chosen so far.
+The **Set up your workspace** page has three steps. The **Launch preview** panel beside them shows what you have chosen so far.
 
-1. **Region**: Where the workspace's data is stored. By default, your organization's home region.
-2. **Profile**: Keep the selected profile. Profiles marked as **Legacy** can't be selected at the moment.
-3. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything.
-4. **Workspace name**: Required. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
+1. **Region**: Where the workspace's data is stored. **EU (Germany)** is selected. The other regions are marked **Coming soon** and can't be selected.
+2. **Profile**: Keep the selected profile. Profiles marked as **Legacy** can't be selected.
+3. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything. Enter a **Workspace name** on this step too. It's required. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
 
 Click **Continue** to move to the next step and **Launch** on the last one.
 {% endstep %}
@@ -100,7 +99,7 @@ After **Launch**, Console opens on the Console hub. The top of the hub shows you
 
 While Navixy creates your workspace, the hub tells you that instead of listing products. This usually takes less than a minute, and the hub updates automatically.
 
-Under **My products**, each product shows its status. A product shows as **Enabling** while Navixy sets it up, which takes a few minutes, and **Enabled** when it's ready.
+Under **My products**, each product shows its status. A product shows as **Enabling** while Navixy sets it up, which takes a few minutes. When the product is ready, a green dot appears on its icon, and the **Open** button appears next to it.
 
 The products that your plan requires stay enabled. You can enable or disable the other products with **Enable** and **Disable**. Disabling a product removes user access to it, but its data is kept. To use a product not covered by your plan, contact [sales@navixy.com](mailto:sales@navixy.com).
 

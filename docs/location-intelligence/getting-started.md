@@ -36,11 +36,12 @@ To activate the device, follow these steps:
 1. Go to **Device Management** and click **Activate device**. The **Activate device** page opens on the **Model** step.
 2. In the search field, enter the model name or the vendor name, for example, FMB920.
 3. Open the vendor group, select the model, and click **Next**. The **Details** step opens.
-4. (Optional) In **Device name (optional)**, enter a name for the device. Without a name, Navixy names the device after its vendor, model, and IMEI.
-5. In **Phone number**, enter the phone number of the SIM card. Use the country code and digits only, for example, 79121234567.
+4. (Optional) In **Device name (optional)**, enter a name for the device. Without a name, Navixy names the device after its model and IMEI.
+5. In **Phone number**, enter the phone number of the SIM card, with the country code. The number has 5 to 15 digits. You can type it with spaces, brackets, dashes, or a plus sign, for example, +1 (201) 555-0123: the form keeps only the digits.
 6. Expand **GPRS settings** and enter the mobile carrier's **APN**. If the carrier uses them, also enter the **APN username (optional)** and the **APN password (optional)**.
 7. In **IMEI**, enter the 15-digit IMEI of the device.
-8. Click **Activate**. The device page will open and show the device as **Waiting to connect**.
+8. (Optional) In **Activation code (optional)**, enter the activation code, if you have one.
+9. Click **Activate**. The device page will open and show the device as **Waiting to connect**.
 
 If the workspace has no devices yet, the **Devices** list will show an **Activate device** button, which opens the same page. If no model matches your search, check the model name on the device label or on its box. If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device.
 

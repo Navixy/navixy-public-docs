@@ -25,7 +25,7 @@ An asset appears on the map when it has a device and the device sent a position.
 3. To search by name, click <picture><source srcset="../.gitbook/assets/icons/search-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/search.svg" alt="Search" data-size="line"></picture> in the panel and enter part of the name.
 4. Click the asset's entry in the list.
 
-The map moves to the asset and circles its marker. Each asset you select after that moves the map again. Selecting all assets with the **Select all** checkbox doesn't move the map.
+The map moves to the asset. While some of the assets on the map are selected, but not all, the markers of the selected assets are larger, with a white fill and an outline in the color of their status, and the other markers are dimmed. Each asset you select after that moves the map again. Selecting all assets with the **Select all** checkbox doesn't move the map.
 
 To see only the assets you selected, click <picture><source srcset="../.gitbook/assets/icons/more_vert-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/more_vert.svg" alt="Open map settings" data-size="line"></picture> in the panel header and select **Show only selected assets**.
 
@@ -52,7 +52,7 @@ You can also click the asset's marker on the map. To open the details panel ever
 
 If the asset has more than one device, the panel shows one section per device. The primary device's section is open, and you can expand the others.
 
-Readings are listed under their code names, such as **hw_mileage** for the odometer or **din channel 1** for the first input. To learn what they mean, see [Asset details](README.md#asset-details).
+Readings are listed under their titles. A reading that has no title is listed under its code name, such as **hw_mileage** for the odometer or **din channel 1** for the first input. To learn what they mean, see [Asset details](README.md#asset-details).
 
 ## Show a custom field in the asset list
 

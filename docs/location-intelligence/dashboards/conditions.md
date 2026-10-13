@@ -123,7 +123,7 @@ A fault code, or DTC (diagnostic trouble code), is a code that the vehicle repor
 | **HDOP** | GPS accuracy of the latest position. |
 | **Mileage**, **RPM**, **Max speed** | The latest odometer reading, the latest engine RPM, and the latest speed. |
 
-The table has more columns: **Satellites**, **DTC codes**, **DTC events**, **SOS events**, **Seatbelt events**, and **Max acceleration**. To choose which columns you see, use **Columns** in the panel header.
+The table has more columns, which always show the same value: **Satellites**, **DTC codes**, and **Max acceleration** show "—", and **DTC events**, **SOS events**, and **Seatbelt events** show 0. For the fault codes, see [Fault codes](#fault-codes). For the SOS and seatbelt events, see [Fleet summary](#fleet-summary). To choose which columns you see, use **Columns** in the panel header.
 
 ## See also
 

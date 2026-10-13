@@ -46,14 +46,14 @@ temp_celsius != null && temp_celsius > 8
 ```
 
 {% hint style="warning" %}
-Start every condition with `attribute != null &&`. This check keeps a message without the value out of the **then** branch, whatever operator follows. The check works only when it comes first. See [Missing values](../expressions/missing-values.md).
+Start every condition with `attribute != null &&`. This check keeps a message without the value out of the then branch, whatever operator follows. The check works only when it comes first. See [Missing values](../expressions/missing-values.md).
 {% endhint %}
 
 Set **Expression name** to `over_limit` as well. The node then stores its own true or false answer as an attribute. Anything that reads the data can then count excursions, which are readings above the limit, without recalculating the threshold.
 
 ## 4. Mark the messages above the limit
 
-Add a second **Initiate Attribute** node and connect the **then** branch of the Logic node to it: the upper outgoing point, marked with a check mark. Name it `Excursion`.
+Add a second **Initiate Attribute** node and connect the then branch of the Logic node to it: the upper outgoing point, marked with a check-mark icon. Name it `Excursion`.
 
 Add one attribute, `excursion_degrees`, that records how far over the limit the reading was:
 
@@ -61,7 +61,7 @@ Add one attribute, `excursion_degrees`, that records how far over the limit the 
 temp_celsius - 8
 ```
 
-This node is on the **then** branch, so it runs only for messages above the limit. Messages on the **else** branch never reach this node and never have `excursion_degrees`.
+This node is on the then branch, so it runs only for messages above the limit. Messages on the else branch never reach this node and never have `excursion_degrees`.
 
 ## 5. Send both paths to the platform
 
@@ -69,13 +69,13 @@ Add one **Output Endpoint** node and name it `To platform`.
 
 Connect two paths to the node:
 
-* The **Excursion** node, which is the end of the **then** branch
-* The **else** branch of the Logic node, directly: the lower outgoing point, marked with a cross
+* The **Excursion** node, which is the end of the then branch
+* The else branch of the Logic node, directly: the lower outgoing point, marked with a cross icon
 
 Both paths end at the same node. The flow allows this connection because only one of the two paths is live for any message: a message is either over the limit or not.
 
 {% hint style="info" %}
-Two branches that are both live must not meet. Here the two branches can't both be live, because **then** and **else** are alternatives. Two branches that fan out from the same node and rejoin would fail the save, with **Two live paths reach this node, so one path's work would be lost**.
+Two branches that are both live must not meet. Here the two branches can't both be live, because the then and else branches are alternatives. Two branches that fan out from the same node and rejoin would fail the save, with **Two live paths reach this node, so one path's work would be lost**.
 {% endhint %}
 
 ## 6. Save the flow

@@ -60,7 +60,16 @@ If you switch the slot back from **Custom** to a preset rule or to **Doesn't rep
 Which conditions you can add depends on the unit in **Repeat every**. **Week numbers**, for example, works only with **Year**. Turning on **All day** removes any **Hours**, **Minutes**, and **Seconds** conditions from the slot. [Schedules](README.md#custom-repeat-rule) lists them all.
 
 {% hint style="info" %}
-Your start date may not match the conditions you set. When you save, Navixy can move the start forward to the first matching date. This happens with **Days of the week** on **Week**, **Month**, or **Year**, with **Days of the month** on **Month** or **Year**, and with **Hours**, **Minutes**, or **Seconds** on **Day** or a shorter unit, which can move the start time of day. A slot that starts on a Monday and happens on Saturdays and Sundays first happens on the Saturday after it.
+Your start date may not match the conditions you set. When you save, Navixy can move the start forward to the first matching date and time. These conditions can move the start:
+
+* **Months**, **Days of the year**, and **Week numbers** on **Year**
+* **Days of the month** on **Month** or **Year**
+* **Days of the week** on **Week**, **Month**, or **Year**
+* **Hours** on **Day**, **Week**, **Month**, or **Year**
+* **Minutes** on **Hour** or a longer unit
+* **Seconds** on **Minute** or a longer unit
+
+**Hours**, **Minutes**, and **Seconds** move the start time of day. On a shorter unit, a condition only limits when the slot happens and doesn't move the start. A slot that starts on a Monday and happens on Saturdays and Sundays first happens on the Saturday after it.
 {% endhint %}
 
 ### Repeat a slot Monday to Friday

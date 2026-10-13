@@ -41,7 +41,7 @@ The **General** tab has the following fields:
 | Field                                             | Description                                                                                                                                                                 |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Display name**                                  | The organization's name, as everyone that you invite sees it.                                                                                                               |
-| **URL**                                           | The organization's short name in addresses. It uses 1 to 128 lowercase letters or numbers, separated by single dashes.                                                      |
+| **URL**                                           | The organization's short name in addresses. Navixy sets it when the organization is created. You can't change it.                                                          |
 | **Brand name**                                    | Your brand name, if it differs from the organization's name.                                                                                                                |
 | **Growth manager**, **Contract type**, **Region** | Set by Navixy. You can't change them. **Region** is the organization's home region where its data is stored.                                                                |
 | **Language**, **Country**                         | The organization's language and country.                                                                                                                                    |
@@ -49,13 +49,13 @@ The **General** tab has the following fields:
 | **Notes**                                         | Any text for your team.                                                                                                                                                     |
 | **Channel partner**                               | Shows whether the organization can create child organizations. Navixy grants this status to your organization. A channel partner can grant it to their child organizations. |
 
-The **Billing details** tab lists the organization's legal name and address, its tax ID or VAT number, bank details, and billing email. At the moment, you can't edit these fields.
+The **Billing details** tab lists the organization's legal name and address, its tax ID or VAT number, bank details, and billing email. You can't edit these fields.
 
 **Delete organization** deletes the organization and every organization under it. You can't delete your last organization.
 
 ## Workspace details
 
-Clicking a workspace's name on the **Workspaces** tab opens a side panel titled with that name. Its top shows the workspace ID, the creation date, the region, and the workspace's products.
+Clicking a workspace's name on the **Workspaces** tab opens a side panel titled with that name. Its top shows the workspace **ID**, the date it was **Created**, the **Organization**, and the **Tariff plan**. Below are the workspace's fields, including its **Region**, which you can't change, and its products.
 
 You can change the **Workspace name** and the **Description**. See [Rename a workspace](manage-workspaces.md#rename-a-workspace). **Delete workspace** deletes the workspace, which can't be undone. An organization must keep at least one workspace, so you can't delete the last one. See [Delete a workspace](manage-workspaces.md#delete-a-workspace).
 

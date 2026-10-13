@@ -56,7 +56,7 @@ On the sidebar, click **Organization**, then click **Create organization**.
 
 ### Name the organization
 
-Select **Child organization** and enter an **Organization name**. Use your customer's company name.
+Select **Child organization** and enter an **Organization name**. Use your customer's company name. The window title changes to **Create child organization**.
 
 If **Child organization** can't be selected, your organization isn't a channel partner yet. See [Become a channel partner](#id-1.-become-a-channel-partner).
 {% endstep %}
@@ -76,12 +76,11 @@ Click **Continue**.
 
 ### Set up the first workspace
 
-The next steps set up the new organization's first workspace:
+The next three steps set up the new organization's first workspace:
 
-1. **Region**: Where the workspace's data is stored. Only the European Union is available at the moment.
+1. **Region**: Where the workspace's data is stored. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 2. **Deployment**: Keep the selected option. Options marked as **Legacy** can't be selected.
-3. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs.
-4. **Workspace name**: By default, the organization's name. You can change it.
+3. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs. On the same step, check the **Workspace name**. By default, it's the organization's name. You can change it.
 
 The **Launch preview** panel shows what you have chosen so far. Click **Continue** to move to the next step, and **Launch** on the last one.
 {% endstep %}
@@ -108,7 +107,7 @@ To set up the customer's workspace, follow these steps:
 
 1. In the top navigation bar, select the customer's organization from the left dropdown menu.
 2. On the sidebar, click **Console hub**.
-3. Check that the products that the customer needs are **Enabled**.
+3. Check that the products that the customer needs are enabled: an enabled product has a green dot on its icon and an **Open** button.
 4. Next to a product, click **Open**.
 5. In the product, add the customer's data, such as the GPS devices and the vehicles that they track.
 6. Choose a role for the customer's administrator. The Admin role gives full access to the customer's organization. To give less access, create a role. For the steps, see [Create a role](../users-and-roles/manage-roles.md#create-a-role).

@@ -89,7 +89,7 @@ An invitation reserves a place in the organization for an email address and stor
 
 ## Security profiles
 
-A security profile sets how strict the sign-in rules are for a member, such as how long a session lasts. It doesn't change what the member can reach, because their roles decide that. Every member has a security profile. You select it when you invite the person, and a member without one gets **Standard**. When a session ends, the member signs in again.
+A security profile sets how strict the sign-in rules are for a member, such as how long a session lasts. It doesn't change what the member can reach, because their roles decide that. You select it when you invite the person. If a member has no security profile set, the **Users** tab shows **No security profile** for them, and Navixy applies the **Standard** sign-in rules. When a session ends, the member signs in again.
 
 | Profile       | For                                                                | Sign-in rules                                                                                                                                                               |
 | ------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

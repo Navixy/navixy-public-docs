@@ -56,7 +56,7 @@ Drag the node from the **Nodes** panel onto the canvas. The node gets a default 
 
 Draw a connection from the earlier node's outgoing point to the later node's incoming point. Direction matters: data moves along the connection, and a flow can never loop back.
 
-An **IF/THEN Logic** node has two outgoing points rather than one. The upper one, marked with a check mark, is **then**. The lower one, marked with a cross, is **else**.
+An **IF/THEN Logic** node has two outgoing points rather than one. The upper one, marked with a check-mark icon, starts the then branch, which messages that match the condition take. The lower one, marked with a cross icon, starts the else branch, which the other messages take.
 {% endstep %}
 
 {% step %}
@@ -78,7 +78,7 @@ The settings dialog has the same controls for every node type. The fields of eac
 | **Apply changes** | Keeps the changes and closes the dialog. Available once you change a field |
 | **Cancel** | Discards them |
 
-The dialog of some node types has a help control, which opens the in-product help for that node.
+The dialog of every node type has a help icon next to its title. For **IF/THEN Logic** and **Initiate Attribute** nodes, the icon opens a help dialog about that node type. For **Data Source** and **Output Endpoint** nodes, point at the icon to read a short description of the node.
 
 {% hint style="info" %}
 **Apply changes** doesn't save the flow. It updates the node on the canvas, and the flow is saved when you click **Save flow**.

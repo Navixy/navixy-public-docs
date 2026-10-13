@@ -19,10 +19,10 @@ To create a workspace, follow these steps:
 
 1. In the top navigation bar, select your organization from the left dropdown menu.
 2. On the sidebar, click **Organization**, then click **Create workspace**.
-3. Select a **Region**. Only the European Union is available at the moment.
+3. Select a **Region**. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 4. Keep the selected **Deployment** option.
 5. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-6. Enter a **Workspace name**.
+6. On the same step, enter a **Workspace name**.
 7. Click **Launch**.
 
 The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.

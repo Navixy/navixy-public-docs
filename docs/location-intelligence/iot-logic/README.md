@@ -26,7 +26,7 @@ IoT Logic is a tool in the Navixy platform for processing data without writing c
 {% hint style="info" %}
 **Navigation**
 
-IoT Logic is a product of the Location Intelligence workspace. Open it from the platform menu.
+To open IoT Logic, click **IoT Logic** in the Location Intelligence menu.
 {% endhint %}
 
 ## Who it is for
@@ -49,7 +49,7 @@ Take a temperature sensor that reports a raw number, where the team needs degree
 
 Add an **[IF/THEN Logic](nodes/logic.md)** node when some messages need different handling from the rest. These nodes are the whole set: see [Nodes](nodes/).
 
-Start from an empty canvas, or from a flow that someone has already built.
+Start from an empty canvas, from a [template](flow-management/templates.md), or from a flow that someone has already built.
 
 ### Formulas
 
@@ -79,6 +79,7 @@ New to IoT Logic? Build your first flow in [Quick start](quick-start.md).
   * [Flow editor](flow-management/flow-editor.md)
   * [Build conditional flows](flow-management/conditional-flow.md)
   * [Devices without flows](flow-management/default-processing.md)
+  * [Templates](flow-management/templates.md)
 * [Nodes](nodes/)
   * [Data Source](nodes/data-source.md)
   * [Initiate Attribute](nodes/initiate-attribute.md)
