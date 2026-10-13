@@ -23,7 +23,9 @@ The usual causes are on the side of the device or the mobile network:
 
 To narrow down the cause, look at what the device sent before it went silent:
 
-1. Generate a [Sensor readings](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings) report for the days before the device stopped. Select the battery, voltage, and signal values that the device sends.
-2. Check how the values changed before the last message. A falling battery voltage or board voltage points to a power problem. A weak signal points to poor coverage.
+1. Run a [Sensor readings](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings) report for the asset and the days before the device stopped.
+2. In the **Sensors** filter, select the battery, power, and signal values. Each value is listed under the key that the device sends. The device documentation names each value's key, such as the battery voltage key.
+3. Click a value's row to open its [reading panel](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings#reading-panel). **Pauses** lists each long gap in the readings with its start and end. **Coverage** shows the share of the period's intervals that have a reading. Together they show when the readings stopped.
+4. Check how the values changed before the last reading. A falling battery voltage or board voltage points to a power problem. A weak signal points to poor coverage.
 
 For a device that didn't connect after activation, the device page in Device Management lists more causes, such as sleep mode, a SIM card PIN, or roaming settings. See [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).

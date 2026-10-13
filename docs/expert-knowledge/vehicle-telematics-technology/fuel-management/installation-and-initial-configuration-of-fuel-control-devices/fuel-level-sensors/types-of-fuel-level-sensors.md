@@ -16,7 +16,7 @@ Fuel sensors are devices designed to make accurate measurements of the fuel leve
 * average fuel consumption. e.g. miles per gallon (mpg)
 * fuel refills or drains
 
-In Navixy, the [Sensor readings](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings) report shows the fuel level over a period. An [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic) flow can compare a level with its earlier values to find a refill or a drain.
+In Navixy, the [Sensor readings](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings) report shows the fuel level values over a period, as the device sends them. An [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic) flow can compare a level with its earlier values to find a refill or a drain.
 
 Fuel sensors are used on stationary units, such as fuel tanks at gas stations, and on vehicles: cars, locomotives, ships, etc.
 

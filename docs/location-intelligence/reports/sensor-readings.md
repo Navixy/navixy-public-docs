@@ -1,7 +1,7 @@
 ---
 description: >-
   Sensor readings: which GPS device values the report includes, how they're
-  grouped into 5-minute steps, and how Min, Max, Avg, First, and Last work.
+  grouped into intervals, how each figure is calculated, and how pauses are found.
 tags:
   - reference
   - beta
@@ -11,7 +11,7 @@ tags:
 
 **Sensor readings** shows the values that the GPS devices of your assets sent over a period. The values include fuel level, temperature, battery voltage, and engine speed. Use it to check how a value changed, to find the highest temperature in a refrigerated trailer, or to see when a device stopped sending data.
 
-This page describes what the report shows and how its values are calculated. To generate the report, see [Manage reports](manage-reports.md).
+This page describes what the report shows and how its values are calculated. To run the report, see [Manage reports](manage-reports.md#run-a-report).
 
 {% hint style="info" %}
 **Access**
@@ -21,33 +21,42 @@ This page describes what the report shows and how its values are calculated. To 
 
 ## What the report shows
 
-<figure><img src="../.gitbook/assets/reports-sensor-readings.png" alt="The Sensor readings report in Reports for one asset, one GPS device, and one sensor, engine speed, over four days. Summary tiles show 1 asset, 1 device, 1 sensor, and 980 readings. Below them, a chart shows how the engine speed changed over the period, with gaps where the device sent no data."><figcaption>The Sensor readings report with its summary tiles and chart</figcaption></figure>
+<figure><img src="../.gitbook/assets/reports-sensor-readings.png" alt="The Sensor readings report for one day, filtered to two sensors with the Sensors filter. Under the period, the Interval options run from 5 min to 1 day. Four tiles show 1 asset, 1 device, 2 sensors, and the number of samples. A chart titled Readings with no unit shows one line for each sensor, starting late in the morning, when the readings start. The table lists the two sensors under the keys that the device sends, with Average, Min, Max, First, Last, and Change."><figcaption><p>Sensor readings for two sensors: the interval options, the tiles, a chart of the readings, and the table of sensors</p></figcaption></figure>
+
+The report opens with no assets chosen.
 
 Here's what you can do in the report:
 
-* Choose the asset types, the assets, the GPS devices, the sensors, and the period, and click **Generate**.
-* Read the totals in the tiles at the top: **Total Assets**, **Total devices**, **Total sensors**, and **Total readings**.
-* Compare the lowest, highest, average, first, and last values of each sensor over the period.
-* On the chart, see how a value changed and zoom in on part of the period.
-* Open a tab for one asset, one GPS device, or one sensor.
-* Click a row to open its details: the values and a timeline that shows when the device sent data.
-* Choose the columns in **Customize**.
+* Choose the assets and the period, and click **Run**.
+* Read the counts in the **Assets**, **Devices**, **Sensors**, and **Samples** tiles.
+* Compare each sensor's figures for the period: **Average**, **Min**, **Max**, **First**, **Last**, **Change**, **Samples**, and **Coverage**.
+* See a chart of the readings for each unit.
+* Narrow the table with the **Sensors** and **Devices** filters.
+* Click a row to open its reading panel and see when the readings paused.
+* Change the **Interval** that the chart and the pauses use.
+* Hide columns and download the table. See [Show and hide columns](manage-reports.md#show-and-hide-columns) and [Download a table](manage-reports.md#download-a-table).
 
-The fields for asset types, assets, GPS devices, and sensors depend on each other. Each field becomes available when the field before it has a value. When you select an asset, Reports also selects its GPS devices.
+The download menu of this report offers two tables, each as **CSV** or **Excel (XLSX)**. **By sensor** is the table as it's shown. **Readings by interval** has one row for each interval of each sensor.
 
 ## Which values the report includes
 
-The report includes every numeric value that a GPS device sends. The report shows each value under its sensor label, the readable name that a sensor has in your workspace, such as "Fuel level". A value that has no label appears under the name that the GPS device uses, such as `lls_level_0` or `temperature_2`. The report also includes the battery level, the battery voltage, the board voltage, and the odometer. Values that are only 0 or 1 are included too, except digital inputs and outputs.
+The report includes every numeric value that a GPS device sends. Each value appears under the key that the GPS device sends for it, such as `fuel_level` or `lls_level_0`. The report also includes the battery level, the battery voltage, the board voltage, and the odometer. Values that are only 0 or 1 are included too, except digital inputs and outputs.
 
 The report doesn't include the following:
 
-* GPS values: speed, satellites, and altitude
+* GPS values: Speed, satellites, and altitude
 * Digital inputs and outputs, such as a door sensor connected to an input
 * Text values and fault codes
 
-Sensor values don't depend on the position. The report includes the values of every message, also a message without a position or with a position that trips don't use. That's why the report can have values for a period in which [Trips & Stops](trips-and-stops.md) has no trip.
+Sensor values don't depend on the position. The report includes the values from every message, including a message without a position or with a position that trips don't use. For this reason, the report can have values for a period in which [Trips and stops](trips-and-stops.md) has no trip.
 
-Values appear as the GPS device sends them. Reports doesn't convert or calibrate them, so a fuel sensor that sends a raw number shows that number, not liters. The unit is the unit that the device reports. When a GPS device reports no unit, the battery level is in %, the battery voltage and the board voltage are in mV, and the odometer is in meters. The unit is part of what makes a row, so one GPS device can show the same value in two rows. For example, this happens when the unit changes after a firmware update.
+Values appear as the GPS device sends them. Reports doesn't convert or calibrate them, so a fuel sensor that sends a raw number shows that number, not liters. The unit is the unit that the device reports, and it appears in the **Unit** column. When a GPS device reports no unit, the report uses these units:
+
+* Battery level: %
+* Battery voltage and board voltage: mV
+* Odometer: meters
+
+The unit and the type of the value are part of what makes a row, so one GPS device can show the same value in two rows. For example, a firmware update can change the unit or the type of a value.
 
 ## How readings are grouped into 5-minute steps
 
@@ -55,64 +64,99 @@ Navixy groups the values of each sensor into steps of 5 minutes. For each step, 
 
 A reading at 10:07 belongs to the step that starts at 10:05. A short peak and a value that stayed high for the whole 5 minutes give the same highest value.
 
-## How the values for a period are calculated
+The report then combines these steps into the [interval](#interval) that you choose. For example, a 30-minute interval combines six steps.
+
+## Interval
+
+**Interval** sets the length of the time intervals that the chart, the pauses, the **Coverage** column, and the **Readings by interval** table use. The options are 5 min, 10 min, 30 min, 1 hr, 4 hr, and 1 day.
+
+The report offers only the intervals that split the period into at most 2,016 intervals. For example, the report offers 5 min for a period of up to 7 days and 10 min for a period of up to 14 days. For a longer period, the shortest interval is 30 min.
+
+Until you choose an interval, the report uses the shortest interval that splits the period into at most 800 intervals:
+
+| Period | Interval |
+| --- | --- |
+| Up to 2 days | 5 min |
+| Up to 5 days | 10 min |
+| Up to 16 days | 30 min |
+| Up to 31 days | 1 hr |
+
+When you choose another interval, the report runs again. The interval that you chose stays when you run the report for another period, as long as that period offers it.
+
+A 1-day interval runs from midnight to midnight UTC. For this reason, a 1-day interval can start and end at a different time than your local day.
+
+## How the values are calculated
 
 The table shows one row for each sensor of each GPS device. The values of a row cover the whole period:
 
 | Column | How it's calculated |
 | --- | --- |
+| **Average** | The sum of all readings in the period divided by the number of readings, so each reading counts the same |
 | **Min** | The lowest value in the period |
 | **Max** | The highest value in the period |
-| **Avg** | The sum of all readings in the period divided by the number of readings, so a step with more readings counts more |
 | **First** | The first value in the period |
 | **Last** | The last value in the period |
+| **Change** | **Last** minus **First**, with its sign |
+| **Samples** | The number of readings in the period |
+| **Coverage** | The share of the period's intervals that have at least one reading |
 
-For a sensor that counts up, such as fuel used or distance, the change over the period is **Last** minus **First**.
+For a value that is only 0 or 1, such as an on or off state, **Average** is the share of readings that were 1.
 
-For a value that is only 0 or 1, such as an on or off state, **Avg** shows a dash. **Min**, **Max**, **First**, and **Last** show 0 or 1.
+For a sensor that counts up, such as mileage, **Change** shows how much the counter grew over the period. When the counter was reset during the period, **Change** is smaller than the real growth.
 
-Each row shows the unit of its sensor. The **Total** row shows a unit only when all rows have the same unit.
+**Coverage** leaves out the intervals that haven't started yet. The interval in progress when you run the report counts only when it already has a reading. **Coverage** is rounded down to a whole percent. A coverage above 0 and under 1% shows as <1%.
 
-The **Total** row at the top calculates the same values over all rows of the tab, even when the rows are different sensors.
+Values are rounded to at most 2 decimals and are in the unit that the device reports.
 
 ## Table columns
 
-These columns are shown by default: **Asset**, **Device**, **Sensor**, **Avg**, **Min**, **Max**, **First**, and **Last**. You can also add **Asset type**, **Sensor type**, and the counts **Assets**, **Devices**, and **Sensors**. To change the columns and their order, open **Customize**.
+The table has these columns, all shown by default: **Asset**, **Device**, **Sensor**, **Unit**, **Average**, **Min**, **Max**, **First**, **Last**, **Change**, **Samples**, and **Coverage**.
 
-**Sensor type** shows Custom for every sensor, so it doesn't tell sensors apart. To identify a sensor, use the **Sensor** column.
+* **Device** appears when the sensors of an asset come from more than one GPS device.
+* **Sensor** always shows. You can hide every other column.
 
-Click the name of an asset, a GPS device, or a sensor in a row to open a tab for it. An asset tab or a GPS device tab shows the same table with the readings of that asset or GPS device only.
+A sensor that sent no reading in the period has no row.
 
-## Sensor tab
+The **Sensors** tile counts rows, not sensor names. A sensor that two GPS devices send counts twice, and so does a sensor that appears with two units or two value types.
 
-A sensor tab shows how one sensor changed over the period, with one row for each time step, the newest first. Choose the length of the step in **Interval**: 5 min, 10 min, 30 min, or 1 hour. For a period longer than 7 days, the shortest step is 10 minutes. For a period longer than 14 days, it is 30 minutes.
+## Filters
 
-A period when this sensor had no readings appears as a row that starts with "No data". The GPS device may have been off, or it may have sent messages without this value.
+The **Sensors** and **Devices** filters narrow the table, the tiles, and the chart to the sensors or GPS devices that you choose. The filters don't run the report again.
+
+* **Sensors** lists the sensors in the report.
+* **Devices** lists the GPS devices, grouped by asset. It appears when the readings of an asset come from more than one GPS device.
+
+To show every row again, click **Clear filters**.
+
+When the filters leave no row, the report says so. See [Troubleshooting reports](troubleshooting.md).
 
 ## Chart
 
-The chart above the table shows each sensor as a line. A break in a line is a period without data. Navixy doesn't fill such a period with an estimated value.
+The report draws one chart for each unit, one under the other. Sensors that have the same unit share a chart.
 
-You can do the following on the chart:
+The chart draws at most 8 sensors. When the filters leave more than 8 sensors, the report asks you to narrow the filters, and no chart appears.
 
-* Drag across the chart to zoom in on part of the period. Double-click to reset the zoom.
-* Click a sensor in the legend to show or hide its line.
-* Point to the chart to see the value of each sensor at that time.
+Each line shows the average for each interval. A shaded band around the line runs from the lowest to the highest value in each interval. A break in a line is an interval without a reading. Navixy doesn't fill such an interval with an estimated value. When an interval has a reading and the intervals on both sides have none, the chart shows that reading as a dot.
 
-When the sensors on the chart have different units, each line has its own scale.
+Point to a chart to see the values at that time, on all charts at once.
 
-## Sensor details
+The color next to the sensor in the table row is the color of its line.
 
-Click a row to open its details. The details show the following sections:
+## Reading panel
 
-* **Map**: The GPS track of the asset over the period. Point to the state timeline to see where the asset was at that time.
-* **Metrics**: The values of the row, the number of readings, and **Coverage** (the share of the period when the GPS device sent data).
-* **State timeline**: The periods when the GPS device sent data (**Transmitting**), the periods when it sent no data (**No data**), and how the value changed.
+Click a row to open its reading panel. The panel shows the following:
 
-To print the details, click **Export PDF**.
+* The sensor, the asset, the GPS device, and the unit
+* All eight figures of the row, from **Average** to **Coverage**
+* A chart of the readings, with the pauses shaded
+* **Pauses**: The number of pauses and their total length, then each pause with its start, its end, and its length
+
+A pause is a gap in the readings that is more than 2.5 times as long as the sensor's usual gap. The usual gap depends on how often the device sends this value. For example, a sensor with a reading in every interval pauses when two intervals in a row have no reading. A sensor that sends a reading every third interval doesn't pause between its readings.
+
+The report measures pauses in whole intervals of the **Interval** that you chose. A gap at the start or the end of the period counts too. For example, a device stops sending on the second day of the period. The panel then shows one pause, from that time to the end of the period or to the time that you ran the report.
 
 ## See also
 
 * [How report data is prepared](how-report-data-works.md): Learn when a reading appears in a report and how long readings are kept.
-* [Manage reports](manage-reports.md): Generate the report, save it, and export it.
-* [Troubleshooting reports](troubleshooting.md): Find out why a sensor has an unfamiliar name or a report is empty.
+* [Manage reports](manage-reports.md): Run the report, share it by its link, and download its tables.
+* [Troubleshooting reports](troubleshooting.md): Find out why a report is empty, a sensor is missing, or its readings have gaps.

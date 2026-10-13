@@ -44,12 +44,12 @@ A flow can calculate values that a device doesn't send, such as litres from a ra
 
 ### Reports
 
-Reports shows what your assets did over a period. You choose a report, the assets, and a period, and Reports builds a table with totals that you can sort, filter, and export.
+Reports shows what your assets did over a period. You choose a report, the assets, and a period. Reports then shows the report's totals and tables, such as a log of trips and stops. You can download each table as a CSV or Excel file.
 
-* **Trips & Stops** lists every trip of every asset: when and where it started and ended, its distance and duration, and the average and maximum speed. It also shows how long each asset stood still between trips.
+* **Trips and stops** lists every trip of every asset: when it started and ended, its distance and duration, and the average and maximum speed. It also shows how long each asset stood still between trips.
 * **Sensor readings** shows the values that your assets' GPS devices sent over the period, such as fuel level or temperature. For each value, it shows the lowest, highest, and average reading.
 
-You can save a report and export it to an Excel file or a PDF. A report shows data up to the moment when you generate it.
+A report shows data up to the moment when you run it.
 
 ### Dashboards
 
@@ -67,7 +67,7 @@ You can export a dashboard to PDF, or a single panel to CSV or Excel.
 
 ## How the products can work together
 
-The products can use each other's data, so something that you set up in one product can appear in another. For example, you can assign a GPS device from Device Management to a vehicle in Assets. Tracking, Reports, and Dashboards can then show that vehicle under its own name, with the data of its device.
+The products can use each other's data, so something that you set up in one product can appear in another. For example, you can assign a GPS device from Device Management to a vehicle in Assets. Tracking and Dashboards can then show that vehicle under its own name, with the data of its device. Reports includes that device's trips and readings in the vehicle's reports.
 
 ## Who it is for
 
@@ -83,4 +83,4 @@ To go from a GPS device in a box to a vehicle on the map, follow [Getting starte
 
 ## Products
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><h3><i class="fa-database">:database:</i></h3></td><td><strong>Business Data Repository</strong></td><td>Describe your assets, geo objects, and schedules, and assign GPS devices to your assets.</td><td><a href="bdr/">bdr</a></td></tr><tr><td><h3><i class="fa-tower-broadcast">:tower-broadcast:</i></h3></td><td><strong>Device Management</strong></td><td>Activate GPS devices and follow each one until it connects.</td><td><a href="device-management/">device-management</a></td></tr><tr><td><h3><i class="fa-location-arrow">:location-arrow:</i></h3></td><td><strong>Tracking</strong></td><td>Follow your assets on the map, with their status, readings, and trips.</td><td><a href="tracking/">tracking</a></td></tr><tr><td><h3><i class="fa-diagram-project">:diagram-project:</i></h3></td><td><strong>IoT Logic</strong></td><td>Process device data as it arrives: calculate values and send the data where it's needed.</td><td><a href="iot-logic/">iot-logic</a></td></tr><tr><td><h3><i class="fa-file-lines">:file-lines:</i></h3></td><td><strong>Reports</strong></td><td>See the trips, stops, and sensor readings of your assets over a period, and export them.</td><td><a href="reports/">reports</a></td></tr><tr><td><h3><i class="fa-chart-line">:chart-line:</i></h3></td><td><strong>Dashboards</strong></td><td>See the state of the whole fleet, its trips, and its device health in ready-made dashboards.</td><td><a href="dashboards/">dashboards</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><h3><i class="fa-database">:database:</i></h3></td><td><strong>Business Data Repository</strong></td><td>Describe your assets, geo objects, and schedules, and assign GPS devices to your assets.</td><td><a href="bdr/">bdr</a></td></tr><tr><td><h3><i class="fa-tower-broadcast">:tower-broadcast:</i></h3></td><td><strong>Device Management</strong></td><td>Activate GPS devices and follow each one until it connects.</td><td><a href="device-management/">device-management</a></td></tr><tr><td><h3><i class="fa-location-arrow">:location-arrow:</i></h3></td><td><strong>Tracking</strong></td><td>Follow your assets on the map, with their status, readings, and trips.</td><td><a href="tracking/">tracking</a></td></tr><tr><td><h3><i class="fa-diagram-project">:diagram-project:</i></h3></td><td><strong>IoT Logic</strong></td><td>Process device data as it arrives: calculate values and send the data where it's needed.</td><td><a href="iot-logic/">iot-logic</a></td></tr><tr><td><h3><i class="fa-file-lines">:file-lines:</i></h3></td><td><strong>Reports</strong></td><td>See the trips, stops, and sensor readings of your assets over a period, and download them.</td><td><a href="reports/">reports</a></td></tr><tr><td><h3><i class="fa-chart-line">:chart-line:</i></h3></td><td><strong>Dashboards</strong></td><td>See the state of the whole fleet, its trips, and its device health in ready-made dashboards.</td><td><a href="dashboards/">dashboards</a></td></tr></tbody></table>

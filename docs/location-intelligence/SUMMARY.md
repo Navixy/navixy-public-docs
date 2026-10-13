@@ -30,7 +30,7 @@
 * [Reports](reports/README.md)
   * [Manage reports](reports/manage-reports.md)
   * [How report data is prepared](reports/how-report-data-works.md)
-  * [Trips & Stops](reports/trips-and-stops.md)
+  * [Trips and stops](reports/trips-and-stops.md)
   * [Sensor readings](reports/sensor-readings.md)
   * [Troubleshooting reports](reports/troubleshooting.md)
 * [IoT Logic](iot-logic/README.md)

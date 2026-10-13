@@ -65,7 +65,7 @@ When considering fuel data, pay attention not only to the sensor's settings and 
 
 ### Data checking
 
-Examine, analyze, and consider supplementary factors. The Sensor readings report shows the values exactly as the device sent them, so you can check them for errors that compromise measurement accuracy, such as an incorrect calibration or wrong parameters in the sensor or device settings.
+Examine, analyze, and consider supplementary factors. The Sensor readings report shows the values that the device sent, with no conversion or calibration. Use these values to find errors that reduce measurement accuracy, such as an incorrect calibration or wrong parameters in the sensor or device settings.
 
 {% hint style="info" %}
 We highly recommend conducting comprehensive testing of the installed equipment and system settings once all work is finished. It is also advisable to perform these tests annually to ensure optimal performance. Any anomalies detected during testing should undergo further analysis using raw data to identify the root cause and mitigate their impact on the calculations.

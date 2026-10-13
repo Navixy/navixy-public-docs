@@ -1,7 +1,7 @@
 ---
 description: >-
-  How to generate a report in Reports, choose its columns, save it, open a
-  saved report, set a default report, and export a report to Excel or PDF.
+  How to run a report in Reports for the assets and the period that you
+  choose, share it by its link, and download its tables as CSV or Excel files.
 tags:
   - how-to
   - beta
@@ -12,91 +12,125 @@ tags:
 {% hint style="info" %}
 **Access**
 
-The Reports menu lists only the report types that your role lets you see. To generate a report, your role must also let you generate that report type. See [Access to Reports](README.md#access-to-reports).
+The Reports menu lists the report types that your role lets you see, and the report types with a lock. To run a report, your role must also let you run that report type. See [Access to Reports](README.md#access-to-reports).
 {% endhint %}
 
-## Generate a report
+## Open a report
 
-A report covers the assets and the period that you choose. Choose **Trips & Stops** or **Sensor readings** in the Reports menu. The report settings are under **Scope and period**.
+Reports shows one report type at a time. You choose it in the Reports menu.
 
-<figure><img src="../.gitbook/assets/reports-scope-and-period.png" alt="The Scope and period settings of a report: the Asset types and Assets fields, the period buttons Today, Yesterday, 7 days, 14 days, and Month, the date range, and the Generate button."><figcaption>The settings under Scope and period choose the assets and the period of a report</figcaption></figure>
+To open a report, follow these steps:
 
-To generate a report, follow these steps:
+1. Click **Reports** on the sidebar.
+2. In the Reports menu, click **Trips and stops** or **Sensor readings**.
 
-1. Open Reports from the Navixy platform menu.
-2. In the Reports menu, select the report type.
-3. If the report settings are hidden, click the report name at the top of the report.
-4. In **Asset types**, select the types of assets to include.
-5. In **Assets**, select the assets. In **Trips & Stops**, every asset that has a GPS device is selected by default.
-6. For **Sensor readings** only, select the GPS devices in **Devices**.
-7. For **Sensor readings** only, select the values in **Sensors**.
-8. Choose a period of up to 31 days. Do one of the following:
-   * Click **Today**, **Yesterday**, **7 days**, **14 days**, or **Month**.
-   * Click the date range and select the start and end dates and times.
+**Trips and stops** opens for **All assets** and **Yesterday** and runs immediately. **Sensor readings** opens for **Yesterday** with no assets and asks you to choose them. Choose the assets, then click **Run**. See [Run a report](#run-a-report).
 
-   **7 days** is today and the 6 days before. **14 days** is today and the 13 days before. **Month** is the last 30 days, including today. Reports generates the report when you click a period button or close the date range.
+To make the Reports menu narrow, click **Collapse menu**. The menu then shows only icons. To show the names again, click **Expand menu**.
 
-To update the report after you change **Asset types**, **Assets**, **Devices**, or **Sensors**, click **Generate**.
+## Run a report
 
-## Choose the columns of a report
+A report covers the assets and the period that you choose at the top of the report. Two buttons there show the current choice, such as **All assets** and **Yesterday**.
 
-You can show and hide the columns of the report screen and change their order. **Customize** keeps this column setup in this browser only. In another browser, the report screen shows the default columns until you open a saved report.
+To run a report, follow these steps:
 
-To choose the columns, follow these steps:
+1. Click the button that shows the assets, such as **All assets**.
+2. Choose **All assets**, or choose the assets one by one. To find an asset, search by its ID.
+3. Click the button that shows the period, such as **Yesterday**, then choose the period. See [Choose the period](#choose-the-period).
+4. Click **Run**.
 
-1. Click **Customize**.
-2. On the **Columns** tab, click a column to show or hide it.
-3. Under **Column order**, drag a column to its new place.
-4. Click **Save**.
+You can choose at most 200 assets one by one. To include more than 200 assets, choose **All assets**.
 
-To go back to the default columns, click **Reset to defaults** in **Customize**, then click **Save**.
+Changes to the assets or the period apply only when you click **Run**. To undo the changes that you haven't run yet, click **Reset**.
 
-## Save a report
+The report doesn't update by itself. To run it again with the same assets and period, click **Run**.
 
-A saved report stores its assets, its period, and the columns that are visible when you save it. Navixy keeps saved reports on its server, so a saved report opens with the same columns in any browser. Only you can see the reports that you save.
+In **Sensor readings**, when you change the **Interval**, the report runs again. See [Interval](sensor-readings.md#interval).
 
-A saved report keeps the period button that you chose, such as **Yesterday** or **7 days**, and calculates its dates again each time that you open it. For example, a report saved with **Yesterday** on September 23 shows September 29 when you open it on September 30. A period that you choose in the date range keeps its dates.
+## Choose the period
 
-To save a report, follow these steps:
+A report covers whole days, from midnight at the start of the first day to midnight at the end of the last day.
 
-1. Generate the report with the assets, the period, and the columns that you need.
-2. Click **Save**.
-3. Enter a **Report name**.
-4. Click **Save**.
+<figure><img src="../.gitbook/assets/reports-scope-and-period.png" alt="The period menu of a report, open under the period button. It lists the presets Today, Yesterday, This week, Last week, This month, and Last month. Next to them, a calendar shows two months, with yesterday selected."><figcaption><p>The period menu: choose a preset, or a range of days in the calendar</p></figcaption></figure>
 
-## Open a saved report
+To choose the period, follow these steps:
 
-A saved report opens in the report type in which you saved it.
+1. Click the button that shows the period, such as **Yesterday**.
+2. Do one of the following:
+   * Click a preset.
+   * In the calendar, click the first day of the range, then the last day.
+3. Click **Run**.
 
-To open a saved report, follow these steps:
+Each preset covers these days:
 
-1. Open the report type in which you saved the report.
-2. Click **Open**.
-3. Select the saved report.
+| Preset | Days |
+| --- | --- |
+| **Today** | Today |
+| **Yesterday** | Yesterday |
+| **This week** | The first day of this week to today |
+| **Last week** | The whole previous week |
+| **This month** | The first day of this month to today |
+| **Last month** | The whole previous month |
 
-Reports generates the report again with its saved assets, period, and columns.
+Your browser's language sets the first day of the week, such as Sunday or Monday. When the language sets no first day, the week starts on Monday.
 
-## Set a report as the default
+A range in the calendar is at most 31 days long and ends today at the latest.
 
-The default report opens when you open its report type.
+A report's dates and times are in your computer's time zone. The report names this time zone, for example "Times are in Europe/Berlin." See [Which time zone a report uses](how-report-data-works.md#which-time-zone-a-report-uses).
 
-To set a report as the default, follow these steps:
+## Share a report by its link
 
-1. Open the saved report.
-2. Click **Set as default**.
+A report's page address keeps the assets, the dates, the open tabs, and the filters. It also keeps the interval of **Sensor readings**, and the trip panel, stop panel, or reading panel that is open. A link to the page or a bookmark opens the same report.
 
-If you click **Set as default** in a report that you haven't saved, Reports saves it first. The saved report gets the name in **Report name**. When **Report name** is empty, it gets the name of the report type, such as Trips & Stops.
+To share a report, follow these steps:
 
-## Export a report
+1. Run the report with the assets and the period that you need.
+2. Copy the page address from the address bar of your browser.
+3. Send the address, or save it as a bookmark.
 
-You can export a report as an Excel file or as a PDF.
+The address keeps the dates, not the preset. For example, if you bookmark a report for **Last week**, the bookmark shows that same week when you open it a month later. To see the most recent week, choose **Last week** again and click **Run**.
 
-To export a report, follow these steps:
+When another person opens the link, Reports uses that person's own access. To see the same report, that person needs access to the report type in the same workspace.
 
-1. Generate the report.
-2. Click **Export**.
-3. Select **Excel (XLSX)** or **PDF**.
+## Show and hide columns
 
-The Excel file downloads to your computer. It contains the report as it is shown on screen, with every report tab that you opened: **Summary** and the tabs that you added with **+**. The PDF opens in a new browser tab, where you can print it or save it as a file.
+Each report table has its own columns menu. Some columns always show: **Asset** in the **By asset** table, **Day** in the **By day** table, and **Sensor** in **Sensor readings**.
 
-You can also export the details of one row as a PDF: the trip details in [Trips & Stops](trips-and-stops.md) or the sensor details in [Sensor readings](sensor-readings.md). To do this, open the details and click **Export PDF**.
+To show or hide columns, follow these steps:
+
+1. Click <picture><source srcset="../.gitbook/assets/icons/reports-view_column-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-view_column.svg" alt="Columns" data-size="line"></picture> next to the table.
+2. Click a column to show or hide it.
+
+To show every column again, click **Show every column**. While a column is hidden, <picture><source srcset="../.gitbook/assets/icons/reports-view_column-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-view_column.svg" alt="Columns" data-size="line"></picture> has a dot.
+
+Reports keeps your choice in this browser, for your account. The choice applies to the same table on every tab. For example, the **By day** table shows the same columns on the **Days** tab and on the tab of each asset.
+
+## Download a table
+
+You can download each table of a report as a CSV file or an Excel file.
+
+To download a table, follow these steps:
+
+1. Click <picture><source srcset="../.gitbook/assets/icons/reports-download-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-download.svg" alt="Download" data-size="line"></picture> next to the table.
+2. Click **CSV** or **Excel (XLSX)**.
+
+In **Sensor readings**, the menu offers two files. **By sensor** is the table itself. **Readings by interval** has one row for each interval of each sensor. Click **CSV** or **Excel (XLSX)** under the file that you need. Hidden columns don't change the **Readings by interval** file.
+
+The file contains the table as it shows on screen. Hidden columns are left out. The sort, the filters, the tab, and the choice of **All**, **Trips**, or **Stops** in the log also apply to the file. The file adds a few columns that the screen doesn't show:
+
+* The file of the **Trip and stop log** starts with **Asset** and **Day**. In place of **Position**, it has **Start latitude**, **Start longitude**, **End latitude**, and **End longitude**.
+* On the tab of an asset, the file of the **By day** table starts with **Asset**.
+
+The column headings name the unit and the time zone, for example **Distance (km)** and **Start (Europe/Berlin)**. Durations are in decimal hours: 1 hour 15 minutes is 1.25. Excel shows two decimals, and the CSV file has up to six, such as 2.083333 for 2 hours 5 minutes.
+
+The file name has the table and the first and last day of the period, for example `trips-and-stops-log-2026-10-01-2026-10-07.xlsx`. For a period of one day, the name has one date.
+
+If the file isn't saved, the menu shows "The file could not be written. Try again, or reload the page."
+
+## Report types with a lock
+
+Besides **Trips and stops** and **Sensor readings**, the Reports menu shows other report types and **Ask** with <picture><source srcset="../.gitbook/assets/icons/reports-lock-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-lock.svg" alt="Locked" data-size="line"></picture>. Click one of them to see what it reports.
+
+These report types are offered as paid options. Contact Navixy to add them to your workspace.
+
+<a href="https://navixy.com/en/contact?utm_source=navixy-docs&utm_campaign=reports-paid-options" class="button primary">Contact Navixy</a>
