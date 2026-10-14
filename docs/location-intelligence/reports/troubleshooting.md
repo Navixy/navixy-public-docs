@@ -45,7 +45,7 @@ If the GPS device stopped sending data during the trip, the trip appears later. 
 
 Check the following:
 
-* **The GPS device was offline.** Data that reaches Navixy long after the GPS device recorded it, for example after the device was offline, isn't added to trips. The trip for that period is missing or shorter. See [Data that arrives late isn't added](how-report-data-works.md#data-that-arrives-late-isnt-added).
+* **The GPS device was offline.** Data that reaches Navixy long after the GPS device recorded it, for example after the device was offline, isn't added to trips. The trip for that period is missing or shorter. See [Late data is added to sensor readings, not to trips](how-report-data-works.md#late-data-is-added-to-sensor-readings-not-to-trips).
 * **The distance was under 50 m.** A movement shorter than 50 m isn't a trip.
 * **The GPS device was assigned later.** Trips from before the GPS device was assigned to the asset never appear. If you moved the GPS device from another asset, the earlier trips stay with the other asset.
 * **The positions were unreliable.** Navixy doesn't use positions from a mobile network or Wi-Fi, or positions with poor satellite reception. A trip in an area with poor reception can be shorter or missing.

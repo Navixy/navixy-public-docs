@@ -33,11 +33,13 @@ A report has no data for a period that is older than the time shown in the table
 
 A report can cover a period of up to 31 days. The earliest report data is from the time when your workspace was created.
 
-## Data that arrives late isn't added
+## Late data is added to sensor readings, not to trips
 
-Data that reaches Navixy long after the GPS device recorded it is left out of reports, because Navixy doesn't change report data that it already stored. Late data is common after a GPS device was offline: the device sends its stored data when it connects again.
+Late data is data that reaches Navixy long after the GPS device recorded it. Late data is common after a GPS device was offline: the device sends its stored data when it connects again.
 
-A position that arrives after a newer position from the same GPS device is also left out of trips. As a result, for a period when a GPS device was offline, a report can miss a trip or show a shorter trip.
+Sensor readings includes late data. Navixy adds each late value to the 5-minute step of the time when the GPS device recorded it, so the readings for the period when the device was offline appear in the report.
+
+Trips and stops doesn't include late data, because Navixy doesn't change trips and stops that it already stored. A position that arrives after a newer position from the same GPS device is also left out of trips. As a result, for a period when a GPS device was offline, a report can miss a trip or show a shorter trip.
 
 ## A GPS device must be assigned to the asset first
 
