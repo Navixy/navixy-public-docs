@@ -10,6 +10,7 @@ This section contains step-by-step guides for the basic scenarios of using Billi
 
 ### Guides in this section
 
-* [Choosing a plan and subscribing](choosing-a-plan-and-subscribing.md): List the plans your workspace may take and what each one charges, subscribe your workspace, and confirm the subscription
-* [Reading balance and statement](reading-balance-and-statement.md): Read the balance of your workspace and list the payments and corrections that moved it
-* [Reading usage submissions](reading-usage-submissions.md): List the usage that Navixy products reported for your workspace, read what each submission says, and follow one metric month by month
+* [Choosing a plan and subscribing](choosing-a-plan-and-subscribing.md): List the plans your workspace may take and what each one charges, subscribe your workspace, and confirm the subscription.
+* [Reading balance and statement](reading-balance-and-statement.md): Read your workspace's balance and list the payments, corrections, and invoice charges that changed it.
+* [Reading invoices](reading-invoices.md): List your workspace's invoices, read the lines of one invoice, match it to the balance statement, and find the invoices that are still unpaid.
+* [Reading usage submissions](reading-usage-submissions.md): List the usage that Navixy products reported for your workspace, read what each submission says, and follow one metric month by month.

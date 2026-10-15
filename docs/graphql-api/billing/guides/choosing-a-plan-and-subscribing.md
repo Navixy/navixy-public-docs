@@ -18,7 +18,7 @@ Every operation on this page acts in the workspace named by your access token. Y
 
 You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myAvailablePlans](../api-reference/plan.md#myavailableplans) and [mySubscribe](../api-reference/subscription.md#mysubscribe), read only that claim. Without it, they refuse the request and don't fall back to the workspace of your single membership. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
 
-To check that the token names a workspace and that Billing accepts it, run this query and list the subscriptions the workspace already holds:
+To check that the token names a workspace and that Billing accepts it, run this query and list the subscriptions that the workspace already has:
 
 ```graphql
 query CurrentSubscriptions {
@@ -39,7 +39,7 @@ query CurrentSubscriptions {
 }
 ```
 
-Response for a workspace that holds no subscription yet:
+Response for a workspace that has no subscription:
 
 ```json
 {
@@ -54,11 +54,11 @@ Response for a workspace that holds no subscription yet:
 }
 ```
 
-An empty list is a valid answer. A `PERMISSION_DENIED` error instead means that the token has no workspace claim. See [Error handling](#error-handling) below.
+An empty list is a valid response. A `PERMISSION_DENIED` error instead means that the token has no workspace claim. See [Error handling](#error-handling).
 
 ## How plans and subscriptions work
 
-This guide uses two important concepts: plans and subscriptions. [Plans](../api-reference/plan.md) and [Subscriptions](../api-reference/subscription.md) document every field.
+This guide uses 2 important concepts: plans and subscriptions. [Plans](../api-reference/plan.md) and [Subscriptions](../api-reference/subscription.md) document every field.
 
 A plan is what a workspace pays for: a fee per billing period, plus a price for the usage of each metered product. A plan may have branches, which are variants of the plan with their own price. Billing offers a branch as its own row, next to the base plan or in its place, so you choose a row, not a plan and then a branch. [myAvailablePlans](../api-reference/plan.md#myavailableplans) lists every row currently open to your workspace. An archived plan, a plan outside its active dates, or a plan reserved for other workspaces won't be there.
 
@@ -66,14 +66,14 @@ A subscription is the link between a workspace and one row: the plan and the bra
 
 ## Example scenario: A fleet operator moves to a larger plan
 
-TransLog GmbH runs delivery trucks out of Hamburg. Their workspace holds no active subscription: the Basic plan it started on was cancelled by Navixy staff at their request. Now their administrator wants a plan that covers more devices and chooses one through the API.
+TransLog GmbH runs delivery trucks out of Hamburg. On July 1, 2026, their workspace has no active subscription: Navixy cancelled the Basic plan that the workspace started on, at TransLog's request. TransLog has more devices than Basic includes, so their administrator chooses a plan that covers more devices through the API. To subscribe the workspace, follow these steps:
 
 {% stepper %}
 {% step %}
 
 ### Read the plans open to the workspace
 
-[myAvailablePlans](../api-reference/plan.md#myavailableplans) returns every row the workspace may subscribe to, with the subscription it already holds on each. The list isn't paginated, because a workspace sees a small catalogue.
+[myAvailablePlans](../api-reference/plan.md#myavailableplans) returns every row the workspace may subscribe to, with the subscription that the workspace already has on each. The list isn't paginated, because a workspace sees a small catalogue.
 
 Run this query:
 
@@ -174,6 +174,17 @@ Response:
               "warningThresholds": [80, 100],
               "pricingModel": "FLAT",
               "usagePricing": { "price": 300, "tiers": null, "pricingDimension": null }
+            },
+            {
+              "planItemId": "019a6b2f-793e-807b-8001-425049540003",
+              "branchItemId": null,
+              "metric": { "code": "registered_assets", "title": "Registered assets", "unit": "count" },
+              "aggregationFunction": "MAX",
+              "includedLimit": null,
+              "quota": null,
+              "warningThresholds": null,
+              "pricingModel": "SUBSCRIPTION",
+              "usagePricing": { "price": null, "tiers": null, "pricingDimension": null }
             }
           ],
           "subscription": null
@@ -181,10 +192,10 @@ Response:
         {
           "planId": "019a6b2f-793e-807b-8001-42504c4e0002",
           "branchId": "019a6b2f-793e-807b-8001-4242524e0001",
-          "title": "Fleet Pro, annual",
-          "description": "Fleet Pro with a yearly fee.",
+          "title": "Fleet Pro, large fleet",
+          "description": "Fleet Pro for fleets of more than 50 devices, with 50 devices included in the fee.",
           "currency": "USD",
-          "periodFee": { "amount": 49000, "currency": "USD" },
+          "periodFee": { "amount": 14900, "currency": "USD" },
           "trialDays": 14,
           "items": [
             {
@@ -192,11 +203,11 @@ Response:
               "branchItemId": "019a6b2f-793e-807b-8001-424252490001",
               "metric": { "code": "registered_devices", "title": "Registered devices", "unit": "count" },
               "aggregationFunction": "MAX",
-              "includedLimit": 10,
-              "quota": 500,
+              "includedLimit": 50,
+              "quota": 1000,
               "warningThresholds": [80, 100],
               "pricingModel": "FLAT",
-              "usagePricing": { "price": 300, "tiers": null, "pricingDimension": null }
+              "usagePricing": { "price": 200, "tiers": null, "pricingDimension": null }
             }
           ],
           "subscription": null
@@ -207,42 +218,39 @@ Response:
 }
 ```
 
-The workspace sees three rows: the Basic plan, the Fleet Pro plan, and one branch of Fleet Pro with a yearly fee. A branch row has the same `planId` as its base plan and its own `branchId`. No row has a `subscription`, because the workspace holds none. When it holds one, that row has a `subscription`.
+The workspace sees 3 rows: the Basic plan, the Fleet Pro plan, and one branch of Fleet Pro for large fleets. A branch row has the same `planId` as its base plan and its own `branchId`. No row has a `subscription`, because the workspace has no active subscription. When it has one, that row has a `subscription`.
 {% endstep %}
 
 {% step %}
 
 ### Render each row with its price and limits
 
-Read what each row costs and what it includes. Every amount of a row is in the `currency` of the row. Three fields decide the price, and the items decide the limits:
+Read what each row costs and what it includes. Every amount of a row is in the row's `currency`. These fields set the price, and the items set the limits:
 
-- `periodFee` is the fee per billing period, in the minor units of `currency`. Divide by 100 for a currency with two decimals: `4900` is $49.00. The sum of the fees of every product in the plan makes up this value, so a branch that changes a fee changes it too.
+- `periodFee` is the fee per billing period, in the minor units of `currency`. Every billing period is one month. Divide by 100 for a currency with 2 decimal places: `4900` is $49.00. This value is the sum of the fees of every product in the plan. When a branch sets its own fee for a product, that fee replaces the base plan's fee for the product.
 - `trialDays` is the length of the trial that a new subscription gets. A trial is granted once per plan: a workspace that already had a trial on Fleet Pro or on one of its branches will resubscribe without a trial.
 - Each entry of `items` prices one metric. `includedLimit` is the usage included in the fee. `quota` is a soft limit on usage: usage may exceed it, and Billing doesn't block it. `warningThresholds` lists the percentages of the quota that quota warnings use.
-- `pricingModel` says how usage above the included limit is priced. `SUBSCRIPTION` means the fee covers it and there is no per-unit charge. `FLAT` charges `usagePricing.price` per unit, in minor units: in the example, $3.00 per device above the ten included. `TIERED` and `VOLUME` price usage by `usagePricing.tiers`. [Plans](../api-reference/plan.md#billingpricingmodel) define each model.
+- `pricingModel` says how usage above the included limit is priced. `SUBSCRIPTION` means the fee covers it and there is no per-unit charge. `FLAT` charges `usagePricing.price` per unit, in minor units: in the example, $3.00 per device above the 10 included. `TIERED` and `VOLUME` price usage by `usagePricing.tiers`. [Plans](../api-reference/plan.md#billingpricingmodel) define each model.
 
-In the example, Basic includes five devices at no charge, with a quota of five. Fleet Pro costs $49.00 per period, includes ten devices, and charges $3.00 for each device above that, with a quota of 500.
+In the example, Basic includes 5 devices at no charge, with a quota of 5. Fleet Pro costs $49.00 per month, includes 10 devices, and charges $3.00 for each device above that, with a quota of 500. Its fee also covers registered assets, with no per-unit charge.
 
-At the moment, Billing stores the prices and the limits of a plan and applies none of them: no usage is charged, and no quota is enforced or warned about. The balance moves only through payments and corrections. See [Coming soon](../README.md#coming-soon) on the overview.
+The large fleet branch costs $149.00 per month, includes 50 devices, and charges $2.00 for each device above that, with a quota of 1,000. The branch row lists only the items that the branch changes, so it shows the device item alone. A subscription to the branch uses the branch's fee and device item, and the base plan's asset item. For a fleet of more than 43 devices, the branch costs less than the base plan.
+
+Billing applies the fee and the prices on the invoice of each billing period: the fee, and the usage above the included limit at the plan's price. The invoice total is charged to the balance. See [Reading invoices](reading-invoices.md) to learn what an invoice charges. The quota doesn't limit usage: Billing accepts usage above the quota, and the Billing API returns no warning when usage reaches a threshold. See [Coming soon](../README.md#coming-soon) on the overview.
 {% endstep %}
 
 {% step %}
 
 ### Subscribe your workspace to the plan you chose
 
-[mySubscribe](../api-reference/subscription.md#mysubscribe) subscribes the workspace named by the token. The input takes the `planId` of the row and, for a branch row, its `branchId`. Leave `branchId` out to subscribe to the base plan.
+[mySubscribe](../api-reference/subscription.md#mysubscribe) subscribes the workspace named by the token. The input takes the row's `planId` and, for a branch row, its `branchId`. Leave `branchId` out to subscribe to the base plan.
 
-TransLog chooses Fleet Pro, annual. Run this mutation:
+TransLog has 11 devices. On the base plan, that's $49.00 plus $3.00 for 1 device above the included 10, which costs less than the branch. TransLog chooses the Fleet Pro row, so the mutation leaves out `branchId`. Run this mutation:
 
 ```graphql
-mutation SubscribeToFleetProAnnual {
+mutation SubscribeToFleetPro {
   billing {
-    mySubscribe(
-      input: {
-        planId: "019a6b2f-793e-807b-8001-42504c4e0002"
-        branchId: "019a6b2f-793e-807b-8001-4242524e0001"
-      }
-    ) {
+    mySubscribe(input: { planId: "019a6b2f-793e-807b-8001-42504c4e0002" }) {
       subscription {
         id
         workspaceId
@@ -269,11 +277,11 @@ Response:
           "id": "019a6b2f-793e-807b-8001-425355420002",
           "workspaceId": "019a6b2f-793e-807b-8001-575350430001",
           "planId": "019a6b2f-793e-807b-8001-42504c4e0002",
-          "branchId": "019a6b2f-793e-807b-8001-4242524e0001",
+          "branchId": null,
           "status": "ACTIVE",
-          "subscribedAt": "2026-09-28T10:41:07Z",
+          "subscribedAt": "2026-07-01T08:12:40Z",
           "expiresAt": null,
-          "trialExpiresAt": "2026-10-12T10:41:07Z"
+          "trialExpiresAt": "2026-07-15T08:12:40Z"
         }
       }
     }
@@ -281,9 +289,9 @@ Response:
 }
 ```
 
-The subscription starts at once and has a trial that ends 14 days later. `expiresAt` is the end date of the branch when the branch has one, otherwise null.
+The subscription starts at once and has a trial that ends 14 days later. `expiresAt` is the end date of the branch when the subscription is on a branch that has one, otherwise null. The trial makes the fee free until July 15, so the first invoice, issued on August 1, charges the fee only for the part of July after the trial. See [Reading invoices](reading-invoices.md) to read that invoice.
 
-Before Billing accepts the subscription, it checks the row. The plan, or the branch, must be one that [myAvailablePlans](../api-reference/plan.md#myavailableplans) offers the workspace. The branch must belong to the plan. And no product of the plan may be covered by an active workspace subscription. A workspace holds one active subscription per product, and this API doesn't replace one. Read the rows from `myAvailablePlans` in the same session and send `planId` and `branchId` as they came, so that the first two checks pass. For the third, see [Error handling](#error-handling).
+Before Billing accepts the subscription, it checks the row. The plan, or the branch, must be one that [myAvailablePlans](../api-reference/plan.md#myavailableplans) offers the workspace. The branch must belong to the plan. And no product of the plan may be covered by an active workspace subscription. A workspace has one active subscription per product, and this API doesn't replace one. Read the rows from `myAvailablePlans` in the same session and send `planId` and `branchId` as they came, so that the first 2 checks pass. For the third, see [Error handling](#error-handling).
 
 {% hint style="warning" %}
 The workspace claim names the workspace, and the roles of the token must give access to the Billing product. No finer role is checked: any such token can subscribe the workspace to a paid plan. Show the plan page only to the people who may subscribe the workspace to a plan.
@@ -324,10 +332,10 @@ Response:
           {
             "id": "019a6b2f-793e-807b-8001-425355420002",
             "planId": "019a6b2f-793e-807b-8001-42504c4e0002",
-            "branchId": "019a6b2f-793e-807b-8001-4242524e0001",
+            "branchId": null,
             "status": "ACTIVE",
-            "subscribedAt": "2026-09-28T10:41:07Z",
-            "trialExpiresAt": "2026-10-12T10:41:07Z"
+            "subscribedAt": "2026-07-01T08:12:40Z",
+            "trialExpiresAt": "2026-07-15T08:12:40Z"
           }
         ]
       }
@@ -336,7 +344,7 @@ Response:
 }
 ```
 
-The new subscription is the only active one. Run [myAvailablePlans](../api-reference/plan.md#myavailableplans) again, and the Fleet Pro annual row now has a `subscription`, while the other two rows have none.
+The new subscription is the only active one. Run [myAvailablePlans](../api-reference/plan.md#myavailableplans) again, and the Fleet Pro row now has a `subscription`, while the Basic row and the branch row have none. A subscription to the base plan doesn't mark the branch row as taken.
 {% endstep %}
 {% endstepper %}
 
@@ -378,8 +386,8 @@ Response:
           {
             "id": "019a6b2f-793e-807b-8001-425355420001",
             "status": "CANCELLED",
-            "subscribedAt": "2026-08-14T09:12:30Z",
-            "cancelledAt": "2026-09-25T16:03:00Z"
+            "subscribedAt": "2026-06-15T09:30:12Z",
+            "cancelledAt": "2026-06-30T16:03:00Z"
           }
         ]
       }
@@ -388,9 +396,9 @@ Response:
 }
 ```
 
-The filter has two fields, `planId` and `status`, and they combine with AND. The list orders by `SUBSCRIBED_AT` only. See [Pagination](../../pagination.md) for the cursor rules.
+The filter has 2 fields, `planId` and `status`, and they combine with AND. The list orders by `SUBSCRIBED_AT` only. See [Pagination](../../pagination.md) for the cursor rules.
 
-`mySubscriptions` answers where [myAvailablePlans](../api-reference/plan.md#myavailableplans) can't. A subscription to a plan that was archived later, or whose active dates have passed, is absent from the catalogue but still in effect. To show what the workspace is on, read `mySubscriptions`, not the `subscription` field of the catalogue rows.
+`mySubscriptions` returns subscriptions that [myAvailablePlans](../api-reference/plan.md#myavailableplans) doesn't show. A subscription to a plan that was archived later, or whose active dates have passed, is absent from the catalogue but still in effect. To show what the workspace is on, read `mySubscriptions`, not the `subscription` field of the catalogue rows.
 
 ## Error handling
 
@@ -403,7 +411,7 @@ The Billing operations return errors in the shared format. See [Error handling](
 | `VALIDATION_ERROR`  | A product of the plan is covered by an active subscription of the workspace. This API doesn't replace it.                                                                                                                                   | Read the active subscription from [mySubscriptions](../api-reference/subscription.md#mysubscriptions). To cancel or switch it, contact Navixy at [sales@navixy.com](mailto:sales@navixy.com). |
 | `VALIDATION_ERROR`  | The `workspace_id` claim names a workspace that this deployment doesn't have.                                                                                                                                                               | Request a token for a workspace of this deployment.                                                                                                    |
 
-When an active subscription already covers a product of the plan, the mutation returns this error. A second subscription to Fleet Pro while the subscription above is active is an example:
+When an active subscription already covers a product of the plan, the mutation returns this error. For example, a second subscription to Fleet Pro, while the subscription from the scenario is active, returns this error:
 
 ```json
 {
@@ -418,7 +426,7 @@ When an active subscription already covers a product of the plan, the mutation r
       "instance": "/graphql",
       "code": "VALIDATION_ERROR",
       "traceId": "0af7651916cd43dd8448eb211c80319c",
-      "timestamp": "2026-09-28T10:45:00Z"
+      "timestamp": "2026-07-01T08:15:00Z"
     }
   }],
   "data": { "billing": { "mySubscribe": null } }
@@ -427,12 +435,12 @@ When an active subscription already covers a product of the plan, the mutation r
 
 ### How to handle a product conflict
 
-Read the subscription IDs in `detail` and look them up in [mySubscriptions](../api-reference/subscription.md#mysubscriptions). Your workspace already holds a subscription that covers a product of the plan you chose. To move to the new plan, contact Navixy at [sales@navixy.com](mailto:sales@navixy.com): switching and cancelling a subscription aren't in this API. To avoid the error, check `mySubscriptions(filter: { status: ACTIVE })` before you subscribe.
+Read the subscription IDs in `detail` and look them up in [mySubscriptions](../api-reference/subscription.md#mysubscriptions). Your workspace already has a subscription that covers a product of the plan you chose. To move to the new plan, contact Navixy at [sales@navixy.com](mailto:sales@navixy.com): switching and cancelling a subscription aren't in this API. To avoid the error, check `mySubscriptions(filter: { status: ACTIVE })` before you subscribe.
 
 ## See also
 
 - [Plans](../api-reference/plan.md): Learn how the rows of the catalogue, their items, and the pricing vocabulary work.
 - [Subscriptions](../api-reference/subscription.md): Learn how [mySubscribe](../api-reference/subscription.md#mysubscribe), [mySubscriptions](../api-reference/subscription.md#mysubscriptions), and the subscription type work.
-- [Reading balance and statement](reading-balance-and-statement.md): Read the prepaid balance of the workspace and what moved it.
+- [Reading balance and statement](reading-balance-and-statement.md): Read the workspace's prepaid balance and the entries that changed it.
 - [Billing errors](../errors.md): Learn how the Billing operations report a missing entity and which fields their errors have.
 - [Authentication](../../authentication.md): Learn how the token names the workspace that every operation acts in.

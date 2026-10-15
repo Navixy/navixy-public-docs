@@ -73,6 +73,7 @@
     * [Choosing a plan and subscribing](billing/guides/choosing-a-plan-and-subscribing.md)
     * [Reading balance and statement](billing/guides/reading-balance-and-statement.md)
     * [Reading usage submissions](billing/guides/reading-usage-submissions.md)
+    * [Reading invoices](billing/guides/reading-invoices.md)
   * [Billing errors](billing/errors.md "Errors")
   * [Billing API reference](billing/api-reference/README.md "API reference")
     * [Plans](billing/api-reference/plan.md)

@@ -1,8 +1,8 @@
 ---
 description: >-
   How the Billing operations use the shared error codes: what a missing entity
-  returns, which fields a Billing error has, and the errors that the my*
-  operations return.
+  returns, which fields a Billing error has, and the errors of the my*
+  operations.
 tags:
   - reference
   - beta
@@ -14,9 +14,9 @@ The Billing operations return errors in the shared Navixy GraphQL API format, us
 
 ## Missing entities
 
-Billing never returns `NOT_FOUND`. A missing entity is reported in one of two ways, depending on where the ID appears.
+Billing never returns `NOT_FOUND`. A missing entity is reported in one of 2 ways, depending on where the ID appears.
 
-A query by ID returns `null`, with no entry in `errors`: `node(id:)` returns `null` for a submission of another workspace. [myBalance](api-reference/balance.md#mybalance) never returns `null`. A workspace that holds no balance yet gets one opened at zero on the first read.
+A query by ID returns `null`, with no entry in `errors`: `node(id:)` returns `null` for a submission of another workspace, and [myInvoice](api-reference/invoice.md#myinvoice) returns `null` for an invoice that doesn't exist or belongs to another workspace. [myBalance](api-reference/balance.md#mybalance) never returns `null`. When a workspace has no balance, the first read opens one at zero.
 
 A mutation that names an entity that doesn't exist returns `VALIDATION_ERROR`. The entity and the ID are in `detail`, and there is no `field`, because a rule of the service rejected the reference rather than the input parsing. Send [mySubscribe](api-reference/subscription.md#mysubscribe) with a plan ID that Billing doesn't know, and the response will be:
 
@@ -44,7 +44,7 @@ The name in the message is the entity, `Plan`, not the GraphQL type `BillingAvai
 
 ### How to handle a missing entity
 
-Treat `null` from a query and `VALIDATION_ERROR` with "not found" in `detail` from a mutation the same way: the entity isn't available to your token. For a plan, read [myAvailablePlans](api-reference/plan.md#myavailableplans) again and send an ID from one of its rows.
+Treat `null` from a query and `VALIDATION_ERROR` with "not found" in `detail` from a mutation the same way: the entity isn't available to your token. For a plan, read [myAvailablePlans](api-reference/plan.md#myavailableplans) again and send an ID from one of its rows. For an invoice, read [myInvoices](api-reference/invoice.md#myinvoices) again and take the `id` from it.
 
 ## IDs of the wrong type
 
@@ -52,7 +52,7 @@ Every Billing ID names its entity type. A plan ID sent where a branch ID belongs
 
 ## Fields of a Billing error
 
-A Billing error has the standard fields of [Error handling](../error-handling.md#error-response-structure), with two differences:
+A Billing error has the standard fields of [Error handling](../error-handling.md#error-response-structure), with 2 differences:
 
 * `field` is present when the input itself failed, such as a malformed ID, and absent when a Billing rule rejected the request, such as a plan that the workspace may not take or a product that an active subscription already covers. Branch on `code`, and read `detail` for the reason.
 * `entityType` and `entityId` are never present on a Billing error.
@@ -94,4 +94,5 @@ Request a token issued for the workspace whose billing you read. A token that wo
 * [Error handling](../error-handling.md): Learn the error structure, every code, and the common scenarios across the API.
 * [Choosing a plan and subscribing](guides/choosing-a-plan-and-subscribing.md): Subscribe a workspace to a plan and handle the errors of [mySubscribe](api-reference/subscription.md#mysubscribe).
 * [Reading balance and statement](guides/reading-balance-and-statement.md): Read a balance and its statement.
+* [Reading invoices](guides/reading-invoices.md): Read a workspace's invoices and handle a `null` invoice.
 * [Authentication](../authentication.md): Learn how the token names the workspace that every operation acts in.

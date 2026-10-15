@@ -1,7 +1,7 @@
 ---
 description: >-
   Activate a batch of GPS devices through Navixy GraphQL API, correct a wrong
-  SIM number, resend a lost SMS, and watch which devices are still waiting to
+  phone number, resend a lost SMS, and list the devices still waiting to
   connect.
 tags:
   - guide
@@ -10,7 +10,7 @@ tags:
 
 # Activating a device
 
-This guide shows how to activate GPS devices in your workspace through the Business Data Repository API and how to handle what goes wrong on the way: a wrong SIM number, a lost SMS, and a device that never connects. You will activate a batch of devices, correct one of them, resend the settings to another, and list the devices that are still waiting to connect.
+This guide shows how to activate GPS devices in your workspace through the Business Data Repository API and how to handle what goes wrong on the way: a wrong phone number, a lost SMS, and a device that never connects. You will check that the phone numbers are available, activate a batch of devices, correct one of them, resend the settings to another, and list the devices that are still waiting to connect.
 
 Every operation on this page acts in the workspace named by your access token. For the shortest path from a token to one activated device, see [Getting started](../../getting-started.md). This guide starts where that page ends.
 
@@ -101,13 +101,15 @@ Save the ID of `awaiting_connection`. Status IDs are the same in every workspace
 
 `deviceActivate` does three things in one call. It creates the device record with the IMEI as its identifier, stores the SIM phone number and the APN settings on the device, and queues an SMS to the SIM card. The SMS carries the APN settings and the address of the Navixy platform. When the device receives it, the device connects to the platform on its own. Every activated device gets the built-in `gps_tracker` type, so the input takes no type.
 
+The Device Management web app expects a device to connect within 2 minutes after `activatedAt`. If the device is still `awaiting_connection` after that, the app offers **Retry activation**. The retry sends `deviceActivate` again with the same IMEI, as the [correction](#correct-a-wrong-phone-number) and [resend](#resend-a-lost-sms) steps of the scenario below do.
+
 Three rules decide what happens to a second activation with the same IMEI:
 
-* While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the phone number, the APN settings, and the model, replaces the title when you send one, and queues the SMS again. Use it to correct a typo or to resend a lost SMS.
+* While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the phone number, the APN settings, and the model, replaces the title when you send a title that isn't blank, and queues the SMS again. Use it to correct a typo or to resend a lost SMS.
 * Once the device is `active` or `inactive`, the IMEI is taken, and the call fails with `DUPLICATE` on `input.identifier`.
 * An IMEI that belongs to a device of another workspace fails the same way. The error doesn't say which workspace holds it.
 
-The phone number is unique across the platform too. A second device with the same number fails with `DUPLICATE` on `input.phone`. The APN password goes into the SMS only: the API neither stores nor returns it, so every re-run needs it again.
+The phone number is unique across the platform too. A second device with the same number fails with `DUPLICATE` on `input.phone`. To check a number before you activate, call `deviceActivationPhoneAvailable`, as the [first step of the scenario](#check-that-the-phone-numbers-are-available) shows. The APN password goes into the SMS only: the API neither stores nor returns it, so every re-run needs it again.
 
 A device that was created with `deviceCreate` can be activated later with the same call. It attaches to the existing record, because that record is `not_activated`.
 
@@ -115,9 +117,52 @@ A device that was created with `deviceCreate` can be activated later with the sa
 
 ## Example scenario: A fleet operator activates a shipment of devices
 
-TransLog GmbH runs delivery trucks out of Hamburg. A shipment of three Teltonika FMB003 devices arrived, each with a SIM card from the same carrier. The administrator activates the three devices, then finds that one SIM number was typed wrong and that another device didn't receive its SMS.
+TransLog GmbH runs delivery trucks out of Hamburg. A shipment of three Teltonika FMB003 devices arrived, each with a SIM card from the same carrier. The administrator checks that the three phone numbers are available and activates the devices, then finds that one phone number was typed wrong and that another device didn't receive its SMS.
 
 {% stepper %}
+{% step %}
+### Check that the phone numbers are available
+
+A phone number can belong to only one device on the platform. Before you activate, check the three numbers with `deviceActivationPhoneAvailable`. `deviceActivationPhoneAvailable` checks one number per call, so give each number its own alias in the `bdr` block. See [Aliases](../../graphql-basics/graphql-tips-and-patterns.md#aliases) to learn how aliases work. Run this query:
+
+```graphql
+query CheckPhones {
+  bdr {
+    truck01: deviceActivationPhoneAvailable(phone: "4915112345678")
+    truck02: deviceActivationPhoneAvailable(phone: "4915112345697")
+    truck03: deviceActivationPhoneAvailable(phone: "4915112345670")
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "truck01": true,
+      "truck02": true,
+      "truck03": true
+    }
+  }
+}
+```
+
+`true` means that no device in any workspace has the number, so `deviceActivate` accepts it. `false` means that another device has the number, and `deviceActivate` with it fails with `DUPLICATE` on `input.phone`. The response doesn't say which device or workspace has the number.
+
+Key fields:
+
+* `phone` is 5 to 20 digits, as in `deviceActivate`.
+* `identifier` is optional. It's the IMEI of the device that you activate. Send it when you run the activation again for a device of your workspace. Then the number that this device has returns `true`, because the re-run keeps the number. Without `identifier`, the same number returns `false`.
+
+The check doesn't reserve the number. If another device gets the number before your activation, `deviceActivate` still fails with `DUPLICATE`. The check doesn't find a typo either: a wrong number that no device has returns `true`. See [Correct a wrong phone number](#correct-a-wrong-phone-number) for an example.
+
+A `phone` or an `identifier` in the wrong format returns `VALIDATION_ERROR`, and `field` is `phone` or `identifier`, without the `input.` prefix. `deviceActivationPhoneAvailable` never returns `null`, so an error on one alias makes the whole `data` `null`: the other numbers get no result either. Before you send the query, check that every number has 5 to 20 digits and nothing else.
+
+The query needs the rights to read and create devices, because the response can show that a device of another workspace has the number. Without these rights, it returns `PERMISSION_DENIED`.
+{% endstep %}
+
 {% step %}
 ### Activate the first device
 
@@ -202,15 +247,16 @@ The device exists, holds its IMEI, and is `awaiting_connection`. The response sa
 Key fields:
 
 * `identifier` must be exactly 15 digits. It becomes the `IMEI` identifier of the device.
-* `phone` is 8 to 20 digits, with no `+`, spaces, or dashes.
+* `phone` is 5 to 20 digits, with no `+`, spaces, or dashes.
 * `apn.name` is 1 to 40 characters of letters, digits, `.`, `_`, or `-`. `apn.user` and `apn.password` are optional and at most 40 characters each, with `@` allowed too.
-* `title` is optional. Without it, the API names the device after the vendor, the model, and the IMEI.
+* `title` is optional. Without it, or when it's blank, the API names a new device after the model and the IMEI, for example, `FMB003 356307042772396`.
+* `activationCode` is optional: a code that the carrier issued with the SIM card, 3 to 20 digits. The API checks its format and stores it with the activation, and `activation.activationCode` returns it. The SMS doesn't include it.
 {% endstep %}
 
 {% step %}
 ### Activate the other devices in one request
 
-A `bdr` block runs one mutation at a time, so give each device its own aliased `bdr` block (see [Aliases](../../graphql-basics/graphql-tips-and-patterns.md#aliases)). The root fields run in the order you write them:
+A `bdr` block runs one mutation at a time, so give each device its own aliased `bdr` block. See [Aliases](../../graphql-basics/graphql-tips-and-patterns.md#aliases) to learn how aliases work. The root fields run in the order you write them:
 
 ```graphql
 mutation ActivateShipment {
@@ -219,7 +265,7 @@ mutation ActivateShipment {
       modelId: "019a6b2f-793e-807b-8001-43444d4c0005"
       title: "Truck 02"
       identifier: "356307042772404"
-      phone: "4915112345679"
+      phone: "4915112345697"
       apn: { name: "internet.example.net", user: "iot", password: "iot" }
     }) {
       device { id title status { code } }
@@ -262,9 +308,9 @@ When one activation fails, the others still run. The failed alias holds `null`, 
 {% endstep %}
 
 {% step %}
-### Correct a wrong SIM number
+### Correct a wrong phone number
 
-Truck 02 doesn't connect. The administrator finds that its phone number ends in 79 on the SIM card, not 78 as typed. Run the activation again with the same IMEI and the corrected number. The device is still `awaiting_connection`, so the call attaches to it:
+Truck 02 doesn't connect within 2 minutes. The administrator finds that its phone number ends in 79 on the SIM card, not 97 as typed. Run the activation again with the same IMEI and the corrected number. The device is still `awaiting_connection`, so the call attaches to it:
 
 ```graphql
 mutation CorrectPhone {
@@ -321,7 +367,7 @@ A wrong IMEI can't be corrected this way. A re-run with another IMEI and the sam
 {% step %}
 ### Resend a lost SMS
 
-Truck 03 has the right number but didn't receive the SMS. Run the activation again with the same input. Nothing changes on the device except `activatedAt` and `version`, and the SMS is queued once more:
+Truck 03 has the right number but doesn't connect within 2 minutes either: it didn't receive the SMS. Run the activation again with the same input. Nothing changes on the device except `activatedAt` and `version`, and the SMS is queued once more:
 
 ```graphql
 mutation ResendSettings {
@@ -391,7 +437,7 @@ query WaitingToConnect {
 }
 ```
 
-Response, an hour after the re-runs:
+Response, 10 minutes after the re-runs:
 
 ```json
 {
@@ -417,7 +463,7 @@ Truck 01 and Truck 02 connected and left the list. Truck 03 is still waiting aft
 {% endstepper %}
 
 {% hint style="success" %}
-Three GPS devices were activated in your workspace, one SIM number was corrected, one SMS was resent, and the list of devices still waiting to connect tells you where to look next. Every call acted in the workspace named by your token.
+Three GPS devices were activated in your workspace, one phone number was corrected, one SMS was resent, and the list of devices still waiting to connect tells you where to look next. Every call acted in the workspace named by your token.
 {% endhint %}
 
 ## Related operations
@@ -436,8 +482,8 @@ The activation operations return errors in the shared format. See [Error handlin
 
 | Code                | When it occurs                                                                                                                                                                                                | Resolution                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it.                                    | Request a token issued for the workspace, or ask an administrator of your organization for a role that creates and updates devices.                    |
-| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 8 to 20 digits, `activationCode` isn't 3 to 20 digits, `apn.name` breaks its format, or the model isn't supported. `field` names the argument.                    | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`.                                      |
+| `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
+| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `activationCode` isn't 3 to 20 digits, `apn.name` breaks its format, or the model isn't supported. `field` names the argument.                    | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`.                                      |
 | `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                     | Send the `id` as `deviceModels` returned it.                                                                                                           |
 | `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
 
