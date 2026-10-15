@@ -28,7 +28,7 @@ To get a flow from an assistant, follow these steps:
 A flow depends on facts that only the user knows. The assistant asks for them before it writes anything, rather than guessing:
 
 * **Devices.** Which devices enter the flow, by ID. If the user gives device titles, look up the IDs with the Business Data Repository `devices` query first.
-* **Attribute names.** The exact names that the devices report, such as `analog_1` or `din1`. The names depend on the device model. The user reads them in Data Stream Analyzer.
+* **Attribute names.** The exact names that the devices report, such as `analog_1` or `din1`. The names depend on the device model. The user reads them in Data Stream Analyzer, or lists them with the `deviceAttributes` query. See [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
 * **Calculations.** What each new value means, its unit, and its formula, or the data needed to write the formula, such as a tank size.
 * **Conditions.** Each threshold and what happens when it is crossed.
 * **Outputs.** Which paths keep their results. Every path that calculates something ends at an Output Endpoint, which sends the result to the Navixy platform.
@@ -114,7 +114,7 @@ The assistant checks its own output against this list before it returns it. Each
 * [ ] Every expression parses and stays within its length (`INVALID_EXPRESSION`, `EXPRESSION_TOO_LONG`)
 * [ ] Keys are unique, and every transition names existing keys (single `VALIDATION_ERROR` before validation)
 
-Two checks compare the flow with data in Navixy: `ATTRIBUTE_ALREADY_PRODUCED` with your other flows, and `ATTRIBUTE_REPORTED_BY_DEVICE` with the attributes of your devices. Give the assistant the attribute names that the devices report, from Data Stream Analyzer, so that it can avoid both. The write still reports them, and they can appear on a later attempt, after the other violations are fixed.
+Two checks compare the flow with data in Navixy: `ATTRIBUTE_ALREADY_PRODUCED` with your other flows, and `ATTRIBUTE_REPORTED_BY_DEVICE` with the attributes of your devices. Give the assistant the result of the `deviceAttributes` query for the devices of the flow, so that it can avoid both. The write still reports them, and they can appear on a later attempt, after the other violations are fixed.
 
 ## Example
 

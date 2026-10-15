@@ -516,6 +516,28 @@ A paginated list of Device items.
 
 ---
 
+### deviceActivationPhoneAvailable
+
+Whether `deviceActivate` would accept this phone: no device of any workspace holds it, or the one that does is the
+  caller's device with `identifier`. Lets a client check the phone before submitting the form; `deviceActivate` still
+  enforces uniqueness, so a phone taken in between is refused there with `DUPLICATE`.
+
+```graphql
+deviceActivationPhoneAvailable(
+    phone: String! @trim
+    identifier: String @trim
+  ): Boolean!
+```
+
+**Arguments**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `phone` | `String!` | The SIM phone number, as `DeviceActivateInput.phone` takes it: 5 to 20 digits. |
+| `identifier` | `String` | The IMEI the form activates. The phone of the caller's device with this IMEI counts as available, since re-running activation for that device keeps it. |
+
+---
+
 ## Mutations
 
 ### deviceCreate
@@ -697,10 +719,11 @@ Deletes a device.
   delete instead.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them. A required
-  `DEVICE` field holding the device and a live flow linking it, in a workspace that has IoT Logic,
-  are among them; the flows of a workspace without IoT Logic block nothing. Nothing is detached
-  when the delete is refused.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out. A required `DEVICE` field holding
+  the device and a live flow linking it, in a workspace that has IoT Logic, are among them; the
+  flows of a workspace without IoT Logic block nothing. Nothing is detached when the delete is
+  refused.
 
 ```graphql
 deviceDelete(
@@ -911,9 +934,9 @@ Input for activating a device: creates it with the given IMEI, records SIM/APN d
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
-| `title` | `String` | The device display name. For a new device, auto-generated the same way as `deviceCreate` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted. |
+| `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
 | `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
-| `phone` | `String!` | The SIM phone number the activation SMS is sent to. Globally unique across the installation. |
+| `phone` | `String!` | The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput)! | The APN settings pushed to the device. |
 | `activationCode` | `String` | An optional carrier-issued activation code, format-validated only. |
 
@@ -1267,7 +1290,8 @@ A classification type for devices.
 Deletes a device type.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
 
 ```graphql
 deviceTypeDelete(
@@ -1484,7 +1508,8 @@ An operational status for devices.
 Deletes a device status.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
 
 ```graphql
 deviceStatusDelete(
@@ -1969,9 +1994,9 @@ Input for activating a device: creates it with the given IMEI, records SIM/APN d
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
-| `title` | `String` | The device display name. For a new device, auto-generated the same way as `deviceCreate` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted. |
+| `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
 | `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
-| `phone` | `String!` | The SIM phone number the activation SMS is sent to. Globally unique across the installation. |
+| `phone` | `String!` | The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput)! | The APN settings pushed to the device. |
 | `activationCode` | `String` | An optional carrier-issued activation code, format-validated only. |
 

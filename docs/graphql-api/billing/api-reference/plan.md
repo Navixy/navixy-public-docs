@@ -121,7 +121,7 @@ A tier in a plan's tiered or volume pricing.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `from` | `Float!` | Lower bound of the tier (inclusive). |
-| `to` | `Float` | Upper bound of the tier (inclusive, null means unlimited). |
+| `to` | `Float` | Upper bound of the tier: exclusive for TIERED, where the next tier starts, and inclusive for VOLUME; null means unlimited. |
 | `price` | [Long](../../core-api-reference/common.md#long)! | Price for this tier in minor currency units. |
 
 ---

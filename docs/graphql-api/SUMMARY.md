@@ -79,6 +79,7 @@
     * [Subscriptions](billing/api-reference/subscription.md)
     * [Balances](billing/api-reference/balance.md)
     * [Submissions](billing/api-reference/submission.md)
+    * [Invoices](billing/api-reference/invoice.md)
 * [Console overview](console/README.md "Console")
   * [Guides](console/guides/README.md)
     * [Enabling and disabling a product](console/guides/enabling-and-disabling-a-product.md)

@@ -243,6 +243,41 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 
 ---
 
+### deviceAttributes
+
+Lists the attribute names of up to 1,000 devices: the names that each device reported, the names that flows calculated for it, and the names that flows declare. Check the names that your expressions read against this list. The query needs the `read` action on IoT Logic flows. The result has one entry for each device, in the order of `deviceIds`, and lists each device once. Devices that your roles don't let you read, or that aren't in your workspace, are left out. A device without names has an empty `attributes` list. See [Find the attribute names of your devices](../guides/reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
+
+```graphql
+deviceAttributes(
+    deviceIds: [ID!]!
+    flowId: ID
+  ): [IotLogicDeviceAttributes!]!
+```
+
+**Arguments**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `deviceIds` | `[ID!]!` | The devices to read, at most 1,000 different IDs. An empty list returns an empty list. |
+| `flowId` | `ID` | Optional. Only this flow adds its names: the names that it declares and the names that it calculated, to every device in `deviceIds`, whether a data source of the flow lists the device or not. Without it, every flow that lists the device in a data source adds its own names. Disabled flows count. A deleted flow, or a flow that isn't in your workspace, adds nothing. Reported names are listed either way. |
+
+**Output types:**
+
+<details>
+
+<summary>IotLogicDeviceAttributes</summary>
+
+The attribute names of one device.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `deviceId` | `ID!` | The ID of the device. |
+| `attributes` | [[IotLogicDeviceAttribute](#iotlogicdeviceattribute)!]! | Each name once, sorted by name and then by channel number, so `analog_2` comes before `analog_10`. |
+
+</details>
+
+---
+
 ## Mutations
 
 ### flowCreate
@@ -282,7 +317,7 @@ Input for creating a flow. The flow is created disabled.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT`, `ACTION`, and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -292,7 +327,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
-| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
+| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
@@ -418,7 +453,7 @@ Input for updating a flow. `nodes` and `transitions` are the whole new graph, no
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT`, `ACTION`, and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -428,7 +463,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
-| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
+| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
@@ -597,6 +632,33 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 | `deviceId` | `ID!` | The ID of the device. |
 | `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` of that message. For a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy doesn't record when such a message arrived. |
 | `nonNullFields` | [JSON](../../core-api-reference/common.md#json)! | The recent values of the attribute that aren't `null`. They can be older than the messages in `allFields`, so this map isn't part of `allFields`. An attribute with no such value isn't in the map. |
+
+---
+
+<a id="iotlogicdeviceattributes"></a>
+
+### IotLogicDeviceAttributes
+
+The attribute names of one device.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `deviceId` | `ID!` | The ID of the device. |
+| `attributes` | [[IotLogicDeviceAttribute](#iotlogicdeviceattribute)!]! | Each name once, sorted by name and then by channel number, so `analog_2` comes before `analog_10`. |
+
+---
+
+<a id="iotlogicdeviceattribute"></a>
+
+### IotLogicDeviceAttribute
+
+One attribute name of a device. A name that the device reported stays in the list after the device stops sending it, for example after a sensor is removed. A name that a flow calculated stays only while the flow still declares it.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `name` | `String!` | The name with its channel number, such as `lls_level_0`. This is the form that expressions and attribute names in a flow use. |
+| `received` | `Boolean!` | `true` when the device reported the attribute, or a flow calculated it for this device. A name of a flow that hasn't processed the device yet has `false`. |
+| `inFlow` | `Boolean!` | `true` when a flow declares the attribute, in an Initiate Attribute node or as the `expressionName` of an IF/THEN Logic node. |
 
 ---
 
@@ -847,7 +909,7 @@ Ordering options for device links.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT`, `ACTION`, and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -857,7 +919,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
-| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
+| `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |

@@ -1,6 +1,6 @@
 # =============================================================================
-# NAVIXY 4 - GraphQL Schema — IAM module
-# Version: 0.3.0
+# NAVIXY 4 - GraphQL Schema — IAM public schema
+# Version: 0.4.1
 # =============================================================================
 #
 # The roles of the caller's organization and who holds them, as IAM's own gRPC `RoleService` and
@@ -13,7 +13,9 @@
 #
 # Module prefix `Iam` on every declaration
 # (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — `Query.iam` and
-# `Mutation.iam` — lives in nvx4-bdr.graphql, which owns the roots.
+# `Mutation.iam` — lives in nvx4-bdr.graphql, which owns the roots. IAM's global registries, for
+# staff only, extend `IamQuery` and `IamMutation` from nvx4-iam-admin.graphql, which the SDK does not
+# consume; the two files share this version.
 #
 # Types it references but does not declare: the kernel's `Connection`, `Edge`, `PageInfo`,
 # `CountInfo`, `UUID`, `DateTime`, `Duration`, `Long`.
@@ -21,7 +23,8 @@
 # IDENTITY
 # --------
 # `IamRole.id` and every `roleId` are `ID`: IAM mints role ids in the UuidV8 layout with the `IROL`
-# discriminator, and nvx4 checks that structure (not the deployment or region, which are IAM's).
+# discriminator, and nvx4 checks that structure and that the id carries this deployment's flag and
+# region.
 # `IamRole` does not implement `Node`: a role is reached only through this namespace. `actorId` is a
 # `UUID`: Console mints actor ids under its own scheme, as for `ConsoleWorkspaceOperation.actorUserId`.
 # `IamRole.organizationId` is an `ID` like `ConsoleOrganization.id`: Console's organization id, with

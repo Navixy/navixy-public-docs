@@ -23,7 +23,7 @@ The GraphQL schema for Navixy GraphQL API is public and split into several parts
 
 The files are GraphQL schema definition language. They describe the same type system that introspection returns, plus comments that introspection leaves out. Download them to generate typed client code, to feed a GraphQL plugin in your editor, or to compare two versions of the API and see what changed. Read them together rather than one at a time: each file uses types that the common file declares, and `nvx4-bdr.graphql` declares the root types that refer to all the others.
 
-To explore the API without downloading anything, use [introspection](../graphql-basics/#introspection) from your own GraphQL client.
+To explore the API without downloading anything, use [introspection](../graphql-basics/#introspection) from your own GraphQL client, with your access token.
 
 ## Versions
 

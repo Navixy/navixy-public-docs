@@ -91,6 +91,10 @@ Response:
 
 Save the IDs of the devices that you want the flow to process.
 
+### Find the attribute names of your devices
+
+Expressions read the attributes of a device message by name, and the names depend on the device model. Before you write expressions, list the names that your devices report with the `deviceAttributes` query. See [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
+
 ## How a write describes a graph
 
 A create or update request describes the graph in two lists:
@@ -710,7 +714,7 @@ The steps on this page most often fail for these reasons:
 | Error | Cause | How to fix |
 | --- | --- | --- |
 | `VALIDATION_ERROR` without `violations` | A transition names a key that no node in the request has, two nodes have the same key, or an attribute name breaks the naming rule | Correct the input that `field` names. See [Errors outside the violations list](../flow-validation-errors.md#errors-outside-the-violations-list). |
-| `ATTRIBUTE_REPORTED_BY_DEVICE` | A calculated attribute has the name of an attribute that a device of the flow reports | Rename the attribute. Data Stream Analyzer and the `flowDebugValues` query show the names that the devices of a flow report. |
+| `ATTRIBUTE_REPORTED_BY_DEVICE` | A calculated attribute has the name of an attribute that a device of the flow reports | Rename the attribute. Check the names with `deviceAttributes` first, see [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices). |
 | `EDGE_TYPE_MISMATCH` | A transition that leaves a logic node is `SIMPLE`, or a transition that leaves another node is `THEN` or `ELSE` | Use `THEN` or `ELSE` after a logic node, and `SIMPLE` after every other node. |
 | `UNKNOWN_DEVICE` | A device in `deviceIds` doesn't exist, belongs to another workspace, or isn't one that your roles let you read | Correct the device ID, or remove it. |
 | `CONFLICT` | Someone changed the flow after you read it | Read the flow again and apply your change to the current graph. See [Handling version conflicts](#handling-version-conflicts). |

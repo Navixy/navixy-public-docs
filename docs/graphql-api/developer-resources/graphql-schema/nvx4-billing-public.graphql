@@ -1,12 +1,13 @@
 # =============================================================================
 # Billing public schema — exposed through the SDK
-# Version: 0.12.1
+# Version: 0.15.0
 # =============================================================================
 #
 # What a customer's own token may do in billing: read its usage-metric and invoice-line-item
 # submissions with the reference types they denormalize (BillingProductDomain, BillingMetric), and —
 # since 0.6.0 — `myAvailablePlans` and `mySubscribe`, with the catalogue and pricing vocabulary they
-# need. Every operation here acts on the workspace the token names and accepts no workspace argument.
+# need, and — since 0.15.0 — `myInvoices` and `myInvoice`. Every operation here acts on the workspace the token
+# names and accepts no workspace argument.
 #
 # Submissions are written by product services over billing's gRPC `SubmissionService`
 # (`com.navixy:billing-client`), not through this contract (since 0.9.0).
@@ -126,7 +127,7 @@ type BillingUsagePricing {
 type BillingUsagePricingTier {
   "Lower bound of the tier (inclusive)."
   from: Float!
-  "Upper bound of the tier (inclusive, null means unlimited)."
+  "Upper bound of the tier: exclusive for TIERED, where the next tier starts, and inclusive for VOLUME; null means unlimited."
   to: Float
   "Price for this tier in minor currency units."
   price: Long!
@@ -506,6 +507,147 @@ type BillingInvoiceLineItemSubmission implements Node {
 }
 
 # =============================================================================
+# INVOICES (since 0.15.0)
+# =============================================================================
+# A workspace sees its invoices as BillingWorkspaceInvoice: the same row as the staff BillingInvoice, with a line's
+# subscription and plan as ids. The status and the ordering serve both realms.
+
+# @category: billing/invoice
+"Lifecycle of an invoice. Billing writes ISSUED, PAID and OVERDUE; DRAFT and VOID are reserved and never set."
+enum BillingInvoiceStatus {
+  "Assembled but not yet issued to the customer."
+  DRAFT
+  "Issued and outstanding."
+  ISSUED
+  "Settled."
+  PAID
+  "Issued, past its due date, still outstanding."
+  OVERDUE
+  "Cancelled without being paid."
+  VOID
+}
+
+# @category: billing/invoice
+"Ordering options for invoices."
+input BillingInvoiceOrder {
+  "The field to order by."
+  field: BillingInvoiceOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: billing/invoice
+"Fields available for ordering invoices."
+enum BillingInvoiceOrderField {
+  "Order by the day the invoice was issued."
+  ISSUED_AT
+}
+
+# @category: billing/invoice
+"""
+One of the caller's own workspace's invoices: its charge for every complete billing period of its subscriptions that
+no invoice covered yet, as of one pass. `periodStart` and `periodEnd` span the periods covered. The total is posted to
+the balance as the `INVOICE` entry on its statement.
+
+`status` is `PAID` at issue when the balance covers the total, and `ISSUED` when the invoice opens a debt.
+Payments are not tied to invoices and settle the oldest invoices first; the payment that covers an invoice marks it
+`PAID` and sets `paidAt`. Once the grace period has passed (`dueAt`), the daily pass marks an unpaid one `OVERDUE`.
+"""
+type BillingWorkspaceInvoice {
+  id: ID!
+  "The workspace being charged: the one the token names."
+  workspaceId: ID!
+  "Human-facing number, unique across the schema."
+  invoiceNumber: String!
+  "First instant of the earliest billing period covered."
+  periodStart: DateTime!
+  "End of the latest billing period covered, exclusive."
+  periodEnd: DateTime!
+  "Sum of the line items, before adjustments."
+  subtotal: Money!
+  "Signed adjustment applied to the subtotal — a discount is negative."
+  priceModify: Money!
+  "What the customer owes: `subtotal` plus `priceModify`."
+  total: Money!
+  "Current lifecycle status."
+  status: BillingInvoiceStatus!
+  "When the invoice was issued. Its place in a list is this, not `createdAt`."
+  issuedAt: DateTime!
+  "When payment is due."
+  dueAt: DateTime!
+  "When it was paid; null while it is not."
+  paidAt: DateTime
+  "The lines, in display order: per covered period, the period fees, then every metric of the plan, then the line-item submissions."
+  lineItems: [BillingWorkspaceInvoiceLineItem!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# @category: billing/invoice
+"""
+One line of a workspace's invoice: a period fee, a metric's priced usage, or a line-item submission passed through.
+`amount` is `quantity × unitPrice` rounded half up to the minor unit, except on a line-item submission that carried
+its own amount.
+"""
+type BillingWorkspaceInvoiceLineItem {
+  id: ID!
+  "What the line charges for, ending with the billing period it belongs to, as `, 2026-01-15 – 2026-02-14`."
+  description: String!
+  "Units charged: the share of the month on a period-fee line, the aggregated usage over the included limit on a metric line, the quantity as submitted on a line-item line. `metric.unit` names the unit."
+  quantity: Float!
+  "Price of one unit in the invoice's currency."
+  unitPrice: Money!
+  "The line's total."
+  amount: Money!
+  "The product the line belongs to."
+  productDomain: BillingProductDomain
+  "The metric the line prices; null on a period-fee line and on a line-item submission's line."
+  metric: BillingMetric
+  "The subscription the line charges for, as in `mySubscriptions`."
+  subscriptionId: ID
+  "The plan that priced the line; the subscription's branch, when it has one, overrode this plan's fee and prices."
+  planId: ID
+  "First instant of the billing period the line belongs to."
+  periodStart: DateTime
+  "End of that billing period, exclusive."
+  periodEnd: DateTime
+  createdAt: DateTime!
+}
+
+# @category: billing/invoice
+"A page of the caller's own workspace's invoices."
+type BillingWorkspaceInvoiceConnection implements Connection {
+  "A list of edges."
+  edges: [BillingWorkspaceInvoiceEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [BillingWorkspaceInvoice!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: billing/invoice
+"An edge in the BillingWorkspaceInvoice connection."
+type BillingWorkspaceInvoiceEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The invoice at the end of the edge."
+  node: BillingWorkspaceInvoice!
+}
+
+# @category: billing/invoice
+"Filtering options for the caller's own invoices. Fields combine with AND."
+input BillingWorkspaceInvoiceFilter {
+  "Keep only invoices in this status."
+  status: BillingInvoiceStatus
+  "Keep only invoices issued at or after this instant."
+  issuedFrom: DateTime
+  "Keep only invoices issued at or before this instant."
+  issuedTo: DateTime
+}
+
+# =============================================================================
 # LIST / PAGINATION TYPES
 # =============================================================================
 
@@ -691,6 +833,32 @@ type BillingQuery {
     "The ordering options for the returned entries."
     orderBy: BillingBalanceEntryOrder = { field: CREATED_AT, direction: DESC }
   ): BillingBalanceEntryConnection!
+
+  # @category: billing/invoice
+  "One of the caller's own workspace's invoices; null when it does not exist or belongs to another workspace."
+  myInvoice("The ID of the invoice to retrieve." id: ID!): BillingWorkspaceInvoice
+
+  # @category: billing/invoice
+  """
+  The caller's own workspace's invoices, newest issue date first.
+
+  **The workspace is not an argument.** It is the one the caller's token names; a token carrying no
+  workspace claim is refused.
+  """
+  myInvoices(
+    "Filtering options for the returned invoices."
+    filter: BillingWorkspaceInvoiceFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned invoices."
+    orderBy: BillingInvoiceOrder = { field: ISSUED_AT, direction: DESC }
+  ): BillingWorkspaceInvoiceConnection!
 
   # @category: billing/submission
   """

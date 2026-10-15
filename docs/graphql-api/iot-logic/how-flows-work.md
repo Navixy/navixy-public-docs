@@ -27,7 +27,7 @@ A later node on a path can read every attribute that an earlier node on the same
 
 An Output Endpoint node sends the message to the Navixy platform. The attributes that the flow calculated arrive together with the values that the device sent. The platform stores them in the history of the device. In a later message of the same device, an expression of the same flow can read them with `value()`. Other flows can't read them.
 
-To see the values that arrive, read them with the `flowDebugValues` query. It returns the last 12 values of every attribute of up to 10 devices of a flow, as the messages leave the flow, including the attributes that a device model reports under its own names. See [Checking what a flow calculated](guides/reading-flows-and-device-data.md#checking-what-a-flow-calculated). In the flow editor, the same values appear in Data Stream Analyzer.
+To see the values that arrive, read them with the `flowDebugValues` query. It returns the last 12 values of every attribute of up to 10 devices of a flow, as the messages leave the flow, including the attributes that a device model reports under its own names. See [Checking what a flow calculated](guides/reading-flows-and-device-data.md#checking-what-a-flow-calculated). In the flow editor, the same values appear in Data Stream Analyzer. To list only the attribute names of your devices, without values, use the `deviceAttributes` query. See [Find the attribute names of your devices](guides/reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
 
 ## How a write changes a flow
 

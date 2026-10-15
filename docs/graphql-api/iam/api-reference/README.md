@@ -38,7 +38,7 @@ The two IAM connections page differently, and both differ from the [pagination](
 
 ## Identifiers
 
-`IamRole.id` and every `roleId` are `ID` values that IAM issues. `IamRole` isn't a `Node`, so `node(id:)` doesn't return it. Read a role through `role` or `roles`. Role titles aren't unique, so identify a role by its ID.
+`IamRole.id` and every `roleId` are `ID` values that IAM issues. A `roleId` issued in another Navixy region or deployment is refused with `VALIDATION_ERROR`. `IamRole` isn't a `Node`, so `node(id:)` doesn't return it. Read a role through `role` or `roles`. Role titles aren't unique, so identify a role by its ID.
 
 `IamRole.organizationId` is an `ID`, the same value as `ConsoleOrganization.id` in [Console](../../console/api-reference/organizations.md). For this ID, `node(id:)` returns the organization when it's one of your own organizations. If IAM returns a role whose `organizationId` isn't an organization ID, the operation that returns the role fails with `SERVICE_UNAVAILABLE` and `dependency: "iam"`.
 

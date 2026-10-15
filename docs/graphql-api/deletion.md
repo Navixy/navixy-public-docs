@@ -45,6 +45,8 @@ Device identifiers are different. The identifiers of a deleted device stay reser
 
 A delete fails with `IN_USE` while another record that isn't deleted still refers to the record. Nothing is deleted and nothing else changes. The error has a `blockers` list that names what still refers to the record. Each entry covers one kind of record and one of its fields: `entityType` is the kind of record, `path` is the field, and `ids` lists up to 20 of those records that your role can read. An empty `ids` list means that such records exist, but you can't read them. [In use (409)](error-handling.md#in-use-409) shows a complete response.
 
+The list has at most five entries. They come in a fixed order: the record's own fields first, then custom field values, then custom field definitions, then the other references, such as an IoT Logic flow. When there are more than five, `extensions.hasMoreBlockers` is `true`. Clear the entries you got and send the delete again: the next refusal names the next blockers, up to five, or the delete succeeds.
+
 | Record you delete | What blocks the delete | `path` in `blockers` |
 | --- | --- | --- |
 | Asset type | An asset of that type | `type` |
@@ -92,7 +94,7 @@ Change the records in `blockers` through their own mutations, then send the dele
 
 1. Send `version` with every delete. A delete without `version` can remove a record that someone changed after you last read it. `flowDelete` always requires it. See [Optimistic locking](optimistic-locking.md).
 2. Read what you need first. The API doesn't return a deleted record, so fetch an asset group's `history` before you delete the group.
-3. Handle `IN_USE` as a normal result of a delete in your app. Show the user the records in `blockers`, so they know what to change.
+3. Handle `IN_USE` as a normal result of a delete in your app. Show the user the records in `blockers`, so they know what to change. When `hasMoreBlockers` is `true`, tell the user that more records refer to the record, and that the next delete attempt names them.
 4. Before you delete a device whose hardware you want to use again, remove its identifiers. The identifiers of a deleted device stay reserved.
 
 ## See also

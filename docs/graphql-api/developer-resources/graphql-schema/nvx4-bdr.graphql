@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Business Data Repository
-# Version: 0.16.4
+# Version: 0.16.14
 # =============================================================================
 #
 # TABLE OF CONTENTS
@@ -93,8 +93,9 @@
 #
 # INTROSPECTION
 # -------------
-# Introspection queries require authentication.
-# Anonymous introspection is disabled for security.
+# Introspection queries require authentication: `__schema` and `__type` without a token
+# fail with UNAUTHORIZED. `__typename` stays open. A test stand may answer `__schema` and
+# `__type` without a token, so a schema explorer loads there; production does not.
 #
 # RATE LIMITING & QUERY COMPLEXITY
 # --------------------------------
@@ -360,9 +361,12 @@
 #   | dependencyCode  | String   | That system's own code, on a relayed refusal   |
 #   | productCode     | String   | The product not enabled, on PRODUCT_DISABLED   |
 #   | blockers        | [Object] | On IN_USE: { entityType, path, ids } per       |
-#   |                 |          | holder type and path; path is the holder's     |
-#   |                 |          | field that points at the target; ids only      |
-#   |                 |          | those the caller may read                      |
+#   |                 |          | holder type and path, the first five in a      |
+#   |                 |          | stable order; path is the holder's field that  |
+#   |                 |          | points at the target; ids only those the       |
+#   |                 |          | caller may read                                |
+#   | hasMoreBlockers | Boolean  | On IN_USE: true when blockers left out some    |
+#   |                 |          | holder types and paths past the first five     |
 #
 # -----------------------------------------------------------------------------
 # ERROR CODES REFERENCE
@@ -572,7 +576,7 @@
 #   |-------------|---------------------------------------------------|
 #   | 200         | Request processed (check `errors` for failures)   |
 #   | 400         | Invalid HTTP/GraphQL request (parse/validation)   |
-#   | 401         | Authentication required or invalid                |
+#   | 401         | Token invalid, expired or of an unknown user      |
 #   | 403         | Authorization failed (forbidden)                  |
 #   | 429         | Rate limit exceeded                               |
 #   | 5xx         | Infrastructure/system error                       |
@@ -582,6 +586,10 @@
 #   are returned with HTTP 200. The semantic status code is in extensions.status.
 #
 #   Example: Entity not found returns HTTP 200 with extensions.status = 404.
+#
+#   A request without a token is processed as well: each field that needs
+#   authentication fails with UNAUTHORIZED, extensions.status = 401. A caller with a valid token
+#   that lacks a permission gets PERMISSION_DENIED, extensions.status = 403.
 #
 # Rule: Use `extensions.code` for programmatic handling, NOT HTTP status.
 #
@@ -3131,11 +3139,11 @@ Input for activating a device: creates it with the given IMEI, records SIM/APN d
 input DeviceActivateInput {
   "The device model. Must be `supported`."
   modelId: ID!
-  "The device display name. For a new device, auto-generated the same way as `deviceCreate` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted."
+  "The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank."
   title: String @trim
   "The device's IMEI (15 digits). Becomes the device's IMEI identifier."
   identifier: String! @trim
-  "The SIM phone number the activation SMS is sent to. Globally unique across the installation."
+  "The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation."
   phone: String! @trim
   "The APN settings pushed to the device."
   apn: ApnSettingsInput!
@@ -3840,7 +3848,7 @@ type BdrQuery {
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): CatalogConnection!
 
-  # --- Org-scoped Catalog Items ---
+  # --- Workspace-scoped Catalog Items ---
 
   # @category: bdr/devices
   "Lists device types in the caller's workspace."
@@ -4071,6 +4079,19 @@ type BdrQuery {
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
   ): DeviceConnection!
+
+  # @category: bdr/devices
+  """
+  Whether `deviceActivate` would accept this phone: no device of any workspace holds it, or the one that does is the
+  caller's device with `identifier`. Lets a client check the phone before submitting the form; `deviceActivate` still
+  enforces uniqueness, so a phone taken in between is refused there with `DUPLICATE`.
+  """
+  deviceActivationPhoneAvailable(
+    "The SIM phone number, as `DeviceActivateInput.phone` takes it: 5 to 20 digits."
+    phone: String! @trim
+    "The IMEI the form activates. The phone of the caller's device with this IMEI counts as available, since re-running activation for that device keeps it."
+    identifier: String @trim
+  ): Boolean!
 
   # @category: bdr/assets
   "Retrieves an asset by its ID."
@@ -4415,10 +4436,11 @@ type BdrMutation {
   delete instead.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them. A required
-  `DEVICE` field holding the device and a live flow linking it, in a workspace that has IoT Logic,
-  are among them; the flows of a workspace without IoT Logic block nothing. Nothing is detached
-  when the delete is refused.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out. A required `DEVICE` field holding
+  the device and a live flow linking it, in a workspace that has IoT Logic, are among them; the
+  flows of a workspace without IoT Logic block nothing. Nothing is detached when the delete is
+  refused.
   """
   deviceDelete(
     "The input fields for deleting the device."
@@ -4486,7 +4508,8 @@ type BdrMutation {
   Deletes an asset.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   assetDelete(
     "The input fields for deleting the asset."
@@ -4514,7 +4537,8 @@ type BdrMutation {
   Deletes an asset group.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   assetGroupDelete(
     "The input fields for deleting the asset group."
@@ -4556,7 +4580,8 @@ type BdrMutation {
   Deletes a geo object.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   geoObjectDelete(
     "The input fields for deleting the geo object."
@@ -4584,7 +4609,8 @@ type BdrMutation {
   Deletes a schedule.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   scheduleDelete(
     "The input fields for deleting the schedule."
@@ -4612,7 +4638,8 @@ type BdrMutation {
   Deletes an inventory.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   inventoryDelete(
     "The input fields for deleting the inventory."
@@ -4742,7 +4769,8 @@ type BdrMutation {
   Deletes a device type.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   deviceTypeDelete(
     "The input fields for deleting the device type."
@@ -4768,7 +4796,8 @@ type BdrMutation {
   Deletes a device status.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   deviceStatusDelete(
     "The input fields for deleting the device status."
@@ -4794,7 +4823,8 @@ type BdrMutation {
   Deletes an asset type.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   assetTypeDelete(
     "The input fields for deleting the asset type."
@@ -4820,7 +4850,8 @@ type BdrMutation {
   Deletes an asset group type.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   assetGroupTypeDelete(
     "The input fields for deleting the asset group type."
@@ -4846,7 +4877,8 @@ type BdrMutation {
   Deletes a geo object type.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   geoObjectTypeDelete(
     "The input fields for deleting the geo object type."
@@ -4872,7 +4904,8 @@ type BdrMutation {
   Deletes a tag.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   tagDelete(
     "The input fields for deleting the tag."
@@ -4898,7 +4931,8 @@ type BdrMutation {
   Deletes a user-defined catalog.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   catalogDelete(
     "The input fields for deleting the catalog."
@@ -4924,7 +4958,8 @@ type BdrMutation {
   Deletes a user catalog item.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
   """
   userCatalogItemDelete(
     "The input fields for deleting the item."

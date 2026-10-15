@@ -223,7 +223,8 @@ A user-defined catalog item that supports hierarchical workspace.
 Deletes a user catalog item.
 
   Refused with `IN_USE` while another live entity points at it through one of its own fields,
-  custom-field values and field definitions included; the error's `blockers` name them.
+  custom-field values and field definitions included; the error's `blockers` name the first five
+  of them, and `hasMoreBlockers` says whether it left any out.
 
 ```graphql
 userCatalogItemDelete(

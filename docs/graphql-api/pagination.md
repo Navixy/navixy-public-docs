@@ -257,7 +257,7 @@ Choose an appropriate page size. Use 20–50 items for UI lists, up to 100 for b
 
 Keep sort parameters consistent. A cursor encodes a position in one sort order. Changing `orderBy` between requests returns no error, but the next page is then cut at a position that means nothing in the new order, so items are skipped or repeated. Always use the same `orderBy` value when paginating through a result set. If you need a different sort order, start pagination from the beginning.
 
-Don't store cursors long-term. Cursors are meant for immediate pagination within a session. They may become invalid after data changes affecting sort order, server updates, or extended time periods.
+Don't store cursors long-term. Cursors are meant for immediate pagination within a session. A cursor that the API can't read returns a [validation error](error-handling.md#validation-error-400) with the message `Invalid cursor format`: start again from the first page. They may become invalid after data changes affecting sort order, server updates, or extended time periods.
 
 Handle empty results. Always check for empty `nodes` or `edges` arrays before processing results.
 

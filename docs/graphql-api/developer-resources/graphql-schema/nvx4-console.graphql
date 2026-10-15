@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Console module
-# Version: 0.16.3
+# Version: 0.16.13
 # =============================================================================
 #
 # The organizations and workspaces a caller can reach, their own IAM-visible roles, the members of
@@ -24,8 +24,8 @@
 # Every organization id here is an `ID`: `ConsoleOrganization.id`, `ConsoleWorkspace.organizationId`,
 # `ConsoleWorkspaceOperation.organizationId` and the `organizationId` argument of
 # `accessibleWorkspaces`. Console mints organization ids in the UuidV8 layout with the `ORGN`
-# discriminator (Console ADR-009), and nvx4 checks that structure (not the deployment or region,
-# which are Console's); it is the same id as `Workspace.organizationId` and `AccessibleOrganization.id`.
+# discriminator (Console ADR-009), and nvx4 checks that structure and that the id carries this
+# deployment's flag and region; it is the same id as `Workspace.organizationId` and `AccessibleOrganization.id`.
 # An argument that is not one is refused with VALIDATION_ERROR; an answer from Console naming one
 # that is not is Console's fault and fails with SERVICE_UNAVAILABLE. `ConsoleWorkspace.id` is `ID`: nvx4
 # validates Console's workspace ids as `WorkspaceId`, the same `WSPC`-discriminated type `Workspace.id`
@@ -110,7 +110,8 @@ An organization the caller can access, as Console reports it.
 `node(id:)` and `nodes(ids:)` resolve an organization id only among the caller's own organizations, the ones
 `console.accessibleOrganizations` lists. Any other organization id resolves to null, and so does every organization
 id when the token does not carry the organization and workspace a call to Console needs, or Console refuses the
-caller. When Console cannot answer (not configured on the deployment, unreachable or failing), the organization
+caller. An organization id minted under another deployment flag or region is refused with VALIDATION_ERROR.
+When Console cannot answer (not configured on the deployment, unreachable or failing), the organization
 resolves to null and an error with `extensions.code` SERVICE_UNAVAILABLE and `extensions.dependency` `console` names
 its path; the other ids of the same `nodes(ids:)` call resolve as usual.
 """

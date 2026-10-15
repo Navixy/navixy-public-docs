@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — Tracking module
-# Version: 0.16.2
+# Version: 0.16.7
 # =============================================================================
 #
 # Live state of assets and the devices linked to them, a subscription over that state, and trips
@@ -1386,7 +1386,7 @@ type TrackingQuery {
 # -------------------------------
 # Neither the query side nor this input names a workspace. The request acts on the workspace the
 # caller's token names, resolved once per request by `CallerWorkspaceResolver` and carried on
-# `RequestContext.orgId`, exactly as `BdrQuery` has done since 0.10.0
+# `RequestContext.workspaceId`, exactly as `BdrQuery` has done since 0.10.0
 # (docs/adr/025-iam-integration-for-bdr.md §2). Taking it as an argument scopes the query and not
 # the caller, which is a cross-tenant read for anyone who can name an id.
 #

@@ -142,9 +142,9 @@ The `... on Device { }` block is an inline fragment: it selects `title` only whe
 
 Some IDs work differently with `node` and with ID arguments:
 
-* `node` returns a Console organization only when it's one of your own organizations: the organizations that `console { accessibleOrganizations }` lists.
+* `node` returns a Console organization only when it's one of your own organizations: the organizations that `console { accessibleOrganizations }` lists. An organization ID from another Navixy region or deployment returns a `VALIDATION_ERROR`.
 * The IDs of Console workspace operations and of tracking commands don't identify records of this API. `node` returns `null` for them.
-* An argument that expects the ID of one kind of record returns a `VALIDATION_ERROR` for the ID of another kind. For example, `device(id:)` returns this error for an asset ID.
+* An argument that expects the ID of one kind of record returns a `VALIDATION_ERROR` for the ID of another kind. For example, `device(id:)` returns this error for an asset ID. An organization, workspace, operation or role ID issued in another Navixy region or deployment returns the same error.
 
 Treat an ID as a string that you store and send back unchanged. Don't build IDs, and don't read meaning from their characters.
 
@@ -662,6 +662,8 @@ The [Navixy GraphQL API schema](../developer-resources/public-graphql-schema.md)
 ## Introspection
 
 GraphQL APIs are self-describing. You can explore the schema using GraphQL tools or by querying the API directly. This is called **introspection**. GraphQL has special built-in fields that start with `__` (double underscore) for this purpose.
+
+Introspection needs an access token, like any other query: send it in the `Authorization` header, or set it in your GraphQL tool. Without a token, the API returns `UNAUTHORIZED` and no part of the schema.
 
 For example, to see all fields available on the `Device` type:
 
