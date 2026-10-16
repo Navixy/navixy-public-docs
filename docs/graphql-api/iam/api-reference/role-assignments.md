@@ -101,8 +101,12 @@ A page of the holders of one role.
 
 ### memberRoleAssign
 
-Assigns a role to a member. Refused with CONFLICT, `dependencyCode` NOT_A_MEMBER, when the actor
-  is not a member of the caller's organization.
+Assigns a role to a member. IAM refuses the assignment in these cases, and the error has `dependency: "iam"`:
+
+* A role ID that doesn't exist, or a role that was deleted: `NOT_FOUND`.
+* An actor who isn't a member of your organization: `CONFLICT` with `dependencyCode` `NOT_A_MEMBER`. IAM checks this before the role.
+* The Owner role, or another system role: `CONFLICT` with `dependencyCode` `SYSTEM_ROLE`.
+* A role that is inactive, belongs to another organization, or doesn't reach your workspace: `CONFLICT` with `dependencyCode` `FAILED_PRECONDITION`.
 
 ```graphql
 memberRoleAssign(

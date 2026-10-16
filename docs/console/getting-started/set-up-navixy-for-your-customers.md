@@ -113,7 +113,7 @@ To set up the customer's workspace, follow these steps:
 6. Choose a role for the customer's administrator. The Admin role gives full access to the customer's organization. To give less access, create a role. For the steps, see [Create a role](../users-and-roles/manage-roles.md#create-a-role).
 7. Invite the customer's administrator with this role. For the steps, see [Invite a user](../users-and-roles/manage-users.md#invite-a-user).
 
-An administrator's role manages the organization: its workspaces, users, and roles. If you create this role yourself, select the **Console** product for it.
+An administrator's role manages the organization: its workspaces, users, and roles. If you create this role yourself, select the **Console** and **Iam** products for it.
 
 ## 5. Give your team access to the customer's organization
 

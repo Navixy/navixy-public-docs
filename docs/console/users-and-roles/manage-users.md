@@ -12,7 +12,7 @@ tags:
 
 ## Invite a user
 
-An invitation reserves a place in the organization for an email address and stores the roles that the person receives.
+An invitation reserves a place in the organization for an email address and stores the roles that the person receives. To invite a user, you need the Owner role or a role that includes the **Console** and **Iam** products.
 
 Every invitation includes at least one role. A new organization has the Admin role, which gives full access, so you can invite the people who manage the organization with you right away. To give a person less access, create a role for them first. See [Create a role](manage-roles.md#create-a-role). The Owner role can't be given in an invitation. See [Roles that Navixy creates](README.md#roles-that-navixy-creates).
 
@@ -49,7 +49,7 @@ The invitation's status changes to **Revoked**.
 
 ## Assign a role to a user
 
-Assign a role when someone's work changes, or when the role that they were invited with no longer covers what they do. A role assigned this way has no expiration date. To end a role on a set date, see [Set role expiration date](#set-role-expiration-date).
+Assign a role when someone's work changes, or when the role that they were invited with no longer covers what they do. A role assigned this way has no expiration date. To end a role on a set date, see [Set role expiration date](#set-role-expiration-date). To assign a role, you need the Owner role or a role that includes the **Console** and **Iam** products.
 
 A member can have several roles. To give one person an extra permission, assign them another role instead of changing a role that other people share.
 
@@ -64,7 +64,7 @@ The Owner role isn't offered, because only one person can have it.
 
 ## Set role expiration date
 
-A role assignment can have an expiration date. On that date, the role stops applying, and the person loses the access that it gives without any action from you. Use it for contractors and for temporary work. You set the date on the role's page, where you can also assign the role to several people at once. You can assign a role there only while one of its workspaces is selected in the top navigation bar. Otherwise, select one of the role's workspaces first.
+A role assignment can have an expiration date. On that date, the role stops applying, and the person loses the access that it gives without any action from you. Use it for contractors and for temporary work. To set or change the date, you need the Owner role or a role that includes the **Console** and **Iam** products. You set the date on the role's page, where you can also assign the role to several people at once. You can assign a role there only while one of its workspaces is selected in the top navigation bar. Otherwise, select one of the role's workspaces first.
 
 To set a role expiration date, follow these steps:
 
@@ -78,7 +78,7 @@ The **Expiration date** column on the **Users** tab shows the date. **Never** me
 
 ## Revoke a role
 
-Revoke a role when the person no longer needs the access that it gives.
+Revoke a role when the person no longer needs the access that it gives. To revoke a role, you need the Owner role or a role that includes the **Console** and **Iam** products.
 
 To revoke a role, follow these steps:
 

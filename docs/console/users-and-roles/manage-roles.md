@@ -11,7 +11,7 @@ tags:
 
 ## Create a role
 
-A role sets which workspaces a person can access, which products they use, and what they can do with the data. A role applies only in the organization where it's created. To create a role, you need the Owner role or a role that includes the **Console** product.
+A role sets which workspaces a person can access, which products they use, and what they can do with the data. A role applies only in the organization where it's created. To create a role, you need the Owner role or a role that includes the **Console** and **Iam** products.
 
 A new organization already has the Admin role, which gives full access. Create a role when a person needs less access than that. See [Roles that Navixy creates](README.md#roles-that-navixy-creates).
 
@@ -28,10 +28,10 @@ To create a role, follow these steps:
 
 The role becomes active immediately. There is no separate publishing step.
 
-**Products** lists the products of the plan of the workspace that you selected in the top navigation bar, together with the products that administer Navixy itself, such as **Console**. Selecting a product grants full access to it: every feature and every data resource, current and future. To give access to every product, set **Products** to **All**. If you select no product, the page warns that the role allows nothing. You can still save the role, but it gives no access until you edit it.
+**Products** lists the products of the plan of the workspace that you selected in the top navigation bar, together with the products that administer Navixy itself, such as **Console** and **Iam**. Selecting a product grants full access to it: every feature and every data resource, current and future. To give access to every product, set **Products** to **All**. If you select no product, the page warns that the role allows nothing. You can still save the role, but it gives no access until you edit it.
 
 {% hint style="warning" %}
-Some roles manage the organization itself: its workspaces, users, and roles. Select the **Console** product for that role. Without it, Console refuses every request from the people who have the role, including read-only requests.
+A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **Iam** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **Iam**, they can't do any of these things.
 {% endhint %}
 
 You can't grant more access than you have yourself. If a role gives more access than your own roles, Console refuses to save it.
@@ -66,7 +66,7 @@ The copy has no users. Assign it under **Assign to users** before you save, or l
 
 ## Edit a role
 
-A change to a role applies to everyone who has it. To give one person more access, assign them another role instead. See [Assign a role to a user](manage-users.md#assign-a-role-to-a-user).
+A change to a role applies to everyone who has it. To edit a role, you need the Owner role or a role that includes the **Console** and **Iam** products. To give one person more access, assign them another role instead. See [Assign a role to a user](manage-users.md#assign-a-role-to-a-user).
 
 To edit a role, follow these steps:
 
@@ -81,7 +81,7 @@ Roles marked **System** are created by Navixy and can't be edited. Their row on 
 
 ## Delete a role
 
-Deleting a role removes the access that it gives from everyone who has it.
+Deleting a role removes the access that it gives from everyone who has it. To delete a role, you need the Owner role or a role that includes the **Console** and **Iam** products.
 
 To delete a role, follow these steps:
 

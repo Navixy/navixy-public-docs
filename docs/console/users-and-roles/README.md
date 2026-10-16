@@ -63,7 +63,7 @@ Navixy keeps an audit log for each workspace. It records when devices, inventori
 | **Assign to users**       | The organization's members. Selecting a person assigns the role, and clearing them revokes it when you save. The date next to a person sets when their assignment ends. **Assigned** lists only the people who have the role. You can select new people only while one of the role's workspaces is selected in the top navigation bar. |
 
 {% hint style="warning" %}
-Some roles manage the organization itself: its workspaces, users, and roles. Such roles need the **Console** product. Without it, Console refuses every request from the people who have the role, including read-only requests.
+A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **Iam** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **Iam**, they can't do any of these things.
 {% endhint %}
 
 You can't grant more access permissions than you have yourself. Console refuses to save a role with more access than your own roles give you.
