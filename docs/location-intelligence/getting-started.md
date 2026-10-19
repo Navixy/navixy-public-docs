@@ -37,7 +37,7 @@ To activate the device, follow these steps:
 2. In the search field, enter the model name or the vendor name, for example, FMB920.
 3. Open the vendor group, select the model, and click **Next**. The **Details** step opens.
 4. (Optional) In **Device name (optional)**, enter a name for the device. If you leave the field empty, Navixy names the device after its model and IMEI, for example `FMB920 356938035643809`.
-5. In **Phone number**, enter the phone number of the SIM card, with the country code. The number has 5 to 15 digits. You can type it with spaces, brackets, dashes, or a plus sign, for example, +1 (201) 555-0123: the form keeps only the digits.
+5. In **Phone number**, enter the phone number of the SIM card with the country code, digits only, for example 79121234567.
 6. Expand **GPRS settings** and enter the mobile carrier's **APN**. If the carrier uses them, also enter the **APN username (optional)** and the **APN password (optional)**.
 7. In **IMEI**, enter the 15-digit IMEI of the device.
 8. (Optional) In **Activation code (optional)**, enter the activation code, if you have one.
