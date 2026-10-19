@@ -9,8 +9,6 @@
 # need, and — since 0.15.0 — `myInvoices` and `myInvoice`. Every operation here acts on the workspace the token
 # names and accepts no workspace argument.
 #
-# Submissions are written by product services over billing's gRPC `SubmissionService`
-# (`com.navixy:billing-client`), not through this contract (since 0.9.0).
 # Money and Currency are used here too but declared in nvx4-common.graphql — see below.
 #
 # Plan administration is not part of this contract. A workspace sees a subscription as
@@ -28,8 +26,6 @@
 # The `Version:` above is the billing schema's own version, maintained
 # independently of the core schema version in nvx4-bdr.graphql (started at
 # 0.1.0). Follow the evolutionary versioning & deprecation policy documented in nvx4-bdr.graphql
-# (§VERSIONING & DEPRECATION). This is NOT the per-entity `version` field,
-# which is optimistic-locking concurrency control.
 
 # =============================================================================
 # REFERENCE TYPES
@@ -920,9 +916,7 @@ type BillingMutation {
   cannot put a tenant the token does not name onto a paid plan. A token carrying no workspace claim
   is refused.
 
-  With IAM method security enabled, the caller also needs a role that grants the `billing` product;
-  otherwise the call fails with `PERMISSION_DENIED`. With it disabled, any token naming a workspace can
-  put that workspace on a paid plan.
+  With it disabled, any token naming a workspace can put that workspace on a paid plan.
 
   The plan is validated before the subscription is taken: the plan, or the branch, must be a row
   that `myAvailablePlans` offers the workspace; the branch must belong to the plan; and no product

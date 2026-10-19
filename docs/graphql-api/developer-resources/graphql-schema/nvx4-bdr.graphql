@@ -26,7 +26,6 @@
 # 19. Query
 # 20. Mutation
 # 21. Subscription
-# 22. Bulk Operations (TODO)
 #
 # =============================================================================
 
@@ -223,7 +222,6 @@
 #
 #   What puts a mutation in this section is that the row it manages carries no `version` of its
 #   own. `memberCreate`/`memberRemove` read as relationship-shaped but do not qualify — a
-#   membership is a versioned entity, so they follow the optimistic-locking rules in §2 above.
 
 # =============================================================================
 # 3. LOCALIZATION
@@ -245,7 +243,6 @@
 # NOT YET HONOURED:
 #   No backend code reads these headers yet, so the description above is the target behaviour, not
 #   the current one. Header-based localization is planned after the MVP release
-#   (docs/todo/roadmap/wave-6-platform.md).
 #
 # =============================================================================
 
@@ -291,8 +288,6 @@
 #                field that raised the error. Array elements use 0-based index.
 #                The first segment is always the module namespace the field was
 #                reached through (e.g. "bdr", "billing") — see
-#                changelog_v0.8.1.md §"Every root field moves under a per-module
-#                namespace wrapper" for the batching rule this implies.
 #                Example: ["bdr", "devices", "edges", 0, "node", "customFields"]
 #
 #   extensions - Optional but ALWAYS provided by this API. Contains structured
@@ -503,9 +498,6 @@
 #
 #   Batching aliases the *namespace* field, not the leaf mutation — at most one field may be
 #   selected inside a single `bdr { ... }` (or `billing { ... }`) block per operation; see
-#   changelog_v0.8.1.md §"Mutation batching now requires aliasing the namespace field, not the
-#   leaf mutation" for why (mutation-ordering guarantee) — §20 QUERY / §21 MUTATION below hold
-#   only the type definitions, not the rule itself.
 #
 #   Request:
 #     mutation {
@@ -695,7 +687,6 @@
 # 6. DIRECTIVES
 # =============================================================================
 
-# `@trim` moved to `contracts/graphql/nvx4-common.graphql` — used by inputs across modules.
 
 # =============================================================================
 # 7. SCALAR TYPES
@@ -712,30 +703,17 @@
 # without the layout — an ID is opaque, `Query.node(id:)` resolves it, and `scalar UUID` is the
 # type for an identifier that is not an entity id of this API.
 
-# `Date` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
-# `UUID` moved to `contracts/graphql/nvx4-common.graphql`: it is not a BDR concept, and the `console`
-# and `iam` namespaces both use it for actor ids. Used by more than one module is the kernel's own
-# admission rule.
 
-# `GeoJSON` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # `Latitude`, `Longitude`, `CountryCode`, `EmailAddress`, `HexColorCode` and `Locale` all moved to
-# `contracts/graphql/nvx4-common.graphql` as one recorded exception: every one of them is read by a
 # BDR type and by no other module's SDL, so none meets the kernel's "used by more than one module"
 # rule. `Locale`'s consumer is deferred rather than present — `User.locale` was removed in 0.6.5 to
 # come back as part of `UserSettings`, which is not written yet
-# (docs/adr/015-api-module-namespacing.md §Decision item 3, 2026-09-21 amendment, which also
-# records why the transitive-reachability argument for `Latitude`/`Longitude` was withdrawn).
 
-# The commented-out `TimeZone` TODO moved with them. It sat between `EmailAddress` and
 # `HexColorCode`, and the consumers it names — `UserSettings.timezone` and schedule entities — are
 # BDR's too, so uncommenting it joins that exception rather than meeting the rule.
 
-# `Decimal` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # @category: bdr/schedules
 """
@@ -809,8 +787,6 @@ enum CatalogItemOrigin {
   PRESET
 }
 
-# `FieldType` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # @category: bdr/devices
 "The type of hardware identifier used to identify a device."
@@ -860,33 +836,22 @@ enum AuditEventType {
 }
 
 # `CustomFieldDefinitionDeleteBehavior`, `FieldOperator` and `GeoJsonGeometryType` moved to
-# `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # =============================================================================
 # 9. INTERFACES
 # =============================================================================
 
-# `Titled`, `Customizable` and `CustomFieldValue` moved to `contracts/graphql/nvx4-common.graphql`
 # — custom-field vocabulary. `Titled` moves as kernel vocabulary in its own right, not merely as a
 # bridge for `CustomFieldDefinition` — its exclusion from the original kernel extraction is now
-# superseded (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # `StringCustomFieldValue`, `DecimalCustomFieldValue`, `IntegerCustomFieldValue`,
 # `BooleanCustomFieldValue`, `DateCustomFieldValue`, `DateTimeCustomFieldValue`,
 # `GeoJsonCustomFieldValue` and `OptionsCustomFieldValue` moved to
-# `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # `DeviceCustomFieldValue` stays here, not in the kernel — it names `Device`, a BDR entity type,
 # so moving it would make the kernel depend on BDR. It still implements (not `extend`s) the
 # kernel's `CustomFieldValue` interface from this file — legal GraphQL, since `implements` does
 # not change the interface's own shape. A module file must never `extend type` a kernel type
-# instead, and `GraphqlSchemaValidationTest$StandaloneFileClosure` enforces it: a module's plain
-# references may resolve into the kernel, but its `extend` targets may not, so a module `extend`ing
-# a kernel type fails the gate
-# (docs/adr/015-api-module-namespacing.md §Decision item 3;
-# docs/reference/graphql-conventions.md §Module namespacing).
 # @category: bdr/custom-fields
 "DEVICE custom-field value (primary-capable)."
 type DeviceCustomFieldValue implements CustomFieldValue {
@@ -899,13 +864,7 @@ type DeviceCustomFieldValue implements CustomFieldValue {
   isPrimary: Boolean!
 }
 
-# `ReferenceCustomFieldValue` moved to `contracts/graphql/nvx4-common.graphql` — custom-field
-# vocabulary (docs/adr/015-api-module-namespacing.md §Decision item 3). Note it stayed generic
-# (`refs: [Node]!`) even before the move — only the params side and `DeviceCustomFieldValue`
-# concretely name a BDR type.
 
-# `MultiValue` moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # @category: bdr/devices/inventory
 "An object that can be assigned to an inventory."
@@ -2496,8 +2455,6 @@ type Schedule implements Node & Titled & Versioned {
 # 15. CUSTOM FIELDS
 # =============================================================================
 #
-# The custom-field vocabulary moved to `contracts/graphql/nvx4-common.graphql`
-# (docs/adr/015-api-module-namespacing.md §Decision item 3): `CustomFieldDefinition`,
 # `FieldTypeAvailability`, `FieldParams`, `FieldParamsString`, `FieldParamsText`,
 # `FieldParamsDecimal`, `FieldParamsInteger`, `FieldParamsBoolean`, `FieldParamsDate`,
 # `FieldParamsDatetime`, `FieldParamsGeojson`, `FieldParamsOptions` and `FieldOption`.
@@ -2507,9 +2464,6 @@ type Schedule implements Node & Titled & Versioned {
 # `FieldParamsDevice` stays here, not in the kernel — its `refSubtypes` field returns
 # `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR. It
 # still implements (not `extend`s) the kernel's `FieldParams` interface from this file — legal
-# GraphQL; see the note on `DeviceCustomFieldValue` in §9 above, and
-# docs/reference/graphql-conventions.md §Module namespacing, for why `extend`ing a kernel type
-# from a module file is forbidden — and, unlike a plain reference, fails the closure gate.
 # @category: bdr/custom-fields
 "Parameters for DEVICE field type."
 type FieldParamsDevice implements FieldParams {
@@ -2526,9 +2480,6 @@ type FieldParamsDevice implements FieldParams {
 # `FieldParamsReference` stays here, not in the kernel — its `refSubtypes` field returns
 # `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR. It
 # still implements (not `extend`s) the kernel's `FieldParams` / `MultiValue` interfaces from this
-# file — legal GraphQL; see the note on `DeviceCustomFieldValue` in §9 above, and
-# docs/reference/graphql-conventions.md §Module namespacing, for why `extend`ing a kernel type
-# from a module file is forbidden — and, unlike a plain reference, fails the closure gate.
 # @category: bdr/custom-fields
 "Parameters for REFERENCE field type."
 type FieldParamsReference implements FieldParams & MultiValue {
@@ -3020,8 +2971,6 @@ enum AuditEventOrderField {
 }
 
 # `CustomFieldFilterValue` and `CustomFieldFilter` (and the operator-rules comment that followed
-# them) moved to `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # =============================================================================
 # 18. MUTATION INPUTS
@@ -3029,8 +2978,6 @@ enum AuditEventOrderField {
 
 # `CustomFieldsPatchInput`, `CustomFieldValueInput`, `CustomFieldValueDataInput`,
 # `DeviceValueInput`, `ReferenceValueInput` and `ReferenceListValueInput` moved to
-# `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # --- Device ---
 
@@ -3461,8 +3408,6 @@ input DeviceRelationRemoveInput {
 # `IntegerFieldParamsInput`, `BooleanFieldParamsInput`, `DateFieldParamsInput`,
 # `DateTimeFieldParamsInput`, `GeoJsonFieldParamsInput`, `OptionsFieldParamsInput`,
 # `FieldOptionInput`, `DeviceFieldParamsInput` and `ReferenceFieldParamsInput` moved to
-# `contracts/graphql/nvx4-common.graphql` — custom-field vocabulary
-# (docs/adr/015-api-module-namespacing.md §Decision item 3).
 
 # --- Catalog Item CRUD Inputs ---
 
@@ -3763,11 +3708,6 @@ input CatalogItemDeleteInput {
 # "a schema" and errors if more than one qualifies — this file already qualifies via `type Query`.
 #
 # `Subscription` is the one root named here and declared elsewhere — nvx4-tracking.graphql, as of
-# 0.11.0, beside the batch it streams (§21 below, and that file's §7). That leaves the classifier
-# above deciding between two files that each declare a root type, which the rule as written does not
-# cover — it names `schema { … }` and `type Query`, neither of which moved. Settled by running it
-# rather than by reading it: `:sdk:api-client:generateApolloSources` is green with `Subscription`
-# declared in nvx4-tracking.graphql, which is also in Apollo's `schemaFiles`.
 schema {
   query: Query
   mutation: Mutation
@@ -3810,7 +3750,6 @@ type Query {
 """
 BDR (Business Data Repository) module queries — the platform's own fleet/IoT domain: workspaces,
 users, devices, assets, geo objects, schedules and the catalogs behind them.
-See docs/reference/graphql-conventions.md §Module namespacing.
 """
 type BdrQuery {
   # @category: bdr/custom-fields
@@ -4407,7 +4346,7 @@ type Mutation {
 
 """
 BDR (Business Data Repository) module mutations — writes against the platform's own fleet/IoT
-domain. See docs/reference/graphql-conventions.md §Module namespacing.
+domain.
 """
 type BdrMutation {
   # --- Devices ---
@@ -4976,18 +4915,15 @@ type BdrMutation {
 # root field is the event source and must resolve to the stream itself. A wrapper object would
 # have to be emitted once and then stream from a nested field, which the specification does not
 # provide for. Module ownership therefore lives in the field name — `trackingAssetStates`, not
-# `tracking { assetStates }`. Recorded in docs/reference/graphql-conventions.md §Subscriptions.
 #
 # `type Subscription` itself is declared in nvx4-tracking.graphql as of 0.11.0, beside the batch
 # it emits — the one root type this file does not hold. The `schema { … }` block above still names
 # it, and remains this contract's only such block. Moving it back means moving `Subscription`'s
 # every emitted type with it, or splitting a root field from its return types across two files
-# again; nvx4-tracking.graphql §7 carries the reasoning.
 
 # =============================================================================
 
 # =============================================================================
-# 22. BULK OPERATIONS (TODO)
 # =============================================================================
 #
 # Bulk operations (mass update/delete) planned as asynchronous jobs.

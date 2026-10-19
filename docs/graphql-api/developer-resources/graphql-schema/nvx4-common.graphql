@@ -4,15 +4,7 @@
 #
 # Types, interfaces, scalars and the directive used by more than one module,
 # plus the pagination/identity contract. Extracted from nvx4-bdr.graphql and
-# nvx4-billing-public.graphql (docs/adr/015-api-module-namespacing.md
-# §Decision item 3) — the selection criterion is "used by more than one module, or
-# part of the pagination/identity contract", not a syntactic category. Three groups do not fit it:
-# `Money`/`Currency` (§6) are read only by the two billing files, undocumented as an exception when
-# the original kernel extraction moved them here; the custom-field vocabulary (§2–§4 and
-# §7/§8) is a deliberate, recorded anticipatory exception — see §Decision item 3's 2026-08-24
-# amendment for both; and the six scalars that arrived from nvx4-bdr.graphql on 2026-09-21 —
 # `Latitude`, `Longitude`, `CountryCode`, `EmailAddress`, `HexColorCode`, `Locale`, with the
-# commented-out `TimeZone` TODO — are the third exception, admitted by the 2026-09-21 amendment.
 # Each is read by a BDR type and by no other module's SDL; `Locale`'s consumer is the not-yet-written
 # `UserSettings` that 0.6.5 removed `User.locale` in favour of. "Used by a module" there means the
 # module's own SDL names the type: reachability through the type graph reaches almost everything
@@ -115,8 +107,7 @@ falls inside it. A caller that means a calendar step asks for a date range inste
 
 `@specifiedBy` points at the Navixy page rather than at ISO 8601 or RFC 3339, because the full
 grammar in either is precisely what this scalar does not accept — a pointer to it would describe
-the wrong type. The page restates the paragraphs above; those paragraphs and
-`ScalarCoercingTest.DurationCoercingTest` are the contract.
+the wrong type.
 """
 scalar Duration @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#duration")
 
@@ -179,7 +170,6 @@ scalar EmailAddress
     url: "https://the-guild.dev/graphql/scalars/docs/scalars/email-address"
   )
 
-# TODO: TimeZone scalar — will be used in UserSettings.timezone and schedule entities.
 # scalar TimeZone
 #   @specifiedBy(url: "https://the-guild.dev/graphql/scalars/docs/scalars/time-zone")
 
@@ -474,7 +464,6 @@ type Money {
 #
 # Vocabulary only — the engine (custom_field_definition, FK-bound to BDR's own
 # workspace/ci_base/ci_entity_type/actor tables) stays in BDR. See
-# docs/adr/015-api-module-namespacing.md §Decision item 3.
 #
 # DeviceCustomFieldValue, FieldParamsDevice and FieldParamsReference stay in nvx4-bdr.graphql —
 # they name BDR entity types (Device, CatalogItem) and would make the kernel depend on BDR. They

@@ -19,13 +19,12 @@ The field dictionary. Needed by any UI that renders readings: without it a clien
   and a number but no title, unit or nature.
 
   Returns an empty list today, whatever `codes` and `includeDeprecated` say: the dictionary is not
-  populated yet (NTF SPEC §5.4). The rest of this description is the contract once it is.
+  populated yet. The rest of this description is the contract once it is.
 
-  Cacheable, but not immutable. What NTF freezes is an entry's identity — SPEC §5.4 forbids
-  changing a type, unit or nature, and an entry is never renamed — so a cached entry never starts
-  meaning something else. What it does not freeze is the dictionary's composition: SPEC §5.1 says
-  it changes by design, and an existing entry can still gain `deprecated` and a `replacedBy`. So a
-  held copy goes stale in one direction only — it can lack an entry, or miss a deprecation, never
+  Cacheable, but not immutable. What NTF freezes is an entry's identity — an entry is never renamed
+  — so a cached entry never starts meaning something else. What it does not freeze is the
+  dictionary's composition, and an existing entry can still gain `deprecated` and a `replacedBy`. So
+  a held copy goes stale in one direction only — it can lack an entry, or miss a deprecation, never
   misdescribe a field it already has. Refetch when a reading arrives whose `code` is not in the
   cache. The locale is separate: it comes from the request headers rather than an argument here, so
   a client that switches language re-fetches, and a shared cache is keyed per locale or holds only
@@ -51,17 +50,17 @@ fieldDefinitions(
 
 <summary>TrackingFieldDefinition</summary>
 
-A field dictionary entry (NTF SPEC §5). Entries are never renamed, retyped or deleted — only
-deprecated with a pointer to the replacement, because an entry describes every value ever
-recorded under that name, not just new ones.
+A field dictionary entry. Entries are never renamed, retyped or deleted — only deprecated
+with a pointer to the replacement, because an entry describes every value ever recorded
+under that name, not just new ones.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `code` | [Code](../../core-api-reference/common.md#code)! |  |
-| `title` | `String!` | Human-readable name of the field, for a UI that renders readings. Localized by design: the language comes from the request, not from an argument — `X-Locale` or `Accept-Language`, with English as the fallback, per §3 Localization in nvx4-bdr.graphql. Those headers are not honoured yet, so today the text does not vary by caller. Once they are, this field is the one part of a dictionary entry that is not stable across callers, and a client caching the dictionary caches it per locale. |
+| `title` | `String!` | Human-readable name of the field, for a UI that renders readings. Localized by design: the language comes from the request, not from an argument. Those headers are not honoured yet, so today the text does not vary by caller. Once they are, this field is the one part of a dictionary entry that is not stable across callers, and a client caching the dictionary caches it per locale. |
 | `description` | `String` | Longer explanation of the field, localized on the same terms as `title`. |
 | `valueType` | [TrackingValueType](#trackingvaluetype)! |  |
-| `unit` | `String` | Reference unit (UCUM): the one the quantity is customarily shown and stored in (NTF SPEC §3.2). Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands in. Null for dimensionless fields. |
+| `unit` | `String` | Reference unit (UCUM): the one the quantity is customarily shown and stored in. Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands in. Null for dimensionless fields. |
 | `quantity` | [TrackingQuantity](#trackingquantity) |  |
 | `nature` | [TrackingFieldNature](#trackingfieldnature)! |  |
 | `channelled` | `Boolean!` | Whether values of this field can carry a channel number. |
@@ -201,7 +200,7 @@ Nested structure whose members are full readings (decoded J1939 frame, tachograp
 ### TrackingClearedValue
 
 The value was explicitly cleared. Its own variant so that "nothing was said" and "this no longer
-holds" can never be confused (NTF SPEC §3.3).
+holds" can never be confused.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -221,10 +220,10 @@ There is exactly one such list per state: NTF v1 has no inputs/states split.
 | `code` | [Code](../../core-api-reference/common.md#code)! | Dictionary name of the field, e.g. `lls_level`, `ignition`, `hw_mileage`. |
 | `channel` | [Long](../../core-api-reference/common.md#long) | Channel number for multi-channel fields (`lls_level` on tank 2), in `0..4294967295`. Null when the field has none. |
 | `value` | [TrackingValue](#trackingvalue)! |  |
-| `unit` | `String` | Unit of this value (UCUM, e.g. `km`, `Cel`, `L/h`), by the rules of NTF SPEC §3.2: the unit the message carried. For the four legacy fields the format names — `board_voltage`, `battery_voltage`, `battery_level`, `hw_mileage` — a message without a unit means the dictionary's unit by contract, and this field carries it. For every other field a message without a unit means "unknown", and this field is null: a dictionary `Cel` on `temperature` does not make a number that arrived without a unit degrees Celsius. So null covers both "dimensionless" and "unknown". `definition.unit` tells the two apart when the code is in the dictionary — a dimensionless field has none there. For a code the dictionary does not know, `definition` is null as well and the two cannot be told apart: the value has no unit a client may rely on. `definition.unit` is a reference value — the unit the quantity is customarily shown in — never a default for this one. |
-| `declaredType` | [TrackingValueType](#trackingvaluetype) | Source-register type: the sender's own `Field.declared_type`, or the type NTF SPEC Appendix A pins for this name when the sender declared none. Shown only when that type differs from the one `value`'s own member already implies, or when it equals the Appendix A pin regardless — a sender that declares exactly the implied type, for a name Appendix A does not pin, reads as null either way, the same as declaring none at all. |
-| `updatedAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When this value was last received. Per NTF SPEC §3.5 a field carries no timestamp of its own — this is the event time of the message it last arrived in, which across a last-known state is *not* the same for every reading. |
-| `definition` | [TrackingFieldDefinition](#trackingfielddefinition) | Dictionary entry behind `code`: title, nature, quantity, deprecation. Always null today: the field dictionary is not populated yet (NTF SPEC §5.4), so no code has an entry. `TrackingQuery.fieldDefinitions` returns an empty list for the same reason. |
+| `unit` | `String` | Unit of this value (UCUM, e.g. `km`, `Cel`, `L/h`): the unit the message carried. For the four legacy fields the format names — `board_voltage`, `battery_voltage`, `battery_level`, `hw_mileage` — a message without a unit means the dictionary's unit by contract, and this field carries it. For every other field a message without a unit means "unknown", and this field is null: a dictionary `Cel` on `temperature` does not make a number that arrived without a unit degrees Celsius. So null covers both "dimensionless" and "unknown". `definition.unit` tells the two apart when the code is in the dictionary — a dimensionless field has none there. For a code the dictionary does not know, `definition` is null as well and the two cannot be told apart: the value has no unit a client may rely on. `definition.unit` is a reference value — the unit the quantity is customarily shown in — never a default for this one. |
+| `declaredType` | [TrackingValueType](#trackingvaluetype) | Shown only when that type differs from the one `value`'s own member already implies, or when it equals the Appendix A pin regardless — a sender that declares exactly the implied type, for a name Appendix A does not pin, reads as null either way, the same as declaring none at all. |
+| `updatedAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When this value was last received. A field carries no timestamp of its own — this is the event time of the message it last arrived in, which across a last-known state is *not* the same for every reading. |
+| `definition` | [TrackingFieldDefinition](#trackingfielddefinition) | Dictionary entry behind `code`: title, nature, quantity, deprecation. Always null today: the field dictionary is not populated yet, so no code has an entry. `TrackingQuery.fieldDefinitions` returns an empty list for the same reason. |
 
 ---
 
@@ -232,17 +231,17 @@ There is exactly one such list per state: NTF v1 has no inputs/states split.
 
 ### TrackingFieldDefinition
 
-A field dictionary entry (NTF SPEC §5). Entries are never renamed, retyped or deleted — only
-deprecated with a pointer to the replacement, because an entry describes every value ever
-recorded under that name, not just new ones.
+A field dictionary entry. Entries are never renamed, retyped or deleted — only deprecated
+with a pointer to the replacement, because an entry describes every value ever recorded
+under that name, not just new ones.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `code` | [Code](../../core-api-reference/common.md#code)! |  |
-| `title` | `String!` | Human-readable name of the field, for a UI that renders readings. Localized by design: the language comes from the request, not from an argument — `X-Locale` or `Accept-Language`, with English as the fallback, per §3 Localization in nvx4-bdr.graphql. Those headers are not honoured yet, so today the text does not vary by caller. Once they are, this field is the one part of a dictionary entry that is not stable across callers, and a client caching the dictionary caches it per locale. |
+| `title` | `String!` | Human-readable name of the field, for a UI that renders readings. Localized by design: the language comes from the request, not from an argument. Those headers are not honoured yet, so today the text does not vary by caller. Once they are, this field is the one part of a dictionary entry that is not stable across callers, and a client caching the dictionary caches it per locale. |
 | `description` | `String` | Longer explanation of the field, localized on the same terms as `title`. |
 | `valueType` | [TrackingValueType](#trackingvaluetype)! |  |
-| `unit` | `String` | Reference unit (UCUM): the one the quantity is customarily shown and stored in (NTF SPEC §3.2). Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands in. Null for dimensionless fields. |
+| `unit` | `String` | Reference unit (UCUM): the one the quantity is customarily shown and stored in. Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands in. Null for dimensionless fields. |
 | `quantity` | [TrackingQuantity](#trackingquantity) |  |
 | `nature` | [TrackingFieldNature](#trackingfieldnature)! |  |
 | `channelled` | `Boolean!` | Whether values of this field can carry a channel number. |
@@ -271,8 +270,8 @@ Declared type of a value in terms of the *source* register. `navixy.telemetry.v1
 
 ### TrackingFieldNature
 
-What kind of quantity a field is, which decides how it may be aggregated (NTF SPEC §5.2).
-Dictionary metadata, not carried by the message.
+What kind of quantity a field is, which decides how it may be aggregated. Dictionary
+metadata, not carried by the message.
 
 | Value | Description |
 | ----- | ----------- |
@@ -317,17 +316,12 @@ two composite ones, and an explicit clear.
 
 An absent variant means the sender had nothing to say and the previous value stands;
 `TrackingClearedValue` is the opposite — an assertion that the value no longer holds (driver key
-pulled, trailer detached). NTF SPEC §3.3.
+pulled, trailer detached).
 
 Each scalar variant names its field after the type — `boolValue`, `intValue`, … — instead of all
 sharing `value`. A selection set that reads `value` from two members with different scalars fails
 validation (`FieldsInSetCanMerge`, GraphQL spec §5.3.2), so a client rendering readings would have
-to alias the occurrences. docs/reference/graphql-conventions.md §Interface field naming resolves
-the same conflict for interfaces with `<semantic><Variant>` (`minDecimal`); here the order inside a
-name is the wire's — `bool_value`, `int_value`, … in `value.proto` — so a schema name matches the
-JSON member name in the NTF SPEC §9 examples, except that `double_value` is `floatValue`, after the
-GraphQL scalar and this type's name. `GraphqlSchemaValidationTest$UnionMemberFieldShapes` enforces
-the distinct-name half for every union.
+to alias the occurrences.
 
 **One of:** [TrackingBoolValue](#trackingboolvalue), [TrackingIntValue](#trackingintvalue), [TrackingUIntValue](#trackinguintvalue), [TrackingFloatValue](#trackingfloatvalue), [TrackingStringValue](#trackingstringvalue), [TrackingBytesValue](#trackingbytesvalue), [TrackingTimestampValue](#trackingtimestampvalue), [TrackingDurationValue](#trackingdurationvalue), [TrackingArrayValue](#trackingarrayvalue), [TrackingStructValue](#trackingstructvalue), [TrackingClearedValue](#trackingclearedvalue)
 

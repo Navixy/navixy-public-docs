@@ -3,16 +3,8 @@
 # Version: 0.4.1
 # =============================================================================
 #
-# The roles of the caller's organization and who holds them, as IAM's own gRPC `RoleService` and
-# `RoleAssignmentService` hold them. The gateway calls both with the caller's own context token,
-# forwarded as it came, and IAM authorizes the call itself (IAM ADR-032,
-# `specs/decisions/032-role-management-authorized-in-iam.md` in the `iam` repository): the caller
-# needs a role scoping product `iam`, and cannot create, change, assign or revoke a role granting
-# more than their own roles do. The organization and the workspace these fields act in are always
-# the token's `organization_id` and `workspace_id` claims; no field here takes either.
 #
 # Module prefix `Iam` on every declaration
-# (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — `Query.iam` and
 # `Mutation.iam` — lives in nvx4-bdr.graphql, which owns the roots. IAM's global registries, for
 # staff only, extend `IamQuery` and `IamMutation` from nvx4-iam-admin.graphql, which the SDK does not
 # consume; the two files share this version.
@@ -28,16 +20,10 @@
 # `IamRole` does not implement `Node`: a role is reached only through this namespace. `actorId` is a
 # `UUID`: Console mints actor ids under its own scheme, as for `ConsoleWorkspaceOperation.actorUserId`.
 # `IamRole.organizationId` is an `ID` like `ConsoleOrganization.id`: Console's organization id, with
-# the `ORGN` discriminator nvx4 checks (nvx4-console.graphql §Identity). Product, feature and
-# data-resource codes, actions and data-resource item ids are IAM's own vocabulary and stay `String`.
 #
 # PAGINATION
 # ----------
 # `roles` takes the same arguments and rules as the `console` connections (nvx4-console.graphql
-# §Pagination: default 50, 1-100, `last` only with `before`, `before` only with `last`). IAM answers
-# an organization's roles in one response, so nvx4 pages them itself: ordered by id, `edge.cursor`
-# is the role's id, and `total` is `EXACT`. `roleHolders` pages forward only, over IAM's own page
-# token: `last` and `before` are refused with VALIDATION_ERROR, and `total` is always null.
 #
 # ERRORS
 # ------
@@ -118,9 +104,9 @@ type IamRoleProductScopes {
 # @category: iam/roles
 "A role of the caller's organization. A role belongs to one organization and reaches no other."
 type IamRole {
-  "IAM's id for the role. See the file header §Identity."
+  "IAM's id for the role."
   id: ID!
-  "The organization the role belongs to, by the same id as `ConsoleOrganization.id`. See the file header §Identity."
+  "The organization the role belongs to, by the same id as `ConsoleOrganization.id`."
   organizationId: ID!
   "The role's name."
   title: String!
@@ -169,7 +155,7 @@ type IamRoleEdge implements Edge {
 # @category: iam/role-assignments
 "One role a member holds in the caller's organization."
 type IamMemberRoleAssignment {
-  "Console's id for the actor holding the role. See the file header §Identity."
+  "Console's id for the actor holding the role."
   actorId: UUID!
   "The role held."
   role: IamRole!
@@ -196,7 +182,7 @@ enum IamRolePrincipalType {
 # @category: iam/role-assignments
 "One holder of a role."
 type IamRoleHolder {
-  "Console's id for the actor holding the role. See the file header §Identity."
+  "Console's id for the actor holding the role."
   actorId: UUID!
   "What kind of principal the actor is."
   principalType: IamRolePrincipalType!

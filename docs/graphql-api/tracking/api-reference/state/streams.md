@@ -169,7 +169,7 @@ A pair of nullable fields rather than a `TrackingAssetStateSnapshot | TrackingSt
 union, for handling: the id sits in one place for both outcomes, and a client reads two fields
 instead of switching on `__typename` across fragments. Not for extensibility — a third outcome
 would leave both fields null on a client built against this version, which the sentence above
-forbids, so it is a breaking change of the same kind as a new union member (§9).
+forbids, so it is a breaking change of the same kind as a new union member.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |

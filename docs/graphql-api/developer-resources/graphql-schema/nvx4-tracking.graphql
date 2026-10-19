@@ -7,24 +7,15 @@
 # and stops derived from the message archive.
 #
 # Module prefix `Tracking` on every declaration except one
-# (docs/reference/graphql-conventions.md §Module namespacing). The exception is `type Subscription`,
-# the GraphQL root this file declares as of 0.11.0, beside the stream it carries — one root holds
-# every module's subscription fields, so its name is module-neutral by construction (§7).
 # `Query.tracking` and the `schema { … }` block live in nvx4-bdr.graphql, which owns root wiring.
 #
 # The data model follows the telemetry contracts and does not restate them:
-#   contracts/proto/navixy/telemetry/v1/SPEC.md      — NTF 1.2, the wire format
-#   contracts/clickhouse/telemetry/v1/schema.sql     — telemetry.records, the archive
-#   contracts/clickhouse/telemetry/v1/STORAGE.md     — what the archive can and cannot answer
 #
 # ONE STATE, NOT TWO
 # ------------------
 # nvx3 split the same picture across a beacon state (gps, connection, movement, ignition,
 # input/output bitmasks) and a separate readings channel (inputs / states / virtualSensors /
 # counters), which is why the battery level exists twice there and virtual sensors have to look in
-# both places. NTF §5.2 collapsed that split in the wire format: one namespace of named fields
-# whose *nature* (GAUGE / COUNTER / STATE / BITSET / …) is dictionary metadata. This schema keeps
-# it collapsed — exactly one reading list per state, sensors and device states alike.
 #
 # WHAT THIS MODULE ASSUMES OF OTHERS
 # ----------------------------------
@@ -33,7 +24,6 @@
 # `Connection`, `Edge`, `PageInfo`, `CountInfo`.
 
 # =============================================================================
-# 1. VALUE MODEL  (NTF SPEC §3)
 # =============================================================================
 
 # @category: tracking/readings
@@ -43,17 +33,12 @@ two composite ones, and an explicit clear.
 
 An absent variant means the sender had nothing to say and the previous value stands;
 `TrackingClearedValue` is the opposite — an assertion that the value no longer holds (driver key
-pulled, trailer detached). NTF SPEC §3.3.
+pulled, trailer detached).
 
 Each scalar variant names its field after the type — `boolValue`, `intValue`, … — instead of all
 sharing `value`. A selection set that reads `value` from two members with different scalars fails
 validation (`FieldsInSetCanMerge`, GraphQL spec §5.3.2), so a client rendering readings would have
-to alias the occurrences. docs/reference/graphql-conventions.md §Interface field naming resolves
-the same conflict for interfaces with `<semantic><Variant>` (`minDecimal`); here the order inside a
-name is the wire's — `bool_value`, `int_value`, … in `value.proto` — so a schema name matches the
-JSON member name in the NTF SPEC §9 examples, except that `double_value` is `floatValue`, after the
-GraphQL scalar and this type's name. `GraphqlSchemaValidationTest$UnionMemberFieldShapes` enforces
-the distinct-name half for every union.
+to alias the occurrences.
 """
 union TrackingValue =
     TrackingBoolValue
@@ -117,7 +102,7 @@ type TrackingStructValue { fields: [TrackingReading!]! }
 # @category: tracking/readings
 """
 The value was explicitly cleared. Its own variant so that "nothing was said" and "this no longer
-holds" can never be confused (NTF SPEC §3.3).
+holds" can never be confused.
 """
 type TrackingClearedValue { cleared: Boolean! }
 
@@ -133,8 +118,8 @@ enum TrackingValueType {
 
 # @category: tracking/readings
 """
-What kind of quantity a field is, which decides how it may be aggregated (NTF SPEC §5.2).
-Dictionary metadata, not carried by the message.
+What kind of quantity a field is, which decides how it may be aggregated. Dictionary
+metadata, not carried by the message.
 """
 enum TrackingFieldNature {
   "Instantaneous measurement — averaging and medians are meaningful."
@@ -167,7 +152,6 @@ enum TrackingQuantity {
 }
 
 # =============================================================================
-# 2. READINGS  (NTF SPEC §4, Appendix A)
 # =============================================================================
 
 # @category: tracking/readings
@@ -182,12 +166,12 @@ type TrackingReading {
   channel: Long
   value: TrackingValue!
   """
-  Unit of this value (UCUM, e.g. `km`, `Cel`, `L/h`), by the rules of NTF SPEC §3.2: the unit the
-  message carried. For the four legacy fields the format names — `board_voltage`,
-  `battery_voltage`, `battery_level`, `hw_mileage` — a message without a unit means the
-  dictionary's unit by contract, and this field carries it. For every other field a message
-  without a unit means "unknown", and this field is null: a dictionary `Cel` on `temperature` does
-  not make a number that arrived without a unit degrees Celsius.
+  Unit of this value (UCUM, e.g. `km`, `Cel`, `L/h`): the unit the message carried. For the four
+  legacy fields the format names — `board_voltage`, `battery_voltage`, `battery_level`,
+  `hw_mileage` — a message without a unit means the dictionary's unit by contract, and this field
+  carries it. For every other field a message without a unit means "unknown", and this field is
+  null: a dictionary `Cel` on `temperature` does not make a number that arrived without a unit
+  degrees Celsius.
 
   So null covers both "dimensionless" and "unknown". `definition.unit` tells the two apart when the
   code is in the dictionary — a dimensionless field has none there. For a code the dictionary does
@@ -197,65 +181,57 @@ type TrackingReading {
   """
   unit: String
   """
-  Source-register type: the sender's own `Field.declared_type`, or the type NTF SPEC Appendix A
-  pins for this name when the sender declared none. Shown only when that type differs from the one
-  `value`'s own member already implies, or when it equals the Appendix A pin regardless — a sender
-  that declares exactly the implied type, for a name Appendix A does not pin, reads as null either
-  way, the same as declaring none at all.
+  Shown only when that type differs from the one `value`'s own member already implies, or when it
+  equals the Appendix A pin regardless — a sender that declares exactly the implied type, for a
+  name Appendix A does not pin, reads as null either way, the same as declaring none at all.
   """
   declaredType: TrackingValueType
   # No per-value `computed` flag. NTF carries one (`Field.computed`, "the sender computed this
   # rather than observing it"), but the archive does not store it and cannot reconstruct it
-  # (STORAGE.md §"Что формат передаёт, а хранилище не сохраняет": "признак теряется, и это
-  # осознанная потеря"). A field that is present on live values and invented for
-  # archived ones is worse than an absent one. What survives is the dictionary-level statement —
   # `TrackingFieldDefinition.computed`, "this field is always computed by the platform" — and
-  # SPEC §5.4 is explicit that the two are not the same claim.
   #
   # This is the current state, not the intended end state: the decision is that the archive should
   # store the flag the wire already carries, so that a stream's opening load and its later updates
   # describe a value the same way. The field returns here, nullable, once storage keeps it
-  # (docs/todo/tracking/tracking-api-design-followups.md).
   """
-  When this value was last received. Per NTF SPEC §3.5 a field carries no timestamp of its own —
-  this is the event time of the message it last arrived in, which across a last-known state is
-  *not* the same for every reading.
+  When this value was last received. A field carries no timestamp of its own — this is the event
+  time of the message it last arrived in, which across a last-known state is *not* the same for
+  every reading.
   """
   updatedAt: DateTime!
   """
   Dictionary entry behind `code`: title, nature, quantity, deprecation.
 
-  Always null today: the field dictionary is not populated yet (NTF SPEC §5.4), so no code has an
-  entry. `TrackingQuery.fieldDefinitions` returns an empty list for the same reason.
+  Always null today: the field dictionary is not populated yet, so no code has an entry.
+  `TrackingQuery.fieldDefinitions` returns an empty list for the same reason.
   """
   definition: TrackingFieldDefinition
 }
 
 # @category: tracking/readings
 """
-A field dictionary entry (NTF SPEC §5). Entries are never renamed, retyped or deleted — only
-deprecated with a pointer to the replacement, because an entry describes every value ever
-recorded under that name, not just new ones.
+A field dictionary entry. Entries are never renamed, retyped or deleted — only deprecated
+with a pointer to the replacement, because an entry describes every value ever recorded
+under that name, not just new ones.
 """
 type TrackingFieldDefinition {
   code: Code!
   """
   Human-readable name of the field, for a UI that renders readings.
 
-  Localized by design: the language comes from the request, not from an argument — `X-Locale` or
-  `Accept-Language`, with English as the fallback, per §3 Localization in nvx4-bdr.graphql. Those
-  headers are not honoured yet, so today the text does not vary by caller. Once they are, this
-  field is the one part of a dictionary entry that is not stable across callers, and a client
-  caching the dictionary caches it per locale.
+  Localized by design: the language comes from the request, not from an argument. Those headers
+  are not honoured yet, so today the text does not vary by caller. Once they are, this field is
+  the one part of a dictionary entry that is not stable across callers, and a client caching the
+  dictionary caches it per locale.
   """
   title: String!
   "Longer explanation of the field, localized on the same terms as `title`."
   description: String
   valueType: TrackingValueType!
   """
-  Reference unit (UCUM): the one the quantity is customarily shown and stored in (NTF SPEC §3.2).
-  Not a default for a value that arrived without one — `TrackingReading.unit` says when it stands
-  in. Null for dimensionless fields.
+  Reference unit (UCUM): the one the quantity is customarily shown and stored in. Not a default
+  for a value that arrived without one — `TrackingReading.unit` says when it stands in. Null for
+  dimensionless fields.
   """
   unit: String
   quantity: TrackingQuantity
@@ -306,20 +282,20 @@ type TrackingPosition {
   Where `at` came from (`telemetry.records.event_time_source`). `fitness` grades the coordinates,
   this grades the time: a point can be a clean satellite fix whose time the receiver replaced
   (`DEVICE_CORRECTED`) or a buffered record that had no time of its own (`SERVER`), and both then
-  sit on the axis at the moment of upload rather than of observation (NTF SPEC §6.3). Null where
-  the archive holds `UNSPECIFIED`.
+  sit on the axis at the moment of upload rather than of observation. Null where the archive
+  holds `UNSPECIFIED`.
   """
   timeSource: TrackingTimeSource
   """
-  Event time of the message this position came from — the moment the position is claimed for
-  (NTF SPEC §6.3), and the time to age it by on a map. Always present: a message with a position
-  has an event time by definition. In a state it equals `updatedAt` when the newest message
-  carried a position, and lags it when heartbeats or readings-only reports came after.
+  Event time of the message this position came from — the moment the position is claimed for,
+  and the time to age it by on a map. Always present: a message with a position has an event
+  time by definition. In a state it equals `updatedAt` when the newest message carried a
+  position, and lags it when heartbeats or readings-only reports came after.
   """
   at: DateTime!
   """
   When the fix was taken, as the device reported it — a raw observation, not a decoder's
-  inference (NTF SPEC §6.3).
+  inference.
 
   For a fresh fix it simply equals `at`; for a repeated last-known point it is the time of that
   old fix, and for dead reckoning the time of the anchor. Null means one thing only: the protocol
@@ -399,8 +375,7 @@ enum TrackingPositionSource {
 
 # @category: tracking/state
 """
-Suitability of a point, decided once by the writer rather than by each reader
-(contracts/clickhouse/telemetry/v1/STORAGE.md §"Как отобрать пригодные точки").
+Suitability of a point, decided once by the writer rather than by each reader.
 """
 enum TrackingFitness {
   "No position in the message at all — heartbeat, readings-only report."
@@ -430,8 +405,8 @@ type TrackingConnectivity {
   lastMessageAt: DateTime
   """
   Event time of the most recent message that carried a position fit for a track — fitness `GNSS`
-  or `NETWORK`, the archive's track filter (STORAGE.md §"Как отобрать пригодные точки"). A
-  `LAST_KNOWN` repeat or a `WEAK_GNSS` fix moves `position.at` but not this.
+  or `NETWORK`, the archive's track filter. A `LAST_KNOWN` repeat or a `WEAK_GNSS` fix moves
+  `position.at` but not this.
   """
   lastPositionAt: DateTime
   "Arrival time of the most recent message (`UUIDv7ToDateTime(message_id)`)."
@@ -439,7 +414,7 @@ type TrackingConnectivity {
   """
   Protocol code with generation, as stored: `teltonika_codec8e`, not the model family. Left as
   `Code` rather than an enum on purpose — there are over a hundred and the list grows with every
-  new device model (NTF SPEC §5.3), which is exactly why the format keeps it a string too.
+  new device model, which is exactly why the format keeps it a string too.
   """
   protocol: Code
   "Channel the message arrived over."
@@ -447,19 +422,19 @@ type TrackingConnectivity {
   """
   The identifier value as the device presented it, with its case preserved.
 
-  The archive stores value and uniqueness namespace packed into one column with escaping
-  (`schema.sql` §identifier); this field is the unpacked value, and `identifierNamespace` the
-  unpacked namespace. Returning the packed form would hand callers a string that does not match
-  the IMEI on the sticker for the minority of devices that have a namespace.
+  The archive stores value and uniqueness namespace packed into one column with escaping; this
+  field is the unpacked value, and `identifierNamespace` the unpacked namespace. Returning the
+  packed form would hand callers a string that does not match the IMEI on the sticker for the
+  minority of devices that have a namespace.
   """
   identifier: String
   """
   Namespace the identifier is unique within. Null when the identifier is globally unique.
 
-  `String`, not `Code`: NTF permits `$` anywhere in either half of the packed identifier (SPEC
-  §8.2, receiver obligations) and `Code` allows only letters, digits, `_`, `.` and `-`. A single
-  device with an exotic namespace would otherwise fail coercion — and through the non-null chain
-  `connectivity` → `devices` → `nodes`, take the whole page of states down with it.
+  `String`, not `Code`: NTF permits `$` anywhere in either half of the packed identifier and
+  `Code` allows only letters, digits, `_`, `.` and `-`. A single device with an exotic namespace
+  would otherwise fail coercion — and through the non-null chain `connectivity` → `devices` →
+  `nodes`, take the whole page of states down with it.
   """
   identifierNamespace: String
   "Kind of identifier. Null where the archive holds `UNSPECIFIED`."
@@ -494,7 +469,7 @@ enum TrackingTransport {
 """
 Whether a device is currently connected. Derived from the time of its last message and never
 stored. Two values are connected and not connected: `ONLINE` is the first, `OFFLINE` and
-`NEVER_REPORTED` are the second (`meta/core-meta` ADR-0020).
+`NEVER_REPORTED` are the second.
 
 Not to be confused with `Device.status` (`DeviceStatus`), which is the administrative lifecycle of
 the device — registered, active, retired — held as a catalog item in BDR, changing rarely and
@@ -537,8 +512,8 @@ enum TrackingMotionStatus { MOVING STOPPED PARKED UNKNOWN }
 type TrackingWorkspaceSettings {
   """
   The thresholds that derive `TrackingConnectivity.status` and `TrackingMotion.status` in this
-  workspace (`meta/core-meta` ADR-0020). The same values apply to every device of the workspace,
-  and today to every workspace. The timeline's `PLATFORM_DEFAULT` segmentation is these values too.
+  workspace. The same values apply to every device of the workspace, and today to every workspace.
+  The timeline's `PLATFORM_DEFAULT` segmentation is these values too.
   """
   statusThresholds: TrackingStatusThresholds!
 }
@@ -557,16 +532,16 @@ type TrackingStatusThresholds {
 }
 
 # @category: tracking/state
-"An event carried by a message (NTF SPEC §6.5)."
+"An event carried by a message."
 type TrackingEvent {
   "Canonical platform code, e.g. `sos`, `harsh_braking`. Null when the vendor code is unmapped."
   code: Code
   """
-  The code the device sent, verbatim. Null means the platform itself raised the event
-  (NTF SPEC §6.5) — there is no separate origin flag.
+  The code the device sent, verbatim. Null means the platform itself raised the event — there is
+  no separate origin flag.
 
-  `String` for the same reason as `identifierNamespace`: SPEC §6.5 requires storing exactly what
-  the device sent, and that alphabet is open, while `Code`'s is not.
+  `String` for the same reason as `identifierNamespace`, and that alphabet is open, while
+  `Code`'s is not.
   """
   vendorCode: String
   """
@@ -576,7 +551,7 @@ type TrackingEvent {
   occurredAt: DateTime!
   """
   Where the event happened: the position of the message that carried it, since an event has no
-  place of its own (NTF SPEC §6.5). Null when that message carried no coordinates. On
+  place of its own. Null when that message carried no coordinates. On
   `TrackingTrackPoint.events` it equals the point; on `lastEvents`, `TrackingTrack.events` and
   `TrackingStop.events` it is what lets an SOS stay on the map after the device has moved on.
   """
@@ -584,9 +559,8 @@ type TrackingEvent {
   """
   Event parameters — triggering input, threshold, duration — as readings, not as opaque JSON.
   The archive already stores them as a canonical `StructValue` with each parameter's name, type
-  and unit, and NTF SPEC §6.5 calls them "ordinary fields, as everywhere else". Returning `JSON`
-  here would force a client that already renders `TrackingReading` to write a second renderer,
-  which is the split this schema exists to avoid.
+  and unit. Returning `JSON` here would force a client that already renders `TrackingReading` to
+  write a second renderer, which is the split this schema exists to avoid.
   """
   params: [TrackingReading!]!
   "Free-form text, including a device's reply to a command."
@@ -595,16 +569,14 @@ type TrackingEvent {
   The command this event answers, when the receiver matched one.
 
   The platform's command service mints command ids, so this is an `ID` like any other. No type in
-  this API is a command, since commands are a separate surface this contract does not create (§8),
-  so `node(id:)` answers null for it.
+  this API is a command, since commands are a separate surface this contract does not create, so
+  `node(id:)` answers null for it.
   """
   commandId: ID
   """
-  For a level alarm — an event a device re-sends in every message while the condition holds —
-  the moment it started. `occurredAt` then carries the latest repeat, and the repeats in between
-  are collapsed into this one object rather than returned individually (SPEC §6.5: collapsing "is
-  the job of a consumer that holds state", and this service is that consumer). Null for a
-  one-shot event.
+  For a level alarm — an event a device re-sends in every message while the condition holds — the
+  moment it started. `occurredAt` then carries the latest repeat, and the repeats in between are
+  collapsed into this one object rather than returned individually. Null for a one-shot event.
 
   A held alarm stops being reported once a message arrives without it — protocols of this family
   send no paired `*_END` code, so absence is the only signal there is. It also stops once nothing
@@ -658,16 +630,16 @@ type TrackingDeviceState {
 
   A tag is its own `Device` in BDR, linked to the tracker it rides with through `DeviceRelation`
   (`Device.relationsFrom` / `relationsTo`), and it has a state of its own: NTF keeps a tag's
-  readings in the carrier message's `ble_tags`, apart from the carrier's own fields (SPEC §6.6),
-  and this schema keeps them apart the same way — a tag's temperature is `readings` on the tag's
-  state, never on the tracker's. Its `position` is a carrier's position with `source: BLE`, chosen
-  by the ordinary rule on `position`: the most recent carrying message that had coordinates. That
-  is not always the latest observation — a stationary gateway reports tags in messages without a
-  position (SPEC §6.4.3) — so `position.at` can lag `updatedAt`, and the position can come from an
-  earlier message through a different tracker than `carrier` names. Its `connectivity` describes
-  the latest carrier's link, and its `identifier` is the tag's own. This field says which carrier
-  the latest observation came through, which the static relation cannot: a tag that rides between
-  two trackers has two relations and one current carrier.
+  readings in the carrier message's `ble_tags`, apart from the carrier's own fields, and this
+  schema keeps them apart the same way — a tag's temperature is `readings` on the tag's state,
+  never on the tracker's. Its `position` is a carrier's position with `source: BLE`, chosen by the
+  ordinary rule on `position`: the most recent carrying message that had coordinates. That is not
+  always the latest observation — a stationary gateway reports tags in messages without a position
+  — so `position.at` can lag `updatedAt`, and the position can come from an earlier message
+  through a different tracker than `carrier` names. Its `connectivity` describes the latest
+  carrier's link, and its `identifier` is the tag's own. This field says which carrier the latest
+  observation came through, which the static relation cannot: a tag that rides between two
+  trackers has two relations and one current carrier.
 
   Where it comes from: every observation carries it. On the wire it is the `device` of the message
   whose `ble_tags` held the tag; in the archive it is `telemetry.ble_tags.device_id`, the device
@@ -687,12 +659,10 @@ type TrackingDeviceState {
   updatedAt: DateTime
   connectivity: TrackingConnectivity!
   """
-  The most recent position of any fitness except `NO_POSITION` and `NO_FIX`, the two that carry
-  no coordinates — so a `LAST_KNOWN` repeat or a `WEAK_GNSS` fix is shown rather than nothing
-  (STORAGE.md §"Как отобрать пригодные точки", the "where is the device now" query; equal event
-  times are broken by fitness rank, then by message id). Null for a device that has never sent
-  one. Its age is `position.at`, not `updatedAt`: a heartbeat after it moves the latter and leaves
-  the former.
+  The most recent position of any fitness except `NO_POSITION` and `NO_FIX`, the two that carry no
+  coordinates — so a `LAST_KNOWN` repeat or a `WEAK_GNSS` fix is shown rather than nothing. Null
+  for a device that has never sent one. Its age is `position.at`, not `updatedAt`: a heartbeat
+  after it moves the latter and leaves the former.
   """
   position: TrackingPosition
   motion: TrackingMotion
@@ -842,7 +812,6 @@ type TrackingAssetStateSnapshot {
 #
 # Both were missing from the first draft of this contract. The batch marker would have been
 # additive and could have waited; the removal signal would not have been, which is why they landed
-# together. See §Extending this contract at the end of the file for the rule that follows from it.
 
 # @category: tracking/state/streams
 """
@@ -884,7 +853,7 @@ A pair of nullable fields rather than a `TrackingAssetStateSnapshot | TrackingSt
 union, for handling: the id sits in one place for both outcomes, and a client reads two fields
 instead of switching on `__typename` across fragments. Not for extensibility — a third outcome
 would leave both fields null on a client built against this version, which the sentence above
-forbids, so it is a breaking change of the same kind as a new union member (§9).
+forbids, so it is a breaking change of the same kind as a new union member.
 """
 type TrackingAssetStateChange {
   assetId: ID!
@@ -992,8 +961,6 @@ enum TrackingAssetStateOrderField {
 # =============================================================================
 #
 # nvx4 stores no track entity — there is no `track_id` the way nvx3 had one, and no separate
-# track table (STORAGE.md §"Отдельной таблицы под треки нет"). Segments are derived from
-# telemetry.records on read, under a segmentation policy.
 #
 # Always computed on read, never precomputed. That is what makes a request-level policy possible
 # at all: precomputed segments carry one policy, and no override could apply to them. The cost is
@@ -1101,7 +1068,7 @@ type TrackingTrack {
   """
   Trip length, km. Includes the leg from the last still point before the trip to its first moving
   point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from
-  the sum (STORAGE.md §Как отобрать).
+  the sum.
   """
   distance: Float!
   "Wall-clock duration."
@@ -1211,10 +1178,9 @@ type TrackingTimeline {
 # @category: tracking/trips
 input TrackingTrackOptions {
   """
-  Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`.
-  Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it
-  never enters `distance`, whatever this argument says, because a stop in a tunnel would
-  otherwise read as a trip (STORAGE.md §Как отобрать пригодные точки).
+  Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map,
+  which is where it belongs; it never enters `distance`, whatever this argument says, because a
+  stop in a tunnel would otherwise read as a trip.
   """
   fitness: [TrackingFitness!] = [GNSS, NETWORK]
   "Return the points of each trip, not just its summary. Off by default — points dominate the payload."
@@ -1229,9 +1195,9 @@ input TrackingTrackOptions {
   """
   Include only these event codes on segments and points. Empty list — the default — includes
   none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every
-  message while it holds (SPEC §6.5), so a day of a stuck input is thousands of identical
-  objects. The service collapses a repeated level alarm into one event with `since` set; this
-  argument is the second lever.
+  message while it holds, so a day of a stuck input is thousands of identical objects. The
+  service collapses a repeated level alarm into one event with `since` set; this argument is
+  the second lever.
   """
   eventCodes: [Code!] = []
 }
@@ -1242,7 +1208,7 @@ input TrackingTrackOptions {
 
 """
 Tracking module queries — live state of assets and their devices, and their trips and stops.
-Reached through `Query.tracking` (docs/reference/graphql-conventions.md §Module namespacing).
+Reached through `Query.tracking`.
 """
 type TrackingQuery {
   # @category: tracking/state
@@ -1318,13 +1284,12 @@ type TrackingQuery {
   and a number but no title, unit or nature.
 
   Returns an empty list today, whatever `codes` and `includeDeprecated` say: the dictionary is not
-  populated yet (NTF SPEC §5.4). The rest of this description is the contract once it is.
+  populated yet. The rest of this description is the contract once it is.
 
-  Cacheable, but not immutable. What NTF freezes is an entry's identity — SPEC §5.4 forbids
-  changing a type, unit or nature, and an entry is never renamed — so a cached entry never starts
-  meaning something else. What it does not freeze is the dictionary's composition: SPEC §5.1 says
-  it changes by design, and an existing entry can still gain `deprecated` and a `replacedBy`. So a
-  held copy goes stale in one direction only — it can lack an entry, or miss a deprecation, never
+  Cacheable, but not immutable. What NTF freezes is an entry's identity — an entry is never renamed
+  — so a cached entry never starts meaning something else. What it does not freeze is the
+  dictionary's composition, and an existing entry can still gain `deprecated` and a `replacedBy`. So
+  a held copy goes stale in one direction only — it can lack an entry, or miss a deprecation, never
   misdescribe a field it already has. Refetch when a reading arrives whose `code` is not in the
   cache. The locale is separate: it comes from the request headers rather than an argument here, so
   a client that switches language re-fetches, and a shared cache is keyed per locale or holds only
@@ -1352,8 +1317,6 @@ type TrackingQuery {
 # A subscription's root field is the event source and must resolve to a stream; a wrapper object
 # would have to emit one object and then stream from a nested field, which the spec does not
 # provide for. Module ownership therefore lives in the field name — `trackingAssetStates`, not
-# `tracking { assetStates }`. A stated exception to §Module namespacing that has to be written
-# into docs/reference/graphql-conventions.md rather than left implicit.
 #
 # `type Subscription` is declared here, in the module that owns the only stream, while
 # `schema { … subscription: Subscription }` stays in nvx4-bdr.graphql with the other root wiring.
@@ -1371,24 +1334,13 @@ type TrackingQuery {
 #
 # The guards that enumerate the roots, or that assumed all three are declared in one file, are held
 # to this arrangement:
-#   SchemaNamingConventionTest.`Subscription is declared once, in the module that owns the stream`
 #     — and its `MustStartWith` exemption, which lets this file carry that one unprefixed name
-#   GraphqlSchemaValidationTest$SubscriptionRootName
-#   GraphqlSchemaValidationTest$NamespaceWrappers.`subscription root is exactly the one tracking
-#     stream` (an exact set, so a second module's field cannot appear unnoticed)
-#   GraphqlSchemaValidationTest$StandaloneFileClosure — its walk reads the `schema { … }` block as
-#     of 0.11.0, which is what makes nvx4-bdr.graphql's reference to a type it no longer declares a
-#     checked exception rather than an unnoticed one
-#   GraphqlSchemaValidationTest$MergedSchemaSnapshot (baseline regenerated)
-#   GraphqlSchemaValidationTest.allQueryFields() (walks the subscription root too)
 #
 # THE WORKSPACE IS NOT AN ARGUMENT
 # -------------------------------
 # Neither the query side nor this input names a workspace. The request acts on the workspace the
 # caller's token names, resolved once per request by `CallerWorkspaceResolver` and carried on
 # `RequestContext.workspaceId`, exactly as `BdrQuery` has done since 0.10.0
-# (docs/adr/025-iam-integration-for-bdr.md §2). Taking it as an argument scopes the query and not
-# the caller, which is a cross-tenant read for anyone who can name an id.
 #
 # A subscription outlives the request that opened it, so the workspace is **captured when the
 # stream opens and held for its life**, not re-read per emission: there is no request context on
@@ -1401,7 +1353,6 @@ type TrackingQuery {
 # forty readings each re-sends all three states when one input bit flips. `readingCodes` and
 # `batchWindowMs` are the two levers against it.
 #
-# What travels is a batch (`TrackingAssetStateBatch`, §4b), not a bare list of states. "Full state"
 # describes each entity in it; the batch adds the two things no state can say — that the opening
 # snapshot is still arriving, and that it is complete — and each change inside adds the one thing a
 # *missing* state has to say, that the entity is gone.
@@ -1430,7 +1381,6 @@ type TrackingQuery {
 #     not this case: that is a per-entity `TrackingStreamRemoval` with `ACCESS_REVOKED`, and the
 #     stream stays open.
 #   * A silent WebSocket client. `/graphql/ws` closes a connection whose client has stopped
-#     answering the server's pings (nvx4-bdr.graphql §5 WEBSOCKET), and its streams end with it.
 
 """
 The root subscription type. One field, and it is this module's.
@@ -1518,12 +1468,10 @@ input TrackingAssetStateSubscriptionInput {
 #
 # `Query.tracking` and the `schema { … }` block live in nvx4-bdr.graphql, which owns root wiring
 # for every module (`Query.billing` is the precedent). `type Subscription` is the one root type
-# this module declares itself, for the reason in §7.
 #
 # There is no `Mutation.tracking`. Commands to devices — send a command, toggle an output — are a
 # separate surface; `TrackingEvent.commandId` points at one without creating it. The one write
 # this schema implies is the per-device segmentation policy behind
-# `TrackingSegmentationSource.DEVICE`, which has no storage or mutation yet (see §6).
 #
 # `Device.status` is untouched. The device's administrative lifecycle is a BDR catalog item;
 # whether a first message should move it from `not_activated` to `active` is a question for core,
@@ -1534,12 +1482,6 @@ input TrackingAssetStateSubscriptionInput {
 # 9. EXTENDING THIS CONTRACT
 # =============================================================================
 #
-# Written down because the removal signal in §4b was nearly deferred on the grounds that "adding
-# it later is cheap" — true of the batch marker beside it, false of the removal signal, and the
-# difference is not a matter of judgement. In GraphQL the additive changes are: a new field on an
-# object type, a new optional argument, a new type, a new input field that is nullable or carries
-# a default. None disturbs an existing client, because a client receives only what its own
-# document selects.
 #
 # Exactly two constructs break one, and this file uses both:
 #
@@ -1555,14 +1497,11 @@ input TrackingAssetStateSubscriptionInput {
 #                               gains a wire representation — a change to the format, not to this
 #                               schema. Least likely to move, widest blast radius: every reading
 #                               passes through it.
-#   TrackingStreamRemovalReason will grow; it enumerates operational causes. §4b already tells
-#                               clients to treat an unrecognised value as a plain removal.
 #   TrackingTransport           grows with new link types.
 #   TrackingReportReason        grows as decoders learn why a device sent a point.
 #   TrackingQuantity            grows with the field dictionary.
 #   TrackingValueType           tracks the proto enum; moves only with it.
 #   TrackingTimeSource          tracks the proto enum; moves only with it.
-#   TrackingFieldNature         closed by SPEC §5.2.
 #   TrackingFixType, TrackingPositionSource, TrackingFitness, TrackingConnectivityStatus,
 #   TrackingMotionStatus, TrackingCounterScope, TrackingSegmentationSource
 #                               small and closed by their own definitions today.
@@ -1577,5 +1516,3 @@ input TrackingAssetStateSubscriptionInput {
 # breaking that promise as a new union member breaks a client with no `... on NewType` branch and
 # no `__typename` fallback. The pair was chosen for handling — `assetId` in one place, no fragments
 # — and a third outcome, should one be needed, is a versioned change whose rule for old clients is
-# written down when it is designed. changelog_v0.9.0.md claimed the third outcome would be
-# additive; changelog_v0.9.1.md withdraws it.

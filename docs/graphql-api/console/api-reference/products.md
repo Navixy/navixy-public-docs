@@ -36,7 +36,7 @@ workspaceProducts(
 
 <summary>ConsoleWorkspaceProduct</summary>
 
-One product a workspace may or does have enabled, as Console's WorkspaceProductDto reports it.
+One product a workspace may or does have enabled.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -84,7 +84,7 @@ productCatalog(
 
 <summary>ConsoleProductCatalogEntry</summary>
 
-One entry of Console's own product catalog, as ProductCatalogEntryDto reports it.
+One entry of Console's own product catalog.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -126,7 +126,7 @@ workspaceOperation(
 
 <summary>ConsoleWorkspaceOperation</summary>
 
-One workspace operation Console tracked, as its full operation.WorkspaceOperationDto reports it.
+One workspace operation Console tracked.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -301,7 +301,7 @@ Whether the caller may take one action on a workspace product, and why not when 
 
 ### ConsoleWorkspaceProduct
 
-One product a workspace may or does have enabled, as Console's WorkspaceProductDto reports it.
+One product a workspace may or does have enabled.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -329,7 +329,7 @@ One product a workspace may or does have enabled, as Console's WorkspaceProductD
 
 ### ConsoleProductCatalogEntry
 
-One entry of Console's own product catalog, as ProductCatalogEntryDto reports it.
+One entry of Console's own product catalog.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -349,7 +349,7 @@ One entry of Console's own product catalog, as ProductCatalogEntryDto reports it
 
 ### ConsoleWorkspaceOperation
 
-One workspace operation Console tracked, as its full operation.WorkspaceOperationDto reports it.
+One workspace operation Console tracked.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |

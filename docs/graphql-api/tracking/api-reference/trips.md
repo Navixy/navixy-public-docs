@@ -81,11 +81,11 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip (STORAGE.md §Как отобрать пригодные точки). |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |
-| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds (SPEC §6.5), so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
+| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds, so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
 
 </details>
 
@@ -177,11 +177,11 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip (STORAGE.md §Как отобрать пригодные точки). |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |
-| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds (SPEC §6.5), so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
+| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds, so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
 
 </details>
 
@@ -273,7 +273,7 @@ distinction the device-in-the-hash rule above exists to make.
 | `id` | `String!` |  |
 | `startedAt` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
 | `endedAt` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `distance` | `Float!` | Trip length, km. Includes the leg from the last still point before the trip to its first moving point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from the sum (STORAGE.md §Как отобрать). |
+| `distance` | `Float!` | Trip length, km. Includes the leg from the last still point before the trip to its first moving point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from the sum. |
 | `duration` | [Duration](../../core-api-reference/common.md#duration)! | Wall-clock duration. |
 | `maxSpeed` | `Float` |  |
 | `avgSpeed` | `Float` |  |
@@ -381,11 +381,11 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to the track filter from STORAGE.md — `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip (STORAGE.md §Как отобрать пригодные точки). |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |
-| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds (SPEC §6.5), so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
+| `eventCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include only these event codes on segments and points. Empty list — the default — includes none; null includes all, which is rarely what a caller wants: a level alarm re-fires in every message while it holds, so a day of a stuck input is thousands of identical objects. The service collapses a repeated level alarm into one event with `since` set; this argument is the second lever. |
 
 ---
 

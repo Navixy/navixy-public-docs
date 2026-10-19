@@ -8,7 +8,6 @@
 # ingest and side-effect contexts are not exposed here.
 #
 # Module prefix `Iot` on every declaration
-# (docs/reference/graphql-conventions.md §Module namespacing). Root wiring — `Query.iotLogic` and
 # `Mutation.iotLogic` — lives in nvx4-bdr.graphql, which owns the roots.
 #
 # Types it references but does not declare: `Device` and `DeviceOrder` from nvx4-bdr.graphql, and
@@ -21,7 +20,6 @@
 # `iotlogic.device_flow_links`, not inside the graph. A data source may hold up to 25 000 devices,
 # which is why no read returns the list inline. Link rows outlive the devices they name — nothing
 # prunes them — and the fields below say where that shows; see
-# docs/todo/iot-logic/device-counts-include-stale-links.md.
 #
 # ACCESS
 # ------
@@ -249,7 +247,6 @@ type IotLogicFlowNodePosition {
 
 # The domain calls this an edge. The API cannot: `IotLogicFlowEdge` is the Relay edge of
 # `IotLogicFlowConnection` below, and a second type ending in `Edge` that carries no `node`/`cursor`
-# fails `GraphqlSchemaValidationTest`. Transition is the same thing under a name Relay has not taken.
 # @category: iot-logic/flows
 "A directed connection between two nodes of the graph."
 type IotLogicFlowTransition {
@@ -530,7 +527,6 @@ type IotLogicFlowDeletePayload {
 
 """
 IoT Logic module queries — the flow graphs users author for their devices.
-See docs/reference/graphql-conventions.md §Module namespacing.
 """
 type IotLogicQuery {
   # @category: iot-logic/flows
@@ -608,7 +604,6 @@ type IotLogicQuery {
 
 """
 IoT Logic module mutations.
-See docs/reference/graphql-conventions.md §Module namespacing.
 """
 type IotLogicMutation {
   # @category: iot-logic/flows

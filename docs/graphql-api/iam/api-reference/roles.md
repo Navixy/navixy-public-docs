@@ -71,7 +71,7 @@ role(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `id` | `ID!` | IAM's id for the role. |
+| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
 
 **Output types:**
 

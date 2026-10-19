@@ -363,8 +363,7 @@ falls inside it. A caller that means a calendar step asks for a date range inste
 
 `@specifiedBy` points at the Navixy page rather than at [ISO 8601](https://www.iso.org/standard/8601.html) or [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html), because the full
 grammar in either is precisely what this scalar does not accept — a pointer to it would describe
-the wrong type. The page restates the paragraphs above; those paragraphs and
-`ScalarCoercingTest.DurationCoercingTest` are the contract.
+the wrong type.
 
 ---
 
