@@ -81,6 +81,6 @@ To delete a workspace, follow these steps:
 1. On the sidebar, click **Organization**.
 2. On the **Workspaces** tab, click the workspace's name. The workspace details open.
 3. Under **Delete workspace**, click **Delete**.
-4. In the confirmation window, click **Delete workspace**. The window says that the workspace's data and products stop being available to everyone in it, and that you can't undo this.
+4. In the confirmation window, click **Delete workspace**.
 
 The workspace shows the status **Terminating** and stays in the list until Navixy finishes deleting it.
