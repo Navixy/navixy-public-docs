@@ -186,7 +186,7 @@ Some products have **Features**. Set them to **All** or **Specific**. **All** me
 
 Click **Save role**. The role becomes active immediately. There is no separate publishing step.
 
-You can also assign the role to members of the organization on this page, under **Assign to users**. To give the role to someone who isn't a member yet, invite them with it.
+You can also assign the role to members of the organization on this page, under **Assign to users**. Then Console asks you to confirm the assignments when you save: click **Save changes**. To give the role to someone who isn't a member yet, invite them with it.
 {% endstep %}
 {% endstepper %}
 
@@ -208,16 +208,17 @@ To assign a role, follow these steps:
 
 1. Go to **Users and roles** and open the **Users** tab.
 2. Click the person's name to open their details.
-3. Click **Assign role**. The **Assigned roles** window opens.
+3. Click <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> next to **Roles**. The **Assigned roles** window opens.
 4. Select a role under **Available roles** and click **Assign**.
+5. In the confirmation window, click **Assign**.
 
-To revoke a role, click **Revoke** next to it under **Assigned roles**.
+To revoke a role, click **Revoke** next to it under **Assigned roles**, then click **Revoke** in the confirmation window.
 
 {% hint style="info" %}
 Console records a revocation straight away. The person loses the access rights within about 5 minutes.
 {% endhint %}
 
-A member whose last role is revoked stays in the organization without a role, so you can assign them a role later without inviting them again. Console doesn't ask you to confirm a revocation.
+A member whose last role is revoked stays in the organization without a role, so you can assign them a role later without inviting them again.
 
 A role assignment can have an expiration date. When the date passes, the person loses the access that the role gives. To set the date, open the role's page. See [Set role expiration date](../users-and-roles/manage-users.md#set-role-expiration-date).
 
@@ -240,5 +241,5 @@ Congratulations! Your organization is set up, and your onboarding is complete. E
 * [Set up Navixy for your customers](set-up-navixy-for-your-customers.md): Create an organization and a workspace for each company that you work with, if you run Navixy for other companies.
 * [Manage workspaces](../organization/manage-workspaces.md): Create more workspaces for other fleets, teams, or departments.
 * [Create organization](../organization/create-organization.md): Create another organization, or one for each customer if you are a channel partner.
-* [Manage users](../users-and-roles/manage-users.md): Invite more people, revoke invitations, assign and revoke roles, and change security profiles.
+* [Manage users](../users-and-roles/manage-users.md): Invite more people, revoke invitations, assign and revoke roles, remove members, and change security profiles.
 * [Manage roles](../users-and-roles/manage-roles.md): Configure what a role allows, copy a role, and edit or delete roles.

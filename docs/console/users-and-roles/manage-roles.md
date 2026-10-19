@@ -24,7 +24,7 @@ To create a role, follow these steps:
 5. Under **Products**, select each product that the role gives access to.
 6. (Optional) Narrow the access to each product. See [Configure what a role allows](#configure-what-a-role-allows).
 7. (Optional) Under **Assign to users**, select the people who receive the role. To end a person's access on a set date, click **No expiration** next to them and select the date.
-8. Click **Save role**.
+8. Click **Save role**. If you selected people under **Assign to users**, click **Save changes** in the confirmation window.
 
 The role becomes active immediately. There is no separate publishing step.
 
@@ -75,7 +75,7 @@ To edit a role, follow these steps:
 3. Change the settings that you need.
 4. Click **Save changes**.
 
-Under **Assign to users**, the role's page also shows who has the role. **Assigned** lists only them. Selecting or clearing a person and saving assigns or revokes the role.
+Under **Assign to users**, the role's page also shows who has the role. **Assigned** lists only them. Selecting or clearing a person and saving assigns or revokes the role. When you save changes to who has the role or when it expires, a confirmation window lists them. Click **Save changes** in it.
 
 Roles marked **System** are created by Navixy and can't be edited. Their row on the **Roles** tab says that they aren't editable.
 

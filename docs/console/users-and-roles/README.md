@@ -36,7 +36,7 @@ Clicking a person's name opens a side panel titled with their name or email.
 
 | Section                   | Description                                                                                                           |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Roles**                 | The person's roles. **Assign role** opens the **Assigned roles** window, where you assign and revoke roles.           |
+| **Roles**                 | The person's roles. <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> opens the **Assigned roles** window, where you assign and revoke roles. |
 | **Scope**                 | The workspaces that the person's roles reach, such as **All workspaces**.                                             |
 | **Security profile**      | The sign-in rules for the person. You can select another profile here. See [Security profiles](./#security-profiles). |
 | **Expiration date**       | When the person's role assignment ends. **Never** means that it doesn't end. You set the date on the role's page.     |

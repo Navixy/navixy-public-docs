@@ -1,8 +1,8 @@
 ---
 description: >-
   How to invite users to an organization in Navixy Console, revoke an
-  invitation, assign and revoke roles, set a role expiration date, and change
-  the security profile of a member.
+  invitation, assign and revoke roles, set a role expiration date, remove a
+  member, and change the security profile of a member.
 tags:
   - how-to
   - beta
@@ -57,8 +57,9 @@ To assign a role, follow these steps:
 
 1. Go to **Users and roles** and open the **Users** tab.
 2. Click the person's name to open their details.
-3. Click **Assign role**. The **Assigned roles** window opens.
+3. Click <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> next to **Roles**. The **Assigned roles** window opens.
 4. Under **Available roles**, click **Assign** next to the role. The list shows the roles that apply to the workspace selected in the top navigation bar.
+5. In the confirmation window, click **Assign**.
 
 The Owner role isn't offered, because only one person can have it.
 
@@ -73,6 +74,7 @@ To set a role expiration date, follow these steps:
 3. Under **Assign to users**, select the person.
 4. Click **No expiration** next to the person and select the date. The earliest date that you can select is tomorrow.
 5. Click **Save changes**.
+6. In the confirmation window, click **Save changes**.
 
 The **Expiration date** column on the **Users** tab shows the date. **Never** means that the assignment has no expiration date. To remove the date, click <picture><source srcset="../.gitbook/assets/icons/close-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/close.svg" alt="Clear expiration" data-size="line"></picture> next to it on the role's page and save the role.
 
@@ -84,12 +86,24 @@ To revoke a role, follow these steps:
 
 1. Go to **Users and roles** and open the **Users** tab.
 2. Click the person's name to open their details.
-3. Click **Assign role** or **Manage roles**. The **Assigned roles** window opens.
+3. Click <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> next to **Roles**. The **Assigned roles** window opens.
 4. Under **Assigned roles**, click **Revoke** next to the role.
+5. In the confirmation window, click **Revoke**.
 
-You can also revoke a role on the role's page: under **Assign to users**, clear the person and save the role.
+You can also revoke a role on the role's page: under **Assign to users**, clear the person, save the role, and confirm.
 
 The person loses access rights within about 5 minutes. A member whose last role is revoked stays in the organization without a role. To give them access again, assign them a role. You don't need to invite them again. The Owner role can't be revoked.
+
+## Remove a member
+
+Removing a member revokes all their roles in the organization, and they lose access to it. You can't undo it, but you can invite the person again. To remove a member, you need the Owner role or a role that includes the **Console** product. You can't remove a member whose roles give more access than yours. You also can't remove yourself, the organization's only Owner, or a person who belongs to no other organization.
+
+To remove a member, follow these steps:
+
+1. Go to **Users and roles** and open the **Users** tab.
+2. Click the person's name to open their details.
+3. Under **Remove member from organization**, click **Remove**.
+4. In the confirmation window, click **Remove member**.
 
 ## Change a member's security profile
 
@@ -102,3 +116,5 @@ To change the security profile, follow these steps:
 3. Under **Security profile**, select a profile.
 
 The **Security profile** column on the **Users** tab shows each member's profile.
+
+**MFA** in the member's details shows whether the member uses multi-factor authentication. You can't change it there.
