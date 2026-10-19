@@ -52,7 +52,7 @@ Selections can nest at most 15 levels deep. The count includes the `bdr` level, 
 
 ### Request rate
 
-Each caller can send 100 requests per 60-second period. The caller is the user or integration that the access token names, so all tokens of one user count toward the same limit. Requests without a token count per IP address, so all callers without a token that use the same IP address share one limit.
+Each caller can send 100 requests per 60-second period. The caller is the user or integration that the access token names, so all tokens of one user count toward the same limit. Requests without a token count per IP address, so all callers without a token that use the same IP address share one limit. Each API server keeps its own count, and more than one server answers requests, so the number is what you can always rely on, not a ceiling: a caller sometimes gets more requests through in a period.
 
 The limit counts more than HTTP requests:
 
@@ -68,7 +68,7 @@ A single `bdr` block in a mutation may select only one mutation field. To run se
 
 ## Subscription limits
 
-A subscription keeps a connection open, so it has limits of its own. The transports are described in [Subscriptions](graphql-basics/#subscriptions).
+A subscription keeps a connection open, so it has limits of its own. The transports are described in [Subscriptions](graphql-basics/#subscriptions). The connection and subscription counts are kept on each API server, like the request rate, so the values are what you can always rely on.
 
 | Limit | Default value | What happens when it's exceeded |
 | --- | --- | --- |

@@ -93,7 +93,7 @@ The person loses access rights within about 5 minutes. A member whose last role 
 
 ## Change a member's security profile
 
-Every member has a security profile. It sets how strict the sign-in rules are for that person, such as how long a session lasts. You select it when you invite the person, and you can change it later. Keep **Standard** for your own employees, and choose **Limited** or **Protected** for contractors and for people from other companies.
+A security profile sets how strict the sign-in rules are for a member, such as how long a session lasts. A member who has none follows the **Standard** rules, and the **Users** tab shows **No security profile** for them. You select the profile when you invite the person, and you can change it later. Keep **Standard** for your own employees, and choose **Limited** or **Protected** for contractors and for people from other companies.
 
 To change the security profile, follow these steps:
 

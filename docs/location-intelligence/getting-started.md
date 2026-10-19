@@ -19,7 +19,7 @@ The guide is for the person who sets up Navixy for their fleet: a fleet manager,
 Before you start, make sure that you have the following:
 
 * Access to a workspace where you can open **Assets** and **Device Management**
-* A role that lets you create devices and assets in that workspace, as described in [Access and roles](access-and-roles.md)
+* A role that lets you view and create devices and assets in that workspace, as described in [Access and roles](access-and-roles.md)
 * A GPS device of a supported model, with a SIM card installed and the device powered on
 * The phone number of the SIM card, the access point name (APN) of its mobile carrier, and the IMEI of the device
 

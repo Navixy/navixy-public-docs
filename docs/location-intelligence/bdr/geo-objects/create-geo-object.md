@@ -13,7 +13,7 @@ Follow this guide to create your first geo object: a depot drawn as an area on t
 
 This guide builds a Depot type with one extra field, an address, then draws one depot and assigns it to a vehicle. A new workspace has no geo object types, so the first geo object always starts with its type.
 
-Before you start, you need an asset to assign the depot to. To create one, see [Create asset](../assets/create-asset.md). You also need a role that lets you create types and geo objects and edit assets. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
+Before you start, you need an asset to assign the depot to. To create one, see [Create asset](../assets/create-asset.md). You also need a role that lets you create and edit types, create geo objects, and edit assets. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
 
 ## 1. Create the geo object type
 

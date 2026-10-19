@@ -100,7 +100,7 @@ Several mutations in one request run one after another, each in its own aliased 
 
 ### Unauthorized (401)
 
-Returned when the request carries a token that is malformed, expired, or wasn't issued by the identity service that the API trusts. The check runs before the query, so the response has no `data` field and the HTTP status is 401, unlike the 200 that business logic errors return. A request with no token at all is not an HTTP 401: it reaches the query, and every field that needs a token, such as `bdr` or `node`, returns `UNAUTHORIZED` with `detail` `Authentication required` inside an HTTP 200 response. Introspection without a token returns the same error and no part of the schema. See [Authentication](authentication.md) for how to obtain a token.
+Returned when the request carries a token that is malformed, expired, or wasn't issued by the identity service that the API trusts. The check runs before the query, so the response has no `data` field and the HTTP status is 401, unlike the 200 that business logic errors return. A request with no token at all is not an HTTP 401: it reaches the query, and every field that needs a token returns `UNAUTHORIZED` with `detail` `Authentication required` inside an HTTP 200 response. The `bdr`, `billing`, `tracking` and `nodes` fields can't be null, so the whole `data` field is null then; `node` on its own returns null. Introspection without a token returns `UNAUTHORIZED` with `detail` `Introspection requires authentication` and no part of the schema. See [Authentication](authentication.md) for how to obtain a token.
 
 ```json
 {

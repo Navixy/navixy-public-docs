@@ -14,7 +14,7 @@ Follow this guide to create an asset: a vehicle with a GPS device.
 
 Every asset is based on an asset type. First you choose one of the preset types or build your own, then you create the asset based on it. This guide creates one vehicle based on the Navixy-provided Vehicle asset type and assigns it one device.
 
-Before you start, you need a GPS device in your workspace. To add one, see [Device Management](../../device-management/README.md). You also need a role that lets you create assets, and to build your own asset type, a role that lets you create types. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
+Before you start, you need a GPS device in your workspace. To add one, see [Device Management](../../device-management/README.md). You also need a role that lets you view devices and create assets, and to build your own asset type, a role that lets you create types. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
 
 To create an asset, follow these steps:
 

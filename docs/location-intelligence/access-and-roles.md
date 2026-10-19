@@ -42,7 +42,7 @@ Location Intelligence shows what you have access to and leaves out the rest. An 
 | Your roles don't give you access to the data of another product | The product is in the menu when your workspace includes it. When you open it, it shows an error message and no data. |
 | Your role lets you see only some records | Lists, maps, and counts show only these records. A record that you can see doesn't show the linked records that you can't see. For example, an asset doesn't show its GPS device if your role doesn't let you see the device. |
 | Your role doesn't allow an action | The button for the action is shown, such as **Create** or **Delete**. When you click it, an error message appears and nothing changes. |
-| None of your roles covers a workspace | The workspace can still be in the workspace list. Switching to it fails with the message "Failed to switch workspace". |
+| None of your roles covers a workspace | The workspace isn't in the workspace list. If it's still shown, for example because your roles changed after the list loaded, switching to it fails with the message "Failed to switch workspace". |
 
 ## How to get more access
 

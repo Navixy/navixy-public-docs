@@ -78,4 +78,4 @@ You assign a geo object to an asset through a [**Reference** field](README.md#cu
 8. In the field, select the geo object. To create one without leaving the asset, use <picture><source srcset="../../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/add.svg" alt="Create" data-size="line"></picture> in the field.
 9. Click **Save**.
 
-A geo object doesn't show which assets it's assigned to. You can't delete a geo object while an asset has it in a field, even in a field that was removed from the asset's type. Clear the field on those assets or select another geo object in it, and then delete the geo object.
+A geo object doesn't show which assets it's assigned to. You can't delete a geo object while an asset or another geo object has it in a field, or a type uses it as a field's default. Clear those fields or select another geo object in them, and then delete the geo object. A field that was removed from the asset's type still holds its value, but the asset no longer shows it: delete that asset, or clear the value through the Navixy GraphQL API.

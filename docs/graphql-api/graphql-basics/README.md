@@ -348,7 +348,7 @@ These rules apply to every WebSocket connection. They use the message types of t
 * The client must send the access token in the payload of `connection_init`, as `{"Authorization": "Bearer <ACCESS_TOKEN>"}`, within 10 seconds of opening the connection. Otherwise the server closes the connection with code 4408. The server closes the connection with code 4401 when `connection_init` has no valid token.
 * The server sends a `ping` every 15 seconds and closes a connection whose client has sent nothing for 45 seconds, with code 1001. Client libraries such as `graphql-ws` reply to every `ping` with a `pong` message automatically.
 * A query or a mutation sent over the WebSocket gets one `next` message with a `VALIDATION_ERROR` error, then `complete`. A second `subscribe` with an ID that is already in use closes the connection with code 4409.
-* One caller can keep up to 12 connections open. The server closes a connection over that number with code 4403 after its `connection_init`. `graphql-ws` then reconnects after a delay that grows with each attempt.
+* One caller can rely on keeping up to 12 connections open; each API server counts them on its own. The server closes a connection over that number with code 4403 after its `connection_init`. `graphql-ws` then reconnects after a delay that grows with each attempt.
 * Every subscription that you send counts as one request toward your [request rate](../limits.md#request-rate), even one that the server then refuses. A subscription over the limit gets one `next` message with a `RATE_LIMITED` error, then `complete`, and the connection stays open.
 * A subscription ends with an `UNAUTHORIZED` error when its access token expires. Get a new token and subscribe again.
 

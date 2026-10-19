@@ -12,7 +12,7 @@ Follow this guide to create a schedule and assign it to an asset. Use a schedule
 
 This guide takes the shortest way through. It builds one schedule that repeats on a preset rule, then assigns it to one asset. Where a step has a longer version, it links to it.
 
-Before you start, you need an asset and its asset type. Learn how to create them in [Create asset](../assets/create-asset.md). You also need a role that lets you create schedules and edit assets. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
+Before you start, you need an asset and its asset type. Learn how to create them in [Create asset](../assets/create-asset.md). You also need a role that lets you create schedules, edit asset types, and edit assets. See [Access to Business Data Repository](../README.md#access-to-business-data-repository).
 
 ## 1. Create the schedule
 

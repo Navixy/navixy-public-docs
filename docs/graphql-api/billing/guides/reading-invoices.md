@@ -99,7 +99,7 @@ Payments aren't linked to invoices: a payment is added to the balance. Billing p
 
 ## Example scenario: An operator checks the latest invoice
 
-TransLog GmbH runs delivery trucks out of Hamburg. Their workspace has been on the Fleet Pro plan since July 1, 2026, with a 14-day trial. The plan costs $49.00 per month, includes 10 registered devices, and charges $3.00 for each device above that. Registered assets are included in the fee. The Navixy platform reports each month's device and asset counts at 00:02 UTC on the first day of the next month, before the daily pass, so each invoice charges the month that just ended.
+TransLog GmbH runs delivery trucks out of Hamburg. Their workspace has been on the Fleet Pro plan since July 1, 2026, with a 14-day trial. The plan costs $49.00 per month, includes 10 registered devices, and charges $3.00 for each device above that. Registered assets are included in the fee. The Navixy platform reports each month's device and asset counts within about an hour after the month ends. In this example they arrive at 00:02 UTC on the first day of the next month, before the daily pass at 00:05, so each invoice charges the month that just ended. A count that arrives after the pass is charged as late usage on the next day's invoice.
 
 On October 6, their administrator reads the workspace's invoices and checks what the latest invoice, issued on October 1, charged for. To check the latest invoice, follow these steps:
 
@@ -317,7 +317,7 @@ Response:
 }
 ```
 
-The invoice charges September: the $49.00 fee, and 3 devices above the included 10 at $3.00 each. The Navixy platform reported 13 devices and 10 assets for September at 00:02 UTC on October 1, so the daily pass at 00:05 put both counts on this invoice. The asset line ends with `(included)`, because the fee covers assets.
+The invoice charges September: the $49.00 fee, and 3 devices above the included 10 at $3.00 each. In this example the Navixy platform reported 13 devices and 10 assets for September at 00:02 UTC on October 1, before the daily pass at 00:05, so both counts are on this invoice. The asset line says `(included)`, because the fee covers assets.
 
 `myInvoice` returns `null` when no invoice has this ID or when the invoice belongs to another workspace. The 2 cases look the same, so an ID tells you nothing about other workspaces.
 {% endstep %}
@@ -333,7 +333,7 @@ Use these fields to show a line:
 * `unitPrice` and `amount` are in minor units, in the invoice currency. A correction line has a negative amount when late usage lowers a charge.
 * `subscriptionId` is the subscription that the line charges for, the `id` that [mySubscriptions](../api-reference/subscription.md#mysubscriptions) returns. `planId` is the plan of that subscription. When the subscription is on a branch, `planId` is the base plan's ID, and the branch set the fee and the prices.
 
-With `TIERED` pricing, a metric has one line for each tier that the usage reached. When `pricingModel` is `SUBSCRIPTION`, the metric line ends with `(included)`, its `quantity` is all the usage, and its unit price is zero. The [Plans](../api-reference/plan.md#billingpricingmodel) reference defines each pricing model.
+With `TIERED` pricing, a metric has one line for each tier that the usage reached. When `pricingModel` is `SUBSCRIPTION`, the metric line's `description` carries `(included)` after the metric name, its `quantity` is all the usage, and its unit price is zero. The [Plans](../api-reference/plan.md#billingpricingmodel) reference defines each pricing model.
 {% endstep %}
 
 {% step %}

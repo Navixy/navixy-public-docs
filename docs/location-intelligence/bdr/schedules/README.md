@@ -77,7 +77,7 @@ Which conditions you can add depends on the unit in **Repeat every**. **Week num
 | **Days of the month** | One or more days, 1 to 31.                                           | **First day**, **Last day**, **Day 15**, **Clear all**                                              |
 | **Days of the year**  | Day numbers from 1 to 366, or -1 for the last day of the year.       | None                                                                                                |
 | **Week numbers**      | Week numbers from 1 to 53.                                           | None                                                                                                |
-| **Hours**             | One or more hours of the day.                                        | **All day**, **Working hours** (the hours 9 to 17, so 09:00 to 17:59), **Morning**, **Evening**, **Night**, **Clear all** |
+| **Hours**             | One or more hours of the day. Each selected hour starts an occurrence that lasts as long as the slot. | **All day**, **Working hours** (the hours 9 to 17), **Morning**, **Evening**, **Night**, **Clear all** |
 | **Minutes**           | One or more minutes of the hour.                                     | **Every minute**, **Every 2 minutes**, **Every 5 minutes**, **Every 30 minutes**, **Clear all**     |
 | **Seconds**           | One or more seconds of the minute.                                   | **Every 5 seconds**, **Every 10 seconds**, **Every 30 seconds**, **Clear all**                      |
 | **Week start day**    | The weekday a week begins on. It matters for rules that count weeks. | None                                                                                                |
@@ -98,4 +98,4 @@ You can assign a schedule to an asset, such as a maintenance period to a vehicle
 
 To learn how to assign schedules, see [Assign a schedule to an asset](manage-schedules.md#assign-a-schedule-to-an-asset).
 
-You can't delete a schedule while an asset has it in a field, even in a field that was removed from the asset's type. Clear the field on those assets or select another schedule in it, and then delete the schedule.
+You can't delete a schedule while an asset or a geo object has it in a field, or a type uses it as a field's default. Clear those fields or select another schedule in them, and then delete the schedule. A field that was removed from the asset's type still holds its value, but the asset no longer shows it: delete that asset, or clear the value through the Navixy GraphQL API.

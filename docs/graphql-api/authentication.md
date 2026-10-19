@@ -64,7 +64,7 @@ Response:
 }
 ```
 
-A request without the `Authorization` header doesn't return HTTP 401. The API returns HTTP 200 with an `UNAUTHORIZED` error, with `detail` `Authentication required`, on every field that needs a token, such as `bdr` and `node`. Nothing under those fields runs. Introspection needs a token too: without one, `__schema` and `__type` return the same error and no part of the schema. If you get this error on every request, check the header first.
+A request without the `Authorization` header doesn't return HTTP 401. The API returns HTTP 200 with an `UNAUTHORIZED` error, with `detail` `Authentication required`, on every field that needs a token, such as `bdr` and `node`. Nothing under those fields runs. Introspection needs a token too: without one, `__schema` and `__type` return an `UNAUTHORIZED` error with `detail` `Introspection requires authentication`, and no part of the schema. If you get this error on every request, check the header first.
 
 ## How the API checks a request
 
@@ -205,7 +205,7 @@ The following example shows a decoded token with only the claims that the API re
   "organization_id": "019a6b2f-793e-807b-8001-4f52474e0001",
   "workspace_id": "019a6b2f-793e-807b-8001-575350430001",
   "actor_id": "8e2b6d4c-1f3a-4b7e-9c5d-2a6f8e1b3d70",
-  "role_ids": ["a7c3e9f1-5b2d-4e8a-b6c4-1d9f3e7a5b20"],
+  "role_ids": ["019a6b2f-793e-807b-8001-49524f4c0001"],
   "product_codes": ["bdr"]
 }
 ```

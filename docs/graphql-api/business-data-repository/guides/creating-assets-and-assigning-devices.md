@@ -35,7 +35,7 @@ query ListAssetTypes {
 }
 ```
 
-You'll get the types of your workspace. A new workspace starts with the preset types Workforce, Vehicle, and Cargo, which your workspace can edit or delete:
+You'll get the types of your workspace. A new workspace starts with the preset types Workforce, Vehicle, and Cargo, which your workspace can edit, and delete once no other type's field refers to them (Vehicle's `cf_driver` refers to Workforce, and Cargo's `cf_transport_unit` to Vehicle):
 
 ```json
 {
