@@ -1,7 +1,7 @@
 ---
 description: >-
-  How to find a device, add a device without activating it, rename a device or
-  change its model, and deactivate it.
+  How to find a device, rename it, change its phone number or APN, and
+  deactivate it.
 tags:
   - how-to
   - beta
@@ -26,44 +26,11 @@ The **Devices** list of Device Management shows every device of your workspace. 
 
 If nothing matches, the list shows "No devices match your search."
 
-## Add a device without activating it
-
-Add a device without activating it when you have the device but haven't installed it yet. For example, add a device that you receive from the supplier. When you install the device later, [activate it](activate-device.md): activation finds the device by its IMEI and doesn't add it a second time.
-
-Navixy sends a device added this way no settings until you activate it. If the device is already configured, for example by its supplier, Navixy accepts its data before activation.
-
-You add the device from the asset that it will belong to, in a **Device** field of the asset.
-
-1. Go to **Assets**, open the tab of the asset type, and click <picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> in the asset's row.
-2. Next to the **Device** field, click **Create** (the plus icon).
-   The **Add device to inventory** panel opens.
-3. In **Model**, select the device model.
-4. Optional: in **Name (optional)**, enter a name. If you leave it empty, Navixy names the device after its vendor, model, and IMEI, for example `Teltonika FMB920 356938035643809`.
-5. In **Device type**, select the type of the device.
-6. In **IMEI**, enter the 15-digit IMEI of the device.
-7. Click **Save**.
-   The **Device** field shows the new device.
-8. Click **Save** to save the asset.
-
-The device appears in the **Devices** list of Device Management with the status **Not activated**.
-
 ## Rename a device
 
 1. In **Device Management**, click the device.
 2. Click **Rename**.
 3. In **Name**, enter the new name.
-4. Click **Save**.
-
-You can also rename a device in the **Edit device** panel. See [Change the model of a device](#change-the-model-of-a-device).
-
-## Change the model of a device
-
-You change the model from an asset that has the device in a **Device** field.
-
-1. Go to **Assets**, open the tab of the asset type, and click <picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> in the asset's row.
-2. Next to the **Device** field that has the device, click **Edit** (the pencil icon).
-   The **Edit device** panel opens.
-3. In **Model**, select the model. To rename the device at the same time, change the **Name (optional)**.
 4. Click **Save**.
 
 ## Change the phone number or the APN
@@ -94,3 +61,5 @@ To stop a device that is still waiting to connect, cancel its activation instead
 ## Assign a device to an asset
 
 You assign a device to an asset in Business Data Repository, from the asset. See [Assign a device to an asset](../bdr/assets/manage-assets.md#assign-a-device-to-an-asset).
+
+To activate a new device and assign it to an asset in one step, start the activation from the asset. See [Start from an asset](activate-device.md#start-from-an-asset).

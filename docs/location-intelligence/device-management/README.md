@@ -21,11 +21,11 @@ A GPS device you install in a vehicle sends nothing to your workspace until Navi
 
 **See every device in one list.** The list shows the model, the device identifier, and the phone number of each device, and when it last sent data. Search finds a device by its name or by its IMEI.
 
-**Add a device before you install it.** Add a device from the asset that it will belong to, and activate it when you install it. Activation finds the device you added by its IMEI, so the device isn't added twice.
+**Activate a device from its asset.** Start the activation from the **Device** field of the asset that the device will belong to. You activate the device and assign it to the asset in one step.
 
 ## Who it is for
 
-Device Management is for the people who install and look after GPS devices: installers, fleet managers, and the support staff of a telematics service provider. It is part of [Business Data Repository](../bdr/README.md), so every workspace that has Business Data Repository has Device Management. Activate a device before you assign it to an asset in Business Data Repository. An asset shows on the map in [Tracking](../tracking/README.md) only when its primary device sends data.
+Device Management is for the people who install and look after GPS devices: installers, fleet managers, and the support staff of a telematics service provider. It is part of [Business Data Repository](../bdr/README.md), so every workspace that has Business Data Repository has Device Management. Activate a device before you assign it to an asset in Business Data Repository, or activate it from the asset itself. An asset shows on the map in [Tracking](../tracking/README.md) only when its primary device sends data.
 
 ## Core concepts
 
@@ -51,8 +51,8 @@ A device can keep data in its internal memory, for example while it has no cover
 Device Management follows your access to devices and inventories in [Business Data Repository](../bdr/README.md#access-to-business-data-repository). It has no access settings of its own.
 
 * The device list shows only the devices that your role lets you see.
-* To activate a device, your role must let you create devices. If the device is already in your workspace, for example added without activation, your role must also let you view and edit it.
-* To change a device, such as renaming it or changing its model, your role must let you view and edit devices.
+* To activate a device, your role must let you create devices. If the device is already in your workspace and isn't activated yet, your role must also let you view and edit it.
+* To change a device, such as renaming it, your role must let you view and edit devices.
 
 **Activate device** and the other actions are shown to everyone. If your role doesn't allow the action, an error message appears when you try it. To learn more, see [Access and roles](../access-and-roles.md).
 
@@ -63,4 +63,4 @@ Start with [Activate a device](activate-device.md). It takes you from a GPS devi
 ## Section contents
 
 * [Activate a device](activate-device.md): Choose the model, enter the SIM card and IMEI details, wait for the device to connect, and retry if it doesn't.
-* [Manage devices](manage-devices.md): Find a device, add one without activating it, rename it or change its model, and deactivate it.
+* [Manage devices](manage-devices.md): Find a device, rename it, change its phone number or APN, and deactivate it.

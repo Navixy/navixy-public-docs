@@ -33,6 +33,18 @@ If the workspace has no devices yet, the **Devices** list shows "No devices yet"
 
 To stop at any step, click **Cancel**. Navixy returns you to the **Devices** list and doesn't keep what you entered.
 
+### Start from an asset
+
+You can also start the activation from the asset that the device will belong to, such as a vehicle. You then activate the device and assign it to the asset in one step.
+
+1. Go to **Assets**, open the tab of the asset type, and click <picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> in the asset's row.
+2. Next to the **Device** field, click <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Create" data-size="line"></picture>.
+   The **Activate device** panel opens on the **Model** step.
+
+The **Device** field has the same icon when you create an asset.
+
+The panel has the same steps as the **Activate device** page, but no **Cancel** button. To stop, click <picture><source srcset="../.gitbook/assets/icons/close-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/close.svg" alt="Close" data-size="line"></picture>.
+
 ## 2. Select the model
 
 The list shows the models that Navixy can activate, grouped by vendor. Each vendor shows the number of its models in brackets.
@@ -76,6 +88,8 @@ Check the IMEI before you click **Activate**. To correct a wrong IMEI later, you
 1. Click **Activate**.
    Navixy shows "Device activated, configuration SMS queued", and the device page opens with the device as **Waiting to connect**.
 
+If you started from an asset, Navixy shows the same message and closes the panel. No device page opens, and the **Device** field of the asset shows the new device. If the field already had a device, the new device replaces it. Click **Save** to save the asset. To follow the activation, go to **Device Management** and click the device.
+
 If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device. If an APN field has an error, **GPRS settings** expands so you can see it.
 
 {% hint style="warning" %}
@@ -102,7 +116,7 @@ The device connects after it receives the SMS, if it's powered on and within cel
 
 ## If the device is already in Business Data Repository
 
-You can add a device to Business Data Repository before you activate it, for example when you receive a batch of devices before installation. Activation finds that device by its IMEI and activates it, rather than creating a second one.
+If a device with the IMEI you enter is already in Business Data Repository and isn't activated yet, activation activates that device instead of creating a second one.
 
 In that case, the model changes to the model you selected on the **Model** step, and the device takes the name in **Device name (optional)**. If you leave that field empty, the device keeps the name it already has. You also need permission to change that device.
 
