@@ -42,7 +42,7 @@ Payments are not tied to invoices and settle the oldest invoices first; the paym
 | ----- | ---- | ----------- |
 | `id` | `ID!` |  |
 | `workspaceId` | `ID!` | The workspace being charged: the one the token names. |
-| `invoiceNumber` | `String!` | Human-facing number, unique across the schema. |
+| `invoiceNumber` | `String!` | The number shown to people, unique across all invoices of the platform. |
 | `periodStart` | [DateTime](../../core-api-reference/common.md#datetime)! | First instant of the earliest billing period covered. |
 | `periodEnd` | [DateTime](../../core-api-reference/common.md#datetime)! | End of the latest billing period covered, exclusive. |
 | `subtotal` | [Money](../../core-api-reference/common.md#money)! | Sum of the line items, before adjustments. |
@@ -157,7 +157,7 @@ Payments are not tied to invoices and settle the oldest invoices first; the paym
 | ----- | ---- | ----------- |
 | `id` | `ID!` |  |
 | `workspaceId` | `ID!` | The workspace being charged: the one the token names. |
-| `invoiceNumber` | `String!` | Human-facing number, unique across the schema. |
+| `invoiceNumber` | `String!` | The number shown to people, unique across all invoices of the platform. |
 | `periodStart` | [DateTime](../../core-api-reference/common.md#datetime)! | First instant of the earliest billing period covered. |
 | `periodEnd` | [DateTime](../../core-api-reference/common.md#datetime)! | End of the latest billing period covered, exclusive. |
 | `subtotal` | [Money](../../core-api-reference/common.md#money)! | Sum of the line items, before adjustments. |

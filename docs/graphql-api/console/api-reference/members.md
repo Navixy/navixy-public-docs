@@ -63,8 +63,7 @@ A page of the members of the caller's organization.
 
 ### ConsoleMember
 
-A person or agent in the caller's organization, as Console's `GET /v1/organizations/{id}/members`
-reports it. Reading members needs Console administration; without it the field answers
+A person or agent in the caller's organization, as Console reports it. Reading members needs Console administration; without it the field answers
 PERMISSION_DENIED.
 
 | Field | Type | Description |

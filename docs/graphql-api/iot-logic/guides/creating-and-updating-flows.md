@@ -47,7 +47,7 @@ Response:
 }
 ```
 
-The steps below show only the document and its variables. In the [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox), paste the document into the operation panel and the variables into the variables panel.
+The steps below show only the document and its variables. In your GraphQL client, send the document as the query and the variables as its variables.
 
 ### Find the devices for the flow
 

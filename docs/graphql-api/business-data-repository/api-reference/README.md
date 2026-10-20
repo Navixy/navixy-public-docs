@@ -32,7 +32,6 @@ Every category page follows the same order: queries, then mutations, then the ca
 
 ## Other ways to explore the API
 
-* [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox): Run queries and mutations interactively.
 * [Public GraphQL schema](../../developer-resources/public-graphql-schema.md): The full type system split into several files.
 * [Introspection](../../graphql-basics/#introspection): Explore the schema from your own GraphQL client.
 

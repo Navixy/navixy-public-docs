@@ -19,7 +19,7 @@ All IAM queries are nested under the `iam` field of the `Query` type, and the IA
 
 Every operation acts in the organization and the workspace that your [access token](../../authentication.md) names, so no field takes an organization ID or a workspace ID. A token that names no organization or no workspace is refused with `PERMISSION_DENIED`. A role of another organization is out of reach: `role` returns null for it, and [`memberRoleAssign`](role-assignments.md#memberroleassign) refuses it with `CONFLICT`.
 
-IAM decides what you may do. To call any `iam` operation, you need a role that grants product `iam` or every product. The Owner role grants every product. You can't create, change, assign, or revoke a role that grants more than your own roles do. IAM refuses such a request with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED`. A role that grants every workspace, every product, or every feature or data resource of a product needs a caller whose own roles grant the same. A list that happens to name every item doesn't count as "every".
+IAM decides what you may do. To call any `iam` operation, you need a role that grants product `iam` or every product. The Owner role grants every product, and so does the Admin role as IAM creates it. You can't create, change, delete, assign, or revoke a role that grants more than your own roles do. IAM refuses such a request with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED`. A role that grants every workspace, every product, or every feature or data resource of a product needs a caller whose own roles grant the same. A list that happens to name every item doesn't count as "every".
 
 ## Pages
 
@@ -56,7 +56,6 @@ The interfaces and pagination types that IAM shares with the other products are 
 
 ## Other ways to explore the API
 
-* [GraphQL Sandbox](https://api.navixy.dev/v4/graphql/sandbox): Run queries and mutations interactively.
 * [Public GraphQL schema](../../developer-resources/public-graphql-schema.md): The full type system split into several files.
 * [Introspection](../../graphql-basics/#introspection): Explore the schema from your own GraphQL client.
 

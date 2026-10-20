@@ -312,7 +312,7 @@ Input for creating a new geo object.
 | ----- | ---- | ----------- |
 | `typeId` | `ID!` | The geo object type ID. |
 | `title` | `String!` | The geo object display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `input.geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 </details>
@@ -1721,7 +1721,7 @@ Input for creating a new geo object.
 | ----- | ---- | ----------- |
 | `typeId` | `ID!` | The geo object type ID. |
 | `title` | `String!` | The geo object display name. |
-| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
+| `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The GeoJSON geometry. A `Polygon` or `MultiPolygon` must be a well-formed area, or the mutation fails with `VALIDATION_ERROR` on `input.geojsonData`: a `Polygon` is a non-empty array of rings, a `MultiPolygon` a non-empty array of such polygons; a ring has at least four positions, and its first and last positions have equal longitude and latitude; a position has at least two elements, all numbers, with longitude in [-180, 180] and latitude in [-90, 90]. Elements after the second (altitude) and a `crs` member do not change the area; ring winding is not checked. |
 | `customFields` | [CustomFieldsPatchInput](custom-fields.md#customfieldspatchinput) | The custom field values. |
 
 ---

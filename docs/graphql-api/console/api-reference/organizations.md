@@ -68,7 +68,7 @@ An organization the caller can access, as Console reports it.
 `node(id:)` and `nodes(ids:)` resolve an organization id only among the caller's own organizations, the ones
 `console.accessibleOrganizations` lists. Any other organization id resolves to null, and so does every organization
 id when the token does not carry the organization and workspace a call to Console needs, or Console refuses the
-caller. An organization id minted under another deployment flag or region is refused with VALIDATION_ERROR.
+caller. An organization ID issued by another Navixy deployment or region is refused with `VALIDATION_ERROR`.
 When Console cannot answer (not configured on the deployment, unreachable or failing), the organization
 resolves to null and an error with `extensions.code` SERVICE_UNAVAILABLE and `extensions.dependency` `console` names
 its path; the other ids of the same `nodes(ids:)` call resolve as usual.
