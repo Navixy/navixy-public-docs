@@ -56,7 +56,7 @@ On the sidebar, click **Organization**, then click **Create organization**.
 
 ### Name the organization
 
-Select **Child organization** and enter an **Organization name**. Use your customer's company name. The window title changes to **Create child organization**.
+Select **Child organization** and enter an **Organization name** of up to 256 characters. Use your customer's company name. The window title changes to **Create child organization**.
 
 If **Child organization** can't be selected, your organization isn't a channel partner yet. See [Become a channel partner](#id-1.-become-a-channel-partner).
 {% endstep %}
@@ -80,7 +80,7 @@ The next three steps set up the new organization's first workspace:
 
 1. **Region**: Where the workspace's data is stored. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 2. **Deployment**: Keep the selected option. Options marked as **Legacy** can't be selected.
-3. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs. On the same step, check the **Workspace name**. By default, it's the organization's name. You can change it.
+3. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs. On the same step, check the **Workspace name**. By default, it's the organization's name. You can change it, up to 256 characters.
 
 The **Launch preview** panel shows what you have chosen so far. Click **Continue** to move to the next step, and **Launch** on the last one.
 {% endstep %}

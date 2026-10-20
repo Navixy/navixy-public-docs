@@ -52,7 +52,7 @@ On the **Create your password** page, enter a **Password** of at least 12 charac
 
 An organization is your company in Navixy. It owns the users, the roles, and the workspaces you create under it.
 
-Enter an **Organization name**. Use your company's name. It is how your organization appears to everyone you invite. You can change it later.
+Enter an **Organization name** of up to 128 characters. Use your company's name. It is how your organization appears to everyone you invite. You can change it later.
 
 **Home region** shows where your organization's data is stored. It's where your data is kept, not where your company operates.
 
@@ -70,7 +70,7 @@ The **Set up your workspace** page has three steps. The **Launch preview** panel
 
 1. **Region**: Where the workspace's data is stored. **EU (Germany)** is selected. The other regions are marked **Coming soon** and can't be selected.
 2. **Profile**: Keep the selected profile. Profiles marked as **Legacy** can't be selected.
-3. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything. Enter a **Workspace name** on this step too. It's required. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
+3. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything. Enter a **Workspace name** on this step too. It's required and can be up to 128 characters long. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
 
 Click **Continue** to move to the next step and **Launch** on the last one.
 {% endstep %}
@@ -132,7 +132,7 @@ To invite a user, follow these steps:
 
 The invitation appears on the **Invitations** tab with the status **Pending**, and the person appears on the **Users** tab with the status **Invited**. They become a member when they accept, and their status changes to **Active**.
 
-To accept, the person should click the link in the invitation email. A person without a Navixy account will fill in their profile and create a password on the **Set up your Console account** page, and a person with an account will sign in. Either way, the product selected under **Product to open** will open, without the registration steps.
+To accept, the person clicks the link in the invitation email. A person without a Navixy account fills in their profile and creates a password on the **Set up your Console account** page. A person with an account signs in. If their account has no password yet, for example because they didn't finish registering, the **Create your password** page opens first. Either way, the product selected under **Product to open** will open directly without any registration steps.
 
 An address that already belongs to a member of the organization or already has a pending invitation won't receive another invitation.
 

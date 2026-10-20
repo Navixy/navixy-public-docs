@@ -22,7 +22,7 @@ To create a workspace, follow these steps:
 3. Select a **Region**. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 4. Keep the selected **Deployment** option.
 5. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-6. On the same step, enter a **Workspace name**.
+6. On the same step, enter a **Workspace name** of up to 128 characters.
 7. Click **Launch**.
 
 The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
@@ -69,7 +69,7 @@ To rename a workspace, follow these steps:
 
 1. On the sidebar, click **Organization**.
 2. On the **Workspaces** tab, click the workspace's name. The workspace details open.
-3. Change the **Workspace name** and the **Description**.
+3. Change the **Workspace name**, up to 128 characters, and the **Description**.
 4. Click **Save**.
 
 ## Delete a workspace
