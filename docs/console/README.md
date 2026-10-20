@@ -64,6 +64,6 @@ Every product works inside a workspace, and every workspace belongs to one organ
   * [Create organization](organization/create-organization.md): Create an independent organization or a child organization.
   * [Manage workspaces](organization/manage-workspaces.md): Create, switch, rename, and delete workspaces, and enable or disable their products.
 * [Users and roles](users-and-roles/): Learn how users, roles, invitations, and security profiles work.
-  * [Manage users](users-and-roles/manage-users.md): Invite people, assign and revoke roles, set role expiration dates, remove members, and change security profiles.
+  * [Manage users](users-and-roles/manage-users.md): Invite people, assign and revoke roles, set role expiration dates, remove and rename members, and change security profiles.
   * [Manage roles](users-and-roles/manage-roles.md): Create, configure, copy, edit, and delete roles.
 * [Billing](billing/): Learn what the Billing page shows about a workspace's plans and balance.

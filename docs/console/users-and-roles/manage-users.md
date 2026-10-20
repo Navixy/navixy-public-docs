@@ -2,7 +2,7 @@
 description: >-
   How to invite users to an organization in Navixy Console, revoke an
   invitation, assign and revoke roles, set a role expiration date, remove a
-  member, and change the security profile of a member.
+  member, rename a member, and change the security profile of a member.
 tags:
   - how-to
   - beta
@@ -104,6 +104,17 @@ To remove a member, follow these steps:
 2. Click the person's name to open their details.
 3. Under **Remove member from organization**, click **Remove**.
 4. In the confirmation window, click **Remove member**.
+
+## Rename a member
+
+You can change a member's first and last name, for example to fix a typo. The name is the person's own, so the new name shows in every organization that they belong to and on the sign-in pages. To rename a member, you need the Owner role or a role that includes the **Console** product. You can't rename a person who was removed from the organization, and you can't change the email address.
+
+To rename a member, follow these steps:
+
+1. Go to **Users and roles** and open the **Users** tab.
+2. Click the person's name to open their details.
+3. Change the **First name** and the **Last name**. Both are required, and each can be up to 255 characters long.
+4. Click **Save**.
 
 ## Change a member's security profile
 

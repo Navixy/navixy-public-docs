@@ -241,5 +241,5 @@ Congratulations! Your organization is set up, and your onboarding is complete. E
 * [Set up Navixy for your customers](set-up-navixy-for-your-customers.md): Create an organization and a workspace for each company that you work with, if you run Navixy for other companies.
 * [Manage workspaces](../organization/manage-workspaces.md): Create more workspaces for other fleets, teams, or departments.
 * [Create organization](../organization/create-organization.md): Create another organization, or one for each customer if you are a channel partner.
-* [Manage users](../users-and-roles/manage-users.md): Invite more people, revoke invitations, assign and revoke roles, remove members, and change security profiles.
+* [Manage users](../users-and-roles/manage-users.md): Invite more people, revoke invitations, assign and revoke roles, remove and rename members, and change security profiles.
 * [Manage roles](../users-and-roles/manage-roles.md): Configure what a role allows, copy a role, and edit or delete roles.

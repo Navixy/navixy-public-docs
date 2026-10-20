@@ -32,15 +32,18 @@ Here's what you can do:
 
 ## User details
 
-Clicking a person's name opens a side panel titled with their name or email.
+Clicking a person's name opens a side panel titled with their name or email. Its top shows the person's **User ID**, which <picture><source srcset="../.gitbook/assets/icons/content_copy-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/content_copy.svg" alt="Copy user ID" data-size="line"></picture> copies, when they last signed in under **Last sign-in**, when they joined under **Member since**, and the **Expiration date** of their role assignment. **Never** means that the assignment doesn't end. You set the date on the role's page.
 
-| Section                   | Description                                                                                                           |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Roles**                 | The person's roles. <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> opens the **Assigned roles** window, where you assign and revoke roles. |
-| **Scope**                 | The workspaces that the person's roles reach, such as **All workspaces**.                                             |
-| **Security profile**      | The sign-in rules for the person. You can select another profile here. See [Security profiles](./#security-profiles). |
-| **Expiration date**       | When the person's role assignment ends. **Never** means that it doesn't end. You set the date on the role's page.     |
-| **Last sign-in**, **MFA** | When the person last signed in, and whether they use multi-factor authentication.                                     |
+| Section | Description |
+| --- | --- |
+| **First name**, **Last name** | The person's name. You can change it. See [Rename a member](manage-users.md#rename-a-member). |
+| **Email** | The address that the person signs in with. You can't change it. |
+| **Security profile** | The sign-in rules for the person. You can select another profile here. See [Security profiles](./#security-profiles). |
+| **Workspaces** | The workspaces that the person's roles reach, such as **All workspaces**. |
+| **Products** | The products that the person's roles give access to. |
+| **Roles** | The person's roles. <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> opens the **Assigned roles** window, where you assign and revoke roles. |
+| **MFA** | Whether the person uses multi-factor authentication. You can't change it here. |
+| **Remove member from organization** | **Remove** takes the person out of the organization. See [Remove a member](manage-users.md#remove-a-member). |
 
 A person invited to the organization has the status **Invited** until they accept the invitation, and **Active** after that. A member whose last role is revoked stays in the organization without a role. You can assign them a role later without inviting them again.
 
