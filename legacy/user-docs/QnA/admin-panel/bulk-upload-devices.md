@@ -46,6 +46,6 @@ curl -X POST 'https://api.us.navixy.com/v2/tracker/register' \
 
 ## Links
 
-* [API: tracker/register](/broken/spaces/6dtcPLayxXVB2qaaiuIL/pages/DKGv1OcjSTBwHwbWSEw0#register)
+* [API: tracker/register](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker#post-tracker-register)
 * [Bulk activation](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/devices/bulk-activation)
 * [Automatic device activation](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/quick-start/activate-gps-device#activate-gps-device-automatically)

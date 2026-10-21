@@ -17,7 +17,7 @@ First thing to keep in mind is that the platform usually shows what it has been 
 
 Usually, it is enough to disable the **Split by stops** and **Smart filter** options to show "raw trip data" without filters. These two filters can drastically change the way trip history is displayed in the tracking module. However, if you see no points after disabling both options, you might want to review and analyze raw data using the [Raw Data](https://app.gitbook.com/s/IgDb43gtyXcm1Av4h1np/faq-and-troubleshooting/access-iot-data) feature. There may be no points provided by the device for the given time span.
 
-First, the Parking Detection system is applied to the points delivered by the tracker. The Parking Detection system is a very important part of the trip history logic. It may filter a big part of trips in cases of bad Parking Detection configuration or inconsistent data provided by a tracker. To find out more about the logic, refer to the documentation on [Parking Detection](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/kuQsXSvRlmWewB0IVXgM). In short, the logic is as follows.
+First, the Parking Detection system is applied to the points delivered by the tracker. The Parking Detection system is a very important part of the trip history logic. It may filter a big part of trips in cases of bad Parking Detection configuration or inconsistent data provided by a tracker. To find out more about the logic, refer to the documentation on [Parking Detection](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/location-and-movement/parking-detection). In short, the logic is as follows.
 
 There are parameters defined in the **Parking detection** block (Devices & Settings):
 
@@ -48,6 +48,6 @@ Learn more about [exporting](https://app.gitbook.com/s/IgDb43gtyXcm1Av4h1np/faq-
 
 ## Links
 
-* [Raw data block](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/nAow2M4maY1kfkjkJ02G)
+* [Raw data block](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/object-management/raw-data)
 * [Exporting Raw Data](https://app.gitbook.com/s/IgDb43gtyXcm1Av4h1np/faq-and-troubleshooting/access-iot-data/save-iot-data-to-csv-file)
 * [Interpreting Raw Data](https://app.gitbook.com/s/IgDb43gtyXcm1Av4h1np/faq-and-troubleshooting/access-iot-data/save-iot-data-to-csv-file/columns-in-csv-file)

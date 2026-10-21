@@ -12,4 +12,4 @@ A crucial factor is the task status. Once a task is marked as completed, failed,
 
 In short, the API works effectively for updates only when the task is active and the form has already been submitted. Otherwise, modifications aren't allowed.
 
-**Links:** [Form/Value/Update API call](/broken/spaces/6dtcPLayxXVB2qaaiuIL/pages/cDufzorcKR1OYHErQYqO)
+**Links:** [Form/Value/Update API call](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/field-service/task/form/values#post-task-form-values-update)

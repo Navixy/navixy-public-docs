@@ -31,4 +31,4 @@ Then adjust **LBS detection radius** in device settings so the LBS radius remain
 
 ## Links
 
-* [LBS detection radius](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/FvVxmMr2tYoEekbWHjKR)
+* [LBS detection radius](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/location-and-movement/lbs-detection-radius)

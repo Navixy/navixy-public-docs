@@ -28,4 +28,4 @@ For example, if your device last reported that it was moving at 00:08 AM on Nove
 
 [Connection status](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/tracking/objects-list/connection-state)
 
-[Parking detection widget](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/kuQsXSvRlmWewB0IVXgM)
+[Parking detection widget](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/location-and-movement/parking-detection)

@@ -22,4 +22,4 @@ On the other hand, if the vehicle is parked and there is GPS drift, but the igni
 ## Links
 
 * [Types of reports](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/reports/report-types)
-* [Parking detection](/broken/spaces/446mKak1zDrGv70ahuYZ/pages/kuQsXSvRlmWewB0IVXgM)
+* [Parking detection](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/location-and-movement/parking-detection)

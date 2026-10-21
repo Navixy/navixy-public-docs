@@ -36,7 +36,7 @@ Click <img src="../.gitbook/assets/image (87).png" alt="" data-size="line"> to c
 This window contains the following settings:
 
 * **Label:** The plan's name.
-* **Billing cycle:** Payment frequence. There are four billing cycle types to choose from:
+* **Billing cycle:** Payment frequency. There are four billing cycle types to choose from:
   * **Monthly:** The user is charged on the first day of the month at 00:05 UTC or immediately after applying the pricing plan. If you check **Monthly fee proportional charge**, the user is charged for the number of days left in the month. Otherwise, they are charged for the full month.
   * **Monthly (daily debit):** The user is charged each day at 00:05 UTC proportionally to the monthly fee.
   * **Daily:** The user is charged each day at 00:05 UTC. This is a post-paid plan, meaning the user is charged only if the tracker connected to the server at least once in the last 24 hours.

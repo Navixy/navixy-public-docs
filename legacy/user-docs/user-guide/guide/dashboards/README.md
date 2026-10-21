@@ -35,7 +35,7 @@ Three tabs carry a period in their label: they read **Trips, 14 days**, **Condit
 
 ## What a sub-user sees
 
-A sub-user sees only the objects, geofences, and points of interest assigned to their account. Every panel, chart, and table on every tab is filtered to those items, so two people looking at the same tab on the same account can see different totals. For how the same rule applies to vehicles elsewhere in Navixy, see [Sub-user vehicle visibility rules](https://app.gitbook.com/s/DsdXBoGC1KF2ZkUJgWs5/using-navixy/subuser-vehicle-visibility-rules).
+A sub-user sees only the objects, geofences, and points of interest assigned to their account. Every panel, chart, and table on every tab is filtered to those items, so two people looking at the same tab on the same account can see different totals. For how the same rule applies to vehicles elsewhere in Navixy, see [Sub-user vehicle visibility rules](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/using-navixy/subuser-vehicle-visibility-rules).
 
 Access is item-based today. The dashboards filter by the items assigned to the sub-user, not by the sub-user's individual permissions. A sub-user with access to a device therefore sees that device on every tab.
 
