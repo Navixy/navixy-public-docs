@@ -13,7 +13,7 @@ This article shows how a system integrator can turn telematics and sensor data a
 
 Sensoriqua is a reference implementation: a zone-based sensor monitoring application built by a Navixy partner directly on the IoT Query PTL, not a Navixy product itself. It groups individual sensor channels by physical zone (a cold room, a server rack row, a greenhouse sector), applies a threshold to each one, and shows the zone's operational status ahead of the underlying raw values.
 
-[Read more](https://navixy.com/en/blog/sensor-monitoring-system-application) about the story behind this development in the Navixy blog.
+[Read more](https://navixy.com/blog/sensor-monitoring-system-application/) about the story behind this development in the Navixy blog.
 
 ### Why do warehouses need a zone-based view instead of a per-device dashboard?
 

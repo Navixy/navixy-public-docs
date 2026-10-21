@@ -40,7 +40,7 @@ The transportation of perishable goods, such as food products, necessitates stri
 
 Such an incident can result in substantial losses for the carrier company and disrupt supply chains, forcing retailers or restaurants to seek alternative suppliers to ensure timely delivery of fresh products.
 
-For this scenario, we'll use the [Teltonika FMB 920 model](https://www.navixy.com/devices/teltonika/teltonika-fmb920/) and Eye sensor. These devices are equipped to monitor and report on various parameters, including temperature, humidity, and door status without wires.\
+For this scenario, we'll use the [Teltonika FMB 920 model](https://navixy.com/en/devices/teltonika-telematics/teltonika-fmb920/) and Eye sensor. These devices are equipped to monitor and report on various parameters, including temperature, humidity, and door status without wires.\
 You can take any device supported on the platform with reading of Humidity, Temperature and other measurement sensors.
 
 Consider the use of a Bluetooth sensor with the capability to transmit data about temperature and humidity. This sensor can be installed within the refrigeration unit, ensuring constant monitoring of crucial environmental factors. Additionally, installing a magnetic Bluetooth sensor on the door provides real-time information about the door's status, alerting you when the refrigeration unit's door is opened or closed.

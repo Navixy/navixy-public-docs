@@ -38,7 +38,7 @@ The APN settings depend on your device's SIM GSM carrier. It is desirable to spe
 
 ![](../../../../../.gitbook/assets/image-20230810-124519.png)
 
-5. Download the [example file](https://www.navixy.com/wp-content/uploads/2022/04/hardware-trackers-activation-example.csv) for importing devices to Navixy platform and transfer all fields from the Wialon file. Specify a user\_id as a name, where to load devices.
+5. Download the [example file](https://cdn.navixy.com/hardware_trackers_activation_example_2781a794af.csv) for importing devices to Navixy platform and transfer all fields from the Wialon file. Specify a user\_id as a name, where to load devices.
 
 ![](../../../../../.gitbook/assets/image-20230810-124537.png)
 

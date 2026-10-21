@@ -20,7 +20,7 @@ Before you begin, ensure that your CSV file contains the following columns in th
 - apn_password
 - comment
 
-If you need to assign devices to different users, fill in the `user_id` column. In case of a file without `user_id`, all devices are added to a single user. Avoid using special characters such as "+", "°", or double spaces in the file. The comment field is optional and can be used to add additional information about a device. Navixy also provides a [sample file](https://www.navixy.com/wp-content/uploads/2022/04/hardware-trackers-activation-example.csv) for guidance.
+If you need to assign devices to different users, fill in the `user_id` column. In case of a file without `user_id`, all devices are added to a single user. Avoid using special characters such as "+", "°", or double spaces in the file. The comment field is optional and can be used to add additional information about a device. Navixy also provides a [sample file](https://cdn.navixy.com/hardware_trackers_activation_example_2781a794af.csv) for guidance.
 
 Once the bulk upload file has been created, reach out to Navixy’s support team to assist further with the upload.
 

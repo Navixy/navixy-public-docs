@@ -10,7 +10,7 @@ Whether you’re using a Teltonika in South America, a Queclink in Asia, or a cu
 
 ### One universal language: the Navixy Generic Protocol (NGP)
 
-At the heart of Navixy’s integration power is NGP, the [Navixy Generic Protocol](https://www.navixy.com/iot-logic/navixy-generic-protocol/) — our open, universal “language” for telematics data.
+At the heart of Navixy’s integration power is NGP, the [Navixy Generic Protocol](https://navixy.com/en/iot-logic/ngp/) — our open, universal “language” for telematics data.
 
 * Works with any modern GPS or IoT hardware
 * Standardizes all incoming and outgoing data
@@ -80,7 +80,7 @@ Whether you’re a fleet operator, a system integrator, or a hardware manufactur
 
 {% columns %}
 {% column %}
-<a href="https://www.navixy.com/learn-more/contact" class="button primary">Start your integration</a>
+<a href="https://navixy.com/en/contact/" class="button primary">Start your integration</a>
 {% endcolumn %}
 
 {% column %}

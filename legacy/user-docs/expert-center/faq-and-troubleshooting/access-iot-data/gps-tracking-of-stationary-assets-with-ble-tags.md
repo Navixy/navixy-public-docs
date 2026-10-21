@@ -12,7 +12,7 @@ In this tutorial, we'll discuss how to organize tracking for stationary objects,
 
 ## What you need to track stationary objects
 
-Various devices are able to read data from BLE beacons: Galileosky, Quecklink, Ruptela, Teltonika, TopFlyTech\*.\* We will describe on example of [Teltonika FMB920](https://www.navixy.com/devices/teltonika/teltonika-fmb920/) model and BLE beacon [Eye Sensor](https://teltonika-gps.com/products/accessories/sensors-beacons/eye).\
+Various devices are able to read data from BLE beacons: Galileosky, Quecklink, Ruptela, Teltonika, TopFlyTech\*.\* We will describe on example of [Teltonika FMB920](https://navixy.com/en/devices/teltonika-telematics/teltonika-fmb920/) model and BLE beacon [Eye Sensor](https://teltonika-gps.com/products/accessories/sensors-beacons/eye).\
 To begin tracking stationary objects, you'll need the following:
 
 1. A GPS device that can read BLE tags and is supported by the platform.

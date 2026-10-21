@@ -127,7 +127,7 @@ Fuel tankers have 2 or 3 tanks, each of them having at least 3 sections. For max
 
 ### Fuel sensor outputs
 
-If your client’s vehicle is already equipped with a device, the first task will be to ask for the device’s make and model. Once you’ve cleared that up, go to Navixy [Devices](https://www.navixy.com/devices/) to check available outputs for the device and to select the fuel sensor that fits. If the device supports both analog and digital signals (just like [Teltonika FMB 125](https://www.navixy.com/devices/teltonika/teltonika-fmb125/)), a fuel sensor with a digital interface (e.g. RS-485) should be favored.
+If your client’s vehicle is already equipped with a device, the first task will be to ask for the device’s make and model. Once you’ve cleared that up, go to Navixy [Devices](https://www.navixy.com/devices/) to check available outputs for the device and to select the fuel sensor that fits. If the device supports both analog and digital signals (just like [Teltonika FMB 125](https://navixy.com/en/devices/teltonika-telematics/teltonika-fmb125/)), a fuel sensor with a digital interface (e.g. RS-485) should be favored.
 
 If a client needs both a fuel sensor and a device, we would definitely recommend a digital interface (e.g. RS-485) in both cases.
 
