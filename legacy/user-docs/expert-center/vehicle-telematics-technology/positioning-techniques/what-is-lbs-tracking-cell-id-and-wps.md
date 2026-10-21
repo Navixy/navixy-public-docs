@@ -90,7 +90,7 @@ If you are not sure whether your devices support LBS on Navixy, check integratio
 
 ## GSM and Wi-Fi based tracking in X-GPS apps
 
-Navixy provides our own [Mobile tracking solution](https://www.navixy.com/features/mobile-apps/) with LBS support included.
+Navixy provides our own [Mobile tracking solution](https://navixy.com/en/learn-more/mobile-apps/) with LBS support included.
 
 Unlike hardware devices, Navixy mobile apps transmit already processed LBS data. Apps rely on native OS services like Apple Core Location or Google Fused Location depending on which OS is used.
 
