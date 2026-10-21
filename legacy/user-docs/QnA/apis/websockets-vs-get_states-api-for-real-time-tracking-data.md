@@ -47,4 +47,4 @@ Cons:
 ## Links
 
 * [WebSocket](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/websocket)
-* [`tracker/get_states`](https://www.navixy.com/docs/navixy-api/user-api/resources/tracking/tracker#get_states)
+* [`tracker/get_states`](https://navixy.com/docs/navixy-api/user-api/resources/tracking/tracker#post-tracker-get_states)

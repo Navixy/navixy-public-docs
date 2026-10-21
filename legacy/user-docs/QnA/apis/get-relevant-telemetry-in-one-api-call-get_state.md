@@ -72,7 +72,7 @@ Example response (trimmed to the fields that matter most):
 {% hint style="info" %}
 `get_state` returns the state for **one tracker**.
 
-If you need multiple trackers, use [`get_states`](https://www.navixy.com/docs/navixy-api/user-api/resources/tracking/tracker#get_states).
+If you need multiple trackers, use [`get_states`](https://navixy.com/docs/navixy-api/user-api/resources/tracking/tracker#post-tracker-get_states).
 {% endhint %}
 
 Note: this method works with a tracker ID. If you need the latest data for more than one tracker, use `get_states`.
