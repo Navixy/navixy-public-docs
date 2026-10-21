@@ -81,7 +81,7 @@ its path; the other ids of the same `nodes(ids:)` call resolve as usual.
 | `slug` | `String!` | Console's URL-safe slug for the organization. |
 | `displayName` | `String!` | Human-readable organization name. |
 | `orgType` | `String!` | Console's own organization-type vocabulary (e.g. \"customer\", \"partner\"). |
-| `roles` | `[String!]!` | The caller's own roles in this organization, as Console reports them. |
+| `roles` | `[String!]!` | Console's membership preset for the caller in this organization, such as `owner` or `member`. It isn't the caller's IAM roles. Read those with [memberRoles](../../iam/api-reference/role-assignments.md#memberroles). |
 
 ---
 
