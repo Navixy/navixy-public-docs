@@ -8,7 +8,7 @@ description: Connect Grafana to IoT Query via the PostgreSQL data source. Build 
 This guide demonstrates how to connect Grafana to **IoT Query** for visualizing telematics and fleet data. Grafana provides powerful visualization capabilities for monitoring vehicle status, sensor data, and other metrics in real-time.
 
 {% hint style="info" %}
-This guide is part of the **IoT Query** documentation suite and specifically covers connecting Power BI to your data warehouse. If you're still deciding which BI tool to use, refer to the [Selecting BI tools](https://www.navixy.com/docs/analytics/datahub/connection-setup/selecting-bi-tools) overview.
+This guide is part of the **IoT Query** documentation suite and specifically covers connecting Power BI to your data warehouse. If you're still deciding which BI tool to use, refer to the [Selecting BI tools](https://www.navixy.com/docs/analytics/iot-query/connection-setup/selecting-bi-tools) overview.
 {% endhint %}
 
 Watch a quick video overview to see what is possible with **IoT Query**+Grafana combination (available in English and Spanish):

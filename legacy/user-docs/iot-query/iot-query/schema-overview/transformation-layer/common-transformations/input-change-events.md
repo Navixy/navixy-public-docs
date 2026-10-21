@@ -97,7 +97,7 @@ Each device's current `discrete_inputs` and `discrete_outputs` bit strings are c
 {% step %}
 #### Matching against rules
 
-A flipped bit becomes a candidate event if its input number and new value match the condition configured on an `input_change` rule. See [Input triggering](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/input-triggering) for how these rules are configured, and the [Rule types reference](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/rules/rule_types) for the full list of rule types.
+A flipped bit becomes a candidate event if its input number and new value match the condition configured on an `input_change` rule. See [Input triggering](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/input-triggering) for how these rules are configured, and the [Rule types reference](https://navixy.com/docs/navixy-api/user-api/resources/tracking/tracker/rules/rule_types) for the full list of rule types.
 {% endstep %}
 
 {% step %}

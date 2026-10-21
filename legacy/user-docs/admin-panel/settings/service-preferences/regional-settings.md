@@ -16,7 +16,7 @@ Changing UI language sets it as the default language for all new user accounts. 
 
 ## User interface language
 
-Navixy is dedicated to global accessibility, currently supporting dozens of languages with more being added regularly. Navixy platform’s versatility is enhanced by contributions from a community of translators. If the language you need isn’t yet supported, you're encouraged to [add a new language and help expand Navixy's multilingual capabilities](https://www.navixy.com/docs/navixy-api/general/contribute/translation).
+Navixy is dedicated to global accessibility, currently supporting dozens of languages with more being added regularly. Navixy platform’s versatility is enhanced by contributions from a community of translators. If the language you need isn’t yet supported, you're encouraged to [add a new language and help expand Navixy's multilingual capabilities](https://www.navixy.com/docs/navixy-api).
 
 **Current list of supported languages:**
 

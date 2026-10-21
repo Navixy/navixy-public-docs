@@ -28,4 +28,4 @@ Approach 2:
 
 ## Linksss
 
-* [`track/list`](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/track/index#list)
+* [`track/list`](https://www.navixy.com/docs/navixy-api/user-api/resources/tracking/track#list)

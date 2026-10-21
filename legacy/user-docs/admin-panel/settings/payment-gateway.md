@@ -63,7 +63,7 @@ Once you have completed these steps, you are ready to accept online payments.
 
 ## Accepting payments with other methods
 
-You can use practically any payment method by creating a custom script to receive online payments. Your script should be accessible via a URL and process payments by calling the [Navixy Billing API](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/billing).
+You can use practically any payment method by creating a custom script to receive online payments. Your script should be accessible via a URL and process payments by calling the [Navixy Billing API](https://www.navixy.com/docs/navixy-api/user-api/resources/billing).
 
 ### User interface for custom payment methods
 

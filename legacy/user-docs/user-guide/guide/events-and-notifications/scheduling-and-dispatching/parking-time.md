@@ -10,7 +10,7 @@ For instance, if the allowed parking duration is set to 30 minutes, the system a
 
 ## Rule settings
 
-**Allowed parking time**: The parking time begins counting as soon as the vehicle enters a parked state. Users can configure the allowed parking duration, with options ranging from 5 to 60,000 minutes. The timer resets when the vehicle exits the parked state. For more detailed information on parking detection, see the [Parking detection](https://www.navixy.com/docs/user/guide/devices-and-settings/location-and-movement/parking-detection-block) article.
+**Allowed parking time**: The parking time begins counting as soon as the vehicle enters a parked state. Users can configure the allowed parking duration, with options ranging from 5 to 60,000 minutes. The timer resets when the vehicle exits the parked state. For more detailed information on parking detection, see the [Parking detection](https://www.navixy.com/docs/user/guide/devices-and-settings/location-and-movement/parking-detection) article.
 
 To monitor dwell time in specific areas, bind the rule to the designated geofences.
 

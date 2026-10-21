@@ -19,7 +19,7 @@ The point object both operations return, in `points_list` on a track and in `tra
 [OpenAPI navixy-platform](../../../reference/Navixy_Platform.json)
 {% endopenapi-schemas %}
 
-Whether a point counts as trip or as parking is decided by the Navixy platform's [parking detection](https://www.navixy.com/docs/user/web-interface-docs/devices-doc/parking-detection/) settings.
+Whether a point counts as trip or as parking is decided by the Navixy platform's [parking detection](https://navixy.com/docs/user/guide/devices-and-settings/location-and-movement/parking-detection) settings.
 
 ## API actions
 

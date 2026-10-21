@@ -38,6 +38,6 @@ Currently, the frontend does not indicate when the returned event list has been 
 
 ## Links
 
-[API- Tracker events](https://navixy.com/docs/navixy-api/user-api/backend-api/resources/commons/history/history_tracker)
+[API- Tracker events](https://navixy.com/docs/navixy-api/user-api/resources/commons/history/history_tracker)
 
 [Event History](https://navixy.com/docs/user/guide/tracking/history-view/event-history#event-details)

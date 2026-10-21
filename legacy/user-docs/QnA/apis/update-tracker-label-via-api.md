@@ -25,5 +25,5 @@ Safe bulk approach:
 
 ## Links
 
-* [`tracker/list`](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker#list)
-* [`tracker/settings/update`](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/tracking/tracker/settings/index#update)
+* [`tracker/list`](https://www.navixy.com/docs/navixy-api/user-api/resources/tracking/tracker#list)
+* [`tracker/settings/update`](https://www.navixy.com/docs/navixy-api/user-api/resources/tracking/tracker/settings#update)

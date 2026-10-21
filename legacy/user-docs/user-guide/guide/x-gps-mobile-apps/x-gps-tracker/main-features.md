@@ -26,7 +26,7 @@ The **Map** section contains the following options:
 
 1. **Go instantly to your current location.** Available only when the tracking is enabled in the settings.
 2. **Zoom Map.** You can zoom in or out using the **+** and **-** buttons.
-3. **Check-in.** To learn more about this feature, see [Developer Documentation](https://www.navixy.com/docs/navixy-api/user-api/backend-api/resources/field-service/checkin).
+3. **Check-in.** To learn more about this feature, see [Developer Documentation](https://www.navixy.com/docs/navixy-api/user-api/resources/field-service/checkin).
 4. **Map.** Select one of the available maps by tapping the button in the lower left corner.
 {% endcolumn %}
 
