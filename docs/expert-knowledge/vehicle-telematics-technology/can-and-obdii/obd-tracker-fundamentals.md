@@ -93,7 +93,7 @@ Although certain functions vary from device to device, GPS tracking providers ca
 
 ### GPS tracking
 
-Every common OBD2 device on the market transmits [GPS location](https://www.navixy.com/asset-gps-tracking/features/). Depending on the device settings and use case, this could simply mean updated GPS coordinates on demand or live tracking on the map.
+Every common OBD2 device on the market transmits [GPS location](https://navixy.com/en/asset-gps-tracking/). Depending on the device settings and use case, this could simply mean updated GPS coordinates on demand or live tracking on the map.
 
 To provide better accuracy, as well as faster and more reliable positioning, modern OBD devices support advanced technologies including multiple GNSS networks, Assisted GPS, LBS / Cell ID, and better sensitivity thanks to newer GPS modules or dual orthogonal GPS antennas inside the device.
 
