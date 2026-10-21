@@ -8,7 +8,6 @@
 # ingest and side-effect contexts are not exposed here.
 #
 # Module prefix `Iot` on every declaration
-# `Mutation.iotLogic` — lives in nvx4-bdr.graphql, which owns the roots.
 #
 # Types it references but does not declare: `Device` and `DeviceOrder` from nvx4-bdr.graphql, and
 # the kernel's `Node`, `Titled`, `Versioned`, `Connection`, `Edge`, `PageInfo`, `CountInfo`,
@@ -19,7 +18,7 @@
 # Which devices enter a flow belongs to a data source node and is stored as rows in
 # `iotlogic.device_flow_links`, not inside the graph. A data source may hold up to 25 000 devices,
 # which is why no read returns the list inline. Link rows outlive the devices they name — nothing
-# prunes them — and the fields below say where that shows; see
+# prunes them — and the fields below say where that shows.
 #
 # ACCESS
 # ------
@@ -245,8 +244,7 @@ type IotLogicFlowNodePosition {
   y: Int!
 }
 
-# The domain calls this an edge. The API cannot: `IotLogicFlowEdge` is the Relay edge of
-# `IotLogicFlowConnection` below, and a second type ending in `Edge` that carries no `node`/`cursor`
+# The domain calls this an edge.
 # @category: iot-logic/flows
 "A directed connection between two nodes of the graph."
 type IotLogicFlowTransition {

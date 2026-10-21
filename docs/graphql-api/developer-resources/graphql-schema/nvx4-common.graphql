@@ -3,8 +3,8 @@
 # =============================================================================
 #
 # Types, interfaces, scalars and the directive used by more than one module,
-# plus the pagination/identity contract. Extracted from nvx4-bdr.graphql and
-# `Latitude`, `Longitude`, `CountryCode`, `EmailAddress`, `HexColorCode`, `Locale`, with the
+# plus the pagination/identity contract.
+# Three groups do not fit it:
 # Each is read by a BDR type and by no other module's SDL; `Locale`'s consumer is the not-yet-written
 # `UserSettings` that 0.6.5 removed `User.locale` in favour of. "Used by a module" there means the
 # module's own SDL names the type: reachability through the type graph reaches almost everything
@@ -463,7 +463,7 @@ type Money {
 # =============================================================================
 #
 # Vocabulary only — the engine (custom_field_definition, FK-bound to BDR's own
-# workspace/ci_base/ci_entity_type/actor tables) stays in BDR. See
+# workspace/ci_base/ci_entity_type/actor tables) stays in BDR.
 #
 # DeviceCustomFieldValue, FieldParamsDevice and FieldParamsReference stay in nvx4-bdr.graphql —
 # they name BDR entity types (Device, CatalogItem) and would make the kernel depend on BDR. They

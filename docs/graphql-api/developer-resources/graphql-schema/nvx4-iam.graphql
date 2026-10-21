@@ -3,9 +3,11 @@
 # Version: 0.4.1
 # =============================================================================
 #
+# The organization and the workspace these fields act in are always
+# the token's `organization_id` and `workspace_id` claims; no field here takes either.
 #
 # Module prefix `Iam` on every declaration
-# `Mutation.iam` — lives in nvx4-bdr.graphql, which owns the roots. IAM's global registries, for
+# IAM's global registries, for
 # staff only, extend `IamQuery` and `IamMutation` from nvx4-iam-admin.graphql, which the SDK does not
 # consume; the two files share this version.
 #
@@ -19,11 +21,11 @@
 # region.
 # `IamRole` does not implement `Node`: a role is reached only through this namespace. `actorId` is a
 # `UUID`: Console mints actor ids under its own scheme, as for `ConsoleWorkspaceOperation.actorUserId`.
-# `IamRole.organizationId` is an `ID` like `ConsoleOrganization.id`: Console's organization id, with
 #
 # PAGINATION
 # ----------
-# `roles` takes the same arguments and rules as the `console` connections (nvx4-console.graphql
+# `roleHolders` pages forward only, over IAM's own page
+# token: `last` and `before` are refused with VALIDATION_ERROR, and `total` is always null.
 #
 # ERRORS
 # ------

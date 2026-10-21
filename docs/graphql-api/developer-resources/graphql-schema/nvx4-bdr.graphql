@@ -221,7 +221,7 @@
 #   description; retry logic must not assume a repeated call against one of them is safe.
 #
 #   What puts a mutation in this section is that the row it manages carries no `version` of its
-#   own. `memberCreate`/`memberRemove` read as relationship-shaped but do not qualify — a
+#   own. `memberCreate`/`memberRemove` read as relationship-shaped but do not qualify.
 
 # =============================================================================
 # 3. LOCALIZATION
@@ -242,7 +242,7 @@
 #
 # NOT YET HONOURED:
 #   No backend code reads these headers yet, so the description above is the target behaviour, not
-#   the current one. Header-based localization is planned after the MVP release
+#   the current one.
 #
 # =============================================================================
 
@@ -287,7 +287,7 @@
 #                For execution errors, this is the path from root to the
 #                field that raised the error. Array elements use 0-based index.
 #                The first segment is always the module namespace the field was
-#                reached through (e.g. "bdr", "billing") — see
+#                reached through (e.g. "bdr", "billing").
 #                Example: ["bdr", "devices", "edges", 0, "node", "customFields"]
 #
 #   extensions - Optional but ALWAYS provided by this API. Contains structured
@@ -497,7 +497,7 @@
 # EXAMPLE 5: Multiple errors (batch mutation via aliases)
 #
 #   Batching aliases the *namespace* field, not the leaf mutation — at most one field may be
-#   selected inside a single `bdr { ... }` (or `billing { ... }`) block per operation; see
+#   selected inside a single `bdr { ... }` (or `billing { ... }`) block per operation.
 #
 #   Request:
 #     mutation {
@@ -706,13 +706,8 @@
 
 
 
-# `Latitude`, `Longitude`, `CountryCode`, `EmailAddress`, `HexColorCode` and `Locale` all moved to
-# BDR type and by no other module's SDL, so none meets the kernel's "used by more than one module"
-# rule. `Locale`'s consumer is deferred rather than present — `User.locale` was removed in 0.6.5 to
-# come back as part of `UserSettings`, which is not written yet
+# `Locale`'s consumer is deferred rather than present.
 
-# `HexColorCode`, and the consumers it names — `UserSettings.timezone` and schedule entities — are
-# BDR's too, so uncommenting it joins that exception rather than meeting the rule.
 
 
 # @category: bdr/schedules
@@ -835,23 +830,17 @@ enum AuditEventType {
   RESTORED
 }
 
-# `CustomFieldDefinitionDeleteBehavior`, `FieldOperator` and `GeoJsonGeometryType` moved to
 
 # =============================================================================
 # 9. INTERFACES
 # =============================================================================
 
-# — custom-field vocabulary. `Titled` moves as kernel vocabulary in its own right, not merely as a
-# bridge for `CustomFieldDefinition` — its exclusion from the original kernel extraction is now
 
-# `StringCustomFieldValue`, `DecimalCustomFieldValue`, `IntegerCustomFieldValue`,
-# `BooleanCustomFieldValue`, `DateCustomFieldValue`, `DateTimeCustomFieldValue`,
-# `GeoJsonCustomFieldValue` and `OptionsCustomFieldValue` moved to
 
 # `DeviceCustomFieldValue` stays here, not in the kernel — it names `Device`, a BDR entity type,
 # so moving it would make the kernel depend on BDR. It still implements (not `extend`s) the
 # kernel's `CustomFieldValue` interface from this file — legal GraphQL, since `implements` does
-# not change the interface's own shape. A module file must never `extend type` a kernel type
+# not change the interface's own shape.
 # @category: bdr/custom-fields
 "DEVICE custom-field value (primary-capable)."
 type DeviceCustomFieldValue implements CustomFieldValue {
@@ -2455,15 +2444,12 @@ type Schedule implements Node & Titled & Versioned {
 # 15. CUSTOM FIELDS
 # =============================================================================
 #
-# `FieldTypeAvailability`, `FieldParams`, `FieldParamsString`, `FieldParamsText`,
-# `FieldParamsDecimal`, `FieldParamsInteger`, `FieldParamsBoolean`, `FieldParamsDate`,
-# `FieldParamsDatetime`, `FieldParamsGeojson`, `FieldParamsOptions` and `FieldOption`.
 #
 # `FieldParamsDevice` and `FieldParamsReference` stay here — see the comment on each below.
 
 # `FieldParamsDevice` stays here, not in the kernel — its `refSubtypes` field returns
 # `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR. It
-# still implements (not `extend`s) the kernel's `FieldParams` interface from this file — legal
+# still implements (not `extend`s) the kernel's `FieldParams` interface from this file.
 # @category: bdr/custom-fields
 "Parameters for DEVICE field type."
 type FieldParamsDevice implements FieldParams {
@@ -2478,8 +2464,7 @@ type FieldParamsDevice implements FieldParams {
 }
 
 # `FieldParamsReference` stays here, not in the kernel — its `refSubtypes` field returns
-# `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR. It
-# still implements (not `extend`s) the kernel's `FieldParams` / `MultiValue` interfaces from this
+# `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR.
 # @category: bdr/custom-fields
 "Parameters for REFERENCE field type."
 type FieldParamsReference implements FieldParams & MultiValue {
@@ -2970,14 +2955,11 @@ enum AuditEventOrderField {
   OCCURRED_AT
 }
 
-# `CustomFieldFilterValue` and `CustomFieldFilter` (and the operator-rules comment that followed
 
 # =============================================================================
 # 18. MUTATION INPUTS
 # =============================================================================
 
-# `CustomFieldsPatchInput`, `CustomFieldValueInput`, `CustomFieldValueDataInput`,
-# `DeviceValueInput`, `ReferenceValueInput` and `ReferenceListValueInput` moved to
 
 # --- Device ---
 
@@ -3401,13 +3383,6 @@ input DeviceRelationRemoveInput {
   id: ID!
 }
 
-# `CustomFieldDefinitionInput`, `CustomFieldDefinitionCreateData`,
-# `CustomFieldDefinitionUpdateData`, `CustomFieldDefinitionDeleteData`,
-# `CustomFieldDefinitionArchiveData`, `CustomFieldDefinitionRestoreData`, `FieldParamsInput`,
-# `StringFieldParamsInput`, `TextFieldParamsInput`, `DecimalFieldParamsInput`,
-# `IntegerFieldParamsInput`, `BooleanFieldParamsInput`, `DateFieldParamsInput`,
-# `DateTimeFieldParamsInput`, `GeoJsonFieldParamsInput`, `OptionsFieldParamsInput`,
-# `FieldOptionInput`, `DeviceFieldParamsInput` and `ReferenceFieldParamsInput` moved to
 
 # --- Catalog Item CRUD Inputs ---
 
@@ -3707,7 +3682,7 @@ input CatalogItemDeleteInput {
 # classifies any schemaFiles entry containing a `schema { ... }` block or a type named `Query` as
 # "a schema" and errors if more than one qualifies — this file already qualifies via `type Query`.
 #
-# `Subscription` is the one root named here and declared elsewhere — nvx4-tracking.graphql, as of
+# `Subscription` is the one root named here and declared elsewhere.
 schema {
   query: Query
   mutation: Mutation
@@ -4914,12 +4889,11 @@ type BdrMutation {
 # `Query.tracking` are, and the exception is structural rather than stylistic: a subscription's
 # root field is the event source and must resolve to the stream itself. A wrapper object would
 # have to be emitted once and then stream from a nested field, which the specification does not
-# provide for. Module ownership therefore lives in the field name — `trackingAssetStates`, not
+# provide for. Module ownership therefore lives in the field name.
 #
 # `type Subscription` itself is declared in nvx4-tracking.graphql as of 0.11.0, beside the batch
 # it emits — the one root type this file does not hold. The `schema { … }` block above still names
-# it, and remains this contract's only such block. Moving it back means moving `Subscription`'s
-# every emitted type with it, or splitting a root field from its return types across two files
+# it, and remains this contract's only such block.
 
 # =============================================================================
 

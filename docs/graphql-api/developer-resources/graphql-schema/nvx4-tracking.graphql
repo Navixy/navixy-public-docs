@@ -13,9 +13,6 @@
 #
 # ONE STATE, NOT TWO
 # ------------------
-# nvx3 split the same picture across a beacon state (gps, connection, movement, ignition,
-# input/output bitmasks) and a separate readings channel (inputs / states / virtualSensors /
-# counters), which is why the battery level exists twice there and virtual sensors have to look in
 #
 # WHAT THIS MODULE ASSUMES OF OTHERS
 # ----------------------------------
@@ -24,6 +21,7 @@
 # `Connection`, `Edge`, `PageInfo`, `CountInfo`.
 
 # =============================================================================
+# 1. VALUE MODEL
 # =============================================================================
 
 # @category: tracking/readings
@@ -152,6 +150,7 @@ enum TrackingQuantity {
 }
 
 # =============================================================================
+# 2. READINGS
 # =============================================================================
 
 # @category: tracking/readings
@@ -180,19 +179,14 @@ type TrackingReading {
   shown in — never a default for this one.
   """
   unit: String
-  """
-  Shown only when that type differs from the one `value`'s own member already implies, or when it
-  equals the Appendix A pin regardless — a sender that declares exactly the implied type, for a
-  name Appendix A does not pin, reads as null either way, the same as declaring none at all.
-  """
   declaredType: TrackingValueType
-  # No per-value `computed` flag. NTF carries one (`Field.computed`, "the sender computed this
-  # rather than observing it"), but the archive does not store it and cannot reconstruct it
-  # `TrackingFieldDefinition.computed`, "this field is always computed by the platform" — and
+  # No per-value `computed` flag.
+  # What survives is the dictionary-level statement —
+  # `TrackingFieldDefinition.computed`, "this field is always computed by the platform".
   #
   # This is the current state, not the intended end state: the decision is that the archive should
   # store the flag the wire already carries, so that a stream's opening load and its later updates
-  # describe a value the same way. The field returns here, nullable, once storage keeps it
+  # describe a value the same way.
   """
   When this value was last received. A field carries no timestamp of its own — this is the event
   time of the message it last arrived in, which across a last-known state is *not* the same for
@@ -811,7 +805,7 @@ type TrackingAssetStateSnapshot {
 # the subscription" — is per entity and has, by construction, no state to travel in.
 #
 # Both were missing from the first draft of this contract. The batch marker would have been
-# additive and could have waited; the removal signal would not have been, which is why they landed
+# additive and could have waited.
 
 # @category: tracking/state/streams
 """
@@ -960,7 +954,7 @@ enum TrackingAssetStateOrderField {
 # 5. TRIPS AND STOPS
 # =============================================================================
 #
-# nvx4 stores no track entity — there is no `track_id` the way nvx3 had one, and no separate
+# nvx4 stores no track entity.
 #
 # Always computed on read, never precomputed. That is what makes a request-level policy possible
 # at all: precomputed segments carry one policy, and no override could apply to them. The cost is
@@ -1316,7 +1310,7 @@ type TrackingQuery {
 # Deliberately NOT namespaced behind a `Subscription.tracking` wrapper, unlike Query/Mutation.
 # A subscription's root field is the event source and must resolve to a stream; a wrapper object
 # would have to emit one object and then stream from a nested field, which the spec does not
-# provide for. Module ownership therefore lives in the field name — `trackingAssetStates`, not
+# provide for. Module ownership therefore lives in the field name.
 #
 # `type Subscription` is declared here, in the module that owns the only stream, while
 # `schema { … subscription: Subscription }` stays in nvx4-bdr.graphql with the other root wiring.
@@ -1334,13 +1328,10 @@ type TrackingQuery {
 #
 # The guards that enumerate the roots, or that assumed all three are declared in one file, are held
 # to this arrangement:
-#     — and its `MustStartWith` exemption, which lets this file carry that one unprefixed name
 #
 # THE WORKSPACE IS NOT AN ARGUMENT
 # -------------------------------
-# Neither the query side nor this input names a workspace. The request acts on the workspace the
-# caller's token names, resolved once per request by `CallerWorkspaceResolver` and carried on
-# `RequestContext.workspaceId`, exactly as `BdrQuery` has done since 0.10.0
+# Neither the query side nor this input names a workspace.
 #
 # A subscription outlives the request that opened it, so the workspace is **captured when the
 # stream opens and held for its life**, not re-read per emission: there is no request context on
@@ -1353,9 +1344,6 @@ type TrackingQuery {
 # forty readings each re-sends all three states when one input bit flips. `readingCodes` and
 # `batchWindowMs` are the two levers against it.
 #
-# describes each entity in it; the batch adds the two things no state can say — that the opening
-# snapshot is still arriving, and that it is complete — and each change inside adds the one thing a
-# *missing* state has to say, that the entity is gone.
 #
 # "Full state" includes every reading the device has sent, each as of the message it last arrived
 # in. A VIN sent once stays in every later emission although the device does not resend it, so a
@@ -1380,7 +1368,7 @@ type TrackingQuery {
 #     refresh — a client renews the token and subscribes again. Access revoked for one entity is
 #     not this case: that is a per-entity `TrackingStreamRemoval` with `ACCESS_REVOKED`, and the
 #     stream stays open.
-#   * A silent WebSocket client. `/graphql/ws` closes a connection whose client has stopped
+#   * A silent WebSocket client.
 
 """
 The root subscription type. One field, and it is this module's.
@@ -1467,11 +1455,10 @@ input TrackingAssetStateSubscriptionInput {
 # =============================================================================
 #
 # `Query.tracking` and the `schema { … }` block live in nvx4-bdr.graphql, which owns root wiring
-# for every module (`Query.billing` is the precedent). `type Subscription` is the one root type
+# for every module (`Query.billing` is the precedent).
 #
 # There is no `Mutation.tracking`. Commands to devices — send a command, toggle an output — are a
-# separate surface; `TrackingEvent.commandId` points at one without creating it. The one write
-# this schema implies is the per-device segmentation policy behind
+# separate surface; `TrackingEvent.commandId` points at one without creating it.
 #
 # `Device.status` is untouched. The device's administrative lifecycle is a BDR catalog item;
 # whether a first message should move it from `not_activated` to `active` is a question for core,
@@ -1482,6 +1469,10 @@ input TrackingAssetStateSubscriptionInput {
 # 9. EXTENDING THIS CONTRACT
 # =============================================================================
 #
+# In GraphQL the additive changes are: a new field on an
+# object type, a new optional argument, a new type, a new input field that is nullable or carries
+# a default. None disturbs an existing client, because a client receives only what its own
+# document selects.
 #
 # Exactly two constructs break one, and this file uses both:
 #
@@ -1514,5 +1505,4 @@ input TrackingAssetStateSubscriptionInput {
 # the schema's own making. `TrackingAssetStateChange` promises exactly one of `state` and `removal`
 # non-null; a third outcome would leave both null on every client built against this version,
 # breaking that promise as a new union member breaks a client with no `... on NewType` branch and
-# no `__typename` fallback. The pair was chosen for handling — `assetId` in one place, no fragments
-# — and a third outcome, should one be needed, is a versioned change whose rule for old clients is
+# no `__typename` fallback. The pair was chosen for handling.

@@ -104,7 +104,8 @@ Subscribes the caller's own workspace to a plan, optionally on a branch.
   cannot put a tenant the token does not name onto a paid plan. A token carrying no workspace claim
   is refused.
 
-  With it disabled, any token naming a workspace can put that workspace on a paid plan.
+  The caller also needs a role that grants the `billing` product. Without one, the call fails
+  with `PERMISSION_DENIED`.
 
   The plan is validated before the subscription is taken: the plan, or the branch, must be a row
   that `myAvailablePlans` offers the workspace; the branch must belong to the plan; and no product

@@ -9,7 +9,7 @@
 # `GET /v1/me/accessible-workspaces`, `GET /v1/organizations/{id}/members`,
 # `GET /v1/workspaces/{id}/products`, `GET /v1/product-catalog`, `GET /v1/workspace-operations/{id}`)
 # reports, and `POST`/`DELETE /v1/workspaces/{id}/products[/{productId}]` mutate. nvx4 wraps these
-# endpoints rather than reimplementing Console's authorization — see
+# endpoints rather than reimplementing Console's authorization.
 #
 # Module prefix `Console` on every declaration
 #
@@ -20,10 +20,11 @@
 # --------
 # Every organization id here is an `ID`: `ConsoleOrganization.id`, `ConsoleWorkspace.organizationId`,
 # `ConsoleWorkspaceOperation.organizationId` and the `organizationId` argument of
-# `accessibleWorkspaces`. Console mints organization ids in the UuidV8 layout with the `ORGN`
+# `accessibleWorkspaces`.
 # An argument that is not one is refused with VALIDATION_ERROR; an answer from Console naming one
-# that is not is Console's fault and fails with SERVICE_UNAVAILABLE. `ConsoleWorkspace.id` is `ID`: nvx4
-# validates Console's workspace ids as `WorkspaceId`, the same `WSPC`-discriminated type `Workspace.id`
+# that is not is Console's fault and fails with SERVICE_UNAVAILABLE.
+# Console keeps plain-v4 workspaces from before `WSPC` readable; a workspace
+# whose id is not a `WorkspaceId` is left out of `accessibleWorkspaces`, as it is of the workspaces
 # `me.organizations` lists (`AccessibleWorkspace.id`). `ConsoleOrganization` implements `Node`:
 # `node(id:)` and `nodes(ids:)` resolve an organization id among the caller's own organizations, the
 # ones `accessibleOrganizations` lists (see the type's description). `ConsoleWorkspace` does not:
@@ -78,8 +79,7 @@
 #   - `before` requires `last` — a lone `before` has no direction to page in.
 #   - Whichever of `first`/`last` is given (or the default, when neither is) must be 1-100.
 # `edge.cursor` is Console's own `item_cursors[i]`, one per item; `startCursor`/`endCursor` are
-# Console's own first/last item cursor for the page — not derived from the edges themselves, so they
-# still bound the page even when this facade drops every edge on it (see `ConsoleWorkspace.id` in
+# Console's own first/last item cursor for the page.
 # `total` is `CountInfo(count, EXACT)` on `ConsoleOrganizationConnection`;
 # `ConsoleWorkspaceConnection.total` is `APPROXIMATE` instead — see its own field description for why.
 # `members` is the exception to Console-side paging: Console answers the whole member list at once,
