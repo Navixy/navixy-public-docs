@@ -36,7 +36,7 @@ The node sends its commands on every message that reaches it, not only when a va
 
 ## Where it sits in a flow
 
-<figure><img src="../../.gitbook/assets/iot-logic-device-action-in-flow.png" alt="A flow with an IF/THEN Logic node whose then branch leads to a Device Action node, while the else branch continues to an Output Endpoint node."><figcaption>A Device Action node on the then branch</figcaption></figure>
+<figure><img src="../../.gitbook/assets/iot-logic-device-action-in-flow.png" alt="A flow with an IF/THEN Logic node named Speeding. Its then branch leads to a Device Action node named Speed alarm and to an Output Endpoint node named Tracking. Its else branch leads to the same Output Endpoint node."><figcaption>The then branch reaches the Device Action node and an Output Endpoint node</figcaption></figure>
 
 The **Device Action** node ends a path: nothing can follow it. Put an **IF/THEN Logic** node before it, so that the commands go out only for the messages that meet a condition. If no **IF/THEN Logic** node comes before it on the path, the node sends its commands on every message.
 
@@ -53,7 +53,7 @@ The settings dialog has two tabs:
 {% endcolumn %}
 
 {% column width="42%" %}
-<figure><img src="../../.gitbook/assets/iot-logic-device-action-form.png" alt="The Device Action node settings dialog showing the Standard tab, with an action type selector and its parameters."><figcaption>The actions of the node</figcaption></figure>
+<figure><img src="../../.gitbook/assets/iot-logic-device-action-form.png" alt="The Device Action node settings dialog on the Standard tab: the node name, the Node ID, Action 1 switching output 2 on, and Action 2 sending a GPRS command."><figcaption>The actions of the node</figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -78,7 +78,7 @@ Turns a digital output of the device on or off, such as a relay, an immobilizer,
 | **Output number** | The output to switch, 1 to 8. A number that another **Switch output** action of this node uses isn't offered |
 | **Signal off** / **Signal on** | The state to set. A new action starts at **Signal off** |
 
-<figure><img src="../../.gitbook/assets/iot-logic-device-action-switch-output.png" alt="The Switch output action configured in the Device Action node, showing the output number selector and the signal on and off toggle."><figcaption>Switch an output on or off</figcaption></figure>
+<figure><img src="../../.gitbook/assets/iot-logic-device-action-switch-output.png" alt="Action 1 of a Device Action node: the Switch output type, output number 2, and the switch set to Signal on."><figcaption>Switch an output on or off</figcaption></figure>
 
 #### Send GPRS command
 
@@ -88,7 +88,7 @@ Sends a text command to the device over GPRS, exactly as you write it.
 | --- | --- |
 | **Command string** | The command text. Required, up to 512 characters |
 
-<figure><img src="../../.gitbook/assets/iot-logic-device-action-gprs.png" alt="The Send GPRS command action configured in the Device Action node, showing the command string field."><figcaption>Send a command string</figcaption></figure>
+<figure><img src="../../.gitbook/assets/iot-logic-device-action-gprs.png" alt="Action 2 of a Device Action node: the Send GPRS command type, with the command string getgps."><figcaption>Send a command string</figcaption></figure>
 
 The command text depends on the device model. Check the manufacturer's documentation for the exact string, and test it on one device before you use it for a fleet. Use only characters from a standard English keyboard: other characters don't arrive as typed. A command can't include values from the message: the text is sent as written.
 
