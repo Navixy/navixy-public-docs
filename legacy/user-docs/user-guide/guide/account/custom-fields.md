@@ -55,4 +55,4 @@ To add a new custom field, navigate to **Account settings → Custom fields**.
 ## FAQs and troubleshooting
 
 * **Can custom fields be added to other objects besides places?** Currently, custom fields can only be added to places, with plans to expand this functionality in the future.
-* **Can I fill in Custom fields from CRM systems via Navixy API?** Yes, you can fill custom fields in Navixy by making API calls to synchronize data from your CRM. This enables seamless data transfer and updates, ensuring that all information is up-to-date and accessible in both systems. Read more in [Navixy API Documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/general/readme).
+* **Can I fill in Custom fields from CRM systems via Navixy API?** Yes, you can fill custom fields in Navixy by making API calls to synchronize data from your CRM. This enables seamless data transfer and updates, ensuring that all information is up-to-date and accessible in both systems. Read more in [Navixy API Documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/).

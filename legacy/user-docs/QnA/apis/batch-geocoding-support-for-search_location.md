@@ -24,4 +24,4 @@ If you need to process multiple coordinates, do it in your code:
 
 ## Linksss
 
-* [`geocoder/search_location`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/geocoder#search_location)
+* [`geocoder/search_location`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/geocoder#post-geocoder-search_location)

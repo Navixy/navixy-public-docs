@@ -115,7 +115,7 @@ For details about open-source usage of Dashboard Studio, see [Open-source Studio
 The application source code and deployment documentation are available through the project repository at [https://github.com/Navixy/navixy-iot-query-dashboard](https://github.com/Navixy/navixy-iot-query-dashboard).
 
 {% hint style="info" %}
-Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/backend-api/resources/commons/user/applications/app-connect) for user authentication.
+Use Navixy's [App Connect](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/user/applications/app-connect) for user authentication.
 {% endhint %}
 
 ## Next steps

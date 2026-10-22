@@ -34,4 +34,4 @@ Summary:
 
 * [Audit log list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/user/audit/audit_log)
 * [Output triggering (UI)](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/events-and-notifications/inputs-and-outputs/output-triggering)
-* [History user list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/history/history-user#list)
+* [History user list](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/history/history-user#post-history-user-list)

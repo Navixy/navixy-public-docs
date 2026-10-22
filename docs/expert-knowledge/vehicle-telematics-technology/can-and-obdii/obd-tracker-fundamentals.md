@@ -99,7 +99,7 @@ To provide better accuracy, as well as faster and more reliable positioning, mod
 
 ### CAN bus information
 
-One of the main benefits of an OBD device is its direct connection to CAN bus data. This not only provides access to fuel, engine, coolant, battery, and other parameters, but also vehicle identification number (VIN), malfunction indicator (MIL), and DTC codes for diagnostics. Basically, what a driver sees on the dashboard may be sent to the cloud to further improve [fleet management](https://www.navixy.com/fleet-management/features/) operations.
+One of the main benefits of an OBD device is its direct connection to CAN bus data. This not only provides access to fuel, engine, coolant, battery, and other parameters, but also vehicle identification number (VIN), malfunction indicator (MIL), and DTC codes for diagnostics. Basically, what a driver sees on the dashboard may be sent to the cloud to further improve [fleet management](https://navixy.com/en/fleet-management/) operations.
 
 ### Geofences
 

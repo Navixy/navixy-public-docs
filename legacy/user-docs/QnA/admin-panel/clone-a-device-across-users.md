@@ -21,4 +21,4 @@ If you need to clone a device across panels (for example, between two separate r
 
 ## Links
 
-* [Panel API: tracker clone](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/panel-api/resources/tracker#clone)
+* [Panel API: tracker clone](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/panel-api/resources/tracker#post-panel-tracker-clone)

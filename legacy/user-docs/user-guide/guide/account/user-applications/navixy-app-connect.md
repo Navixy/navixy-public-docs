@@ -76,6 +76,6 @@ Dashboard Studio serves as an example of what's possible with Navixy App Connect
 
 If you're a developer interested in integrating your application with Navixy App Connect, the following resources provide complete implementation guidance:
 
-* [API Documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/user/applications/app-connect#required-api-endpoint): Technical specifications and implementation guidelines, endpoints and parameters
+* [API Documentation](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/commons/user/applications/app-connect#authentication-endpoint): Technical specifications and implementation guidelines, endpoints and parameters
 
 Applications you develop can be used privately within your organization or published to the [Navixy Marketplace](https://marketplace.navixy.com/) for broader distribution. Marketplace applications undergo review to ensure they meet platform standards and security requirements.

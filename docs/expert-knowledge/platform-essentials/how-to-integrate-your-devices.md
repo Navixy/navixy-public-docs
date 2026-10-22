@@ -79,4 +79,4 @@ Whether you're a fleet operator, a system integrator, or a hardware manufacturer
 ## See also
 
 * [Supported devices](https://www.navixy.com/devices/): the models and manufacturers Navixy integrates today.
-* [Contact Navixy](https://www.navixy.com/learn-more/contact) to start an integration for a device that isn't listed.
+* [Contact Navixy](https://navixy.com/en/contact) to start an integration for a device that isn't listed.

@@ -26,5 +26,5 @@ To build a list of trackers that have readings:
 
 ## Links
 
-* [`tracker/sensor/readings/batch_list`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/readings#batch_list)
+* [`tracker/sensor/readings/batch_list`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/readings#post-tracker-readings-batch_list)
 * [Sensor data guide](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/guides/data-retrieval/sensor-data)
