@@ -107,6 +107,7 @@ Assigns a role to a member. IAM refuses the assignment in these cases, and the e
 * An actor who isn't a member of your organization: `CONFLICT` with `dependencyCode` `NOT_A_MEMBER`. IAM checks this before the role.
 * The Owner role, or another system role: `CONFLICT` with `dependencyCode` `SYSTEM_ROLE`.
 * A role that is inactive, belongs to another organization, or doesn't reach your workspace: `CONFLICT` with `dependencyCode` `FAILED_PRECONDITION`.
+* A role that you couldn't grant yourself, or an assignment that would last longer than your own access to the role: `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`. A permanent assignment needs your own access to the role to be permanent.
 
 ```graphql
 memberRoleAssign(
@@ -159,8 +160,11 @@ The assignment as IAM stored it.
 
 ### memberRoleRevoke
 
-Revokes a role from a member. NOT_FOUND when the actor does not hold it; CONFLICT,
-  `dependencyCode` LAST_OWNER, when it would leave the organization without an Owner.
+Revokes a role from a member. IAM refuses the revocation in these cases, and the error has `dependency: "iam"`:
+
+* The member doesn't hold the role: `NOT_FOUND`.
+* The revocation would leave the organization without an Owner: `CONFLICT` with `dependencyCode` `LAST_OWNER`.
+* A role that you couldn't grant yourself: `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`.
 
 ```graphql
 memberRoleRevoke(

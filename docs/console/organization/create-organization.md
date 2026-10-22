@@ -19,11 +19,11 @@ To create an independent organization, follow these steps:
 
 1. In the top navigation bar, select your organization from the left dropdown menu.
 2. On the sidebar, click **Organization**, then click **Create organization**.
-3. Keep **Independent organization** selected and enter an **Organization name** of up to 256 characters.
+3. Keep **Independent organization** selected and enter an **Organization name** of up to 128 characters.
 4. Select a **Region** for the first workspace. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 5. Keep the selected **Deployment** option.
 6. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-7. On the same step, enter a **Workspace name** of up to 256 characters. By default, it's the organization's name.
+7. On the same step, enter a **Workspace name** of up to 128 characters. By default, it's the organization's name.
 8. Click **Launch**.
 
 The new workspace is on the default tariff plan. To open the organization, click **Go to organization**.
@@ -40,12 +40,12 @@ To create a child organization, follow these steps:
 
 1. In the top navigation bar, select your organization from the left dropdown menu.
 2. On the sidebar, click **Organization**, then click **Create organization**.
-3. Select **Child organization** and enter an **Organization name** of up to 256 characters.
+3. Select **Child organization** and enter an **Organization name** of up to 128 characters.
 4. To let the new organization create child organizations of its own, select **Channel partner**.
 5. Select a **Region** for the first workspace. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
 6. Keep the selected **Deployment** option.
 7. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-8. On the same step, enter a **Workspace name** of up to 256 characters. By default, it's the organization's name.
+8. On the same step, enter a **Workspace name** of up to 128 characters. By default, it's the organization's name.
 9. Click **Launch**.
 
 The child organization appears under **Child organizations** in the left dropdown menu of the top navigation bar. You are its Owner, and its first workspace is on the default tariff plan. To open the child organization, click **Go to organization**.

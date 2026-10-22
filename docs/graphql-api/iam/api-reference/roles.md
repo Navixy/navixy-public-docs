@@ -90,7 +90,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing. |
 | `isSystem` | `Boolean!` | Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and `roleDelete` refuse such a role with CONFLICT. |
 | `version` | `Int!` | The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`. |
-| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace ID. It's empty when Navixy Console has deleted every workspace that the role named. Such a role reaches nothing, and `roleUpdate` accepts it only with a workspace named again. |
 | `productScopes` | [IamRoleProductScopes](role-access.md#iamroleproductscopes)! | The products the role grants. |
 | `holderCount` | [Long](../../core-api-reference/common.md#long)! | How many actors hold the role now, as IAM counts them: every principal type and every holder whose assignment has not expired, including people who have since left the organization or were invited and never joined. IAM holds assignments, not memberships. It can therefore be larger than the number of members a member list shows. 0 for an inactive role, which IAM does not count. |
 
@@ -124,7 +124,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing. |
 | `isSystem` | `Boolean!` | Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and `roleDelete` refuse such a role with CONFLICT. |
 | `version` | `Int!` | The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`. |
-| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace ID. It's empty when Navixy Console has deleted every workspace that the role named. Such a role reaches nothing, and `roleUpdate` accepts it only with a workspace named again. |
 | `productScopes` | [IamRoleProductScopes](role-access.md#iamroleproductscopes)! | The products the role grants. |
 | `holderCount` | [Long](../../core-api-reference/common.md#long)! | How many actors hold the role now, as IAM counts them: every principal type and every holder whose assignment has not expired, including people who have since left the organization or were invited and never joined. IAM holds assignments, not memberships. It can therefore be larger than the number of members a member list shows. 0 for an inactive role, which IAM does not count. |
 
@@ -164,7 +164,7 @@ own roles do with PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED.
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Omitted or null for none. |
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. |
-| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace ID. IAM refuses an empty selection and a workspace that the organization doesn't own. It checks the grant ceiling first and treats an empty selection as every workspace. So a caller whose own roles don't reach every workspace, or don't reach the named one, gets `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`. Any other caller gets `VALIDATION_ERROR`. |
 | `productScopes` | [IamRoleProductScopesInput](role-access.md#iamroleproductscopesinput)! | The products the role grants. |
 
 </details>
@@ -279,7 +279,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing. |
 | `isSystem` | `Boolean!` | Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and `roleDelete` refuse such a role with CONFLICT. |
 | `version` | `Int!` | The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`. |
-| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace ID. It's empty when Navixy Console has deleted every workspace that the role named. Such a role reaches nothing, and `roleUpdate` accepts it only with a workspace named again. |
 | `productScopes` | [IamRoleProductScopes](role-access.md#iamroleproductscopes)! | The products the role grants. |
 | `holderCount` | [Long](../../core-api-reference/common.md#long)! | How many actors hold the role now, as IAM counts them: every principal type and every holder whose assignment has not expired, including people who have since left the organization or were invited and never joined. IAM holds assignments, not memberships. It can therefore be larger than the number of members a member list shows. 0 for an inactive role, which IAM does not count. |
 
@@ -310,8 +310,7 @@ roleUpdate(
 <summary>IamRoleUpdateInput</summary>
 
 The whole new document of a role: every field replaces the stored one, so an omitted description
-removes it and an empty list empties it. There is no partial update. Refused with CONFLICT when
-`version` is not the stored one, or when the role is a system role.
+removes it and an empty list empties it. There is no partial update. Refused with `CONFLICT` when `version` isn't the stored one, or when the role is a system role. Refused with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED` when the role as stored or as written grants more than your own roles do, so you can't change a role that you couldn't have granted, not even to narrow it. The same refusal applies when the role has holders and the change adds access that your own roles don't cover until the last holder's assignment ends.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -320,7 +319,7 @@ removes it and an empty list empties it. There is no partial update. Refused wit
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Omitted or null removes it. |
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. |
-| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace ID. IAM refuses an empty selection and a workspace that the organization doesn't own. It checks the grant ceiling first and treats an empty selection as every workspace. So a caller whose own roles don't reach every workspace, or don't reach the named one, gets `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`. Any other caller gets `VALIDATION_ERROR`. |
 | `productScopes` | [IamRoleProductScopesInput](role-access.md#iamroleproductscopesinput)! | The products the role grants. |
 
 </details>
@@ -435,7 +434,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing. |
 | `isSystem` | `Boolean!` | Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and `roleDelete` refuse such a role with CONFLICT. |
 | `version` | `Int!` | The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`. |
-| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace ID. It's empty when Navixy Console has deleted every workspace that the role named. Such a role reaches nothing, and `roleUpdate` accepts it only with a workspace named again. |
 | `productScopes` | [IamRoleProductScopes](role-access.md#iamroleproductscopes)! | The products the role grants. |
 | `holderCount` | [Long](../../core-api-reference/common.md#long)! | How many actors hold the role now, as IAM counts them: every principal type and every holder whose assignment has not expired, including people who have since left the organization or were invited and never joined. IAM holds assignments, not memberships. It can therefore be larger than the number of members a member list shows. 0 for an inactive role, which IAM does not count. |
 
@@ -465,8 +464,7 @@ roleDelete(
 
 <summary>IamRoleDeleteInput</summary>
 
-A role to delete. Refused with CONFLICT when `version` is not the stored one, or when the role is
-a system role. Deleting a role also revokes every assignment of it.
+A role to delete. Refused with `CONFLICT` when `version` isn't the stored one, or when the role is a system role. Refused with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED` when you couldn't have granted the role. Deleting a role also revokes every assignment of it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -508,7 +506,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. An inactive role is stored but grants nothing. |
 | `isSystem` | `Boolean!` | Whether IAM provisioned and protects the role: the organization's Owner. `roleUpdate` and `roleDelete` refuse such a role with CONFLICT. |
 | `version` | `Int!` | The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`. |
-| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelection](role-access.md#iamselection)! | The workspaces of the organization the role reaches, by workspace ID. It's empty when Navixy Console has deleted every workspace that the role named. Such a role reaches nothing, and `roleUpdate` accepts it only with a workspace named again. |
 | `productScopes` | [IamRoleProductScopes](role-access.md#iamroleproductscopes)! | The products the role grants. |
 | `holderCount` | [Long](../../core-api-reference/common.md#long)! | How many actors hold the role now, as IAM counts them: every principal type and every holder whose assignment has not expired, including people who have since left the organization or were invited and never joined. IAM holds assignments, not memberships. It can therefore be larger than the number of members a member list shows. 0 for an inactive role, which IAM does not count. |
 
@@ -552,7 +550,7 @@ own roles do with PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED.
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Omitted or null for none. |
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. |
-| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace ID. IAM refuses an empty selection and a workspace that the organization doesn't own. It checks the grant ceiling first and treats an empty selection as every workspace. So a caller whose own roles don't reach every workspace, or don't reach the named one, gets `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`. Any other caller gets `VALIDATION_ERROR`. |
 | `productScopes` | [IamRoleProductScopesInput](role-access.md#iamroleproductscopesinput)! | The products the role grants. |
 
 ---
@@ -562,8 +560,7 @@ own roles do with PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED.
 ### IamRoleUpdateInput
 
 The whole new document of a role: every field replaces the stored one, so an omitted description
-removes it and an empty list empties it. There is no partial update. Refused with CONFLICT when
-`version` is not the stored one, or when the role is a system role.
+removes it and an empty list empties it. There is no partial update. Refused with `CONFLICT` when `version` isn't the stored one, or when the role is a system role. Refused with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED` when the role as stored or as written grants more than your own roles do, so you can't change a role that you couldn't have granted, not even to narrow it. The same refusal applies when the role has holders and the change adds access that your own roles don't cover until the last holder's assignment ends.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -572,7 +569,7 @@ removes it and an empty list empties it. There is no partial update. Refused wit
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Omitted or null removes it. |
 | `isActive` | `Boolean!` | Whether the role can be assigned and grants anything. |
-| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace id. |
+| `workspaces` | [IamSelectionInput](role-access.md#iamselectioninput)! | The workspaces of the organization the role reaches, by workspace ID. IAM refuses an empty selection and a workspace that the organization doesn't own. It checks the grant ceiling first and treats an empty selection as every workspace. So a caller whose own roles don't reach every workspace, or don't reach the named one, gets `PERMISSION_DENIED` with `dependencyCode` `GRANT_CEILING_EXCEEDED`. Any other caller gets `VALIDATION_ERROR`. |
 | `productScopes` | [IamRoleProductScopesInput](role-access.md#iamroleproductscopesinput)! | The products the role grants. |
 
 ---
@@ -581,8 +578,7 @@ removes it and an empty list empties it. There is no partial update. Refused wit
 
 ### IamRoleDeleteInput
 
-A role to delete. Refused with CONFLICT when `version` is not the stored one, or when the role is
-a system role. Deleting a role also revokes every assignment of it.
+A role to delete. Refused with `CONFLICT` when `version` isn't the stored one, or when the role is a system role. Refused with `PERMISSION_DENIED` and `dependencyCode` `GRANT_CEILING_EXCEEDED` when you couldn't have granted the role. Deleting a role also revokes every assignment of it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |

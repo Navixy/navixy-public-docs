@@ -40,11 +40,11 @@ Your access token names one of your organizations and one of its workspaces. IAM
 
 Three parties share the work on roles:
 
-<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>View the roles and who holds them, create, change, and delete roles, and assign or revoke roles. You can't give anyone more access than your own roles give you.</td></tr><tr><td><strong>IAM</strong></td><td>Creates the Owner role of each organization and protects it. Checks every request against your own roles before it makes a change.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Keeps the list of members of each organization, which you can read through its <code>members</code> query. IAM refuses to assign a role to anyone who isn't on that list.</td></tr></tbody></table>
+<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>View the roles and who holds them, create, change, and delete roles, and assign or revoke roles. You can't give anyone more access than your own roles give you, or for longer than your own access lasts.</td></tr><tr><td><strong>IAM</strong></td><td>Creates the Owner role of each organization and protects it. Checks every request against your own roles before it makes a change.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Keeps the list of members of each organization, which you can read through its <code>members</code> query. IAM refuses to assign a role to anyone who isn't on that list.</td></tr></tbody></table>
 
 To use the IAM API, you need a role that gives access to IAM in your organization. The Owner role always has it, and so does the Admin role unless someone changed it.
 
-Note two behaviors of the IAM API. The list of the holders of a role also includes people who have left the organization or never joined it. A role that you have just created or changed can take about a second to appear among the roles you can assign.
+When a member leaves the organization or is removed from it, IAM revokes all their roles, so they drop out of the holder lists. A role that you have just created or changed can take about a second to appear among the roles you can assign.
 
 ## Navigation
 
