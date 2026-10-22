@@ -132,3 +132,4 @@ Now you have:
 
 * [Build conditional flows](flow-management/conditional-flow.md): Handle a reading over a threshold differently from the rest.
 * [Earlier values](expressions/history.md): Read what a device reported earlier, to calculate a change rather than a value.
+* [Device Action](nodes/device-action.md): Send a command to the device when a reading crosses a limit.

@@ -98,6 +98,7 @@ Now you have:
 
 ## Next steps
 
+* **Act on the excursion.** Add a [Device Action](../nodes/device-action.md) node and connect the **Excursion** node to it, so that the node sends a command to the truck when a reading is above the limit. Keep the connection from **Excursion** to `To platform` as well. The **Device Action** node finishes its path, and without the **Output Endpoint** node on the same branch, the calculated values of those messages never reach the platform.
 * **Watch the excursions.** Open **Data Stream Analyzer** on the flow and select `over_limit` and `excursion_degrees` to see which trucks are over the limit as their messages arrive. Tracking shows the same attributes. See [Flow monitoring](../monitoring.md).
 * **Test two things at once.** When both conditions must be true, join them with `&&` in one node rather than chaining two Logic nodes.
 * **Compare against earlier readings** instead of a fixed threshold, so the flow reacts to a change rather than a level. See [Earlier values](../expressions/history.md).

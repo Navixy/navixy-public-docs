@@ -27,6 +27,7 @@ A flow adds to the device's data.
 | --- | --- |
 | The readings the device sends | The readings the device sends, unchanged |
 | No calculated attributes | The attributes your flow calculates |
+| No commands to the device | Commands to the device, when the flow has a **Device Action** node |
 
 Everything the device reported is still there afterwards. A flow that calculates a fuel percentage doesn't remove the raw sensor count it was calculated from.
 
@@ -36,6 +37,7 @@ Add a device to a flow when one of these conditions is true:
 
 * **The reading isn't in the unit that you need.** For example, a raw sensor count, a temperature in the wrong scale, or a value that needs a coefficient applied.
 * **You need a value that the device never sends.** For example, a difference against an earlier reading, a combination of two sensors, or a decoded bit from a status word.
+* **You need something to happen when the data says so.** For example, a command that switches on one of the device's outputs when a reading crosses a limit.
 
 A device that needs none of these doesn't need a flow.
 

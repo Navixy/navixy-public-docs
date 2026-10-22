@@ -21,6 +21,7 @@ IoT Logic enables you to:
 * Read one flow, or list the flows of your workspace with filters and sorting
 * Replace the graph of a flow, change its title and description, and enable or disable it
 * Attach devices to a flow, see how many devices it processes, and find the flows that a device is in
+* Send commands to devices from a flow, such as switching an output on when a condition is true
 * List the attribute names that your devices report, to write expressions with them
 * Read the recent values of the devices of a flow, to check what the flow calculated
 * Delete a flow that you no longer need

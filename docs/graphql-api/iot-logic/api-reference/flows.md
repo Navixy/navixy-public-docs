@@ -317,7 +317,7 @@ Input for creating a flow. The flow is created disabled.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -331,6 +331,9 @@ Each field below that names a node type belongs to that type only. The other typ
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
+| `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
+| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
 
 </details>
 
@@ -357,6 +360,57 @@ One attribute that an Initiate Attribute node calculates: its name and the expre
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. Lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `expression` | `String!` | The expression that calculates the value, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 960 characters. |
+
+</details>
+
+<details>
+
+<summary>IotLogicDeviceCommandActionInput</summary>
+
+One action of a Device Action node. The input type is `@oneOf`: set exactly one of its two fields. A value with both fields, or with neither, fails the request.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `setOutput` | [IotLogicSetOutputActionInput](#iotlogicsetoutputactioninput) | Switches a digital output of the device on or off. |
+| `rawCommand` | [IotLogicRawCommandActionInput](#iotlogicrawcommandactioninput) | Sends a text command to the device. |
+
+</details>
+
+<details>
+
+<summary>IotLogicSetOutputActionInput</summary>
+
+Switches a digital output of the device on or off.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `output` | `Int!` | The number of the output, from 1 to 8. The API accepts the same output in two actions of one node, although the flow editor doesn't offer it. |
+| `enabled` | `Boolean!` | `true` switches the output on, and `false` switches it off. |
+
+</details>
+
+<details>
+
+<summary>IotLogicRawCommandActionInput</summary>
+
+A text command that Navixy sends to the device unchanged.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `text` | `String!` | The command text, at most 512 characters. It can't be blank. Spaces at the start and the end are kept. Navixy sends the text as ASCII, so use only printable ASCII characters: other characters don't arrive as written. |
+
+</details>
+
+<details>
+
+<summary>IotLogicDeviceMappingEntryInput</summary>
+
+One entry of the device mapping of a Device Action node: when a message of `sourceDeviceId` reaches the node, the actions go to each device in `targetDeviceIds` instead of to the source. A source can have only one entry in a node, and an entry needs at least one target.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `sourceDeviceId` | `ID!` | The device whose messages trigger the actions. It receives no commands itself, unless it is also in `targetDeviceIds`. |
+| `targetDeviceIds` | `[ID!]!` | The devices that receive the actions. At least one. |
 
 </details>
 
@@ -453,7 +507,7 @@ Input for updating a flow. `nodes` and `transitions` are the whole new graph, no
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -467,6 +521,9 @@ Each field below that names a node type belongs to that type only. The other typ
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
+| `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
+| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
 
 </details>
 
@@ -493,6 +550,57 @@ One attribute that an Initiate Attribute node calculates: its name and the expre
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. Lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `expression` | `String!` | The expression that calculates the value, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 960 characters. |
+
+</details>
+
+<details>
+
+<summary>IotLogicDeviceCommandActionInput</summary>
+
+One action of a Device Action node. The input type is `@oneOf`: set exactly one of its two fields. A value with both fields, or with neither, fails the request.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `setOutput` | [IotLogicSetOutputActionInput](#iotlogicsetoutputactioninput) | Switches a digital output of the device on or off. |
+| `rawCommand` | [IotLogicRawCommandActionInput](#iotlogicrawcommandactioninput) | Sends a text command to the device. |
+
+</details>
+
+<details>
+
+<summary>IotLogicSetOutputActionInput</summary>
+
+Switches a digital output of the device on or off.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `output` | `Int!` | The number of the output, from 1 to 8. The API accepts the same output in two actions of one node, although the flow editor doesn't offer it. |
+| `enabled` | `Boolean!` | `true` switches the output on, and `false` switches it off. |
+
+</details>
+
+<details>
+
+<summary>IotLogicRawCommandActionInput</summary>
+
+A text command that Navixy sends to the device unchanged.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `text` | `String!` | The command text, at most 512 characters. It can't be blank. Spaces at the start and the end are kept. Navixy sends the text as ASCII, so use only printable ASCII characters: other characters don't arrive as written. |
+
+</details>
+
+<details>
+
+<summary>IotLogicDeviceMappingEntryInput</summary>
+
+One entry of the device mapping of a Device Action node: when a message of `sourceDeviceId` reaches the node, the actions go to each device in `targetDeviceIds` instead of to the source. A source can have only one entry in a node, and an entry needs at least one target.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `sourceDeviceId` | `ID!` | The device whose messages trigger the actions. It receives no commands itself, unless it is also in `targetDeviceIds`. |
+| `targetDeviceIds` | `[ID!]!` | The devices that receive the actions. At least one. |
 
 </details>
 
@@ -754,7 +862,7 @@ An Output Endpoint node: it ends a path and sends the message, with the attribut
 
 ### IotLogicFlowActionNode
 
-A Device Action node.
+A Device Action node: it sends commands to devices when a message reaches it. The commands go to the device that sent the message, or to the target devices that the device mapping of the node names for that device. A message that answers a command doesn't trigger the node. See [Device Action](../node-types.md#device-action).
 
 **Implements:** [IotLogicFlowNode](#iotlogicflownode)
 
@@ -764,6 +872,47 @@ A Device Action node.
 | `name` | `String!` | The name that the flow editor shows. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
+| `actions` | [[IotLogicDeviceCommandAction](#iotlogicdevicecommandaction)!]! | The commands that the node sends, in the order of the last write. An empty list for a node without actions. |
+| `trackableNodeId` | `String` | The name of the flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. `null` when the node has none. |
+| `deviceMapping` | [[IotLogicDeviceMappingEntry](#iotlogicdevicemappingentry)!]! | The mapping entries of the source devices that still exist and that your roles let you read. Each entry lists only the targets that still exist and that your roles let you read, and an entry with no such target is left out. So a mapping that you read and send back unchanged in an update always saves. |
+
+---
+
+<a id="iotlogicsetoutputaction"></a>
+
+### IotLogicSetOutputAction
+
+Switches a digital output of the device on or off.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `output` | `Int!` | The number of the output, from 1 to 8. |
+| `enabled` | `Boolean!` | `true` switches the output on, and `false` switches it off. |
+
+---
+
+<a id="iotlogicrawcommandaction"></a>
+
+### IotLogicRawCommandAction
+
+A text command that Navixy sends to the device unchanged.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `text` | `String!` | The command text. |
+
+---
+
+<a id="iotlogicdevicemappingentry"></a>
+
+### IotLogicDeviceMappingEntry
+
+One entry of the device mapping of a Device Action node: messages of `source` send the actions of the node to each device in `targets` instead of to `source`.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `source` | [Device](../../business-data-repository/api-reference/devices/README.md#device)! | The device whose messages trigger the actions. |
+| `targets` | [[Device](../../business-data-repository/api-reference/devices/README.md#device)!]! | The devices that receive the actions. |
 
 ---
 
@@ -909,7 +1058,7 @@ Ordering options for device links.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, and `attributes` to `INITIATE_ATTRIBUTES`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -923,6 +1072,60 @@ Each field below that names a node type belongs to that type only. The other typ
 | `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
+| `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
+| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
+
+---
+
+<a id="iotlogicdevicecommandactioninput"></a>
+
+### IotLogicDeviceCommandActionInput
+
+One action of a Device Action node. The input type is `@oneOf`: set exactly one of its two fields. A value with both fields, or with neither, fails the request.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `setOutput` | [IotLogicSetOutputActionInput](#iotlogicsetoutputactioninput) | Switches a digital output of the device on or off. |
+| `rawCommand` | [IotLogicRawCommandActionInput](#iotlogicrawcommandactioninput) | Sends a text command to the device. |
+
+---
+
+<a id="iotlogicsetoutputactioninput"></a>
+
+### IotLogicSetOutputActionInput
+
+Switches a digital output of the device on or off.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `output` | `Int!` | The number of the output, from 1 to 8. The API accepts the same output in two actions of one node, although the flow editor doesn't offer it. |
+| `enabled` | `Boolean!` | `true` switches the output on, and `false` switches it off. |
+
+---
+
+<a id="iotlogicrawcommandactioninput"></a>
+
+### IotLogicRawCommandActionInput
+
+A text command that Navixy sends to the device unchanged.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `text` | `String!` | The command text, at most 512 characters. It can't be blank. Spaces at the start and the end are kept. Navixy sends the text as ASCII, so use only printable ASCII characters: other characters don't arrive as written. |
+
+---
+
+<a id="iotlogicdevicemappingentryinput"></a>
+
+### IotLogicDeviceMappingEntryInput
+
+One entry of the device mapping of a Device Action node: when a message of `sourceDeviceId` reaches the node, the actions go to each device in `targetDeviceIds` instead of to the source. A source can have only one entry in a node, and an entry needs at least one target.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `sourceDeviceId` | `ID!` | The device whose messages trigger the actions. It receives no commands itself, unless it is also in `targetDeviceIds`. |
+| `targetDeviceIds` | `[ID!]!` | The devices that receive the actions. At least one. |
 
 ---
 
@@ -1076,6 +1279,18 @@ A node of a flow: one step of the graph, shown as a box in the flow editor. A fl
 | `name` | `String!` | The name that the flow editor shows. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
+
+---
+
+## Unions
+
+<a id="iotlogicdevicecommandaction"></a>
+
+### IotLogicDeviceCommandAction
+
+A command that a Device Action node sends: an `IotLogicSetOutputAction` or an `IotLogicRawCommandAction`. Read the fields of each type with an inline fragment, such as `... on IotLogicSetOutputAction { output enabled }`.
+
+**One of:** [IotLogicSetOutputAction](#iotlogicsetoutputaction), [IotLogicRawCommandAction](#iotlogicrawcommandaction)
 
 ---
 

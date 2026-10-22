@@ -1,7 +1,7 @@
 ---
 description: >-
   What to do when an IoT Logic flow won't save, an attribute doesn't
-  appear, or a value isn't what you expected.
+  appear, a value isn't what you expected, or a device command doesn't arrive.
 tags:
   - troubleshooting
   - beta
@@ -42,6 +42,8 @@ Then open the flow's **Data Source** node and check the **Selected** tab. When y
 ### Check where the path splits
 
 Follow the path from the **Data Source** node to the node that calculates the attribute. If a node other than **IF/THEN Logic** connects to two or more nodes on the way, all those paths are live, and the flow keeps the calculated values of only one of them. The flow saves without an error. Split the path with an **IF/THEN Logic** node instead. See [Live paths](../how-flows-work.md#live-paths).
+
+A node that connects to a **Device Action** node and an **Output Endpoint** node on the same branch is safe. The **Device Action** node adds no values, so the flow loses nothing.
 {% endstep %}
 
 {% step %}
@@ -124,8 +126,22 @@ When you switch off a flow, the calculations of that flow stop. The device's own
 
 If a dashboard stopped showing a value, the missing value is the calculated attribute, not the device's data.
 
+## A device command doesn't arrive
+
+A **Device Action** node should have sent a command, and the device didn't act on it. The interface doesn't show the status of a command, so work through these checks:
+
+* **Check the device model.** Only Teltonika devices receive commands. For a device of any other model, or a device without an IMEI, the node sends nothing, and nothing on screen says so.
+* **Check that the node is on a conditional branch.** If no **IF/THEN Logic** node comes before the **Device Action** node on its path, the node runs on every message. If it follows a condition that is never true, it never runs at all.
+* **Check the condition.** Look at the attributes in [Flow monitoring](../monitoring.md) and work out whether the condition was true for the message.
+* **Check the custom mappings.** On the **Advanced** tab, a custom mapping sends the commands for a source device to its target devices instead. The source device gets no command unless it is one of the targets too.
+* **Check the command string** against the manufacturer's documentation. The command text is specific to the device model, and the device ignores a string that it doesn't recognize. The text is sent exactly as written, and characters outside the standard English keyboard don't arrive as you entered them.
+* **Check whether the device was online.** A command for an offline device waits in a queue and is sent when the device next connects. A **Switch output** command waits up to 3 days. A **Send GPRS command** action waits up to 1 hour. After that time, the command is dropped.
+* **Check how many commands wait for the device.** Up to 100 commands can wait for one device. When 100 commands are waiting, a new command is refused and lost. A command that matches a command already waiting isn't added again.
+
+The node sends a command on every message that reaches it, not only when a value changes. While the condition holds, a device that reports every 10 seconds gets a command every 10 seconds. See [Device Action](../nodes/device-action.md).
+
 ## The flow saves but nothing happens at all
 
 * Confirm that the flow is switched on, in the **Status** column.
-* Confirm that the path reaches an **Output Endpoint** node. A path that stops before an **Output Endpoint** node keeps nothing that the flow calculated.
+* Confirm that the path reaches an **Output Endpoint** node. A path that stops before an **Output Endpoint** node keeps nothing that the flow calculated. A path that ends at a **Device Action** node keeps nothing either, so connect an **Output Endpoint** node to the same branch as the **Device Action** node.
 * Confirm that the reporting devices are the devices that you expect. Check the **Connected devices** count in **Created flows**.

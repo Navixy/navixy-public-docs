@@ -101,11 +101,15 @@ The file keeps the flow's structure and logic:
 * Every connection, including which ones belong to the then branch and which to the else branch
 * The condition and the **Expression name** of each **IF/THEN Logic** node
 * The attribute names and formulas of each **Initiate Attribute** node
+* The actions and the **Node ID** of each **Device Action** node
 
 The file leaves out anything that belongs to one workspace or is secret:
 
 * The devices selected in **Data Source** nodes
+* The custom mappings of **Device Action** nodes
 * Whether the flow is switched on
+
+An uploaded flow has the actions of each **Device Action** node, but no custom mappings. Add the mappings again on the node's **Advanced** tab.
 
 To create a flow from a file, click **Upload flow** on the start page. Choose the file, or drag it onto the dialog, and click **Upload**. The flow opens on the canvas as a new flow that isn't saved yet. Its name comes from the file name. When a flow with that name already exists, ` (1)` is added to it.
 

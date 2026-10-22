@@ -21,7 +21,7 @@ To save changes in the editor, your role must let you edit flows. The device lis
 
 | Part | What it is |
 | --- | --- |
-| **Nodes** panel | The node types you can add, in three groups |
+| **Nodes** panel | The node types you can add, in four groups |
 | The canvas | The flow itself: nodes and the connections between them |
 | **Flow**, in the toolbar | Which flow you are editing, and a way to switch to another flow |
 | **Save flow** | Runs every check, then saves the whole flow |
@@ -32,12 +32,13 @@ An empty flow shows **How to build a flow** and the instruction to drag a node f
 
 ## The Nodes panel
 
-The **Nodes** panel groups the four node types in the order that you usually use them.
+The **Nodes** panel shows the five node types in four groups, in the order that you usually use them.
 
 | Group | Node types | Required |
 | --- | --- | --- |
 | **Start with** | Data Source | Yes |
 | **Process** | Initiate Attribute, IF/THEN Logic | No |
+| **Action** | Device Action | No |
 | **End with** | Output Endpoint | Yes |
 
 Each entry carries a one-line description of what that node does. When you need more space for the canvas, collapse the panel with the control in its header.
@@ -78,7 +79,7 @@ The settings dialog has the same controls for every node type. The fields of eac
 | **Apply changes** | Keeps the changes and closes the dialog. Available once you change a field |
 | **Cancel** | Discards them |
 
-The dialog of every node type has a help icon next to its title. For **IF/THEN Logic** and **Initiate Attribute** nodes, the icon opens a help dialog about that node type. For **Data Source** and **Output Endpoint** nodes, point at the icon to read a short description of the node.
+The dialog of every node type has a help icon next to its title. For **IF/THEN Logic**, **Initiate Attribute**, and **Device Action** nodes, the icon opens a help dialog about that node type. For **Data Source** and **Output Endpoint** nodes, point at the icon to read a short description of the node.
 
 {% hint style="info" %}
 **Apply changes** doesn't save the flow. It updates the node on the canvas, and the flow is saved when you click **Save flow**.

@@ -17,7 +17,7 @@ The section grows from Support cases. Questions are grouped by what they are abo
 
 * **Technologies**: whether a device can resist jamming, and why CAN mileage and the odometer differ.
 * **Devices**: questions grouped by manufacturer. Input and output capabilities, BLE sensors, static navigation and I/O elements on [Teltonika](devices/teltonika/README.md) devices.
-* **Products**: how [IoT Logic](products/iot-logic/README.md) flows handle devices, attributes, conditions, and outputs, grouped by node.
+* **Products**: how [IoT Logic](products/iot-logic/README.md) flows handle devices, attributes, conditions, commands, and outputs, grouped by node.
 * **Platform**: how to get raw device data, and what to check when a device stops transmitting.
 
 ## Still need a hand?

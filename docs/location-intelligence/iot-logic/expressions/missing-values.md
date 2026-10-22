@@ -66,6 +66,8 @@ The last three rows differ by how you write the value, not by what the value is.
 
 {% hint style="danger" %}
 **`!=` returns true when the value is missing.** `speed != 60` is true for a device that reports no speed at all, so every message from that device takes the then branch. `!~` behaves the same way, and so do `!^` and `!$` in the `value()` form, such as `value('x', 0) !^ 'AB'`.
+
+Put a **Device Action** node on that branch, and it sends a command on every message from every device that is missing the attribute. Nothing on screen says why.
 {% endhint %}
 
 ## How to test a yes/no value

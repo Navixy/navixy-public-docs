@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — IoT Logic module
-# Version: 0.16.1
+# Version: 0.17.0
 # =============================================================================
 #
 # Flow authoring: the node graphs a user draws on the canvas, which the engine evaluates per
@@ -52,7 +52,9 @@
 # UNREACHABLE_NODE, MISSING_DATA_SOURCE, DATA_SOURCE_HAS_INCOMING_EDGE, NO_EDGES,
 # DUPLICATE_ATTRIBUTE_IN_FLOW, UNKNOWN_DEVICE, SIMULTANEOUS_PATHS, OVERLAPPING_ENTRY_PATHS,
 # ATTRIBUTE_ALREADY_PRODUCED, INVALID_EXPRESSION, RESERVED_ATTRIBUTE_NAME,
-# ATTRIBUTE_REPORTED_BY_DEVICE, EDGE_TYPE_MISMATCH.
+# ATTRIBUTE_REPORTED_BY_DEVICE, EDGE_TYPE_MISMATCH, ACTIONS_PER_NODE_EXCEEDED,
+# DEVICE_MAPPINGS_PER_NODE_EXCEEDED, INVALID_DEVICE_COMMAND, DUPLICATE_TRACKABLE_NODE_ID,
+# EMPTY_DEVICE_MAPPING_ENTRY.
 #
 # A title or attribute name that is malformed rather than merely too long is rejected on parse and
 # comes back as a single VALIDATION_ERROR, not in this list.
@@ -211,16 +213,53 @@ type IotLogicFlowOutputEndpointNode implements IotLogicFlowNode {
 }
 
 # @category: iot-logic/flows
-"A device command."
+"""
+Sends commands to devices when a message reaches it: to the device that sent the message, or to the
+targets its device mapping names for that device. A message that answers a command sends nothing.
+"""
 type IotLogicFlowActionNode implements IotLogicFlowNode {
   id: ID!
   name: String!
   description: String
   position: IotLogicFlowNodePosition
+  actions: [IotLogicDeviceCommandAction!]!
+  "A flow attribute set to 1 on each message that reaches the node and 0 on each that does not."
+  trackableNodeId: String
+  """
+  Entries the caller may read, by source device id; targets by device id. An entry whose source the
+  caller may not read is left out, as are targets the caller may not read, deleted devices, and an
+  entry with no target left.
+  """
+  deviceMapping: [IotLogicDeviceMappingEntry!]!
 }
 
 # @category: iot-logic/flows
-"An outbound HTTP call. Carries no configuration yet."
+"A command an action node sends."
+union IotLogicDeviceCommandAction = IotLogicSetOutputAction | IotLogicRawCommandAction
+
+# @category: iot-logic/flows
+"Switches a digital output on or off."
+type IotLogicSetOutputAction {
+  "The output number, 1 to 8."
+  output: Int!
+  enabled: Boolean!
+}
+
+# @category: iot-logic/flows
+"Text sent to the device as-is."
+type IotLogicRawCommandAction {
+  text: String!
+}
+
+# @category: iot-logic/flows
+"Messages from `source` command each of `targets` instead of `source` itself."
+type IotLogicDeviceMappingEntry {
+  source: Device!
+  targets: [Device!]!
+}
+
+# @category: iot-logic/flows
+"An outbound HTTP call."
 type IotLogicFlowWebhookNode implements IotLogicFlowNode {
   id: ID!
   name: String!
@@ -391,7 +430,8 @@ the stored node the key stands for and is omitted for a node being added.
 
 The payload fields below belong to one node type each and must be absent for the others:
 `deviceIds` to DATA_SOURCE, `condition` and `expressionName` to LOGIC, `attributes` to
-INITIATE_ATTRIBUTES. OUTPUT_ENDPOINT and WEBHOOK carry none.
+INITIATE_ATTRIBUTES, `actions`, `trackableNodeId` and `deviceMapping` to ACTION.
+OUTPUT_ENDPOINT and WEBHOOK carry none.
 """
 input IotLogicFlowNodeInput {
   "Handle for this node within the request. Unique per request."
@@ -430,6 +470,53 @@ input IotLogicFlowNodeInput {
   expressionName: String
   "INITIATE_ATTRIBUTES. At most 50 per node, and 200 across the flow counting LOGIC's."
   attributes: [IotLogicFlowAttributeAssignmentInput!]
+  "ACTION. At most 10. Omitted means none."
+  actions: [IotLogicDeviceCommandActionInput!]
+  """
+  ACTION. `^[a-z0-9]+(_[a-z0-9]+)*$`, optionally ending in `_<digits>` for a channel. Unique among
+  the flow's action nodes.
+  """
+  trackableNodeId: String
+  """
+  ACTION. Omitted keeps the current mapping, `[]` removes every entry the caller may read, anything
+  else replaces them. `null` is refused. Entries and targets outside the caller's grant stay either way. A node being
+  added treats omitted as no mapping. At most 1000 targets per node, counted across its sources.
+
+  A device outside the caller's grant fails as UNKNOWN_DEVICE, the same answer as an absent one.
+  """
+  deviceMapping: [IotLogicDeviceMappingEntryInput!]
+}
+
+# @category: iot-logic/flows
+"One action in a write. Exactly one field must be set (`@oneOf`)."
+input IotLogicDeviceCommandActionInput @oneOf {
+  setOutput: IotLogicSetOutputActionInput
+  rawCommand: IotLogicRawCommandActionInput
+}
+
+# @category: iot-logic/flows
+"Switches a digital output on or off."
+input IotLogicSetOutputActionInput {
+  "1 to 8."
+  output: Int!
+  enabled: Boolean!
+}
+
+# @category: iot-logic/flows
+"Text sent to the device as-is."
+input IotLogicRawCommandActionInput {
+  "Not blank, at most 512 characters. Not trimmed."
+  text: String!
+}
+
+# @category: iot-logic/flows
+"""
+Messages from `sourceDeviceId` command each of `targetDeviceIds` instead. A source appears once per
+node; its targets are not empty.
+"""
+input IotLogicDeviceMappingEntryInput {
+  sourceDeviceId: ID!
+  targetDeviceIds: [ID!]!
 }
 
 # @category: iot-logic/flows

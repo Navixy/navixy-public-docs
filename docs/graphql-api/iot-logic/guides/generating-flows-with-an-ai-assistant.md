@@ -32,6 +32,7 @@ A flow depends on facts that only the user knows. The assistant asks for them be
 * **Calculations.** What each new value means, its unit, and its formula, or the data needed to write the formula, such as a tank size.
 * **Conditions.** Each threshold and what happens when it is crossed.
 * **Outputs.** Which paths keep their results. Every path that calculates something ends at an Output Endpoint, which sends the result to the Navixy platform.
+* **Commands.** Which commands a condition sends, and to which devices: an output number to switch on or off, or a command text. Only Teltonika device models receive commands.
 
 If an answer is missing, the assistant asks for it. An invented attribute name saves without an error but never produces a value, because validation doesn't check the names against the data of the device.
 
@@ -73,6 +74,7 @@ Every node has a unique `key`, a `type`, and a `name`. The `name` uses English l
 | `INITIATE_ATTRIBUTES` | `attributes`: a list of `{ name, expression }` | At most 50 attributes per node, 200 per flow. Each expression at most 960 characters on one line. |
 | `LOGIC` | `condition`, and optionally `expressionName` | The condition at most 480 characters on one line. |
 | `OUTPUT_ENDPOINT` | None | Ends every path that calculates something. |
+| `ACTION` | `actions`: a list of `{ setOutput: { output, enabled } }` or `{ rawCommand: { text } }`, and optionally `trackableNodeId` and `deviceMapping` | At most 10 actions per node. `output` from 1 to 8, `text` at most 512 characters and not blank. Next to an Output Endpoint on the same outcome, if the path calculated anything. See [Device Action](../node-types.md#device-action). |
 
 Attribute names, including `expressionName`, use lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l`. They are never one of the 12 names that Navixy reserves for the position of a device, such as `position_latitude` (see [Initiate Attribute](../node-types.md#initiate-attribute)). They never repeat a name that the devices already report, that another node on the same path produces, or that another flow produces for the same devices.
 
@@ -112,6 +114,7 @@ The assistant checks its own output against this list before it returns it. Each
 * [ ] No attribute name is one of the reserved position names, such as `position_latitude` (`RESERVED_ATTRIBUTE_NAME`)
 * [ ] Every text field is printable ASCII (`NON_LATIN_INPUT`)
 * [ ] Every expression parses and stays within its length (`INVALID_EXPRESSION`, `EXPRESSION_TOO_LONG`)
+* [ ] Every Device Action node has at most 10 valid actions, and its `trackableNodeId`, if any, is unique in the flow (`ACTIONS_PER_NODE_EXCEEDED`, `INVALID_DEVICE_COMMAND`, `DUPLICATE_TRACKABLE_NODE_ID`)
 * [ ] Keys are unique, and every transition names existing keys (single `VALIDATION_ERROR` before validation)
 
 Two checks compare the flow with data in Navixy: `ATTRIBUTE_ALREADY_PRODUCED` with your other flows, and `ATTRIBUTE_REPORTED_BY_DEVICE` with the attributes of your devices. Give the assistant the result of the `deviceAttributes` query for the devices of the flow, so that it can avoid both. The write still reports them, and they can appear on a later attempt, after the other violations are fixed.

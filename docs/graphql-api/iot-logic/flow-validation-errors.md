@@ -110,7 +110,7 @@ Match each violation to your request by `fields`, and use `constraint` to decide
 
 To show the problems in your app, use `fields` to find the node in your request. Use `nodeIds` only for nodes that the flow already had. A node that the request adds gets a new ID during validation, and Navixy doesn't store that ID when the write fails. In the example above, the unreachable node was added by the request, so its ID in `nodeIds` doesn't exist anywhere else.
 
-Fixing every violation in the list doesn't always make the next write succeed. Navixy compares your flow with your other flows and with the attributes that your devices report only after every other rule passes. So `ATTRIBUTE_ALREADY_PRODUCED` and `ATTRIBUTE_REPORTED_BY_DEVICE` can appear on the next attempt. If a flow has more than 64 nodes or more than 96 transitions, Navixy also skips the graph, expression, and attribute name checks until the flow is within the limits.
+Fixing every violation in the list doesn't always make the next write succeed. Navixy compares your flow with your other flows and with the attributes that your devices report only after every other rule passes. So `ATTRIBUTE_ALREADY_PRODUCED` and `ATTRIBUTE_REPORTED_BY_DEVICE` can appear on the next attempt. If a flow has more than 64 nodes or more than 96 transitions, Navixy also skips the graph, expression, and attribute name checks until the flow is within the limits. Of the Device Action checks, only `ACTIONS_PER_NODE_EXCEEDED` and `DEVICE_MAPPINGS_PER_NODE_EXCEEDED` run.
 
 ## Errors outside the violations list
 
@@ -123,6 +123,9 @@ Some mistakes stop a write before Navixy validates the graph. They return a sing
 | A blank node key, or two nodes with the same key in one request | `input.nodes[0].key`, or `input.nodes` |
 | A transition that names a key that no node in the request has | `input.transitions[0].from` or `input.transitions[0].to` |
 | A node name that doesn't follow the [naming rule](#names-and-text) | None. The message quotes the name. |
+| A `trackableNodeId` that doesn't follow the [naming rule](#names-and-text) | `input.nodes[0].trackableNodeId` |
+| `deviceIds: null` on a data source, or `deviceMapping: null` on a Device Action node | `input.nodes[0].deviceIds` or `input.nodes[0].deviceMapping` |
+| One source device in two entries of the `deviceMapping` of one node | `input.nodes[0].deviceMapping` |
 
 The following error is the response to an Initiate Attribute node with the attribute name `TempF`:
 
@@ -196,14 +199,24 @@ The codes are grouped by the part of the flow that they check.
 | `DUPLICATE_ATTRIBUTE_IN_FLOW` | A message from one data source would pass two nodes that produce the same attribute, or one node produces it twice. The `THEN` and `ELSE` paths of one logic node can each produce it, because a message takes only one of them. | Rename one of the attributes, or remove it. |
 | `RESERVED_ATTRIBUTE_NAME` | The flow produces an attribute with one of the names that Navixy reserves for the position of a device, such as `position_latitude`. See [Initiate Attribute](node-types.md#initiate-attribute) for the full list. | Rename the attribute. |
 | `ATTRIBUTE_ALREADY_PRODUCED` | Another flow already produces the attribute for a device of this flow, or another data source of this flow does. `relatedFlowIds` lists the flows that produce it. | Rename the attribute, or remove the device from one of the flows. |
-| `ATTRIBUTE_REPORTED_BY_DEVICE` | A device of the flow reports an attribute with the same name. The value from the flow would replace the value from the device. | Rename the attribute. |
+| `ATTRIBUTE_REPORTED_BY_DEVICE` | A device of the flow reports an attribute with the same name as a calculated attribute or as the `trackableNodeId` of a Device Action node. The value from the flow would replace the value from the device. | Rename the attribute or the `trackableNodeId`. |
 
 ### Devices
 
 | Code | Cause | How to fix |
 | --- | --- | --- |
-| `UNKNOWN_DEVICE` | A device that the write adds doesn't exist, belongs to another workspace, or isn't one that your roles let you read. The message lists the device IDs. | Remove the device ID, or correct it. Navixy checks only the devices that the write adds, so a device that the flow already had never fails the write. |
+| `UNKNOWN_DEVICE` | A device that the write adds to a data source or to the `deviceMapping` of a Device Action node doesn't exist, belongs to another workspace, or isn't one that your roles let you read. The message lists the device IDs. | Remove the device ID, or correct it. Navixy checks only the devices that the write adds, so a device that the flow already had never fails the write. |
 | `OVERLAPPING_ENTRY_PATHS` | One device is in two data sources whose paths reach the same node. That node would process each message of the device twice. | Keep the device in one of the data sources, or separate the paths. |
+
+### Device Action nodes
+
+| Code | Cause | How to fix |
+| --- | --- | --- |
+| `ACTIONS_PER_NODE_EXCEEDED` | A Device Action node has more than 10 actions. `fields` names `input.nodes[0].actions`. | Remove actions, or move some of them to another Device Action node. |
+| `INVALID_DEVICE_COMMAND` | An action isn't valid: a `setOutput` output number is outside 1 to 8, or a `rawCommand` text is blank or longer than 512 characters. `fields` names the action, such as `input.nodes[0].actions[1]`. | Correct the output number, or the command text. |
+| `DUPLICATE_TRACKABLE_NODE_ID` | Two Device Action nodes of the flow have the same `trackableNodeId`. `nodeIds` has both nodes. | Give each Device Action node its own `trackableNodeId`. |
+| `DEVICE_MAPPINGS_PER_NODE_EXCEEDED` | The `deviceMapping` of a Device Action node has more than 1,000 targets, counted across its entries. | Remove targets, or split the mapping between several Device Action nodes. |
+| `EMPTY_DEVICE_MAPPING_ENTRY` | An entry of the `deviceMapping` of a Device Action node has no targets. The message lists the source devices of these entries. | Add at least one target to the entry, or remove the entry. A source device without an entry receives its own commands. |
 
 ## Names and text
 
@@ -217,6 +230,8 @@ These rules apply to the names and text of a flow. Text with a character outside
 | Attribute `name` and `expressionName` | Lowercase letters and digits in groups joined by single underscores, such as `temperature_f`, at most 48 characters. The name can end with `_` and a channel number, such as `temperature_2`, which doesn't count toward the limit |
 | `condition` of a logic node | Printable ASCII on one line, at most 480 characters |
 | `expression` of an attribute | Printable ASCII on one line, at most 960 characters |
+| `trackableNodeId` of a Device Action node | The rule of attribute names |
+| `text` of a `rawCommand` action | At most 512 characters, not blank. Navixy doesn't check its characters, but sends the text as ASCII, so use printable ASCII |
 
 ## Best practices
 

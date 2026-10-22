@@ -57,6 +57,22 @@ The message **A device already reports an attribute with this name.** can appear
 
 The message appears only for a device that you add. A device that was already attached and was deleted later doesn't stop the flow from saving. The same message appears for a device that your role doesn't let you see.
 
+## A Device Action node isn't valid
+
+The settings dialog of a **Device Action** node catches most of these problems before you click **Apply changes**. The save checks them again.
+
+**The node has too many actions.** A **Device Action** node has more than 10 actions. Delete actions, or move some to a second **Device Action** node.
+
+**An action of the node isn't valid.** An action has an output number outside 1 to 8, or an empty command string, or a command string longer than 512 characters. Open the node and correct the action.
+
+**A custom mapping has no target devices.** On the **Advanced** tab, a custom mapping has a source device and no target devices. Add a target device, or delete the mapping.
+
+**The custom mappings of the node have too many target devices.** The custom mappings of one node have more than 1,000 target devices in all. Remove targets, or split the mappings across two **Device Action** nodes.
+
+**Another Device Action node has the same "Node ID".** Two **Device Action** nodes of the flow have the same **Node ID**. The editor gives every node its own **Node ID**, so this happens only when a program changed the flow through the API. Delete one of the two nodes and add it again: a new node gets a new **Node ID**.
+
+A custom mapping can also cause **A device connected here no longer exists.**, for a source or target device that isn't in the workspace any more. See [A device is gone](#a-device-is-gone).
+
 ## The save fails without a list of problems
 
 If saving shows an error message and no node shows a problem, your role may not let you change flows. Saving a new flow needs a role that lets you create flows, and saving an existing flow needs a role that lets you edit flows. Ask the people who set up your workspace. See [Access to flows](../flow-management/README.md#access-to-flows).

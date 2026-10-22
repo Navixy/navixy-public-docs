@@ -110,6 +110,7 @@ Each node type uses only its own fields. The API ignores the fields of other typ
 | `INITIATE_ATTRIBUTES` | `attributes`: A list of assignments. Each one has a `name` for the new attribute and an `expression` that calculates it |
 | `LOGIC` | `condition`: The expression to check. `expressionName` (optional): An attribute that stores the result of the check |
 | `OUTPUT_ENDPOINT` | None |
+| `ACTION` | `actions`: The commands that the node sends. `trackableNodeId` (optional): The name of a flow value that shows whether a message reached the node. `deviceMapping` (optional): The devices that receive the commands instead of the device that sent the message. See [Device Action](../node-types.md#device-action) |
 
 Every node can also have a `description` and a `position`. `position` stores the `x` and `y` coordinates where the flow editor draws the node. A node without `position` has no stored coordinates, and a read returns `null` for it.
 

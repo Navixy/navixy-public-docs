@@ -30,9 +30,17 @@ This section answers common questions about IoT Logic flows, grouped by node. Ea
 * [Current time in IF/THEN Logic conditions](current-time-in-conditions.md)
 * [IoT Logic branches without Output Endpoint nodes](branches-without-output-endpoint.md)
 
+## Device Action
+
+* [Device Action commands for offline devices](device-action-commands-for-offline-devices.md)
+* [Several commands in one Device Action node](several-commands-in-one-device-action-node.md)
+* [Message values in Device Action command text](message-values-in-device-action-commands.md)
+* [Nodes after Device Action nodes](nodes-after-device-action.md)
+
 ## Output Endpoint
 
 * [Format of messages that IoT Logic flows send](format-of-messages-at-destination.md)
+* [Output Endpoint nodes in command-only flows](output-endpoint-in-command-only-flows.md)
 * [Two branches into one Output Endpoint node](two-branches-into-one-output-endpoint.md)
 
 ## Still need a hand?

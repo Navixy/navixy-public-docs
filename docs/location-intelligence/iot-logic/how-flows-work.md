@@ -39,9 +39,10 @@ Inside a flow, the message moves from its **Data Source** node along the connect
 
 * An **Initiate Attribute** node calculates new values and adds them to the message.
 * An **IF/THEN Logic** node evaluates its condition and sends the message down the then branch or the else branch. On the canvas, a check-mark icon marks the then branch and a cross icon marks the else branch.
+* A **Device Action** node sends a command to the device that sent the message, or to the devices that you map to it. The path ends there. See [Device Action](nodes/device-action.md).
 * An **Output Endpoint** node finishes the path and sends the result to the Navixy platform.
 
-When a path reaches an **Output Endpoint** node, the flow keeps what it calculated. A path that finishes anywhere else keeps nothing: the message still reaches the platform, but with only what the device sent. See [IF/THEN Logic](nodes/logic.md).
+When a path reaches an **Output Endpoint** node, the flow keeps what it calculated. A path that finishes anywhere else keeps nothing: the message still reaches the platform, but with only what the device sent. To keep the values for a message that triggers a command, connect an **Output Endpoint** node to the same branch as the **Device Action** node. See [IF/THEN Logic](nodes/logic.md).
 
 A value calculated early in a flow is available to every node after it, so you can build one attribute from another.
 {% endstep %}

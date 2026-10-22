@@ -26,10 +26,11 @@ Messages that match the condition leave through the then branch: the upper outgo
 {% endcolumn %}
 {% endcolumns %}
 
-The node has two uses:
+The node has three uses:
 
 * Calculate only when it applies. Put an **Initiate Attribute** node on the then branch, and its values appear only on the messages that match. For example, in a fleet where only some trucks have a fuel probe, the flow can calculate liters, a percentage, and the change since the last message for those trucks. The messages from the other trucks stay unchanged.
 * Mark the matching messages. When you enter an **Expression name**, the node stores its answer, true or false, under that name on every message where the condition gives an answer. Data Stream Analyzer and Tracking show it like any other attribute.
+* Send a command only when it applies. Put a **[Device Action](device-action.md)** node on the then branch, and the command is sent only for the messages that match. For example, a vehicle over the speed limit gets a command, and the other vehicles get nothing.
 
 Both branches end at an **Output Endpoint** node, and they can share one **Output Endpoint** node. See [Formula examples](../expressions/examples.md#calculating-a-value-only-for-some-messages) to learn how the complete fuel probe flow is built.
 
@@ -110,9 +111,15 @@ Before you write a condition that could read a missing value, see [Missing value
 
 ## What happens to a branch without an Output Endpoint node
 
-A branch that doesn't reach an **Output Endpoint** node still runs, and its nodes calculate their values. But the branch adds nothing to the message.
+A branch that doesn't reach an **Output Endpoint** node still runs: its nodes calculate their values, and a **Device Action** node on it sends its commands. But the branch adds nothing to the message.
 
 For a message that takes such a branch, the flow discards everything that it calculated, including attributes calculated before the **IF/THEN Logic** node and the node's own stored result. The message still reaches the Navixy platform, because delivery to the platform doesn't depend on the flow. But the message arrives without any of the values that this flow calculated.
+
+{% hint style="warning" %}
+A **Device Action** node finishes its path, so a branch that ends there loses the flow's calculated values. To keep them for the messages that trigger the command, connect an **Output Endpoint** node to the same branch as the **Device Action** node. For example, connect the then branch to both nodes. An **Output Endpoint** node on the else branch doesn't help, because a message that takes the then branch never reaches it.
+
+Here it's safe to connect one node to two nodes. Both paths are [live](../how-flows-work.md#live-paths), but the **Device Action** node adds no values, so the flow loses none of its calculated values.
+{% endhint %}
 
 ## How to configure an IF/THEN Logic node
 

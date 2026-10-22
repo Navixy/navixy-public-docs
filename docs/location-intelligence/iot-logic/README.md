@@ -23,6 +23,8 @@ IoT Logic is a tool in the Navixy platform for processing data without writing c
 
 **Send data down different paths depending on what it says.** A message that meets a condition goes one way and the rest go another. One flow can calculate a value only for the vehicles that are speeding, or mark each speeding message so that Tracking shows it.
 
+**Act on the data as it arrives.** A flow can send a command to the device that sent the message, such as switching on one of its outputs. The command goes out when the message arrives, not on a schedule.
+
 {% hint style="info" %}
 **Navigation**
 
@@ -47,7 +49,7 @@ Take a temperature sensor that reports a raw number, where the team needs degree
 2. An **[Initiate Attribute](nodes/initiate-attribute.md)** node calculates the degrees with a formula that you enter in a field and adds the degrees to the message.
 3. An **[Output Endpoint](nodes/output-endpoint.md)** node sends the result to the Navixy platform, where Tracking shows the new value next to the device's own readings.
 
-Add an **[IF/THEN Logic](nodes/logic.md)** node when some messages need different handling from the rest. These nodes are the whole set: see [Nodes](nodes/).
+Add an **[IF/THEN Logic](nodes/logic.md)** node when some messages need different handling from the rest, and a **[Device Action](nodes/device-action.md)** node to send a command to the device. These nodes are the whole set: see [Nodes](nodes/).
 
 Start from an empty canvas, from a [template](flow-management/templates.md), or from a flow that someone has already built.
 
@@ -84,6 +86,7 @@ New to IoT Logic? Build your first flow in [Quick start](quick-start.md).
   * [Data Source](nodes/data-source.md)
   * [Initiate Attribute](nodes/initiate-attribute.md)
   * [IF/THEN Logic](nodes/logic.md)
+  * [Device Action](nodes/device-action.md)
   * [Output Endpoint](nodes/output-endpoint.md)
 * [Expressions](expressions/)
   * [Attribute names](expressions/attributes.md)
