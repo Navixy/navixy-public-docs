@@ -17,7 +17,7 @@ A template is a ready-made workflow file for a common transformation, such as tr
 
 Each template builds a table of the same kind as a table that Navixy already calculates in the [report database](../data-schema/transformation-layer/report.md):
 
-| Template | What it produces | Table in `report` |
+| Template | What it produces | Matching table in the report database |
 | --- | --- | --- |
 | [Trips](#trips) | One row per trip, with the geo objects where the trip started and ended | `report.trips_stops`, the rows with `kind` `trip` |
 | [Trips without geo objects](#trips-without-geo-objects) | One row per trip | `report.trips_stops`, the rows with `kind` `trip` |
@@ -53,7 +53,7 @@ Each rule is a value in the SQL of a node of the template. Change a value there 
 
 Most columns have a counterpart in `report.trips_stops`:
 
-| Column | What it contains | Column of `report.trips_stops` |
+| Column | What it contains | Matching report column |
 | --- | --- | --- |
 | `device_id` | The GPS device | `device_id` |
 | `trip_start_time`, `trip_end_time` | When the trip started and ended, in UTC | `start_time`, `end_time` |

@@ -68,7 +68,7 @@ For an update, the object also has the `id` and the current `version` of the flo
 
 Every node has a unique `key`, a `type`, and a `name`. The `name` uses English letters, digits, underscores, dashes, slashes, and single spaces between words. The fields of each type:
 
-| `type` | Fields | Rules |
+| Node type | Fields | Rules |
 | --- | --- | --- |
 | `DATA_SOURCE` | `deviceIds` | At least one per flow. Nothing leads into it. At most 25,000 devices across the data sources of a flow. |
 | `INITIATE_ATTRIBUTES` | `attributes`: a list of `{ name, expression }` | At most 50 attributes per node, 200 per flow. Each expression at most 960 characters on one line. |

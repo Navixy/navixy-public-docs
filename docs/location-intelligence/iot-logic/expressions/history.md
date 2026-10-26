@@ -65,7 +65,7 @@ value('fuel_level', 1, 'all')
 
 `valid` and `all` differ only for an attribute that isn't in every message. A sensor that reports on every message gives the same answer either way.
 
-| | `valid` | `all` |
+| Difference | Counting with valid | Counting with all |
 | --- | --- | --- |
 | Index 1 means | The previous value of this attribute | This attribute in the previous message |
 | An attribute missing from a message | Skipped over | Counted, and returns nothing |

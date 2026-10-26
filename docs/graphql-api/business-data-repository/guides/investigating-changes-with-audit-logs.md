@@ -104,7 +104,7 @@ The keys in `changedFields` and in both states are the property names that Busin
 
 Which of the two you get depends on the operation, because a newly created entity has no "before" and a deleted one has no "after":
 
-| Operation | `before_state` | `after_state` | `changedFields`                               |
+| Operation | Before state | After state | Changed fields |
 | --------- | -------------- | ------------- | --------------------------------------------- |
 | `CREATE`  | absent         | present       | every field that has a value, with `"old": null` |
 | `UPDATE`  | present        | present       | only the fields that differ                   |

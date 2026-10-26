@@ -25,7 +25,7 @@ Every custom field has a [FieldType](../api-reference/custom-fields.md#fieldtype
 
 ### Field type reference
 
-| Field type  | Use for                                                     | Key params                                                                                                                            | Value in `set`                                                                                         |
+| Field type  | Use for                                                     | Key params                                                                                                                            | Value to write |
 | ----------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `STRING`    | Short text, codes, identifiers                              | `isRequired`, `minLength`, `maxLength`, `defaultString`, `trim`                                                                       | `{ string: "1HGBH41JXMN109186" }`                                                                      |
 | `TEXT`      | Long descriptions, notes                                    | `isRequired`, `maxLength`, `defaultText`, `trim`                                                                                      | `{ string: "Installed under dashboard" }`                                                              |

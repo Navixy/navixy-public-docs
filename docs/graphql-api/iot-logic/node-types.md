@@ -15,7 +15,7 @@ This page describes each node type of a flow: the fields that you send in a writ
 
 A flow node has a type. The `type` field of a node in a write request takes the value in the first column. A read returns the object type in the second column, and each object type has the fields of its node.
 
-| `type` in a write | Object type in a read | Node in the flow editor | What the node does |
+| Type in a write request | Object type in a read | Node in the flow editor | What the node does |
 | --- | --- | --- | --- |
 | `DATA_SOURCE` | `IotLogicFlowDataSourceNode` | Data Source | Receives the messages of the devices that you list in `deviceIds` |
 | `INITIATE_ATTRIBUTES` | `IotLogicFlowInitiateAttributesNode` | Initiate Attribute | Calculates the attributes in `attributes` and adds them to the message |

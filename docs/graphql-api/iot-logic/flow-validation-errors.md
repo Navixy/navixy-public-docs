@@ -116,7 +116,7 @@ Fixing every violation in the list doesn't always make the next write succeed. N
 
 Some mistakes stop a write before Navixy validates the graph. They return a single `VALIDATION_ERROR` without `violations`. Most of them name the input in `field`:
 
-| Mistake | `field` in the error |
+| Mistake | Input named in the error |
 | --- | --- |
 | An attribute name that doesn't follow the [naming rule](#names-and-text), such as `TempF` | `input.nodes[0].attributes[0].name` |
 | A logic node without `condition` | `input.nodes[0].condition` |

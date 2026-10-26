@@ -47,7 +47,7 @@ A delete fails with `IN_USE` while another record that isn't deleted still refer
 
 The list has at most five entries. They come in a fixed order: the record's own fields first, then custom field values, then custom field definitions, then the other references, such as an IoT Logic flow. When there are more than five, `extensions.hasMoreBlockers` is `true`. Clear the entries you got and send the delete again: the next refusal names the next blockers, up to five, or the delete succeeds.
 
-| Record you delete | What blocks the delete | `path` in `blockers` |
+| Record you delete | What blocks the delete | Path in the error |
 | --- | --- | --- |
 | Asset type | An asset of that type | `type` |
 | Asset type | An asset group type that lists it in `allowedAssetTypes` | `allowedAssetTypes` |
@@ -77,7 +77,7 @@ These rules apply to every row of the table:
 
 Change the records in `blockers` through their own mutations, then send the delete again:
 
-| `path` | How to clear it |
+| Path | How to clear it |
 | --- | --- |
 | `type` | Delete those records. The API can't change the type of an asset, a geo object, an asset group, or a device |
 | `allowedAssetTypes` | Remove the type from the asset group type's `allowedAssetTypes` with `assetGroupTypeUpdate` |

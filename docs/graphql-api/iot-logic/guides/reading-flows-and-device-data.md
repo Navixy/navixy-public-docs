@@ -80,7 +80,7 @@ Both trucks report `temperature`, so the cold chain flow can read it in an expre
 
 Use the two flags of each name to decide what your flow can do with it:
 
-| `received` | `inFlow` | What it means for your flow |
+| Value of received | Value of inFlow | What it means for your flow |
 | --- | --- | --- |
 | `true` | `false` | The device reports the attribute. Your flow can read it. A calculated attribute can't have this name: the write fails with `ATTRIBUTE_REPORTED_BY_DEVICE`. |
 | `true` or `false` | `true` | A flow declares the attribute. With `flowId` set to your flow, these are the names of your flow. Without `flowId`, they can come from other flows. Your flow can't read the attributes of another flow, and it can't calculate them for the same devices (`ATTRIBUTE_ALREADY_PRODUCED`). |

@@ -486,7 +486,7 @@ Several outcomes look alike if you read only the totals:
 
 The timeline queries check their arguments before they read any data, so an invalid request fails the same way for every device. See [Error handling](../../error-handling.md) for the shared response format.
 
-| Code                  | When it occurs                                                                                                   | Field in `extensions.field`                                                                        |
+| Code                  | When it occurs                                                                                                   | Field named in the error |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | `VALIDATION_ERROR`    | `from` isn't earlier than `to`.                                                                                  | `to`                                                                                               |
 | `VALIDATION_ERROR`    | `options.maxPoints` is zero or negative.                                                                         | `options.maxPoints`                                                                                |
