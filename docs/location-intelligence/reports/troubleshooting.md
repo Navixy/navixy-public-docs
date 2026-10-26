@@ -56,7 +56,7 @@ Check the following:
 Check the following:
 
 * **The asset has no GPS device.** An asset without a GPS device isn't included in any report. Assign a GPS device to the asset in [Manage assets](../bdr/assets/manage-assets.md).
-* **The asset isn't chosen.** Click the button that shows the chosen assets, such as **All assets**. In the list, choose the asset or **All assets**. Then click **Run**. The search in the list of assets finds an asset by its ID. You can choose at most 200 assets one by one. To include more, choose **All assets**.
+* **The asset isn't chosen.** Click the button that shows the chosen assets, such as **All assets**. In the list, choose the asset or **All assets**. Then click **Run**. The search in the list of assets finds an asset by its name or ID. You can choose at most 200 assets one by one. To include more, choose **All assets**.
 
 In Trips and stops, the **By asset** table has a row for every asset in the report, including an asset that made no trips. When the asset has a row with no trips, the asset is in the report but has no trips in the period. See [The report is empty](#the-report-is-empty).
 

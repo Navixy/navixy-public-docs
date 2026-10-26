@@ -35,7 +35,7 @@ A report covers the assets and the period that you choose at the top of the repo
 To run a report, follow these steps:
 
 1. Click the button that shows the assets, such as **All assets**.
-2. Choose **All assets**, or choose the assets one by one. To find an asset, search by its ID.
+2. Choose **All assets**, or choose the assets one by one. To find an asset, search by its name or ID.
 3. Click the button that shows the period, such as **Yesterday**, then choose the period. See [Choose the period](#choose-the-period).
 4. Click **Run**.
 

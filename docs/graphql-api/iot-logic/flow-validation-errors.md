@@ -126,6 +126,8 @@ Some mistakes stop a write before Navixy validates the graph. They return a sing
 | A `trackableNodeId` that doesn't follow the [naming rule](#names-and-text) | `input.nodes[0].trackableNodeId` |
 | `deviceIds: null` on a data source, or `deviceMapping: null` on a Device Action node | `input.nodes[0].deviceIds` or `input.nodes[0].deviceMapping` |
 | One source device in two entries of the `deviceMapping` of one node | `input.nodes[0].deviceMapping` |
+| `title: null`, `nodes: null`, or `isEnabled: null` in `flowUpdate`. Leave the field out to keep its stored value. | `input.title`, `input.nodes`, or `input.isEnabled` |
+| `transitions` without `nodes` in `flowUpdate`. Send both lists together. | `input.transitions` |
 
 The following error is the response to an Initiate Attribute node with the attribute name `TempF`:
 
