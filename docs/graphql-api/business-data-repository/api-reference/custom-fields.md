@@ -337,7 +337,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required for this field. |
 | `minDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The default value. |
 
 ---
@@ -821,7 +821,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The default value. |
 
 ---

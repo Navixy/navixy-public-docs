@@ -26,7 +26,7 @@ Full state of each followed asset, re-emitted whenever any of its devices report
   Acts on the workspace the caller's token names, captured when the stream opens.
 
   The workspace needs Tracking enabled in Console; otherwise the subscription is refused with
-  `PRODUCT_DISABLED` before the stream opens.
+  `PRODUCT_DISABLED`. Every refusal comes before the stream opens.
 
   A caller that already has as many streams open as its concurrent stream limit allows is refused
   with `RATE_LIMITED`. A slot frees when the server ends one of the caller's streams; for a

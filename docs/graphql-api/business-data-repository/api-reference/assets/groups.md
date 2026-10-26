@@ -117,7 +117,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
@@ -264,7 +264,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
@@ -335,7 +335,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
@@ -454,7 +454,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
@@ -522,7 +522,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |
@@ -622,7 +622,7 @@ A catalog item that classifies asset groups.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `allowedAssetTypes` | [[AssetGroupTypeConstraint](#assetgrouptypeconstraint)!]! | The asset types that groups of this type are meant to hold, each with an optional `maxItems`. The API stores and returns them but doesn't check them when assets are added. |
 
@@ -721,7 +721,7 @@ A catalog item that classifies asset groups.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `allowedAssetTypes` | [[AssetGroupTypeConstraint](#assetgrouptypeconstraint)!]! | The asset types that groups of this type are meant to hold, each with an optional `maxItems`. The API stores and returns them but doesn't check them when assets are added. |
 
@@ -798,7 +798,7 @@ A catalog item that classifies asset groups.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `allowedAssetTypes` | [[AssetGroupTypeConstraint](#assetgrouptypeconstraint)!]! | The asset types that groups of this type are meant to hold, each with an optional `maxItems`. The API stores and returns them but doesn't check them when assets are added. |
 
@@ -830,7 +830,7 @@ A group of assets.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this group. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this group. |
 | `type` | [AssetGroupType](#assetgrouptype) | The group type. Immutable after creation. |
 | `color` | [HexColorCode](../../../core-api-reference/common.md#hexcolorcode) | The color for UI display in hexadecimal format. |
 | `currentAssets` | [AssetConnection](README.md#assetconnection)! | The assets currently in this group. |

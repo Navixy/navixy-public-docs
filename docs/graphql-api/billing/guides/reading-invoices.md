@@ -11,7 +11,7 @@ tags:
 
 This guide shows how to read your workspace's invoices through the Billing API. You will list the invoices, read one invoice with its lines, and find the balance statement entry that charged it. You will also learn how an invoice becomes paid or overdue, and what to do with an overdue invoice.
 
-Every operation on this page acts in the workspace named by your access token. You never pass a workspace ID, so a request can't read the invoices of another workspace.
+Every operation on this page reads the data of the workspace named by your access token. You never pass a workspace ID, so a request can't read the invoices of another workspace.
 
 ## Prerequisites
 
@@ -465,7 +465,7 @@ Billing doesn't block a workspace with an overdue invoice. Whether the workspace
 
 ## Listing invoices by issue date
 
-To show the invoices issued in a period, filter by `issuedFrom` and `issuedTo`. Both bounds are inclusive and apply to `issuedAt`. To list the oldest invoice first, set `orderBy` to `{ field: ISSUED_AT, direction: ASC }`. `ISSUED_AT` is the only sort field. Run this query:
+To show the invoices issued in a period, filter by `issuedFrom` and `issuedTo`. Both are inclusive and apply to `issuedAt`. To list the oldest invoice first, set `orderBy` to `{ field: ISSUED_AT, direction: ASC }`. `ISSUED_AT` is the only sort field. Run this query:
 
 ```graphql
 query ThirdQuarterInvoices {

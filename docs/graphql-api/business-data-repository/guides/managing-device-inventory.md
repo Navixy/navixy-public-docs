@@ -158,7 +158,7 @@ Response:
 A device can hold only one active assignment, so `deviceInventoryLink` fails if the device is already assigned anywhere, including to the same inventory you're linking it to. The error is a [validation error](../../error-handling.md#validation-error-400) reading `Device <id> already linked to inventory <id>`. Unlink first, then link.
 
 {% hint style="info" %}
-`assignedBy` records the actor who made the API call. It is `null` when the request carried no actor.
+`assignedBy` records the actor who made the API call. It is `null` when Navixy Console doesn't know the actor, and `assignedById` still holds the actor's ID.
 {% endhint %}
 {% endstep %}
 

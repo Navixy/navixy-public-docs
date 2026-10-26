@@ -1,13 +1,14 @@
 # =============================================================================
 # Billing public schema — exposed through the SDK
-# Version: 0.15.0
+# Version: 0.21.0
 # =============================================================================
 #
 # What a customer's own token may do in billing: read its usage-metric and invoice-line-item
 # submissions with the reference types they denormalize (BillingProductDomain, BillingMetric), and —
 # since 0.6.0 — `myAvailablePlans` and `mySubscribe`, with the catalogue and pricing vocabulary they
-# need, and — since 0.15.0 — `myInvoices` and `myInvoice`. Every operation here acts on the workspace the token
-# names and accepts no workspace argument.
+# need, and — since 0.15.0 — `myInvoices` and `myInvoice`, and — since 0.19.0 — `myAuditEvents` and
+# `myEntityHistory`, billing's audit events. Every operation here acts on the workspace the token names and
+# accepts no workspace argument.
 #
 # Money and Currency are used here too but declared in nvx4-common.graphql — see below.
 #
@@ -19,7 +20,8 @@
 #
 # Relies on shared infrastructure from nvx4-common.graphql: Node, Versioned, DateTime, JSON,
 # Connection, Edge, PageInfo, CountInfo, Money, Currency, Code, Long, OrderDirection, @trim —
-# plus GraphQL's built-in ID scalar.
+# plus GraphQL's built-in ID scalar — and on the audit types of nvx4-audit.graphql
+# (AuditEventConnection, AuditEventFilter, AuditEventOrder).
 #
 # VERSIONING
 # ----------
@@ -90,6 +92,7 @@ enum BillingAggregationFunction {
   MIN
   AVG
   LAST
+  MEDIAN
 }
 
 # @category: billing/plan
@@ -478,7 +481,7 @@ type BillingInvoiceLineItemSubmission implements Node {
   productDomain: BillingProductDomain!
   "External idempotency key (per producer scope)."
   externalId: String
-  "Human-readable line description (will appear on the invoice)."
+  "Human-readable line description; the invoice shows it followed by the billing period the line belongs to."
   description: String!
   "Quantity reported for the period."
   quantity: Float!
@@ -682,6 +685,14 @@ input BillingUsageMetricSubmissionFilter {
   submittedAtFrom: DateTime
   "Return submissions whose `submittedAt` is at or before this timestamp (inclusive)."
   submittedAtTo: DateTime
+  "Return submissions whose `periodStart` is at or after this timestamp (inclusive). A value after `periodStartTo` matches nothing."
+  periodStartFrom: DateTime
+  "Return submissions whose `periodStart` is at or before this timestamp (inclusive)."
+  periodStartTo: DateTime
+  "Return submissions whose `metricValue` is at least this value (inclusive). A value above `metricValueMax` matches nothing."
+  metricValueMin: Float
+  "Return submissions whose `metricValue` is at most this value (inclusive). For whole counts, `metricValueMax: 9` means fewer than 10."
+  metricValueMax: Float
 }
 
 # @category: billing/submission
@@ -899,6 +910,55 @@ type BillingQuery {
     "The ordering options for the returned submissions."
     orderBy: BillingInvoiceLineItemSubmissionOrder = { field: SUBMITTED_AT, direction: DESC }
   ): BillingInvoiceLineItemSubmissionConnection!
+
+  # @category: billing/audit
+  """
+  The audit events of billing in the caller's own workspace, newest first by default: who wrote what to the
+  workspace's subscriptions, invoices, balance and other billing entities, and when.
+
+  **The workspace is not an argument.** It is the one the caller's token names; a token carrying no
+  workspace claim is refused.
+
+  Only `billing`'s events are read: `filter.products` absent or empty reads them, and naming any other
+  product fails with `VALIDATION_ERROR`, since this field does not serve it. The types are those of
+  nvx4-audit.graphql, which `BdrQuery.auditEvents` returns too.
+  """
+  myAuditEvents(
+    "Filtering options for the returned events."
+    filter: AuditEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned events."
+    orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
+  ): AuditEventConnection!
+
+  # @category: billing/audit
+  """
+  The audit events of billing about one entity of the caller's own workspace, such as a subscription or an
+  invoice, newest first by default. The workspace, the access and the products are as for `myAuditEvents`.
+  """
+  myEntityHistory(
+    "The ID of the entity whose events to return."
+    entityId: ID!
+    "Filtering options for the returned events."
+    filter: AuditEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned events."
+    orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
+  ): AuditEventConnection!
 }
 
 # =============================================================================

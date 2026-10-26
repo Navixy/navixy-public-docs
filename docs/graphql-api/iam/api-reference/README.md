@@ -42,7 +42,7 @@ The two IAM connections page differently, and both differ from the [pagination](
 
 `IamRole.organizationId` is an `ID`, the same value as `ConsoleOrganization.id` in [Console](../../console/api-reference/organizations.md). For this ID, `node(id:)` returns the organization when it's one of your own organizations. If IAM returns a role whose `organizationId` isn't an organization ID, the operation that returns the role fails with `SERVICE_UNAVAILABLE` and `dependency: "iam"`.
 
-`actorId` is a `UUID` that Navixy Console issues for a person or an integration. Your own actor ID is the `actor_id` claim of your [access token](../../authentication.md#access-token-claims). To find the actor ID of another member, read [members](../../console/api-reference/members.md#members) in Console.
+`actorId` is a `UUID` that Navixy Console issues for a person or an API key. Your own actor ID is the `actor_id` claim of your [access token](../../authentication.md#access-token-claims). To find the actor ID of another member, read [members](../../console/api-reference/members.md#members) in Console.
 
 `productCode` in `IamRoleProductScope` and `IamRoleProductScopeInput`, and `resourceType` in `IamRoleDataResourceGrant` and `IamRoleDataResourceGrantInput`, are [`Code`](../../core-api-reference/common.md#code) values. An input with a value that isn't a valid code is refused before the request runs, as a `VALIDATION_ERROR` without a `field`.
 

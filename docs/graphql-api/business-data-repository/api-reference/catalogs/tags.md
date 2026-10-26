@@ -166,7 +166,7 @@ A tag for labeling and categorizing entities.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `entityTypes` | [[EntityType](system.md#entitytype)!]! | The entity types this tag can be applied to. Empty means the tag is universal. |
 
@@ -252,7 +252,7 @@ A tag for labeling and categorizing entities.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `entityTypes` | [[EntityType](system.md#entitytype)!]! | The entity types this tag can be applied to. Empty means the tag is universal. |
 
@@ -329,7 +329,7 @@ A tag for labeling and categorizing entities.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `entityTypes` | [[EntityType](system.md#entitytype)!]! | The entity types this tag can be applied to. Empty means the tag is universal. |
 

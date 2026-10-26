@@ -12,7 +12,7 @@ tags:
 
 This guide shows how to choose a plan for your workspace and subscribe to it through the Billing API. You will list the plans open to your workspace and read what each one costs and includes, then subscribe your workspace and confirm the result.
 
-Every operation on this page acts in the workspace named by your access token. You never pass a workspace ID, so a request can't subscribe a workspace that the token doesn't name.
+Every operation on this page reads or changes the data of the workspace named by your access token. You never pass a workspace ID, so a request can't subscribe a workspace that the token doesn't name.
 
 ## Prerequisites
 

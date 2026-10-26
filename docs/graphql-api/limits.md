@@ -52,7 +52,7 @@ Selections can nest at most 15 levels deep. The count includes the `bdr` level, 
 
 ### Request rate
 
-Each caller can send 100 requests per 60-second period. The caller is the user or integration that the access token names, so all tokens of one user count toward the same limit. Requests without a token count per IP address, so all callers without a token that use the same IP address share one limit. Each API server keeps its own count, and more than one server answers requests, so the number is what you can always rely on, not a ceiling: a caller sometimes gets more requests through in a period.
+Each caller can send 100 requests per 60-second period. The caller is the user or API key that the access token names, so all tokens of one user count toward the same limit. Requests without a token count per IP address, so all callers without a token that use the same IP address share one limit. Each API server keeps its own count, and more than one server answers requests, so the number is what you can always rely on, not a ceiling: a caller sometimes gets more requests through in a period.
 
 The limit counts more than HTTP requests:
 
@@ -128,7 +128,7 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 
 ## What has no fixed limit
 
-The API sets no cap on the following, so the practical bound is the query complexity limit and your own restraint:
+The API sets no cap on the following. Only the query complexity limit applies to them, so keep them as small as your task allows:
 
 * The number of identifiers per device
 * The number of entries in `customFields.set` and `unset`

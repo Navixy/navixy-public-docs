@@ -58,6 +58,10 @@ Filtering options for the caller's own usage-metric submissions. Fields combine 
 | `accounted` | `Boolean` | Filter by invoicing state: `false` = unaccounted (not yet rolled into an invoice), `true` = accounted (already invoiced), omitted = both. |
 | `submittedAtFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `submittedAt` is at or after this timestamp (inclusive). |
 | `submittedAtTo` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `submittedAt` is at or before this timestamp (inclusive). |
+| `periodStartFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `periodStart` is at or after this timestamp (inclusive). A value after `periodStartTo` matches nothing. |
+| `periodStartTo` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `periodStart` is at or before this timestamp (inclusive). |
+| `metricValueMin` | `Float` | Return submissions whose `metricValue` is at least this value (inclusive). A value above `metricValueMax` matches nothing. |
+| `metricValueMax` | `Float` | Return submissions whose `metricValue` is at most this value (inclusive). For whole counts, `metricValueMax: 9` means fewer than 10. |
 
 </details>
 
@@ -219,7 +223,7 @@ Pre-built invoice line item submitted externally (no aggregation, one row = one 
 | `workspaceId` | `ID!` | The workspace the line item belongs to. |
 | `productDomain` | [BillingProductDomain](plan.md#billingproductdomain)! | The product domain the line item was reported for. |
 | `externalId` | `String` | External idempotency key (per producer scope). |
-| `description` | `String!` | Human-readable line description (will appear on the invoice). |
+| `description` | `String!` | Human-readable line description; the invoice shows it followed by the billing period the line belongs to. |
 | `quantity` | `Float!` | Quantity reported for the period. |
 | `unitPrice` | [Money](../../core-api-reference/common.md#money)! | Unit price for this line. |
 | `amount` | [Money](../../core-api-reference/common.md#money) | Optional total amount; if null, the invoicer derives it from quantity * unitPrice. |
@@ -248,6 +252,10 @@ Filtering options for the caller's own usage-metric submissions. Fields combine 
 | `accounted` | `Boolean` | Filter by invoicing state: `false` = unaccounted (not yet rolled into an invoice), `true` = accounted (already invoiced), omitted = both. |
 | `submittedAtFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `submittedAt` is at or after this timestamp (inclusive). |
 | `submittedAtTo` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `submittedAt` is at or before this timestamp (inclusive). |
+| `periodStartFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `periodStart` is at or after this timestamp (inclusive). A value after `periodStartTo` matches nothing. |
+| `periodStartTo` | [DateTime](../../core-api-reference/common.md#datetime) | Return submissions whose `periodStart` is at or before this timestamp (inclusive). |
+| `metricValueMin` | `Float` | Return submissions whose `metricValue` is at least this value (inclusive). A value above `metricValueMax` matches nothing. |
+| `metricValueMax` | `Float` | Return submissions whose `metricValue` is at most this value (inclusive). For whole counts, `metricValueMax: 9` means fewer than 10. |
 
 ---
 

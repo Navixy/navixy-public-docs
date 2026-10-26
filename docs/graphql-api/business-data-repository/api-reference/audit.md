@@ -54,6 +54,7 @@ Filtering options for audit events.
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
 | `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
 | `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
+| `products` | [[Code](../../core-api-reference/common.md#code)!] | Filter by products (OR within field). Absent or empty: every product the field reads that the caller may read. `BdrQuery`'s fields read the products whose events the server keeps: a product the caller may not read is refused with PERMISSION_DENIED, and one it may read that the server does not keep with VALIDATION_ERROR. A field that reads one product, such as `BillingQuery.myAuditEvents`, refuses any other with VALIDATION_ERROR. |
 | `traceId` | `String` | Filter by trace ID. |
 | `from` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred after this timestamp. |
 | `to` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred before this timestamp. |
@@ -137,6 +138,7 @@ Filtering options for audit events.
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
 | `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
 | `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
+| `products` | [[Code](../../core-api-reference/common.md#code)!] | Filter by products (OR within field). Absent or empty: every product the field reads that the caller may read. `BdrQuery`'s fields read the products whose events the server keeps: a product the caller may not read is refused with PERMISSION_DENIED, and one it may read that the server does not keep with VALIDATION_ERROR. A field that reads one product, such as `BillingQuery.myAuditEvents`, refuses any other with VALIDATION_ERROR. |
 | `traceId` | `String` | Filter by trace ID. |
 | `from` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred after this timestamp. |
 | `to` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred before this timestamp. |
@@ -190,15 +192,17 @@ An audit log entry recording an event that occurred in the system.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
-| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace the event was recorded in. `auditEvents` and `entityHistory` list only the caller's workspace's events, so this is always the caller's workspace. |
-| `actor` | [Actor](actors/README.md#actor) | The actor who triggered the event. |
+| `workspace` | [Workspace](workspaces.md#workspace) | The workspace the event was recorded in. `auditEvents` and `entityHistory` list only the caller's workspace's events, so this is always the caller's workspace. |
+| `actorId` | `ID` | The id of the actor who triggered the event: a user's id from Console, a member of staff's, or the system's. |
+| `actor` | [Actor](../../core-api-reference/common.md#actor) | The actor who triggered the event; null when there is none or Console does not know the id. |
 | `ipAddress` | `String` | The client IP address. |
 | `userAgent` | `String` | The client User-Agent string. |
 | `sourceType` | [SourceType](#sourcetype)! | The source type of the request. |
 | `traceId` | `String` | The distributed tracing ID (32 hex characters) for log correlation. |
-| `aggregateType` | [Code](../../core-api-reference/common.md#code) | The type of entity affected: `asset`, `asset_group`, `catalog_item` (any catalog item), `custom_field_definition`, `device`, `geo_object`, `integration`, `inventory`, `member`, `schedule`, or `workspace`. |
+| `aggregateType` | [Code](../../core-api-reference/common.md#code) | The type of entity affected: `asset`, `asset_group`, `catalog_item` (any catalog item), `custom_field_definition`, `device`, `geo_object`, `inventory`, `schedule`, or `workspace`. Older events can also have `integration` or `member`. |
 | `aggregateId` | `ID` | The ID of the affected entity. |
 | `eventType` | [AuditEventType](#auditeventtype)! | The type of event that occurred. |
+| `product` | [Code](../../core-api-reference/common.md#code)! | The product the event belongs to, such as `bdr`. |
 | `eventData` | [JSON](../../core-api-reference/common.md#json) | The event payload with details such as changed fields. |
 | `occurredAt` | [DateTime](../../core-api-reference/common.md#datetime)! | The date and time when the event occurred. |
 
@@ -219,6 +223,7 @@ Filtering options for audit events.
 | `aggregateIds` | `[ID!]` | Filter by specific entity IDs (OR within field). |
 | `eventTypes` | [[AuditEventType](#auditeventtype)!] | Filter by event types (OR within field). |
 | `sourceTypes` | [[SourceType](#sourcetype)!] | Filter by source types (OR within field). |
+| `products` | [[Code](../../core-api-reference/common.md#code)!] | Filter by products (OR within field). Absent or empty: every product the field reads that the caller may read. `BdrQuery`'s fields read the products whose events the server keeps: a product the caller may not read is refused with PERMISSION_DENIED, and one it may read that the server does not keep with VALIDATION_ERROR. A field that reads one product, such as `BillingQuery.myAuditEvents`, refuses any other with VALIDATION_ERROR. |
 | `traceId` | `String` | Filter by trace ID. |
 | `from` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred after this timestamp. |
 | `to` | [DateTime](../../core-api-reference/common.md#datetime) | Return events that occurred before this timestamp. |
@@ -248,11 +253,12 @@ The source type identifying the origin of an API request.
 
 | Value | Description |
 | ----- | ----------- |
-| `WEB` | Not recorded. Every event has `API`. |
-| `MOBILE` | Not recorded. Every event has `API`. |
-| `API` | Recorded on every event, including the events the platform records on its own. |
-| `INTERNAL` | Not recorded. Every event has `API`. |
-| `INTEGRATION` | Not recorded. Every event has `API`. |
+| `WEB` | Not recorded. Events have `API` or `INTERNAL`. |
+| `MOBILE` | Not recorded. Events have `API` or `INTERNAL`. |
+| `API` | A change that a caller of the API made. Events recorded before `INTERNAL` was introduced have `API` too. |
+| `INTERNAL` | A change that the platform made on its own, such as a workspace that Navixy Console created or changed. |
+| `INTEGRATION` | Not recorded. Events have `API` or `INTERNAL`. |
+| `AGENT` | Reserved for a change that an AI client makes through the MCP server. Not recorded: events have `API` or `INTERNAL`. |
 
 ---
 

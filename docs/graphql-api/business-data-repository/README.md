@@ -25,7 +25,6 @@ Business Data Repository API enables you to:
 * Describe working hours, service windows, and other repeating times as schedules
 * Add fields of your own to asset types and geo object types
 * Keep your own lists and tags, and pick values from them in your fields
-* Add existing users to the workspace as members, and register external systems as integrations
 * See who created, changed, or deleted a record, and when, in the audit log
 
 Your access token names one workspace, and every operation acts in it. No operation takes a workspace ID, so a request can't read or change the data of another workspace.
@@ -48,7 +47,7 @@ Assets are at the center. Devices, geo objects, and schedules are assigned to as
 
 Three parties share the work on the business data of a workspace:
 
-<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Create and change assets and their types and groups, devices and inventories, geo objects, schedules, lists, members, and integrations. Read the audit log. Every call acts in the workspace named by the token.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Creates the workspace and decides which products it runs. Business Data Repository shows the workspace but can't change it.</td></tr><tr><td><strong>Tracking</strong></td><td>Reads the assets and their devices to show live positions, trips, and stops.</td></tr></tbody></table>
+<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Create and change assets and their types and groups, devices and inventories, geo objects, schedules, and lists. Read the audit log. Every call reads or changes the data of the workspace named by the token.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Creates the workspace and decides which products it runs. Business Data Repository shows the workspace but can't change it.</td></tr><tr><td><strong>Tracking</strong></td><td>Reads the assets and their devices to show live positions, trips, and stops.</td></tr></tbody></table>
 
 Business Data Repository stores schedules but doesn't act on them. What a schedule means, such as whether a vehicle may move outside a shift, is up to the product that reads it.
 
@@ -72,8 +71,8 @@ The guides cover the tasks that you can do with the Business Data Repository API
 
 The [Business Data Repository API reference](api-reference/README.md) documents the operations and types, one page per topic:
 
-* [Workspaces](api-reference/workspaces/): Your workspace and its members.
-* [Actors](api-reference/actors/): The users and integrations that send requests.
+* [Workspaces](api-reference/workspaces.md): Your workspace.
+* [Users](api-reference/actors/users.md): The caller, through the `me` query, and the catalog items that users define.
 * [Devices](api-reference/devices/): Devices, their identifiers, the device catalogs, and inventories.
 * [Assets](api-reference/assets/): Assets, asset types, and asset groups.
 * [Geo objects](api-reference/geo-objects.md): Geo objects and their types.

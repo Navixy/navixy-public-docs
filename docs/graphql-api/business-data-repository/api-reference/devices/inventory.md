@@ -42,7 +42,7 @@ An inventory or warehouse record for device stock management.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this inventory. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this inventory. |
 | `devices` | [DeviceConnection](README.md#deviceconnection)! | The devices assigned to this inventory. |
 
 </details>
@@ -182,7 +182,7 @@ An inventory or warehouse record for device stock management.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this inventory. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this inventory. |
 | `devices` | [DeviceConnection](README.md#deviceconnection)! | The devices assigned to this inventory. |
 
 </details>
@@ -248,7 +248,7 @@ An inventory or warehouse record for device stock management.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this inventory. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this inventory. |
 | `devices` | [DeviceConnection](README.md#deviceconnection)! | The devices assigned to this inventory. |
 
 </details>
@@ -370,7 +370,8 @@ A record of a device's assignment to an inventory.
 | `device` | [Device](README.md#device)! | The device that was assigned. |
 | `inventory` | [Inventory](#inventory)! | The inventory the device was assigned to. |
 | `assignedAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | The date and time when the device was assigned. |
-| `assignedBy` | [Actor](../actors/README.md#actor) | The actor who assigned the device. |
+| `assignedById` | `ID` | The id of the actor who assigned the device: a user's id from Console, a member of staff's, or the system's. |
+| `assignedBy` | [Actor](../../../core-api-reference/common.md#actor) | The actor who assigned the device; null when there is none or Console does not know the id. |
 
 </details>
 
@@ -442,7 +443,8 @@ A record of a device's assignment to an inventory.
 | `device` | [Device](README.md#device)! | The device that was assigned. |
 | `inventory` | [Inventory](#inventory)! | The inventory the device was assigned to. |
 | `assignedAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | The date and time when the device was assigned. |
-| `assignedBy` | [Actor](../actors/README.md#actor) | The actor who assigned the device. |
+| `assignedById` | `ID` | The id of the actor who assigned the device: a user's id from Console, a member of staff's, or the system's. |
+| `assignedBy` | [Actor](../../../core-api-reference/common.md#actor) | The actor who assigned the device; null when there is none or Console does not know the id. |
 
 ---
 
@@ -459,7 +461,7 @@ An inventory or warehouse record for device stock management.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this inventory. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this inventory. |
 | `devices` | [DeviceConnection](README.md#deviceconnection)! | The devices assigned to this inventory. |
 
 **Arguments of `devices`**

@@ -1,8 +1,8 @@
 ---
 description: >-
-  Reference for user accounts and user-defined catalog items: the read-only User
-  object, the me query with the organizations and workspaces the caller can
-  switch to, and the mutations that manage hierarchical catalog entries.
+  Reference for the me query, with the caller's organizations, workspaces,
+  products, and roles, and for user-defined catalog items and the mutations that
+  manage them.
 tags:
   - reference
   - beta
@@ -10,7 +10,7 @@ tags:
 
 # Users
 
-User accounts representing human operators who access the system through the UI or API.
+The `me` query, which describes the caller, and the catalog items that users define in their workspace.
 
 ## Queries
 
@@ -28,12 +28,12 @@ me: Me!
 
 <summary>Me</summary>
 
-The caller: the user the token names, and the organizations and workspaces they can switch to.
+The caller: the actor the token names, and the organizations and workspaces they can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The caller's `User` id, the id the rest of this API uses for them. |
-| `title` | `String!` | The caller's display name, the value `User.title` has for the same user: the full name, or the email when the identity provider holds no name. |
+| `id` | `ID!` | The caller's actor id, the id the rest of this API uses for them: a user's id from Console, or a member of staff's, the staff token's subject. |
+| `title` | `String!` | The caller's display name from the token's own claims: the full name, or the email when the token carries no name. It is read for this answer and stored nowhere. |
 | `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization the caller is an active member of in Console, each with its workspaces other than terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the token carries no usable `actor_id` claim, `NOT_FOUND` when Console holds no active user with that id, `SERVICE_UNAVAILABLE` when Console does not answer or this deployment does not read it. |
 | `products` | [[MeProduct](#meproduct)!] | The products the caller may use in the workspace the token names, as billing's catalogue describes them: the codes of the token's `product_codes` claim that a role of the caller scopes, read through the IAM SDK. `isActive` is carried, not filtered on. Empty when the token's workspace does not resolve here or the caller holds no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when this deployment has no product catalogue to read. |
 | `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace the token names: active, of the token's organization, and reaching that workspace — the roles every IAM check of this API is decided over. Empty when the token's workspace does not resolve here or the caller holds no role in it. |
@@ -122,7 +122,7 @@ A user-defined catalog item that supports hierarchical workspace.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `parent` | [UserCatalogItem](#usercatalogitem) | The parent item in the hierarchy. Null for root items. |
 | `children` | [UserCatalogItemConnection](#usercatalogitemconnection)! | The child items in the hierarchy. |
@@ -209,7 +209,7 @@ A user-defined catalog item that supports hierarchical workspace.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `parent` | [UserCatalogItem](#usercatalogitem) | The parent item in the hierarchy. Null for root items. |
 | `children` | [UserCatalogItemConnection](#usercatalogitemconnection)! | The child items in the hierarchy. |
@@ -287,7 +287,7 @@ A user-defined catalog item that supports hierarchical workspace.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `parent` | [UserCatalogItem](#usercatalogitem) | The parent item in the hierarchy. Null for root items. |
 | `children` | [UserCatalogItemConnection](#usercatalogitemconnection)! | The child items in the hierarchy. |
@@ -305,50 +305,16 @@ A user-defined catalog item that supports hierarchical workspace.
 
 ---
 
-<a id="user"></a>
-
-### User
-
-A human user account authenticated via an identity provider.
-
-**Implements:** [Actor](README.md#actor), [Node](../../../core-api-reference/common.md#node), [Versioned](../../../core-api-reference/common.md#versioned), [Titled](../../../core-api-reference/common.md#titled)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | A globally unique identifier. |
-| `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
-| `title` | `String!` | The display name for the user: the full name, or the email when the identity provider holds no name. |
-| `name` | [PersonName](README.md#personname)! | The structured name components from the identity provider. |
-| `identityProvider` | `String!` | The identity provider name (keycloak, auth0, okta, etc.). |
-| `identityProviderId` | `String!` | The user's unique ID in the identity provider. |
-| `email` | [EmailAddress](../../../core-api-reference/common.md#emailaddress)! | The user's primary email address. |
-| `externalId` | `String` | An external system identifier for integration purposes. |
-| `isActive` | `Boolean!` | Whether this user account is active. |
-| `memberships` | [MemberConnection](../workspaces/members.md#memberconnection)! | The workspace memberships for this user. |
-
-**Arguments of `memberships`**
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `filter` | [MemberFilter](../workspaces/members.md#memberfilter) | Filtering options for the returned memberships. |
-| `first` | `Int` | The first `n` elements from the [paginated list](../../../pagination.md). |
-| `after` | `String` | The elements that come after the specified [cursor](../../../pagination.md). |
-| `last` | `Int` | The last `n` elements from the [paginated list](../../../pagination.md). |
-| `before` | `String` | The elements that come before the specified [cursor](../../../pagination.md). |
-| `orderBy` | [MemberOrder](../workspaces/members.md#memberorder) | The ordering options for the returned memberships. Default: `{ field: ASSIGNED_AT, direction: DESC }`. |
-
----
-
 <a id="me"></a>
 
 ### Me
 
-The caller: the user the token names, and the organizations and workspaces they can switch to.
+The caller: the actor the token names, and the organizations and workspaces they can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The caller's `User` id, the id the rest of this API uses for them. |
-| `title` | `String!` | The caller's display name, the value `User.title` has for the same user: the full name, or the email when the identity provider holds no name. |
+| `id` | `ID!` | The caller's actor id, the id the rest of this API uses for them: a user's id from Console, or a member of staff's, the staff token's subject. |
+| `title` | `String!` | The caller's display name from the token's own claims: the full name, or the email when the token carries no name. It is read for this answer and stored nowhere. |
 | `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization the caller is an active member of in Console, each with its workspaces other than terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the token carries no usable `actor_id` claim, `NOT_FOUND` when Console holds no active user with that id, `SERVICE_UNAVAILABLE` when Console does not answer or this deployment does not read it. |
 | `products` | [[MeProduct](#meproduct)!] | The products the caller may use in the workspace the token names, as billing's catalogue describes them: the codes of the token's `product_codes` claim that a role of the caller scopes, read through the IAM SDK. `isActive` is carried, not filtered on. Empty when the token's workspace does not resolve here or the caller holds no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when this deployment has no product catalogue to read. |
 | `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace the token names: active, of the token's organization, and reaching that workspace — the roles every IAM check of this API is decided over. Empty when the token's workspace does not resolve here or the caller holds no role in it. |
@@ -498,38 +464,6 @@ An edge in the UserCatalogItem connection.
 | ----- | ---- | ----------- |
 | `cursor` | `String!` | An opaque cursor for this edge. |
 | `node` | [UserCatalogItem](#usercatalogitem)! | The user catalog item at the end of the edge. |
-
----
-
-<a id="userconnection"></a>
-
-### UserConnection
-
-A paginated list of User items.
-
-**Implements:** [Connection](../../../core-api-reference/common.md#connection)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `edges` | [[UserEdge](#useredge)!]! | A list of edges. |
-| `nodes` | [[User](#user)!]! | A list of nodes in the connection (without edge metadata). |
-| `pageInfo` | [PageInfo](../../../core-api-reference/common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../../../core-api-reference/common.md#countinfo) | The total count of items matching the filter. |
-
----
-
-<a id="useredge"></a>
-
-### UserEdge
-
-An edge in the User connection.
-
-**Implements:** [Edge](../../../core-api-reference/common.md#edge)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `cursor` | `String!` | An opaque cursor for this edge. |
-| `node` | [User](#user)! | The user at the end of the edge. |
 
 ---
 

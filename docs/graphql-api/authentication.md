@@ -79,7 +79,7 @@ The API reads only the claims listed in [Access token claims](authentication.md#
 
 ## How the API picks your workspace
 
-A workspace owns your devices, assets, geo objects, and schedules. Every operation of Business Data Repository and Tracking acts in one workspace, and the API picks that workspace for the whole request before any field runs. For this reason, no operation takes a workspace ID.
+A workspace owns your devices, assets, geo objects, and schedules. Every operation of Business Data Repository and Tracking reads or changes the data of one workspace. The API picks that workspace for the whole request before any field runs. For this reason, no operation takes a workspace ID.
 
 The API picks the workspace in one of two ways:
 
@@ -131,15 +131,15 @@ Entities belong to the workspace too. A by-id query such as `device(id:)` return
 
 ### Switching to another workspace
 
-A token acts in one workspace. To act in another workspace, you need a token issued for that workspace. Your onboarding details say how to get one.
+A token gives access to one workspace. To work with another workspace, you need a token issued for that workspace. Your onboarding details say how to get one.
 
 To list the organizations and workspaces that you can reach, query `me` under `bdr`. See [Users](business-data-repository/api-reference/actors/users.md). The `console` entry point lists them as Navixy Console reports them. See [Console API reference](console/api-reference/).
 
-Workspaces are read-only in Navixy GraphQL API. You create, rename, and close workspaces in Navixy Console. See [Workspaces](business-data-repository/api-reference/workspaces/) for the entity.
+Workspaces are read-only in Navixy GraphQL API. You create, rename, and close workspaces in Navixy Console. See [Workspaces](business-data-repository/api-reference/workspaces.md) for the entity.
 
 ### Billing my\* operations
 
-The Billing [my\* operations](billing/#purpose-and-capabilities), such as `mySubscribe`, act in the workspace too. They read only the `workspace_id` claim. Without the claim, they refuse the request and don't use your membership.
+The Billing [my\* operations](billing/#purpose-and-capabilities), such as `mySubscribe`, read or change the data of that workspace too. They read only the `workspace_id` claim. Without the claim, they refuse the request and don't use your membership.
 
 These operations check that the claim is a workspace ID of this Navixy region and environment. They don't check that the workspace exists. For a workspace that doesn't exist, `myAvailablePlans` returns the plans open to every workspace, and `mySubscribe` fails with `VALIDATION_ERROR`.
 
@@ -161,8 +161,6 @@ A role grants actions on resources. Each resource has a code, which is what the 
 | Geo objects | `bdr.geo-object` |
 | Schedules | `bdr.schedule` |
 | Inventories | `bdr.inventory` |
-| Members | `bdr.member` |
-| Integrations | `bdr.integration` |
 | Catalog items that belong to your workspace | `bdr.catalog` |
 
 The audit log, `bdr.audit`, has the `read` action only. It covers the events of every entity in the workspace, whatever your access to the entities themselves.
@@ -213,9 +211,9 @@ The following example shows a decoded token with only the claims that the API re
 | Claim             | Type            | Required              | What the API does with it                                                                                                                                                                                                                                                                                        |
 | ----------------- | --------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sub`             | String          | Yes                   | Identifies you.                                                                                                                                                                                                                                                                                                  |
-| `email`           | String          | On your first request | The API creates your user record from it. Without it, the first request returns `UNAUTHORIZED`.                                                                                                                                                                                                                  |
-| `given_name`      | String          | No                    | Your first name in the user record, read on your first request.                                                                                                                                                                                                                                                  |
-| `family_name`     | String          | No                    | Your last name in the user record, read on your first request.                                                                                                                                                                                                                                                   |
+| `email` | String | No | Your display name in `me.title` when the token has no name claims. The API reads it for that answer and doesn't store it. |
+| `given_name` | String | No | Your first name in `me.title`. The API reads it for that answer and doesn't store it. |
+| `family_name` | String | No | Your last name in `me.title`. The API reads it for that answer and doesn't store it. |
 | `workspace_id`    | ID              | No                    | The workspace of the request. Without it, the API uses your single active membership. The Billing `my*` operations and the `console` and `iam` operations require it.                                                                                                                                            |
 | `organization_id` | ID              | No                    | The organization of the workspace. Your roles apply only for this organization, so without the claim no role applies. The API also uses it to check the workspace with Navixy Console, and refuses a workspace that it doesn't know yet when the claim is missing. The `console` and `iam` operations require it. See [Console overview](console/#who-does-what) and [IAM overview](iam/#who-does-what). |
 | `actor_id`        | UUID            | No                    | Your actor ID in Navixy Console. `me.organizations` reads it and returns `PERMISSION_DENIED` without it. To read or change your own roles, send it as `actorId` to the `iam` operations. See [IAM API reference](iam/api-reference/#identifiers).                                                                |
@@ -268,4 +266,4 @@ An `UNAUTHORIZED` response has no `data` field. The following example is the res
 
 * [Getting started](getting-started.md): Send your first authenticated request and activate a device.
 * [Error handling](error-handling.md): Learn about the error envelope and every error code.
-* [Workspaces](business-data-repository/api-reference/workspaces/): Learn about the workspace entity and the query that returns it.
+* [Workspaces](business-data-repository/api-reference/workspaces.md): Learn about the workspace entity and the query that returns it.

@@ -23,8 +23,9 @@ Billing API enables a workspace to:
 - Read the statement of its balance: every payment, correction, and invoice charge, with the balance after each one
 - List the usage that Navixy products reported for it
 - List its invoices and read the lines of each one: the fee and the priced usage of every billing period, and whether the invoice is paid
+- Read the audit events of billing in the workspace: who changed its subscriptions, invoices, and balance, and when
 
-The operations behind these tasks are the `my*` operations, named for the prefix `my`, such as `myAvailablePlans` and `mySubscribe`. The [Billing API reference](api-reference/) documents each one. Every `my*` operation acts in the workspace named by your access token. None of them takes a workspace ID, so a request can't read or change the billing of another workspace. Navixy products report usage to Billing outside this API, and [myUsageMetricSubmissions](api-reference/submission.md#myusagemetricsubmissions) lists what they reported for your workspace.
+The operations behind these tasks are the `my*` operations, named for the prefix `my`, such as `myAvailablePlans` and `mySubscribe`. The [Billing API reference](api-reference/) documents each one. Every `my*` operation reads or changes the data of the workspace named by your access token. None of them takes a workspace ID, so a request can't read or change the billing of another workspace. Navixy products report usage to Billing outside this API, and [myUsageMetricSubmissions](api-reference/submission.md#myusagemetricsubmissions) lists what they reported for your workspace.
 
 ## Key concepts
 
@@ -42,7 +43,7 @@ The operations behind these tasks are the `my*` operations, named for the prefix
 
 Billing splits the work between you, calling the API for your own workspace, and Navixy, running the catalog and the money:
 
-<table><thead><tr><th width="147">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Lists the plans open to the workspace, subscribes the workspace to one, reads the invoices, the balance, and its statement, and lists the usage reported for the workspace. Every call acts in the workspace named by the token.</td></tr><tr><td><strong>Navixy</strong></td><td>Sets up the products, metrics, and plans offered by Billing. Moves a workspace to another plan or cancels a subscription. Enters each payment from the bank transfer and files corrections. Billing issues the invoices. You can see the results of each of these on the statement, in the invoices, or in the catalog.</td></tr></tbody></table>
+<table><thead><tr><th width="147">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Lists the plans open to the workspace, subscribes the workspace to one, reads the invoices, the balance, and its statement, and lists the usage reported for the workspace. Every call reads or changes the data of the workspace named by the token.</td></tr><tr><td><strong>Navixy</strong></td><td>Sets up the products, metrics, and plans offered by Billing. Moves a workspace to another plan or cancels a subscription. Enters each payment from the bank transfer and files corrections. Billing issues the invoices. You can see the results of each of these on the statement, in the invoices, or in the catalog.</td></tr></tbody></table>
 
 Two limits apply to every plan: prices are in US dollars, and the billing period is a month.
 
@@ -70,6 +71,7 @@ The [Billing API reference](api-reference/) documents the operations and types, 
 - [Balances](api-reference/balance.md) documents the balance, the statement entry, and the queries that read them.
 - [Submissions](api-reference/submission.md) documents the usage reported for your workspace and the queries that list it.
 - [Invoices](api-reference/invoice.md) documents your workspace's invoices, their lines, and the queries that read them.
+- [Audit](api-reference/audit.md) documents the two queries that read the audit events of billing in your workspace.
 
 For the types that Billing shares with the other products and for an index of the whole API, see [Core API reference](../core-api-reference/).
 

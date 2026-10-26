@@ -30,7 +30,7 @@ Examples: repo (core), fleet_management (FSM), iot (devices), reports, billing.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---
@@ -51,7 +51,7 @@ A definition of an entity type in the system.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `uuidDiscriminator` | `String!` | The 4-character code embedded in UUIDs for entities of this type. |
 | `isCustomizable` | `Boolean!` | Whether entities of this type support custom fields. |
@@ -75,7 +75,7 @@ A country reference data item.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `alpha2Code` | [CountryCode](../../../core-api-reference/common.md#countrycode)! | The [ISO 3166](https://www.iso.org/standard/3166.html)-1 alpha-2 country code. |
 

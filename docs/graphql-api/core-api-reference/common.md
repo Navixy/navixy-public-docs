@@ -74,6 +74,16 @@ An object with a globally unique identifier.
 
 ---
 
+### _health
+
+Liveness check: `true` whenever the API answers.
+
+```graphql
+_health: Boolean
+```
+
+---
+
 ## Objects
 
 <a id="deletepayload"></a>
@@ -85,6 +95,68 @@ The result of a delete mutation.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `deletedId` | `ID!` | The ID of the deleted entity. |
+
+---
+
+<a id="user"></a>
+
+### User
+
+A person, titled by the name Console holds for them.
+
+**Implements:** [Actor](#actor), [Titled](#titled)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `title` | `String!` | The display name of the actor. |
+
+---
+
+<a id="apikey"></a>
+
+### ApiKey
+
+An API key acting on its own, titled by the name it was given in Console.
+
+**Implements:** [Actor](#actor), [Titled](#titled)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `title` | `String!` | The display name of the actor. |
+
+---
+
+<a id="staff"></a>
+
+### Staff
+
+A member of staff, acting through the admin operations. Always titled `Staff`.
+
+**Implements:** [Actor](#actor), [Titled](#titled)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `title` | `String!` | The display name of the actor. |
+
+---
+
+<a id="systemactor"></a>
+
+### SystemActor
+
+A system service acting on its own, titled by the service, such as `Demo Data Seeder`. The general system actor is
+titled `System`, as is a service this server does not know; events recorded before each service had its own actor
+carry the general one.
+
+**Implements:** [Actor](#actor), [Titled](#titled)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `title` | `String!` | The display name of the actor. |
 
 ---
 
@@ -217,6 +289,23 @@ An object with a human-readable display name.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `title` | `String!` | The human-readable display name. |
+
+---
+
+<a id="actor"></a>
+
+### Actor
+
+Someone or something that acted: a person or an API key Console names, a member of staff, or the system. Its name is
+read when asked and stored nowhere. Not a `Node`: an actor is read only through a row that names it, such as an audit
+event, never by an id a client supplies.
+
+**Implements:** [Titled](#titled)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `title` | `String!` | The display name of the actor. |
 
 ---
 

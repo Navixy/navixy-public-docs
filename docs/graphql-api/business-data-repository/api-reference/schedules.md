@@ -43,7 +43,7 @@ A schedule definition for work hours, maintenance windows, or other time-based r
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this schedule. |
 | `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
@@ -184,7 +184,7 @@ A schedule definition for work hours, maintenance windows, or other time-based r
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this schedule. |
 | `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
@@ -251,7 +251,7 @@ A schedule definition for work hours, maintenance windows, or other time-based r
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this schedule. |
 | `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 </details>
@@ -324,7 +324,7 @@ A schedule definition for work hours, maintenance windows, or other time-based r
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this schedule. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this schedule. |
 | `scheduleData` | [ScheduleData](#scheduledata)! | The calendar and time interval definitions for this schedule. |
 
 ---

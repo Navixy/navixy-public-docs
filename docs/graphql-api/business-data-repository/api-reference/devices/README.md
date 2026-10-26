@@ -419,7 +419,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this device. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this device. |
 | `type` | [DeviceType](#devicetype)! | The device type classification. |
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
@@ -615,7 +615,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this device. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this device. |
 | `type` | [DeviceType](#devicetype)! | The device type classification. |
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
@@ -692,7 +692,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this device. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this device. |
 | `type` | [DeviceType](#devicetype)! | The device type classification. |
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
@@ -983,7 +983,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this device. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this device. |
 | `type` | [DeviceType](#devicetype)! | The device type classification. |
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
@@ -1194,7 +1194,7 @@ A classification type for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 </details>
@@ -1278,7 +1278,7 @@ A classification type for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 </details>
@@ -1412,7 +1412,7 @@ An operational status for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 </details>
@@ -1496,7 +1496,7 @@ An operational status for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 </details>
@@ -1572,7 +1572,7 @@ A device manufacturer or vendor.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `models` | [DeviceModelConnection](#devicemodelconnection)! | Device models produced by this vendor. |
 
@@ -1605,7 +1605,7 @@ A specific device model produced by a vendor.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `vendor` | [DeviceVendor](#devicevendor)! | The vendor that manufactures this model. |
 | `supported` | `Boolean!` | Whether the platform decodes this model's data. |
@@ -1628,7 +1628,7 @@ A classification type for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---
@@ -1649,7 +1649,7 @@ An operational status for devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---
@@ -1670,7 +1670,7 @@ A type of relationship between two devices.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---
@@ -1688,7 +1688,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this device. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this device. |
 | `type` | [DeviceType](#devicetype)! | The device type classification. |
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |

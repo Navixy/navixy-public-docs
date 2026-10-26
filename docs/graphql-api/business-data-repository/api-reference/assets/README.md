@@ -117,7 +117,7 @@ A physical or logical asset being tracked.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this asset. |
 | `type` | [AssetType](#assettype)! | The asset type classification. |
 | `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 | `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
@@ -444,7 +444,7 @@ A physical or logical asset being tracked.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this asset. |
 | `type` | [AssetType](#assettype)! | The asset type classification. |
 | `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 | `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
@@ -629,7 +629,7 @@ A physical or logical asset being tracked.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this asset. |
 | `type` | [AssetType](#assettype)! | The asset type classification. |
 | `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 | `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |
@@ -854,7 +854,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The default value. |
 
 </details>
@@ -1088,7 +1088,7 @@ A classification type for assets.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
 
@@ -1261,7 +1261,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../../core-api-reference/common.md#decimal) | The default value. |
 
 </details>
@@ -1495,7 +1495,7 @@ A classification type for assets.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
 
@@ -1572,7 +1572,7 @@ A classification type for assets.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](../catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](../catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](../custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this asset type, ordered by display order. |
 
@@ -1591,7 +1591,7 @@ A physical or logical asset being tracked.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace)! | The workspace that owns this asset. |
+| `workspace` | [Workspace](../workspaces.md#workspace)! | The workspace that owns this asset. |
 | `type` | [AssetType](#assettype)! | The asset type classification. |
 | `customFields` | [[CustomFieldValue](../custom-fields.md#customfieldvalue)!]! | Typed custom field values, one entry per set field code. Each element is a concrete `CustomFieldValue` implementation matching the field's `FieldType` — select fields via inline fragments. The system-reserved code `geojson_data` is excluded — it is exposed through `GeoObject.geojsonData` instead. |
 | `primaryDevice` | [Device](../devices/README.md#device) | The primary device (isPrimary=true among DEVICE-type custom fields). |

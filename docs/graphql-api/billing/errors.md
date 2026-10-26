@@ -10,7 +10,7 @@ tags:
 
 # Billing errors
 
-The Billing operations return errors in the shared Navixy GraphQL API format, using the same codes as every other product. Consult this page if you call the Billing [my\* operations](README.md#purpose-and-capabilities) for your workspace: the operations named with the prefix `my`, such as [mySubscribe](api-reference/subscription.md#mysubscribe) and [myBalance](api-reference/balance.md#mybalance), that act in the workspace named by your token. It covers where Billing differs from the other products in the use of shared codes. For the response structure, the full list of codes, and general scenarios, see [Error handling](../error-handling.md).
+The Billing operations return errors in the shared Navixy GraphQL API format, using the same codes as every other product. Consult this page if you call the Billing [my\* operations](README.md#purpose-and-capabilities) for your workspace: the operations named with the prefix `my`, such as [mySubscribe](api-reference/subscription.md#mysubscribe) and [myBalance](api-reference/balance.md#mybalance), that read or change the data of the workspace named by your token. It covers where Billing differs from the other products in the use of shared codes. For the response structure, the full list of codes, and general scenarios, see [Error handling](../error-handling.md).
 
 ## Missing entities
 

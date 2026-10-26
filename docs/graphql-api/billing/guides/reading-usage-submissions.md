@@ -11,7 +11,7 @@ tags:
 
 This guide shows how to read the usage reported for your workspace through the Billing API. You will list your workspace's usage submissions, read what each submission says, and narrow the list to one metric or one period.
 
-Every operation on this page acts in the workspace named by your access token. You never pass a workspace ID, so a request can't read the usage of another workspace.
+Every operation on this page reads the data of the workspace named by your access token. You never pass a workspace ID, so a request can't read the usage of another workspace.
 
 ## Prerequisites
 
@@ -260,7 +260,7 @@ Response:
 }
 ```
 
-The filter has 5 fields, and they combine with AND: `metricId`, `productDomainId`, `accounted`, `submittedAtFrom`, and `submittedAtTo`. `accounted: true` keeps the submissions that are on an invoice, and `accounted: false` keeps the submissions that no invoice charged. See [Finding usage that no invoice charged](#finding-usage-that-no-invoice-charged) for an example. The list can be sorted by `SUBMITTED_AT`, `PERIOD_START`, `VALUE`, or `METRIC`.
+The filter has 9 fields, and they combine with AND: `metricId`, `productDomainId`, `accounted`, `submittedAtFrom`, `submittedAtTo`, `periodStartFrom`, `periodStartTo`, `metricValueMin`, and `metricValueMax`. All the `From`, `To`, `Min`, and `Max` fields are inclusive, so `metricValueMax: 9` keeps the whole counts below 10. A reversed range, such as `periodStartFrom` after `periodStartTo`, isn't an error: it matches nothing and returns an empty page. `accounted: true` keeps the submissions that are on an invoice, and `accounted: false` keeps the submissions that no invoice charged. See [Finding usage that no invoice charged](#finding-usage-that-no-invoice-charged) for an example. The list can be sorted by `SUBMITTED_AT`, `PERIOD_START`, `VALUE`, or `METRIC`.
 {% endstep %}
 {% endstepper %}
 

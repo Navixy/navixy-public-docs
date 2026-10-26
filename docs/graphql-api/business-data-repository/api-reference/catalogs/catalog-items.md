@@ -46,7 +46,7 @@ A catalog definition that contains catalog items. Catalogs are themselves catalo
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `module` | [Module](system.md#module)! | The module this catalog is associated with. |
 | `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
@@ -209,7 +209,7 @@ A catalog definition that contains catalog items. Catalogs are themselves catalo
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `module` | [Module](system.md#module)! | The module this catalog is associated with. |
 | `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
@@ -295,7 +295,7 @@ A catalog definition that contains catalog items. Catalogs are themselves catalo
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `module` | [Module](system.md#module)! | The module this catalog is associated with. |
 | `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
@@ -388,7 +388,7 @@ A catalog definition that contains catalog items. Catalogs are themselves catalo
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](#catalog)! | Self-reference for the meta-catalog. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `module` | [Module](system.md#module)! | The module this catalog is associated with. |
 | `items` | [CatalogItemConnection](#catalogitemconnection)! | The items in this catalog. |
@@ -578,7 +578,7 @@ A dictionary item that provides reference data for the system.
 | `code` | [Code](../../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](../workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](../workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 
 ---

@@ -72,7 +72,7 @@ Navixy GraphQL API follows the [GraphQL-over-HTTP specification](https://graphql
 
 All business logic errors (such as `NOT_FOUND`, `CONFLICT`, or `VALIDATION_ERROR`) return HTTP 200 with the semantic status code in `extensions.status`. Use `extensions.code` for programmatic error handling, not the HTTP status.
 
-Three cases change the HTTP status. A token that the API can't accept returns 401. A request over the request rate returns 429. A request that the API can't run at all returns 400 when your `Accept` header is `application/graphql-response+json`, and 200 when it's `application/json`. This covers parse and validation errors, `QUERY_TOO_COMPLEX`, and `QUERY_TOO_DEEP`.
+Four cases change the HTTP status. A token that the API can't accept returns 401. A request over the request rate returns 429. A request that the API can't run at all returns 400 when your `Accept` header is `application/graphql-response+json`, and 200 when it's `application/json`. This covers parse and validation errors, `QUERY_TOO_COMPLEX`, and `QUERY_TOO_DEEP`. A body that isn't a GraphQL request returns 400 whatever your `Accept` header says, with or without a token: a body that isn't JSON, a JSON value that isn't an object, an object without `query`, or `variables` or `extensions` that aren't objects. The error has the code `VALIDATION_ERROR`, and its `detail` names the expected shape.
 
 ## Partial failure
 

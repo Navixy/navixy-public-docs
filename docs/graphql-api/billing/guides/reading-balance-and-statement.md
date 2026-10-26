@@ -11,7 +11,7 @@ tags:
 
 This guide shows how to read your workspace's balance and its change history through the Billing API. You will read the balance, then list its statement: every payment, correction, and invoice charge, newest first, each with the balance after it.
 
-Every operation on this page acts in the workspace named by your access token. You never pass a workspace ID, so a request can't read the balance of another workspace.
+Every operation on this page reads the data of the workspace named by your access token. You never pass a workspace ID, so a request can't read the balance of another workspace.
 
 ## Prerequisites
 

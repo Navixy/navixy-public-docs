@@ -360,6 +360,51 @@ interface Titled {
 
 # @category: common
 """
+Someone or something that acted: a person or an API key Console names, a member of staff, or the system. Its name is
+read when asked and stored nowhere. Not a `Node`: an actor is read only through a row that names it, such as an audit
+event, never by an id a client supplies.
+"""
+interface Actor implements Titled {
+  "The actor's id, as the row that names it holds it."
+  id: ID!
+  "The display name of the actor."
+  title: String!
+}
+
+# @category: common
+"A person, titled by the name Console holds for them."
+type User implements Actor & Titled {
+  id: ID!
+  title: String!
+}
+
+# @category: common
+"An API key acting on its own, titled by the name it was given in Console."
+type ApiKey implements Actor & Titled {
+  id: ID!
+  title: String!
+}
+
+# @category: common
+"A member of staff, acting through the admin operations. Always titled `Staff`."
+type Staff implements Actor & Titled {
+  id: ID!
+  title: String!
+}
+
+# @category: common
+"""
+A system service acting on its own, titled by the service, such as `Demo Data Seeder`. The general system actor is
+titled `System`, as is a service this server does not know; events recorded before each service had its own actor
+carry the general one.
+"""
+type SystemActor implements Actor & Titled {
+  id: ID!
+  title: String!
+}
+
+# @category: common
+"""
 An object that supports custom field values.
 
 Implies `Node`: values are stored on the holder and indexed by its id, so every holder is an
@@ -654,8 +699,9 @@ type FieldParamsDecimal implements FieldParams {
   "The maximum allowed value."
   maxDecimal: Decimal
   """
-  Digits after the decimal point. Must be >= 0. Values sent with more
-  fractional digits than `scale` are rounded using HALF_UP before storage.
+  Digits after the decimal point, from 0 to 10, the scale values are stored with.
+  Values sent with more fractional digits than `scale` are rounded using HALF_UP
+  before storage.
   """
   scale: Int!
   "The default value."
@@ -1117,8 +1163,9 @@ input DecimalFieldParamsInput {
   "The maximum allowed value."
   maxDecimal: Decimal
   """
-  Digits after the decimal point. Must be >= 0. Values sent with more
-  fractional digits than `scale` are rounded using HALF_UP before storage.
+  Digits after the decimal point, from 0 to 10, the scale values are stored with.
+  Values sent with more fractional digits than `scale` are rounded using HALF_UP
+  before storage.
   """
   scale: Int!
   "The default value."

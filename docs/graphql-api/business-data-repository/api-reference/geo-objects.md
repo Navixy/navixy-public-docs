@@ -117,7 +117,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
 | `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
@@ -459,7 +459,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
 | `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
@@ -645,7 +645,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
 | `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |
@@ -870,7 +870,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The default value. |
 
 </details>
@@ -1104,7 +1104,7 @@ A classification type for geographic objects.
 | `code` | [Code](../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
@@ -1277,7 +1277,7 @@ Parameters for DECIMAL field type.
 | `isRequired` | `Boolean!` | Whether a value is required. |
 | `minDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The minimum allowed value. |
 | `maxDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The maximum allowed value. |
-| `scale` | `Int!` | Digits after the decimal point. Must be >= 0. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
+| `scale` | `Int!` | Digits after the decimal point, from 0 to 10, the scale values are stored with. Values sent with more fractional digits than `scale` are rounded using HALF_UP before storage. |
 | `defaultDecimal` | [Decimal](../../core-api-reference/common.md#decimal) | The default value. |
 
 </details>
@@ -1511,7 +1511,7 @@ A classification type for geographic objects.
 | `code` | [Code](../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
@@ -1588,7 +1588,7 @@ A classification type for geographic objects.
 | `code` | [Code](../../core-api-reference/common.md#code)! | A machine-readable code, unique within the catalog for a given workspace. A workspace item may reuse the code of the system item it overrides. |
 | `order` | `Int!` | The display order within the same level or category. |
 | `catalog` | [Catalog](catalogs/catalog-items.md#catalog)! | The catalog this item belongs to. |
-| `workspace` | [Workspace](workspaces/README.md#workspace) | The workspace that owns this item. Null for system items. |
+| `workspace` | [Workspace](workspaces.md#workspace) | The workspace that owns this item. Null for system items. |
 | `meta` | [CatalogItemMeta](catalogs/catalog-items.md#catalogitemmeta)! | Metadata about this item including description, origin, and display properties. |
 | `customFieldDefinitions` | [[CustomFieldDefinition](custom-fields.md#customfielddefinition)!]! | Custom field definitions specific to this geo object type, ordered by display order. |
 
@@ -1622,7 +1622,7 @@ A geographic object such as a geofence, point of interest, or route.
 | `id` | `ID!` | A globally unique identifier. This ID is opaque and should not be parsed by clients. |
 | `version` | `Int!` | The version number for optimistic locking. Incremented on each update. Can be provided in update/delete mutations to prevent lost updates. If omitted, the update proceeds without stale-read protection. |
 | `title` | `String!` | The human-readable display name. |
-| `workspace` | [Workspace](workspaces/README.md#workspace)! | The workspace that owns this geo object. |
+| `workspace` | [Workspace](workspaces.md#workspace)! | The workspace that owns this geo object. |
 | `type` | [GeoObjectType](#geoobjecttype)! | The geo object type classification. |
 | `geojsonData` | [GeoJSON](../../core-api-reference/common.md#geojson)! | The geographic shape of this object as GeoJSON geometry. |
 | `containsPoint` | `Boolean!` | Whether this geo object's area covers the point: the point lies inside the area or on its boundary, and not inside a hole (a hole's boundary counts as covered). Edges are straight lines in longitude and latitude. The area is the `geojsonData` geometry when it's a well-formed `Polygon` or `MultiPolygon`. Any other geometry has no area, and the field returns `false`. |

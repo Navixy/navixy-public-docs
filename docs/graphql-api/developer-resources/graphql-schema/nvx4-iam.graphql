@@ -1,6 +1,6 @@
 # =============================================================================
 # NAVIXY 4 - GraphQL Schema — IAM public schema
-# Version: 0.4.1
+# Version: 0.5.0
 # =============================================================================
 #
 # The organization and the workspace these fields act in are always
@@ -123,7 +123,11 @@ type IamRole {
   isSystem: Boolean!
   "The version number for optimistic locking. Pass it to `roleUpdate` and `roleDelete`."
   version: Int!
-  "The workspaces of the organization the role reaches, by workspace id."
+  """
+  The workspaces of the organization the role reaches, by workspace id. Empty when Console has
+  deleted every workspace the role named: such a role reaches nothing, and `roleUpdate` accepts it
+  only with a workspace named again.
+  """
   workspaces: IamSelection!
   "The products the role grants."
   productScopes: IamRoleProductScopes!
@@ -173,9 +177,9 @@ schema does not name yet; treat it as not a person.
 enum IamRolePrincipalType {
   "A person."
   USER
-  "An integration acting for itself."
-  INTEGRATION
-  "IAM itself, for work that no person or integration started."
+  "An API key created in Console, which an agent or a script signs in with."
+  API_KEY
+  "IAM itself, for work that no person or API key started."
   SYSTEM
   "A kind of principal this schema does not name yet."
   UNKNOWN
@@ -282,7 +286,13 @@ input IamRoleCreateInput {
   description: String
   "Whether the role can be assigned and grants anything."
   isActive: Boolean!
-  "The workspaces of the organization the role reaches, by workspace id."
+  """
+  The workspaces of the organization the role reaches, by workspace id. IAM refuses an empty
+  selection and a workspace the organization does not own. It checks the grant ceiling first and
+  judges an empty selection as every workspace, so a caller whose own roles do not reach every
+  workspace, or do not reach the named one, gets PERMISSION_DENIED, `dependencyCode`
+  GRANT_CEILING_EXCEEDED; any other caller gets VALIDATION_ERROR.
+  """
   workspaces: IamSelectionInput!
   "The products the role grants."
   productScopes: IamRoleProductScopesInput!
@@ -292,7 +302,11 @@ input IamRoleCreateInput {
 """
 The whole new document of a role: every field replaces the stored one, so an omitted description
 removes it and an empty list empties it. There is no partial update. Refused with CONFLICT when
-`version` is not the stored one, or when the role is a system role.
+`version` is not the stored one, or when the role is a system role. Refused with PERMISSION_DENIED,
+`dependencyCode` GRANT_CEILING_EXCEEDED, when the role as stored or as written grants more than the
+caller's own roles do, so a role the caller could not have granted cannot be changed, not even
+narrowed. The same refusal when the role has holders and the change adds access that the caller's
+own roles do not cover until the last holder's assignment ends.
 """
 input IamRoleUpdateInput {
   "The role to replace."
@@ -305,7 +319,7 @@ input IamRoleUpdateInput {
   description: String
   "Whether the role can be assigned and grants anything."
   isActive: Boolean!
-  "The workspaces of the organization the role reaches, by workspace id."
+  "The workspaces of the organization the role reaches, by workspace id. Refused as in `IamRoleCreateInput.workspaces`."
   workspaces: IamSelectionInput!
   "The products the role grants."
   productScopes: IamRoleProductScopesInput!
@@ -314,7 +328,8 @@ input IamRoleUpdateInput {
 # @category: iam/roles
 """
 A role to delete. Refused with CONFLICT when `version` is not the stored one, or when the role is
-a system role. Deleting a role also revokes every assignment of it.
+a system role, and with PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED, when the caller
+could not have granted the role. Deleting a role also revokes every assignment of it.
 """
 input IamRoleDeleteInput {
   "The role to delete."
@@ -473,7 +488,9 @@ type IamMutation {
   # @category: iam/role-assignments
   """
   Assigns a role to a member. Refused with CONFLICT, `dependencyCode` NOT_A_MEMBER, when the actor
-  is not a member of the caller's organization.
+  is not a member of the caller's organization. Refused with PERMISSION_DENIED, `dependencyCode`
+  GRANT_CEILING_EXCEEDED, when the caller could not grant the role, or when the assignment would
+  outlive the caller's own access to it: a permanent assignment needs that access to be permanent.
   """
   memberRoleAssign(
     "The input fields for the assignment."
@@ -483,7 +500,8 @@ type IamMutation {
   # @category: iam/role-assignments
   """
   Revokes a role from a member. NOT_FOUND when the actor does not hold it; CONFLICT,
-  `dependencyCode` LAST_OWNER, when it would leave the organization without an Owner.
+  `dependencyCode` LAST_OWNER, when it would leave the organization without an Owner;
+  PERMISSION_DENIED, `dependencyCode` GRANT_CEILING_EXCEEDED, when the caller could not grant the role.
   """
   memberRoleRevoke(
     "The input fields for the revocation."

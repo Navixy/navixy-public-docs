@@ -12,7 +12,7 @@ tags:
 
 This guide shows how to activate GPS devices in your workspace through the Business Data Repository API and how to handle what goes wrong on the way: a wrong phone number, a lost SMS, and a device that never connects. You will check that the phone numbers are available, activate a batch of devices, correct one of them, resend the settings to another, and list the devices that are still waiting to connect.
 
-Every operation on this page acts in the workspace named by your access token. For the shortest path from a token to one activated device, see [Getting started](../../getting-started.md). This guide starts where that page ends.
+Every operation on this page reads or changes the data of the workspace named by your access token. For the shortest path from a token to one activated device, see [Getting started](../../getting-started.md). This guide starts where that page ends.
 
 ## Prerequisites
 

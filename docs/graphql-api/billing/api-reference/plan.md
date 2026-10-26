@@ -174,7 +174,7 @@ A pricing item in the available-plans list. For base plan items branchItemId is 
 
 Function used to aggregate metric values over a billing period.
 
-**Values:** `SUM`, `MAX`, `MIN`, `AVG`, `LAST`
+**Values:** `SUM`, `MAX`, `MIN`, `AVG`, `LAST`, `MEDIAN`
 
 ---
 

@@ -9,7 +9,7 @@ tags:
 
 # Investigating changes with audit logs
 
-Business Data Repository records creates, updates, and deletes on eleven entity types, listed below. You read that record through two queries. This scenario walks you through a compliance investigation: an asset's configuration changed unexpectedly, and you need to establish who changed it, what the old and new values were, and what else that actor touched in the same session.
+Business Data Repository records creates, updates, and deletes on nine entity types, listed below. You read that record through two queries. This scenario walks you through a compliance investigation: an asset's configuration changed unexpectedly, and you need to establish who changed it, what the old and new values were, and what else that actor touched in the same session.
 
 By the end, you'll be able to read one entity's full change history, decode the stored before-and-after values, widen the search across a whole workspace, and tie an audit entry back to your own application logs.
 
@@ -29,19 +29,19 @@ An audit event describes the actor, the affected entity, the type of change, the
 
 | Field                           | Used for                                                                                                      |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `actor`                         | Who made the change: a `User`, an `Integration`, or a `SystemActor`.                                          |
+| `actor` / `actorId` | Who made the change: a `User`, an `ApiKey`, `Staff` at Navixy, or a `SystemActor`. `actor` is `null` when Navixy Console doesn't know the ID, and `actorId` still holds it. |
 | `aggregateType` / `aggregateId` | Which entity changed, as a type code plus its ID.                                                             |
 | `eventType`                     | The type of change: `CREATED`, `UPDATED`, `DELETED`, or `RESTORED`.                                           |
+| `product` | The product the event belongs to. Every event that Business Data Repository records has `bdr`. Billing records its own events with `billing` and serves them through [myAuditEvents](../../billing/api-reference/audit.md#myauditevents) and [myEntityHistory](../../billing/api-reference/audit.md#myentityhistory), which take the same filter. The two queries on this page return them too when you have access to the billing product. |
 | `eventData`                     | The changed fields with their old and new values, plus the entity's stored state before and after the change. |
 | `occurredAt`                    | When the change happened. It comes from the event ID, so ordering by time always matches ordering by ID.      |
 | `traceId`                       | The W3C trace ID of the request or other work that caused the change, for matching audit events with application logs. |
 | `ipAddress` / `userAgent`       | Where the request came from.                                                                                  |
-| `sourceType`                    | The kind of source the change came from. Every event has `API`.                                               |
-| `workspace`                     | The workspace the change belongs to, never `null`. Both queries return only events from your token's workspace, including changes the platform made in it on its own. To spot those, check whether `actor` is a `SystemActor`. |
-
+| `sourceType` | The kind of source the change came from: `INTERNAL` for a change the platform makes on its own, and `API` for a change that a caller of the API makes. Events recorded before `INTERNAL` was introduced have `API`. `AGENT`, reserved for a change that an AI client makes through the MCP server, isn't recorded. |
+| `workspace` | The workspace the change belongs to. Both queries return only events from your token's workspace, including changes the platform made in it on its own. To spot those, check whether `actor` is a `SystemActor`. |
 ### Which entities are audited
 
-Eleven entity types are recorded. `aggregateType` always contains one of these codes, and no other value:
+Nine entity types are recorded. `aggregateType` contains one of these codes:
 
 | Code                      | Recorded event types                        |
 | ------------------------- | ------------------------------------------- |
@@ -51,13 +51,11 @@ Eleven entity types are recorded. `aggregateType` always contains one of these c
 | `custom_field_definition` | `CREATED`, `UPDATED`, `DELETED`             |
 | `device`                  | `CREATED`, `UPDATED`, `DELETED`             |
 | `geo_object`              | `CREATED`, `UPDATED`, `DELETED`             |
-| `integration`             | `CREATED`, `UPDATED`, `DELETED`             |
 | `inventory`               | `CREATED`, `UPDATED`, `DELETED`             |
-| `member`                  | `CREATED`, `UPDATED`, `DELETED`             |
 | `schedule`                | `CREATED`, `UPDATED`, `DELETED`             |
 | `workspace`               | `CREATED`, `UPDATED`, `DELETED`, `RESTORED` |
 
-`catalog_item` covers every catalog item, such as asset types, tags, and catalogs. Archiving a custom field definition and restoring it with the `restore` action are both recorded as `UPDATED`, because neither deletes the definition. `RESTORED` is recorded only for a workspace that Navixy Console reactivates.
+`catalog_item` covers every catalog item, such as asset types, tags, and catalogs. Archiving a custom field definition and restoring it with the `restore` action are both recorded as `UPDATED`, because neither deletes the definition. `RESTORED` is recorded only for a workspace that Navixy Console reactivates. Older events can also have the codes `integration` and `member`, which are no longer recorded.
 
 {% hint style="info" %}
 Some changes aren't recorded in the audit log:
@@ -66,7 +64,7 @@ Some changes aren't recorded in the audit log:
 * Adding assets to a group and removing them. The group's `history` field records membership instead.
 * Device relations and device identifiers.
 * Links between devices and inventories. The device's `inventoryHistory` field records them instead.
-* User accounts. Only the `member` record that joins a user to a workspace is audited.
+* User accounts and workspace memberships. Navixy Console manages them.
 {% endhint %}
 
 ### What eventData contains
@@ -268,8 +266,8 @@ Response:
             "eventType": "CREATED",
             "occurredAt": "2026-08-01T11:47:32.005Z",
             "actor": {
-              "id": "019a6b2f-793e-807b-8001-494e54470001",
-              "title": "Fleet Importer"
+              "id": "019a6b2f-793e-807b-8001-555345520002",
+              "title": "Jonas Becker"
             },
             "traceId": "aabbccddeeff00112233445566778899"
           }
@@ -282,7 +280,7 @@ Response:
 
 The default ordering is `{ field: OCCURRED_AT, direction: DESC }`, so the most recent change is first. That's the one to look at.
 
-`actor` is the [Actor](../api-reference/actors/#actor) interface. Select `id` and `title` directly, or use an inline fragment such as `... on User { email }` when you need type-specific fields.
+`actor` is the [Actor](../../core-api-reference/common.md#actor) interface. Select `id` and `title`. Its types have no other fields, so select `__typename` to tell a `User` from an `ApiKey`, `Staff`, or a `SystemActor`.
 {% endstep %}
 
 {% step %}
@@ -437,7 +435,9 @@ Note that the first two events share a `traceId`. That means they came from the 
 
 `traceId` is the [W3C trace context](https://www.w3.org/TR/trace-context/) trace ID from the request's `traceparent` header, when that header is present and well-formed. If the header is missing or malformed (wrong version, uppercase hex, an all-zero ID), the API generates a trace ID instead. Either way, you see the ID in the event's `traceId` and in `extensions.traceId` of any error the request raised. A generated ID has no match in your own logs, since your client never sent it.
 
-A change that the platform makes on its own has a `SystemActor` as `actor` and the trace ID of what caused it, such as a request or a command from Navixy Console. A scheduled run, or a Console command sent without a trace ID, gets a generated trace ID.
+A change that the platform makes on its own has a `SystemActor` as `actor`, the source type `INTERNAL`, and the trace ID of what caused it, such as a request or a command from Navixy Console. A scheduled run, or a Console command sent without a trace ID, gets a generated trace ID.
+
+The `title` of a `SystemActor` names the service that made the change, such as `Console Workspace Projection` for a workspace that Navixy Console created or changed. Events recorded before each service had its own actor show `System`.
 
 One API request can change several entities, and every event it produces has the same `traceId`. Filtering by it returns that whole set:
 
@@ -477,11 +477,12 @@ You now have the change history of one entity with its before and after values, 
 
 | Field            | Type                | Use for                                                       |
 | ---------------- | ------------------- | ------------------------------------------------------------- |
-| `actorIds`       | `[ID!]`             | Restricting to specific users or integrations                 |
+| `actorIds` | `[ID!]` | Restricting to specific actors, by the `actorId` of their events |
 | `aggregateTypes` | `[Code!]`           | Restricting to entity types, such as `["asset", "device"]`    |
 | `aggregateIds`   | `[ID!]`             | Restricting to specific entity IDs                            |
 | `eventTypes`     | `[AuditEventType!]` | Restricting to `CREATED`, `UPDATED`, `DELETED`, or `RESTORED` |
-| `sourceTypes`    | `[SourceType!]`     | Every event has the source type `API`                         |
+| `sourceTypes` | `[SourceType!]` | Restricting to changes made through the API (`API`) or by the platform (`INTERNAL`) |
+| `products` | `[Code!]` | Restricting to products, such as `["bdr"]`. Without it, both queries read `bdr`, and `billing` when you have access to the billing product. A product that records no audit events is refused with `VALIDATION_ERROR` |
 | `traceId`        | `String`            | Grouping every change made by one request                     |
 | `from` / `to`    | `DateTime`          | Limiting the period                                           |
 
@@ -564,13 +565,14 @@ Audit queries are read-only, so they return the standard errors documented in [E
 | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [400 Validation error](../../error-handling.md#validation-error-400) | `entityId` isn't a valid ID, or `first` or `last` is out of range                       | Check the ID format, and keep `first` and `last` between 1 and 100                        |
 | `UNAUTHORIZED` ([401](../../error-handling.md#error-codes))          | The token is malformed, expired, or issued by another identity service. A request with no token gets `PERMISSION_DENIED`. | Re-authenticate, see [Authentication](../../authentication.md)                   |
+| [400 Validation error](../../error-handling.md#validation-error-400) | `products` names a product that records no audit events, such as `tracking` | Name only `bdr` or `billing` |
 
 ### How to handle an empty result set
 
 An empty `nodes` array is a normal response, not an error. Work through the likely causes in this order:
 
-1. The filter matches no recorded value. Every event has the source type `API`, so a `sourceTypes` filter without `API` returns nothing. `RESTORED` is recorded only for a workspace.
-2. The change isn't audited. Only the eleven types listed above produce events, and some changes aren't recorded at all, such as a change to a user account or an asset group membership. See [Which entities are audited](investigating-changes-with-audit-logs.md#which-entities-are-audited).
+1. The filter matches no recorded value. Events have only the source types `API` and `INTERNAL`, so a `sourceTypes` filter without either of them, for example `[AGENT]`, returns nothing. `RESTORED` is recorded only for a workspace.
+2. The change isn't audited. Only the nine types listed above produce events, and some changes aren't recorded at all, such as a change to a user account or an asset group membership. See [Which entities are audited](investigating-changes-with-audit-logs.md#which-entities-are-audited).
 3. The period is wrong. `from` and `to` are compared against `occurredAt` in UTC. Make sure your values are in UTC too.
 4. The entity belongs to another workspace. `entityHistory` only searches the workspace that your token names, so an entity from a different workspace returns nothing.
 

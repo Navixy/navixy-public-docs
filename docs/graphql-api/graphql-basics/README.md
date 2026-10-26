@@ -90,7 +90,7 @@ The response contains only what you asked for:
 
 Navixy GraphQL API has one endpoint: `https://nvx4.eu.navixy.com/api/graphql`.
 
-Every query and mutation goes to the same URL, and the request body tells the API what you want to do. A subscription uses the same URL over server-sent events, or a WebSocket connection with its own path. See [Subscriptions](./#subscriptions).
+Every query and mutation goes to the same URL, and the request body tells the API what you want to do. The body is a JSON object with `query`, and with `variables` and `extensions` as objects when you send them. Any other body is refused with `VALIDATION_ERROR` and HTTP 400, see [Error handling](../error-handling.md#http-status-codes). A subscription uses the same URL over server-sent events, or a WebSocket connection with its own path. See [Subscriptions](./#subscriptions).
 
 ## Product namespaces
 
@@ -148,7 +148,7 @@ Some IDs work differently with `node` and with ID arguments:
 
 Treat an ID as a string that you store and send back unchanged. Don't build IDs, and don't read meaning from their characters.
 
-A few fields have the type `UUID` instead of `ID`. Their values don't identify records of this API. Examples are `actorId`, the ID of the user or integration that made a change, and `idempotencyKey`, a key that you choose yourself. `node` can't return a record for these values.
+A few fields have the type `UUID` instead of `ID`. Their values don't identify records of this API. Examples are `actorId`, the ID of the user or API key that made a change, and `idempotencyKey`, a key that you choose yourself. `node` can't return a record for these values.
 
 ## Operations
 
