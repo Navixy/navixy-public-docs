@@ -1,8 +1,7 @@
 ---
 description: >-
-  How the Console reference is organized: one page each for the organizations
-  and the workspaces a caller can reach and for the products of a workspace,
-  and how Console's connections paginate.
+  How the Console reference is organized: one page each for organizations,
+  members, workspaces, and products, and how Console's connections paginate.
 tags:
   - reference
   - beta

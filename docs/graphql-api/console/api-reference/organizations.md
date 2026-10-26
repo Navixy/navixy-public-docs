@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for the organizations a caller can reach through Navixy Console: the
-  accessibleOrganizations query and the ConsoleOrganization type with its
-  connection.
+  Reference for the organizations a caller can reach in Navixy Console: the
+  accessibleOrganizations query and the ConsoleOrganization type.
 tags:
   - reference
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
-  Complete reference for schedules, including queries, mutations, and types for
-  defining recurring time patterns such as working hours and maintenance windows
-  (iCalendar-compatible).
+  Reference for schedules: the queries, mutations, and types that define
+  recurring, iCalendar-compatible time patterns such as working hours.
 tags:
   - reference
   - beta

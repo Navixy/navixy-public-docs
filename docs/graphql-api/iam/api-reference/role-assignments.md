@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for role assignments in your organization: the memberRoles and
-  roleHolders queries, the memberRoleAssign and memberRoleRevoke mutations, and
-  the holder and assignment types.
+  Reference for role assignments in your organization: the queries that list
+  them, the mutations that assign and revoke a role, and their types.
 tags:
   - reference
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
   Reference for the me query, with the caller's organizations, workspaces,
-  products, and roles, and for user-defined catalog items and the mutations that
-  manage them.
+  products, and roles, and for user-defined catalog items and their mutations.
 tags:
   - reference
   - beta

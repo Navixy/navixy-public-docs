@@ -1,8 +1,7 @@
 ---
 description: >-
-  Foundational types, scalars, and interfaces shared across the API, including
-  Node, Titled, Versioned, pagination types, and common scalars like DateTime
-  and Decimal.
+  Types, scalars, and interfaces shared across the API, such as Node, Titled,
+  Versioned, the pagination types, and scalars like DateTime and Decimal.
 tags:
   - reference
   - beta

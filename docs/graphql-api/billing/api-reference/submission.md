@@ -1,8 +1,8 @@
 ---
 description: >-
   Reference for the usage-metric and invoice-line-item submissions of your
-  workspace: the myUsageMetricSubmissions and myInvoiceLineItemSubmissions
-  queries, with their filter, order, and pagination types.
+  workspace: the two queries that list them, with filter, order, and pagination
+  types.
 tags:
   - reference
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for the products of a workspace: the workspaceProducts,
-  productCatalog, and workspaceOperation queries, the workspaceProductEnable and
-  workspaceProductDisable mutations, and the types they use.
+  Reference for the products of a workspace: the queries that read products and
+  operations, and the mutations that enable and disable a product.
 tags:
   - reference
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for the roles of your organization: the roles, role, and
-  workspaceRoles queries, the roleCreate, roleUpdate, and roleDelete mutations,
-  and the IamRole type with its connection.
+  Reference for the roles of your organization: the queries that read them, the
+  mutations that create, update, and delete a role, and the IamRole type.
 tags:
   - reference
   - beta

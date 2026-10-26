@@ -1,8 +1,7 @@
 ---
 description: >-
-  Type definitions for custom field definitions, including field types, params,
-  options, filter inputs, and the patch input used in asset and geo object
-  mutations.
+  Types for custom field definitions: field types, params, options, filter
+  inputs, and the patch input that asset and geo object mutations use.
 tags:
   - reference
   - beta

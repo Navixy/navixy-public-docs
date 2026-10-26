@@ -1,8 +1,7 @@
 ---
 description: >-
-  How to invite users to an organization in Navixy Console, revoke an
-  invitation, assign and revoke roles, set a role expiration date, remove a
-  member, rename a member, and change the security profile of a member.
+  How to invite users to a Navixy Console organization, manage invitations and
+  roles, and remove, rename, or change the security profile of members.
 tags:
   - how-to
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
   How the Business Data Repository reference is organized: one page per
-  category for workspaces, actors, devices, assets, geo objects, schedules,
-  custom fields, audit, and catalogs.
+  category, from workspaces and devices to assets, geo objects, and catalogs.
 tags:
   - reference
   - beta

@@ -1,8 +1,7 @@
 ---
 description: >-
-  Use filter and orderBy on list queries to control which results come back and
-  in what order, including text search and sort rules that affect pagination
-  cursors.
+  Use filter and orderBy on list queries to choose which results come back and
+  in what order, with text search and how sorting affects pagination cursors.
 tags:
   - fundamentals
   - beta

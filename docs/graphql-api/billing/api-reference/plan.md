@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for the plans a workspace may subscribe to: the myAvailablePlans
-  query, the BillingAvailablePlan and BillingAvailablePlanItem types, and the
-  product domains, metrics, and pricing vocabulary a plan is built from.
+  Reference for the plans your workspace can subscribe to: the myAvailablePlans
+  query and the types that describe a plan's products, metrics, and prices.
 tags:
   - reference
   - beta

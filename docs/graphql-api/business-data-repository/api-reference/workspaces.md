@@ -1,8 +1,8 @@
 ---
 description: >-
-  Workspaces are isolated tenants that own all business data: devices, assets,
-  geo objects, and configuration. The API acts in the workspace that your token
-  names and exposes it read-only. Navixy Console creates workspaces.
+  Reference for workspaces, the isolated tenants that own all business data.
+  Requests act in the workspace your token names. Navixy Console creates
+  workspaces.
 tags:
   - reference
   - beta

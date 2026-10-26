@@ -1,8 +1,8 @@
 ---
 description: >-
-  Reference for live tracking state: the last known position, connectivity,
-  motion, readings and events of a device, the per-device states of an asset,
-  and the queries that read them.
+  Reference for live tracking state and its queries: the last known position,
+  connectivity, motion, readings, and events of a device or of an asset's
+  devices.
 tags:
   - reference
   - beta

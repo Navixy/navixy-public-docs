@@ -1,8 +1,7 @@
 ---
 description: >-
-  Reference for the members of your organization as Navixy Console reports them:
-  the members query, the ConsoleMember type with what you may do to each member,
-  and its connection.
+  Reference for the members of your organization in Navixy Console: the members
+  query, and the ConsoleMember type with what you may do to each member.
 tags:
   - reference
   - beta

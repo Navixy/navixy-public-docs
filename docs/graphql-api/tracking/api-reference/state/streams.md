@@ -1,8 +1,8 @@
 ---
 description: >-
-  Reference for the tracking subscription: the full state of an asset, with its
-  linked devices, pushed on every report, delivered in batches with
-  opening-snapshot markers and removal signals.
+  Reference for the tracking subscription: an asset's full state and linked
+  devices, sent on every report, in batches marking the opening snapshot and
+  removals.
 tags:
   - reference
   - beta
