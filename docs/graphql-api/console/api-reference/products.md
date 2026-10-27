@@ -15,7 +15,7 @@ The products a workspace may or does have enabled, Console's product catalog, th
 
 ### workspaceProducts
 
-Every product the workspace may or does have enabled.
+Every product the workspace may or does have enabled. Without the Console administration feature, you get only the products installed in your token's workspace that your roles give you access to, each with an empty `allowedActions` list. Another workspace, or one where your roles give you access to no installed product, returns `PERMISSION_DENIED` with `dependencyCode` `WORKSPACE_PRODUCTS_FORBIDDEN`.
 
 ```graphql
 workspaceProducts(

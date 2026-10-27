@@ -48,4 +48,4 @@ To create a child organization, follow these steps:
 8. On the same step, enter a **Workspace name** of up to 128 characters. By default, it's the organization's name.
 9. Click **Launch**.
 
-The child organization appears under **Child organizations** in the left dropdown menu of the top navigation bar. You are its Owner, and its first workspace is on the default tariff plan. To open the child organization, click **Go to organization**.
+The child organization appears in the left dropdown menu of the top navigation bar, indented under your organization. You are its Owner, and its first workspace is on the default tariff plan. To open the child organization, click **Go to organization**.

@@ -88,7 +88,7 @@ The **Launch preview** panel shows what you have chosen so far. Click **Continue
 
 Console confirms that the organization is created and that its workspace is launching. Now you have:
 
-- A child organization under yours. It appears under **Child organizations** in the left dropdown menu of the top navigation bar.
+- A child organization under yours. It appears in the left dropdown menu of the top navigation bar, indented under your organization.
 - The Owner role in the child organization, assigned to you.
 - The Admin role in the child organization, assigned to nobody. It has full access, and you can give it to the customer's administrator. See [Roles that Navixy creates](../users-and-roles/README.md#roles-that-navixy-creates).
 - The child organization's first workspace, on the default tariff plan.
