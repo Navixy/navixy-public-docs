@@ -69,6 +69,8 @@ The settings dialog of a **Device Action** node catches most of these problems b
 
 **The custom mappings of the node have too many target devices.** The custom mappings of one node have more than 1,000 target devices in all. Remove targets, or split the mappings across two **Device Action** nodes.
 
+**Duplicate Switch Output #2 action in nodes: 'Siren on', 'Siren off'** Two **Device Action** nodes that the same message passes through switch the same output. The message gives the output number and the names of the nodes. Switching the output on in one node and off in the other doesn't help, and neither does a custom mapping that sends the commands of each node to different devices. Keep the action for this output in one node only, or put the two nodes on the then and else branches of one **IF/THEN Logic** node: a message follows only one of them, so the two commands never go out together.
+
 **Another Device Action node has the same "Node ID".** Two **Device Action** nodes of the flow have the same **Node ID**. The editor gives every node its own **Node ID**, so this happens only when a program changed the flow through the API. Delete one of the two nodes and add it again: a new node gets a new **Node ID**.
 
 A custom mapping can also cause **A device connected here no longer exists.**, for a source or target device that isn't in the workspace any more. See [A device is gone](#a-device-is-gone).

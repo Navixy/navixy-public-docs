@@ -78,6 +78,8 @@ Turns a digital output of the device on or off, such as a relay, an immobilizer,
 | **Output number** | The output to switch, 1 to 8. A number that another **Switch output** action of this node uses isn't offered |
 | **Signal off** / **Signal on** | The state to set. A new action starts at **Signal off** |
 
+Two **Device Action** nodes that one message passes through can't switch the same output, so the flow doesn't save. The then and else branches of one **IF/THEN Logic** node can each switch it, because a message follows only one of them. See [Why flows won't save](../troubleshooting/flow-wont-save.md#a-device-action-node-isnt-valid).
+
 <figure><img src="../../.gitbook/assets/iot-logic-device-action-switch-output.png" alt="Action 1 of a Device Action node: the Switch output type, output number 2, and the switch set to Signal on."><figcaption>Switch an output on or off</figcaption></figure>
 
 #### Send GPRS command
