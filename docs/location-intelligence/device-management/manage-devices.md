@@ -26,6 +26,8 @@ The **Devices** list of Device Management shows every device of your workspace. 
 
 If nothing matches, the list shows "No devices match your search."
 
+A device that was added without activation, for example through the Navixy GraphQL API, shows **Not activated** next to its name on the device page. Navixy didn't send this device a configuration SMS. The device can still send data if someone configured it by hand.
+
 ## Rename a device
 
 1. In **Device Management**, click the device.
