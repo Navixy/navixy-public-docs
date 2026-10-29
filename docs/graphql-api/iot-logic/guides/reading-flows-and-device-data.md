@@ -59,14 +59,14 @@ Response:
           "deviceId": "019dbec6-d380-8000-801f-44455643e216",
           "attributes": [
             { "name": "din1", "received": true, "inFlow": false },
-            { "name": "speed", "received": true, "inFlow": false },
+            { "name": "position_speed", "received": true, "inFlow": false },
             { "name": "temperature", "received": true, "inFlow": false }
           ]
         },
         {
           "deviceId": "00000000-0000-8000-801f-444556430003",
           "attributes": [
-            { "name": "speed", "received": true, "inFlow": false },
+            { "name": "position_speed", "received": true, "inFlow": false },
             { "name": "temperature", "received": true, "inFlow": false }
           ]
         }

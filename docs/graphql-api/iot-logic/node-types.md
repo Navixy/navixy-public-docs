@@ -108,7 +108,7 @@ An Initiate Attribute node calculates new attributes and adds them to the messag
 Rules:
 
 * A node can have at most 50 attributes. A flow can produce at most 200 attributes, counting the `expressionName` of every logic node.
-* An attribute name uses lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l`. A name has at most 48 characters, not counting the channel number. Navixy reserves these names for the position of a device: `position_latitude`, `position_longitude`, `position_altitude`, `position_speed`, `position_heading`, `position_accuracy`, `position_hdop`, `position_vdop`, `position_pdop`, `position_satellites`, `position_fix_type`, and `position_source`.
+* An attribute name uses lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l`. A name has at most 48 characters, not counting the channel number. Navixy reserves these names for the position of a device: `position_latitude`, `position_longitude`, `position_altitude`, `position_speed`, `position_heading`, `position_accuracy`, `position_hdop`, `position_vdop`, `position_pdop`, `position_satellites`, `position_fix_type`, and `position_source`. When a message has a position, Navixy adds these attributes from it, whatever the device model, and an expression can read them. A value that the position doesn't have, such as the altitude, is left out. For example, `position_speed` is the speed in km/h. Other attribute names depend on the device model: see [Find the attribute names of your devices](guides/reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
 * An expression is printable ASCII on one line, at most 960 characters. It is written in the Navixy IoT Logic Expression Language.
 * A message can pass only one node that produces a given attribute. Two nodes on one path can't produce the same attribute, and neither can two parallel paths that leave one node. The `THEN` and `ELSE` paths of one logic node can each produce it, because a message takes only one of them. Another flow can't produce the same attribute for the same device either, and a flow can't produce an attribute that its devices already report.
 
@@ -131,7 +131,7 @@ Rules:
 * One outcome can have several transitions, and the message follows all of them. Only one of these paths keeps its attributes, so put the nodes of one outcome one after another. See [How a message moves through a flow](how-flows-work.md#how-a-message-moves-through-a-flow).
 * `THEN` can lead both to a Device Action node and to an Output Endpoint node. The flow then sends the commands and keeps the attributes of the path, because a Device Action node calculates nothing.
 * `THEN` and `ELSE` can lead into the same node, because a message never takes both.
-* A missing value doesn't always make the condition false. `temperature > 8` is false for a message without `temperature`, but `speed != 60` is true for a message without `speed`. A Device Action node on the `THEN` outcome of `speed != 60` sends its commands for every message without `speed`.
+* A missing value doesn't always make the condition false. `temperature > 8` is false for a message without `temperature`, but `position_speed != 60` is true for a message without `position_speed`. A Device Action node on the `THEN` outcome of `speed != 60` sends its commands for every message without `speed`.
 
 ## Output Endpoint
 
