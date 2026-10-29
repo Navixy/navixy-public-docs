@@ -72,7 +72,7 @@ The API checks every request in four steps:
 
 1. It checks that the token is valid. It checks the signature, the issuer (`iss`), and the validity period (`exp` and `nbf`). If the API requires an audience, the `aud` claim must name it. A token that Navixy issues for you passes these checks. An invalid token returns `UNAUTHORIZED` with HTTP 401.
 2. It identifies you by the `sub` claim. On your first request, the API creates a user record for you from the `sub`, `email`, `given_name`, and `family_name` claims. Nothing else in the token decides who you are.
-3. It picks the workspace that the request acts in. See [How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace).
+3. It picks the workspace whose data the request reads or changes. See [How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace).
 4. It checks each field of the request against your roles and the products of your workspace. See [What your roles and products allow](authentication.md#what-your-roles-and-products-allow).
 
 The API reads only the claims listed in [Access token claims](authentication.md#access-token-claims). It ignores every other claim in the token.
@@ -81,19 +81,16 @@ The API reads only the claims listed in [Access token claims](authentication.md#
 
 A workspace owns your devices, assets, geo objects, and schedules. Every operation of Business Data Repository and Tracking reads or changes the data of one workspace. The API picks that workspace for the whole request before any field runs. For this reason, no operation takes a workspace ID.
 
-The API picks the workspace in one of two ways:
-
-* If the token has a `workspace_id` claim, the API uses that workspace.
-* If the token has no `workspace_id` claim, the API uses the workspace of your active membership. This works only when you have exactly one active membership.
+The API takes the workspace from the `workspace_id` claim of your token. It never picks one for you, even when you belong to only one workspace.
 
 The API refuses the request in these cases:
 
 * The `workspace_id` claim isn't a workspace ID, or it's a workspace ID from another Navixy region or environment.
 * Navixy Console doesn't confirm the workspace, or the API can't reach Console to check it.
 * The workspace was closed, or Navixy Console suspended it.
-* The token has no `workspace_id` claim, and you have no active membership or more than one.
+* The token has no `workspace_id` claim.
 
-A refusal is a `PERMISSION_DENIED` error. Its `detail` names the reason, for example `the caller belongs to more than one workspace and the token names none`. Every field of Business Data Repository and Tracking except `me` needs the workspace. The field that you select returns this error, and because the entry points can't be `null`, `data` is `null` for the operation.
+A refusal is a `PERMISSION_DENIED` error. Its `detail` names the reason, for example `the token names no workspace`. Every field of Business Data Repository and Tracking except `me` needs the workspace. The field that you select returns this error, and because the entry points can't be `null`, `data` is `null` for the operation.
 
 To see the workspace that you act in, query it:
 
@@ -139,7 +136,7 @@ Workspaces are read-only in Navixy GraphQL API. You create, rename, and close wo
 
 ### Billing my\* operations
 
-The Billing [my\* operations](billing/#purpose-and-capabilities), such as `mySubscribe`, read or change the data of that workspace too. They read only the `workspace_id` claim. Without the claim, they refuse the request and don't use your membership.
+The Billing [my\* operations](billing/#purpose-and-capabilities), such as `mySubscribe`, read or change the data of that workspace too. They read the `workspace_id` claim, as every other operation does. Without the claim, they refuse the request.
 
 These operations check that the claim is a workspace ID of this Navixy region and environment. They don't check that the workspace exists. For a workspace that doesn't exist, `myAvailablePlans` returns the plans open to every workspace, and `mySubscribe` fails with `VALIDATION_ERROR`.
 
@@ -210,13 +207,13 @@ The following example shows a decoded token with only the claims that the API re
 
 | Claim             | Type            | Required              | What the API does with it                                                                                                                                                                                                                                                                                        |
 | ----------------- | --------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sub`             | String          | Yes                   | Identifies you.                                                                                                                                                                                                                                                                                                  |
+| `sub` | String | Yes | Identifies you in the identity service. The API finds you by `actor_id`, not by this claim. |
 | `email` | String | No | Your display name in `me.title` when the token has no name claims. The API reads it for that answer and doesn't store it. |
 | `given_name` | String | No | Your first name in `me.title`. The API reads it for that answer and doesn't store it. |
 | `family_name` | String | No | Your last name in `me.title`. The API reads it for that answer and doesn't store it. |
-| `workspace_id`    | ID              | No                    | The workspace of the request. Without it, the API uses your single active membership. The Billing `my*` operations and the `console` and `iam` operations require it.                                                                                                                                            |
+| `workspace_id` | ID | Yes | The workspace of the request. Without it, every field that reads or changes the data of a workspace returns `PERMISSION_DENIED`: each field of Business Data Repository and Tracking except `me`, the Billing `my*` operations, and the `console` and `iam` operations. |
 | `organization_id` | ID              | No                    | The organization of the workspace. Your roles apply only for this organization, so without the claim no role applies. The API also uses it to check the workspace with Navixy Console, and refuses a workspace that it doesn't know yet when the claim is missing. The `console` and `iam` operations require it. See [Console overview](console/#who-does-what) and [IAM overview](iam/#who-does-what). |
-| `actor_id`        | UUID            | No                    | Your actor ID in Navixy Console. `me.organizations` reads it and returns `PERMISSION_DENIED` without it. To read or change your own roles, send it as `actorId` to the `iam` operations. See [IAM API reference](iam/api-reference/#identifiers).                                                                |
+| `actor_id` | UUID | Yes | Your actor ID in Navixy Console. The API records you by it, and `me.id` returns it. Without it, the API refuses the request with `UNAUTHORIZED`. To read or change your own roles, send it as `actorId` to the `iam` operations. See [IAM API reference](iam/api-reference/#identifiers). |
 | `role_ids`        | List of strings | Yes                   | Your roles in the workspace. Without roles, the API refuses every field that needs a role.                                                                                                                                                                                                                       |
 | `product_codes`   | List of strings | Yes                   | The products of your workspace. Without the claim, the API refuses every Business Data Repository field and mutation that needs a role, and answers `PRODUCT_DISABLED` on `tracking`, `trackingAssetStates`, and the IoT Logic operations.                                                                   |
 
@@ -228,23 +225,23 @@ Authentication errors use the same error envelope as every other error of the AP
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | The request has no `Authorization` header. Every field that needs a token, such as `bdr`, returns the error, and nothing under it runs.                        | `UNAUTHORIZED`      | 200         | `Authentication required`                                    | Add the header. See [How to send an access token](authentication.md#how-to-send-an-access-token).                                                                            |
 | The token is malformed or expired, was issued by another identity service, or names another audience.                                                           | `UNAUTHORIZED`      | 401         | The reason                                                   | Get a new token and retry once. If a new token fails too, check that it comes from the identity service named in your onboarding details.                                    |
-| The token is valid, but the API can't match it to a user. The identity service doesn't know the subject, or the `email` claim is missing on your first request. | `UNAUTHORIZED`      | 401         | `Authenticated principal could not be resolved to a user`    | Check that your account still exists in the identity service. Contact Navixy if it does.                                                                                     |
-| The API can't pick the workspace of the request. Each field of Business Data Repository and Tracking returns the error.                                         | `PERMISSION_DENIED` | 200         | The reason                                                   | Read `detail`. See [How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace). If you belong to several workspaces, get a token for one of them. |
+| The token is valid, but it names no actor: it has no `actor_id` claim. | `UNAUTHORIZED`      | 401         | `Authenticated principal could not be resolved to an actor` | Use a token from the token exchange, which carries `actor_id`. See [How to get an access token](authentication.md#how-to-get-an-access-token).                                                                                     |
+| The API can't pick the workspace of the request. Each field of Business Data Repository and Tracking returns the error.                                         | `PERMISSION_DENIED` | 200         | The reason                                                   | Read `detail`. See [How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace). Get a token issued for the workspace. |
 | Your workspace doesn't have Tracking or IoT Logic, and the request selects `tracking`, `trackingAssetStates`, or an IoT Logic flow mutation.                    | `PRODUCT_DISABLED`  | 200         | `Product tracking is not enabled for the caller's workspace` | Enable the product for the workspace in Navixy Console, then get a new token.                                                                                                |
 | Your roles or the products of your workspace don't allow a mutation or a field that can't be `null`.                                                            | `PERMISSION_DENIED` | 200         | `Access Denied`                                              | Ask an administrator of your organization for a role that grants the action. See [What your roles and products allow](authentication.md#what-your-roles-and-products-allow). |
 
-An `UNAUTHORIZED` response has no `data` field. The following example is the response for a token without `workspace_id`, from a user who belongs to two workspaces:
+An `UNAUTHORIZED` response has no `data` field. The following example is the `PERMISSION_DENIED` response for a token without `workspace_id`:
 
 ```json
 {
   "errors": [{
-    "message": "the caller belongs to more than one workspace and the token names none",
+    "message": "the token names no workspace",
     "path": ["bdr", "workspace"],
     "extensions": {
       "type": "https://api.navixy.com/errors/forbidden",
       "title": "Permission Denied",
       "status": 403,
-      "detail": "the caller belongs to more than one workspace and the token names none",
+      "detail": "the token names no workspace",
       "instance": "/graphql",
       "code": "PERMISSION_DENIED",
       "traceId": "0af7651916cd43dd8448eb211c80319c",
@@ -260,7 +257,7 @@ An `UNAUTHORIZED` response has no `data` field. The following example is the res
 * Never log a token or commit one to a repository. A token is a credential until it expires.
 * Renew the token on a schedule, shortly before it expires, so that a working integration never gets `UNAUTHORIZED`. Don't retry a request with a token that the API rejected: a rejected token stays rejected.
 * Read `extensions.code`, not the HTTP status, to tell an expired token from a refused operation. Only `UNAUTHORIZED` (401), `RATE_LIMITED` (429), and a request that the server can't run at all change the HTTP status. See [HTTP status codes](error-handling.md#http-status-codes).
-* Don't hardcode a workspace ID in your integration. The API takes the workspace from the `workspace_id` claim, or from your single membership when the token has no such claim.
+* Don't hardcode a workspace ID in your integration. The API takes the workspace from the `workspace_id` claim of the token.
 
 ## See also
 

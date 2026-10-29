@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myBalance](../api-reference/balance.md#mybalance) and [myBalanceEntries](../api-reference/balance.md#mybalanceentries), read only that claim. Without it, they refuse the request and don't fall back to the workspace of your single membership. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myBalance](../api-reference/balance.md#mybalance) and [myBalanceEntries](../api-reference/balance.md#mybalanceentries), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, read the amount on the balance with this query:
 
@@ -172,7 +172,7 @@ Response:
             "amount": { "amount": -5800, "currency": "USD" },
             "balanceAfter": { "amount": -3333, "currency": "USD" },
             "description": "INV-2026-000132",
-            "authoredBy": "00000000-0000-8000-8001-535953540000"
+            "authoredBy": "00000000-0000-8000-8001-535953540003"
           },
           {
             "id": "019a6b2f-793e-807b-8001-4254524e0004",
@@ -190,7 +190,7 @@ Response:
             "amount": { "amount": -5500, "currency": "USD" },
             "balanceAfter": { "amount": 1567, "currency": "USD" },
             "description": "INV-2026-000087",
-            "authoredBy": "00000000-0000-8000-8001-535953540000"
+            "authoredBy": "00000000-0000-8000-8001-535953540003"
           },
           {
             "id": "019a6b2f-793e-807b-8001-4254524e0002",
@@ -199,7 +199,7 @@ Response:
             "amount": { "amount": -2933, "currency": "USD" },
             "balanceAfter": { "amount": 7067, "currency": "USD" },
             "description": "INV-2026-000041",
-            "authoredBy": "00000000-0000-8000-8001-535953540000"
+            "authoredBy": "00000000-0000-8000-8001-535953540003"
           },
           {
             "id": "019a6b2f-793e-807b-8001-4254524e0001",
@@ -245,7 +245,7 @@ Use these fields to show a line:
 * `balanceAfter` is the balance right after the entry. It's the same value no matter in which direction you read the statement, so a page ordered oldest first and a page ordered newest first show the same totals.
 * `createdAt` of a payment line is 00:00 UTC on the payment's value date: the day the bank says the money arrived, not the moment the payment was entered. The October 8 payment was entered on October 9, and it appears on the statement on October 8. A correction is dated when it was filed, and an invoice charge when the invoice was issued.
 
-`authoredBy` is the ID of the person who entered the payment or the correction: an accountant for a payment, a staff member for a correction. On an invoice charge, it's the fixed ID that the Navixy platform uses for actions that no person took, because Billing issues invoices itself. In the example, that ID is `00000000-0000-8000-8001-535953540000`. It's an ID, not a name. Billing doesn't store actors, so a page that shows a name looks it up in [Users](../../business-data-repository/api-reference/actors/users.md) or shows the ID as it is.
+`authoredBy` is the ID of the person who entered the payment or the correction: an accountant for a payment, a staff member for a correction. On an invoice charge, it's the fixed ID of the Billing service that issues invoices, because no person took the action. In the example, that ID is `00000000-0000-8000-8001-535953540003`. Invoice charges posted before the service had its own ID have the ID that the platform uses for every other action that no person took, `00000000-0000-8000-8001-535953540000`. It's an ID, not a name. Billing doesn't store actors, so a page that shows a name looks it up in [members](../../console/api-reference/members.md#members) in Navixy Console or shows the ID as it is.
 {% endstep %}
 {% endstepper %}
 
@@ -324,7 +324,7 @@ The Billing operations return errors in the shared format. See [Error handling](
 
 | Code                | When it occurs                                                            | Resolution                                                                                         |
 | ------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID. | Request a token issued for the workspace. The Billing `my*` operations don't use your memberships. |
+| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID. | Request a token issued for the workspace.  |
 | `VALIDATION_ERROR`  | `first` is above 100.                                                     | Send `first` of 100 or less.                                                                       |
 
 A request without a workspace claim returns this error on every Billing field it selects. `myBalance` can't be null, so the error empties the whole `data` object:
@@ -351,7 +351,7 @@ A request without a workspace claim returns this error on every Billing field it
 
 ### How to handle a missing workspace claim
 
-Request a token issued for the workspace whose billing you read. The Billing `my*` operations don't fall back to the workspace of your single membership, so a token that works for Business Data Repository can still be refused here. See [How the API picks your workspace](../../authentication.md#how-the-api-picks-your-workspace).
+Request a token issued for the workspace whose billing you read. A token without a `workspace_id` claim is refused. See [How the API picks your workspace](../../authentication.md#how-the-api-picks-your-workspace).
 
 ## See also
 

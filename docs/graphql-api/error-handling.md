@@ -152,7 +152,7 @@ Returned when input data fails validation: a required field is missing, a value 
 
 The API returns this error in these cases:
 
-* The API could not tell which workspace the request acts in. The `detail` names the reason, for example `the caller belongs to more than one workspace and the token names none` or `the caller has no active workspace membership`. See [Authentication § How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace) for the rule the API applies.
+* The API could not tell which workspace the request reads or changes. The `detail` names the reason, for example `the token names no workspace` or `the token names a Console workspace that was terminated`. See [Authentication § How the API picks your workspace](authentication.md#how-the-api-picks-your-workspace) for the rule the API applies.
 * You're authenticated, but your roles don't allow the operation. See [What your roles and products allow](authentication.md#what-your-roles-and-products-allow).
 * Your workspace doesn't have Business Data Repository or Billing, and the request uses it.
 

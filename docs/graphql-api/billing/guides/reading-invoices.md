@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myInvoices](../api-reference/invoice.md#myinvoices) and [myInvoice](../api-reference/invoice.md#myinvoice), read only that claim. Without it, they refuse the request and don't fall back to the workspace of your single membership. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myInvoices](../api-reference/invoice.md#myinvoices) and [myInvoice](../api-reference/invoice.md#myinvoice), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, count the workspace's invoices with this query:
 
@@ -299,7 +299,7 @@ Response:
           },
           {
             "id": "019a6b2f-793e-807b-8001-424c49540009",
-            "description": "Registered assets (included), 2026-09-01 – 2026-09-30",
+            "description": "Registered assets (Included), 2026-09-01 – 2026-09-30",
             "quantity": 10.0,
             "unitPrice": { "amount": 0, "currency": "USD" },
             "amount": { "amount": 0, "currency": "USD" },
@@ -317,7 +317,7 @@ Response:
 }
 ```
 
-The invoice charges September: the $49.00 fee, and 3 devices above the included 10 at $3.00 each. In this example the Navixy platform reported 13 devices and 10 assets for September at 00:02 UTC on October 1, before the daily pass at 00:05, so both counts are on this invoice. The asset line says `(included)`, because the fee covers assets.
+The invoice charges September: the $49.00 fee, and 3 devices above the included 10 at $3.00 each. In this example the Navixy platform reported 13 devices and 10 assets for September at 00:02 UTC on October 1, before the daily pass at 00:05, so both counts are on this invoice. The asset line says `(Included)`, because the fee covers assets.
 
 `myInvoice` returns `null` when no invoice has this ID or when the invoice belongs to another workspace. The 2 cases look the same, so an ID tells you nothing about other workspaces.
 {% endstep %}
@@ -333,7 +333,7 @@ Use these fields to show a line:
 * `unitPrice` and `amount` are in minor units, in the invoice currency. A correction line has a negative amount when late usage lowers a charge.
 * `subscriptionId` is the subscription that the line charges for, the `id` that [mySubscriptions](../api-reference/subscription.md#mysubscriptions) returns. `planId` is the plan of that subscription. When the subscription is on a branch, `planId` is the base plan's ID, and the branch set the fee and the prices.
 
-With `TIERED` pricing, a metric has one line for each tier that the usage reached. When `pricingModel` is `SUBSCRIPTION`, the metric line's `description` carries `(included)` after the metric name, its `quantity` is all the usage, and its unit price is zero. The [Plans](../api-reference/plan.md#billingpricingmodel) reference defines each pricing model.
+With `TIERED` pricing, a metric has one line for each tier that the usage reached. When `pricingModel` is `SUBSCRIPTION`, the metric line's `description` carries `(Included)` after the metric name, its `quantity` is all the usage, and its unit price is zero. Older invoices show `(included)` in lowercase, because a line's description is stored when the invoice is issued. The [Plans](../api-reference/plan.md#billingpricingmodel) reference defines each pricing model.
 {% endstep %}
 
 {% step %}
@@ -523,7 +523,7 @@ The Billing operations return errors in the shared format. See [Error handling](
 
 | Code                | When it occurs                                                            | Resolution                                                                                         |
 | ------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID. | Request a token issued for the workspace. The Billing `my*` operations don't use your memberships. |
+| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID. | Request a token issued for the workspace.  |
 | `VALIDATION_ERROR`  | The `id` of `myInvoice` isn't an invoice ID.                              | Read `field` and `detail`. Take the ID from `myInvoices`.                                          |
 | `VALIDATION_ERROR`  | `first` is above 100.                                                     | Send `first` of 100 or less.                                                                       |
 | `VALIDATION_ERROR`  | `after` or `before` isn't a valid cursor.                                 | Start the list again without a cursor.                                                             |
@@ -546,7 +546,7 @@ Read [myInvoices](../api-reference/invoice.md#myinvoices) again and take the `id
 
 ### How to handle a missing workspace claim
 
-A request without a workspace claim returns `PERMISSION_DENIED` on every Billing field that it selects. Request a token issued for the workspace whose invoices you read. The Billing `my*` operations don't fall back to the workspace of your single membership. See [Billing errors](../errors.md#how-to-handle-a-missing-workspace-claim) for the error response.
+A request without a workspace claim returns `PERMISSION_DENIED` on every Billing field that it selects. Request a token issued for the workspace whose invoices you read. See [Billing errors](../errors.md#how-to-handle-a-missing-workspace-claim) for the error response.
 
 ## See also
 

@@ -564,7 +564,7 @@ Audit queries are read-only, so they return the standard errors documented in [E
 | Error                                                                | Cause                                                                                  | How to resolve it                                                                |
 | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [400 Validation error](../../error-handling.md#validation-error-400) | `entityId` isn't a valid ID, or `first` or `last` is out of range                       | Check the ID format, and keep `first` and `last` between 1 and 100                        |
-| `UNAUTHORIZED` ([401](../../error-handling.md#error-codes))          | The token is malformed, expired, or issued by another identity service. A request with no token gets `PERMISSION_DENIED`. | Re-authenticate, see [Authentication](../../authentication.md)                   |
+| `UNAUTHORIZED` ([401](../../error-handling.md#error-codes))          | The token is missing, malformed, expired, or issued by another identity service. A request with no token gets HTTP status 200. | Re-authenticate, see [Authentication](../../authentication.md)                   |
 | [400 Validation error](../../error-handling.md#validation-error-400) | `products` names a product that records no audit events, such as `tracking` | Name only `bdr` or `billing` |
 
 ### How to handle an empty result set

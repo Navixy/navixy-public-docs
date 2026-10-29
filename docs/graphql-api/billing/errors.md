@@ -87,7 +87,7 @@ A request without a workspace claim returns this error on every Billing field it
 
 ### How to handle a missing workspace claim
 
-Request a token issued for the workspace whose billing you read. A token that works for Business Data Repository can still be refused here, because the Billing `my*` operations don't use your memberships.
+Request a token issued for the workspace whose billing you read.
 
 ## See also
 

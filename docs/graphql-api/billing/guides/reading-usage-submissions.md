@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myUsageMetricSubmissions](../api-reference/submission.md#myusagemetricsubmissions), read only that claim. Without it, they refuse the request and don't fall back to the workspace of your single membership. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myUsageMetricSubmissions](../api-reference/submission.md#myusagemetricsubmissions), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, count the workspace's usage submissions with this query:
 
@@ -347,7 +347,7 @@ The Billing operations return errors in the shared format. See [Error handling](
 
 | Code                | When it occurs                                                                     | Resolution                                                                                            |
 | ------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID.          | Request a token issued for the workspace. The Billing `my*` operations don't use your memberships.    |
+| `PERMISSION_DENIED` | The token has no `workspace_id` claim, or the claim isn't a workspace ID.          | Request a token issued for the workspace.     |
 | `VALIDATION_ERROR`  | `metricId` or `productDomainId` isn't an ID of that type.                          | Read `field` and `detail`. Take the IDs from the `metric` and `productDomain` of a listed submission. |
 | `VALIDATION_ERROR`  | `first` is above 100.                                                              | Send `first` of 100 or less.                                                                          |
 

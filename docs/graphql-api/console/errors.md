@@ -84,7 +84,7 @@ A request whose token names no organization returns this error on every `console
 
 ### How to handle a missing claim
 
-Request a token issued for the organization and the workspace, and send it on every `console` request. A token that works for Business Data Repository can still be refused here: Business Data Repository reads only the `workspace_id` claim and falls back to your single membership, and the Console operations need both claims.
+Request a token issued for the organization and the workspace, and send it on every `console` request. A token that works for Business Data Repository can still be refused here: Business Data Repository reads only the `workspace_id` claim, and the Console operations need `organization_id` too.
 
 ## When Console doesn't respond
 
