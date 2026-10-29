@@ -70,6 +70,7 @@ Pages that explain how flows behave and what each part of a flow accepts:
 Step-by-step walkthroughs of the most common scenarios:
 
 * [Creating and updating flows](guides/creating-and-updating-flows.md)
+* [Reading flows and device data](guides/reading-flows-and-device-data.md)
 * [Calculating values in several steps](guides/calculating-values-in-several-steps.md)
 
 ### API reference

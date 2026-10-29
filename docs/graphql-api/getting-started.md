@@ -30,9 +30,9 @@ At the moment, Navixy GraphQL API doesn't accept API keys. The Navixy identity s
 
 Activation is one mutation, `deviceActivate`. It creates the device record from the IMEI, stores the SIM phone number and the APN settings, and queues an SMS to the SIM card. The SMS contains the APN settings and the address of the platform, so the device can connect and send its data there. Every activated device has the built-in `gps_tracker` device type, so you don't choose a type.
 
-A device goes through three statuses:
+A device has one of four statuses:
 
-<table><thead><tr><th width="230">Status code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>not_activated</code></td><td>The device record exists, but nothing was sent to the device. A device created with <code>deviceCreate</code> starts here.</td></tr><tr><td><code>awaiting_connection</code></td><td><code>deviceActivate</code> ran, and the SMS is queued. The device hasn't sent anything yet.</td></tr><tr><td><code>active</code></td><td>The first message from the device reached the platform.</td></tr></tbody></table>
+<table><thead><tr><th width="230">Status code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>not_activated</code></td><td>The device record exists, but nothing was sent to the device. A device created with <code>deviceCreate</code> starts here.</td></tr><tr><td><code>awaiting_connection</code></td><td><code>deviceActivate</code> ran, and the SMS is queued. The device hasn't sent anything yet.</td></tr><tr><td><code>active</code></td><td>The first message from the device reached the platform.</td></tr><tr><td><code>inactive</code></td><td>The platform refuses messages from the device, and <code>deviceActivate</code> refuses its IMEI. No operation of this API sets this status.</td></tr></tbody></table>
 
 Until the device connects, you can run `deviceActivate` again with the same IMEI. The second run replaces the phone number, the APN settings, and the model, and queues the SMS again. Use a second run to resend a lost SMS or to correct a typo in the phone number or the APN settings. Once the device is `active` or `inactive`, a second activation with its IMEI fails with `DUPLICATE`.
 

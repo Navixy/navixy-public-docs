@@ -317,7 +317,7 @@ Input for creating a flow. The flow is created disabled.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -507,7 +507,7 @@ Input for updating a flow. `nodes` and `transitions` are the whole new graph, no
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -916,23 +916,6 @@ One entry of the device mapping of a Device Action node: messages of `source` se
 
 ---
 
-<a id="iotlogicflowwebhooknode"></a>
-
-### IotLogicFlowWebhookNode
-
-A Webhook node.
-
-**Implements:** [IotLogicFlowNode](#iotlogicflownode)
-
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
-| `description` | `String` | Notes about the node. |
-| `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
-
----
-
 <a id="iotlogicflowattributeassignment"></a>
 
 ### IotLogicFlowAttributeAssignment
@@ -1058,7 +1041,7 @@ Ordering options for device links.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` and `WEBHOOK` nodes have no fields of their own.
+Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -1237,7 +1220,7 @@ The outcome of the node that a transition leaves, and so the messages that follo
 
 The node types that a flow can have.
 
-**Values:** `DATA_SOURCE`, `LOGIC`, `INITIATE_ATTRIBUTES`, `OUTPUT_ENDPOINT`, `ACTION`, `WEBHOOK`
+**Values:** `DATA_SOURCE`, `LOGIC`, `INITIATE_ATTRIBUTES`, `OUTPUT_ENDPOINT`, `ACTION`
 
 ---
 

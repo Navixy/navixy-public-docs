@@ -27,15 +27,15 @@ me: Me!
 
 <summary>Me</summary>
 
-The caller: the actor the token names, and the organizations and workspaces they can switch to.
+The caller of the request, and the organizations and workspaces that the caller can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The caller's actor id, the id the rest of this API uses for them: a user's id from Console, or a member of staff's, the staff token's subject. |
-| `title` | `String!` | The caller's display name from the token's own claims: the full name, or the email when the token carries no name. It is read for this answer and stored nowhere. |
-| `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization the caller is an active member of in Console, each with its workspaces other than terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the token carries no usable `actor_id` claim, `NOT_FOUND` when Console holds no active user with that id, `SERVICE_UNAVAILABLE` when Console does not answer or this deployment does not read it. |
-| `products` | [[MeProduct](#meproduct)!] | The products the caller may use in the workspace the token names, as billing's catalogue describes them: the codes of the token's `product_codes` claim that a role of the caller scopes, read through the IAM SDK. `isActive` is carried, not filtered on. Empty when the token's workspace does not resolve here or the caller holds no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when this deployment has no product catalogue to read. |
-| `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace the token names: active, of the token's organization, and reaching that workspace — the roles every IAM check of this API is decided over. Empty when the token's workspace does not resolve here or the caller holds no role in it. |
+| `id` | `ID!` | The ID of the caller. Other operations of the API use the same ID for the caller. |
+| `title` | `String!` | The caller's display name, taken from the access token: the full name, or the email address when the token has no name. The API doesn't store it. |
+| `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization in which the caller is an active member in Navixy Console, with its workspaces except terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the access token names no caller, `NOT_FOUND` when Navixy Console has no active user with the caller's ID, and `SERVICE_UNAVAILABLE` when Navixy Console doesn't answer. |
+| `products` | [[MeProduct](#meproduct)!] | The products that the caller may use in the workspace of the access token: the products of the token that a role of the caller covers. The list includes products whose `isActive` is `false`. Empty when the token's workspace isn't found or the caller has no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when the product list can't be read. |
+| `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace of the access token: the active roles of the token's organization that reach this workspace. The API checks every permission against these roles. Empty when the token's workspace isn't found or the caller has no role in it. |
 
 </details>
 
@@ -308,15 +308,15 @@ A user-defined catalog item that supports hierarchical workspace.
 
 ### Me
 
-The caller: the actor the token names, and the organizations and workspaces they can switch to.
+The caller of the request, and the organizations and workspaces that the caller can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The caller's actor id, the id the rest of this API uses for them: a user's id from Console, or a member of staff's, the staff token's subject. |
-| `title` | `String!` | The caller's display name from the token's own claims: the full name, or the email when the token carries no name. It is read for this answer and stored nowhere. |
-| `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization the caller is an active member of in Console, each with its workspaces other than terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the token carries no usable `actor_id` claim, `NOT_FOUND` when Console holds no active user with that id, `SERVICE_UNAVAILABLE` when Console does not answer or this deployment does not read it. |
-| `products` | [[MeProduct](#meproduct)!] | The products the caller may use in the workspace the token names, as billing's catalogue describes them: the codes of the token's `product_codes` claim that a role of the caller scopes, read through the IAM SDK. `isActive` is carried, not filtered on. Empty when the token's workspace does not resolve here or the caller holds no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when this deployment has no product catalogue to read. |
-| `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace the token names: active, of the token's organization, and reaching that workspace — the roles every IAM check of this API is decided over. Empty when the token's workspace does not resolve here or the caller holds no role in it. |
+| `id` | `ID!` | The ID of the caller. Other operations of the API use the same ID for the caller. |
+| `title` | `String!` | The caller's display name, taken from the access token: the full name, or the email address when the token has no name. The API doesn't store it. |
+| `organizations` | [[AccessibleOrganization](#accessibleorganization)!] | Every organization in which the caller is an active member in Navixy Console, with its workspaces except terminated ones. Each organization lists only the workspaces that the caller's roles reach. `null`, with an error at this path, when the list cannot be read: `PERMISSION_DENIED` when the access token names no caller, `NOT_FOUND` when Navixy Console has no active user with the caller's ID, and `SERVICE_UNAVAILABLE` when Navixy Console doesn't answer. |
+| `products` | [[MeProduct](#meproduct)!] | The products that the caller may use in the workspace of the access token: the products of the token that a role of the caller covers. The list includes products whose `isActive` is `false`. Empty when the token's workspace isn't found or the caller has no role in it. `null`, with a `SERVICE_UNAVAILABLE` error at this path, when the product list can't be read. |
+| `roles` | [[MeRole](#merole)!] | The caller's roles in the workspace of the access token: the active roles of the token's organization that reach this workspace. The API checks every permission against these roles. Empty when the token's workspace isn't found or the caller has no role in it. |
 
 ---
 
@@ -324,18 +324,18 @@ The caller: the actor the token names, and the organizations and workspaces they
 
 ### MeProduct
 
-A product the caller may use, as billing's catalogue describes it.
+A product that the caller may use.
 
 **Implements:** [Titled](../../../core-api-reference/common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `code` | [Code](../../../core-api-reference/common.md#code)! | The product code billing stores: the value `product_codes` and IAM's product scopes name. |
-| `title` | `String!` | Billing's title for the product, or its code while billing holds none. |
+| `code` | [Code](../../../core-api-reference/common.md#code)! | The product code. Access tokens and roles name the product by this code. |
+| `title` | `String!` | The name of the product, or its code when the product has no name. |
 | `description` | `String` |  |
 | `url` | `String` | The product's user-facing address. |
-| `internalPath` | `String` | The product's internal path: an absolute http or https URL, or a path starting with a single `/`. Null while billing holds none. |
-| `isActive` | `Boolean!` | Whether billing has the product switched on. Carried, not filtered on. |
+| `internalPath` | `String` | The product's internal address: an absolute http or https URL, or a path that starts with a single `/`. Null when none is set. |
+| `isActive` | `Boolean!` | Whether the product is switched on. |
 
 ---
 
@@ -343,16 +343,16 @@ A product the caller may use, as billing's catalogue describes it.
 
 ### MeRole
 
-A role of the caller, as IAM holds it.
+A role of the caller.
 
 **Implements:** [Titled](../../../core-api-reference/common.md#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | IAM's role id, the value the token's `role_ids` carries. |
+| `id` | `ID!` | The ID of the role. The access token lists the caller's roles by these IDs. |
 | `title` | `String!` | The human-readable display name. |
 | `description` | `String` |  |
-| `isSystem` | `Boolean!` | A role IAM ships and no administrator edits. |
+| `isSystem` | `Boolean!` | `true` for a built-in role, which no administrator can edit. |
 
 ---
 
@@ -364,7 +364,7 @@ An organization the caller can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | Console's organization id: what the context-token exchange takes as `organization_id`. |
+| `id` | `ID!` | The ID of the organization in Navixy Console. |
 | `title` | `String!` | The organization's display name in Console. |
 | `workspaces` | [[AccessibleWorkspace](#accessibleworkspace)!]! | The organization's workspaces other than terminated ones. May be empty. |
 
@@ -378,9 +378,9 @@ A workspace the caller can switch to.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | Console's workspace id: what the exchange takes as `workspace_id`, and what the context token then carries in its `workspace_id` claim. Equal to `Workspace.id` once nvx4 holds a row for this workspace; present whether or not it does. A Console workspace whose id is not a workspace id of this deployment (Console keeps plain-v4 workspaces from before its current id layout) is not listed. |
+| `id` | `ID!` | The ID of the workspace in Navixy Console: the workspace ID that an access token names. When the workspace has data in Business Data Repository, its `Workspace.id` is the same. Workspaces created before the current ID format aren't listed. |
 | `title` | `String!` | The workspace's name in Console. |
-| `isActive` | `Boolean!` | Whether the workspace is ready: `true` when Console's status for it is `active`, the rule `Workspace.isActive` follows once the workspace is entered. A workspace still being created, stopped or failed is listed with `false`. |
+| `isActive` | `Boolean!` | Whether the workspace is ready: `true` when its status in Navixy Console is `active`. `Workspace.isActive` follows the same rule. A workspace still being created, stopped or failed is listed with `false`. |
 
 ---
 

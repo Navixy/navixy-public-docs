@@ -259,15 +259,6 @@ type IotLogicDeviceMappingEntry {
 }
 
 # @category: iot-logic/flows
-"An outbound HTTP call."
-type IotLogicFlowWebhookNode implements IotLogicFlowNode {
-  id: ID!
-  name: String!
-  description: String
-  position: IotLogicFlowNodePosition
-}
-
-# @category: iot-logic/flows
 "One `name = <JEXL>` assignment inside an initiate-attributes node."
 type IotLogicFlowAttributeAssignment {
   "The attribute name the expression writes to."
@@ -313,7 +304,6 @@ enum IotLogicFlowNodeType {
   INITIATE_ATTRIBUTES
   OUTPUT_ENDPOINT
   ACTION
-  WEBHOOK
 }
 
 # =============================================================================
@@ -431,7 +421,7 @@ the stored node the key stands for and is omitted for a node being added.
 The payload fields below belong to one node type each and must be absent for the others:
 `deviceIds` to DATA_SOURCE, `condition` and `expressionName` to LOGIC, `attributes` to
 INITIATE_ATTRIBUTES, `actions`, `trackableNodeId` and `deviceMapping` to ACTION.
-OUTPUT_ENDPOINT and WEBHOOK carry none.
+OUTPUT_ENDPOINT carries none.
 """
 input IotLogicFlowNodeInput {
   "Handle for this node within the request. Unique per request."

@@ -17,6 +17,14 @@ To organize assets into named collections, such as grouping vehicles by depot or
 
 You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
 
+Your role needs these actions:
+
+* `read` on `bdr.catalog`, to find the ID of the asset type.
+* `create` on `bdr.asset`, to create an asset.
+* `read` and `update` on `bdr.asset`, to assign a device to an asset. The device only has to belong to the workspace: assigning it needs no action on `bdr.device`.
+
+See [What your roles and products allow](../../authentication.md#what-your-roles-and-products-allow).
+
 ### Check available asset types
 
 Before creating an asset, request the available asset types for your workspace:
@@ -35,7 +43,7 @@ query ListAssetTypes {
 }
 ```
 
-You'll get the types of your workspace. A new workspace starts with the preset types Workforce, Vehicle, and Cargo, which your workspace can edit, and delete once no other type's field refers to them (Vehicle's `cf_driver` refers to Workforce, and Cargo's `cf_transport_unit` to Vehicle):
+You'll get the types of your workspace. To get one type by its code, add `filter: { codes: ["vehicle"] }` to `assetTypes`. A new workspace starts with the preset types Workforce, Vehicle, and Cargo, with the codes `workforce`, `vehicle`, and `cargo`. Your workspace can edit them, and delete them once no other type's field refers to them (Vehicle's `cf_driver` refers to Workforce, and Cargo's `cf_transport_unit` to Vehicle):
 
 ```json
 {

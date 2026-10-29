@@ -62,7 +62,15 @@ The `id` of the workspace is the `workspaceId` that the product operations take.
 
 ## How products and coverage work
 
-A product, such as Business Data Repository or Tracking, runs in your workspace once it's enabled there. Console names a product by its code, such as `bdr`, and by its product ID, the same value as in [Billing](../../billing/README.md). [Products](../api-reference/products.md) documents every field.
+A product, such as Business Data Repository or Tracking, runs in your workspace once it's enabled there. Console names a product by its code and by its product ID, the same value as in [Billing](../../billing/README.md). [Products](../api-reference/products.md) documents every field. The products that this API serves have the following codes:
+
+| Product | Code |
+| --- | --- |
+| [Business Data Repository](../../business-data-repository/README.md) | `bdr` |
+| [Tracking](../../tracking/README.md) | `tracking` |
+| [IoT Logic](../../iot-logic/README.md) | `iot_logic` |
+
+Your workspace can also have products that this API doesn't serve, such as Reports. Their codes are in the list that `workspaceProducts` returns.
 
 Whether you may enable a product depends on coverage. A product is covered when an active subscription of your workspace includes it. Console reads your subscriptions from Billing every time you ask, so a new subscription counts at once. Only a covered product can be enabled. A product that your plan requires is enabled by the plan and can't be disabled.
 
