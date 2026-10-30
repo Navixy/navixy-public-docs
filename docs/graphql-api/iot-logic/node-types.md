@@ -32,7 +32,7 @@ Every node in the `nodes` list of a write has these fields, whatever its type:
 | `key` | Yes | A name for the node, valid only inside this one request. Transitions refer to the node by this key. Keys must be unique in the request. |
 | `id` | Only for a stored node | The ID of the stored node that this entry keeps. Leave it out for a new node, and Navixy creates the ID. |
 | `type` | Yes | The node type, such as `DATA_SOURCE` or `LOGIC`. See [Node types at a glance](#node-types-at-a-glance). |
-| `name` | Yes | The name that the flow editor shows. English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. |
+| `name` | Yes | The name that the flow editor shows. English letters, digits, underscores, dashes, and slashes, in words separated by spaces, at most 255 characters. No space at the start or end. |
 | `description` | No | Notes about the node. Printable ASCII and line feeds (`\n`), at most 4,000 characters. A carriage return (`\r`) fails with `NON_LATIN_INPUT`. |
 | `position` | No | The `x` and `y` coordinates where the flow editor draws the node. |
 
@@ -171,6 +171,8 @@ The following node switches output 1 of the device on:
 ```
 
 An action is one of two types: `setOutput` has `output`, from 1 to 8, and `enabled`, which is `true` to switch the output on and `false` to switch it off. `rawCommand` has `text`, at most 512 characters and not blank. Navixy sends the text unchanged and as ASCII, so use only printable ASCII characters. Message values can't be inserted into the text.
+
+Two `setOutput` actions for the same output can't be on one path of a message, in one node or in two nodes (`DUPLICATE_SET_OUTPUT_ACTION`). The `THEN` and `ELSE` paths of one logic node can each have one.
 
 In a read, `actions` is a list of the union `IotLogicDeviceCommandAction`. Read its fields with an inline fragment for each type:
 

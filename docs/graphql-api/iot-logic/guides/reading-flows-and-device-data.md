@@ -160,7 +160,7 @@ The newest message comes first. In it, the truck reported 6.2 °C, so the flow c
 
 The two maps answer different questions:
 
-* `allFields` has one entry for each recent message. A message without the attribute has an entry with `value: null`, so the entries of all attributes line up by message. In such an entry, `serverTime` has the same value as `messageTime`, because Navixy doesn't record when that message arrived. Use the map to see what the flow did with each message.
+* `allFields` has one entry for each recent message. A message without the attribute has an entry with `value: null`, so the entries of all attributes line up by message. Use the map to see what the flow did with each message.
 * `nonNullFields` has the recent values of each attribute that aren't `null`, and it can go further back than `allFields`. Use it to see the last real value of an attribute that a device reports rarely. The example shows only `temperature` in it, to keep the response short.
 
 Each attribute has at most 12 entries, newest first. `messageTime` is when the device created the message, and `serverTime` is when Navixy received it. Large integers, times, and byte arrays are returned as strings, and durations in milliseconds.

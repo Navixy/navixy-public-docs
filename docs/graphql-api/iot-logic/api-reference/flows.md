@@ -236,7 +236,7 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `deviceId` | `ID!` | The ID of the device. |
-| `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` of that message. For a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy doesn't record when such a message arrived. |
+| `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` and `serverTime` of that message. In some older entries for a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy didn't record when those messages arrived. Newer messages of the device replace them as they arrive. |
 | `nonNullFields` | [JSON](../../core-api-reference/common.md#json)! | The recent values of the attribute that aren't `null`. They can be older than the messages in `allFields`, so this map isn't part of `allFields`. An attribute with no such value isn't in the map. |
 
 </details>
@@ -324,7 +324,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `key` | `String!` | A name for the node, valid only inside this request. Each node in the request needs a different key. |
 | `id` | `ID` | The ID of the stored node that this entry keeps. Leave it out for a new node. |
 | `type` | [IotLogicFlowNodeType](#iotlogicflownodetype)! | The node type. |
-| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
+| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. At most 255 characters. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
@@ -514,7 +514,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `key` | `String!` | A name for the node, valid only inside this request. Each node in the request needs a different key. |
 | `id` | `ID` | The ID of the stored node that this entry keeps. Leave it out for a new node. |
 | `type` | [IotLogicFlowNodeType](#iotlogicflownodetype)! | The node type. |
-| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
+| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. At most 255 characters. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
@@ -738,7 +738,7 @@ Integers larger than 2^53 − 1 or smaller than −(2^53 − 1), times, and byte
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `deviceId` | `ID!` | The ID of the device. |
-| `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` of that message. For a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy doesn't record when such a message arrived. |
+| `allFields` | [JSON](../../core-api-reference/common.md#json)! | One entry per recent message of the device. A message without the attribute, or with an empty value for it, has an entry with `value: null` and the `messageTime` and `serverTime` of that message. In some older entries for a message without the attribute, `serverTime` has the same value as `messageTime`, because Navixy didn't record when those messages arrived. Newer messages of the device replace them as they arrive. |
 | `nonNullFields` | [JSON](../../core-api-reference/common.md#json)! | The recent values of the attribute that aren't `null`. They can be older than the messages in `allFields`, so this map isn't part of `allFields`. An attribute with no such value isn't in the map. |
 
 ---
@@ -797,7 +797,7 @@ A Data Source node: the devices whose messages enter the flow at this node.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 | `devices` | [[Device](../../business-data-repository/api-reference/devices/README.md#device)!]! | The devices whose messages enter the flow at this node and that your roles let you read, ordered by device ID. The list has no pagination. A device that no longer exists isn't in the list, so the list can be shorter than `IotLogicFlow.deviceCount`. If you only need the number of devices, read `deviceCount`, because it doesn't load the device records. |
@@ -815,7 +815,7 @@ An IF/THEN Logic node: a message for which `condition` is true leaves by the `TH
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 | `condition` | `String!` | An expression in the Navixy IoT Logic Expression Language, calculated for each message. |
@@ -834,7 +834,7 @@ An Initiate Attribute node: it calculates attributes and adds them to the messag
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 | `attributes` | [[IotLogicFlowAttributeAssignment](#iotlogicflowattributeassignment)!]! | The attribute assignments of the node. |
@@ -852,7 +852,7 @@ An Output Endpoint node: it ends a path and sends the message, with the attribut
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 
@@ -869,7 +869,7 @@ A Device Action node: it sends commands to devices when a message reaches it. Th
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 | `actions` | [[IotLogicDeviceCommandAction](#iotlogicdevicecommandaction)!]! | The commands that the node sends, in the order of the last write. An empty list for a node without actions. |
@@ -1048,7 +1048,7 @@ Each field below that names a node type belongs to that type only. The other typ
 | `key` | `String!` | A name for the node, valid only inside this request. Each node in the request needs a different key. |
 | `id` | `ID` | The ID of the stored node that this entry keeps. Leave it out for a new node. |
 | `type` | [IotLogicFlowNodeType](#iotlogicflownodetype)! | The node type. |
-| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end. Tabs and line breaks aren't accepted. |
+| `name` | `String!` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. At most 255 characters. No space at the start or end. Tabs and line breaks aren't accepted. |
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
@@ -1259,7 +1259,7 @@ A node of a flow: one step of the graph, shown as a box in the flow editor. A fl
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
-| `name` | `String!` | The name that the flow editor shows. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
 

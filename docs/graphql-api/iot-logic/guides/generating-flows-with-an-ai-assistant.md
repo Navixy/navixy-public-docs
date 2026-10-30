@@ -66,7 +66,7 @@ For an update, the object also has the `id` and the current `version` of the flo
 
 ## Node rules
 
-Every node has a unique `key`, a `type`, and a `name`. The `name` uses English letters, digits, underscores, dashes, slashes, and single spaces between words. The fields of each type:
+Every node has a unique `key`, a `type`, and a `name`. The `name` uses English letters, digits, underscores, dashes, slashes, and single spaces between words, at most 255 characters. The fields of each type:
 
 | Node type | Fields | Rules |
 | --- | --- | --- |
@@ -115,6 +115,7 @@ The assistant checks its own output against this list before it returns it. Each
 * [ ] Every text field is printable ASCII (`NON_LATIN_INPUT`)
 * [ ] Every expression parses and stays within its length (`INVALID_EXPRESSION`, `EXPRESSION_TOO_LONG`)
 * [ ] Every Device Action node has at most 10 valid actions, and its `trackableNodeId`, if any, is unique in the flow (`ACTIONS_PER_NODE_EXCEEDED`, `INVALID_DEVICE_COMMAND`, `DUPLICATE_TRACKABLE_NODE_ID`)
+* [ ] No output is switched twice on one path of a message. Only the `THEN` and `ELSE` paths of one logic node may each switch it (`DUPLICATE_SET_OUTPUT_ACTION`)
 * [ ] Keys are unique, and every transition names existing keys (single `VALIDATION_ERROR` before validation)
 
 Two checks compare the flow with data in Navixy: `ATTRIBUTE_ALREADY_PRODUCED` with your other flows, and `ATTRIBUTE_REPORTED_BY_DEVICE` with the attributes of your devices. Give the assistant the result of the `deviceAttributes` query for the devices of the flow, so that it can avoid both. The write still reports them, and they can appear on a later attempt, after the other violations are fixed.

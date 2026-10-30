@@ -122,7 +122,7 @@ Some mistakes stop a write before Navixy validates the graph. They return a sing
 | A logic node without `condition` | `input.nodes[0].condition` |
 | A blank node key, or two nodes with the same key in one request | `input.nodes[0].key`, or `input.nodes` |
 | A transition that names a key that no node in the request has | `input.transitions[0].from` or `input.transitions[0].to` |
-| A node name that doesn't follow the [naming rule](#names-and-text) | None. The message quotes the name. |
+| A node name that doesn't follow the [naming rule](#names-and-text) | None. The message quotes the name, at most its first 64 characters. |
 | A `trackableNodeId` that doesn't follow the [naming rule](#names-and-text) | `input.nodes[0].trackableNodeId` |
 | `deviceIds: null` on a data source, or `deviceMapping: null` on a Device Action node | `input.nodes[0].deviceIds` or `input.nodes[0].deviceMapping` |
 | One source device in two entries of the `deviceMapping` of one node | `input.nodes[0].deviceMapping` |
@@ -167,6 +167,7 @@ The codes are grouped by the part of the flow that they check.
 | --- | --- | --- |
 | `NON_LATIN_INPUT` | A title, a description, a condition, or an attribute expression has a character outside printable ASCII (U+0020 to U+007E). The message names the character and its position, because Cyrillic and Latin letters can look the same. | Replace the character. Descriptions can also have line feeds (`\n`), but not carriage returns (`\r`). No field accepts a tab, except the flow title: Navixy removes tabs and line breaks from it and replaces several spaces with one. |
 | `DESCRIPTION_TOO_LONG` | The description of the flow or of a node has more than 4,000 characters. | Shorten the description. |
+| `NODE_NAME_TOO_LONG` | A node name has more than 255 characters. `fields` names the node, such as `input.nodes[1].name`. | Shorten the name. |
 | `EXPRESSION_TOO_LONG` | A condition has more than 480 characters, or an attribute expression has more than 960 characters. | Shorten the expression, or split the calculation into several attributes. |
 
 ### Size of the flow
@@ -216,6 +217,7 @@ The codes are grouped by the part of the flow that they check.
 | --- | --- | --- |
 | `ACTIONS_PER_NODE_EXCEEDED` | A Device Action node has more than 10 actions. `fields` names `input.nodes[0].actions`. | Remove actions, or move some of them to another Device Action node. |
 | `INVALID_DEVICE_COMMAND` | An action isn't valid: a `setOutput` output number is outside 1 to 8, or a `rawCommand` text is blank or longer than 512 characters. `fields` names the action, such as `input.nodes[0].actions[1]`. | Correct the output number, or the command text. |
+| `DUPLICATE_SET_OUTPUT_ACTION` | Two Device Action nodes that one message can pass through switch the same output, or one node has two `setOutput` actions for the same output. The `THEN` and `ELSE` paths of one logic node can each switch it, because a message takes only one of them. The value of `enabled` and the `deviceMapping` make no difference. `nodeIds` has the nodes, and `fields` names each of their actions for this output, such as `input.nodes[2].actions[0]`. | Keep the `setOutput` action for this output in one node, or move the nodes to the `THEN` and `ELSE` paths of one logic node. |
 | `DUPLICATE_TRACKABLE_NODE_ID` | Two Device Action nodes of the flow have the same `trackableNodeId`. `nodeIds` has both nodes. | Give each Device Action node its own `trackableNodeId`. |
 | `DEVICE_MAPPINGS_PER_NODE_EXCEEDED` | The `deviceMapping` of a Device Action node has more than 1,000 targets, counted across its entries. | Remove targets, or split the mapping between several Device Action nodes. |
 | `EMPTY_DEVICE_MAPPING_ENTRY` | An entry of the `deviceMapping` of a Device Action node has no targets. The message lists the source devices of these entries. | Add at least one target to the entry, or remove the entry. A source device without an entry receives its own commands. |
@@ -228,7 +230,7 @@ These rules apply to the names and text of a flow. Text with a character outside
 | --- | --- |
 | Flow `title` | Printable ASCII, at most 255 characters, and not blank |
 | `description` of a flow or a node | Printable ASCII and line feeds (`\n`), at most 4,000 characters |
-| Node `name` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces. No space at the start or end |
+| Node `name` | English letters, digits, underscores, dashes, and slashes, in words separated by spaces, at most 255 characters. No space at the start or end |
 | Attribute `name` and `expressionName` | Lowercase letters and digits in groups joined by single underscores, such as `temperature_f`, at most 48 characters. The name can end with `_` and a channel number, such as `temperature_2`, which doesn't count toward the limit |
 | `condition` of a logic node | Printable ASCII on one line, at most 480 characters |
 | `expression` of an attribute | Printable ASCII on one line, at most 960 characters |

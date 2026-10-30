@@ -28,7 +28,7 @@ To explore the API without downloading anything, use [introspection](../graphql-
 
 ## Versions
 
-Every file except the common one states its schema version in a comment on the third line, for example `# Version: 0.12.0`. Each file is versioned on its own, so the numbers can differ across files. The common file carries no version of its own, because it belongs to no product or platform service. Check the version before you report a difference between the schema and this documentation.
+Every file except the common one states its schema version in a comment at the top of the file, for example `# Version: 0.12.0`. Each file is versioned on its own, so the numbers can differ across files. The common file carries no version of its own, because it belongs to no product or platform service. Check the version before you report a difference between the schema and this documentation.
 
 Most changes don't affect an existing client, because a client receives only the fields that its query selects. These are a new field on a type, a new optional argument, a new type, and a new input field that is nullable or has a default. Two changes can break a client that handles every case explicitly: a new member of a union, and a new value of an enum that the API returns. Handle unions with `__typename` or a fallback branch, and give every switch over a returned enum a default branch. For example, treat an unknown `TrackingStreamRemovalReason` as a plain removal and drop the asset from your view.
 
