@@ -51,7 +51,7 @@ A node that connects to a **Device Action** node and an **Output Endpoint** node
 
 A name that matches nothing returns nothing, and the attribute is left out. A wrong attribute name is the most common cause.
 
-Compare the name in the formula against what the device actually sends, in [Flow monitoring](../monitoring.md). For an attribute that the flow calculates, use the attribute button in the expression field to insert the name rather than typing it.
+Compare the name in the formula against what the device actually sends, in [Flow monitoring](../monitoring.md). Use the attribute button in the expression field to insert the name rather than typing it. It lists the readings that the flow's devices have sent and the attributes that the flow calculates.
 {% endstep %}
 
 {% step %}

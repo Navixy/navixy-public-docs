@@ -58,11 +58,11 @@ The **Flow templates** gallery above **Created flows** offers prepared flows for
 | --- | --- |
 | **Name** | The device's name |
 | **Model** | The device model's code |
-| **Device identifier** | The device's identifier |
+| **IMEI** | The device's IMEI |
 | **Connected flows** | The flow that the device is in. Click the flow's name to open it |
 | **Data Source** | The **Data Source** node through which the device enters that flow |
 
-A device has one row for each **Data Source** node that it is selected in, so a device in two flows has two rows. Search the list by device name, model, or identifier. The list shows **No devices are connected to flows yet.** when no flow has any devices.
+A device has one row for each **Data Source** node that it is selected in, so a device in two flows has two rows. Search the list by device name, model, or IMEI. The list shows **No devices are connected to flows yet.** when no flow has any devices.
 
 ## Row actions
 

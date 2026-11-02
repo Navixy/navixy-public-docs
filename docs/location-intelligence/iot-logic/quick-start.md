@@ -88,7 +88,7 @@ Enter the **Expression**:
 temperature * 1.8 + 32
 ```
 
-`temperature` is the attribute that the device reports. Type it exactly as the device sends it: check the name in [Flow monitoring](monitoring.md) if you aren't sure. The attribute button in the field lists only the attributes that this flow calculates, so it is empty in a first flow.
+`temperature` is the attribute that the device reports. Type it exactly as the device sends it, or insert it with the attribute button in the field, which lists the readings that the selected devices have already sent. If `temperature` isn't in the list, check the name in [Flow monitoring](monitoring.md).
 {% endstep %}
 
 {% step %}

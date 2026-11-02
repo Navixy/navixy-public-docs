@@ -52,7 +52,7 @@ Nothing warns you. When a formula reads a name that isn't in the message, the fo
 The flow keeps running and the message still reaches the Navixy platform. There is no error to find, which is what makes a mistyped name hard to spot. See [Missing values](missing-values.md), which is the same silence from the other direction.
 
 {% hint style="info" %}
-Use the attribute button in an expression field to insert the name of an attribute that the flow calculates. It lists only those. For the device's own readings, copy the names from [Flow monitoring](../monitoring.md).
+Use the attribute button in an expression field to insert a name instead of typing it. It lists the readings that the flow's devices have sent and the attributes that the flow calculates. A reading that a device has never sent isn't in the list: check what arrives in [Flow monitoring](../monitoring.md).
 {% endhint %}
 
 ## Names you choose

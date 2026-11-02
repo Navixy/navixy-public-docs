@@ -75,7 +75,7 @@ temperature * 1.8 + 32
 math:round(fuel_raw * 0.1)
 ```
 
-Type the names of the device's readings exactly as the device sends them, as shown in [Flow monitoring](../monitoring.md). The attribute button in the field inserts the names of the attributes that this flow calculates. A name that matches nothing returns nothing, and the attribute is left out.
+Use the names of the device's readings exactly as the device sends them, as shown in [Flow monitoring](../monitoring.md). The attribute button in the field inserts the names of the readings that the flow's devices have sent and of the attributes that this flow calculates. A name that matches nothing returns nothing, and the attribute is left out.
 
 See [Expressions](../expressions/) to learn the operators, the functions, and how to read earlier values.
 
@@ -99,7 +99,7 @@ Enter an **Attribute name**. The value has this name everywhere afterwards, so m
 {% step %}
 ### Write the formula
 
-Enter the **Expression**. Use the attribute button to insert the names of attributes that the flow calculates.
+Enter the **Expression**. Use the attribute button to insert the names of device readings and of attributes that the flow calculates.
 {% endstep %}
 
 {% step %}
