@@ -21,7 +21,7 @@ This page describes what the report shows and how its values are calculated. To 
 
 ## What the report shows
 
-<figure><img src="../.gitbook/assets/reports-sensor-readings.png" alt="The Sensor readings report for one day, filtered to two sensors with the Sensors filter. Under the period, the Interval options run from 5 min to 1 day. Four tiles show 1 asset, 1 device, 2 sensors, and the number of samples. A chart titled Readings with no unit shows one line for each sensor, starting late in the morning, when the readings start. The table lists the two sensors under the keys that the device sends, with Average, Min, Max, First, Last, and Change."><figcaption><p>Sensor readings for two sensors: the interval options, the tiles, a chart of the readings, and the table of sensors</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/reports-sensor-readings.png" alt="The Sensor readings report for one day, filtered to two sensors with the Sensors filter. Under the period, the Interval options run from 5 min to 1 day. Four tiles show 1 asset, 1 device, 2 sensors, and the number of samples. A chart titled Readings with no unit shows one line for each sensor over the whole day. The table lists the two sensors under the keys that the device sends, with Average, Min, Max, First, Last, Change, Samples, and Coverage. The Ask AI button is at the top right."><figcaption><p>Sensor readings for two sensors: the interval options, the tiles, a chart of the readings, and the table of sensors</p></figcaption></figure>
 
 The report opens with no assets chosen.
 

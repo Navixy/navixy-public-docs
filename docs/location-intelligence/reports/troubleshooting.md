@@ -1,7 +1,8 @@
 ---
 description: >-
   Fix an empty report, a missing or repeated trip, a missing asset or sensor, a
-  trip on the wrong day, and messages when a report doesn't run or open.
+  trip on the wrong day, and messages when a report or Ask AI doesn't run or
+  open.
 tags:
   - troubleshooting
   - beta
@@ -128,6 +129,19 @@ Reports shows one of the following messages instead of the report:
 | **Report data is unavailable**, "Report data cannot be read right now. Please try again later." | Wait a few minutes and click **Try again**. If the message appears again, contact Navixy support. |
 
 A report that is too large doesn't run at all. Reports never shows only a part of a report.
+
+## Ask AI doesn't answer
+
+The **Ask** panel shows one of the following messages instead of a reply:
+
+| Message | What to do |
+| --- | --- |
+| "Ask could not answer this." | Click **Ask again**. If the message appears again, change the question, for example name the report type, the period, and the assets. |
+| "Ask is busy. Try again in a minute." | Wait a minute and send the question again. |
+| "Ask is still answering your last question." | Wait for the reply to your last question, then send the next one. |
+| "You have asked N questions in the last 24 hours, as many as Ask takes. Try again later." | Ask answers up to 50 of your questions in a workspace in 24 hours. Wait until your earliest question of the last 24 hours is more than 24 hours old. |
+| "This conversation is gone. Ask keeps a conversation for 30 days after its last question." | Click **New conversation** to start a new one. |
+| "This conversation could not be read." | Click **Try again**. If the message appears again, start a new conversation with <picture><source srcset="../.gitbook/assets/icons/reports-add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-add.svg" alt="New conversation" data-size="line"></picture>. |
 
 ## The chart, the map, or a download doesn't appear
 

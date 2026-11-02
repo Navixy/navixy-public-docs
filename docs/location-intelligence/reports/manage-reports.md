@@ -1,7 +1,8 @@
 ---
 description: >-
   How to run a report in Reports for the assets and the period that you
-  choose, share it by its link, and download its tables as CSV or Excel files.
+  choose, ask for a report in plain language, share it by its link, and
+  download its tables as CSV or Excel files.
 tags:
   - how-to
   - beta
@@ -127,9 +128,37 @@ The file name has the table and the first and last day of the period, for exampl
 
 If the file isn't saved, the menu shows "The file could not be written. Try again, or reload the page."
 
+## Ask for a report in plain language
+
+**Ask AI** builds a report from a request in plain language. Describe the report that you need, and Ask proposes the report type, the period, and the assets. Ask works with the report types that you can run.
+
+To ask for a report, follow these steps:
+
+1. Click **Ask AI** at the top right of the page. The **Ask** panel opens next to the report.
+2. In the box at the bottom of the panel, describe the report that you need, for example "Trips of all my assets yesterday". In a new conversation, you can also click one of the examples in the panel. The example appears in the box, where you can change it.
+3. Press Enter to send the question. To start a new line instead, press Shift+Enter.
+4. Wait while the panel shows **Thinking…**. The reply appears under your question.
+5. If the reply proposes a report, check the report type, the days, and the assets in the proposal, then click **Open report**.
+
+The report opens for the period and the assets of the proposal and runs. On a narrow screen, the panel closes so that the report shows.
+
+You can name assets by their names and periods in everyday words. "Last week" and the other periods of the period menu cover the same days as in the menu. A proposal follows the rules of the report: at most 31 days and at most 200 assets chosen one by one. Ask can also answer with figures from a report, such as the distance that each asset drove, and tell you which reports you can run.
+
+A question can be up to 2,000 characters long. Ask answers one question at a time, and up to 50 of your questions in a workspace in 24 hours.
+
+### Continue or start a conversation
+
+Ask keeps your conversation while you move between reports in the same browser tab. Each workspace has its own conversation. Ask keeps a conversation for 30 days after its last question.
+
+* To start a new conversation, click <picture><source srcset="../.gitbook/assets/icons/reports-add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-add.svg" alt="New conversation" data-size="line"></picture> at the top of the panel.
+* To close the panel, click **Ask AI** again or press Esc. Your conversation stays when you open the panel again.
+* To make the panel wider or narrower, drag its left edge. The browser remembers the width.
+
+If Ask doesn't answer, see [Ask AI doesn't answer](troubleshooting.md#ask-ai-doesnt-answer).
+
 ## Report types with a lock
 
-Besides **Trips and stops** and **Sensor readings**, the Reports menu shows other report types and **Ask** with <picture><source srcset="../.gitbook/assets/icons/reports-lock-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-lock.svg" alt="Locked" data-size="line"></picture>. Click one of them to see what it reports.
+Besides **Trips and stops** and **Sensor readings**, the Reports menu shows other report types with <picture><source srcset="../.gitbook/assets/icons/reports-lock-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-lock.svg" alt="Locked" data-size="line"></picture>. Click one of them to see what it reports.
 
 These report types are offered as paid options. Contact Navixy to add them to your workspace.
 
