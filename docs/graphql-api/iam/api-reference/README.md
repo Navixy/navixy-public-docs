@@ -9,7 +9,7 @@ tags:
 
 # IAM API reference
 
-The IAM API reference documents the operations and types that Navixy GraphQL API exposes from IAM, the identity and access management service of the platform: the roles of your organization, what each role grants, and who holds it. Each page covers its queries and mutations, its object and input types, and its enums, with a field table for every type.
+The IAM API reference documents the operations and types that Navixy GraphQL API exposes from IAM (Identity and Access Management): the roles of your organization, what each role grants, and who holds it. Each page covers its queries and mutations, its object and input types, and its enums, with a field table for every type.
 
 The reference states what each operation and field is. For the GraphQL fundamentals behind the notation, see [GraphQL basics](../../graphql-basics/), including the [type syntax](../../graphql-basics/#type-syntax) that the field tables use.
 

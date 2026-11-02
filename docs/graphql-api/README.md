@@ -51,7 +51,7 @@ The platform services work in every workspace, regardless of which products it h
 
 [Console](console/) shows the organizations you belong to, the workspaces you can reach, and the workspace's products. You can enable or disable a product covered by the workspace's plan.
 
-[IAM](iam/) (identity and access management) stores your organization's roles: what access each role gives and who holds it. You can create and change roles and assign them to members or revoke them.
+[IAM](iam/) (Identity and Access Management) stores your organization's roles: what access each role gives and who holds it. You can create and change roles and assign them to members or revoke them.
 
 ### Billing
 

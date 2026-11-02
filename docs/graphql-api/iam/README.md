@@ -9,7 +9,7 @@ tags:
 
 # IAM overview
 
-**IAM API** (identity and access management) is the product that decides who may do what in your organization. It's one of the products served by [Navixy GraphQL API](../). IAM stores the organization's roles, what each role gives access to, and who holds each role. This documentation is for Navixy users who call the API for their own organization to set up roles and assign them to members.
+**IAM** (Identity and Access Management) is the product that decides who may do what in your organization. It's one of the products served by [Navixy GraphQL API](../). IAM stores the organization's roles, what each role gives access to, and who holds each role. Every product checks requests against these roles. IAM has no app of its own. The [Users and roles](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/users-and-roles) page in Navixy Console works with the same roles, so a role that you create through the API appears there, and a role created there is available through the API. This documentation is for Navixy users who call the API for their own organization to set up roles and assign them to members.
 
 All IAM queries are nested under the `iam` field of the `Query` type and IAM mutations under the `iam` field of the `Mutation` type. Authentication and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication.md) and [Error handling](../error-handling.md) to learn that. IAM lists are paged differently from the other products: see [How these lists paginate](api-reference/README.md#how-these-lists-paginate). For the endpoint and request headers, see [Getting started](../getting-started.md).
 

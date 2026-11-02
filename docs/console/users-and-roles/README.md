@@ -1,7 +1,7 @@
 ---
 description: >-
-  The Users and roles page of Navixy Console: the users, roles, and invitations
-  of an organization, the user details, the role page, and security profiles.
+  The Users and roles page of Console: the users, invitations, and IAM roles of
+  an organization, the user details, the role page, and security profiles.
 tags:
   - reference
   - beta
@@ -13,6 +13,8 @@ noIndex: true
 A user is a person's Navixy account. It exists on its own, so the same person can be a member of several organizations. A person joins your organization through an invitation, which always gives them at least one role. If you later revoke all of a member's roles, they stay in the organization without access, and you can assign them a role again without a new invitation.
 
 A role sets what its members can do: which workspaces they can access, which products they use, and what they can do with the data. A role applies only in the organization where it's created. A member can have several roles, and their access is the sum of those roles.
+
+Roles belong to IAM (Identity and Access Management), the Navixy product that decides who can do what in every product. IAM has no page of its own, so you work with it on **Users and roles**. Like the other products, **IAM** is in a role's list of products. The organization's members and invitations belong to Console.
 
 This page describes the **Users and roles** page, the user details, the role page, and invitations. To learn how to work with users and roles, see [Manage users](manage-users.md) and [Manage roles](manage-roles.md).
 
@@ -66,7 +68,7 @@ Navixy keeps an audit log for each workspace. It records when devices, inventori
 | **Assign to users**       | The organization's members. Selecting a person assigns the role, and clearing them revokes it when you save. The date next to a person sets when their assignment ends. **Assigned** lists only the people who have the role. You can select new people only while one of the role's workspaces is selected in the top navigation bar. |
 
 {% hint style="warning" %}
-A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **Iam** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **Iam**, they can't do any of these things.
+A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **IAM** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **IAM**, they can't do any of these things.
 {% endhint %}
 
 You can't grant more access permissions than you have yourself. Console refuses to save a role with more access than your own roles give you.
