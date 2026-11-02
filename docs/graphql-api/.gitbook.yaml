@@ -148,3 +148,8 @@ redirects:
   business-data-repository/api-reference/workspaces/members: console/api-reference/members.md
   business-data-repository/api-reference/actors: business-data-repository/api-reference/actors/users.md
   business-data-repository/api-reference/actors/integrations: authentication.md
+  # The same three pages under the address they were published at, which includes the
+  # "products" group of the table of contents; the keys above leave it out (TD-445)
+  products/business-data-repository/api-reference/workspaces/members: console/api-reference/members.md
+  products/business-data-repository/api-reference/actors: business-data-repository/api-reference/actors/users.md
+  products/business-data-repository/api-reference/actors/integrations: authentication.md
