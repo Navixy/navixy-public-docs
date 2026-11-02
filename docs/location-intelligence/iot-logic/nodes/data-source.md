@@ -45,7 +45,7 @@ In the node settings, you choose the devices that send data into the flow.
 | Field | What it does |
 | --- | --- |
 | **Name** | Required. What the node is called on the canvas. Up to 255 characters |
-| **Search devices** | Filters the list by device name as you type |
+| **Search devices** | Filters the list as you type. Text of digits only finds devices by IMEI; any other text finds them by name |
 | **All** | Every device in the workspace that your role lets you see, with the total in the tab label |
 | **Selected** | Only the devices currently chosen, with the count in the tab label |
 | **Select all** | Selects the devices loaded in the list. The list loads 50 devices at a time as you scroll, so scroll to the end first to include every match |
