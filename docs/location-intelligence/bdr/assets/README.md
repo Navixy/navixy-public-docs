@@ -36,7 +36,7 @@ Here's what you can do:
 
 ## Preset asset types
 
-Every new workspace starts with three preset asset types: **Vehicle**, **Workforce**, and **Cargo**. Navixy creates them together with the workspace, so they are there the first time you open **Assets**. A workspace created before Navixy added the preset types doesn't have them, and you can build the same types yourself. Each one is an ordinary asset type in your workspace. You can rename it and add or remove properties (called [custom fields](./#custom-fields) in Navixy). The **Assets** page has no way to delete an asset type.
+Every new workspace starts with three preset asset types: **Vehicle**, **Workforce**, and **Cargo**. Navixy creates them together with the workspace, so they are there the first time you open **Assets**. A workspace created before Navixy added the preset types doesn't have them, and you can build the same types yourself. Each one is an ordinary asset type in your workspace. You can rename it, add or remove properties (called [custom fields](./#custom-fields) in Navixy), or delete it.
 
 Every field is optional except the one that describes the asset: **Vehicle kind** on Vehicle and **Cargo unit** on Cargo. Workforce has no required fields. Every type has a **Device** field for its assigned GPS device.
 
@@ -84,6 +84,8 @@ The editor opens in a side panel, titled **Create asset type** when you add one 
 
 When you add, remove, or reorder a field, a short message confirms it, with an **Undo** button. Nothing changes until you click **Save**. <picture><source srcset="../../.gitbook/assets/icons/drag_handle-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/drag_handle.svg" alt="Drag to reorder" data-size="line"></picture> to drag a field and <picture><source srcset="../../.gitbook/assets/icons/delete-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/delete.svg" alt="Remove field" data-size="line"></picture> to delete it appear when you click the field.
 
+To delete an asset type, open it and click <picture><source srcset="../../.gitbook/assets/icons/delete-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/delete.svg" alt="Delete" data-size="line"></picture> in the header of **Edit asset type**. Deleting a type asks for confirmation and is permanent. You can't delete an asset type while it has assets or while an asset group type, a field, or a record refers to it. If you try, a message lists what uses the type, so you know what to delete or change first.
+
 ## Custom fields
 
 A custom field is a property, a piece of your own data on an asset such as a VIN, a fuel type, or an inspection date. You can add custom fields to an asset type, but not to a single asset. Every asset of this type has the same fields, and you fill in their values for each asset.
@@ -111,9 +113,11 @@ Two of them ask for more once you select them.
 
 ## Asset editor
 
-**Create asset** and <picture><source srcset="../../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> in a row open the same side panel, empty for a new asset and filled in for an existing one. The panel is titled with the name of the asset type: an asset of the Vehicle type opens a panel titled Vehicle. It shows the built-in **Name** field and then every custom field of that type, in the order set by the type.
+**Create asset** and <picture><source srcset="../../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> in a row open the same side panel, empty for a new asset and filled in for an existing one. The panel is titled with the name of the asset type: an asset of the Vehicle type opens a panel titled Vehicle. It shows the built-in **Name** field and then every custom field of that type, in the order set by the type. For an existing asset, <picture><source srcset="../../.gitbook/assets/icons/delete-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/delete.svg" alt="Delete" data-size="line"></picture> in the panel header deletes the asset, the same as <picture><source srcset="../../.gitbook/assets/icons/delete_outline-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/delete_outline.svg" alt="Delete" data-size="line"></picture> in its row.
 
 A **Device** field has an extra setting. **Primary device** indicates which device's position becomes the asset's position when the asset has more than one device. If you select a device that already belongs to another asset, Navixy asks right away whether to reassign it. Confirming moves the device rather than sharing it.
+
+<picture><source srcset="../../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../../.gitbook/assets/icons/add.svg" alt="Create" data-size="line"></picture> in a **Device** field activates a new device without leaving the asset. It opens the same activation steps as Device Management, and the device you activate is selected in the field.
 
 ## Asset groups
 

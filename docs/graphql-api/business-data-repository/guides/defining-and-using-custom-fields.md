@@ -39,6 +39,8 @@ Every custom field has a [FieldType](../api-reference/custom-fields.md#fieldtype
 | `DEVICE`    | Links to device records. Definable on an `AssetType` only   | `isRequired`, `refSubtypeIds`                                                                                                         | `{ device: { id: "...", isPrimary: true } }`                                                           |
 | `REFERENCE` | Links to any other entity, including catalog items and tags | `isRequired`, `isMulti`, `refEntityTypeCode`, `refSubtypeIds`, `defaultRefIds`                                                        | `{ reference: { id: "...", isPrimary: false } }` or `{ references: { ids: [...], isPrimary: false } }` |
 
+A `DECIMAL` field's `defaultDecimal` must be a value that the field itself accepts. The API rounds it to `scale` and then checks it: it must have at most 18 digits before the decimal point and lie between `minDecimal` and `maxDecimal`. Otherwise, creating the field, or updating it with new params, is refused with `VALIDATION_ERROR` on `input.defaultDecimal`. The default is stored as you sent it, not rounded.
+
 {% hint style="info" %}
 There is no separate field type for schedules, catalog items, or tags. Use `REFERENCE` and fix the target with `refEntityTypeCode`, for example `schedule`, `tag`, or `user_catalog_item`. Devices are the exception: they keep their own `DEVICE` type. To find out which types a given owner accepts, and which entity types its `REFERENCE` fields may point at, query [customFieldTypes](defining-and-using-custom-fields.md#discovering-available-field-types).
 {% endhint %}

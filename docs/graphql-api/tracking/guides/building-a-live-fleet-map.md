@@ -583,7 +583,7 @@ The input fields have these defaults:
 
 | Field                 | Default           | Meaning                                                                                                          |
 | --------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `assetIds`            | Every asset       | Every asset with a linked device that the token can see.                                                         |
+| `assetIds`            | Every asset       | Every asset with a linked device that the token can see. An empty list follows no asset.                        |
 | `includeInitialState` | `true`            | Deliver the current state of every followed asset before the live updates.                                       |
 | `batchWindowMs`       | `2000`            | Combine updates for the same asset within this many milliseconds. The allowed range is 1,000 to 5,000.           |
 | `readingCodes`        | Every reading     | Deliver only these readings, every channel included. Any code can be named. `[]` delivers no readings.           |
@@ -625,7 +625,7 @@ The first emission is the opening snapshot. It may span several batches, and the
 }
 ```
 
-The forklift isn't in the snapshot. A stream follows only assets that have a linked device, because an asset without a device has no reports to deliver. Read such assets with `assetStates`.
+The forklift isn't in the snapshot. A stream follows only assets that have a linked device, because an asset without a device has no reports to deliver. Read such assets with `assetStates`. If you name the forklift in `assetIds`, the opening snapshot has a removal for it with the reason `UNLINKED`. This tells your app that the asset exists but has no device, unlike an ID that the token can't see. The forklift joins the stream once a device is linked to it.
 
 Every later emission is a batch of changes. Each change is either the full current state of one asset or a notice that the asset left the stream:
 
@@ -749,7 +749,7 @@ The filter has these fields:
 | Field                | What it selects                                                                                                                                                                           |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assetIds`           | Only these assets. An empty list selects every asset.                                                                                                                                     |
-| `assetGroupIds`      | Assets in any of these asset groups.                                                                                                                                                      |
+| `assetGroupIds`      | Assets in any of these asset groups. A group counts only while the token can see it and it isn't deleted, so the ID of a hidden or deleted group matches nothing.                      |
 | `connectivityStatus` | Assets where some device has one of these connectivity values.                                                                                                                            |
 | `motionStatus`       | Assets where some device has one of these motion values.                                                                                                                                  |
 | `updatedSince`       | Assets where some device reported at or after this moment.                                                                                                                                |

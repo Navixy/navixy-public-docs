@@ -85,7 +85,7 @@ The marker shows the newest position that the device sent, including a repeated 
 
 While some of the assets on the map are selected, but not all, the markers of the selected assets are larger, with a white fill and an outline in the color of their status. The other markers are dimmed. Clicking a marker selects only that asset, clears the rest of the selection, moves the map to it, and opens its details panel.
 
-The controls at the corner of the map zoom in and out, and the compass turns the map back to north. Navixy remembers the map's position and zoom in your browser and shares them with the other Navixy maps in the same browser.
+The toolbar at the bottom of the map zooms in and out and switches the map between 3D and 2D. The map opens in 3D, tilted. After you turn the map, the toolbar also has a button that turns it back to north. <picture><source srcset="../.gitbook/assets/icons/layers-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/layers.svg" alt="Change the map type" data-size="line"></picture> offers a choice of maps. Navixy remembers the map's position, zoom, and map type in your browser and shares them with the other Navixy maps in the same browser.
 
 ## Map settings
 
@@ -95,7 +95,7 @@ The map settings change what the map shows and how it reacts. To open them, clic
 
 ## Asset details
 
-The details panel shows everything an asset's devices report. It opens next to the **Assets** panel and shares the title with the asset's name. Open it by clicking <picture><source srcset="../.gitbook/assets/icons/info-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/info.svg" alt="Show details" data-size="line"></picture> on a list entry, which appears when you hover over the entry, or by clicking the asset's marker. It closes when the asset leaves the list, for example, when you switch tabs or search for another name.
+The details panel shows everything an asset's devices report. It opens next to the **Assets** panel or over it. If it covers the list, close the details panel to see the list again. The panel shares the title with the asset's name. Open it by clicking <picture><source srcset="../.gitbook/assets/icons/info-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/info.svg" alt="Show details" data-size="line"></picture> on a list entry, which appears when you hover over the entry, or by clicking the asset's marker. It closes when the asset leaves the list, for example, when you switch tabs or search for another name.
 
 The panel has one section for each **Device** field of the asset. The section of the primary device is open, and the others are collapsed. Each section shows:
 
@@ -109,11 +109,11 @@ Each reading is listed under its title. A reading that has no title is listed un
 
 <picture><source srcset="../.gitbook/assets/icons/star_border-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/star_border.svg" alt="Show the field for this asset in the list" data-size="line"></picture> will show that field in the asset's list entry. Pinned fields are saved for each asset in this browser only: another person, or you on another computer, will see the default fields. You can pin every row except **Connection status**, **Motion status**, and the readings.
 
-<picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit asset" data-size="line"></picture> in the panel header opens the asset editor, the same one as on the **Assets** page. You can't delete the asset from here. To learn what its fields do, see [Assets](../bdr/assets/#asset-editor).
+<picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit asset" data-size="line"></picture> in the panel header opens the asset editor, the same one as on the **Assets** page. You can't delete the asset from here, and its fields can't create new devices or records. To learn what its fields do, see [Assets](../bdr/assets/#asset-editor).
 
 ## Trip history
 
-The **Trip history** panel lists the trips and stops of the assets you selected for the period you choose, and shows them on the map. It opens next to the **Assets** panel, in place of the details panel. It closes when you clear the selection, when none of the selected assets are on the current tab or match your search, and when you open a details panel.
+The **Trip history** panel lists the trips and stops of the assets you selected for the period you choose, and shows them on the map. It opens in the place of the details panel, next to the **Assets** panel or over it. It closes when you clear the selection, when none of the selected assets are on the current tab or match your search, and when you open a details panel.
 
 The default period when you open the panel is today. To choose another period, click the date range at the top of the panel. You can enter the dates and times in **Start Date** and **End Date**, or click a day in the calendar.
 
@@ -122,7 +122,7 @@ The list has one section for each selected asset with the number of its trips an
 * **Trip:** When the trip started and ended, with the coordinates of both places, the distance, and how long it took.
 * **Stop:** Where the asset stopped, with the stop's coordinates, and how long it stayed. Only a stop of 5 minutes or more is listed. A shorter stop, such as at a traffic light, is part of the trip.
 
-Trip history builds trips from the usable positions that the device sent. A trip's distance is the sum of the straight-line distances between them. A trip starts when a new position is more than 100 m from where the device stopped or reports a speed above 3 km/h, and data that stops arriving doesn't end it. When a device reports rarely, its route is a straight line between reports, so the distance is shorter than the distance driven, and a short stop between two reports isn't listed. How often a device sends positions is set on the device. Reports build trips by their own rules, so Tracking and Reports can show different trips for such a device.
+Trip history builds trips from the usable positions that the device sent. A trip's distance is the sum of the straight-line distances between them. A trip starts when a new position is more than 100 m from where the device stopped or reports a speed above 3 km/h, and a gap in the data doesn't end it unless no position data arrives for more than 25 hours. When a device reports rarely, its route is a straight line between reports, so the distance is shorter than the distance driven, and a short stop between two reports isn't listed. How often a device sends positions is set on the device. Reports build trips by their own rules, so Tracking and Reports can show different trips for such a device.
 
 Each asset's trips come from its primary device, so an asset with two trackers lists every trip once. History covers the selected assets on the current tab that match your search. The status filter doesn't narrow it. If the assets made no trips or stops in the period, the panel says so.
 
@@ -148,11 +148,12 @@ Selecting a geo object draws its shape on the map and moves the map to show ever
 
 ## Access to Tracking
 
-Tracking is in the menu when your workspace includes it. What you see in Tracking follows your access to assets, devices, and geo objects in [Business Data Repository](../bdr/README.md#access-to-business-data-repository):
+Tracking is in the menu when your workspace includes it. If your workspace doesn't include Tracking, or you don't have access to it, you will receive a warning. What you see in Tracking follows your access to assets, devices, and geo objects in [Business Data Repository](../bdr/README.md#access-to-business-data-repository):
 
 * The **Assets** panel and the map show only the assets that your role lets you see.
 * The details panel of an asset shows only the devices that your role lets you see.
 * The **Geo objects** panel lists only the geo objects that your role lets you see.
+* If you don't have access to asset types or geo object types, you will receive a warning in the **Assets** or **Geo objects** panel.
 * <picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit asset" data-size="line"></picture> in the details panel is shown to everyone. Saving changes to the asset needs a role that lets you edit assets.
 
 To learn more, see [Access and roles](../access-and-roles.md).

@@ -60,7 +60,7 @@ If you switch the slot back from **Custom** to a preset rule or to **Doesn't rep
 Which conditions you can add depends on the unit in **Repeat every**. **Week numbers**, for example, works only with **Year**. Turning on **All day** removes any **Hours**, **Minutes**, and **Seconds** conditions from the slot. [Schedules](README.md#custom-repeat-rule) lists them all.
 
 {% hint style="info" %}
-Your start date may not match the conditions you set. When you save, Navixy can move the start forward to the first matching date and time. These conditions can move the start:
+Your start date may not match the conditions you set. When you save, Navixy can move the start forward to the first matching date and time. The end moves forward by the same amount, so the slot stays the same length as you set it. These conditions can move the start:
 
 * **Months**, **Days of the year**, and **Week numbers** on **Year**
 * **Days of the month** on **Month** or **Year**
@@ -69,7 +69,7 @@ Your start date may not match the conditions you set. When you save, Navixy can 
 * **Minutes** on **Hour** or a longer unit
 * **Seconds** on **Minute** or a longer unit
 
-**Hours**, **Minutes**, and **Seconds** move the start time of day. On a shorter unit, a condition only limits when the slot happens and doesn't move the start. A slot that starts on a Monday and happens on Saturdays and Sundays first happens on the Saturday after it.
+**Hours**, **Minutes**, and **Seconds** move the start time of day. On a shorter unit, a condition only limits when the slot is placed and doesn't move the start. For example, a slot starts on a Monday and is set for Saturdays and Sundays. It is first placed on the Saturday after that Monday.
 {% endhint %}
 
 ### Repeat a slot Monday to Friday
@@ -82,4 +82,4 @@ Working hours across the working week are the most common custom rule, and no pr
 4. Click **On weekdays**. Monday to Friday are selected together.
 5. Click **Save**.
 
-The summary says that the slot happens weekly on weekdays, and gives its start date and when the rule ends.
+The summary says that the slot is scheduled weekly on weekdays and gives its start date and when the rule ends.

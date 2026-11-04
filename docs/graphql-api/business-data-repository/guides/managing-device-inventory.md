@@ -165,7 +165,7 @@ A device can hold only one active assignment, so `deviceInventoryLink` fails if 
 {% step %}
 ### Query inventory contents
 
-To see which devices are currently assigned to Berlin Warehouse, query the `devices` field on the inventory. It accepts the same [DeviceFilter](../api-reference/devices/#devicefilter) input as the top-level `devices` query, but only `typeIds`, `modelIds`, `statusIds`, and `titleContains` have any effect here. `identifierContains`, `vendorIds`, and `inventoryIds` are accepted but ignored.
+To see which devices are currently assigned to Berlin Warehouse, query the `devices` field on the inventory. It accepts the same [DeviceFilter](../api-reference/devices/#devicefilter) input as the top-level `devices` query, and every field of the filter applies here too.
 
 ```graphql
 query BerlinStock {

@@ -78,6 +78,8 @@ filter: {
 
 This is useful when building dynamic filters, so you don't need to conditionally omit empty fields from your query.
 
+Some inputs read an empty list as "none". For example, an empty `assetIds` in the `trackingAssetStates` subscription follows no asset. Each such input says so in the API reference. See also [Building a live fleet map](../tracking/guides/building-a-live-fleet-map.md).
+
 ### Text search
 
 Most filters include a `titleContains` field for partial text matching:

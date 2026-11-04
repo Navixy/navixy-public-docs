@@ -364,6 +364,8 @@ Durations, stops, and the number of trips add up across parts only in two cases:
 - The cut falls while the vehicle moves.
 - The cut falls inside a stop, and the stop lasts at least `minStopDuration` on each side of the cut.
 
+A gap of more than 25 hours without points that includes the cut breaks both cases. This applies when the device's last point before the cut is at most 25 hours before the cut, and the next point comes more than 25 hours after that last point. A request for the whole period ends the trip or the stop at that last point, as the next step describes. In the part before the cut, the trip or the stop lasts until the cut instead, and the next part doesn't continue it. A pause shorter than `minStopDuration` at the end of a trip can also appear as a stop in the part before the cut.
+
 In other cases, each part classifies its side of the cut on its own. A short pause at the cut can end a trip. A stop can split into two pieces that are too short to count as stops. To get figures that don't depend on the parts, request periods short enough that `continueFrom` stays null.
 
 If a request for a part fails, send the same request again. Add its totals only after it succeeds, so that a retry doesn't count them twice.
@@ -388,13 +390,19 @@ Always take the next `from` value from `continueFrom`. Don't compute it from the
 | Trip | 09:12:05 | 10:03:47              | 51 min 42 s      | 41.9 km  |
 | Stop | 10:04:17 | Ongoing at period end | 13 h 55 min 43 s |          |
 
-Only trips have a distance. The distance of a trip includes the leg from the last point of the stop before it. A stop with `endedAt: null` was still going at the end of the covered period, or at a continuation boundary. Its `duration` is capped at that end, so it isn't the time since the stop began, and the stop isn't necessarily still going now.
+Only trips have a distance. The distance of a trip includes the leg from the last point of the stop before it. A stop with `endedAt: null` was still going at the end of the covered period, or at a continuation boundary. Its `duration` is capped at that end, so it isn't the time since the stop began, and the stop isn't necessarily still going now. A stop can also have `endedAt` set at the end of the covered period. This happens when the device hasn't sent any points for more than 25 hours after the stop's last point. `endedAt` then shows that last point.
 
 A stop begins at the second point that the device reported at the same place, because one point can't show that the vehicle stopped. The time between the last point of a trip and that second point belongs to neither segment. At the moment, each stop therefore leaves a gap of about one reporting interval. In the example, the device reported every 30 seconds as it arrived, so the three gaps add up to 90 seconds. A stop ends, and the next trip starts, at the same moment.
 
 `totalDrivingTime` is the sum of trip durations, including pauses too short to qualify as stops. It isn't the time spent physically moving.
 
 Trips and stops also leave a gap where the device sent no messages. A gap doesn't mean that the vehicle was stopped, and a complete response doesn't prove that the device reported throughout the period.
+
+A gap of more than 25 hours between two points splits the timeline. The trip or the stop before the gap ends at the last point before the gap. A trip that ends with a pause shorter than `minStopDuration` ends at its last moving point instead. A new trip or stop starts at the first point after the gap. No trip covers the gap, and the gap adds nothing to `distance`.
+
+For example, a vehicle is switched off in Hamburg for three days and then reports from Berlin. The response has no trip from Hamburg to Berlin. When a vehicle stays at the same place before and after such a gap, the response lists two stops, one on each side of the gap.
+
+Only points of the kinds set in `options.fitness` count, which by default are satellite (GNSS) and network positions. Two points exactly 25 hours apart aren't a gap, so a parked tracker that reports once a day keeps one stop.
 {% endstep %}
 
 {% step %}

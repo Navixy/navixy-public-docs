@@ -67,7 +67,7 @@ The slot starts out named **New time slot**. Give it a name that says what the p
 
 {% step %}
 
-### Choose how often the slot happens
+### Choose how often the slot is scheduled
 
 Open the **Repeat** list of the slot and select a rule:
 
@@ -84,7 +84,7 @@ These rules cover one day of the week, not several. For Monday to Friday, or a r
 
 ### Check the summary and save
 
-Read the **Schedule summary**. It gives you one line for each slot: how often it happens, when it starts, and when the repetition ends.
+Read the **Schedule summary**. It gives you one line for each slot: how often it is scheduled, when it starts, and when the repetition ends.
 
 Click **Save**.
 {% endstep %}
