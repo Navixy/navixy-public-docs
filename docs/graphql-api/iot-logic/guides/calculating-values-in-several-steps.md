@@ -21,7 +21,7 @@ You also need the name of the attribute that the fuel sensor reports. The name d
 
 ## Why a chain of nodes
 
-A chain of Initiate Attribute nodes splits one long calculation into short steps. It has three advantages over one long expression:
+A chain of Initiate Attribute nodes splits one long calculation, written in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview), into short steps. It has three advantages over one long expression:
 
 * Each expression stays short. A condition can have at most 480 characters, and an attribute expression at most 960.
 * Each intermediate value is an attribute of its own, such as `fuel_level_l`. Later nodes read it by name, and so do the other tools of the Navixy platform once the message reaches an Output Endpoint.
@@ -258,7 +258,9 @@ You now have a flow that turns a raw fuel sensor voltage into litres, a fill per
 
 ## Extending the chain
 
-To react to a drain, add nodes to the `THEN` outcome of the logic node, and end the new path at the Output Endpoint, so that the flow still keeps its attributes. For example, put an Initiate Attribute node between the `THEN` outcome and the Output Endpoint to calculate the size of the drop, `fuel_drain_l`, only for the messages that look like a drain. The `ELSE` outcome still leads straight to the Output Endpoint. The two paths can meet there because a message never takes both. To also send a command to the truck, add a `THEN` transition to a [Device Action](../node-types.md#device-action) node next to the `THEN` transition that you already have. A Device Action node calculates nothing, so the flow still keeps its attributes. See [IF/THEN Logic](../node-types.md#if-then-logic) for the rules of logic node outcomes.
+To react to a drain, add nodes to the `THEN` outcome of the logic node, and end the new path at the Output Endpoint, so that the flow still keeps its attributes. For example, put an Initiate Attribute node between the `THEN` outcome and the Output Endpoint to calculate the size of the drop, `fuel_drain_l`, only for the messages that look like a drain. The `ELSE` outcome still leads straight to the Output Endpoint. The two paths can meet there because a message never takes both.
+
+To also send a command to the truck, add a `THEN` transition to a [Device Action](../node-types.md#device-action) node next to the `THEN` transition that you already have. A Device Action node calculates nothing, so the flow still keeps its attributes. To notify a system outside Navixy about the drain, add one more `THEN` transition, to a [Webhook](../node-types.md#webhook) node with `{{fuel_level_l}}` in its body. See [IF/THEN Logic](../node-types.md#if-then-logic) for the rules of logic node outcomes.
 
 To add a calculation, add an Initiate Attribute node to the chain with an update. The update sends the whole graph, so send the stored nodes with their IDs and the new node with a key only. See [Replace the graph](creating-and-updating-flows.md#replace-the-graph).
 

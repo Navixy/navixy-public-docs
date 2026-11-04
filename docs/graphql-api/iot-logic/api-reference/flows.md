@@ -317,7 +317,7 @@ Input for creating a flow. The flow is created disabled.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
+Some fields below belong to one or two node types only, and the other types ignore them without an error. `DATA_SOURCE` uses `deviceIds`. `LOGIC` uses `condition` and `expressionName`. `INITIATE_ATTRIBUTES` uses `attributes`. `ACTION` uses `actions`, `deviceMapping`, and `trackableNodeId`. `WEBHOOK` uses `url`, `headers`, `body`, and `trackableNodeId`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -328,12 +328,15 @@ Each field below that names a node type belongs to that type only. The other typ
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
-| `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
+| `condition` | `String` | `LOGIC` only. The condition to check, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
 | `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
-| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `trackableNodeId` | `String` | Optional for `ACTION`, required for `WEBHOOK`. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. `1` means that the message reached the node, not that a command or a request succeeded. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two Device Action or Webhook nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name of a Device Action node. For a Device Action node, the flow editor fills it with `action_` and 8 hexadecimal characters. |
 | `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
+| `url` | `String` | `WEBHOOK` only, required. The address that the node sends its request to. It starts with `http://` or `https://` in lowercase, has only printable ASCII characters, and is at most 255 characters long. The only placeholder that it accepts is `{{device_id}}`. A `url` with `localhost`, a host name that ends in `.localhost`, or a loopback, private, link-local, or other refused IP address fails when you save the flow. When a host name resolves to at least one such address, Navixy doesn't send the request and reports no error. See [Rules for Webhook nodes](../node-types.md#rules-for-webhook-nodes). |
+| `headers` | [[IotLogicFlowWebhookHeaderInput](#iotlogicflowwebhookheaderinput)!] | `WEBHOOK` only. The HTTP headers that the node sends, at most 10. A node without `headers` has none, so in an update, leaving the field out removes the stored headers. |
+| `body` | `String` | `WEBHOOK` only, required. The body of the request, at most 4,000 characters. Navixy replaces its placeholders with values of the message. See [Placeholders](../node-types.md#placeholders). |
 
 </details>
 
@@ -359,7 +362,7 @@ One attribute that an Initiate Attribute node calculates: its name and the expre
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. Lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
-| `expression` | `String!` | The expression that calculates the value, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 960 characters. |
+| `expression` | `String!` | The expression that calculates the value, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 960 characters. |
 
 </details>
 
@@ -411,6 +414,19 @@ One entry of the device mapping of a Device Action node: when a message of `sour
 | ----- | ---- | ----------- |
 | `sourceDeviceId` | `ID!` | The device whose messages trigger the actions. It receives no commands itself, unless it is also in `targetDeviceIds`. |
 | `targetDeviceIds` | `[ID!]!` | The devices that receive the actions. At least one. |
+
+</details>
+
+<details>
+
+<summary>IotLogicFlowWebhookHeaderInput</summary>
+
+One HTTP header of a Webhook node. A `Content-Type` header can appear once, and its value is `application/json` or another `application` media type that ends in `+json`, such as `application/problem+json`, with no `charset` other than `utf-8`. Navixy sets these headers itself, so a node can't have them: `Content-Length`, `Transfer-Encoding`, `Host`, `Connection`, `Keep-Alive`, `Proxy-Connection`, `TE`, `Trailer`, `Upgrade`, `Expect`, and `X-Navixy-Webhook`. Header names aren't case-sensitive.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `key` | `String!` | The name of the header, at most 255 characters. It is an HTTP token ([RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-tokens)): English letters, digits, and the characters ``!#$%&'*+-.^_`|~``. |
+| `value` | `String!` | The value of the header. Printable ASCII, at most 255 characters. The only placeholder that it accepts is `{{device_id}}`. |
 
 </details>
 
@@ -507,7 +523,7 @@ Input for updating a flow. `nodes` and `transitions` are the whole new graph, no
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
+Some fields below belong to one or two node types only, and the other types ignore them without an error. `DATA_SOURCE` uses `deviceIds`. `LOGIC` uses `condition` and `expressionName`. `INITIATE_ATTRIBUTES` uses `attributes`. `ACTION` uses `actions`, `deviceMapping`, and `trackableNodeId`. `WEBHOOK` uses `url`, `headers`, `body`, and `trackableNodeId`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -518,12 +534,15 @@ Each field below that names a node type belongs to that type only. The other typ
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
-| `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
+| `condition` | `String` | `LOGIC` only. The condition to check, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
 | `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
-| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `trackableNodeId` | `String` | Optional for `ACTION`, required for `WEBHOOK`. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. `1` means that the message reached the node, not that a command or a request succeeded. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two Device Action or Webhook nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name of a Device Action node. For a Device Action node, the flow editor fills it with `action_` and 8 hexadecimal characters. |
 | `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
+| `url` | `String` | `WEBHOOK` only, required. The address that the node sends its request to. It starts with `http://` or `https://` in lowercase, has only printable ASCII characters, and is at most 255 characters long. The only placeholder that it accepts is `{{device_id}}`. A `url` with `localhost`, a host name that ends in `.localhost`, or a loopback, private, link-local, or other refused IP address fails when you save the flow. When a host name resolves to at least one such address, Navixy doesn't send the request and reports no error. See [Rules for Webhook nodes](../node-types.md#rules-for-webhook-nodes). |
+| `headers` | [[IotLogicFlowWebhookHeaderInput](#iotlogicflowwebhookheaderinput)!] | `WEBHOOK` only. The HTTP headers that the node sends, at most 10. A node without `headers` has none, so in an update, leaving the field out removes the stored headers. |
+| `body` | `String` | `WEBHOOK` only, required. The body of the request, at most 4,000 characters. Navixy replaces its placeholders with values of the message. See [Placeholders](../node-types.md#placeholders). |
 
 </details>
 
@@ -549,7 +568,7 @@ One attribute that an Initiate Attribute node calculates: its name and the expre
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. Lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
-| `expression` | `String!` | The expression that calculates the value, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 960 characters. |
+| `expression` | `String!` | The expression that calculates the value, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 960 characters. |
 
 </details>
 
@@ -601,6 +620,19 @@ One entry of the device mapping of a Device Action node: when a message of `sour
 | ----- | ---- | ----------- |
 | `sourceDeviceId` | `ID!` | The device whose messages trigger the actions. It receives no commands itself, unless it is also in `targetDeviceIds`. |
 | `targetDeviceIds` | `[ID!]!` | The devices that receive the actions. At least one. |
+
+</details>
+
+<details>
+
+<summary>IotLogicFlowWebhookHeaderInput</summary>
+
+One HTTP header of a Webhook node. A `Content-Type` header can appear once, and its value is `application/json` or another `application` media type that ends in `+json`, such as `application/problem+json`, with no `charset` other than `utf-8`. Navixy sets these headers itself, so a node can't have them: `Content-Length`, `Transfer-Encoding`, `Host`, `Connection`, `Keep-Alive`, `Proxy-Connection`, `TE`, `Trailer`, `Upgrade`, `Expect`, and `X-Navixy-Webhook`. Header names aren't case-sensitive.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `key` | `String!` | The name of the header, at most 255 characters. It is an HTTP token ([RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-tokens)): English letters, digits, and the characters ``!#$%&'*+-.^_`|~``. |
+| `value` | `String!` | The value of the header. Printable ASCII, at most 255 characters. The only placeholder that it accepts is `{{device_id}}`. |
 
 </details>
 
@@ -818,7 +850,7 @@ An IF/THEN Logic node: a message for which `condition` is true leaves by the `TH
 | `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
 | `description` | `String` | Notes about the node. |
 | `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
-| `condition` | `String!` | An expression in the Navixy IoT Logic Expression Language, calculated for each message. |
+| `condition` | `String!` | An expression in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview), calculated for each message. |
 | `expressionName` | `String` | The attribute that stores the result of the check. `null` when the node only chooses the transition. |
 
 ---
@@ -916,6 +948,40 @@ One entry of the device mapping of a Device Action node: messages of `source` se
 
 ---
 
+<a id="iotlogicflowwebhooknode"></a>
+
+### IotLogicFlowWebhookNode
+
+A Webhook node. For each message that reaches the node, Navixy sends `body` to `url` in an HTTP `POST` request. Navixy replaces placeholders in the body, such as `{{device_id}}`, with values of the message. See [Webhook](../node-types.md#webhook).
+
+**Implements:** [IotLogicFlowNode](#iotlogicflownode)
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `id` | `ID!` | The ID of the node. It is unique within the flow, and it stays the same when an update keeps the node. |
+| `name` | `String!` | The name that the flow editor shows. At most 255 characters. |
+| `description` | `String` | Notes about the node. |
+| `position` | [IotLogicFlowNodePosition](#iotlogicflownodeposition) | The coordinates where the flow editor draws the node. `null` for a node that has no stored position. |
+| `url` | `String!` | The address that the node sends its request to. |
+| `headers` | [[IotLogicFlowWebhookHeader](#iotlogicflowwebhookheader)!]! | The HTTP headers that the node sends. Empty when the node has none. |
+| `body` | `String!` | The body of the request, with its placeholders as you sent them. |
+| `trackableNodeId` | `String!` | The name of the flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. |
+
+---
+
+<a id="iotlogicflowwebhookheader"></a>
+
+### IotLogicFlowWebhookHeader
+
+One HTTP header of a Webhook node. A read returns the header exactly as you sent it, including a secret such as an access token. Anyone whose roles let them read the flow can read the value.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `key` | `String!` | The name of the header. |
+| `value` | `String!` | The value of the header, with the `{{device_id}}` placeholder as you sent it. |
+
+---
+
 <a id="iotlogicflowattributeassignment"></a>
 
 ### IotLogicFlowAttributeAssignment
@@ -925,7 +991,7 @@ One attribute that an Initiate Attribute node calculates.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. |
-| `expression` | `String!` | An expression in the Navixy IoT Logic Expression Language, calculated for each message. |
+| `expression` | `String!` | An expression in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview), calculated for each message. |
 
 ---
 
@@ -1041,7 +1107,7 @@ Ordering options for device links.
 
 A node in a create or update request. `key` names the node inside this one request, and transitions refer to the node by its key. `id` is the ID of the stored node that this entry keeps. Leave out `id` for a new node.
 
-Each field below that names a node type belongs to that type only. The other types ignore it without an error: `deviceIds` to `DATA_SOURCE`, `condition` and `expressionName` to `LOGIC`, `attributes` to `INITIATE_ATTRIBUTES`, and `actions`, `trackableNodeId`, and `deviceMapping` to `ACTION`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
+Some fields below belong to one or two node types only, and the other types ignore them without an error. `DATA_SOURCE` uses `deviceIds`. `LOGIC` uses `condition` and `expressionName`. `INITIATE_ATTRIBUTES` uses `attributes`. `ACTION` uses `actions`, `deviceMapping`, and `trackableNodeId`. `WEBHOOK` uses `url`, `headers`, `body`, and `trackableNodeId`. `OUTPUT_ENDPOINT` nodes have no fields of their own.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -1052,12 +1118,28 @@ Each field below that names a node type belongs to that type only. The other typ
 | `description` | `String` | Printable ASCII and line feeds (`\n`), at most 4,000 characters. Spaces at the start and the end are kept. |
 | `position` | [IotLogicFlowNodePositionInput](#iotlogicflownodepositioninput) | The coordinates where the flow editor draws the node. |
 | `deviceIds` | `[ID!]` | `DATA_SOURCE` only. The devices whose messages enter the flow at this node. In an update, leave it out to keep the current devices, send `[]` to remove all of them, or send a list to replace them. `null` isn't accepted. `[]` and a new list change only the devices that your roles let you read, and the other devices stay attached. A new node without it has no devices. The data sources of a flow can have at most 25,000 devices together, and a device in two data sources counts twice. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. Validation counts every attached device, including the ones that you can't read, toward the limit and toward attribute conflicts. |
-| `condition` | `String` | `LOGIC` only. The condition to check, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 480 characters. |
+| `condition` | `String` | `LOGIC` only. The condition to check, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 480 characters. |
 | `expressionName` | `String` | `LOGIC` only, optional. The attribute that stores the result of the check. Lowercase letters and digits in groups joined by single underscores, such as `is_too_warm` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
 | `attributes` | [[IotLogicFlowAttributeAssignmentInput](#iotlogicflowattributeassignmentinput)!] | `INITIATE_ATTRIBUTES` only. The attributes that the node calculates. At most 50 per node, and at most 200 per flow, counting the `expressionName` of every logic node. |
 | `actions` | [[IotLogicDeviceCommandActionInput](#iotlogicdevicecommandactioninput)!] | `ACTION` only. The commands that the node sends, at most 10. Each action sets exactly one of `setOutput` or `rawCommand`. A node without actions saves and sends nothing. In an update, send the actions every time: a node without `actions` has none, so leaving the field out removes the stored actions. |
-| `trackableNodeId` | `String` | `ACTION` only, optional. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name. The flow editor fills it with `action_` and 8 hexadecimal characters. |
+| `trackableNodeId` | `String` | Optional for `ACTION`, required for `WEBHOOK`. The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. The flow keeps the value in its history and doesn't send it to the Navixy platform. `1` means that the message reached the node, not that a command or a request succeeded. The name follows the rule of attribute names: lowercase letters and digits in groups joined by single underscores (`^[a-z0-9]+(_[a-z0-9]+)*$`), at most 48 characters, not counting a final channel number. Two Device Action or Webhook nodes of one flow can't have the same name, and a device of the flow can't report it. In an update, leaving the field out removes the stored name of a Device Action node. For a Device Action node, the flow editor fills it with `action_` and 8 hexadecimal characters. |
 | `deviceMapping` | [[IotLogicDeviceMappingEntryInput](#iotlogicdevicemappingentryinput)!] | `ACTION` only. Sends the actions to other devices: when a message of a source device reaches the node, the actions go to the target devices of its entry instead of to the source. A device without an entry receives its own commands. In an update, leave it out to keep the current mapping, send `[]` to remove it, or send a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without it has no mapping. At most 1,000 targets per node, counted across its entries. A source or a target can be any device of your workspace that your roles let you read, whether a data source of the flow lists it or not. A device that your roles don't let you read fails with `UNKNOWN_DEVICE`, as a device that doesn't exist does. |
+| `url` | `String` | `WEBHOOK` only, required. The address that the node sends its request to. It starts with `http://` or `https://` in lowercase, has only printable ASCII characters, and is at most 255 characters long. The only placeholder that it accepts is `{{device_id}}`. A `url` with `localhost`, a host name that ends in `.localhost`, or a loopback, private, link-local, or other refused IP address fails when you save the flow. When a host name resolves to at least one such address, Navixy doesn't send the request and reports no error. See [Rules for Webhook nodes](../node-types.md#rules-for-webhook-nodes). |
+| `headers` | [[IotLogicFlowWebhookHeaderInput](#iotlogicflowwebhookheaderinput)!] | `WEBHOOK` only. The HTTP headers that the node sends, at most 10. A node without `headers` has none, so in an update, leaving the field out removes the stored headers. |
+| `body` | `String` | `WEBHOOK` only, required. The body of the request, at most 4,000 characters. Navixy replaces its placeholders with values of the message. See [Placeholders](../node-types.md#placeholders). |
+
+---
+
+<a id="iotlogicflowwebhookheaderinput"></a>
+
+### IotLogicFlowWebhookHeaderInput
+
+One HTTP header of a Webhook node. A `Content-Type` header can appear once, and its value is `application/json` or another `application` media type that ends in `+json`, such as `application/problem+json`, with no `charset` other than `utf-8`. Navixy sets these headers itself, so a node can't have them: `Content-Length`, `Transfer-Encoding`, `Host`, `Connection`, `Keep-Alive`, `Proxy-Connection`, `TE`, `Trailer`, `Upgrade`, `Expect`, and `X-Navixy-Webhook`. Header names aren't case-sensitive.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `key` | `String!` | The name of the header, at most 255 characters. It is an HTTP token ([RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-tokens)): English letters, digits, and the characters ``!#$%&'*+-.^_`|~``. |
+| `value` | `String!` | The value of the header. Printable ASCII, at most 255 characters. The only placeholder that it accepts is `{{device_id}}`. |
 
 ---
 
@@ -1121,7 +1203,7 @@ One attribute that an Initiate Attribute node calculates: its name and the expre
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `name` | `String!` | The name of the attribute. Lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l` (`^[a-z0-9]+(_[a-z0-9]+)*$`). A final group of digits, such as `_2`, gives the channel number. At most 48 characters, not counting the channel number. Navixy reserves 12 names for the position of a device, such as `position_latitude`. See [Initiate Attribute](../node-types.md#initiate-attribute). |
-| `expression` | `String!` | The expression that calculates the value, in the Navixy IoT Logic Expression Language. Printable ASCII on one line, at most 960 characters. |
+| `expression` | `String!` | The expression that calculates the value, in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Printable ASCII on one line, at most 960 characters. |
 
 ---
 
@@ -1220,7 +1302,7 @@ The outcome of the node that a transition leaves, and so the messages that follo
 
 The node types that a flow can have.
 
-**Values:** `DATA_SOURCE`, `LOGIC`, `INITIATE_ATTRIBUTES`, `OUTPUT_ENDPOINT`, `ACTION`
+**Values:** `DATA_SOURCE`, `LOGIC`, `INITIATE_ATTRIBUTES`, `OUTPUT_ENDPOINT`, `ACTION`, `WEBHOOK`
 
 ---
 

@@ -192,6 +192,32 @@ type IotLogicDeviceMappingEntry {
 }
 
 # @category: iot-logic/flows
+"""
+POSTs `body` to `url` when a message reaches it. `{{name}}` placeholders take an attribute name,
+channel included (`lls_level_0`), or `device_id`, `device_label`, `device_imei`; `url` and header
+values admit `{{device_id}}` only.
+"""
+type IotLogicFlowWebhookNode implements IotLogicFlowNode {
+  id: ID!
+  name: String!
+  description: String
+  position: IotLogicFlowNodePosition
+  url: String!
+  headers: [IotLogicFlowWebhookHeader!]!
+  "The request body, with placeholders."
+  body: String!
+  "A flow attribute set to 1 on each message that reaches the node and 0 on each that does not."
+  trackableNodeId: String!
+}
+
+# @category: iot-logic/flows
+"An HTTP header a webhook node sends. Stored and returned as entered, secrets included."
+type IotLogicFlowWebhookHeader {
+  key: String!
+  value: String!
+}
+
+# @category: iot-logic/flows
 "One `name = <JEXL>` assignment inside an initiate-attributes node."
 type IotLogicFlowAttributeAssignment {
   "The attribute name the expression writes to."
@@ -236,6 +262,7 @@ enum IotLogicFlowNodeType {
   INITIATE_ATTRIBUTES
   OUTPUT_ENDPOINT
   ACTION
+  WEBHOOK
 }
 
 # @category: iot-logic/flows
@@ -344,8 +371,8 @@ the stored node the key stands for and is omitted for a node being added.
 
 The payload fields below belong to one node type each and must be absent for the others:
 `deviceIds` to DATA_SOURCE, `condition` and `expressionName` to LOGIC, `attributes` to
-INITIATE_ATTRIBUTES, `actions`, `trackableNodeId` and `deviceMapping` to ACTION.
-OUTPUT_ENDPOINT carries none.
+INITIATE_ATTRIBUTES, `actions` and `deviceMapping` to ACTION, `url`, `headers` and `body` to
+WEBHOOK, `trackableNodeId` to ACTION and WEBHOOK. OUTPUT_ENDPOINT carries none.
 """
 input IotLogicFlowNodeInput {
   "Handle for this node within the request. Unique per request."
@@ -387,8 +414,8 @@ input IotLogicFlowNodeInput {
   "ACTION. At most 10. Omitted means none."
   actions: [IotLogicDeviceCommandActionInput!]
   """
-  ACTION. `^[a-z0-9]+(_[a-z0-9]+)*$`, optionally ending in `_<digits>` for a channel. Unique among
-  the flow's action nodes.
+  ACTION, optional; WEBHOOK, required. `^[a-z0-9]+(_[a-z0-9]+)*$`, optionally ending in `_<digits>`
+  for a channel. Unique among the flow's action and webhook nodes.
   """
   trackableNodeId: String
   """
@@ -399,6 +426,29 @@ input IotLogicFlowNodeInput {
   A device outside the caller's grant fails as UNKNOWN_DEVICE, the same answer as an absent one.
   """
   deviceMapping: [IotLogicDeviceMappingEntryInput!]
+  """
+  WEBHOOK, required. `http://` or `https://`, printable ASCII, at most 255 characters. Admits the
+  `{{device_id}}` placeholder only. A loopback or private address literal, or `localhost`, is refused;
+  a host that resolves to one is refused when the call is made.
+  """
+  url: String @trim
+  "WEBHOOK. At most 10. Omitted means none."
+  headers: [IotLogicFlowWebhookHeaderInput!]
+  "WEBHOOK, required. At most 4000 characters."
+  body: String
+}
+
+# @category: iot-logic/flows
+"""
+One header of a webhook node. `Content-Type`, given at most once, is `application/json` or another
+`application` type with a `+json` suffix. Refused: `Content-Length`, `Transfer-Encoding`, `Host`, `Connection`,
+`Keep-Alive`, `Proxy-Connection`, `TE`, `Trailer`, `Upgrade`, `Expect`, `X-Navixy-Webhook`.
+"""
+input IotLogicFlowWebhookHeaderInput {
+  "An HTTP token (RFC 9110) of at most 255 characters: letters, digits and ``!#$%&'*+-.^_`|~``."
+  key: String! @trim
+  "Printable ASCII, at most 255 characters. Admits the `{{device_id}}` placeholder only."
+  value: String!
 }
 
 # @category: iot-logic/flows

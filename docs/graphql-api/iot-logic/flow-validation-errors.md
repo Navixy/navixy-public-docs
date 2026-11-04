@@ -110,7 +110,7 @@ Match each violation to your request by `fields`, and use `constraint` to decide
 
 To show the problems in your app, use `fields` to find the node in your request. Use `nodeIds` only for nodes that the flow already had. A node that the request adds gets a new ID during validation, and Navixy doesn't store that ID when the write fails. In the example above, the unreachable node was added by the request, so its ID in `nodeIds` doesn't exist anywhere else.
 
-Fixing every violation in the list doesn't always make the next write succeed. Navixy compares your flow with your other flows and with the attributes that your devices report only after every other rule passes. So `ATTRIBUTE_ALREADY_PRODUCED` and `ATTRIBUTE_REPORTED_BY_DEVICE` can appear on the next attempt. If a flow has more than 64 nodes or more than 96 transitions, Navixy also skips the graph, expression, and attribute name checks until the flow is within the limits. Of the Device Action checks, only `ACTIONS_PER_NODE_EXCEEDED` and `DEVICE_MAPPINGS_PER_NODE_EXCEEDED` run.
+Fixing every violation in the list doesn't always make the next write succeed. Navixy compares your flow with your other flows and with the attributes that your devices report only after every other rule passes. So `ATTRIBUTE_ALREADY_PRODUCED` and `ATTRIBUTE_REPORTED_BY_DEVICE` can appear on the next attempt. If a flow has more than 64 nodes or more than 96 transitions, Navixy also skips the graph, expression, and attribute name checks until the flow is within the limits. Only four Device Action and Webhook checks still run: `ACTIONS_PER_NODE_EXCEEDED`, `DEVICE_MAPPINGS_PER_NODE_EXCEEDED`, `WEBHOOK_NODES_PER_FLOW_EXCEEDED`, and `WEBHOOK_HEADERS_PER_NODE_EXCEEDED`.
 
 ## Errors outside the violations list
 
@@ -120,10 +120,11 @@ Some mistakes stop a write before Navixy validates the graph. They return a sing
 | --- | --- |
 | An attribute name that doesn't follow the [naming rule](#names-and-text), such as `TempF` | `input.nodes[0].attributes[0].name` |
 | A logic node without `condition` | `input.nodes[0].condition` |
+| A Webhook node without `url`, `body`, or `trackableNodeId` | `input.nodes[0].url`, `input.nodes[0].body`, or `input.nodes[0].trackableNodeId` |
 | A blank node key, or two nodes with the same key in one request | `input.nodes[0].key`, or `input.nodes` |
 | A transition that names a key that no node in the request has | `input.transitions[0].from` or `input.transitions[0].to` |
 | A node name that doesn't follow the [naming rule](#names-and-text) | None. The message quotes the name, at most its first 64 characters. |
-| A `trackableNodeId` that doesn't follow the [naming rule](#names-and-text) | `input.nodes[0].trackableNodeId` |
+| A `trackableNodeId` of a Device Action or Webhook node that doesn't follow the [naming rule](#names-and-text), such as `alert_01`, whose channel number starts with 0 | `input.nodes[0].trackableNodeId` |
 | `deviceIds: null` on a data source, or `deviceMapping: null` on a Device Action node | `input.nodes[0].deviceIds` or `input.nodes[0].deviceMapping` |
 | One source device in two entries of the `deviceMapping` of one node | `input.nodes[0].deviceMapping` |
 | `title: null`, `nodes: null`, or `isEnabled: null` in `flowUpdate`. Leave the field out to keep its stored value. | `input.title`, `input.nodes`, or `input.isEnabled` |
@@ -165,7 +166,7 @@ The codes are grouped by the part of the flow that they check.
 
 | Code | Cause | How to fix |
 | --- | --- | --- |
-| `NON_LATIN_INPUT` | A title, a description, a condition, or an attribute expression has a character outside printable ASCII (U+0020 to U+007E). The message names the character and its position, because Cyrillic and Latin letters can look the same. | Replace the character. Descriptions can also have line feeds (`\n`), but not carriage returns (`\r`). No field accepts a tab, except the flow title: Navixy removes tabs and line breaks from it and replaces several spaces with one. |
+| `NON_LATIN_INPUT` | One of these fields has a character outside printable ASCII (U+0020 to U+007E): a title, a description, a condition, an attribute expression, or the `url` or a header value of a Webhook node. The message names the character and its position, because Cyrillic and Latin letters can look the same. | Replace the character. Descriptions can also have line feeds (`\n`), but not carriage returns (`\r`). No field accepts a tab, except the flow title: Navixy removes tabs and line breaks from it and replaces several spaces with one. |
 | `DESCRIPTION_TOO_LONG` | The description of the flow or of a node has more than 4,000 characters. | Shorten the description. |
 | `NODE_NAME_TOO_LONG` | A node name has more than 255 characters. `fields` names the node, such as `input.nodes[1].name`. | Shorten the name. |
 | `EXPRESSION_TOO_LONG` | A condition has more than 480 characters, or an attribute expression has more than 960 characters. | Shorten the expression, or split the calculation into several attributes. |
@@ -198,11 +199,11 @@ The codes are grouped by the part of the flow that they check.
 
 | Code | Cause | How to fix |
 | --- | --- | --- |
-| `INVALID_EXPRESSION` | A condition, or an attribute expression of at most 480 characters, isn't a valid formula. The message names the logic node, or the attribute for an attribute expression, with the position and the reason. A longer attribute expression isn't checked when you save it, and if it has an error, the attribute gets no value. | Correct the formula. |
+| `INVALID_EXPRESSION` | A condition, or an attribute expression of at most 480 characters, isn't a valid formula. The message names the logic node, or the attribute for an attribute expression, with the position and the reason. A longer attribute expression isn't checked when you save it, and if it has an error, the attribute gets no value. | Correct the formula. See [Formula errors](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/formula-errors). |
 | `DUPLICATE_ATTRIBUTE_IN_FLOW` | A message from one data source would pass two nodes that produce the same attribute, or one node produces it twice. The `THEN` and `ELSE` paths of one logic node can each produce it, because a message takes only one of them. | Rename one of the attributes, or remove it. |
 | `RESERVED_ATTRIBUTE_NAME` | The flow produces an attribute with one of the names that Navixy reserves for the position of a device, such as `position_latitude`. See [Initiate Attribute](node-types.md#initiate-attribute) for the full list. | Rename the attribute. |
 | `ATTRIBUTE_ALREADY_PRODUCED` | Another flow already produces the attribute for a device of this flow, or another data source of this flow does. `relatedFlowIds` lists the flows that produce it. | Rename the attribute, or remove the device from one of the flows. |
-| `ATTRIBUTE_REPORTED_BY_DEVICE` | A device of the flow reports an attribute with the same name as a calculated attribute or as the `trackableNodeId` of a Device Action node. The value from the flow would replace the value from the device. | Rename the attribute or the `trackableNodeId`. |
+| `ATTRIBUTE_REPORTED_BY_DEVICE` | A device of the flow reports an attribute with the same name as a calculated attribute or as the `trackableNodeId` of a Device Action or Webhook node. The value from the flow would replace the value from the device. | Rename the attribute or the `trackableNodeId`. |
 
 ### Devices
 
@@ -218,9 +219,19 @@ The codes are grouped by the part of the flow that they check.
 | `ACTIONS_PER_NODE_EXCEEDED` | A Device Action node has more than 10 actions. `fields` names `input.nodes[0].actions`. | Remove actions, or move some of them to another Device Action node. |
 | `INVALID_DEVICE_COMMAND` | An action isn't valid: a `setOutput` output number is outside 1 to 8, or a `rawCommand` text is blank or longer than 512 characters. `fields` names the action, such as `input.nodes[0].actions[1]`. | Correct the output number, or the command text. |
 | `DUPLICATE_SET_OUTPUT_ACTION` | Two Device Action nodes that one message can pass through switch the same output, or one node has two `setOutput` actions for the same output. The `THEN` and `ELSE` paths of one logic node can each switch it, because a message takes only one of them. The value of `enabled` and the `deviceMapping` make no difference. `nodeIds` has the nodes, and `fields` names each of their actions for this output, such as `input.nodes[2].actions[0]`. | Keep the `setOutput` action for this output in one node, or move the nodes to the `THEN` and `ELSE` paths of one logic node. |
-| `DUPLICATE_TRACKABLE_NODE_ID` | Two Device Action nodes of the flow have the same `trackableNodeId`. `nodeIds` has both nodes. | Give each Device Action node its own `trackableNodeId`. |
+| `DUPLICATE_TRACKABLE_NODE_ID` | Two Device Action or Webhook nodes of the flow have the same `trackableNodeId`. `nodeIds` has both nodes. | Give each node its own `trackableNodeId`. |
 | `DEVICE_MAPPINGS_PER_NODE_EXCEEDED` | The `deviceMapping` of a Device Action node has more than 1,000 targets, counted across its entries. | Remove targets, or split the mapping between several Device Action nodes. |
 | `EMPTY_DEVICE_MAPPING_ENTRY` | An entry of the `deviceMapping` of a Device Action node has no targets. The message lists the source devices of these entries. | Add at least one target to the entry, or remove the entry. A source device without an entry receives its own commands. |
+
+### Webhook nodes
+
+| Code | Cause | How to fix |
+| --- | --- | --- |
+| `WEBHOOK_NODES_PER_FLOW_EXCEEDED` | The flow has more than 10 Webhook nodes. | Remove Webhook nodes, or move some of them to another flow. |
+| `WEBHOOK_HEADERS_PER_NODE_EXCEEDED` | A Webhook node has more than 10 headers. `fields` names `input.nodes[0].headers`. | Remove headers. |
+| `INVALID_WEBHOOK_URL` | The `url` of a Webhook node breaks one of the [rules for Webhook nodes](node-types.md#rules-for-webhook-nodes): it is too long, doesn't start with `http://` or `https://`, has a space or a placeholder other than `{{device_id}}`, isn't a valid URL with a host, or names `localhost` or a loopback, private, or other refused IP address. `fields` names `input.nodes[0].url`. | Correct the URL. The receiving system must have a public address. |
+| `INVALID_WEBHOOK_HEADER` | A header of a Webhook node breaks one of the [rules for Webhook nodes](node-types.md#rules-for-webhook-nodes): the name or the value is too long, the name isn't an HTTP token or is a header that Navixy sets itself, the value has a placeholder other than `{{device_id}}`, or `Content-Type` is repeated or isn't a JSON media type in UTF-8. `fields` names the header name or value, such as `input.nodes[0].headers[1].key`. | Correct the header, or remove it. |
+| `INVALID_WEBHOOK_BODY` | The `body` of a Webhook node has more than 4,000 characters. `fields` names `input.nodes[0].body`. | Shorten the body. |
 
 ## Names and text
 
@@ -234,8 +245,12 @@ These rules apply to the names and text of a flow. Text with a character outside
 | Attribute `name` and `expressionName` | Lowercase letters and digits in groups joined by single underscores, such as `temperature_f`, at most 48 characters. The name can end with `_` and a channel number, such as `temperature_2`, which doesn't count toward the limit |
 | `condition` of a logic node | Printable ASCII on one line, at most 480 characters |
 | `expression` of an attribute | Printable ASCII on one line, at most 960 characters |
-| `trackableNodeId` of a Device Action node | The rule of attribute names |
+| `trackableNodeId` of a Device Action or Webhook node | The rule of attribute names |
 | `text` of a `rawCommand` action | At most 512 characters, not blank. Navixy doesn't check its characters, but sends the text as ASCII, so use printable ASCII |
+| `url` of a Webhook node | Printable ASCII without spaces, at most 255 characters, starting with `http://` or `https://` in lowercase |
+| Header `key` of a Webhook node | An HTTP token, at most 255 characters: English letters, digits, and the characters ``!#$%&'*+-.^_`|~`` |
+| Header `value` of a Webhook node | Printable ASCII, at most 255 characters |
+| `body` of a Webhook node | At most 4,000 characters. Navixy doesn't check its characters |
 
 ## Best practices
 

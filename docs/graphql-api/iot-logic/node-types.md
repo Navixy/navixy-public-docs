@@ -22,6 +22,7 @@ A flow node has a type. The `type` field of a node in a write request takes the 
 | `LOGIC` | `IotLogicFlowLogicNode` | IF/THEN Logic | Checks `condition` and sends the message to the `THEN` or the `ELSE` transition |
 | `OUTPUT_ENDPOINT` | `IotLogicFlowOutputEndpointNode` | Output Endpoint | Ends a path and sends the message, with the attributes that the flow calculated, to the Navixy platform |
 | `ACTION` | `IotLogicFlowActionNode` | Device Action | Sends commands to devices, such as switching an output on |
+| `WEBHOOK` | `IotLogicFlowWebhookNode` | Webhook | Sends an HTTP request to a system outside Navixy |
 
 ## Fields that every node has
 
@@ -109,10 +110,10 @@ Rules:
 
 * A node can have at most 50 attributes. A flow can produce at most 200 attributes, counting the `expressionName` of every logic node.
 * An attribute name uses lowercase letters and digits in groups joined by single underscores, such as `fuel_level_l`. A name has at most 48 characters, not counting the channel number. Navixy reserves these names for the position of a device: `position_latitude`, `position_longitude`, `position_altitude`, `position_speed`, `position_heading`, `position_accuracy`, `position_hdop`, `position_vdop`, `position_pdop`, `position_satellites`, `position_fix_type`, and `position_source`. When a message has a position, Navixy adds these attributes from it, whatever the device model, and an expression can read them. A value that the position doesn't have, such as the altitude, is left out. For example, `position_speed` is the speed in km/h. Other attribute names depend on the device model: see [Find the attribute names of your devices](guides/reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
-* An expression is printable ASCII on one line, at most 960 characters. It is written in the Navixy IoT Logic Expression Language.
+* An expression is printable ASCII on one line, at most 960 characters. It is written in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview).
 * A message can pass only one node that produces a given attribute. Two nodes on one path can't produce the same attribute, and neither can two parallel paths that leave one node. The `THEN` and `ELSE` paths of one logic node can each produce it, because a message takes only one of them. Another flow can't produce the same attribute for the same device either, and a flow can't produce an attribute that its devices already report.
 
-An expression can read the earlier values of an attribute with `value()`, for example `value('fuel_level_l', 1, 'valid')` for the previous valid value. Navixy stores the last 12 values of each attribute of a device.
+An expression can read the earlier values of an attribute with `value()`, for example `value('fuel_level_l', 1, 'valid')` for the previous valid value. Navixy stores the last 12 values of each attribute of a device. See [Full syntax](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/expression-syntax-reference#full-syntax-historical-and-advanced).
 
 ## IF/THEN Logic
 
@@ -131,7 +132,7 @@ Rules:
 * One outcome can have several transitions, and the message follows all of them. Only one of these paths keeps its attributes, so put the nodes of one outcome one after another. See [How a message moves through a flow](how-flows-work.md#how-a-message-moves-through-a-flow).
 * `THEN` can lead both to a Device Action node and to an Output Endpoint node. The flow then sends the commands and keeps the attributes of the path, because a Device Action node calculates nothing.
 * `THEN` and `ELSE` can lead into the same node, because a message never takes both.
-* A missing value doesn't always make the condition false. `temperature > 8` is false for a message without `temperature`, but `position_speed != 60` is true for a message without `position_speed`. A Device Action node on the `THEN` outcome of `speed != 60` sends its commands for every message without `speed`.
+* A missing value doesn't always make the condition false. `temperature > 8` is false for a message without `temperature`, but `position_speed != 60` is true for a message without `position_speed`. A Device Action node on the `THEN` outcome of `position_speed != 60` sends its commands for every message without `position_speed`. See [Null propagation](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/expression-syntax-reference#null-propagation).
 
 ## Output Endpoint
 
@@ -219,7 +220,7 @@ For example, a mapping can send the commands of a trailer sensor to the tractor 
 
 * A Device Action node doesn't keep the attributes of the path: on a path that ends at a Device Action node, the attributes that the path calculated are lost. To keep them, lead the same outcome to an Output Endpoint node as well.
 * A node can have at most 10 actions. More fail with `ACTIONS_PER_NODE_EXCEEDED`. An output number outside 1 to 8, or a text that is blank or longer than 512 characters, fails with `INVALID_DEVICE_COMMAND`.
-* `trackableNodeId` follows the naming rule of attributes: lowercase letters and digits in groups joined by single underscores, at most 48 characters, not counting a final channel number. Two action nodes of one flow can't have the same name (`DUPLICATE_TRACKABLE_NODE_ID`), and a device of the flow can't report an attribute with this name (`ATTRIBUTE_REPORTED_BY_DEVICE`).
+* `trackableNodeId` follows the naming rule of attributes: lowercase letters and digits in groups joined by single underscores, at most 48 characters, not counting a final channel number. Two Device Action or [Webhook](#webhook) nodes of one flow can't have the same name (`DUPLICATE_TRACKABLE_NODE_ID`), and a device of the flow can't report an attribute with this name (`ATTRIBUTE_REPORTED_BY_DEVICE`).
 * In an update, send `actions` and `trackableNodeId` every time. A node without them has none, so leaving them out removes the stored values.
 * In an update, leave out `deviceMapping` to keep the current mapping. Send `deviceMapping: []` to remove it, or a list to replace it. `null` isn't accepted. `[]` and a new list change only the entries and targets that your roles let you read, and the others stay. A new node without `deviceMapping` has no mapping.
 * A node can have at most 1,000 targets, counted across its entries (`DEVICE_MAPPINGS_PER_NODE_EXCEEDED`). An entry without targets fails with `EMPTY_DEVICE_MAPPING_ENTRY`. A source device can have only one entry in a node, and a second one fails with a single `VALIDATION_ERROR`.
@@ -228,12 +229,178 @@ For example, a mapping can send the commands of a trailer sensor to the tractor 
 
 ### Differences from the flow editor
 
-The API accepts two things that the flow editor doesn't offer:
-
-* A mapping can name any device of your workspace that your roles let you read, as a source or a target. The flow editor offers only the devices of the data sources of the flow.
-* Two `setOutput` actions of one node can switch the same output. The flow editor doesn't offer an output that another action of the node already uses.
+A mapping in the API can name any device of your workspace that your roles let you read, as a source or a target. The flow editor offers only the devices of the data sources of the flow.
 
 The flow editor also fills `trackableNodeId` on its own, with `action_` and 8 hexadecimal characters, and doesn't let you change it.
+
+## Webhook
+
+**`type`: `WEBHOOK`. Object type in a read: `IotLogicFlowWebhookNode`.**
+
+A Webhook node sends an HTTP `POST` request to a system outside Navixy when a message reaches the node. The system can be a messaging service, a ticketing system, or your own app. You write the request body, and Navixy replaces the [placeholders](#placeholders) in it with values of the message. Put the node on the `THEN` outcome of a logic node to send the request only when a condition is true. Without a logic node before it on the path, the node sends a request for every message that reaches it.
+
+| Field | Required | What it holds |
+| --- | --- | --- |
+| `url` | Yes | The address that the node sends the request to, at most 255 characters. It starts with `http://` or `https://`. The only placeholder that it accepts is `{{device_id}}`. |
+| `headers` | No | The HTTP headers of the request, at most 10. Each header has a `key`, which is the header name, and a `value`. The only placeholder that a value accepts is `{{device_id}}`. |
+| `body` | Yes | The body of the request, at most 4,000 characters. It can have [placeholders](#placeholders). Send `""` for a request with an empty body. |
+| `trackableNodeId` | Yes | The name of a flow value that Navixy sets to `1` on each message that reaches the node and to `0` on every other message of the flow. `1` means that the message reached the node, not that the request succeeded. Choose any name that follows the naming rule of attributes and that no other Device Action or Webhook node of the flow uses, such as `dispatcher_notified`. The flow keeps the value in its history and doesn't send it to the Navixy platform. |
+
+The following node sends the device ID, the device title, and the temperature to your system:
+
+```json
+{
+  "key": "notify",
+  "type": "WEBHOOK",
+  "name": "Notify dispatcher",
+  "url": "https://example.com/hooks/cold-chain",
+  "headers": [{ "key": "Authorization", "value": "Bearer <your token>" }],
+  "body": "{\"device\": \"{{device_id}}\", \"name\": \"{{device_label}}\", \"temperature\": {{temperature}}}",
+  "trackableNodeId": "dispatcher_notified"
+}
+```
+
+`body` is a JSON string, so its quotation marks are escaped. Without the escapes, the body is this JSON template:
+
+```
+{"device": "{{device_id}}", "name": "{{device_label}}", "temperature": {{temperature}}}
+```
+
+For a message with a temperature of 9.5, your system receives a request like this one:
+
+```http
+POST /hooks/cold-chain HTTP/1.1
+Host: example.com
+Authorization: Bearer <your token>
+Content-Type: application/json
+X-Navixy-Webhook: <the ID of the flow>
+
+{"device": "019dbec6-d380-8000-801f-44455643e216", "name": "Truck 12", "temperature": 9.5}
+```
+
+The body has `{{temperature}}` without quotation marks, so the receiving system gets a number. A message without `temperature` gives a body that isn't valid JSON, so put the node after a logic node that checks `temperature`.
+
+### A flow with a Webhook node
+
+The following `flowCreate` variables create a flow that notifies a dispatcher when a cargo is too warm. Every message reaches the Output Endpoint, by the `THEN` or the `ELSE` transition, so the flow keeps its attributes. Only a message with `temperature > 8` also reaches the Webhook node:
+
+```json
+{
+  "input": {
+    "title": "Cold chain alert",
+    "nodes": [
+      {
+        "key": "src",
+        "type": "DATA_SOURCE",
+        "name": "Refrigerated trucks",
+        "deviceIds": ["019dbec6-d380-8000-801f-44455643e216"]
+      },
+      {
+        "key": "check",
+        "type": "LOGIC",
+        "name": "Too warm",
+        "condition": "temperature > 8"
+      },
+      {
+        "key": "notify",
+        "type": "WEBHOOK",
+        "name": "Notify dispatcher",
+        "url": "https://example.com/hooks/cold-chain",
+        "headers": [{ "key": "Authorization", "value": "Bearer <your token>" }],
+        "body": "{\"device\": \"{{device_id}}\", \"name\": \"{{device_label}}\", \"temperature\": {{temperature}}}",
+        "trackableNodeId": "dispatcher_notified"
+      },
+      { "key": "out", "type": "OUTPUT_ENDPOINT", "name": "Default output" }
+    ],
+    "transitions": [
+      { "from": "src", "to": "check", "type": "SIMPLE" },
+      { "from": "check", "to": "notify", "type": "THEN" },
+      { "from": "check", "to": "out", "type": "THEN" },
+      { "from": "check", "to": "out", "type": "ELSE" }
+    ]
+  }
+}
+```
+
+The flow is created disabled. Enable it to start sending requests. See [Enable the flow](guides/creating-and-updating-flows.md#enable-the-flow).
+
+### Read a Webhook node
+
+Read the fields of the node with an inline fragment. Each item of `headers` is an `IotLogicFlowWebhookHeader` with a `key` and a `value`:
+
+```graphql
+... on IotLogicFlowWebhookNode {
+  url
+  headers { key value }
+  body
+  trackableNodeId
+}
+```
+
+`trackableNodeId` is `String!` on a Webhook node and `String` on a Device Action node. To read both node types in one query, give one of the two fields an alias, such as `webhookTrackableNodeId: trackableNodeId`. Without it, the query fails with `VALIDATION_ERROR`, because GraphQL doesn't accept one response field with two types.
+
+An update sends the whole node again, so read all four fields before you change a Webhook node. A read returns each header as you sent it, including a secret such as an access token. Anyone whose roles let them read the flow can read the value.
+
+### Placeholders
+
+A placeholder is a name in double braces, such as `{{temperature}}`. When Navixy sends the request, it replaces each placeholder in the body with a value of the message:
+
+| Placeholder | Value |
+| --- | --- |
+| `{{device_id}}` | The ID of the device that sent the message |
+| `{{device_label}}` | The title of the device |
+| `{{device_imei}}` | The IMEI of the device. For a device with several IMEIs, Navixy uses the IMEI that was added first. |
+| `{{<attribute name>}}` | The value of the attribute. For an attribute with a channel, include the channel number in the name, such as `{{lls_level_0}}`. The value comes from the attributes that the path calculated, or from the values that the device sent. |
+
+Placeholders follow these rules:
+
+* A placeholder name follows the naming rule of attributes: lowercase letters and digits in groups joined by single underscores. Text in double braces that breaks the rule, such as `{{Speed}}` or `{{ temperature }}` with spaces, isn't a placeholder, and Navixy sends it as you wrote it.
+* Navixy replaces a placeholder with empty text when the message doesn't have its value. A placeholder whose name is longer than 48 characters also becomes empty text, and so does one whose channel number starts with 0, such as `{{temp_01}}`.
+* `{{device_label}}` and `{{device_imei}}` become empty text when Navixy can't look up the device. `{{device_imei}}` also becomes empty text for a device without an IMEI.
+* The `trackableNodeId` of a node isn't a value of the message, so a placeholder with its name becomes empty text.
+* Navixy doesn't check the attribute names in the body when you save the flow. A misspelled name gives empty text in every request.
+* Navixy inserts each value as the content of a JSON string, without the quotation marks around it. Navixy escapes characters such as `"` and `\`. Put the quotation marks in the body yourself, as in `"name": "{{device_label}}"`.
+* You can leave out the quotation marks for a number or for `true` or `false`, as in `"temperature": {{temperature}}`. Then a message without the value gives a body that isn't valid JSON.
+* Navixy writes a number without trailing zeros, so `4.0` becomes `4`.
+* Navixy writes a time in ISO 8601, such as `2026-10-29T10:15:30Z`, a duration in ISO 8601, such as `PT5M`, and a byte value as hexadecimal text. Put these placeholders in quotation marks. A value that is a structure becomes empty text.
+* Navixy inserts a list of values as a JSON array of strings, numbers included, so write its placeholder without quotation marks.
+* In `url` and in header values, `{{device_id}}` is the only placeholder. In `url`, Navixy encodes it for a URL.
+
+### How Navixy sends the request
+
+* The node sends one request for every message that reaches it, not only when a value changes. While a condition stays true, a device that reports every 10 seconds triggers a request every 10 seconds.
+* A message that answers a command triggers the node too. A message that arrives late, or that Navixy processes a second time, doesn't.
+* Navixy sends the request after it stores the values of the message.
+* Navixy sends the body in UTF-8 and doesn't check that it is valid JSON.
+* The request has the headers of the node, the headers that the HTTP library adds, such as `Host` and `Content-Length`, and the header `X-Navixy-Webhook`, whose value is the ID of the flow. Without a `Content-Type` header in the node, the request has `Content-Type: application/json`, also when the body is empty. When the node has two headers with the same name, the request has both.
+* Navixy sends requests in parallel, so your system can receive them in a different order than the messages. At most 20 requests go to one host at the same time. A request that waits more than 5 seconds for a free connection fails.
+* Navixy waits at most 5 seconds to connect, at most 5 seconds for the response to start, at most 5 seconds between two parts of the response, and at most 10 seconds for the whole request. Then it cancels the request.
+* Navixy ignores the response, including its status code, and doesn't follow a redirect. Delivery is at most once: Navixy doesn't send a failed request again. The API doesn't return the response or the status of a request.
+* When the host name of `url` resolves to at least one address that Navixy refuses in `url` (see the [rules](#rules-for-webhook-nodes)), Navixy doesn't send the request and reports no error.
+* One message sends at most 100 requests, counted across all flows, and Navixy drops the rest.
+* At most 500 requests of one workspace can wait or be in progress at the same time. When there are 500, Navixy drops each new request.
+* When the body is larger than 64 KB after Navixy inserts the values, Navixy doesn't send the request.
+
+### Rules for Webhook nodes
+
+* A Webhook node doesn't keep the attributes of the path: on a path that ends at a Webhook node, the attributes that the path calculated are lost. To keep them, lead the same outcome to an Output Endpoint node as well.
+* A write needs `url`, `body`, and `trackableNodeId` on every Webhook node. A node without one of them fails the write with a single `VALIDATION_ERROR` that names the field, such as `input.nodes[2].body`.
+* A flow can have at most 10 Webhook nodes (`WEBHOOK_NODES_PER_FLOW_EXCEEDED`), and a node can have at most 10 headers (`WEBHOOK_HEADERS_PER_NODE_EXCEEDED`).
+* `url` starts with `http://` or `https://` in lowercase, has at most 255 characters, and has no spaces. Navixy removes spaces at the start and the end. Its only placeholder is `{{device_id}}`. A `url` that breaks one of these rules, or that isn't a valid URL with a host, fails with `INVALID_WEBHOOK_URL`.
+* `url` can't name `localhost` or a host name that ends in `.localhost`. It can't name an IP address of these kinds either, and a `url` that does fails with `INVALID_WEBHOOK_URL`:
+  * loopback, such as `127.0.0.1` or `::1`
+  * private: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, and the IPv6 range `fc00::/7`
+  * link-local, such as `169.254.0.1` or `fe80::1`
+  * multicast, broadcast (`255.255.255.255`), and `0.0.0.0/8`
+  * carrier-grade NAT: `100.64.0.0/10`
+  * an IPv6 address that contains one of these IPv4 addresses
+* A header name has at most 255 characters and is an HTTP token, as [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-tokens) defines it: English letters, digits, and the characters ``!#$%&'*+-.^_`|~``. Navixy removes spaces at the start and the end of a name. A header value has at most 255 characters, and its only placeholder is `{{device_id}}`. A header that breaks these rules fails with `INVALID_WEBHOOK_HEADER`.
+* Navixy sets these headers itself when it sends the request, so a node can't have them: `Content-Length`, `Transfer-Encoding`, `Host`, `Connection`, `Keep-Alive`, `Proxy-Connection`, `TE`, `Trailer`, `Upgrade`, `Expect`, and `X-Navixy-Webhook`. A node with one of these headers fails with `INVALID_WEBHOOK_HEADER`. Header names aren't case-sensitive, so `host` fails too.
+* A node can have one `Content-Type` header. Its value is `application/json` or another `application` media type that ends in `+json`, such as `application/problem+json`. A `charset` parameter can only be `utf-8`. Any other value, or a second `Content-Type` header, fails with `INVALID_WEBHOOK_HEADER`.
+* A body longer than 4,000 characters fails with `INVALID_WEBHOOK_BODY`.
+* `url` and header values have only printable ASCII characters. A character outside printable ASCII fails with `NON_LATIN_INPUT`. Navixy doesn't check the characters of the body.
+* `trackableNodeId` follows the naming rule of attributes: lowercase letters and digits in groups joined by single underscores, at most 48 characters, not counting a final channel number. A channel number can't start with 0, so `alert_01` isn't valid. A name that breaks the rule fails with a single `VALIDATION_ERROR` on `input.nodes[2].trackableNodeId`. Two Device Action or Webhook nodes of one flow can't have the same name (`DUPLICATE_TRACKABLE_NODE_ID`), and a device of the flow can't report an attribute with this name (`ATTRIBUTE_REPORTED_BY_DEVICE`).
+* In an update, send `url`, `headers`, `body`, and `trackableNodeId` every time. A node without `headers` has none, so leaving them out removes the stored headers.
 
 ## See also
 

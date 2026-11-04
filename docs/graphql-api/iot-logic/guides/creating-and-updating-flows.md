@@ -93,7 +93,7 @@ Save the IDs of the devices that you want the flow to process.
 
 ### Find the attribute names of your devices
 
-Expressions read the attributes of a device message by name, and the names depend on the device model. Before you write expressions, list the names that your devices report with the `deviceAttributes` query. See [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
+Conditions and attribute expressions are written in the [Navixy IoT Logic Expression Language](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-iot-logic-expression-language/overview). Expressions read the attributes of a device message by name, and the names depend on the device model. Before you write expressions, list the names that your devices report with the `deviceAttributes` query. See [Find the attribute names of your devices](reading-flows-and-device-data.md#find-the-attribute-names-of-your-devices).
 
 ## How a write describes a graph
 
@@ -111,6 +111,7 @@ Each node type uses only its own fields. The API ignores the fields of other typ
 | `LOGIC` | `condition`: The expression to check. `expressionName` (optional): An attribute that stores the result of the check |
 | `OUTPUT_ENDPOINT` | None |
 | `ACTION` | `actions`: The commands that the node sends. `trackableNodeId` (optional): The name of a flow value that shows whether a message reached the node. `deviceMapping` (optional): The devices that receive the commands instead of the device that sent the message. See [Device Action](../node-types.md#device-action) |
+| `WEBHOOK` | `url`: The address that the node sends an HTTP request to. `headers` (optional): The headers of the request. `body`: The body of the request, with placeholders for the values of the message. `trackableNodeId`: The name of a flow value that shows whether a message reached the node. See [Webhook](../node-types.md#webhook) |
 
 Every node can also have a `description` and a `position`. `position` stores the `x` and `y` coordinates where the flow editor draws the node. A node without `position` has no stored coordinates, and a read returns `null` for it.
 
@@ -291,7 +292,7 @@ Notes on the response:
 {% step %}
 ### Read the flow
 
-Read the flow with its node settings. `nodes` returns the `IotLogicFlowNode` interface, which has only the fields that every node has. To read the fields of a node type, add an inline fragment for that type, the `... on TypeName { }` blocks in the query below:
+Read the flow with its node settings. `nodes` returns the `IotLogicFlowNode` interface, which has only the fields that every node has. To read the fields of a node type, add an inline fragment for that type, the `... on TypeName { }` blocks in the query below. The flow of this guide has no Device Action or Webhook node. For those, add the fragments from [Device Action](../node-types.md#device-action) and [Read a Webhook node](../node-types.md#read-a-webhook-node): an update sends every node again, so read all of their fields before you change the flow. In one query, give the `trackableNodeId` of one of the two fragments an alias, as [Read a Webhook node](../node-types.md#read-a-webhook-node) shows.
 
 ```graphql
 query GetFlow($id: ID!) {
