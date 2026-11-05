@@ -24,11 +24,11 @@ Business Data Repository stores your fleet's business data: what you track, the 
 * **Geo objects:** Draw depots, customer sites, and delivery zones on the map as points, lines, or areas. You create the geo object types that you need, each with its own properties. You can assign a geo object to an asset, such as a van's home depot.
 * **Schedules:** Describe a depot's opening hours, a vehicle's service window, or a team's shift. A schedule can happen once or regularly, such as every Monday, and you can assign it to any number of assets and geo objects.
 
-### Device Management
+### Device management
 
-Device Management connects GPS devices to Navixy. You activate a device in one form. You select the model, then enter the SIM card's phone number, the mobile carrier's access point name (APN), and the device's IMEI. Navixy then sends the device its settings by SMS, so you don't configure the device by hand.
+Device management connects GPS devices to Navixy. You activate a device in one form: you select the model and enter the device's IMEI. With automatic setup, you also enter the SIM card's phone number and the mobile carrier's access point name (APN), and Navixy sends the device its settings by SMS. With manual setup, Navixy shows the server address and the port, and you set them on the device yourself.
 
-The device page shows the progress of each activation until the device connects. If the device doesn't connect, the page lists the possible causes and lets you send the settings again. In the device list, you can find a device by its name or its IMEI.
+The device page shows the progress of each activation until the device connects. If the device doesn't connect, the page lists the possible causes. With automatic setup, it also lets you send the settings again. In the device list, you can find a device by its name, its IMEI, or the phone number of its SIM card.
 
 ### Tracking
 
@@ -67,7 +67,7 @@ You can export a dashboard to PDF, or a single panel to CSV or Excel.
 
 ## How the products can work together
 
-The products can use each other's data, so something that you set up in one product can appear in another. For example, you can assign a GPS device from Device Management to a vehicle in Assets. Tracking and Dashboards can then show that vehicle under its own name, with the data of its device. Reports includes that device's trips and readings in the vehicle's reports.
+The products can use each other's data, so something that you set up in one product can appear in another. For example, you can assign a GPS device from Device management to a vehicle in Assets. Tracking and Dashboards can then show that vehicle under its own name, with the data of its device. Reports includes that device's trips and readings in the vehicle's reports.
 
 ## Who it is for
 
@@ -79,8 +79,8 @@ What you can do in Location Intelligence depends on the products of your workspa
 
 ## Where to start
 
-To go from a GPS device in a box to a vehicle on the map, follow [Getting started](getting-started.md). It uses Device Management, Assets, and Tracking. To start with one product, choose it under [Products](./#products).
+To go from a GPS device in a box to a vehicle on the map, follow [Getting started](getting-started.md). It uses Device management, Assets, and Tracking. To start with one product, choose it under [Products](./#products).
 
 ## Products
 
-<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><h3><i class="fa-database">:database:</i></h3></td><td><strong>Business Data Repository</strong></td><td>Describe your assets, geo objects, and schedules, and assign GPS devices to your assets.</td><td><a href="bdr/">bdr</a></td></tr><tr><td><h3><i class="fa-tower-broadcast">:tower-broadcast:</i></h3></td><td><strong>Device Management</strong></td><td>Activate GPS devices and follow each one until it connects.</td><td><a href="device-management/">device-management</a></td></tr><tr><td><h3><i class="fa-location-arrow">:location-arrow:</i></h3></td><td><strong>Tracking</strong></td><td>Follow your assets on the map, with their status, readings, and trips.</td><td><a href="tracking/">tracking</a></td></tr><tr><td><h3><i class="fa-diagram-project">:diagram-project:</i></h3></td><td><strong>IoT Logic</strong></td><td>Process device data as it arrives: calculate values and send the data where it's needed.</td><td><a href="iot-logic/">iot-logic</a></td></tr><tr><td><h3><i class="fa-file-lines">:file-lines:</i></h3></td><td><strong>Reports</strong></td><td>See the trips, stops, and sensor readings of your assets over a period, and download them.</td><td><a href="reports/">reports</a></td></tr><tr><td><h3><i class="fa-chart-line">:chart-line:</i></h3></td><td><strong>Dashboards</strong></td><td>See the state of the whole fleet, its trips, and its device health in ready-made dashboards.</td><td><a href="dashboards/">dashboards</a></td></tr></tbody></table>
+<table data-view="cards"><thead><tr><th></th><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><h3><i class="fa-database">:database:</i></h3></td><td><strong>Business Data Repository</strong></td><td>Describe your assets, geo objects, and schedules, and assign GPS devices to your assets.</td><td><a href="bdr/">bdr</a></td></tr><tr><td><h3><i class="fa-tower-broadcast">:tower-broadcast:</i></h3></td><td><strong>Device management</strong></td><td>Activate GPS devices and follow each one until it connects.</td><td><a href="device-management/">device-management</a></td></tr><tr><td><h3><i class="fa-location-arrow">:location-arrow:</i></h3></td><td><strong>Tracking</strong></td><td>Follow your assets on the map, with their status, readings, and trips.</td><td><a href="tracking/">tracking</a></td></tr><tr><td><h3><i class="fa-diagram-project">:diagram-project:</i></h3></td><td><strong>IoT Logic</strong></td><td>Process device data as it arrives: calculate values and send the data where it's needed.</td><td><a href="iot-logic/">iot-logic</a></td></tr><tr><td><h3><i class="fa-file-lines">:file-lines:</i></h3></td><td><strong>Reports</strong></td><td>See the trips, stops, and sensor readings of your assets over a period, and download them.</td><td><a href="reports/">reports</a></td></tr><tr><td><h3><i class="fa-chart-line">:chart-line:</i></h3></td><td><strong>Dashboards</strong></td><td>See the state of the whole fleet, its trips, and its device health in ready-made dashboards.</td><td><a href="dashboards/">dashboards</a></td></tr></tbody></table>

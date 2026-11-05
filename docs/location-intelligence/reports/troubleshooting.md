@@ -143,6 +143,19 @@ The **Ask** panel shows one of the following messages instead of a reply:
 | "This conversation is gone. Ask keeps a conversation for 30 days after its last question." | Click **New conversation** to start a new one. |
 | "This conversation could not be read." | Click **Try again**. If the message appears again, start a new conversation with <picture><source srcset="../.gitbook/assets/icons/reports-add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-add.svg" alt="New conversation" data-size="line"></picture>. |
 
+## Dictation doesn't fill in the question
+
+The **Ask** panel shows one of the following messages under the box:
+
+| Message | What to do |
+| --- | --- |
+| "The browser does not let this page use the microphone. Allow it in the site settings, then try again." | Allow the microphone for Reports in your browser's site settings, then click <picture><source srcset="../.gitbook/assets/icons/reports-mic-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-mic.svg" alt="Dictate" data-size="line"></picture> again. |
+| "No microphone is available. Connect one, or close the app using it, then try again." | Connect a microphone. If one is connected, close the other app that uses it. |
+| "Nothing was heard. Speak closer to the microphone, then try again." | Speak closer to the microphone, and check that the microphone isn't muted. |
+| "The text does not fit in the question, which takes 2000 characters. Shorten the question, then dictate again." | Delete part of the text in the box, then dictate again. |
+| "You have dictated N phrases in the last 24 hours, as many as Ask takes. Type the question instead." | You can dictate up to 100 phrases in a workspace in 24 hours. Type the question instead. |
+| "Voice input is unavailable right now. Try again later, or type the question." | Try again later, or type the question. |
+
 ## The chart, the map, or a download doesn't appear
 
 Reports shows one of the following messages:

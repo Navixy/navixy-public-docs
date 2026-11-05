@@ -16,9 +16,9 @@ It is written for developers: firmware engineers connecting a device, integrator
 
 ## What is here
 
-* [Navixy Generic Protocol](navixy-generic-protocol/overview.md): an open, JSON-based protocol for sending telematics data to the Navixy tracking servers over HTTP/HTTPS or MQTT, from your own devices or from another system. Covers the transport layer, message structure, data types, and the standard event identifiers. The GPS devices that you activate in Location Intelligence don't use it: they connect through [Device Management](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/device-management/activate-device), with the protocol of their manufacturer.
+* [Navixy Generic Protocol](navixy-generic-protocol/overview.md): an open, JSON-based protocol for sending telematics data to the Navixy tracking servers over HTTP/HTTPS or MQTT, from your own devices or from another system. Covers the transport layer, message structure, data types, and the standard event identifiers. The GPS devices that you activate in Location Intelligence don't use it: they connect through [Device management](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device), with the protocol of their manufacturer.
 * [Navixy IoT Logic Expression Language](navixy-iot-logic-expression-language/overview.md): the full syntax of the formulas IoT Logic evaluates, with the operator and function tables and a reference of every formula error.
 
 ## Related documentation
 
-To write formulas in the platform's own interface, see [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic) in the Location Intelligence documentation. To connect a GPS device, see [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/device-management/activate-device).
+To write formulas in the platform's own interface, see [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic) in the Location Intelligence documentation. To connect a GPS device, see [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).

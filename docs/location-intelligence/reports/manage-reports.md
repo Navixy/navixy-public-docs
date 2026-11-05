@@ -146,6 +146,18 @@ You can name assets by their names and periods in everyday words. "Last week" an
 
 A question can be up to 2,000 characters long. Ask answers one question at a time, and up to 50 of your questions in a workspace in 24 hours.
 
+### Dictate a question
+
+You can speak your question instead of typing it. To dictate, your browser needs a microphone and permission to use it.
+
+1. Check the language at the bottom left of the box, for example **EN**. To change it, click it and choose a language. The browser remembers your choice.
+2. Click <picture><source srcset="../.gitbook/assets/icons/reports-mic-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-mic.svg" alt="Dictate" data-size="line"></picture> and speak. A clock shows how long you have spoken, up to 30 seconds.
+3. To finish, click <picture><source srcset="../.gitbook/assets/icons/reports-stop-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-stop.svg" alt="Stop and transcribe" data-size="line"></picture>. After 30 seconds, the recording stops by itself. To cancel the recording, press Esc.
+
+The panel shows **Transcribing…**, and the text appears in the box, after anything that you typed. Check the text, change it if needed, and send the question.
+
+Speak in the language that the box shows. Speech in another language turns into wrong text. You can dictate up to 100 phrases in a workspace in 24 hours. If the text doesn't appear, see [Dictation doesn't fill in the question](troubleshooting.md#dictation-doesnt-fill-in-the-question).
+
 ### Continue or start a conversation
 
 Ask keeps your conversation while you move between reports in the same browser tab. Each workspace has its own conversation. Ask keeps a conversation for 30 days after its last question.

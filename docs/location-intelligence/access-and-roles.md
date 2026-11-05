@@ -57,7 +57,7 @@ A role gives access to a product as a whole, or to parts of it. The table shows 
 | Product | What a role can limit |
 | --- | --- |
 | [Business Data Repository](bdr/README.md#access-to-business-data-repository): **Assets**, **Geo objects**, **Schedules** | Which records you can see and what you can do with them, separately for each kind of record: assets, asset groups, geo objects, schedules, devices, inventories, and the types with their custom fields |
-| [Device Management](device-management/README.md#access-to-device-management) | The devices and inventories that you can see and what you can do with them. Device Management follows your access to devices in Business Data Repository |
+| [Device management](device-management/README.md#access-to-device-management) | The devices and inventories that you can see and what you can do with them. Device management follows your access to devices in Business Data Repository |
 | [Tracking](tracking/README.md#access-to-tracking) | The assets and devices that you see on the map. Tracking follows your access to assets and devices in Business Data Repository |
 | [IoT Logic](iot-logic/flow-management/README.md#access-to-flows) | What you can do with flows: view, create, edit, or delete them. Access applies to all the flows of the workspace. Which devices you can add to a flow follows your access to devices |
 | [Reports](reports/README.md#access-to-reports) | Which report types you can see, and which of them you can run |

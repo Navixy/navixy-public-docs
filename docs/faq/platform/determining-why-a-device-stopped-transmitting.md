@@ -28,4 +28,4 @@ To narrow down the cause, look at what the device sent before it went silent:
 3. Click a value's row to open its [reading panel](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports/sensor-readings#reading-panel). **Pauses** lists each long gap in the readings with its start and end. **Coverage** shows the share of the period's intervals that have a reading. Together they show when the readings stopped.
 4. Check how the values changed before the last reading. A falling battery voltage or board voltage points to a power problem. A weak signal points to poor coverage.
 
-For a device that didn't connect after activation, the device page in Device Management lists more causes, such as sleep mode, a SIM card PIN, or roaming settings. See [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).
+For a device that didn't connect after activation, the device page in Device management lists more causes, such as sleep mode, a SIM card PIN, or roaming settings. See [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).

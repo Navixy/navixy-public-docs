@@ -25,7 +25,7 @@ Business Data Repository is the Navixy product for your business data. It has th
 
 ## Who it is for
 
-Business Data Repository is for the people who set up and run a fleet in Navixy: fleet managers, dispatchers, and the teams that prepare workspaces for their customers. It works closely with [Device Management](../device-management/) and [Tracking](../tracking/). You activate GPS devices in Device Management, assign them to assets here, and see the assets on the map in Tracking. An asset appears on the map only once it has a primary device.
+Business Data Repository is for the people who set up and run a fleet in Navixy: fleet managers, dispatchers, and the teams that prepare workspaces for their customers. It works closely with [Device management](../device-management/) and [Tracking](../tracking/). You activate GPS devices in Device management, assign them to assets here, and see the assets on the map in Tracking. An asset appears on the map only once it has a primary device.
 
 ## Core concepts
 

@@ -19,7 +19,7 @@
     * [Manage schedules](bdr/schedules/manage-schedules.md)
 * [Tracking](tracking/README.md)
   * [Track assets](tracking/track-assets.md)
-* [Device Management](device-management/README.md)
+* [Device management](device-management/README.md)
   * [Activate a device](device-management/activate-device.md)
   * [Manage devices](device-management/manage-devices.md)
 * [Dashboards](dashboards/README.md)

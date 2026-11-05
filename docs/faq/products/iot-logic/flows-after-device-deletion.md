@@ -18,7 +18,7 @@ Not while the flow uses it. A device that is in a **Data Source** node of a flow
 If you try while a flow still uses the device, the delete fails:
 
 * In **Business Data Repository**, the message says that the device is still referenced by an IoT Logic Flow.
-* In **Device Management**, **Deactivate** shows the message **Failed to load the data.**
+* In **Device management**, **Deactivate** shows the message "Failed to complete the action. Try again."
 
 A flow that still lists a deleted device saves and keeps running, and the **Connected devices** count in the flow list still includes the deleted device.
 
