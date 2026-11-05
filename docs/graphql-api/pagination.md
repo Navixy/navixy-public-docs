@@ -20,7 +20,7 @@ The API has two types of queries for fetching data:
 * Single-entity queries return one item by ID. They use singular names: `device`, `asset`, `schedule`.
 * List queries return multiple items matching your criteria. They use plural names: `devices`, `assets`, `schedules`.
 
-Pagination applies to all list queries. They return connection types following a consistent pattern: `devices` returns `DeviceConnection`, `assets` returns `AssetConnection`, `auditEvents` returns `AuditEventConnection`, and so on.
+Pagination applies to all list queries. They return connection types following a consistent pattern: `devices` returns `DeviceConnection`, `assets` returns `AssetConnection`, `myAuditEvents` returns `AuditEventConnection`, and so on.
 
 Many nested fields are also paginated, for example `Workspace.devices` or `AssetGroup.currentAssets`. You can identify paginated fields by their return type (anything ending in `Connection`) or by the presence of `first`, `after`, `last`, and `before` arguments.
 
@@ -184,11 +184,11 @@ Use `last` and `before` to paginate from the end of the result set. This is usef
 ```graphql
 query {
   bdr {
-    auditEvents(
+    myAuditEvents(
       last: 20
     ) {
       nodes {
-        eventType
+        operation
         occurredAt
       }
       pageInfo {
@@ -207,12 +207,12 @@ To get the previous page, use `startCursor` as the `before` argument:
 ```graphql
 query {
   bdr {
-    auditEvents(
+    myAuditEvents(
       last: 20
       before: "T0NDVVJSRURfQVQ6REVTQzoyMDI2LTA5LTMwVDEwOjQ1OjAwWnwwMTlhNmIyZi03OTNlLTgwN2ItODAwMS00MTU1NDQ1NDAwMjE" # startCursor from the previous response
     ) {
       nodes {
-        eventType
+        operation
         occurredAt
       }
       pageInfo {

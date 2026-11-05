@@ -165,7 +165,7 @@ truth for how the total was reached.
 
 One movement of a workspace's balance, as a line on a statement.
 
-Not a stored row: an entry is a posting joined to the document that justifies it, and `balanceAfter`
+Not stored as such: an entry is a posting together with the document that justifies it, and `balanceAfter`
 is derived at read time rather than stored against the posting. A payment whose `valueDate` falls
 before existing entries therefore shifts every line after it, the way a statement should, instead of
 leaving a stale snapshot behind.

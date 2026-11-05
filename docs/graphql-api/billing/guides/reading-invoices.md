@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myInvoices](../api-reference/invoice.md#myinvoices) and [myInvoice](../api-reference/invoice.md#myinvoice), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myInvoices](../api-reference/invoice.md#myinvoices) and [myInvoice](../api-reference/invoice.md#myinvoice), read that claim. Without it, they refuse the request. See [Authentication](../../authentication/README.md#how-the-api-chooses-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, count the workspace's invoices with this query:
 

@@ -15,7 +15,7 @@ To organize assets into named collections, such as grouping vehicles by depot or
 
 ## Prerequisites
 
-You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
+You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
 Your role needs these actions:
 
@@ -23,7 +23,7 @@ Your role needs these actions:
 * `create` on `bdr.asset`, to create an asset.
 * `read` and `update` on `bdr.asset`, to assign a device to an asset. The device only has to belong to the workspace: assigning it needs no action on `bdr.device`.
 
-See [What your roles and products allow](../../authentication.md#what-your-roles-and-products-allow).
+See [Roles and products](../../authentication/roles-and-products.md).
 
 ### Check available asset types
 

@@ -213,7 +213,7 @@ Raw usage measurement submitted by a product service. Aggregated later into invo
 
 ### BillingInvoiceLineItemSubmission
 
-Pre-built invoice line item submitted externally (no aggregation, one row = one line).
+Pre-built invoice line item submitted externally (no aggregation, one submission = one line).
 
 **Implements:** [Node](../../core-api-reference/common.md#node)
 

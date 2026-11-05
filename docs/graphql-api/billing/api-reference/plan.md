@@ -20,7 +20,7 @@ Lists the plans and branches the caller's own workspace may subscribe to, with t
 
   **The workspace is not an argument.** It is the one the caller's token names, so this operation
   cannot be pointed at a tenant the token does not name. A token carrying no workspace claim is
-  refused rather than answered: see [Authentication](../../authentication.md).
+  refused rather than answered: see [Authentication](../../authentication/README.md).
 
   Unpaginated: the answer is bounded by the catalogue a single workspace can see.
 

@@ -15,7 +15,7 @@ The guide is for developers who are comfortable with GraphQL. For the rules that
 
 ## Prerequisites
 
-You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
+You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
 Every request on this page is a GraphQL document with variables. Send each one as an HTTP POST request to `https://nvx4.eu.navixy.com/api/graphql`, with the document in the `query` field of a JSON body and the variables in the `variables` field. The following request reads one flow:
 
@@ -720,7 +720,7 @@ The steps on this page most often fail for these reasons:
 | `EDGE_TYPE_MISMATCH` | A transition that leaves a logic node is `SIMPLE`, or a transition that leaves another node is `THEN` or `ELSE` | Use `THEN` or `ELSE` after a logic node, and `SIMPLE` after every other node. |
 | `UNKNOWN_DEVICE` | A device in `deviceIds` doesn't exist, belongs to another workspace, or isn't one that your roles let you read | Correct the device ID, or remove it. |
 | `CONFLICT` | Someone changed the flow after you read it | Read the flow again and apply your change to the current graph. See [Handling version conflicts](#handling-version-conflicts). |
-| `PERMISSION_DENIED` | Your roles don't have the `create`, `update`, or `delete` action on IoT Logic flows | Ask an administrator for a role with the action. See [Authentication](../../authentication.md). |
+| `PERMISSION_DENIED` | Your roles don't have the `create`, `update`, or `delete` action on IoT Logic flows | Ask an administrator for a role with the action. See [Authentication](../../authentication/README.md). |
 | `NOT_FOUND` | The flow was deleted, or isn't in your workspace | Check the flow ID with `flows`. |
 
 For every violation code and the structure of the error, see [Flow validation errors](../flow-validation-errors.md).

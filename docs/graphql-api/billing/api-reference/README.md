@@ -17,7 +17,7 @@ The reference states what each operation and field is. For the GraphQL fundament
 
 All Billing queries and mutations are nested under the `billing` field of the `Query` and `Mutation` types, and every response has the same shape under `data.billing`.
 
-Every operation is one of the [my\* operations](../README.md#purpose-and-capabilities), named with the prefix `my`: it acts in the workspace named by your access token and takes no workspace argument. Navixy products report usage to Billing outside this API, and the submission queries list what they reported for your workspace.
+Every operation is one of the [my\* operations](../README.md#purpose-and-capabilities), named with the prefix `my`: it acts in the workspace named by your access token and takes no workspace argument. The audit queries with `scope: ORGANIZATION` act in the token's organization instead. Navixy products report usage to Billing outside this API, and the submission queries list what they reported for your workspace.
 
 For a workspace token, `node(id:)` returns `null` for billing types other than the 2 submission types, and for a submission of another workspace. Read them through the queries on these pages.
 

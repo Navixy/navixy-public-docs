@@ -23,7 +23,7 @@ Enabling or disabling a product is asynchronous. The mutation answers as soon as
 
 ## Pages
 
-<table><thead><tr><th width="186">Page</th><th>Covers</th></tr></thead><tbody><tr><td><a href="organizations.md">Organizations</a></td><td><code>ConsoleOrganization</code>, with the caller's membership preset in it, and the <code>accessibleOrganizations</code> query with its connection and edge types.</td></tr><tr><td><a href="workspaces.md">Workspaces</a></td><td><code>ConsoleWorkspace</code>, with the organization and the zone it belongs to, and the <code>accessibleWorkspaces</code> query with its connection and edge types.</td></tr><tr><td><a href="members.md">Members</a></td><td><code>ConsoleMember</code>, a person or agent of your organization with what you may do to them, and the <code>members</code> query with its connection and edge types.</td></tr><tr><td><a href="products.md">Products</a></td><td>The products a workspace may or does have enabled (<code>ConsoleWorkspaceProduct</code>), Console's product catalog (<code>ConsoleProductCatalogEntry</code>), and the operation Console tracks for a toggle (<code>ConsoleWorkspaceOperation</code>), with the <code>workspaceProducts</code>, <code>productCatalog</code>, and <code>workspaceOperation</code> queries and the <code>workspaceProductEnable</code> and <code>workspaceProductDisable</code> mutations.</td></tr></tbody></table>
+<table><thead><tr><th width="186">Page</th><th>Covers</th></tr></thead><tbody><tr><td><a href="organizations.md">Organizations</a></td><td><code>ConsoleOrganization</code>, with the caller's membership preset in it, and the <code>accessibleOrganizations</code> query with its connection and edge types.</td></tr><tr><td><a href="workspaces.md">Workspaces</a></td><td><code>ConsoleWorkspace</code>, with the organization and the zone it belongs to, and the <code>accessibleWorkspaces</code> query with its connection and edge types.</td></tr><tr><td><a href="members.md">Members</a></td><td><code>ConsoleMember</code>, a person or agent of your organization with what you may do to them, and the <code>members</code> query with its connection and edge types.</td></tr><tr><td><a href="products.md">Products</a></td><td>The products a workspace may or does have enabled (<code>ConsoleWorkspaceProduct</code>), Console's product catalog (<code>ConsoleProductCatalogEntry</code>), and the operation Console tracks for a toggle (<code>ConsoleWorkspaceOperation</code>), with the <code>workspaceProducts</code>, <code>productCatalog</code>, and <code>workspaceOperation</code> queries and the <code>workspaceProductEnable</code> and <code>workspaceProductDisable</code> mutations.</td></tr><tr><td><a href="audit.md">Audit</a></td><td>The <code>myAuditEvents</code> and <code>myEntityHistory</code> queries, which read the audit events that Console records.</td></tr></tbody></table>
 
 ## How these connections paginate
 
@@ -36,6 +36,8 @@ The Console connections follow Console's own pagination, which differs from the 
 * `accessibleWorkspaces` can return fewer items than `first`, or none, while `pageInfo.hasNextPage` is still `true`: it leaves out any workspace whose ID isn't a workspace ID of this deployment without adjusting the page size. Keep paging past a short or empty page. `accessibleOrganizations` doesn't leave out rows this way.
 * `members` is paged by the API, not by Console, because Console answers the whole member list at once. The page is ordered by `actorId`, the cursor of each edge is the actor ID, and `total` is exact. A cursor that isn't an actor ID returns `VALIDATION_ERROR`.
 * The default page size is 50, and `first` and `last` accept 1 to 100 on every query. The default of 20 on the general [Pagination](../../pagination.md) page doesn't apply here.
+
+`myAuditEvents` and `myEntityHistory` follow none of these rules. They page as the general [Pagination](../../pagination.md) page describes, with a default page size of 20.
 
 A short page is what the last rule looks like. This request asks for 50 workspaces after a cursor:
 
@@ -102,5 +104,5 @@ The interfaces and pagination types that Console shares with the other products 
 
 ## See also
 
-* [Authentication](../../authentication.md): Learn how the access token names the workspace that every request acts in.
+* [Authentication](../../authentication/README.md): Learn how the access token names the workspace that every request acts in.
 * [Error handling](../../error-handling.md): Understand error structure, codes, and common error scenarios.

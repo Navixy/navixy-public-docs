@@ -1,7 +1,7 @@
 ---
 description: >-
-  Make your first Navixy GraphQL API calls: authenticate, activate a GPS device
-  with its SIM and APN settings, and check that the device connected.
+  Make your first Navixy GraphQL API calls: exchange an API key for an access
+  token, read your workspace, and activate a GPS device.
 tags:
   - guide
   - beta
@@ -9,7 +9,7 @@ tags:
 
 # Getting started
 
-This guide takes you from an access token to a GPS device that is activated and connected to the Navixy platform. You send your first authenticated request, find a supported device model, activate the device with its IMEI and SIM data, and check the connection. Every step shows the full request and the response that you get back.
+This guide takes you from an API key to a GPS device that is activated and connected to the Navixy platform. You exchange the key for an access token and send your first request with it. Then you find a supported device model, activate the device with its IMEI and SIM data, and check the connection. Every step shows the full request and the response that you get back.
 
 The guide is for developers who are comfortable with HTTP and JSON. It doesn't assume GraphQL experience: every operation is shown in full. See [GraphQL basics](graphql-basics/) to learn the concepts behind the examples.
 
@@ -17,14 +17,10 @@ The guide is for developers who are comfortable with HTTP and JSON. It doesn't a
 
 Before you start, make sure that you have the following:
 
-* An access token for the workspace that you work in. A workspace is the tenant that owns your devices, assets, geo objects, and schedules. The API reads the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](authentication.md) to learn how to get a token and how the API picks the workspace.
-* A GPS device of a model supported by the Navixy platform, its IMEI, and a SIM card with a known phone number. At the moment, seven Teltonika models are supported: FMB920, FMC130, FMB140, FMB125, FMB003, FMC650, and FTC305. The second step shows how to list them.
+* An API key. Your organization's administrator creates it in Navixy Console and gives it a role. For this guide, the role must allow `read`, `create`, and `update` on devices (`bdr.device`) and `read` on catalog items (`bdr.catalog`). Ask the administrator for the key and for the example request that Console shows next to it. The example request has the ID of your workspace, which the first step needs. See [Get an API key](authentication/README.md#get-an-api-key).
+* A GPS device of a model supported by the Navixy platform, its IMEI, and a SIM card with a known phone number. At the moment, seven Teltonika models are supported: FMB920, FMC130, FMB140, FMB125, FMB003, FMC650, and FTC305. The third step shows how to list them.
 * The APN settings of your SIM carrier: the APN name and, if the carrier requires them, the user name and the password.
-* An HTTP client that can send a POST request with a JSON body. The examples use `curl`.
-
-{% hint style="info" %}
-At the moment, Navixy GraphQL API doesn't accept API keys. The Navixy identity service issues access tokens only to people, so a script or a backend service can't get a token of its own. Use a token issued to a person and renew it before it expires, as described in [Tokens for scripts and backend services](authentication.md#tokens-for-scripts-and-backend-services).
-{% endhint %}
+* A terminal with `curl` and [`jq`](https://jqlang.org/). The examples use `jq` to read the access token from a JSON response.
 
 ## How activation works
 
@@ -34,23 +30,73 @@ A device has one of four statuses:
 
 <table><thead><tr><th width="230">Status code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>not_activated</code></td><td>The device record exists, but nothing was sent to the device. A device created with <code>deviceCreate</code> starts here and keeps this status: the platform accepts its messages, but its status doesn't change.</td></tr><tr><td><code>awaiting_connection</code></td><td><code>deviceActivate</code> ran, and the SMS is queued. The device hasn't sent anything yet.</td></tr><tr><td><code>active</code></td><td>The first message from the device reached the platform after <code>deviceActivate</code>.</td></tr><tr><td><code>inactive</code></td><td>The platform refuses messages from the device, and <code>deviceActivate</code> refuses its IMEI. No operation of this API sets this status.</td></tr></tbody></table>
 
-Until the device connects, you can run `deviceActivate` again with the same IMEI. The second run replaces the phone number, the APN settings, and the model, and queues the SMS again. Use a second run to resend a lost SMS or to correct a typo in the phone number or the APN settings. Once the device is `active` or `inactive`, a second activation with its IMEI fails with `DUPLICATE`.
+Until the device connects, you can run `deviceActivate` again with the same IMEI. The second run replaces the phone number, the APN settings, and the model. It also queues the SMS again. Use a second run to resend a lost SMS or to correct a typo in the phone number or the APN settings. Once the device is `active` or `inactive`, a second activation with its IMEI fails with `DUPLICATE`.
 
-## How to activate a GPS device in Navixy
+## How to get a token and activate a GPS device
 
-To activate a GPS device and check that it's connected, follow these steps:
+To get an access token, send your first request, and activate a GPS device, follow these steps:
 
 {% stepper %}
 {% step %}
-### Authenticate and read your workspace
+### Exchange the API key for an access token
 
-Navixy GraphQL API has one endpoint: `https://nvx4.eu.navixy.com/api/graphql`. Send every operation as an HTTP POST request with a JSON body that has a `query` field and, optionally, a `variables` field. Put the access token in the `Authorization` header, after the word `Bearer` and a space. The following request reads your workspace and confirms that the token works:
+The API doesn't accept the API key itself. Your app exchanges the key for an access token at the Navixy identity service and sends the token with every request. First, put the key in an environment variable, so that it doesn't appear in your commands or in the shell history:
+
+```bash
+read -rs NAVIXY_API_KEY && export NAVIXY_API_KEY
+```
+
+Paste the key and press Enter. The key doesn't appear on the screen.
+
+Then exchange the key and save the access token in the `ACCESS_TOKEN` variable:
+
+```bash
+ACCESS_TOKEN=$(curl -L -s \
+  --request POST \
+  --url 'https://iam.eu.navixy.com/realms/quickstart/protocol/openid-connect/token' \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
+  --data-urlencode 'client_id=api-key-exchange' \
+  --data-urlencode "subject_token=$NAVIXY_API_KEY" \
+  --data-urlencode 'subject_token_type=urn:navixy:token-type:api-key' \
+  --data-urlencode 'navixy_agent_name=getting-started' \
+  --data-urlencode 'navixy_workspace_id=<WORKSPACE_ID>' \
+  | jq -r .access_token)
+echo "$ACCESS_TOKEN"
+```
+
+The command prints the access token: a long string of three parts separated by dots. The exchange returns the token in this response, and `jq` reads the `access_token` field from it:
+
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY3Rvcl9pZCI6IjAxOWE2YjJmLTc5M2UtODA3Yi04MDAxLTQxNTA0OTRiMDAwMSJ9.c2lnbmF0dXJl",
+  "expires_in": 300,
+  "token_type": "Bearer",
+  "issued_token_type": "urn:ietf:params:oauth:token-type:access_token"
+}
+```
+
+**Parameters:**
+
+* `subject_token` is the key. The command reads it from `NAVIXY_API_KEY`.
+* `navixy_agent_name` is a name for your app, 1 to 100 characters. The token includes it, so you can tell the tokens of your apps apart.
+* `navixy_workspace_id` is the ID of your workspace from the example request in Navixy Console. If the key's role covers only one workspace, you can leave this line out.
+
+The token expires after the number of seconds in `expires_in`. If a later step gets an `UNAUTHORIZED` error, run this command again to get a new token.
+
+If the command prints `null`, the exchange failed. Run the `curl` command without `| jq -r .access_token` to see the error. A `workspace_selection_required` error lists the workspaces that the key can reach: repeat the command with one of their IDs in `navixy_workspace_id`. See [Exchange errors](authentication/README.md#exchange-errors) for every error of the exchange.
+{% endstep %}
+
+{% step %}
+### Send your first request
+
+Navixy GraphQL API has one main endpoint: `https://nvx4.eu.navixy.com/api/graphql`. Send every operation to this endpoint as an HTTP POST request with a JSON body. The body has a `query` field and, optionally, a `variables` field. The following request reads your workspace and confirms that the token works:
 
 ```bash
 curl -L \
   --request POST \
   --url 'https://nvx4.eu.navixy.com/api/graphql' \
-  --header 'Authorization: Bearer <ACCESS_TOKEN>' \
+  --header "Authorization: Bearer $ACCESS_TOKEN" \
   --header 'Content-Type: application/json' \
   --data '{
     "query": "query MyWorkspace { bdr { workspace { id title isActive } } }"
@@ -75,12 +121,12 @@ Response:
 
 **Parameters:**
 
-* The `Authorization` header contains the word `Bearer`, a space, and your access token. The API uses the token to identify you and your workspace.
+* The `Authorization` header contains the word `Bearer`, a space, and the access token from the previous step. The API uses the token to identify the key and your workspace.
 * The `query` field contains the text of your GraphQL query. `MyWorkspace` is a name that you give the query, and it's optional. `workspace { id title isActive }` asks for three fields of your workspace.
 
-Every Business Data Repository operation is nested inside the `bdr` field, and the response has the same structure under `data.bdr`. The next steps show only the text of each query or mutation and its variables. Send the text in the `query` field and the variables in the `variables` field of the same POST request.
+Every Business Data Repository operation is inside the `bdr` field, and the response has the same structure under `data.bdr`. The next steps show only the text of each query or mutation and its variables. Send the text in the `query` field and the variables in the `variables` field of the same POST request, with the same `Authorization` header.
 
-If the response has an `errors` array instead of `data`, the token or the request is wrong. An `UNAUTHORIZED` error means that the request had no token, or that the token is expired or invalid. A `PERMISSION_DENIED` error means that the API couldn't identify the workspace of the request, or that your roles don't allow the request. See [Error handling](error-handling.md) to learn the error format and every error code.
+If the response has an `errors` array instead of `data`, the token or the request is wrong. An `UNAUTHORIZED` error means that the request had no token or that the token expired: run the previous step again. A `PERMISSION_DENIED` error means that the API couldn't choose the workspace of the request or that the key's role doesn't allow the request. See [API errors](authentication/README.md#api-errors) for every authentication error.
 {% endstep %}
 
 {% step %}
@@ -170,7 +216,6 @@ mutation ActivateDevice($input: DeviceActivateInput!) {
             name
             user
           }
-          activationCode
           activatedAt
         }
       }
@@ -218,7 +263,6 @@ Response:
           "activation": {
             "phone": "4915112345678",
             "apn": { "name": "internet.example.net", "user": "iot" },
-            "activationCode": null,
             "activatedAt": "2026-09-30T09:12:41Z"
           }
         }
@@ -236,7 +280,6 @@ Response:
 * `identifier` is the device IMEI: exactly 15 digits. It becomes the `IMEI` identifier of the device record. An IMEI is unique across the whole Navixy platform.
 * `phone` is the SIM card's phone number: 5 to 20 digits, without `+` or spaces. The SMS goes to this number. The number is unique across the platform, so a second device with the same number fails with `DUPLICATE`. To check a number before you activate, see [Activating a device](business-data-repository/guides/activating-a-device.md#check-that-the-phone-numbers-are-available).
 * `title` is optional. When you leave it out or send it blank, the API builds a title from the model and the IMEI, for example, `FMB003 356307042772396`.
-* `activationCode` is optional. Some carriers issue an activation code with the SIM card. It's 3 to 20 digits. The API checks only the format and stores the code with the activation.
 
 `input.apn`:
 
@@ -294,20 +337,20 @@ If the status stays `awaiting_connection`, the SMS didn't reach the device or th
 {% endstepper %}
 
 {% hint style="success" %}
-You sent authenticated requests to Navixy GraphQL API and activated a GPS device with its IMEI and SIM data. The device is connected and sends its data to the platform. You can now link its record to an asset.
+You exchanged an API key for an access token and sent authenticated requests to Navixy GraphQL API. You also activated a GPS device with its IMEI and SIM data. The device is connected and sends its data to the platform. You can now link its record to an asset.
 {% endhint %}
 
 ## Error handling
 
 The activation operations return errors in the shared format. See [Error handling](error-handling.md) to learn the response structure and the general codes.
 
-| Code                | When it occurs                                                                                                                                                                                                                                                             | Resolution                                                                                                                                                                                                   |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `UNAUTHORIZED`      | The request has no token, or the token is malformed or expired, or another identity service issued it.                                                                                                                                                                                                  | Get a new token and retry.                                                                                                                                                                                   |
-| `PERMISSION_DENIED` | The API can't tell in which workspace the request works, or your roles don't allow creating devices. Activating an existing device also requires the right to update it.                                                                         | Send a token issued for the workspace, or ask an administrator of your organization for a role that creates and updates devices. See [Authentication](authentication.md#what-your-roles-and-products-allow). |
-| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `activationCode` isn't 3 to 20 digits, `apn.name` has characters or a length outside its rules, or the model isn't supported. `field` names the argument, for example, `input.identifier` or `input.apn.name`. | Read `field` and `detail` and correct the value. Choose a model from `deviceModels(filter: { supported: true })`.                                                                                            |
-| `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                                                                                  | Send the `id` as `deviceModels` returned it.                                                                                                                                                                 |
-| `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device from another workspace. Or the phone number belongs to another device. `field` is `input.identifier` or `input.phone`.                                                          | Check the IMEI and the phone number. A deleted device keeps its IMEI reserved, so the same GPS device can't be activated again with a new record.                                                            |
+| Code | When it occurs | Resolution |
+| --- | --- | --- |
+| `UNAUTHORIZED` | The request has no token, or the token is malformed or expired, or another identity service issued it. | Exchange the key again and repeat the request. See [Exchange the API key for an access token](#exchange-the-api-key-for-an-access-token). |
+| `PERMISSION_DENIED` | The API can't choose the workspace of the request, or the key's role doesn't allow creating devices. Activating an existing device also requires the right to update it. | Check `navixy_workspace_id` in the exchange or ask your organization's administrator for a key with a role that creates and updates devices. See [Roles and products](authentication/roles-and-products.md). |
+| `VALIDATION_ERROR` | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` has characters or a length outside its rules, or the model isn't supported. `field` names the argument, for example, `input.identifier` or `input.apn.name`. | Read `field` and `detail` and correct the value. Choose a model from `deviceModels(filter: { supported: true })`. |
+| `NOT_FOUND` | `modelId` names no model. | Send the `id` as `deviceModels` returned it. |
+| `DUPLICATE` | The IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device from another workspace. Or the phone number belongs to another device. `field` is `input.identifier` or `input.phone`. | Check the IMEI and the phone number. A deleted device keeps its IMEI reserved, so the same GPS device can't be activated again with a new record. |
 
 Activation with an IMEI that another device already has returns this error:
 
@@ -334,14 +377,16 @@ Activation with an IMEI that another device already has returns this error:
 
 ### How to handle a duplicate IMEI or phone number
 
-Read `field`. When `field` is `input.identifier`, another device already has this IMEI. A device in your workspace that is `not_activated` or `awaiting_connection` doesn't cause this error, because the activation attaches to that device. So the IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device in another workspace. To find it in your workspace, look up the device with `devices(filter: { identifierContains: "<IMEI>" })`. When `field` is `input.phone`, another device already has this phone number: correct the number, or delete the other device first.
+Read `field`. When `field` is `input.identifier`, another device already has this IMEI. A device in your workspace that is `not_activated` or `awaiting_connection` doesn't cause this error, because the activation attaches to that device. So the IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device in another workspace. To find it in your workspace, look up the device with `devices(filter: { identifierContains: "<IMEI>" })`. When `field` is `input.phone`, another device already has this phone number: correct the number or delete the other device first.
 
 ## Next steps
 
+* [Authentication](authentication/README.md): Renew the access token in your app, work with several workspaces, and handle every authentication error.
+* [Roles and products](authentication/roles-and-products.md): Learn what the key's role and your workspace's products allow.
 * [Managing device records and identifiers](business-data-repository/guides/managing-device-records-and-identifiers.md): Update and delete the device, manage its identifiers, and link it to other devices.
-* [Creating assets and assigning devices](business-data-repository/guides/creating-assets-and-assigning-devices.md): Create the vehicles and equipment that devices track, and link a device to an asset.
+* [Creating assets and assigning devices](business-data-repository/guides/creating-assets-and-assigning-devices.md): Create the vehicles and equipment that devices track and link a device to an asset.
+* [Building a live fleet map](tracking/guides/building-a-live-fleet-map.md): Show where your assets are and keep the map current with a state stream.
 * [Devices](business-data-repository/api-reference/devices/#deviceactivate): Learn how `deviceActivate`, the `DeviceActivation` type, and every other device operation work.
 * [Optimistic locking](optimistic-locking.md): Use the `version` field to keep concurrent updates from overwriting each other.
 * [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting/): Page through long lists and narrow them down.
-* [Error handling](error-handling.md): Learn the error format, every error code, and how to handle each code.
 * [Core API reference](core-api-reference/): Find every type and operation of the API, grouped by product and category.

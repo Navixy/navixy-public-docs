@@ -16,7 +16,7 @@ Every operation on this page reads or changes the data of the workspace named by
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myAvailablePlans](../api-reference/plan.md#myavailableplans) and [mySubscribe](../api-reference/subscription.md#mysubscribe), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myAvailablePlans](../api-reference/plan.md#myavailableplans) and [mySubscribe](../api-reference/subscription.md#mysubscribe), read that claim. Without it, they refuse the request. See [Authentication](../../authentication/README.md#how-the-api-chooses-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, run this query and list the subscriptions that the workspace already has:
 
@@ -443,4 +443,4 @@ Read the subscription IDs in `detail` and look them up in [mySubscriptions](../a
 - [Subscriptions](../api-reference/subscription.md): Learn how [mySubscribe](../api-reference/subscription.md#mysubscribe), [mySubscriptions](../api-reference/subscription.md#mysubscriptions), and the subscription type work.
 - [Reading balance and statement](reading-balance-and-statement.md): Read the workspace's prepaid balance and the entries that changed it.
 - [Billing errors](../errors.md): Learn how the Billing operations report a missing entity and which fields their errors have.
-- [Authentication](../../authentication.md): Learn how the token names the workspace that every operation acts in.
+- [Authentication](../../authentication/README.md): Learn how the token names the workspace that every operation acts in.

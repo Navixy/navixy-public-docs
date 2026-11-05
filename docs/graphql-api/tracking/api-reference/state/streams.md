@@ -57,11 +57,11 @@ trackingAssetStates(
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `assetIds` | `[ID!]` | Assets to follow. Null means every asset visible to the caller in its workspace, up to a server-side ceiling on how many one subscription may follow; over it the subscription is refused with `VALIDATION_ERROR` rather than silently truncated. The query side paginates the same data, and a stream has no cursor to paginate with, so the ceiling is where that bound goes. The set is live in both directions. An asset that becomes visible after the subscription opened — created, linked, or access granted — joins it, and its first appearance is an ordinary change carrying its full `state`; there is no separate "added" marker, because a state a client has not seen before is that marker. Growing past the ceiling this way closes the stream with `VALIDATION_ERROR`, the same answer the same size gets at open. An explicit id the caller cannot see at open is not refused: it emits nothing until it becomes visible, symmetric to `ACCESS_REVOKED` on the way out. |
+| `assetIds` | `[ID!]` | Assets to follow. The stream follows only an asset with at least one device the caller can see. Null means every such asset in the caller's workspace, up to a server-side ceiling on how many one subscription may follow; over it the subscription is refused with `VALIDATION_ERROR` rather than silently truncated. The query side paginates, and a stream has no cursor to paginate with, so the ceiling is where that bound goes. `TrackingQuery.assetStates` returns the assets without such a device too (see `TrackingStreamRemovalReason.UNLINKED`). An empty list follows no asset; in `TrackingAssetStateFilter.assetIds` an empty list sets no condition. The set is live in both directions. An asset that becomes visible after the subscription opened — created with a device, linked, or access granted — joins it, and its first appearance is an ordinary change carrying its full `state`; there is no separate "added" marker, because a state a client has not seen before is that marker. Growing past the ceiling this way closes the stream with `VALIDATION_ERROR`, the same answer the same size gets at open. An explicit id the caller cannot see at open is not refused: it emits nothing until it becomes visible, symmetric to `ACCESS_REVOKED` on the way out. A named asset that the caller can see but that has no device the caller can see gets a removal with `UNLINKED` in the opening snapshot, so a client can tell it from an id it cannot see. It joins once it has a device the caller can see. |
 | `readingCodes` | [[Code](../../../core-api-reference/common.md#code)!] | Narrow the delivered readings to these codes, every channel included; any code can be named. Null — the default — delivers every reading the device has sent; an empty list delivers none. |
 | `eventCodes` | [[Code](../../../core-api-reference/common.md#code)!] | Deliver only these event codes. Empty list — the default — delivers none; null delivers all, which a stuck level alarm turns into a repeated object in every batch. The emitted snapshot type carries no arguments, so this input is the only place the filter can live. |
-| `includeInitialState` | `Boolean` | Emit the current state of everything followed before live updates begin, so a client does not have to query and subscribe separately and race between the two. Delivered in the same batches as live updates, not as one frame — a workspace-wide subscription would otherwise serialise its entire fleet into a single message. |
-| `batchWindowMs` | `Int` | Coalescing window in milliseconds. Updates for the same asset within one window collapse into one message, and messages are delivered as a batch — nvx3's `state_batch` broadcaster, made explicit. The server sets a minimum and a maximum, 1 000 and 5 000 ms by default; a value outside them refuses the subscription with `VALIDATION_ERROR` on `batchWindowMs`. |
+| `includeInitialState` | `Boolean` | Emit the current state of everything followed before live updates begin, so a client does not have to query and subscribe separately and race between the two. Delivered in the same batches as live updates, not as one frame — a workspace-wide subscription would otherwise serialise its entire fleet into a single message. `assetIds` says which assets are followed and what the opening snapshot emits for a named asset that is not; with `false`, such an asset emits nothing. |
+| `batchWindowMs` | `Int` | Coalescing window in milliseconds. Updates for the same asset within one window collapse into one message, and messages are delivered as a batch. The server sets a minimum and a maximum, 1 000 and 5 000 ms by default; a value outside them refuses the subscription with `VALIDATION_ERROR` on `batchWindowMs`. |
 
 </details>
 
@@ -107,8 +107,8 @@ message, a choice the input never sees. Two types cost some duplication.
 a map renders from, and re-fetching titles over a second channel for every asset defeats that.
 The cost is that `Device`'s own collection fields (`inventoryHistory`, and `groups`/`customFields`
 on `Asset`) are reachable from a subscription's selection set, where they execute per emission —
-and the gateway's complexity limit cannot see it, being computed from the document alone. The
-per-emission budget is therefore part of the subscription implementation, not of the query limits.
+and the query complexity limit cannot see it, being computed from the document alone. The
+subscription applies its own budget per emission; the query limits do not cover it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -175,7 +175,7 @@ forbids, so it is a breaking change of the same kind as a new union member.
 | ----- | ---- | ----------- |
 | `assetId` | `ID!` |  |
 | `state` | [TrackingAssetStateSnapshot](#trackingassetstatesnapshot) | Full state as of this emission. Null when, and only when, `removal` is set. |
-| `removal` | [TrackingStreamRemoval](#trackingstreamremoval) | Why the asset stopped being followed. Null while it is still followed. |
+| `removal` | [TrackingStreamRemoval](#trackingstreamremoval) | Why the asset is not, or is no longer, followed. Null while it is followed. |
 
 ---
 
@@ -183,13 +183,14 @@ forbids, so it is a breaking change of the same kind as a new union member.
 
 ### TrackingStreamRemoval
 
-Why an entity left a subscription. Without this a client cannot tell "gone" from "quiet": an
-entity that stops being emitted looks exactly like one that simply has not reported.
+Why an entity left a subscription, or, for an asset named in `assetIds`, why it is not in it.
+Without this a client cannot tell "gone" from "quiet": an entity that stops being emitted looks
+exactly like one that simply has not reported.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `reason` | [TrackingStreamRemovalReason](#trackingstreamremovalreason)! |  |
-| `at` | [DateTime](../../../core-api-reference/common.md#datetime)! | When the server stopped following it. |
+| `at` | [DateTime](../../../core-api-reference/common.md#datetime)! | When the server stopped following it, or found at open that it does not follow it. |
 
 ---
 
@@ -201,11 +202,11 @@ entity that stops being emitted looks exactly like one that simply has not repor
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `assetIds` | `[ID!]` | Assets to follow. Null means every asset visible to the caller in its workspace, up to a server-side ceiling on how many one subscription may follow; over it the subscription is refused with `VALIDATION_ERROR` rather than silently truncated. The query side paginates the same data, and a stream has no cursor to paginate with, so the ceiling is where that bound goes. The set is live in both directions. An asset that becomes visible after the subscription opened — created, linked, or access granted — joins it, and its first appearance is an ordinary change carrying its full `state`; there is no separate "added" marker, because a state a client has not seen before is that marker. Growing past the ceiling this way closes the stream with `VALIDATION_ERROR`, the same answer the same size gets at open. An explicit id the caller cannot see at open is not refused: it emits nothing until it becomes visible, symmetric to `ACCESS_REVOKED` on the way out. |
+| `assetIds` | `[ID!]` | Assets to follow. The stream follows only an asset with at least one device the caller can see. Null means every such asset in the caller's workspace, up to a server-side ceiling on how many one subscription may follow; over it the subscription is refused with `VALIDATION_ERROR` rather than silently truncated. The query side paginates, and a stream has no cursor to paginate with, so the ceiling is where that bound goes. `TrackingQuery.assetStates` returns the assets without such a device too (see `TrackingStreamRemovalReason.UNLINKED`). An empty list follows no asset; in `TrackingAssetStateFilter.assetIds` an empty list sets no condition. The set is live in both directions. An asset that becomes visible after the subscription opened — created with a device, linked, or access granted — joins it, and its first appearance is an ordinary change carrying its full `state`; there is no separate "added" marker, because a state a client has not seen before is that marker. Growing past the ceiling this way closes the stream with `VALIDATION_ERROR`, the same answer the same size gets at open. An explicit id the caller cannot see at open is not refused: it emits nothing until it becomes visible, symmetric to `ACCESS_REVOKED` on the way out. A named asset that the caller can see but that has no device the caller can see gets a removal with `UNLINKED` in the opening snapshot, so a client can tell it from an id it cannot see. It joins once it has a device the caller can see. |
 | `readingCodes` | [[Code](../../../core-api-reference/common.md#code)!] | Narrow the delivered readings to these codes, every channel included; any code can be named. Null — the default — delivers every reading the device has sent; an empty list delivers none. |
 | `eventCodes` | [[Code](../../../core-api-reference/common.md#code)!] | Deliver only these event codes. Empty list — the default — delivers none; null delivers all, which a stuck level alarm turns into a repeated object in every batch. The emitted snapshot type carries no arguments, so this input is the only place the filter can live. |
-| `includeInitialState` | `Boolean` | Emit the current state of everything followed before live updates begin, so a client does not have to query and subscribe separately and race between the two. Delivered in the same batches as live updates, not as one frame — a workspace-wide subscription would otherwise serialise its entire fleet into a single message. |
-| `batchWindowMs` | `Int` | Coalescing window in milliseconds. Updates for the same asset within one window collapse into one message, and messages are delivered as a batch — nvx3's `state_batch` broadcaster, made explicit. The server sets a minimum and a maximum, 1 000 and 5 000 ms by default; a value outside them refuses the subscription with `VALIDATION_ERROR` on `batchWindowMs`. |
+| `includeInitialState` | `Boolean` | Emit the current state of everything followed before live updates begin, so a client does not have to query and subscribe separately and race between the two. Delivered in the same batches as live updates, not as one frame — a workspace-wide subscription would otherwise serialise its entire fleet into a single message. `assetIds` says which assets are followed and what the opening snapshot emits for a named asset that is not; with `false`, such an asset emits nothing. |
+| `batchWindowMs` | `Int` | Coalescing window in milliseconds. Updates for the same asset within one window collapse into one message, and messages are delivered as a batch. The server sets a minimum and a maximum, 1 000 and 5 000 ms by default; a value outside them refuses the subscription with `VALIDATION_ERROR` on `batchWindowMs`. |
 
 ---
 
@@ -223,7 +224,7 @@ it without that fallback.
 | ----- | ----------- |
 | `ACCESS_REVOKED` | The subscriber lost the right to see it. |
 | `DELETED` | The asset was deleted. |
-| `UNLINKED` | The asset's last device was unlinked, so nothing can report for it any more. The mirror of `linked` in `TrackingAssetStateSubscriptionInput.assetIds`: a device link is one of the three things that bring an asset into a subscription, and losing the last link is what takes it back out. Re-linking a device returns the asset as an ordinary change carrying its full state, with no "added" marker, exactly as it arrived the first time. An asset with no devices is not an error and not invisible — `TrackingQuery.assetStates` still returns it, with an empty `devices` and a null `updatedAt`. It is the *stream* it leaves: a stream carries reports, and an asset with no device has none to carry. A client that wants such assets on screen reads them from the query side, which is where the no-longer-reporting case has an answer. |
+| `UNLINKED` | The asset has no device the caller can see: its last one was unlinked, or an asset named in `assetIds` had none when the stream opened. The mirror of `linked` in `TrackingAssetStateSubscriptionInput.assetIds`: a device link is one of the three things that bring an asset into a subscription, and losing the last link is what takes it back out. Linking a device, again or for the first time, brings the asset in as an ordinary change carrying its full state, with no "added" marker. An asset with no devices is not an error and not invisible — `TrackingQuery.assetStates` still returns it, with an empty `devices` and a null `updatedAt`. It is the *stream* it leaves: a stream carries reports, and an asset with no device has none to carry. A client that wants such assets on screen reads them from the query side, which is where the no-longer-reporting case has an answer. |
 
 ---
 

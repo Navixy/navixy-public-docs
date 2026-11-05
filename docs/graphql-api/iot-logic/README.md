@@ -11,7 +11,7 @@ tags:
 
 **IoT Logic** is the product that processes the messages of your devices as they arrive. It is one of the products served by [Navixy GraphQL API](../). A flow reads each message of the devices attached to it, calculates new values, and adds them to the message. The same flows appear on the canvas of the IoT Logic flow editor, so a flow that you create through the API opens in the editor, and the reverse.
 
-All IoT Logic operations are nested under the `iotLogic` field of the `Query` and `Mutation` types. Every operation acts in the workspace that your access token names, so no query or mutation takes a workspace ID. The shared pages of this space cover the request format, [authentication](../authentication.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
+All IoT Logic operations are nested under the `iotLogic` field of the `Query` and `Mutation` types. Every operation acts in the workspace that your access token names, so no query or mutation takes a workspace ID. The shared pages of this space cover the request format, [authentication](../authentication/README.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
 
 ## Purpose and capabilities
 
@@ -52,7 +52,7 @@ Three parties share the work on the flows of a workspace:
 
 Your roles decide what you can do with flows. Reading flows needs the `read` action on IoT Logic flows, and `flowCreate`, `flowUpdate`, and `flowDelete` need the `create`, `update`, and `delete` actions. Without the action, the operation fails with `PERMISSION_DENIED`.
 
-The devices of a flow follow your access to devices in Business Data Repository. A flow shows, counts, and changes only the devices that your roles let you read. The other devices stay in the flow. See [What your roles and products allow](../authentication.md#what-your-roles-and-products-allow).
+The devices of a flow follow your access to devices in Business Data Repository. A flow shows, counts, and changes only the devices that your roles let you read. The other devices stay in the flow. See [Roles and products](../authentication/roles-and-products.md).
 
 ## Navigation
 

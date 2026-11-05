@@ -211,7 +211,7 @@ Creates a new asset group.
 ```graphql
 assetGroupCreate(
     input: AssetGroupCreateInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -281,7 +281,7 @@ Updates an existing asset group.
 ```graphql
 assetGroupUpdate(
     input: AssetGroupUpdateInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -356,7 +356,7 @@ Deletes an asset group.
 ```graphql
 assetGroupDelete(
     input: AssetGroupDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -403,7 +403,7 @@ Adds assets to a group.
 ```graphql
 assetGroupItemsAdd(
     input: AssetGroupItemsAddInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -471,7 +471,7 @@ Removes assets from a group.
 ```graphql
 assetGroupItemsRemove(
     input: AssetGroupItemsRemoveInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -539,7 +539,7 @@ Creates a new asset group type.
 ```graphql
 assetGroupTypeCreate(
     input: AssetGroupTypeCreateInput!
-  ): AssetGroupTypePayload
+  ): AssetGroupTypePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -637,7 +637,7 @@ Updates an asset group type.
 ```graphql
 assetGroupTypeUpdate(
     input: AssetGroupTypeUpdateInput!
-  ): AssetGroupTypePayload
+  ): AssetGroupTypePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -740,7 +740,7 @@ Deletes an asset group type.
 ```graphql
 assetGroupTypeDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

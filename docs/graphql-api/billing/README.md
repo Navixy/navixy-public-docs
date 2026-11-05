@@ -11,7 +11,7 @@ tags:
 
 **Billing API** is the product that stores what a workspace pays for. It's one of the products served by [Navixy GraphQL API](../). This documentation is for developers who call the API for their own workspace to show its plans, subscriptions, invoices, balance, and usage in an app or to subscribe it to a plan. For a workspace, Billing shows which plans it may take, which plan it's on, what usage was reported for it, what each billing period cost, and how much it has on balance and why.
 
-All Billing queries are nested under the `billing` field of the `Query` type and Billing mutations under the `billing` field of the `Mutation` type. Authentication, pagination, and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication.md), [Pagination](../pagination.md), and [Error handling](../error-handling.md) to learn that. For the endpoint and request headers, see [Getting started](../getting-started.md).
+All Billing queries are nested under the `billing` field of the `Query` type and Billing mutations under the `billing` field of the `Mutation` type. Authentication, pagination, and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication/README.md), [Pagination](../pagination.md), and [Error handling](../error-handling.md) to learn that. For the endpoint and request headers, see [Getting started](../getting-started.md).
 
 ## Purpose and capabilities
 
@@ -23,9 +23,11 @@ Billing API enables a workspace to:
 - Read the statement of its balance: every payment, correction, and invoice charge, with the balance after each one
 - List the usage that Navixy products reported for it
 - List its invoices and read the lines of each one: the fee and the priced usage of every billing period, and whether the invoice is paid
-- Read the audit events of billing in the workspace: who changed its subscriptions, invoices, and balance, and when
+- Read the audit events of billing in your workspace or, with the organization scope, in every workspace of your organization: who changed its subscriptions, invoices, and balance, and when
 
-The operations behind these tasks are the `my*` operations, named for the prefix `my`, such as `myAvailablePlans` and `mySubscribe`. The [Billing API reference](api-reference/) documents each one. Every `my*` operation reads or changes the data of the workspace named by your access token. None of them takes a workspace ID, so a request can't read or change the billing of another workspace. Navixy products report usage to Billing outside this API, and [myUsageMetricSubmissions](api-reference/submission.md#myusagemetricsubmissions) lists what they reported for your workspace.
+The operations behind these tasks are the `my*` operations, named for the prefix `my`, such as `myAvailablePlans` and `mySubscribe`. The [Billing API reference](api-reference/) documents each one. Every `my*` operation reads or changes the data of the workspace named by your access token, except `myAuditEvents` and `myEntityHistory` with `scope: ORGANIZATION`, which read the organization that the token names. None of them accepts a workspace ID, so a request can't read or change the billing of another workspace. Navixy products report usage to Billing outside this API, and [myUsageMetricSubmissions](api-reference/submission.md#myusagemetricsubmissions) lists what they reported for your workspace.
+
+The `my*` operations read the workspace only from the access token's `workspace_id` claim. They check only that the claim is the ID of a workspace in this Navixy region and environment. They don't check that the workspace exists. For a workspace that doesn't exist, `myAvailablePlans` returns the plans that every workspace can choose, and `mySubscribe` fails with `VALIDATION_ERROR`. See [How the API chooses your workspace](../authentication/README.md#how-the-api-chooses-your-workspace).
 
 ## Key concepts
 
@@ -71,7 +73,7 @@ The [Billing API reference](api-reference/) documents the operations and types, 
 - [Balances](api-reference/balance.md) documents the balance, the statement entry, and the queries that read them.
 - [Submissions](api-reference/submission.md) documents the usage reported for your workspace and the queries that list it.
 - [Invoices](api-reference/invoice.md) documents your workspace's invoices, their lines, and the queries that read them.
-- [Audit](api-reference/audit.md) documents the two queries that read the audit events of billing in your workspace.
+- [Audit](api-reference/audit.md) documents the two queries that read the audit events of billing in your workspace or in every workspace of your organization. [Audit log](../audit-log/README.md) explains the event format and the scopes.
 
 For the types that Billing shares with the other products and for an index of the whole API, see [Core API reference](../core-api-reference/).
 

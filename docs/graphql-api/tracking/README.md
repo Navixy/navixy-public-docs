@@ -11,9 +11,9 @@ tags:
 
 **Tracking** is the product that answers where your assets are and what their devices report. It is one of the products served by [Navixy GraphQL API](../). [Business Data Repository](../business-data-repository/README.md) stores the records of an asset and of the devices linked to it. Tracking returns what those devices report: position, connectivity, motion, and sensor readings, plus the trips and stops calculated from them.
 
-All Tracking queries are nested under the `tracking` field of the `Query` type. The state stream is a field of the `Subscription` type. The shared pages of this space cover the request format, [authentication](../authentication.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For the endpoint and the headers of a request, see [Getting started](../getting-started.md).
+All Tracking queries are nested under the `tracking` field of the `Query` type. The state stream is a field of the `Subscription` type. The shared pages of this space cover the request format, [authentication](../authentication/README.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For the endpoint and the headers of a request, see [Getting started](../getting-started.md).
 
-Tracking is a product of your workspace, so every Tracking query and the state stream need Tracking enabled for the workspace in Navixy Console. Otherwise, the request fails with `PRODUCT_DISABLED`. Enable the product in Console and request a new token. See [What your roles and products allow](../authentication.md#what-your-roles-and-products-allow).
+Tracking is a product of your workspace, so every Tracking query and the state stream need Tracking enabled for the workspace in Navixy Console. Otherwise, the request fails with `PRODUCT_DISABLED`. Enable the product in Console and request a new token. See [Roles and products](../authentication/roles-and-products.md).
 
 ## Purpose and capabilities
 

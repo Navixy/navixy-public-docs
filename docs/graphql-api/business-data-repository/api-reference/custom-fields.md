@@ -64,7 +64,7 @@ DEVICE custom-field value (primary-capable).
 | ----- | ---- | ----------- |
 | `code` | [Code](../../core-api-reference/common.md#code)! | The custom field code. |
 | `isDefault` | `Boolean!` | Whether this field is on by default for this entity. |
-| `device` | [Device](devices/README.md#device)! | The linked device. |
+| `device` | [Device](devices/README.md#device) | The linked device. `null` when the caller's role may not read it, with no error. `null` with a `NOT_FOUND` error at this path when the device was deleted without this value being cleared. |
 | `isPrimary` | `Boolean!` | Whether this device is the entity's primary DEVICE. |
 
 ---
@@ -80,7 +80,7 @@ Parameters for DEVICE field type.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `isRequired` | `Boolean!` | Whether a value is required for this field. |
-| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The device types a value may belong to. Empty means any device type is allowed. An element is null when the device type behind it no longer resolves — see `FieldParamsReference.refSubtypes`, which is resolved by the same loader. |
+| `refSubtypes` | [[CatalogItem](catalogs/catalog-items.md#catalogitem)]! | The device types a value may belong to. Empty means any device type is allowed. An element is null when the device type behind it no longer resolves, for the same reason as on `FieldParamsReference.refSubtypes`. |
 
 ---
 
@@ -657,8 +657,8 @@ Data for creating a custom field definition within its parent catalog item.
 
 A type carries at most **50 active** definitions, and at most **100 in total** — active and
 archived together. Archiving a field frees an active slot but not a total one: an archived
-definition accepts no new values, so it cannot grow, but it keeps its row and the values already
-stored under it, and only `delete` releases that. System-level fields owned by the entity type
+definition accepts no new values, so it cannot grow, but it still exists and keeps the values
+already stored under it, and only `delete` releases that. System-level fields owned by the entity type
 rather than by the type, such as the platform's own `geojson_data`, sit in a separate scope and
 never reduce either allowance. A type belongs to exactly one workspace, so the allowances are per
 type.
@@ -741,8 +741,8 @@ Data for restoring a previously archived custom field definition.
 
 Restoring makes the field active again, so it is refused with `VALIDATION_ERROR` when the type is
 already at the **active** limit stated on `CustomFieldDefinitionCreateData` — otherwise archiving
-would be a way around that limit. The total limit never refuses a restore: the row already exists
-and is already counted, so restoring moves it between the two buckets without adding to the total.
+would be a way around that limit. The total limit never refuses a restore: the definition already
+exists and is already counted, so restoring moves it between the two buckets without adding to the total.
 Restoring a definition that is already active is never refused either, since it adds no field to
 the type; it still bumps the definition's `version`.
 

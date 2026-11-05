@@ -31,7 +31,7 @@ Navixy checks a create or update request in this order, and stops at the first c
 2. Your roles. Without the `create`, `update`, or `delete` action on IoT Logic flows, the mutation fails with `PERMISSION_DENIED`.
 3. The flow. A graph that breaks a rule fails with a `VALIDATION_ERROR` that lists every violation.
 
-So a request with a malformed input returns `VALIDATION_ERROR` even when your roles don't allow the mutation. `flowCreate`, `flowUpdate`, and `flowDelete` can't return `null`, so a `PERMISSION_DENIED` error sets the whole `data` to `null`. See [What your roles and products allow](../authentication.md#what-your-roles-and-products-allow).
+So a request with a malformed input returns `VALIDATION_ERROR` even when your roles don't allow the mutation. `flowCreate`, `flowUpdate`, and `flowDelete` can't return `null`, so a `PERMISSION_DENIED` error sets the whole `data` to `null`. See [Roles and products](../authentication/roles-and-products.md).
 
 ## Structure of a flow validation error
 

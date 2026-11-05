@@ -1,7 +1,7 @@
 ---
 description: >-
   Reconstruct who changed an entity, what they changed, and when with
-  entityHistory and auditEvents queries.
+  myEntityHistory and myAuditEvents queries.
 tags:
   - guide
   - beta
@@ -15,35 +15,21 @@ By the end, you'll be able to read one entity's full change history, decode the 
 
 ## Prerequisites
 
-You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
+You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
 You also need an audited entity that has been changed at least once. The first step below shows how to find its ID, including when the entity was already deleted. See [Which entities are audited](investigating-changes-with-audit-logs.md#which-entities-are-audited) for the list of audited entities.
 
 ## How audit works
 
-The API writes every recorded change as an audit event, and events never change after they're written. Business Data Repository keeps events with no time limit. This section covers what one event holds, which entities produce events, and how to read the recorded values.
+Every product that records audit events uses the same event format, filter, and pagination. [Audit log](../../audit-log/README.md) explains them: what one event records, the event codes and operations, and how to filter and page. This section covers what is specific to Business Data Repository: which entities produce events and how to read their recorded values.
 
-### What one event records
+Both queries on this page, [myAuditEvents](../api-reference/audit.md#myauditevents) and [myEntityHistory](../api-reference/audit.md#myentityhistory), return only the events of the workspace your token names, with `product` set to `bdr`. They include the changes the platform made in the workspace on its own. To spot those, check whether `actor` is a `SystemActor`.
 
-An audit event describes the actor, the affected entity, the type of change, the before and after values, and the details of the request, so you can match the change against your own logs.
-
-| Field                           | Used for                                                                                                      |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `actor` / `actorId` | Who made the change: a `User`, an `ApiKey`, `Staff` at Navixy, or a `SystemActor`. `actor` is `null` when Navixy Console doesn't know the ID, and `actorId` still holds it. |
-| `aggregateType` / `aggregateId` | Which entity changed, as a type code plus its ID.                                                             |
-| `eventType`                     | The type of change: `CREATED`, `UPDATED`, `DELETED`, or `RESTORED`.                                           |
-| `product` | The product the event belongs to. Every event that Business Data Repository records has `bdr`. Billing records its own events with `billing` and serves them through [myAuditEvents](../../billing/api-reference/audit.md#myauditevents) and [myEntityHistory](../../billing/api-reference/audit.md#myentityhistory), which take the same filter. The two queries on this page return them too when you have access to the billing product. |
-| `eventData`                     | The changed fields with their old and new values, plus the entity's stored state before and after the change. |
-| `occurredAt`                    | When the change happened. It comes from the event ID, so ordering by time always matches ordering by ID.      |
-| `traceId`                       | The W3C trace ID of the request or other work that caused the change, for matching audit events with application logs. |
-| `ipAddress` / `userAgent`       | Where the request came from.                                                                                  |
-| `sourceType` | The kind of source the change came from: `INTERNAL` for a change the platform makes on its own, and `API` for a change that a caller of the API makes. Events recorded before `INTERNAL` was introduced have `API`. `AGENT`, reserved for a change that an AI client makes through the MCP server, isn't recorded. |
-| `workspace` | The workspace the change belongs to. Both queries return only events from your token's workspace, including changes the platform made in it on its own. To spot those, check whether `actor` is a `SystemActor`. |
 ### Which entities are audited
 
 Nine entity types are recorded. `aggregateType` contains one of these codes:
 
-| Code                      | Recorded event types                        |
+| Code                      | Recorded operations                         |
 | ------------------------- | ------------------------------------------- |
 | `asset`                   | `CREATED`, `UPDATED`, `DELETED`             |
 | `asset_group`             | `CREATED`, `UPDATED`, `DELETED`             |
@@ -55,7 +41,7 @@ Nine entity types are recorded. `aggregateType` contains one of these codes:
 | `schedule`                | `CREATED`, `UPDATED`, `DELETED`             |
 | `workspace`               | `CREATED`, `UPDATED`, `DELETED`, `RESTORED` |
 
-`catalog_item` covers every catalog item, such as asset types, tags, and catalogs. Archiving a custom field definition and restoring it with the `restore` action are both recorded as `UPDATED`, because neither deletes the definition. `RESTORED` is recorded only for a workspace that Navixy Console reactivates. Older events can also have the codes `integration` and `member`, which are no longer recorded.
+`catalog_item` covers every catalog item, such as asset types, tags, and catalogs. Archiving a custom field definition and restoring it with the `restore` action both have the operation `UPDATED`, because neither deletes the definition. Their event codes tell them apart: `custom_field_def_archived` and `custom_field_def_restored`. `RESTORED` is recorded only for a workspace that Console reactivates. Older events can also have the aggregate types `integration` and `member`, which are no longer recorded. [Audit event codes](../../audit-log/event-codes.md#business-data-repository) lists the event code of every change.
 
 {% hint style="info" %}
 Some changes aren't recorded in the audit log:
@@ -64,7 +50,7 @@ Some changes aren't recorded in the audit log:
 * Adding assets to a group and removing them. The group's `history` field records membership instead.
 * Device relations and device identifiers.
 * Links between devices and inventories. The device's `inventoryHistory` field records them instead.
-* User accounts and workspace memberships. Navixy Console manages them.
+* User accounts and workspace memberships. Console records changes to members in its own audit log.
 {% endhint %}
 
 ### What eventData contains
@@ -104,7 +90,7 @@ The keys in `changedFields` and in both states are the property names that Busin
 
 Which of the two you get depends on the operation, because a newly created entity has no "before" and a deleted one has no "after":
 
-| Operation | Before state | After state | Changed fields |
+| Operation | `before_state` | `after_state` | `changedFields`                               |
 | --------- | -------------- | ------------- | --------------------------------------------- |
 | `CREATE`  | absent         | present       | every field that has a value, with `"old": null` |
 | `UPDATE`  | present        | present       | only the fields that differ                   |
@@ -158,13 +144,13 @@ Response:
 
 The same pattern works for the other audited entity types: narrow down [devices](../api-reference/devices/#devices) by `identifierContains` (a fragment of an IMEI or serial number) or `titleContains` and use `titleContains` for [geo objects](../api-reference/geo-objects.md#geoobjects), [schedules](../api-reference/schedules.md#schedules), and [asset groups](../api-reference/assets/groups.md#assetgroups).
 
-If the entity was deleted, list queries no longer return it, but the audit trail still knows it. Search the deletions of its type and take `aggregateId` from the matching event:
+If the entity was deleted, list queries no longer return it, but the audit log still has its events. Search the deletions of its type by event code and take `aggregateId` from the matching event:
 
 ```graphql
 query FindDeletedAsset {
   bdr {
-    auditEvents(
-      filter: { aggregateTypes: ["asset"], eventTypes: [DELETED] }
+    myAuditEvents(
+      filter: { eventCodes: ["asset_deleted"] }
       first: 20
     ) {
       nodes {
@@ -185,7 +171,7 @@ The response lists one entry per deleted asset. `aggregateId` is the deleted ent
 {
   "data": {
     "bdr": {
-      "auditEvents": {
+      "myAuditEvents": {
         "nodes": [
           {
             "aggregateId": "019a6b2f-793e-807b-8001-415353540009",
@@ -205,12 +191,12 @@ Either way, the ID you found is the entity ID for the rest of the scenario.
 {% step %}
 ### Read the entity's history
 
-Start with [entityHistory](../api-reference/audit.md#entityhistory), which returns every audit event for one entity, newest first:
+Start with [myEntityHistory](../api-reference/audit.md#myentityhistory), which returns every audit event for one entity, newest first:
 
 ```graphql
 query TruckHistory {
   bdr {
-    entityHistory(
+    myEntityHistory(
       entityId: "019a6b2f-793e-807b-8001-415353540001"
       first: 20
     ) {
@@ -219,7 +205,7 @@ query TruckHistory {
       }
       nodes {
         id
-        eventType
+        eventCode
         occurredAt
         traceId
         actor {
@@ -238,12 +224,12 @@ Response:
 {
   "data": {
     "bdr": {
-      "entityHistory": {
+      "myEntityHistory": {
         "total": { "count": 3 },
         "nodes": [
           {
             "id": "019a6b2f-793e-807b-8001-415544540001",
-            "eventType": "UPDATED",
+            "eventCode": "asset_updated",
             "occurredAt": "2026-08-19T14:22:07.412Z",
             "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
             "actor": {
@@ -253,23 +239,23 @@ Response:
           },
           {
             "id": "019a6b2f-793e-807b-8001-415544540002",
-            "eventType": "UPDATED",
+            "eventCode": "asset_updated",
             "occurredAt": "2026-08-12T09:04:55.180Z",
+            "traceId": "1a2b3c4d5e6f70718293a4b5c6d7e8f9",
             "actor": {
               "id": "019a6b2f-793e-807b-8001-555345520001",
               "title": "Anna Weber"
-            },
-            "traceId": "1a2b3c4d5e6f70718293a4b5c6d7e8f9"
+            }
           },
           {
             "id": "019a6b2f-793e-807b-8001-415544540003",
-            "eventType": "CREATED",
+            "eventCode": "asset_created",
             "occurredAt": "2026-08-01T11:47:32.005Z",
+            "traceId": "aabbccddeeff00112233445566778899",
             "actor": {
               "id": "019a6b2f-793e-807b-8001-555345520002",
               "title": "Jonas Becker"
-            },
-            "traceId": "aabbccddeeff00112233445566778899"
+            }
           }
         ]
       }
@@ -278,7 +264,7 @@ Response:
 }
 ```
 
-The default ordering is `{ field: OCCURRED_AT, direction: DESC }`, so the most recent change is first. That's the one to look at.
+The most recent change is first. That's the one to look at.
 
 `actor` is the [Actor](../../core-api-reference/common.md#actor) interface. Select `id` and `title`. Its types have no other fields, so select `__typename` to tell a `User` from an `ApiKey`, `Staff`, or a `SystemActor`.
 {% endstep %}
@@ -286,14 +272,14 @@ The default ordering is `{ field: OCCURRED_AT, direction: DESC }`, so the most r
 {% step %}
 ### Identify the changes
 
-Add `eventData` to see what changed, field by field. Narrow down the response to the single event you're looking for with the `aggregateIds` and `eventTypes` filters:
+Add `eventData` to see what changed, field by field. Narrow down the response to the single event you're looking for with the `operations` filter:
 
 ```graphql
 query TruckChangeDetail {
   bdr {
-    entityHistory(
+    myEntityHistory(
       entityId: "019a6b2f-793e-807b-8001-415353540001"
-      filter: { eventTypes: [UPDATED] }
+      filter: { operations: [UPDATED] }
       first: 1
     ) {
       nodes {
@@ -316,7 +302,7 @@ Response:
 {
   "data": {
     "bdr": {
-      "entityHistory": {
+      "myEntityHistory": {
         "nodes": [
           {
             "occurredAt": "2026-08-19T14:22:07.412Z",
@@ -359,12 +345,12 @@ Response:
 {% step %}
 ### Widen the search to the entire workspace
 
-You now know who made the change. To find out what else that actor did around the same time, switch to [auditEvents](../api-reference/audit.md#auditevents), which covers the whole workspace rather than one entity, and narrow it down by actor and period:
+You now know who made the change. To find out what else that actor did around the same time, switch to [myAuditEvents](../api-reference/audit.md#myauditevents), which covers the whole workspace rather than one entity, and narrow it down by actor and period:
 
 ```graphql
 query ActorActivity {
   bdr {
-    auditEvents(
+    myAuditEvents(
       filter: {
         actorIds: ["019a6b2f-793e-807b-8001-555345520001"]
         from: "2026-08-19T14:00:00.000Z"
@@ -378,7 +364,7 @@ query ActorActivity {
       }
       nodes {
         occurredAt
-        eventType
+        eventCode
         aggregateType
         aggregateId
         traceId
@@ -394,26 +380,26 @@ Response:
 {
   "data": {
     "bdr": {
-      "auditEvents": {
+      "myAuditEvents": {
         "total": { "count": 3 },
         "nodes": [
           {
             "occurredAt": "2026-08-19T14:22:07.412Z",
-            "eventType": "UPDATED",
+            "eventCode": "asset_updated",
             "aggregateType": "asset",
             "aggregateId": "019a6b2f-793e-807b-8001-415353540001",
             "traceId": "4bf92f3577b34da6a3ce929d0e0e4736"
           },
           {
             "occurredAt": "2026-08-19T14:22:09.988Z",
-            "eventType": "DELETED",
+            "eventCode": "device_deleted",
             "aggregateType": "device",
             "aggregateId": "019a6b2f-793e-807b-8001-444556430021",
             "traceId": "4bf92f3577b34da6a3ce929d0e0e4736"
           },
           {
             "occurredAt": "2026-08-19T14:31:44.301Z",
-            "eventType": "CREATED",
+            "eventCode": "schedule_created",
             "aggregateType": "schedule",
             "aggregateId": "019a6b2f-793e-807b-8001-534348440001",
             "traceId": "9f8e7d6c5b4a39281706f5e4d3c2b1a0"
@@ -435,16 +421,16 @@ Note that the first two events share a `traceId`. That means they came from the 
 
 `traceId` is the [W3C trace context](https://www.w3.org/TR/trace-context/) trace ID from the request's `traceparent` header, when that header is present and well-formed. If the header is missing or malformed (wrong version, uppercase hex, an all-zero ID), the API generates a trace ID instead. Either way, you see the ID in the event's `traceId` and in `extensions.traceId` of any error the request raised. A generated ID has no match in your own logs, since your client never sent it.
 
-A change that the platform makes on its own has a `SystemActor` as `actor`, the source type `INTERNAL`, and the trace ID of what caused it, such as a request or a command from Navixy Console. A scheduled run, or a Console command sent without a trace ID, gets a generated trace ID.
+A change that the platform makes on its own has a `SystemActor` as `actor`, the source type `INTERNAL`, and the trace ID of what caused it, such as a request or a command from Console. A scheduled run, or a Console command sent without a trace ID, gets a generated trace ID.
 
-The `title` of a `SystemActor` names the service that made the change, such as `Console Workspace Projection` for a workspace that Navixy Console created or changed. Events recorded before each service had its own actor show `System`.
+The `title` of a `SystemActor` names the service that made the change, such as `Console Workspace Projection` for a workspace that Console created or changed. Events recorded before each service had its own actor show `System`.
 
 One API request can change several entities, and every event it produces has the same `traceId`. Filtering by it returns that whole set:
 
 ```graphql
 query OneRequestFootprint {
   bdr {
-    auditEvents(
+    myAuditEvents(
       filter: { traceId: "4bf92f3577b34da6a3ce929d0e0e4736" }
       orderBy: { field: OCCURRED_AT, direction: ASC }
       first: 100
@@ -453,7 +439,7 @@ query OneRequestFootprint {
         count
       }
       nodes {
-        eventType
+        eventCode
         aggregateType
         aggregateId
         eventData
@@ -463,7 +449,7 @@ query OneRequestFootprint {
 }
 ```
 
-When your client sends the `traceparent` header on the request, the same ID appears in your own logs and tracing tools, so it's the shared value that connects the audit trail to them. Use it in the other direction too: given a suspicious request in your logs, this query tells you exactly which entities it modified.
+When your client sends the `traceparent` header on the request, the same ID appears in your own logs and tracing tools, so it's the shared value that connects the audit log to them. Use it in the other direction too: given a suspicious request in your logs, this query tells you exactly which entities it modified.
 {% endstep %}
 {% endstepper %}
 
@@ -471,30 +457,18 @@ When your client sends the `traceparent` header on the request, the same ID appe
 You now have the change history of one entity with its before and after values, the changes made across the whole workspace in the period, and the trace IDs that connect each audit event to your own application logs.
 {% endhint %}
 
-## Filtering
+## Filtering, ordering, and pagination
 
-[AuditEventFilter](../api-reference/audit.md#auditeventfilter) applies to both queries. Values within one field are combined with OR, and separate fields are combined with AND. Empty arrays are ignored.
-
-| Field            | Type                | Use for                                                       |
-| ---------------- | ------------------- | ------------------------------------------------------------- |
-| `actorIds` | `[ID!]` | Restricting to specific actors, by the `actorId` of their events |
-| `aggregateTypes` | `[Code!]`           | Restricting to entity types, such as `["asset", "device"]`    |
-| `aggregateIds`   | `[ID!]`             | Restricting to specific entity IDs                            |
-| `eventTypes`     | `[AuditEventType!]` | Restricting to `CREATED`, `UPDATED`, `DELETED`, or `RESTORED` |
-| `sourceTypes` | `[SourceType!]` | Restricting to changes made through the API (`API`) or by the platform (`INTERNAL`) |
-| `products` | `[Code!]` | Restricting to products, such as `["bdr"]`. Without it, both queries read `bdr`, and `billing` when you have access to the billing product. A product that records no audit events is refused with `VALIDATION_ERROR` |
-| `traceId`        | `String`            | Grouping every change made by one request                     |
-| `from` / `to`    | `DateTime`          | Limiting the period                                           |
+Both queries accept the filter, order, and pagination that every audit query shares, described in [Filtering, ordering, and pagination](../../audit-log/README.md#filtering-ordering-and-pagination). The `products` filter accepts only `bdr` here.
 
 For example, to see every deletion of an asset or a device in one day, run this query:
 
 ```graphql
 query DeletionsToday {
   bdr {
-    auditEvents(
+    myAuditEvents(
       filter: {
-        aggregateTypes: ["asset", "device"]
-        eventTypes: [DELETED]
+        eventCodes: ["asset_deleted", "device_deleted"]
         from: "2026-08-19T00:00:00.000Z"
         to: "2026-08-20T00:00:00.000Z"
       }
@@ -516,40 +490,13 @@ query DeletionsToday {
 }
 ```
 
-## Ordering and pagination
-
-`OCCURRED_AT` is the only field you can order by, in either direction. Both queries return an [AuditEventConnection](../api-reference/audit.md#auditeventconnection) and follow the standard cursor pagination described in [Pagination](../../pagination.md):
-
-```graphql
-query AuditPage {
-  bdr {
-    auditEvents(
-      first: 50
-      after: "T0NDVVJSRURfQVQ6REVTQzoyMDI2LTA4LTE5VDE0OjIyOjA3LjQxMlp8MDE5YTZiMmYtNzkzZS04MDdiLTgwMDEtNDE1NTQ0NTQwMDAx"
-    ) {
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-      nodes {
-        id
-        eventType
-        occurredAt
-      }
-    }
-  }
-}
-```
-
-Request `total { count }` only when you need to show a total, because counting every matching event is a second database query in addition to fetching the page. To move to the next page, check `pageInfo.hasNextPage` instead. It tells you whether another page exists and costs nothing extra.
-
-You can also fetch a single audit event through the `node` query, since `AuditEvent` implements [Node](../../core-api-reference/common.md#node):
+You can also fetch a single Business Data Repository audit event by its ID through the `node` query:
 
 ```graphql
 query OneAuditEvent {
   node(id: "019a6b2f-793e-807b-8001-415544540001") {
     ... on AuditEvent {
-      eventType
+      eventCode
       occurredAt
       eventData
     }
@@ -559,26 +506,21 @@ query OneAuditEvent {
 
 ## Error handling
 
-Audit queries are read-only, so they return the standard errors documented in [Error handling](../../error-handling.md).
-
-| Error                                                                | Cause                                                                                  | How to resolve it                                                                |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [400 Validation error](../../error-handling.md#validation-error-400) | `entityId` isn't a valid ID, or `first` or `last` is out of range                       | Check the ID format, and keep `first` and `last` between 1 and 100                        |
-| `UNAUTHORIZED` ([401](../../error-handling.md#error-codes))          | The token is missing, malformed, expired, or issued by another identity service. A request with no token gets HTTP status 200. | Re-authenticate, see [Authentication](../../authentication.md)                   |
-| [400 Validation error](../../error-handling.md#validation-error-400) | `products` names a product that records no audit events, such as `tracking` | Name only `bdr` or `billing` |
+Audit queries return the errors described in [Audit log errors](../../audit-log/README.md#audit-log-errors). A `products` filter that names any product other than `bdr` is refused with `VALIDATION_ERROR`.
 
 ### How to handle an empty result set
 
 An empty `nodes` array is a normal response, not an error. Work through the likely causes in this order:
 
-1. The filter matches no recorded value. Events have only the source types `API` and `INTERNAL`, so a `sourceTypes` filter without either of them, for example `[AGENT]`, returns nothing. `RESTORED` is recorded only for a workspace.
+1. The filter matches no recorded value. An event code in `eventCodes` matches only when its letter case is the same as the recorded code, and a code that Business Data Repository never records matches nothing. `RESTORED` is recorded only for a workspace.
 2. The change isn't audited. Only the nine types listed above produce events, and some changes aren't recorded at all, such as a change to a user account or an asset group membership. See [Which entities are audited](investigating-changes-with-audit-logs.md#which-entities-are-audited).
 3. The period is wrong. `from` and `to` are compared against `occurredAt` in UTC. Make sure your values are in UTC too.
-4. The entity belongs to another workspace. `entityHistory` only searches the workspace that your token names, so an entity from a different workspace returns nothing.
+4. The entity belongs to another workspace. `myEntityHistory` only searches the workspace that your token names, so an entity from a different workspace returns nothing.
 
 ## See also
 
-* [Audit](../api-reference/audit.md): Complete reference for all audit operations and types
-* [Error handling](../../error-handling.md): Understand error structure, codes, and common error scenarios
+* [Audit log](../../audit-log/README.md): How the audit log works in every product, and the shared filter and errors
+* [Audit event codes](../../audit-log/event-codes.md): The codes of every product with their operations
+* [Audit](../api-reference/audit.md): Complete reference for the Business Data Repository audit queries
 * [Pagination](../../pagination.md): Page through large result sets with cursors
 * [Optimistic locking](../../optimistic-locking.md): Prevent concurrent updates from overwriting each other with `version`

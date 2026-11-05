@@ -19,7 +19,7 @@ This guide continues the FleetOps Ltd scenario from [Managing device records and
 
 ## Prerequisites
 
-You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
+You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
 ## Example scenario: Managing warehouse stock
 

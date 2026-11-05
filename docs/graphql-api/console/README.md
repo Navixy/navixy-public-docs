@@ -11,7 +11,7 @@ tags:
 
 **Console** is the product that administers your organizations: their workspaces, their members, and which products each workspace runs. It's one of the products served by [Navixy GraphQL API](../). This documentation is for Navixy users who call the API for their own workspace to see which products it has, to turn a product on or off, and to see which organizations and workspaces they can reach. Navixy Console decides what you may see and do, exactly as it decides in its own interface, and the API relays its answer.
 
-All Console queries are nested under the `console` field of the `Query` type and Console mutations under the `console` field of the `Mutation` type. Authentication and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication.md) and [Error handling](../error-handling.md) to learn that. Console's lists page by rules of their own: see [How these connections paginate](api-reference/README.md#how-these-connections-paginate). For the endpoint and request headers, see [Getting started](../getting-started.md).
+All Console queries are nested under the `console` field of the `Query` type and Console mutations under the `console` field of the `Mutation` type. Authentication and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication/README.md) and [Error handling](../error-handling.md) to learn that. Console's lists page by rules of their own: see [How these connections paginate](api-reference/README.md#how-these-connections-paginate). For the endpoint and request headers, see [Getting started](../getting-started.md).
 
 ## Purpose and capabilities
 
@@ -22,6 +22,7 @@ Console API enables you to:
 * View the products of a workspace: which ones your plan covers, which are enabled, and what you can do with them
 * Enable or disable a product for a workspace and check that the change went through
 * View the product catalog of Navixy Console
+* Read the audit events of your organization: who changed it, its workspaces, members, and API keys, and when
 
 Your access token names one of your organizations and one of its workspaces. The organization and workspace lists cover every organization you belong to, and you can pass an organization ID to narrow them. The product operations and the member list act only in the organization named by your token, so to change products in another organization, you need a token issued for it.
 
@@ -55,6 +56,7 @@ The [Console API reference](api-reference/) documents the operations and types, 
 * [Workspaces](api-reference/workspaces.md) documents the workspaces you can reach.
 * [Members](api-reference/members.md) documents the members of your organization.
 * [Products](api-reference/products.md) documents the products of a workspace, the product catalog, and the changes that enable and disable a product.
+* [Audit](api-reference/audit.md) documents the queries that read the audit events that Console records.
 
 For the types that Console shares with the other products and for an index of the whole API, see [Core API reference](../core-api-reference/).
 

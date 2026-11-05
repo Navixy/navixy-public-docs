@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myUsageMetricSubmissions](../api-reference/submission.md#myusagemetricsubmissions), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myUsageMetricSubmissions](../api-reference/submission.md#myusagemetricsubmissions), read that claim. Without it, they refuse the request. See [Authentication](../../authentication/README.md#how-the-api-chooses-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, count the workspace's usage submissions with this query:
 
@@ -359,4 +359,4 @@ A request without a workspace claim returns the same error as on every Billing f
 - [Choosing a plan and subscribing](choosing-a-plan-and-subscribing.md): See which metrics a plan prices and what usage it includes.
 - [Reading balance and statement](reading-balance-and-statement.md): Read the workspace's prepaid balance and the entries that changed it.
 - [Billing errors](../errors.md): Learn how the Billing operations report a missing entity and which fields their errors have.
-- [Authentication](../../authentication.md): Learn how the token names the workspace that every operation acts in.
+- [Authentication](../../authentication/README.md): Learn how the token names the workspace that every operation acts in.

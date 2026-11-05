@@ -374,7 +374,7 @@ The queries on this page return few errors. These are the common ones:
 | --- | --- | --- |
 | `VALIDATION_ERROR` | A list of IDs is too long: more than 1,000 different devices in `deviceAttributes` or in the `deviceFlowLinks` filter, or more than 10 different devices in `flowDebugValues`. Or a page asks for more than 100 items | Split the request into smaller ones. |
 | `VALIDATION_ERROR` | An ID in the request isn't a valid ID | Correct the ID. |
-| `PERMISSION_DENIED` | Your roles don't have the `read` action on IoT Logic flows | Ask an administrator for a role with the action. See [Authentication](../../authentication.md). |
+| `PERMISSION_DENIED` | Your roles don't have the `read` action on IoT Logic flows | Ask an administrator for a role with the action. See [Authentication](../../authentication/README.md). |
 
 A flow that doesn't exist in your workspace isn't an error: `flow` and `flowDebugValues` return `null`, and devices that you can't read are left out of the results.
 

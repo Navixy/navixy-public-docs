@@ -15,7 +15,7 @@ Every operation on this page reads the data of the workspace named by your acces
 
 ## Prerequisites
 
-You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myBalance](../api-reference/balance.md#mybalance) and [myBalanceEntries](../api-reference/balance.md#mybalanceentries), read that claim. Without it, they refuse the request. See [Authentication](../../authentication.md#how-the-api-picks-your-workspace) to learn how the API identifies the workspace.
+You need an access token whose `workspace_id` claim names the workspace. The Billing [my\* operations](../README.md#purpose-and-capabilities), the operations named with the prefix `my` such as [myBalance](../api-reference/balance.md#mybalance) and [myBalanceEntries](../api-reference/balance.md#mybalanceentries), read that claim. Without it, they refuse the request. See [Authentication](../../authentication/README.md#how-the-api-chooses-your-workspace) to learn how the API identifies the workspace.
 
 To check that the token names a workspace and that Billing accepts it, read the amount on the balance with this query:
 
@@ -351,7 +351,7 @@ A request without a workspace claim returns this error on every Billing field it
 
 ### How to handle a missing workspace claim
 
-Request a token issued for the workspace whose billing you read. A token without a `workspace_id` claim is refused. See [How the API picks your workspace](../../authentication.md#how-the-api-picks-your-workspace).
+Request a token issued for the workspace whose billing you read. A token without a `workspace_id` claim is refused. See [How the API chooses your workspace](../../authentication/README.md#how-the-api-chooses-your-workspace).
 
 ## See also
 
@@ -359,5 +359,5 @@ Request a token issued for the workspace whose billing you read. A token without
 * [Reading invoices](reading-invoices.md): Read the invoices behind the `INVOICE` entries, line by line.
 * [Choosing a plan and subscribing](choosing-a-plan-and-subscribing.md): List the plans a workspace may take and subscribe to one.
 * [Billing errors](../errors.md): Learn how the Billing operations report a missing entity and which fields their errors have.
-* [Authentication](../../authentication.md): Learn how the token names the workspace that every operation acts in.
+* [Authentication](../../authentication/README.md): Learn how the token names the workspace that every operation acts in.
 * [Pagination](../../pagination.md): Page through a long statement with cursors.

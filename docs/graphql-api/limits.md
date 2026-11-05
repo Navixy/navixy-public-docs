@@ -24,7 +24,7 @@ The request limits (complexity, depth, and rate) and the subscription limits app
 
 ### Query complexity
 
-A query can request at most 200 fields. Every field costs 1 plus the cost of its children, so the complexity of a query is its total field count. The count doesn't depend on page size: a list query that returns 100 items costs the same as one that returns a single item.
+A query can request at most 200 fields. Every field costs 1 plus the cost of its children, so the complexity of a query is its total field count. One exception: an audit query whose filter has a non-blank `*Contains` text adds 50. The count doesn't depend on page size: a list query that returns 100 items costs the same as one that returns a single item.
 
 When a query goes over the limit, the API rejects it before execution:
 
@@ -83,7 +83,7 @@ The server sends a `ping` every 15 seconds. Client libraries reply to it with a 
 
 ## Pagination limits
 
-The `first` and `last` arguments default to 20 items and accept at most 100. The Console and IAM lists default to 50 items, also with at most 100. Requesting more than 100 items doesn't cap the page: it returns a [validation error](error-handling.md#validation-error-400). See [Pagination](pagination.md) for how to page through larger result sets with cursors.
+The `first` and `last` arguments default to 20 items and accept at most 100. The Console and IAM lists default to 50 items, also with at most 100, except their audit queries, which default to 20. Requesting more than 100 items doesn't cap the page: it returns a [validation error](error-handling.md#validation-error-400). See [Pagination](pagination.md) for how to page through larger result sets with cursors.
 
 ## Input value limits
 

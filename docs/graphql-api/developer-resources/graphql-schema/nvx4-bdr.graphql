@@ -1,714 +1,4 @@
-# =============================================================================
-# NAVIXY 4 - GraphQL Schema — Business Data Repository
-# Version: 0.16.27
-# =============================================================================
-#
-# TABLE OF CONTENTS
-# -----------------
-# 1. API Overview & Conventions
-# 2. Optimistic Locking
-# 3. Localization
-# 4. Error Handling (RFC 9457)
-# 5. Distributed Tracing & Source Type
-# 6. Directives
-# 7. Scalar Types
-# 8. Enums
-# 9. Interfaces
-# 10. Pagination Types
-# 11. Catalog Item Types
-# 12. Workspace
-# 13. Actors
-# 14. Business Entities
-# 15. Custom Fields
-# 16. Audit
-# 17. Filter & Order Inputs
-# 18. Mutation Inputs
-# 19. Query
-# 20. Mutation
-# 21. Subscription
-#
-# =============================================================================
-
-# =============================================================================
-# 1. API OVERVIEW & CONVENTIONS
-# =============================================================================
-#
-# ENTITY IDENTIFIERS (ID)
-# -----------------------
-# All entity IDs are opaque strings in UUID format.
-# Example: "019a6a3f-793e-807b-8001-555345529b44"
-#
-# Implementation note: internally, IDs are UUID v8 (RFC 9562) carrying an embedded entity type,
-# which is what lets Query.node(id) resolve an entity from the identifier alone. The layout itself
-# is not part of this contract and may change without notice.
-#
-# Clients should treat IDs as opaque strings and not parse them.
-# Use Query.node(id) or Query.nodes(ids) for entity resolution.
-#
-# Ids Console mints are `ID` too, in the same layout with types of their own: an organization's id
-# (`Workspace.organizationId`, `AccessibleOrganization.id`, and the organization fields of the
-# `console` and `iam` namespaces), a workspace id as Console lists it (`AccessibleWorkspace.id`), and
-# a workspace operation's id in the `console` namespace. So is a device command's id
-# (`TrackingEvent.commandId`). Query.node(id) resolves an organization id among the caller's own
-# organizations and a workspace id to `Workspace`; it answers null for an operation or a command id.
-#
-# `UUID` (nvx4-common.graphql) carries the ids that are not entity ids of this API — the actor ids
-# of the `console` and `iam` namespaces, which node(id:) cannot resolve — and keys a caller chooses,
-# such as `idempotencyKey`.
-#
-# CATALOG SYSTEM (Dictionaries)
-# ----------------------------
-# Catalogs are dictionaries/reference data used throughout the system.
-# Three types of catalog items by origin:
-#
-#   SYSTEM              - Predefined by Navixy, immutable, available to all
-#   WORKSPACE        - Created by specific workspace
-#   PRESET              - Created by BDR in a workspace when it was activated; base asset types only
-#
-# Catalog items support:
-#   - Hierarchical structures (parent/children) for some types
-#   - Localization (title, description)
-#   - Custom display properties (icon, colors)
-#   - Soft delete
-#
-# HIERARCHICAL CATALOG ITEMS
-# --------------------------
-# Some catalog items support parent-child hierarchy (e.g., UserCatalogItem).
-# These implement HierarchicalCatalogItem interface.
-#
-# CONTENT NEGOTIATION
-# -------------------
-# Request:
-#   Content-Type: application/json
-#   Accept: application/graphql-response+json
-#
-# Response:
-#   Content-Type: application/graphql-response+json
-#
-# The response takes the first Accept entry that is application/graphql-response+json or
-# application/json, and application/json when there is none. The 401 and 403 from the
-# gateway's security filters and the 429 from its rate limiter are written before GraphQL runs
-# and follow the same rule; an Accept that does not parse gets them as application/json.
-#
-# A request body that is not a GraphQL request (not JSON, not an object, no `query`, or
-# `variables` or `extensions` that are not objects) is refused with 400 and VALIDATION_ERROR
-# before GraphQL runs, with or without a token; its media type follows the same rule.
-#
-# INTROSPECTION
-# -------------
-# Introspection queries require authentication: `__schema` and `__type` without a token
-# fail with UNAUTHORIZED. `__typename` stays open. A test stand may answer `__schema` and
-# `__type` without a token, so a schema explorer loads there; production does not.
-#
-# RATE LIMITING & QUERY COMPLEXITY
-# --------------------------------
-# API enforces limits on:
-#   - Request rate (per actor, per IP)
-#   - Query depth (max nesting level)
-#   - Query complexity (weighted field cost)
-#
-# Exceeding limits returns RATE_LIMITED error (429).
-# Specific limits documented in API portal.
-#
-# FILTERING & SORTING
-# -------------------
-# Filter semantics:
-#   - Within a field: OR (any value matches)
-#   - Between fields: AND (all conditions must match)
-#   - Empty array / null: ignored (no filtering on this field)
-#
-# Example:
-#   filter: { typeIds: ["a", "b"], statusIds: ["active"] }
-#   → (type IN ['a', 'b']) AND (status = 'active')
-#
-# Sorting:
-#   - Text fields use natural sorting (ICU collation, case-insensitive)
-#   - NULL values: sorted LAST for ASC, FIRST for DESC
-#   - Custom fields can be used for sorting via `customFieldCode` parameter
-#
-# Note: Complex filtering with AND/OR/NOT operators is not currently supported.
-#
-# VERSIONING & DEPRECATION
-# ------------------------
-# This API follows evolutionary versioning without breaking changes.
-#
-# Deprecation process:
-#   1. Field marked with @deprecated(reason: "Use X instead. Removal: YYYY-QN")
-#   2. Deprecation announced in changelog with migration guide
-#   3. Minimum deprecation period: 6 months
-#   4. Field removed only after deprecation period
-#
-# Breaking changes:
-#   Breaking changes are avoided. If unavoidable:
-#   - New field/type introduced alongside old
-#   - Old field deprecated with migration period
-#   - Major version bump in schema version comment
-#
-# =============================================================================
-
-# =============================================================================
-# 2. OPTIMISTIC LOCKING
-# =============================================================================
-#
-# This API uses version fields for optimistic concurrency control.
-# This prevents lost updates when multiple clients modify the same entity.
-#
-# HOW IT WORKS:
-#
-#   # 1. Query returns version
-#   query {
-#     device(id: "...") {
-#       id
-#       version    # -> 5
-#       title
-#     }
-#   }
-#
-#   # 2. Mutation requires version in input
-#   mutation {
-#     deviceUpdate(input: {
-#       id: "..."
-#       version: 5          # <- required for update
-#       title: "New name"
-#     }) {
-#       device {
-#         id
-#         version          # -> 6 (incremented)
-#         title
-#       }
-#     }
-#   }
-#
-# OPERATIONS:
-#
-#   | Operation | version in input | Behavior                              |
-#   |-----------|------------------|---------------------------------------|
-#   | Create    | Not required     | Returns version: 1                    |
-#   | Update    | Optional         | If provided: 409 Conflict if mismatch |
-#   |           |                  | If omitted: uses current DB version   |
-#   | Delete    | Optional         | If provided: 409 Conflict if mismatch |
-#   |           |                  | If omitted: deletes without check     |
-#
-# VERSION MISMATCH:
-#   If version is provided and the entity has been modified since you fetched it:
-#   - HTTP Status: 200 (per GraphQL-over-HTTP spec)
-#   - Error code: CONFLICT
-#   - Error extensions include: status=409, expectedVersion, currentVersion
-#   If version is omitted, the client is not protected against stale reads
-#   (e.g., editing a form while another user modifies the same entity).
-#   Concurrent server-side modifications are still detected.
-#
-#   CONFLICT is not always a version mismatch. A rolled-back concurrent write, a concurrent
-#   device reassignment and a data-integrity conflict are all reported as CONFLICT with neither
-#   expectedVersion nor currentVersion, and code alone does not say which. So:
-#   with those two fields, re-read the entity and retry with its current version; without them,
-#   retry once after a short backoff, then stop and report the failure with its traceId.
-#   A CONFLICT carrying `dependency` is that system refusing the request in its current state
-#   (Console's PRODUCT_NOT_COVERED, say, in `dependencyCode`): do not retry it unchanged.
-#
-# =============================================================================
-#
-# RELATIONSHIP COMMANDS:
-#   Mutations that manage relationships and assignments (link/unlink/assign/revoke)
-#   never require or check `version` — the relationship row has none.
-#
-#   Two of them are also idempotent commands:
-#
-#   - Repeated `add` when the relationship already exists → success (no-op)
-#   - Repeated `remove` when the relationship is absent → success (no-op)
-#
-#   Idempotent: assetGroupItemsAdd, assetGroupItemsRemove.
-#
-#   NOT idempotent — these six reject the repeat instead of treating it as a no-op:
-#   deviceInventoryLink, deviceInventoryUnlink, deviceIdentifierAdd, deviceIdentifierRemove,
-#   deviceRelationCreate, deviceRelationRemove. Each names its error code on its own field
-#   description; retry logic must not assume a repeated call against one of them is safe.
-#
-#   What puts a mutation in this section is that the row it manages carries no `version` of its
-#   own.
-
-# =============================================================================
-# 3. LOCALIZATION
-# =============================================================================
-#
-# All localizable fields (title, description, label) are automatically
-# resolved based on the locale specified in HTTP headers.
-#
-# REQUEST HEADERS:
-#   Accept-Language: es-419
-#   -- or --
-#   X-Locale: es-419
-#
-# X-Locale takes precedence over Accept-Language if both are present.
-#
-# FALLBACK BEHAVIOR:
-#   If translation for requested locale is not found, English (en) is returned.
-#
-# NOT YET HONOURED:
-#   No backend code reads these headers yet, so the description above is the target behaviour, not
-#   the current one.
-#
-# =============================================================================
-
-# =============================================================================
-# 4. ERROR HANDLING
-# =============================================================================
-#
-# This API follows the GraphQL specification (2024) for error handling and
-# enriches error responses with RFC 9457 "Problem Details for HTTP APIs"
-# in the extensions field.
-#
-# -----------------------------------------------------------------------------
-# GRAPHQL ERROR RESPONSE FORMAT (per specification)
-# -----------------------------------------------------------------------------
-#
-# All errors are returned in the standard `errors` array. Each error object
-# contains the following fields as defined by the GraphQL specification:
-#
-#   {
-#     "errors": [
-#       {
-#         "message": "Human-readable error description",
-#         "locations": [{ "line": 3, "column": 5 }],
-#         "path": ["bdr", "deviceUpdate", "device", "title"],
-#         "extensions": { ... }
-#       }
-#     ],
-#     "data": { ... } | null
-#   }
-#
-# FIELD DEFINITIONS:
-#
-#   message    - Required. A human-readable description of the error.
-#                Should NOT be parsed programmatically; use extensions.code instead.
-#
-#   locations  - Optional. Array of locations in the GraphQL document where
-#                the error occurred. Each location has:
-#                - line: Line number (1-indexed)
-#                - column: Column number (1-indexed)
-#
-#   path       - Optional. The path to the field that caused the error.
-#                For execution errors, this is the path from root to the
-#                field that raised the error. Array elements use 0-based index.
-#                The first segment is always the module namespace the field was
-#                reached through (e.g. "bdr", "billing").
-#                Example: ["bdr", "devices", "edges", 0, "node", "customFields"]
-#
-#   extensions - Optional but ALWAYS provided by this API. Contains structured
-#                error details following RFC 9457 format.
-#
-# -----------------------------------------------------------------------------
-# ERROR EXTENSIONS (RFC 9457 Problem Details)
-# -----------------------------------------------------------------------------
-#
-# The extensions object follows RFC 9457 structure with additional context:
-#
-#   {
-#     "extensions": {
-#       // RFC 9457 standard fields
-#       "type": "https://api.navixy.com/errors/not-found",
-#       "title": "Resource Not Found",
-#       "status": 404,
-#       "detail": "Device with ID '019a6a3f-...' does not exist",
-#       "instance": "/graphql",
-#
-#       // API-specific fields
-#       "code": "NOT_FOUND",
-#       "traceId": "0af7651916cd43dd8448eb211c80319c",
-#       "timestamp": "2024-01-15T10:30:00.123Z",
-#
-#       // Context-specific fields (vary by error type)
-#       "field": "email",
-#       "entityType": "Device",
-#       "entityId": "019a6a3f-793e-807b-8001-555345529b44",
-#       "expectedVersion": 5,
-#       "currentVersion": 7,
-#       "constraint": "uq_device_identifier",
-#       "allowedValues": ["ACTIVE", "INACTIVE", "MAINTENANCE"]
-#     }
-#   }
-#
-# EXTENSIONS FIELD REFERENCE:
-#
-#   | Field           | Type     | Description                                    |
-#   |-----------------|----------|------------------------------------------------|
-#   | type            | String!  | RFC 9457 problem type URI (stable identifier)  |
-#   | title           | String!  | Short human-readable title (stable per type)   |
-#   | status          | Int!     | HTTP status code equivalent                    |
-#   | detail          | String   | Specific explanation for this occurrence       |
-#   | instance        | String   | Request path (always "/graphql" for this API)  |
-#   | code            | String!  | Machine-readable error code for client logic   |
-#   | traceId         | String   | W3C Trace ID for distributed tracing (32 hex)  |
-#   | timestamp       | String   | ISO 8601 timestamp when error occurred         |
-#   | field           | String   | Field name for validation errors, or a relayed |
-#   |                 |          | refusal's own field name, translated back to   |
-#   |                 |          | this API's own name before being relayed       |
-#   | entityType      | String   | Entity type code for entity-related errors, or |
-#   |                 |          | a relayed refusal's own type, when it names    |
-#   |                 |          | one this API exposes; else this API's own type |
-#   | entityId        | String   | Entity ID for entity-related errors, or a      |
-#   |                 |          | relayed refusal's own entity id, given only    |
-#   |                 |          | alongside a relayed entityType                 |
-#   | expectedVersion | Int      | Expected version, on version-conflict CONFLICT |
-#   | currentVersion  | Int      | Actual version, on version-conflict CONFLICT   |
-#   | constraint      | String   | Database constraint name for DUPLICATE errors, |
-#   |                 |          | or a relayed refusal's own constraint name     |
-#   | allowedValues   | [String] | Valid options for enum validation errors, or a |
-#   |                 |          | relayed refusal's own list of allowed values   |
-#   | dependency      | String   | Unreachable system, on SERVICE_UNAVAILABLE;    |
-#   |                 |          | or the system whose refusal is relayed         |
-#   | dependencyCode  | String   | That system's own code, on a relayed refusal   |
-#   | productCode     | String   | The product not enabled, on PRODUCT_DISABLED   |
-#   | blockers        | [Object] | On IN_USE: { entityType, path, ids } per       |
-#   |                 |          | holder type and path, the first five in a      |
-#   |                 |          | stable order; path is the holder's field that  |
-#   |                 |          | points at the target; ids only those the       |
-#   |                 |          | caller may read                                |
-#   | hasMoreBlockers | Boolean  | On IN_USE: true when blockers left out some    |
-#   |                 |          | holder types and paths past the first five     |
-#
-# -----------------------------------------------------------------------------
-# ERROR CODES REFERENCE
-# -----------------------------------------------------------------------------
-#
-#   | Code                | Type URI                    | Status | Description                       |
-#   |---------------------|-----------------------------|--------|-----------------------------------|
-#   | UNAUTHORIZED        | .../errors/unauthorized     | 401    | Missing or invalid authentication |
-#   | PERMISSION_DENIED   | .../errors/forbidden        | 403    | Insufficient permissions          |
-#   | PRODUCT_DISABLED    | .../errors/product-disabled | 403    | Product not enabled in Console    |
-#   |                     |                             |        | for the caller's workspace        |
-#   | NOT_FOUND           | .../errors/not-found        | 404    | Entity does not exist             |
-#   | VALIDATION_ERROR    | .../errors/validation       | 400    | Input validation failed           |
-#   | CONFLICT            | .../errors/conflict         | 409    | Version, concurrency, integrity,  |
-#   |                     |                             |        | or a relayed system's state rule  |
-#   | DUPLICATE           | .../errors/duplicate        | 409    | Unique constraint violation       |
-#   | IN_USE              | .../errors/in-use           | 409    | Delete refused while live         |
-#   |                     |                             |        | references remain; see blockers   |
-#   | RATE_LIMITED        | .../errors/rate-limited     | 429    | Too many requests                 |
-#   | QUERY_TOO_COMPLEX   | .../errors/query-too-complex| 400    | Query exceeds complexity limit    |
-#   | QUERY_TOO_DEEP      | .../errors/query-too-deep   | 400    | Query exceeds depth limit         |
-#   | INTERNAL_ERROR      | .../errors/internal         | 500    | Unexpected server error           |
-#   | SERVICE_UNAVAILABLE | .../errors/service-unavailable | 503 | Downstream service unavailable    |
-#
-#   Base URI: https://api.navixy.com — these are stable problem-type identifiers, not documentation
-#   links. The human-readable docs live at https://www.navixy.com/docs/navixy-graphql-api.
-#
-# -----------------------------------------------------------------------------
-# ERROR EXAMPLES
-# -----------------------------------------------------------------------------
-#
-# EXAMPLE 1: Entity not found
-#
-#   Request:
-#     query { bdr { device(id: "non-existent-id") { title } } }
-#
-#   Response:
-#     {
-#       "errors": [{
-#         "message": "Device not found",
-#         "path": ["bdr", "device"],
-#         "locations": [{ "line": 1, "column": 15 }],
-#         "extensions": {
-#           "type": "https://api.navixy.com/errors/not-found",
-#           "title": "Resource Not Found",
-#           "status": 404,
-#           "detail": "Device with ID 'non-existent-id' does not exist",
-#           "code": "NOT_FOUND",
-#           "entityType": "Device",
-#           "entityId": "non-existent-id",
-#           "traceId": "0af7651916cd43dd8448eb211c80319c"
-#         }
-#       }],
-#       "data": { "bdr": { "device": null } }
-#     }
-#
-# EXAMPLE 2: Validation error
-#
-#   Request:
-#     mutation { bdr { deviceCreate(input: { title: "", typeId: "..." }) { device { id } } } }
-#
-#   Response:
-#     {
-#       "errors": [{
-#         "message": "Validation failed: title must not be empty",
-#         "path": ["bdr", "deviceCreate"],
-#         "locations": [{ "line": 1, "column": 18 }],
-#         "extensions": {
-#           "type": "https://api.navixy.com/errors/validation",
-#           "title": "Validation Error",
-#           "status": 400,
-#           "detail": "Field 'title' must not be empty",
-#           "code": "VALIDATION_ERROR",
-#           "field": "input.title",
-#           "traceId": "1bf7651916cd43dd8448eb211c80319d"
-#         }
-#       }],
-#       "data": { "bdr": { "deviceCreate": null } }
-#     }
-#
-# EXAMPLE 3: Optimistic locking conflict
-#
-#   Request:
-#     mutation { bdr { deviceUpdate(input: { id: "...", version: 5, title: "New" }) { ... } } }
-#
-#   Response:
-#     {
-#       "errors": [{
-#         "message": "Conflict: entity was modified by another request",
-#         "path": ["bdr", "deviceUpdate"],
-#         "locations": [{ "line": 1, "column": 18 }],
-#         "extensions": {
-#           "type": "https://api.navixy.com/errors/conflict",
-#           "title": "Concurrent Modification Conflict",
-#           "status": 409,
-#           "detail": "Device was modified. Expected version 5, current version 7",
-#           "code": "CONFLICT",
-#           "entityType": "Device",
-#           "entityId": "019a6a3f-793e-807b-8001-555345529b44",
-#           "expectedVersion": 5,
-#           "currentVersion": 7,
-#           "traceId": "2cf7651916cd43dd8448eb211c80319e"
-#         }
-#       }],
-#       "data": { "bdr": { "deviceUpdate": null } }
-#     }
-#
-# EXAMPLE 4: Duplicate constraint violation
-#
-#   Request:
-#     mutation { bdr { deviceIdentifierAdd(input: { deviceId: "...", identifier: { type: IMEI, value: "123456789012345" } }) { ... } } }
-#
-#   Response:
-#     {
-#       "errors": [{
-#         "message": "Duplicate: IMEI '123456789012345' already exists",
-#         "path": ["bdr", "deviceIdentifierAdd"],
-#         "locations": [{ "line": 1, "column": 18 }],
-#         "extensions": {
-#           "type": "https://api.navixy.com/errors/duplicate",
-#           "title": "Duplicate Entry",
-#           "status": 409,
-#           "detail": "Device identifier with type 'IMEI' and value '123456789012345' already exists",
-#           "code": "DUPLICATE",
-#           "constraint": "uq_device_identifier_global",
-#           "field": "input.identifier.value",
-#           "traceId": "3df7651916cd43dd8448eb211c80319f"
-#         }
-#       }],
-#       "data": { "bdr": { "deviceIdentifierAdd": null } }
-#     }
-#
-# EXAMPLE 5: Multiple errors (batch mutation via aliases)
-#
-#   Batching aliases the *namespace* field, not the leaf mutation — at most one field may be
-#   selected inside a single `bdr { ... }` (or `billing { ... }`) block per operation.
-#
-#   Request:
-#     mutation {
-#       d1: bdr { deviceUpdate(input: { id: "id1", version: 1, title: "A" }) { device { id } } }
-#       d2: bdr { deviceUpdate(input: { id: "id2", version: 3, title: "B" }) { device { id } } }
-#     }
-#
-#   Response (partial success):
-#     {
-#       "errors": [{
-#         "message": "Device not found",
-#         "path": ["d2", "deviceUpdate"],
-#         "extensions": {
-#           "code": "NOT_FOUND",
-#           "entityType": "Device",
-#           "entityId": "id2",
-#           ...
-#         }
-#       }],
-#       "data": {
-#         "d1": { "deviceUpdate": { "device": { "id": "id1" } } },
-#         "d2": { "deviceUpdate": null }
-#       }
-#     }
-#
-# -----------------------------------------------------------------------------
-# PARTIAL SUCCESS AND NULL HANDLING
-# -----------------------------------------------------------------------------
-#
-# GraphQL allows partial success: some fields may resolve successfully while
-# others fail. The `data` field structure mirrors the query structure.
-#
-# RULES:
-#
-#   1. If a non-nullable field fails, error bubbles up to nearest nullable parent
-#   2. The `path` in error points to the exact field that failed
-#   3. Nullable mutation payloads allow batch operations with partial success
-#   4. Client should check both `errors` and `data` in every response
-#   5. `bdr`/`billing` are non-null (`Query.bdr: BdrQuery!`), and rule 1 stops the bubble at the
-#      nearest nullable field below them. For a by-id query and a mutation payload that is the
-#      root field itself (nullable per rule 3), so its failure does not null out the whole `data`
-#      (EXAMPLE 1: `data.bdr.device` is null, `data.bdr` is not; EXAMPLE 5: `d2.deviceUpdate` is
-#      null, `d2` is not). A root field whose type is non-null — every list (`devices:
-#      DeviceConnection!` and the other connections, `customFieldTypes`), `workspace` and `me` —
-#      has no nullable field between it and `data`: its failure, such as a PERMISSION_DENIED
-#      with IAM enforcement on, nulls `data` itself, every alias on `bdr`/`billing` included.
-#      Send such a call in a request of its own when another call's result must survive its
-#      failure.
-#
-# NULL PROPAGATION:
-#
-#   Query: { bdr { device(id: "...") { title workspace { title } } } }
-#
-#   If workspace resolver fails:
-#   - workspace field becomes null
-#   - device field becomes null (because workspace is non-nullable in type)
-#   - path: ["bdr", "device", "workspace"]
-#
-# -----------------------------------------------------------------------------
-# HTTP STATUS CODES
-# -----------------------------------------------------------------------------
-#
-# This API follows GraphQL-over-HTTP specification for HTTP status codes.
-# HTTP status indicates transport-level result, NOT domain-level errors.
-#
-# TRANSPORT-LEVEL (HTTP status):
-#   | HTTP Status | Meaning                                           |
-#   |-------------|---------------------------------------------------|
-#   | 200         | Request processed (check `errors` for failures)   |
-#   | 400         | Invalid HTTP/GraphQL request (parse/validation)   |
-#   | 401         | Token invalid, expired or of an unknown user      |
-#   | 403         | Authorization failed (forbidden)                  |
-#   | 429         | Rate limit exceeded                               |
-#   | 5xx         | Infrastructure/system error                       |
-#
-# DOMAIN-LEVEL (extensions.status):
-#   All business logic errors (NOT_FOUND, CONFLICT, VALIDATION_ERROR, etc.)
-#   are returned with HTTP 200. The semantic status code is in extensions.status.
-#
-#   Example: Entity not found returns HTTP 200 with extensions.status = 404.
-#
-#   A request without a token is processed as well: each field that needs
-#   authentication fails with UNAUTHORIZED, extensions.status = 401. A caller with a valid token
-#   that lacks a permission gets PERMISSION_DENIED, extensions.status = 403.
-#
-# Rule: Use `extensions.code` for programmatic handling, NOT HTTP status.
-#
-# -----------------------------------------------------------------------------
-# CLIENT ERROR HANDLING RECOMMENDATIONS
-# -----------------------------------------------------------------------------
-#
-# 1. Always check for `errors` array presence
-# 2. Use `extensions.code` for programmatic error handling, not `message`
-# 3. Display `message` or `extensions.detail` to users
-# 4. Log `extensions.traceId` for support requests
-# 5. Handle partial success: check each field in `data`
-# 6. For CONFLICT errors: with expectedVersion/currentVersion, refetch the entity and retry or
-#    prompt the user; without them the cause is not machine-readable, so retry once after a short
-#    backoff and report the failure if it repeats. One carrying `dependency` is not retried unchanged
-# 7. For RATE_LIMITED: implement exponential backoff
-#
-# =============================================================================
-
-# =============================================================================
-# 5. DISTRIBUTED TRACING & SOURCE TYPE
-# =============================================================================
-#
-# TRACE CONTEXT
-#
-# HTTP REQUESTS:
-#   Header: traceparent (W3C Trace Context format)
-#   Format: 00-{trace-id}-{parent-id}-{flags}
-#   Example: traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
-#
-#   The trace-id (32 hex characters) is extracted and stored in audit events.
-#
-# WEBSOCKET:
-#   `/graphql/ws` accepts only subscriptions; queries and mutations go over
-#   HTTP. A query or a mutation sent over it, and a document that does not
-#   parse or whose operationName does not select one operation, is answered
-#   with one `next` message carrying a VALIDATION_ERROR error, followed by
-#   `complete`. Once the connection's token has expired, the error is
-#   UNAUTHORIZED instead.
-#
-#   Each `subscribe` the server accepts as a subscription spends one request
-#   from the caller's rate limit, the budget its HTTP requests to `/graphql`
-#   spend; the refusals above and `connection_init` spend none. A
-#   `subscribe` over that limit is answered with one `next` message carrying
-#   a RATE_LIMITED error, followed by `complete`; retry with a backoff. The
-#   connection stays open.
-#
-#   The handshake spends one request from the rate limit as well, counted
-#   like a request to `/graphql`: by the subject of its bearer token, or by
-#   the client's address when it carries none. graphql-ws sends the token in
-#   `connection_init`, not with the handshake, so its handshakes share their
-#   address's budget with the context-token exchange. A handshake over the
-#   limit is refused with HTTP 429. The client must send `connection_init`
-#   within 10 s of the handshake (the default), or the server closes the
-#   connection with 4408.
-#
-#   One caller, identified by its token's subject, can keep up to 12
-#   connections open on each server instance (the default). A
-#   `connection_init` over that limit is refused: the server closes the
-#   connection with 4403 Forbidden, which graphql-ws retries with a backoff.
-#   A connection frees its place when it closes; one that dropped without
-#   closing frees it once the server closes it for silence (below).
-#
-#   The server sends a `ping` every 15 s and closes a connection whose
-#   client has sent no message for longer than 45 s (the defaults). A client
-#   must answer every `ping` with `pong`; graphql-ws does so unless its
-#   `disablePong` option is set. The subscriptions of a closed connection
-#   end with it.
-#
-#   The trace id of every operation on a connection comes from the
-#   `traceparent` header of the WebSocket handshake. Request `extensions` are
-#   not read for trace context.
-#
-# MISSING OR INVALID TRACEPARENT:
-#   Validity follows W3C Trace Context
-#   (https://www.w3.org/TR/trace-context/#traceparent-header). Without a
-#   valid `traceparent` the server generates a random trace id. B3 headers
-#   (`b3`, `X-B3-TraceId`) are not read.
-#
-#
-# SYSTEM EVENTS:
-#   Events the server records under the system actor, such as mirroring a
-#   workspace from Console, carry the trace id of what caused them: the HTTP
-#   request or WebSocket connection, or the `traceparent` of the Kafka
-#   command from Console. Only work nothing started (a scheduled run,
-#   start-up seeding, a Kafka command without `traceparent`) gets a trace id
-#   the server generates.
-#
-#   An audit event is recorded without a trace id (`AuditEvent.traceId` is
-#   null) only when it was written outside any trace; the server logs an
-#   error for it.
-#
-#   Server log lines carry the same trace id, so `extensions.traceId` finds
-#   the logs of a request.
-#
-# =============================================================================
-
-# =============================================================================
-# 6. DIRECTIVES
-# =============================================================================
-
-
-# =============================================================================
-# 7. SCALAR TYPES
-# =============================================================================
-
-# Note: The built-in ID scalar is used for entity identifiers.
-# ID values are opaque strings in UUID format.
-# Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-# Example: "019a6a3f-793e-807b-8001-555345529b44"
-#
-# The internal bit layout is not published here. It used to be, "for debugging reference only",
-# which contradicted the sentence above it: a client told to treat an ID as opaque, and handed a
-# field-by-field decoding of it in the same breath, will parse it. What clients need is stated
-# without the layout — an ID is opaque, `Query.node(id:)` resolves it, and `scalar UUID` is the
-# type for an identifier that is not an entity id of this API.
-
-
-
-
-# `Locale`'s consumer is deferred rather than present.
-
-
+# Version: 0.17.20
 
 # @category: bdr/schedules
 """
@@ -762,10 +52,6 @@ Numeric recurrence domains follow RFC 5545 §3.3.10. Maps to a `VEVENT` per `eve
 scalar ScheduleData
   @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/business-data-repository/api-reference/schedules#scheduledata")
 
-# =============================================================================
-# 8. ENUMS
-# =============================================================================
-
 # @category: bdr/catalogs/catalog-items
 "The origin of a catalog item, indicating how it was created."
 enum CatalogItemOrigin {
@@ -781,7 +67,6 @@ enum CatalogItemOrigin {
   """
   PRESET
 }
-
 
 # @category: bdr/devices
 "The type of hardware identifier used to identify a device."
@@ -802,30 +87,30 @@ enum DeviceIdType {
   CUSTOM
 }
 
+# @category: bdr/devices
+"How a device activated by `deviceActivate` receives its server settings."
+enum DeviceSetup {
+  "The platform queues an SMS that pushes the APN and server settings to the device. Needs `phone` and `apn`."
+  AUTOMATIC
+  "The user enters the server settings on the device by hand, from `DeviceActivation.server`. No SMS is sent."
+  MANUAL
+}
 
-# =============================================================================
-# 9. INTERFACES
-# =============================================================================
-
-
-
-# `DeviceCustomFieldValue` stays here, not in the kernel — it names `Device`, a BDR entity type,
-# so moving it would make the kernel depend on BDR. It still implements (not `extend`s) the
-# kernel's `CustomFieldValue` interface from this file — legal GraphQL, since `implements` does
-# not change the interface's own shape.
 # @category: bdr/custom-fields
 "DEVICE custom-field value (primary-capable)."
-type DeviceCustomFieldValue implements CustomFieldValue {
+type DeviceCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   "Whether this field is on by default for this entity."
   isDefault: Boolean!
-  "The linked device."
-  device: Device!
+  """
+  The linked device. `null` when the caller's role may not read it, with no error. `null` with a
+  `NOT_FOUND` error at this path when the device was deleted without this value being cleared.
+  """
+  device: Device
   "Whether this device is the entity's primary DEVICE."
   isPrimary: Boolean!
 }
-
-
 
 # @category: bdr/devices/inventory
 "An object that can be assigned to an inventory."
@@ -859,7 +144,8 @@ interface CatalogItem implements Node & Versioned & Titled {
 
 # @category: bdr/catalogs/catalog-items
 "Metadata about a catalog item."
-type CatalogItemMeta {
+type CatalogItemMeta
+  @dataClass(class: ORDINARY) {
   "A description of the catalog item. Can be localized."
   description: String
   "The origin indicating how this item was created."
@@ -877,15 +163,10 @@ interface HierarchicalCatalogItem {
   parent: CatalogItem
 }
 
-# =============================================================================
-# 10. PAGINATION TYPES
-# =============================================================================
-
-# --- CatalogItem Connection ---
-
 # @category: bdr/catalogs/catalog-items
 "A paginated list of CatalogItem items."
-type CatalogItemConnection implements Connection {
+type CatalogItemConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [CatalogItemEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -898,18 +179,18 @@ type CatalogItemConnection implements Connection {
 
 # @category: bdr/catalogs/catalog-items
 "An edge in the CatalogItem connection."
-type CatalogItemEdge implements Edge {
+type CatalogItemEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The catalog item at the end of the edge."
   node: CatalogItem!
 }
 
-# --- UserCatalogItem Connection ---
-
 # @category: bdr/actors/users
 "A paginated list of UserCatalogItem items."
-type UserCatalogItemConnection implements Connection {
+type UserCatalogItemConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [UserCatalogItemEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -922,18 +203,18 @@ type UserCatalogItemConnection implements Connection {
 
 # @category: bdr/actors/users
 "An edge in the UserCatalogItem connection."
-type UserCatalogItemEdge implements Edge {
+type UserCatalogItemEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The user catalog item at the end of the edge."
   node: UserCatalogItem!
 }
 
-# --- Device Connection ---
-
 # @category: bdr/devices
 "A paginated list of Device items."
-type DeviceConnection implements Connection {
+type DeviceConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -946,18 +227,18 @@ type DeviceConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the Device connection."
-type DeviceEdge implements Edge {
+type DeviceEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device at the end of the edge."
   node: Device!
 }
 
-# --- Asset Connection ---
-
 # @category: bdr/assets
 "A paginated list of Asset items."
-type AssetConnection implements Connection {
+type AssetConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [AssetEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -970,18 +251,18 @@ type AssetConnection implements Connection {
 
 # @category: bdr/assets
 "An edge in the Asset connection."
-type AssetEdge implements Edge {
+type AssetEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The asset at the end of the edge."
   node: Asset!
 }
 
-# --- AssetGroup Connection ---
-
 # @category: bdr/assets/groups
 "A paginated list of AssetGroup items."
-type AssetGroupConnection implements Connection {
+type AssetGroupConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [AssetGroupEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -994,18 +275,18 @@ type AssetGroupConnection implements Connection {
 
 # @category: bdr/assets/groups
 "An edge in the AssetGroup connection."
-type AssetGroupEdge implements Edge {
+type AssetGroupEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The asset group at the end of the edge."
   node: AssetGroup!
 }
 
-# --- AssetGroupItem Connection ---
-
 # @category: bdr/assets/groups
 "A paginated list of AssetGroupItem items."
-type AssetGroupItemConnection implements Connection {
+type AssetGroupItemConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [AssetGroupItemEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1018,18 +299,18 @@ type AssetGroupItemConnection implements Connection {
 
 # @category: bdr/assets/groups
 "An edge in the AssetGroupItem connection."
-type AssetGroupItemEdge implements Edge {
+type AssetGroupItemEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The asset group item at the end of the edge."
   node: AssetGroupItem!
 }
 
-# --- Inventory Connection ---
-
 # @category: bdr/devices/inventory
 "A paginated list of Inventory items."
-type InventoryConnection implements Connection {
+type InventoryConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [InventoryEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1042,18 +323,18 @@ type InventoryConnection implements Connection {
 
 # @category: bdr/devices/inventory
 "An edge in the Inventory connection."
-type InventoryEdge implements Edge {
+type InventoryEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The inventory at the end of the edge."
   node: Inventory!
 }
 
-# --- GeoObject Connection ---
-
 # @category: bdr/geo-objects
 "A paginated list of GeoObject items."
-type GeoObjectConnection implements Connection {
+type GeoObjectConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [GeoObjectEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1066,18 +347,18 @@ type GeoObjectConnection implements Connection {
 
 # @category: bdr/geo-objects
 "An edge in the GeoObject connection."
-type GeoObjectEdge implements Edge {
+type GeoObjectEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The geo object at the end of the edge."
   node: GeoObject!
 }
 
-# --- Schedule Connection ---
-
 # @category: bdr/schedules
 "A paginated list of Schedule items."
-type ScheduleConnection implements Connection {
+type ScheduleConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [ScheduleEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1090,18 +371,18 @@ type ScheduleConnection implements Connection {
 
 # @category: bdr/schedules
 "An edge in the Schedule connection."
-type ScheduleEdge implements Edge {
+type ScheduleEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The schedule at the end of the edge."
   node: Schedule!
 }
 
-# --- DeviceInventoryRelation Connection ---
-
 # @category: bdr/devices/inventory
 "A paginated list of DeviceInventoryRelation items."
-type DeviceInventoryRelationConnection implements Connection {
+type DeviceInventoryRelationConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceInventoryRelationEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1114,18 +395,18 @@ type DeviceInventoryRelationConnection implements Connection {
 
 # @category: bdr/devices/inventory
 "An edge in the DeviceInventoryRelation connection."
-type DeviceInventoryRelationEdge implements Edge {
+type DeviceInventoryRelationEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device inventory relation at the end of the edge."
   node: DeviceInventoryRelation!
 }
 
-# --- Catalog-specific type connections ---
-
 # @category: bdr/catalogs/catalog-items
 "A paginated list of Catalog items."
-type CatalogConnection implements Connection {
+type CatalogConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [CatalogEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1138,7 +419,8 @@ type CatalogConnection implements Connection {
 
 # @category: bdr/catalogs/catalog-items
 "An edge in the Catalog connection."
-type CatalogEdge implements Edge {
+type CatalogEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The catalog at the end of the edge."
@@ -1147,7 +429,8 @@ type CatalogEdge implements Edge {
 
 # @category: bdr/devices
 "A paginated list of DeviceType items."
-type DeviceTypeConnection implements Connection {
+type DeviceTypeConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceTypeEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1160,7 +443,8 @@ type DeviceTypeConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the DeviceType connection."
-type DeviceTypeEdge implements Edge {
+type DeviceTypeEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device type at the end of the edge."
@@ -1169,7 +453,8 @@ type DeviceTypeEdge implements Edge {
 
 # @category: bdr/devices
 "A paginated list of DeviceStatus items."
-type DeviceStatusConnection implements Connection {
+type DeviceStatusConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceStatusEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1182,7 +467,8 @@ type DeviceStatusConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the DeviceStatus connection."
-type DeviceStatusEdge implements Edge {
+type DeviceStatusEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device status at the end of the edge."
@@ -1191,7 +477,8 @@ type DeviceStatusEdge implements Edge {
 
 # @category: bdr/devices
 "A paginated list of DeviceModel items."
-type DeviceModelConnection implements Connection {
+type DeviceModelConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceModelEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1204,7 +491,8 @@ type DeviceModelConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the DeviceModel connection."
-type DeviceModelEdge implements Edge {
+type DeviceModelEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device model at the end of the edge."
@@ -1213,7 +501,8 @@ type DeviceModelEdge implements Edge {
 
 # @category: bdr/devices
 "A paginated list of DeviceVendor items."
-type DeviceVendorConnection implements Connection {
+type DeviceVendorConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceVendorEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1226,7 +515,8 @@ type DeviceVendorConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the DeviceVendor connection."
-type DeviceVendorEdge implements Edge {
+type DeviceVendorEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device vendor at the end of the edge."
@@ -1235,7 +525,8 @@ type DeviceVendorEdge implements Edge {
 
 # @category: bdr/devices
 "A paginated list of DeviceRelationType items."
-type DeviceRelationTypeConnection implements Connection {
+type DeviceRelationTypeConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [DeviceRelationTypeEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1248,7 +539,8 @@ type DeviceRelationTypeConnection implements Connection {
 
 # @category: bdr/devices
 "An edge in the DeviceRelationType connection."
-type DeviceRelationTypeEdge implements Edge {
+type DeviceRelationTypeEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The device relation type at the end of the edge."
@@ -1257,7 +549,8 @@ type DeviceRelationTypeEdge implements Edge {
 
 # @category: bdr/assets
 "A paginated list of AssetType items."
-type AssetTypeConnection implements Connection {
+type AssetTypeConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [AssetTypeEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1270,7 +563,8 @@ type AssetTypeConnection implements Connection {
 
 # @category: bdr/assets
 "An edge in the AssetType connection."
-type AssetTypeEdge implements Edge {
+type AssetTypeEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The asset type at the end of the edge."
@@ -1279,7 +573,8 @@ type AssetTypeEdge implements Edge {
 
 # @category: bdr/assets/groups
 "A paginated list of AssetGroupType items."
-type AssetGroupTypeConnection implements Connection {
+type AssetGroupTypeConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [AssetGroupTypeEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1292,7 +587,8 @@ type AssetGroupTypeConnection implements Connection {
 
 # @category: bdr/assets/groups
 "An edge in the AssetGroupType connection."
-type AssetGroupTypeEdge implements Edge {
+type AssetGroupTypeEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The asset group type at the end of the edge."
@@ -1301,7 +597,8 @@ type AssetGroupTypeEdge implements Edge {
 
 # @category: bdr/geo-objects
 "A paginated list of GeoObjectType items."
-type GeoObjectTypeConnection implements Connection {
+type GeoObjectTypeConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [GeoObjectTypeEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1314,7 +611,8 @@ type GeoObjectTypeConnection implements Connection {
 
 # @category: bdr/geo-objects
 "An edge in the GeoObjectType connection."
-type GeoObjectTypeEdge implements Edge {
+type GeoObjectTypeEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The geo object type at the end of the edge."
@@ -1323,7 +621,8 @@ type GeoObjectTypeEdge implements Edge {
 
 # @category: bdr/catalogs/tags
 "A paginated list of Tag items."
-type TagConnection implements Connection {
+type TagConnection implements Connection
+  @dataClass(class: ORDINARY) {
   "A list of edges."
   edges: [TagEdge!]!
   "A list of nodes in the connection (without edge metadata)."
@@ -1336,23 +635,21 @@ type TagConnection implements Connection {
 
 # @category: bdr/catalogs/tags
 "An edge in the Tag connection."
-type TagEdge implements Edge {
+type TagEdge implements Edge
+  @dataClass(class: ORDINARY) {
   "An opaque cursor for this edge."
   cursor: String!
   "The tag at the end of the edge."
   node: Tag!
 }
 
-# =============================================================================
-# 11. CATALOG ITEM TYPES
-# =============================================================================
-
 # @category: bdr/catalogs/system
 """
 A system module that groups related functionality.
 Examples: repo (core), fleet_management (FSM), iot (devices), reports, billing.
 """
-type Module implements CatalogItem & Node & Versioned & Titled {
+type Module implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1373,7 +670,8 @@ type Module implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/catalogs/system
 "A definition of an entity type in the system."
-type EntityType implements CatalogItem & Node & Versioned & Titled {
+type EntityType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1400,7 +698,8 @@ type EntityType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/devices
 "A device manufacturer or vendor."
-type DeviceVendor implements CatalogItem & Node & Versioned & Titled {
+type DeviceVendor implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1436,7 +735,8 @@ type DeviceVendor implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/devices
 "A specific device model produced by a vendor."
-type DeviceModel implements CatalogItem & Node & Versioned & Titled {
+type DeviceModel implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1461,7 +761,8 @@ type DeviceModel implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/devices
 "A classification type for devices."
-type DeviceType implements CatalogItem & Node & Versioned & Titled {
+type DeviceType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1482,7 +783,8 @@ type DeviceType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/devices
 "An operational status for devices."
-type DeviceStatus implements CatalogItem & Node & Versioned & Titled {
+type DeviceStatus implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1503,7 +805,8 @@ type DeviceStatus implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/devices
 "A type of relationship between two devices."
-type DeviceRelationType implements CatalogItem & Node & Versioned & Titled {
+type DeviceRelationType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1524,7 +827,8 @@ type DeviceRelationType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/assets
 "A classification type for assets."
-type AssetType implements CatalogItem & Node & Versioned & Titled {
+type AssetType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1547,7 +851,8 @@ type AssetType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/assets/groups
 "A type for asset groups with membership constraints."
-type AssetGroupType implements CatalogItem & Node & Versioned & Titled {
+type AssetGroupType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1570,7 +875,8 @@ type AssetGroupType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/assets/groups
 "A constraint defining which asset types can be included in an asset group type."
-type AssetGroupTypeConstraint {
+type AssetGroupTypeConstraint
+  @dataClass(class: ORDINARY) {
   "The asset type allowed in the group."
   assetType: AssetType!
   "The maximum number of assets of this type allowed in one group. Null means unlimited."
@@ -1579,7 +885,8 @@ type AssetGroupTypeConstraint {
 
 # @category: bdr/geo-objects
 "A classification type for geographic objects."
-type GeoObjectType implements CatalogItem & Node & Versioned & Titled {
+type GeoObjectType implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1602,7 +909,8 @@ type GeoObjectType implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/catalogs/tags
 "A tag for labeling and categorizing entities."
-type Tag implements CatalogItem & Node & Versioned & Titled {
+type Tag implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1625,7 +933,8 @@ type Tag implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/catalogs/system
 "A country reference data item."
-type Country implements CatalogItem & Node & Versioned & Titled {
+type Country implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1648,7 +957,8 @@ type Country implements CatalogItem & Node & Versioned & Titled {
 
 # @category: bdr/actors/users
 "A user-defined catalog item that supports hierarchical workspace."
-type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & Versioned & Titled {
+type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1686,7 +996,8 @@ type UserCatalogItem implements CatalogItem & HierarchicalCatalogItem & Node & V
 
 # @category: bdr/catalogs/catalog-items
 "A catalog definition that contains catalog items. Catalogs are themselves catalog items."
-type Catalog implements CatalogItem & Node & Versioned & Titled {
+type Catalog implements CatalogItem & Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   "A globally unique identifier."
   id: ID!
   "The version number for optimistic locking."
@@ -1722,13 +1033,10 @@ type Catalog implements CatalogItem & Node & Versioned & Titled {
   ): CatalogItemConnection!
 }
 
-# =============================================================================
-# 12. WORKSPACE
-# =============================================================================
-
 # @category: bdr/workspaces
 "A workspace that owns entities and users."
-type Workspace implements Node & Versioned & Titled {
+type Workspace implements Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -1803,23 +1111,20 @@ type Workspace implements Node & Versioned & Titled {
   ): ScheduleConnection!
 }
 
-# =============================================================================
-# 13. ACTORS
-# =============================================================================
-
 # @category: bdr/actors/users
 "The caller: the actor the token names, and the organizations and workspaces they can switch to."
-type Me {
+type Me
+  @dataClass(class: ORDINARY) {
   """
   The caller's actor id, the id the rest of this API uses for them: a user's id from Console, or a member of
   staff's, the staff token's subject.
   """
-  id: ID!
+  id: ID! @dataClass(class: PERSONAL)
   """
   The caller's display name from the token's own claims: the full name, or the email when the token carries no
   name. It is read for this answer and stored nowhere.
   """
-  title: String!
+  title: String! @dataClass(class: PERSONAL)
   """
   Every organization the caller is an active member of in Console, each with its workspaces other
   than terminated ones. This is membership, not role reach: the context-token exchange refuses a
@@ -1832,7 +1137,7 @@ type Me {
   organizations: [AccessibleOrganization!]
   """
   The products the caller may use in the workspace the token names, as billing's catalogue describes them:
-  the codes of the token's `product_codes` claim that a role of the caller scopes, read through the IAM SDK.
+  the codes of the token's `product_codes` claim that a role of the caller scopes.
   `isActive` is carried, not filtered on. Empty when the token's workspace does not resolve here or the
   caller holds no role in it.
 
@@ -1849,7 +1154,8 @@ type Me {
 }
 
 "A product the caller may use, as billing's catalogue describes it."
-type MeProduct implements Titled {
+type MeProduct implements Titled
+  @dataClass(class: ORDINARY) {
   "The product code billing stores: the value `product_codes` and IAM's product scopes name."
   code: Code!
   "Billing's title for the product, or its code while billing holds none."
@@ -1864,7 +1170,8 @@ type MeProduct implements Titled {
 }
 
 "A role of the caller, as IAM holds it."
-type MeRole implements Titled {
+type MeRole implements Titled
+  @dataClass(class: ORDINARY) {
   "IAM's role id, the value the token's `role_ids` carries."
   id: ID!
   title: String!
@@ -1889,7 +1196,7 @@ type AccessibleOrganization {
 type AccessibleWorkspace {
   """
   Console's workspace id: what the exchange takes as `workspace_id`, and what the context token then
-  carries in its `workspace_id` claim. Equal to `Workspace.id` once nvx4 holds a row for this
+  carries in its `workspace_id` claim. Equal to `Workspace.id` once this API holds the
   workspace; present whether or not it does. A Console workspace whose id is not a workspace id of
   this deployment (Console keeps plain-v4 workspaces from before its current id layout) is not listed.
   """
@@ -1904,13 +1211,10 @@ type AccessibleWorkspace {
   isActive: Boolean!
 }
 
-# =============================================================================
-# 14. BUSINESS ENTITIES
-# =============================================================================
-
 # @category: bdr/geo-objects
 "A geographic coordinate point."
-type GeoPoint {
+type GeoPoint
+  @dataClass(class: ORDINARY) {
   "The latitude coordinate in decimal degrees."
   lat: Latitude!
   "The longitude coordinate in decimal degrees."
@@ -1935,7 +1239,8 @@ input GeoPointInput {
 
 # @category: bdr/devices
 "A tracking device such as a GPS tracker, sensor, or beacon."
-type Device implements Node & Titled & Versioned & InventoryItem {
+type Device implements Node & Titled & Versioned & InventoryItem
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -1949,7 +1254,12 @@ type Device implements Node & Titled & Versioned & InventoryItem {
   status: DeviceStatus!
   "When this device record was created."
   createdAt: DateTime!
-  "SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`."
+  """
+  SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device
+  created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored
+  activation the server cannot read, such as one with a missing key; the device itself and the list it is
+  in are served.
+  """
   activation: DeviceActivation
   "The hardware identifiers for this device (IMEI, serial number, MAC address, etc.)."
   identifiers: [DeviceIdentifier!]!
@@ -1981,25 +1291,45 @@ type Device implements Node & Titled & Versioned & InventoryItem {
 
 # @category: bdr/devices
 """
-SIM/APN data recorded by `deviceActivate` and used to build the `Register` SMS the platform sends
-to the device. Present once activation has run; absent for a device created only via `deviceCreate`.
-Whether the device has connected since is its status: `awaiting_connection` until its first frame
-reaches the platform, `active` after.
+SIM/APN data recorded by `deviceActivate`; for `AUTOMATIC` setup, the `Register` SMS the platform sends
+to the device is built from it. Present once activation has run; absent for a device created only via
+`deviceCreate`. Whether the device has connected since is its status: `awaiting_connection` until its
+first frame reaches the platform, `active` after.
 """
-type DeviceActivation {
-  "The SIM phone number the activation SMS is sent to. Globally unique across the installation."
-  phone: String!
-  "The APN settings pushed to the device."
-  apn: ApnSettings!
-  "An optional carrier-issued activation code, format-validated only."
-  activationCode: String
+type DeviceActivation
+  @dataClass(class: ORDINARY) {
+  "How the device receives its server settings."
+  setup: DeviceSetup!
+  """
+  The SIM phone number, globally unique across the installation. The activation SMS is sent to it for
+  `AUTOMATIC` setup. Null for `MANUAL` setup activated without one.
+  """
+  phone: String @dataClass(class: PERSONAL)
+  "The APN settings, pushed to the device for `AUTOMATIC` setup. Null for `MANUAL` setup activated without them."
+  apn: ApnSettings
+  """
+  The data gateway address the device connects to, to be entered on the device for `MANUAL` setup.
+  Null while the installation publishes no address.
+  """
+  server: ActivationServerAddress
   "When `deviceActivate` last recorded this activation."
   activatedAt: DateTime!
 }
 
 # @category: bdr/devices
+"The data gateway address a device connects to."
+type ActivationServerAddress
+  @dataClass(class: ORDINARY) {
+  "The host name or IP address."
+  host: String!
+  "The TCP port."
+  port: Int!
+}
+
+# @category: bdr/devices
 "APN (Access Point Name) settings pushed to a device by the `Register` command."
-type ApnSettings {
+type ApnSettings
+  @dataClass(class: ORDINARY) {
   "The APN name."
   name: String!
   "The APN username, if the carrier requires one."
@@ -2008,7 +1338,8 @@ type ApnSettings {
 
 # @category: bdr/devices
 "A hardware identifier for a device."
-type DeviceIdentifier implements Node {
+type DeviceIdentifier implements Node
+  @dataClass(class: ORDINARY) {
   id: ID!
   "The device this identifier belongs to."
   device: Device!
@@ -2022,7 +1353,8 @@ type DeviceIdentifier implements Node {
 
 # @category: bdr/devices
 "A relationship between two devices."
-type DeviceRelation implements Node {
+type DeviceRelation implements Node
+  @dataClass(class: ORDINARY) {
   id: ID!
   "The first device in the relationship."
   first: Device!
@@ -2034,7 +1366,8 @@ type DeviceRelation implements Node {
 
 # @category: bdr/devices/inventory
 "A record of a device's assignment to an inventory."
-type DeviceInventoryRelation implements Node {
+type DeviceInventoryRelation implements Node
+  @dataClass(class: ORDINARY) {
   id: ID!
   "The device that was assigned."
   device: Device!
@@ -2043,14 +1376,15 @@ type DeviceInventoryRelation implements Node {
   "The date and time when the device was assigned."
   assignedAt: DateTime!
   "The id of the actor who assigned the device: a user's id from Console, a member of staff's, or the system's."
-  assignedById: ID
+  assignedById: ID @dataClass(class: PERSONAL)
   "The actor who assigned the device; null when there is none or Console does not know the id."
   assignedBy: Actor
 }
 
 # @category: bdr/assets
 "A physical or logical asset being tracked."
-type Asset implements Node & Titled & Customizable & Versioned {
+type Asset implements Node & Titled & Customizable & Versioned
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -2061,7 +1395,7 @@ type Asset implements Node & Titled & Customizable & Versioned {
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
-  ): [CustomFieldValue!]!
+  ): [CustomFieldValue!]! @dataClass(class: PERSONAL)
   "The primary device (isPrimary=true among DEVICE-type custom fields)."
   primaryDevice: Device
   "The groups this asset belongs to."
@@ -2083,7 +1417,8 @@ type Asset implements Node & Titled & Customizable & Versioned {
 
 # @category: bdr/assets/groups
 "A group of assets."
-type AssetGroup implements Node & Versioned & Titled {
+type AssetGroup implements Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -2127,7 +1462,8 @@ type AssetGroup implements Node & Versioned & Titled {
 
 # @category: bdr/assets/groups
 "A record of an asset's membership in a group."
-type AssetGroupItem implements Node {
+type AssetGroupItem implements Node
+  @dataClass(class: ORDINARY) {
   id: ID!
   "The group containing the asset."
   group: AssetGroup!
@@ -2141,7 +1477,8 @@ type AssetGroupItem implements Node {
 
 # @category: bdr/devices/inventory
 "An inventory or warehouse record for device stock management."
-type Inventory implements Node & Versioned & Titled {
+type Inventory implements Node & Versioned & Titled
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -2166,7 +1503,8 @@ type Inventory implements Node & Versioned & Titled {
 
 # @category: bdr/geo-objects
 "A geographic object such as a geofence, point of interest, or route."
-type GeoObject implements Node & Titled & Customizable & Versioned {
+type GeoObject implements Node & Titled & Customizable & Versioned
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -2189,12 +1527,13 @@ type GeoObject implements Node & Titled & Customizable & Versioned {
   customFields(
     "Limit returned fields to these codes. Returns all fields if not specified."
     codes: [Code!]
-  ): [CustomFieldValue!]!
+  ): [CustomFieldValue!]! @dataClass(class: PERSONAL)
 }
 
 # @category: bdr/schedules
 "A schedule definition for work hours, maintenance windows, or other time-based rules."
-type Schedule implements Node & Titled & Versioned {
+type Schedule implements Node & Titled & Versioned
+  @dataClass(class: ORDINARY) {
   id: ID!
   version: Int!
   title: String!
@@ -2203,34 +1542,25 @@ type Schedule implements Node & Titled & Versioned {
   "The calendar and time interval definitions for this schedule."
   scheduleData: ScheduleData!
 }
-# =============================================================================
-# 15. CUSTOM FIELDS
-# =============================================================================
-#
-#
-# `FieldParamsDevice` and `FieldParamsReference` stay here — see the comment on each below.
 
-# `FieldParamsDevice` stays here, not in the kernel — its `refSubtypes` field returns
-# `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR. It
-# still implements (not `extend`s) the kernel's `FieldParams` interface from this file.
 # @category: bdr/custom-fields
 "Parameters for DEVICE field type."
-type FieldParamsDevice implements FieldParams {
+type FieldParamsDevice implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   """
   The device types a value may belong to. Empty means any device type is allowed.
 
-  An element is null when the device type behind it no longer resolves — see
-  `FieldParamsReference.refSubtypes`, which is resolved by the same loader.
+  An element is null when the device type behind it no longer resolves, for the same reason
+  as on `FieldParamsReference.refSubtypes`.
   """
   refSubtypes: [CatalogItem]!
 }
 
-# `FieldParamsReference` stays here, not in the kernel — its `refSubtypes` field returns
-# `[CatalogItem]`, a BDR catalog interface, so moving it would make the kernel depend on BDR.
 # @category: bdr/custom-fields
 "Parameters for REFERENCE field type."
-type FieldParamsReference implements FieldParams & MultiValue {
+type FieldParamsReference implements FieldParams & MultiValue
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   isMulti: Boolean!
   "The entity type code that can be referenced."
@@ -2257,35 +1587,6 @@ type FieldParamsReference implements FieldParams & MultiValue {
   """
   defaultRefs: [Node]!
 }
-
-# =============================================================================
-# 16. AUDIT
-# =============================================================================
-
-
-# =============================================================================
-# 17. FILTER & ORDER INPUTS
-# =============================================================================
-#
-# FILTER SEMANTICS
-# ----------------
-# Array-based filters use OR logic within a field and AND logic between fields.
-#
-# Example:
-#   filter: {
-#     typeIds: ["type1", "type2"]    # type1 OR type2
-#     statusIds: ["active"]          # AND status = active
-#   }
-#
-# This returns items where:
-#   (type = type1 OR type = type2) AND (status = active)
-#
-# Empty arrays are ignored (treated as "no filter on this field").
-# Null values are also ignored.
-#
-# =============================================================================
-
-# --- Catalog Item ---
 
 # @category: bdr/catalogs/catalog-items
 "Filtering options for catalog items."
@@ -2325,8 +1626,6 @@ enum CatalogItemOrderField {
   CREATED_AT
 }
 
-# --- Device ---
-
 # @category: bdr/devices
 "Filtering options for devices."
 input DeviceFilter {
@@ -2344,6 +1643,14 @@ input DeviceFilter {
   inventoryIds: [ID!]
   "Partial match on title (case-insensitive contains)."
   titleContains: String @trim
+  """
+  Free-text search for a device list search box: a device matches when its title or any of its identifier values
+  contains the value (case-insensitive), or its activation SIM phone number contains it. The phone is stored as digits
+  only, so spaces and the characters `+`, `-`, `(`, `)` and `.` are dropped from the value before it is compared with
+  the phone. So `866104` finds a device by IMEI or by phone, and `+49 151` by phone. A value of only those characters
+  still matches by title and identifier.
+  """
+  search: String @trim @dataClass(class: PERSONAL)
 }
 
 # @category: bdr/devices
@@ -2362,8 +1669,6 @@ enum DeviceOrderField {
   TITLE
 }
 
-# --- DeviceInventoryRelation ---
-
 # @category: bdr/devices/inventory
 "Ordering options for device inventory relations."
 input DeviceInventoryRelationOrder {
@@ -2380,8 +1685,6 @@ enum DeviceInventoryRelationOrderField {
   ASSIGNED_AT
 }
 
-# --- Asset ---
-
 # @category: bdr/assets
 "Filtering options for assets."
 input AssetFilter {
@@ -2396,7 +1699,7 @@ input AssetFilter {
   combine with AND: an asset must satisfy every one of them. See `CustomFieldFilter` for how a
   single condition matches.
   """
-  customFields: [CustomFieldFilter!]
+  customFields: [CustomFieldFilter!] @dataClass(class: PERSONAL)
 }
 
 # @category: bdr/assets
@@ -2412,7 +1715,7 @@ input AssetOrder {
   TEXT, OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value
   REFERENCE or a REFERENCE at an entity with no title.
   """
-  customFieldCode: Code
+  customFieldCode: Code @dataClass(class: PERSONAL)
   "The direction to order."
   direction: OrderDirection!
 }
@@ -2423,8 +1726,6 @@ enum AssetOrderField {
   "Order by title."
   TITLE
 }
-
-# --- AssetGroup ---
 
 # @category: bdr/assets/groups
 "Filtering options for asset groups."
@@ -2451,8 +1752,6 @@ enum AssetGroupOrderField {
   TITLE
 }
 
-# --- AssetGroupItem ---
-
 # @category: bdr/assets/groups
 "Filtering options for asset group items."
 input AssetGroupItemFilter {
@@ -2475,8 +1774,6 @@ enum AssetGroupItemOrderField {
   "Order by attachment date."
   ATTACHED_AT
 }
-
-# --- Inventory ---
 
 # @category: bdr/devices/inventory
 "Filtering options for inventories."
@@ -2501,8 +1798,6 @@ enum InventoryOrderField {
   TITLE
 }
 
-# --- GeoObject ---
-
 # @category: bdr/geo-objects
 "Filtering options for geo objects."
 input GeoObjectFilter {
@@ -2515,7 +1810,7 @@ input GeoObjectFilter {
   combine with AND: a geo object must satisfy every one of them. See `CustomFieldFilter` for how
   a single condition matches.
   """
-  customFields: [CustomFieldFilter!]
+  customFields: [CustomFieldFilter!] @dataClass(class: PERSONAL)
   """
   Only geo objects whose area covers this point, as `GeoObject.containsPoint` answers it. A geo object without an
   area (a geometry other than a well-formed `Polygon` or `MultiPolygon`) never matches.
@@ -2536,7 +1831,7 @@ input GeoObjectOrder {
   TEXT, OPTIONS, BOOLEAN and GEOJSON are not supported for sorting, nor is a multi-value
   REFERENCE or a REFERENCE at an entity with no title.
   """
-  customFieldCode: Code
+  customFieldCode: Code @dataClass(class: PERSONAL)
   "The direction to order."
   direction: OrderDirection!
 }
@@ -2547,8 +1842,6 @@ enum GeoObjectOrderField {
   "Order by title."
   TITLE
 }
-
-# --- Schedule ---
 
 # @category: bdr/schedules
 "Filtering options for schedules."
@@ -2573,8 +1866,6 @@ enum ScheduleOrderField {
   TITLE
 }
 
-# --- DeviceModel ---
-
 # @category: bdr/devices
 "Filtering options for device models."
 input DeviceModelFilter {
@@ -2588,22 +1879,12 @@ input DeviceModelFilter {
   supported: Boolean
 }
 
-# --- Tag ---
-
 # @category: bdr/catalogs/tags
 "Filtering options for tags."
 input TagFilter {
   "Partial match on title (case-insensitive contains)."
   titleContains: String @trim
 }
-
-
-# =============================================================================
-# 18. MUTATION INPUTS
-# =============================================================================
-
-
-# --- Device ---
 
 # @category: bdr/devices
 "Input for creating a new device."
@@ -2697,7 +1978,8 @@ input ApnSettingsInput {
   user: String @trim
   """
   The APN password, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`,
-  `-` or `@`.
+  `-` or `@`. Not saved in the device activation: it goes only into the activation SMS text, which the command queue
+  keeps with the queued command. Ignored for `MANUAL` setup.
   """
   password: String @trim
 }
@@ -2705,24 +1987,25 @@ input ApnSettingsInput {
 # @category: bdr/devices
 """
 Input for activating a device: creates it with the given IMEI, records SIM/APN data, sets it
-`awaiting_connection`, and queues the SMS that pushes APN and server settings to it.
+`awaiting_connection`, and for `AUTOMATIC` setup queues the SMS that pushes APN and server settings to it.
 """
 input DeviceActivateInput {
+  "How the device receives its server settings."
+  setup: DeviceSetup! = AUTOMATIC
   "The device model. Must be `supported`."
   modelId: ID!
   "The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank."
   title: String @trim
   "The device's IMEI (15 digits). Becomes the device's IMEI identifier."
   identifier: String! @trim
-  "The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation."
-  phone: String! @trim
-  "The APN settings pushed to the device."
-  apn: ApnSettingsInput!
-  "An optional carrier-issued activation code, format-validated only."
-  activationCode: String @trim
+  """
+  The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the
+  installation. Required for `AUTOMATIC` setup, optional for `MANUAL`.
+  """
+  phone: String @trim
+  "The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`."
+  apn: ApnSettingsInput
 }
-
-# --- Asset ---
 
 # @category: bdr/assets
 "Input for creating a new asset."
@@ -2756,8 +2039,6 @@ input AssetDeleteInput {
   "The current version for optimistic locking. If omitted, auto-increments without conflict check."
   version: Int
 }
-
-# --- AssetGroup ---
 
 # @category: bdr/assets/groups
 "Input for creating a new asset group."
@@ -2814,8 +2095,6 @@ input AssetGroupItemsRemoveInput {
   assetIds: [ID!]!
 }
 
-# --- GeoObject ---
-
 # @category: bdr/geo-objects
 "Input for creating a new geo object."
 input GeoObjectCreateInput {
@@ -2863,8 +2142,6 @@ input GeoObjectDeleteInput {
   version: Int
 }
 
-# --- Schedule ---
-
 # @category: bdr/schedules
 "Input for creating a new schedule."
 input ScheduleCreateInput {
@@ -2896,8 +2173,6 @@ input ScheduleDeleteInput {
   version: Int
 }
 
-# --- Inventory ---
-
 # @category: bdr/devices/inventory
 "Input for creating a new inventory."
 input InventoryCreateInput {
@@ -2924,8 +2199,6 @@ input InventoryDeleteInput {
   "The current version for optimistic locking. If omitted, auto-increments without conflict check."
   version: Int
 }
-
-# --- Device Relations ---
 
 # @category: bdr/devices/inventory
 "Input for linking a device to an inventory. Both device and inventory must belong to the same workspace."
@@ -2960,9 +2233,6 @@ input DeviceRelationRemoveInput {
   "The relationship ID to remove."
   id: ID!
 }
-
-
-# --- Catalog Item CRUD Inputs ---
 
 # @category: bdr/catalogs/catalog-items
 "Display properties for catalog items."
@@ -3253,26 +2523,14 @@ input CatalogItemDeleteInput {
   "The current version for optimistic locking. If omitted, auto-increments without conflict check."
   version: Int
 }
-# The contract's only `schema { ... }` definition. Two across the merged contract set is a hard
-# startup failure (SchemaRedefinitionError), not last-wins — see TypeDefinitionRegistry.merge /
-# checkMergeSchemaDefs in graphql-java. Lives here rather than in nvx4-common.graphql because it
-# names Query/Mutation, which are declared in this file, and because Apollo Kotlin's codegen
-# classifies any schemaFiles entry containing a `schema { ... }` block or a type named `Query` as
-# "a schema" and errors if more than one qualifies — this file already qualifies via `type Query`.
-#
-# `Subscription` is the one root named here and declared elsewhere.
 schema {
   query: Query
   mutation: Mutation
   subscription: Subscription
 }
 
-# =============================================================================
-# 19. QUERY
-# =============================================================================
-
 "The root query type."
-type Query {
+type Query @dataClass(class: ORDINARY) {
   # @category: common
   "Retrieves any entity by its globally unique identifier."
   node("The ID of the entity to retrieve." id: ID!): Node
@@ -3283,6 +2541,13 @@ type Query {
 
   "Liveness check: `true` whenever the API answers."
   _health: Boolean
+
+  # @category: common
+  """
+  The server's current time, for a client that measures an interval from a server timestamp such as
+  `DeviceActivation.activatedAt` without relying on the device clock. Not stored: each request reads the clock.
+  """
+  serverTime: DateTime!
 
   "Entry point for BDR (Business Data Repository) queries — the fleet/IoT core domain."
   bdr: BdrQuery!
@@ -3306,8 +2571,9 @@ type Query {
 """
 BDR (Business Data Repository) module queries — the platform's own fleet/IoT domain: workspaces,
 users, devices, assets, geo objects, schedules and the catalogs behind them.
+Reached through `Query.bdr`.
 """
-type BdrQuery {
+type BdrQuery @dataClass(class: ORDINARY) {
   # @category: bdr/custom-fields
   """
   Lists the custom-field types that may be defined on the given owner catalog item,
@@ -3319,8 +2585,6 @@ type BdrQuery {
   and `GeoObjectType`.
   """
   customFieldTypes("The owner catalog item — the type the fields would be defined on." ownerTypeId: ID!): [FieldTypeAvailability!]!
-
-  # --- Catalogs ---
 
   # @category: bdr/catalogs/catalog-items
   "Retrieves a catalog by its ID."
@@ -3342,8 +2606,6 @@ type BdrQuery {
     "The ordering options for the returned catalogs."
     orderBy: CatalogItemOrder = { field: ORDER, direction: ASC }
   ): CatalogConnection!
-
-  # --- Workspace-scoped Catalog Items ---
 
   # @category: bdr/devices
   "Lists device types in the caller's workspace."
@@ -3498,19 +2760,13 @@ type BdrQuery {
     orderBy: CatalogItemOrder = { field: TITLE, direction: ASC }
   ): TagConnection!
 
-  # --- Workspaces ---
-
   # @category: bdr/workspaces
   "The caller's workspace — the one their token names."
   workspace: Workspace!
 
-  # --- Actors ---
-
   # @category: bdr/actors/users
   "The caller, with the organizations and workspaces they can switch to."
   me: Me!
-
-  # --- Business Entities ---
 
   # @category: bdr/devices
   "Retrieves a device by its ID."
@@ -3532,6 +2788,18 @@ type BdrQuery {
     "The ordering options for the returned devices."
     orderBy: DeviceOrder = { field: TITLE, direction: ASC }
   ): DeviceConnection!
+
+  # @category: bdr/devices
+  """
+  The data gateway address a device of this model is pointed at: what the user enters on the device for
+  `MANUAL` setup, before `deviceActivate`, and what the `Register` SMS carries for `AUTOMATIC`. Null while
+  the installation publishes no address. Refused for a model that is not `supported`, as `deviceActivate` is.
+  Needs the `create` right on devices.
+  """
+  deviceActivationServer(
+    "The device model the device is activated with. Must be `supported`."
+    modelId: ID!
+  ): ActivationServerAddress
 
   # @category: bdr/devices
   """
@@ -3651,11 +2919,13 @@ type BdrQuery {
     orderBy: ScheduleOrder = { field: TITLE, direction: ASC }
   ): ScheduleConnection!
 
-  # --- Audit ---
-
   # @category: bdr/audit
-  "Lists audit events in the caller's workspace."
-  auditEvents(
+  """
+  Lists the audit events of the product `bdr` in the caller's workspace, newest first by default. Only `bdr`'s events
+  are read: `filter.products` absent or empty reads them, and naming any other product fails with `VALIDATION_ERROR`,
+  since this field does not serve it. Billing's events are read through `BillingQuery.myAuditEvents`.
+  """
+  myAuditEvents(
     "Filtering options for the returned audit events."
     filter: AuditEventFilter
     "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
@@ -3671,8 +2941,11 @@ type BdrQuery {
   ): AuditEventConnection!
 
   # @category: bdr/audit
-  "Retrieves the change history for any entity in the caller's workspace."
-  entityHistory(
+  """
+  Retrieves the change history of any entity in the caller's workspace: the audit events of the product `bdr` about
+  it, newest first by default. The products are as for `myAuditEvents`.
+  """
+  myEntityHistory(
     "The ID of the entity to retrieve history for."
     entityId: ID!
     "Filtering options for the returned audit events."
@@ -3689,11 +2962,6 @@ type BdrQuery {
     orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
   ): AuditEventConnection!
 }
-# =============================================================================
-# 20. MUTATION
-# =============================================================================
-
-# --- Payloads ---
 
 # @category: common
 "The result of a delete mutation."
@@ -3751,7 +3019,6 @@ type DeviceIdentifierPayload {
   deviceIdentifier: DeviceIdentifier!
 }
 
-
 # @category: bdr/devices/inventory
 "The result of a device inventory link mutation."
 type DeviceInventoryRelationPayload {
@@ -3765,8 +3032,6 @@ type DeviceRelationPayload {
   "The created device relationship."
   deviceRelation: DeviceRelation!
 }
-
-# --- Catalog Item Payloads ---
 
 # @category: bdr/devices
 "The result of a device type mutation."
@@ -3824,8 +3089,6 @@ type UserCatalogItemPayload {
   item: UserCatalogItem!
 }
 
-# --- Mutations ---
-
 "The root mutation type."
 type Mutation {
   "Entry point for BDR (Business Data Repository) mutations — the fleet/IoT core domain."
@@ -3846,24 +3109,22 @@ type Mutation {
 
 """
 BDR (Business Data Repository) module mutations — writes against the platform's own fleet/IoT
-domain.
+domain. Reached through `Mutation.bdr`.
 """
 type BdrMutation {
-  # --- Devices ---
-
   # @category: bdr/devices
   "Creates a new device."
   deviceCreate(
     "The input fields for creating the device."
     input: DeviceCreateInput!
-  ): DevicePayload
+  ): DevicePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   "Updates an existing device."
   deviceUpdate(
     "The input fields for updating the device."
     input: DeviceUpdateInput!
-  ): DevicePayload
+  ): DevicePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -3884,7 +3145,7 @@ type BdrMutation {
   deviceDelete(
     "The input fields for deleting the device."
     input: DeviceDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/devices
   """
@@ -3898,7 +3159,7 @@ type BdrMutation {
   deviceIdentifierAdd(
     "The input fields for adding the identifier."
     input: DeviceIdentifierAddInput!
-  ): DeviceIdentifierPayload
+  ): DeviceIdentifierPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -3910,37 +3171,37 @@ type BdrMutation {
   deviceIdentifierRemove(
     "The input fields for removing the identifier."
     input: DeviceIdentifierRemoveInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/devices
   """
-  Activates a device: creates it with the given IMEI, records SIM/APN data, sets it
-  `awaiting_connection` and queues the SMS with APN and server settings. The first frame makes it
-  `active`. For an IMEI already on a `not_activated` or `awaiting_connection` device of the
-  caller's workspace, replaces that device's SIM/APN data and model and queues the SMS again; an
-  `active` or `inactive` device is refused. The device is returned even when the SMS could not be
-  queued.
+  Activates a device: creates it with the given IMEI, records SIM/APN data and sets it
+  `awaiting_connection`. For `AUTOMATIC` setup it also queues the SMS with APN and server settings;
+  for `MANUAL` setup nothing is sent, and the user enters `DeviceActivation.server` on the device.
+  The first frame makes it `active`. For an IMEI already on a `not_activated` or
+  `awaiting_connection` device of the caller's workspace, replaces that device's activation data and
+  model, cancels an SMS of its previous activation still waiting to be sent and, for `AUTOMATIC`
+  setup, queues the SMS again; an `active` or `inactive` device is refused. The device is returned
+  even when the SMS could not be queued.
   """
   deviceActivate(
     "The input fields for activating the device."
     input: DeviceActivateInput!
-  ): DevicePayload
-
-  # --- Assets ---
+  ): DevicePayload @effect(kinds: [DEVICES, PEOPLE])
 
   # @category: bdr/assets
   "Creates a new asset."
   assetCreate(
     "The input fields for creating the asset."
     input: AssetCreateInput!
-  ): AssetPayload
+  ): AssetPayload @effect(kinds: [NONE])
 
   # @category: bdr/assets
   "Updates an existing asset."
   assetUpdate(
     "The input fields for updating the asset."
     input: AssetUpdateInput!
-  ): AssetPayload
+  ): AssetPayload @effect(kinds: [NONE])
 
   # @category: bdr/assets
   """
@@ -3953,23 +3214,21 @@ type BdrMutation {
   assetDelete(
     "The input fields for deleting the asset."
     input: AssetDeleteInput!
-  ): DeletePayload
-
-  # --- Asset Groups ---
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/assets/groups
   "Creates a new asset group."
   assetGroupCreate(
     "The input fields for creating the asset group."
     input: AssetGroupCreateInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 
   # @category: bdr/assets/groups
   "Updates an existing asset group."
   assetGroupUpdate(
     "The input fields for updating the asset group."
     input: AssetGroupUpdateInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 
   # @category: bdr/assets/groups
   """
@@ -3982,37 +3241,35 @@ type BdrMutation {
   assetGroupDelete(
     "The input fields for deleting the asset group."
     input: AssetGroupDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/assets/groups
   "Adds assets to a group."
   assetGroupItemsAdd(
     "The input fields for adding assets to the group."
     input: AssetGroupItemsAddInput!
-  ): AssetGroupPayload
+  ): AssetGroupPayload @effect(kinds: [NONE])
 
   # @category: bdr/assets/groups
   "Removes assets from a group."
   assetGroupItemsRemove(
     "The input fields for removing assets from the group."
     input: AssetGroupItemsRemoveInput!
-  ): AssetGroupPayload
-
-  # --- GeoObjects ---
+  ): AssetGroupPayload @effect(kinds: [NONE])
 
   # @category: bdr/geo-objects
   "Creates a new geo object."
   geoObjectCreate(
     "The input fields for creating the geo object."
     input: GeoObjectCreateInput!
-  ): GeoObjectPayload
+  ): GeoObjectPayload @effect(kinds: [NONE])
 
   # @category: bdr/geo-objects
   "Updates an existing geo object."
   geoObjectUpdate(
     "The input fields for updating the geo object."
     input: GeoObjectUpdateInput!
-  ): GeoObjectPayload
+  ): GeoObjectPayload @effect(kinds: [NONE])
 
   # @category: bdr/geo-objects
   """
@@ -4025,23 +3282,21 @@ type BdrMutation {
   geoObjectDelete(
     "The input fields for deleting the geo object."
     input: GeoObjectDeleteInput!
-  ): DeletePayload
-
-  # --- Schedules ---
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/schedules
   "Creates a new schedule."
   scheduleCreate(
     "The input fields for creating the schedule."
     input: ScheduleCreateInput!
-  ): SchedulePayload
+  ): SchedulePayload @effect(kinds: [NONE])
 
   # @category: bdr/schedules
   "Updates an existing schedule."
   scheduleUpdate(
     "The input fields for updating the schedule."
     input: ScheduleUpdateInput!
-  ): SchedulePayload
+  ): SchedulePayload @effect(kinds: [NONE])
 
   # @category: bdr/schedules
   """
@@ -4054,23 +3309,21 @@ type BdrMutation {
   scheduleDelete(
     "The input fields for deleting the schedule."
     input: ScheduleDeleteInput!
-  ): DeletePayload
-
-  # --- Inventories ---
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/devices/inventory
   "Creates a new inventory."
   inventoryCreate(
     "The input fields for creating the inventory."
     input: InventoryCreateInput!
-  ): InventoryPayload
+  ): InventoryPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices/inventory
   "Updates an existing inventory."
   inventoryUpdate(
     "The input fields for updating the inventory."
     input: InventoryUpdateInput!
-  ): InventoryPayload
+  ): InventoryPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices/inventory
   """
@@ -4083,11 +3336,7 @@ type BdrMutation {
   inventoryDelete(
     "The input fields for deleting the inventory."
     input: InventoryDeleteInput!
-  ): DeletePayload
-
-  # Workspaces have no mutations: Console owns their lifecycle.
-
-  # --- Device Relations ---
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/devices/inventory
   """
@@ -4101,7 +3350,7 @@ type BdrMutation {
   deviceInventoryLink(
     "The input fields for linking the device."
     input: DeviceInventoryLinkInput!
-  ): DeviceInventoryRelationPayload
+  ): DeviceInventoryRelationPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices/inventory
   """
@@ -4114,7 +3363,7 @@ type BdrMutation {
   deviceInventoryUnlink(
     "The input fields for unlinking the device."
     input: DeviceInventoryUnlinkInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -4127,7 +3376,7 @@ type BdrMutation {
   deviceRelationCreate(
     "The input fields for creating the relationship."
     input: DeviceRelationCreateInput!
-  ): DeviceRelationPayload
+  ): DeviceRelationPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -4139,23 +3388,21 @@ type BdrMutation {
   deviceRelationRemove(
     "The input fields for removing the relationship."
     input: DeviceRelationRemoveInput!
-  ): DeletePayload
-
-  # --- Catalog Item CRUD ---
+  ): DeletePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   "Creates a new device type."
   deviceTypeCreate(
     "The input fields for creating the device type."
     input: DeviceTypeCreateInput!
-  ): DeviceTypePayload
+  ): DeviceTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   "Updates a device type."
   deviceTypeUpdate(
     "The input fields for updating the device type."
     input: DeviceTypeUpdateInput!
-  ): DeviceTypePayload
+  ): DeviceTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -4168,21 +3415,21 @@ type BdrMutation {
   deviceTypeDelete(
     "The input fields for deleting the device type."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/devices
   "Creates a new device status."
   deviceStatusCreate(
     "The input fields for creating the device status."
     input: DeviceStatusCreateInput!
-  ): DeviceStatusPayload
+  ): DeviceStatusPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   "Updates a device status."
   deviceStatusUpdate(
     "The input fields for updating the device status."
     input: DeviceStatusUpdateInput!
-  ): DeviceStatusPayload
+  ): DeviceStatusPayload @effect(kinds: [NONE])
 
   # @category: bdr/devices
   """
@@ -4195,21 +3442,21 @@ type BdrMutation {
   deviceStatusDelete(
     "The input fields for deleting the device status."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/assets
   "Creates a new asset type."
   assetTypeCreate(
     "The input fields for creating the asset type."
     input: AssetTypeCreateInput!
-  ): AssetTypePayload
+  ): AssetTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/assets
   "Updates an asset type."
   assetTypeUpdate(
     "The input fields for updating the asset type."
     input: AssetTypeUpdateInput!
-  ): AssetTypePayload
+  ): AssetTypePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/assets
   """
@@ -4222,21 +3469,21 @@ type BdrMutation {
   assetTypeDelete(
     "The input fields for deleting the asset type."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/assets/groups
   "Creates a new asset group type."
   assetGroupTypeCreate(
     "The input fields for creating the asset group type."
     input: AssetGroupTypeCreateInput!
-  ): AssetGroupTypePayload
+  ): AssetGroupTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/assets/groups
   "Updates an asset group type."
   assetGroupTypeUpdate(
     "The input fields for updating the asset group type."
     input: AssetGroupTypeUpdateInput!
-  ): AssetGroupTypePayload
+  ): AssetGroupTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/assets/groups
   """
@@ -4249,21 +3496,21 @@ type BdrMutation {
   assetGroupTypeDelete(
     "The input fields for deleting the asset group type."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/geo-objects
   "Creates a new geo object type."
   geoObjectTypeCreate(
     "The input fields for creating the geo object type."
     input: GeoObjectTypeCreateInput!
-  ): GeoObjectTypePayload
+  ): GeoObjectTypePayload @effect(kinds: [NONE])
 
   # @category: bdr/geo-objects
   "Updates a geo object type."
   geoObjectTypeUpdate(
     "The input fields for updating the geo object type."
     input: GeoObjectTypeUpdateInput!
-  ): GeoObjectTypePayload
+  ): GeoObjectTypePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/geo-objects
   """
@@ -4276,21 +3523,21 @@ type BdrMutation {
   geoObjectTypeDelete(
     "The input fields for deleting the geo object type."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/catalogs/tags
   "Creates a new tag."
   tagCreate(
     "The input fields for creating the tag."
     input: TagCreateInput!
-  ): TagPayload
+  ): TagPayload @effect(kinds: [NONE])
 
   # @category: bdr/catalogs/tags
   "Updates a tag."
   tagUpdate(
     "The input fields for updating the tag."
     input: TagUpdateInput!
-  ): TagPayload
+  ): TagPayload @effect(kinds: [NONE])
 
   # @category: bdr/catalogs/tags
   """
@@ -4303,21 +3550,21 @@ type BdrMutation {
   tagDelete(
     "The input fields for deleting the tag."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/catalogs/catalog-items
   "Creates a new user-defined catalog."
   catalogCreate(
     "The input fields for creating the catalog."
     input: CatalogCreateInput!
-  ): CatalogPayload
+  ): CatalogPayload @effect(kinds: [NONE])
 
   # @category: bdr/catalogs/catalog-items
   "Updates a user-defined catalog."
   catalogUpdate(
     "The input fields for updating the catalog."
     input: CatalogUpdateInput!
-  ): CatalogPayload
+  ): CatalogPayload @effect(kinds: [NONE])
 
   # @category: bdr/catalogs/catalog-items
   """
@@ -4330,21 +3577,21 @@ type BdrMutation {
   catalogDelete(
     "The input fields for deleting the catalog."
     input: CatalogDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 
   # @category: bdr/actors/users
   "Creates a new user catalog item."
   userCatalogItemCreate(
     "The input fields for creating the item."
     input: UserCatalogItemCreateInput!
-  ): UserCatalogItemPayload
+  ): UserCatalogItemPayload @effect(kinds: [NONE])
 
   # @category: bdr/actors/users
   "Updates a user catalog item."
   userCatalogItemUpdate(
     "The input fields for updating the item."
     input: UserCatalogItemUpdateInput!
-  ): UserCatalogItemPayload
+  ): UserCatalogItemPayload @effect(kinds: [NONE])
 
   # @category: bdr/actors/users
   """
@@ -4357,42 +3604,39 @@ type BdrMutation {
   userCatalogItemDelete(
     "The input fields for deleting the item."
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 }
 
-# =============================================================================
-# 21. SUBSCRIPTION
-# =============================================================================
-#
-# Subscription fields are NOT namespaced behind a wrapper the way `Query.bdr` and
-# `Query.tracking` are, and the exception is structural rather than stylistic: a subscription's
-# root field is the event source and must resolve to the stream itself. A wrapper object would
-# have to be emitted once and then stream from a nested field, which the specification does not
-# provide for. Module ownership therefore lives in the field name.
-#
-# `type Subscription` itself is declared in nvx4-tracking.graphql as of 0.11.0, beside the batch
-# it emits — the one root type this file does not hold. The `schema { … }` block above still names
-# it, and remains this contract's only such block.
+"""
+The root subscription type. One field per module that streams, the module named in the field: a
+subscription's root field is the stream itself and cannot sit behind a namespace wrapper.
+"""
+type Subscription {
+  # @category: tracking/state/streams
+  """
+  Full state of each followed asset, re-emitted whenever any of its devices reports.
 
-# =============================================================================
+  Every message carries the whole state rather than a delta, so a client holds no state machine
+  and a reconnect needs no reconciliation. The emission is a batch — see
+  `TrackingAssetStateBatch` — which is what carries the opening-snapshot markers and lets an
+  asset report that it has left the subscription.
 
-# =============================================================================
-# =============================================================================
-#
-# Bulk operations (mass update/delete) planned as asynchronous jobs.
-#
-# Planned approach:
-# - bulkUpdateDevices(input: BulkUpdateDevicesInput!): BulkJob!
-# - bulkDeleteDevices(input: BulkDeleteDevicesInput!): BulkJob!
-# - bulkJob(id: ID!): BulkJob
-#
-# BulkJob will include:
-# - status: PENDING | RUNNING | COMPLETED | FAILED
-# - progress: Int (0-100)
-# - result: JSON (success/failure counts)
-#
-# Behavior control (in input):
-# - stopOnError: Boolean (stop at first error vs continue)
-# - skipInvalid: Boolean (skip invalid items vs fail all)
-#
-# =============================================================================
+  Acts on the workspace the caller's token names, captured when the stream opens.
+
+  The workspace needs Tracking enabled in Console; otherwise the subscription is refused with
+  `PRODUCT_DISABLED`. Every refusal comes before the stream opens.
+
+  A caller that already has as many streams open as its concurrent stream limit allows is refused
+  with `RATE_LIMITED`. A slot frees when the server ends one of the caller's streams; for a
+  connection that dropped without closing, that happens only once the server notices the silence.
+  Retry with a backoff.
+
+  Each subscription spends one request from the caller's rate limit, the same budget its HTTP
+  requests to `/graphql` spend. Over it the subscription is refused with `RATE_LIMITED`; retry
+  with a backoff.
+  """
+  trackingAssetStates(
+    "What to follow, and how much of each state to deliver."
+    input: TrackingAssetStateSubscriptionInput!
+  ): TrackingAssetStateBatch!
+}

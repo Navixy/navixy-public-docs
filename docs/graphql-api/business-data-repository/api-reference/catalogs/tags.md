@@ -96,7 +96,7 @@ Creates a new tag.
 ```graphql
 tagCreate(
     input: TagCreateInput!
-  ): TagPayload
+  ): TagPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -181,7 +181,7 @@ Updates a tag.
 ```graphql
 tagUpdate(
     input: TagUpdateInput!
-  ): TagPayload
+  ): TagPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -271,7 +271,7 @@ Deletes a tag.
 ```graphql
 tagDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

@@ -83,6 +83,27 @@ _health: Boolean
 
 ---
 
+### serverTime
+
+The server's current time, for a client that measures an interval from a server timestamp such as
+  `DeviceActivation.activatedAt` without relying on the device clock. Not stored: each request reads the clock.
+
+```graphql
+serverTime: DateTime!
+```
+
+**Output types:**
+
+<details>
+
+<summary>DateTime</summary>
+
+An [ISO 8601](https://www.iso.org/standard/8601.html) datetime string with timezone ([RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html)). Example: `2024-01-15T10:30:00Z`.
+
+</details>
+
+---
+
 ## Objects
 
 <a id="deletepayload"></a>
@@ -107,7 +128,7 @@ A person, titled by the name Console holds for them.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `id` | `ID!` | The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`. |
 | `title` | `String!` | The display name of the actor. |
 
 ---
@@ -122,7 +143,7 @@ An API key acting on its own, titled by the name it was given in Console.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `id` | `ID!` | The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`. |
 | `title` | `String!` | The display name of the actor. |
 
 ---
@@ -137,7 +158,7 @@ A member of staff, acting through the admin operations. Always titled `Staff`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `id` | `ID!` | The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`. |
 | `title` | `String!` | The display name of the actor. |
 
 ---
@@ -154,7 +175,7 @@ carry the general one.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `id` | `ID!` | The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`. |
 | `title` | `String!` | The display name of the actor. |
 
 ---
@@ -228,6 +249,39 @@ How far a `CountInfo.count` can be trusted.
 
 ---
 
+<a id="dataclass"></a>
+
+### DataClass
+
+The class of data a type or field holds, as the schema labels it with `@dataClass`. The MCP server reads the labels to
+decide what an AI client may read and what its access log records.
+
+| Value | Description |
+| ----- | ----------- |
+| `ORDINARY` | Data about the fleet and the workspace, such as a device's identifiers. |
+| `PERSONAL` | Data about a person or that can be tied to one: positions and everything else tracking reports, custom field values, people and their ids, a phone number, and where and how a request was made. |
+
+---
+
+<a id="effectkind"></a>
+
+### EffectKind
+
+A kind of effect a mutation has beyond the data it writes, as the schema declares it with `@effect`. Through the MCP
+server an AI client may run only a mutation whose kinds are `NONE`; any other waits for a person's approval.
+
+| Value | Description |
+| ----- | ----------- |
+| `NONE` | No effect beyond the workspace's own data, and no data deleted; a change of links between entities, which the inverse call restores, deletes none. Stands alone in the list. |
+| `DEVICES` | An effect on devices, such as a command sent to a device or an IoT Logic flow that sends commands. |
+| `PEOPLE` | An effect on people, such as a message like an activation SMS, or a change to roles and role assignments. |
+| `MONEY` | An effect on money, such as a subscription, a plan, a payment or an invoice. |
+| `EXTERNAL` | An effect on a system outside Navixy, such as a webhook call. |
+| `DISCLOSURE` | Data leaving the workspace, such as a location-sharing link or a webhook that sends device messages to an address outside Navixy. |
+| `DATA_LOSS` | Data deleted, by a delete or by an update that deletes data, such as a custom field definition deleted with `onValues: CASCADE` or a flow update that removes the nodes it omits. |
+
+---
+
 ## Interfaces
 
 <a id="node"></a>
@@ -296,14 +350,14 @@ An object with a human-readable display name.
 ### Actor
 
 Someone or something that acted: a person or an API key Console names, a member of staff, or the system. Its name is
-read when asked and stored nowhere. Not a `Node`: an actor is read only through a row that names it, such as an audit
-event, never by an id a client supplies.
+read when asked and stored nowhere. Not a `Node`: an actor is read only through a record that names it, such as an
+audit event, never by an id a client supplies.
 
 **Implements:** [Titled](#titled)
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The actor's id, as the row that names it holds it. |
+| `id` | `ID!` | The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`. |
 | `title` | `String!` | The display name of the actor. |
 
 ---
@@ -449,9 +503,9 @@ coercion. Their length is a question about a calendar and a time zone, and a dur
 carries neither — a month is 28 to 31 days, and a week is 168 hours only where no DST transition
 falls inside it. A caller that means a calendar step asks for a date range instead.
 
-`@specifiedBy` points at the Navixy page rather than at [ISO 8601](https://www.iso.org/standard/8601.html) or [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html), because the full
-grammar in either is precisely what this scalar does not accept — a pointer to it would describe
-the wrong type.
+`@specifiedBy` points at the Navixy page rather than at [ISO 8601](https://www.iso.org/standard/8601.html) or [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339.html), because this
+scalar accepts only part of their grammar, and a pointer to either would describe the wrong type.
+The page states the same rules as the paragraphs above.
 
 ---
 
@@ -495,15 +549,14 @@ Arbitrary-precision decimal value encoded as a JSON string (e.g. `"5.25"`).
 String encoding avoids the precision loss inherent in JSON `Float`.
 
 Values exceeding the declared `scale` of a decimal custom field are rounded
-server-side using HALF_UP (round half away from zero for positive values,
-round half toward zero for negative — matches Java `RoundingMode.HALF_UP`).
-The rounded value is persisted in both the CFV table and the
-`custom_fields_data` JSONB blob; raw un-rounded input is never stored.
+server-side using HALF_UP: a value halfway between two neighbours rounds away
+from zero, so at scale 1 `0.25` becomes `0.3` and `-0.25` becomes `-0.3`.
+Only the rounded value is stored; the raw input is never kept.
 
-Storage is `numeric(28, 10)` — up to 28 significant digits, of which at
-most 10 follow the decimal point (so up to 18 digits before). Values
-exceeding this envelope (e.g. more than 18 integer digits) are rejected
-as `VALIDATION_ERROR` at the API layer.
+Values are stored with up to 28 significant digits, of which at most 10
+follow the decimal point (so up to 18 digits before). Values exceeding
+this envelope (e.g. more than 18 integer digits) are rejected as
+`VALIDATION_ERROR`.
 
 | Property | Value |
 | -------- | ----- |

@@ -1,47 +1,24 @@
-# =============================================================================
-# NAVIXY 4 - GraphQL Schema — Shared Kernel
-# =============================================================================
-#
-# Types, interfaces, scalars and the directive used by more than one module,
-# plus the pagination/identity contract.
-# Three groups do not fit it:
-# Each is read by a BDR type and by no other module's SDL; `Locale`'s consumer is the not-yet-written
-# `UserSettings` that 0.6.5 removed `User.locale` in favour of. "Used by a module" there means the
-# module's own SDL names the type: reachability through the type graph reaches almost everything
-# from almost anywhere and selects nothing.
-#
-# No independent version marker: the kernel is nobody's module (see the
-# `# Version:` header in nvx4-bdr.graphql and nvx4-billing*.graphql instead).
-#
-# The schema's only `schema { query: Query, mutation: Mutation, subscription: Subscription }`
-# definition lives in nvx4-bdr.graphql, not here — it names Query/Mutation, which are declared
-# there, and Apollo Kotlin's codegen classifies any schemaFiles entry with a `schema { ... }` block
-# or a type named `Query` as "a schema", erroring if more than one qualifies; nvx4-bdr.graphql
-# already qualifies via `type Query`, so the block has to live wherever that one file already does.
-#
-# TABLE OF CONTENTS
-# -----------------
-# 1. Directives
-# 2. Scalar Types
-# 3. Enums
-# 4. Interfaces
-# 5. Pagination Types
-# 6. Value Types
-# 7. Custom Field Types
-# 8. Custom Field Inputs
-#
-# =============================================================================
-
-# =============================================================================
-# 1. DIRECTIVES
-# =============================================================================
-
 "Automatically trims leading and trailing whitespace from string input values."
 directive @trim on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
 
-# =============================================================================
-# 2. SCALAR TYPES
-# =============================================================================
+"""
+The class of data an object type, a field, an argument or an input field holds. A field without a label takes the class
+of the object type that declares it; an argument or input field without one is ordinary.
+"""
+directive @dataClass(
+  "The class of the labelled element."
+  class: DataClass!
+) on OBJECT | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+"""
+The kinds of effect a mutation has beyond the data it writes. Every mutation of every namespace carries it. `DATA_LOSS`
+makes the mutation irreversible, any other kind but `NONE` makes it consequential, and `NONE` alone makes it
+reversible.
+"""
+directive @effect(
+  "The mutation's effects: `NONE` alone, or one or more of the other kinds."
+  kinds: [EffectKind!]!
+) on FIELD_DEFINITION
 
 # @category: common
 "An ISO 8601 datetime string with timezone (RFC 3339). Example: `2024-01-15T10:30:00Z`."
@@ -105,9 +82,9 @@ coercion. Their length is a question about a calendar and a time zone, and a dur
 carries neither — a month is 28 to 31 days, and a week is 168 hours only where no DST transition
 falls inside it. A caller that means a calendar step asks for a date range instead.
 
-`@specifiedBy` points at the Navixy page rather than at ISO 8601 or RFC 3339, because the full
-grammar in either is precisely what this scalar does not accept — a pointer to it would describe
-the wrong type.
+`@specifiedBy` points at the Navixy page rather than at ISO 8601 or RFC 3339, because this
+scalar accepts only part of their grammar, and a pointer to either would describe the wrong type.
+The page states the same rules as the paragraphs above.
 """
 scalar Duration @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#duration")
 
@@ -132,15 +109,14 @@ Arbitrary-precision decimal value encoded as a JSON string (e.g. `"5.25"`).
 String encoding avoids the precision loss inherent in JSON `Float`.
 
 Values exceeding the declared `scale` of a decimal custom field are rounded
-server-side using HALF_UP (round half away from zero for positive values,
-round half toward zero for negative — matches Java `RoundingMode.HALF_UP`).
-The rounded value is persisted in both the CFV table and the
-`custom_fields_data` JSONB blob; raw un-rounded input is never stored.
+server-side using HALF_UP: a value halfway between two neighbours rounds away
+from zero, so at scale 1 `0.25` becomes `0.3` and `-0.25` becomes `-0.3`.
+Only the rounded value is stored; the raw input is never kept.
 
-Storage is `numeric(28, 10)` — up to 28 significant digits, of which at
-most 10 follow the decimal point (so up to 18 digits before). Values
-exceeding this envelope (e.g. more than 18 integer digits) are rejected
-as `VALIDATION_ERROR` at the API layer.
+Values are stored with up to 28 significant digits, of which at most 10
+follow the decimal point (so up to 18 digits before). Values exceeding
+this envelope (e.g. more than 18 integer digits) are rejected as
+`VALIDATION_ERROR`.
 """
 scalar Decimal @specifiedBy(url: "https://www.navixy.com/docs/navixy-graphql-api/core-api-reference/common#decimal")
 
@@ -170,9 +146,6 @@ scalar EmailAddress
     url: "https://the-guild.dev/graphql/scalars/docs/scalars/email-address"
   )
 
-# scalar TimeZone
-#   @specifiedBy(url: "https://the-guild.dev/graphql/scalars/docs/scalars/time-zone")
-
 # @category: common
 "A hexadecimal color code. Supports 3-digit (`#RGB`) or 6-digit (`#RRGGBB`) format."
 scalar HexColorCode
@@ -186,10 +159,6 @@ scalar CountryCode
   @specifiedBy(
     url: "https://the-guild.dev/graphql/scalars/docs/scalars/country-code"
   )
-
-# =============================================================================
-# 3. ENUMS
-# =============================================================================
 
 # @category: common
 "The direction for sorting query results."
@@ -210,6 +179,52 @@ enum CountPrecision {
   items a client can page through.
   """
   APPROXIMATE
+}
+
+# @category: common
+"""
+The class of data a type or field holds, as the schema labels it with `@dataClass`. The MCP server reads the labels to
+decide what an AI client may read and what its access log records.
+"""
+enum DataClass {
+  "Data about the fleet and the workspace, such as a device's identifiers."
+  ORDINARY
+  """
+  Data about a person or that can be tied to one: positions and everything else tracking reports, custom field values,
+  people and their ids, a phone number, and where and how a request was made.
+  """
+  PERSONAL
+}
+
+# @category: common
+"""
+A kind of effect a mutation has beyond the data it writes, as the schema declares it with `@effect`. Through the MCP
+server an AI client may run only a mutation whose kinds are `NONE`; any other waits for a person's approval.
+"""
+enum EffectKind {
+  """
+  No effect beyond the workspace's own data, and no data deleted; a change of links between entities, which the inverse
+  call restores, deletes none. Stands alone in the list.
+  """
+  NONE
+  "An effect on devices, such as a command sent to a device or an IoT Logic flow that sends commands."
+  DEVICES
+  "An effect on people, such as a message like an activation SMS, or a change to roles and role assignments."
+  PEOPLE
+  "An effect on money, such as a subscription, a plan, a payment or an invoice."
+  MONEY
+  "An effect on a system outside Navixy, such as a webhook call."
+  EXTERNAL
+  """
+  Data leaving the workspace, such as a location-sharing link or a webhook that sends device messages to an address
+  outside Navixy.
+  """
+  DISCLOSURE
+  """
+  Data deleted, by a delete or by an update that deletes data, such as a custom field definition deleted with
+  `onValues: CASCADE` or a flow update that removes the nodes it omits.
+  """
+  DATA_LOSS
 }
 
 # @category: bdr/custom-fields
@@ -313,10 +328,6 @@ enum GeoJsonGeometryType {
   GEOMETRY_COLLECTION
 }
 
-# =============================================================================
-# 4. INTERFACES
-# =============================================================================
-
 # @category: common
 "An object with a globally unique identifier."
 interface Node {
@@ -361,11 +372,11 @@ interface Titled {
 # @category: common
 """
 Someone or something that acted: a person or an API key Console names, a member of staff, or the system. Its name is
-read when asked and stored nowhere. Not a `Node`: an actor is read only through a row that names it, such as an audit
-event, never by an id a client supplies.
+read when asked and stored nowhere. Not a `Node`: an actor is read only through a record that names it, such as an
+audit event, never by an id a client supplies.
 """
 interface Actor implements Titled {
-  "The actor's id, as the row that names it holds it."
+  "The actor's id, the same value as the actor id of the record that names the actor, such as `AuditEvent.actorId`."
   id: ID!
   "The display name of the actor."
   title: String!
@@ -373,22 +384,25 @@ interface Actor implements Titled {
 
 # @category: common
 "A person, titled by the name Console holds for them."
-type User implements Actor & Titled {
+type User implements Actor & Titled
+  @dataClass(class: PERSONAL) {
   id: ID!
   title: String!
 }
 
 # @category: common
 "An API key acting on its own, titled by the name it was given in Console."
-type ApiKey implements Actor & Titled {
+type ApiKey implements Actor & Titled
+  @dataClass(class: ORDINARY) {
   id: ID!
   title: String!
 }
 
 # @category: common
 "A member of staff, acting through the admin operations. Always titled `Staff`."
-type Staff implements Actor & Titled {
-  id: ID!
+type Staff implements Actor & Titled
+  @dataClass(class: ORDINARY) {
+  id: ID! @dataClass(class: PERSONAL)
   title: String!
 }
 
@@ -398,7 +412,8 @@ A system service acting on its own, titled by the service, such as `Demo Data Se
 titled `System`, as is a service this server does not know; events recorded before each service had its own actor
 carry the general one.
 """
-type SystemActor implements Actor & Titled {
+type SystemActor implements Actor & Titled
+  @dataClass(class: ORDINARY) {
   id: ID!
   title: String!
 }
@@ -451,13 +466,10 @@ interface MultiValue {
   isMulti: Boolean!
 }
 
-# =============================================================================
-# 5. PAGINATION TYPES
-# =============================================================================
-
 # @category: common
 "Information about the current page in a paginated connection."
-type PageInfo {
+type PageInfo
+  @dataClass(class: ORDINARY) {
   "Whether more items exist after the current page."
   hasNextPage: Boolean!
   "Whether more items exist before the current page."
@@ -468,27 +480,15 @@ type PageInfo {
   endCursor: String
 }
 
-# Pagination follows Relay Cursor Connections specification.
-# Arguments are provided directly on connection fields:
-#   first: Int     - Number of items to fetch from start (default: 20, max: 100)
-#   after: String  - Cursor to start after (forward pagination)
-#   last: Int      - Number of items to fetch from end
-#   before: String - Cursor to end before (backward pagination)
-#
-# If neither `first` nor `last` is specified, the server defaults to first: 20.
-
 # @category: common
 "Information about the total count of items in a connection."
-type CountInfo {
+type CountInfo
+  @dataClass(class: ORDINARY) {
   "The count of items matching the filter."
   count: Int!
   "The precision level of the count value."
   precision: CountPrecision!
 }
-
-# =============================================================================
-# 6. VALUE TYPES
-# =============================================================================
 
 # @category: common
 "ISO 4217 three-letter currency code (for example: USD, EUR, JPY)."
@@ -503,20 +503,10 @@ type Money {
   currency: Currency!
 }
 
-# =============================================================================
-# 7. CUSTOM FIELD TYPES
-# =============================================================================
-#
-# Vocabulary only — the engine (custom_field_definition, FK-bound to BDR's own
-# workspace/ci_base/ci_entity_type/actor tables) stays in BDR.
-#
-# DeviceCustomFieldValue, FieldParamsDevice and FieldParamsReference stay in nvx4-bdr.graphql —
-# they name BDR entity types (Device, CatalogItem) and would make the kernel depend on BDR. They
-# implement CustomFieldValue / FieldParams from that file instead; see the comment on each there.
-
 # @category: bdr/custom-fields
 "STRING / TEXT custom-field value."
-type StringCustomFieldValue implements CustomFieldValue {
+type StringCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The text value."
@@ -525,7 +515,8 @@ type StringCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "DECIMAL custom-field value (arbitrary precision, string-encoded)."
-type DecimalCustomFieldValue implements CustomFieldValue {
+type DecimalCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The decimal value, string-encoded to preserve arbitrary precision."
@@ -534,7 +525,8 @@ type DecimalCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "INTEGER custom-field value (signed 64-bit)."
-type IntegerCustomFieldValue implements CustomFieldValue {
+type IntegerCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The signed 64-bit integer value."
@@ -543,7 +535,8 @@ type IntegerCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "BOOLEAN custom-field value."
-type BooleanCustomFieldValue implements CustomFieldValue {
+type BooleanCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The boolean value."
@@ -552,7 +545,8 @@ type BooleanCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "DATE custom-field value."
-type DateCustomFieldValue implements CustomFieldValue {
+type DateCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The date value, without a time or a zone."
@@ -561,7 +555,8 @@ type DateCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "DATETIME custom-field value."
-type DateTimeCustomFieldValue implements CustomFieldValue {
+type DateTimeCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The date-time value, with the offset it was stored with."
@@ -570,7 +565,8 @@ type DateTimeCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "GEOJSON custom-field value."
-type GeoJsonCustomFieldValue implements CustomFieldValue {
+type GeoJsonCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The GeoJSON geometry."
@@ -579,7 +575,8 @@ type GeoJsonCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "OPTIONS custom-field value (one or more option codes)."
-type OptionsCustomFieldValue implements CustomFieldValue {
+type OptionsCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   isDefault: Boolean!
   "The selected option codes, in stored order."
@@ -588,7 +585,8 @@ type OptionsCustomFieldValue implements CustomFieldValue {
 
 # @category: bdr/custom-fields
 "REFERENCE custom-field value (one or more referenced entities; primary-capable)."
-type ReferenceCustomFieldValue implements CustomFieldValue {
+type ReferenceCustomFieldValue implements CustomFieldValue
+  @dataClass(class: PERSONAL) {
   code: Code!
   "Whether this field is on by default for this entity."
   isDefault: Boolean!
@@ -616,7 +614,8 @@ To change the field type, delete the definition and create a new one.
 Titled but not a `Node`: a definition is embedded in its owning catalog item and addressed
 through it, never by an id of its own. Within its owner it is identified by `code`.
 """
-type CustomFieldDefinition implements Titled {
+type CustomFieldDefinition implements Titled
+  @dataClass(class: ORDINARY) {
   "The human-readable display name."
   title: String!
   "The machine-readable code, unique per owner and workspace. Always starts with `cf_`."
@@ -647,7 +646,8 @@ type CustomFieldDefinition implements Titled {
 
 # @category: bdr/custom-fields
 "One custom-field type that may be defined on a given owner, and what it may point at."
-type FieldTypeAvailability {
+type FieldTypeAvailability
+  @dataClass(class: ORDINARY) {
   "The field type."
   fieldType: FieldType!
   """
@@ -666,33 +666,36 @@ interface FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for STRING field type."
-type FieldParamsString implements FieldParams {
+type FieldParamsString implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The minimum character length."
   minLength: Int
   "The maximum character length."
   maxLength: Int
   "The default value."
-  defaultString: String
+  defaultString: String @dataClass(class: PERSONAL)
   "Whether to trim leading and trailing whitespace."
   trim: Boolean!
 }
 
 # @category: bdr/custom-fields
 "Parameters for TEXT field type."
-type FieldParamsText implements FieldParams {
+type FieldParamsText implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The maximum character length."
   maxLength: Int
   "The default value."
-  defaultText: String
+  defaultText: String @dataClass(class: PERSONAL)
   "Whether to trim leading and trailing whitespace."
   trim: Boolean!
 }
 
 # @category: bdr/custom-fields
 "Parameters for DECIMAL field type."
-type FieldParamsDecimal implements FieldParams {
+type FieldParamsDecimal implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The minimum allowed value."
   minDecimal: Decimal
@@ -710,7 +713,8 @@ type FieldParamsDecimal implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for INTEGER field type."
-type FieldParamsInteger implements FieldParams {
+type FieldParamsInteger implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The minimum allowed value."
   minInteger: Long
@@ -722,7 +726,8 @@ type FieldParamsInteger implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for BOOLEAN field type."
-type FieldParamsBoolean implements FieldParams {
+type FieldParamsBoolean implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The default value."
   defaultBoolean: Boolean
@@ -730,7 +735,8 @@ type FieldParamsBoolean implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for DATE field type."
-type FieldParamsDate implements FieldParams {
+type FieldParamsDate implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The default value."
   defaultDate: Date
@@ -738,7 +744,8 @@ type FieldParamsDate implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for DATETIME field type."
-type FieldParamsDatetime implements FieldParams {
+type FieldParamsDatetime implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The default value."
   defaultDatetime: DateTime
@@ -746,7 +753,8 @@ type FieldParamsDatetime implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for GEOJSON field type."
-type FieldParamsGeojson implements FieldParams {
+type FieldParamsGeojson implements FieldParams
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   "The allowed geometry types. Null means all types are allowed."
   allowedTypes: [GeoJsonGeometryType!]
@@ -754,7 +762,8 @@ type FieldParamsGeojson implements FieldParams {
 
 # @category: bdr/custom-fields
 "Parameters for OPTIONS field type."
-type FieldParamsOptions implements FieldParams & MultiValue {
+type FieldParamsOptions implements FieldParams & MultiValue
+  @dataClass(class: ORDINARY) {
   isRequired: Boolean!
   isMulti: Boolean!
   "The available options to choose from."
@@ -765,7 +774,8 @@ type FieldParamsOptions implements FieldParams & MultiValue {
 
 # @category: bdr/custom-fields
 "A single option in an OPTIONS field."
-type FieldOption {
+type FieldOption
+  @dataClass(class: ORDINARY) {
   "The unique code for this option within the field."
   code: Code!
   "The display label."
@@ -775,10 +785,6 @@ type FieldOption {
   "Whether this option is archived and should not be shown for new selections."
   isArchived: Boolean!
 }
-
-# =============================================================================
-# 8. CUSTOM FIELD INPUTS
-# =============================================================================
 
 # @category: bdr/custom-fields
 """
@@ -844,16 +850,6 @@ input CustomFieldFilter {
   "The value to compare against. Null for `IS_NULL` and `IS_NOT_NULL` operators."
   value: CustomFieldFilterValue
 }
-
-#
-# OPERATOR RULES:
-#   - IS_NULL / IS_NOT_NULL: `value` must be null or omitted
-#   - IN: `value` must use `stringList` or `idList` variant
-#   - All other operators: `value` is a single-value variant
-#   - GT / GTE / LT / LTE: numeric, date and STRING fields only. TEXT is excluded — see FieldType.
-#
-# Invalid `value` format returns VALIDATION_ERROR with status 400.
-#
 
 # @category: bdr/custom-fields
 """
@@ -998,8 +994,8 @@ Data for creating a custom field definition within its parent catalog item.
 
 A type carries at most **50 active** definitions, and at most **100 in total** — active and
 archived together. Archiving a field frees an active slot but not a total one: an archived
-definition accepts no new values, so it cannot grow, but it keeps its row and the values already
-stored under it, and only `delete` releases that. System-level fields owned by the entity type
+definition accepts no new values, so it cannot grow, but it still exists and keeps the values
+already stored under it, and only `delete` releases that. System-level fields owned by the entity type
 rather than by the type, such as the platform's own `geojson_data`, sit in a separate scope and
 never reduce either allowance. A type belongs to exactly one workspace, so the allowances are per
 type.
@@ -1088,8 +1084,8 @@ Data for restoring a previously archived custom field definition.
 
 Restoring makes the field active again, so it is refused with `VALIDATION_ERROR` when the type is
 already at the **active** limit stated on `CustomFieldDefinitionCreateData` — otherwise archiving
-would be a way around that limit. The total limit never refuses a restore: the row already exists
-and is already counted, so restoring moves it between the two buckets without adding to the total.
+would be a way around that limit. The total limit never refuses a restore: the definition already
+exists and is already counted, so restoring moves it between the two buckets without adding to the total.
 Restoring a definition that is already active is never refused either, since it adds no field to
 the type; it still bumps the definition's `version`.
 """

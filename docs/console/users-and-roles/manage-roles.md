@@ -81,7 +81,7 @@ Roles marked **System** are created by Navixy and can't be edited. Their row on 
 
 ## Delete a role
 
-Deleting a role removes the access that it gives from everyone who has it. To delete a role, you need the Owner role or a role that includes the **Console** and **IAM** products.
+Deleting a role removes the access that it gives from everyone who has it. It also deletes the API keys that have the role, and the **Delete role** window says how many. The apps that use these keys lose the role's access, usually within seconds, even in sessions that already started. See [When a key stops working](../api-keys/README.md#when-a-key-stops-working). To delete a role, you need the Owner role or a role that includes the **Console** and **IAM** products.
 
 To delete a role, follow these steps:
 

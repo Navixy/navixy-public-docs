@@ -424,7 +424,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
 | `createdAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When this device record was created. |
-| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. |
+| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored activation the server cannot read, such as one with a missing key; the device itself and the list it is in are served. |
 | `identifiers` | [[DeviceIdentifier](#deviceidentifier)!]! | The hardware identifiers for this device (IMEI, serial number, MAC address, etc.). |
 | `asset` | [Asset](../assets/README.md#asset) | The asset this device is currently linked to. |
 | `inventory` | [Inventory](inventory.md#inventory) | The inventory this device is currently assigned to. |
@@ -479,6 +479,7 @@ Filtering options for devices.
 | `identifierContains` | `String` | Partial match on device identifier value (case-insensitive contains). |
 | `inventoryIds` | `[ID!]` | Filter by inventories (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
+| `search` | `String` | Free-text search for a device list search box: a device matches when its title or any of its identifier values contains the value (case-insensitive), or its activation SIM phone number contains it. The phone is stored as digits only, so spaces and the characters `+`, `-`, `(`, `)` and `.` are dropped from the value before it is compared with the phone. So `866104` finds a device by IMEI or by phone, and `+49 151` by phone. A value of only those characters still matches by title and identifier. |
 
 </details>
 
@@ -516,6 +517,42 @@ A paginated list of Device items.
 
 ---
 
+### deviceActivationServer
+
+The data gateway address a device of this model is pointed at: what the user enters on the device for
+  `MANUAL` setup, before `deviceActivate`, and what the `Register` SMS carries for `AUTOMATIC`. Null while
+  the installation publishes no address. Refused for a model that is not `supported`, as `deviceActivate` is.
+  Needs the `create` right on devices.
+
+```graphql
+deviceActivationServer(
+    modelId: ID!
+  ): ActivationServerAddress
+```
+
+**Arguments**
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| `modelId` | `ID!` | The device model the device is activated with. Must be `supported`. |
+
+**Output types:**
+
+<details>
+
+<summary>ActivationServerAddress</summary>
+
+The data gateway address a device connects to.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `host` | `String!` | The host name or IP address. |
+| `port` | `Int!` | The TCP port. |
+
+</details>
+
+---
+
 ### deviceActivationPhoneAvailable
 
 Whether `deviceActivate` would accept this phone: no device of any workspace holds it, or the one that does is the
@@ -547,7 +584,7 @@ Creates a new device.
 ```graphql
 deviceCreate(
     input: DeviceCreateInput!
-  ): DevicePayload
+  ): DevicePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -620,7 +657,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
 | `createdAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When this device record was created. |
-| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. |
+| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored activation the server cannot read, such as one with a missing key; the device itself and the list it is in are served. |
 | `identifiers` | [[DeviceIdentifier](#deviceidentifier)!]! | The hardware identifiers for this device (IMEI, serial number, MAC address, etc.). |
 | `asset` | [Asset](../assets/README.md#asset) | The asset this device is currently linked to. |
 | `inventory` | [Inventory](inventory.md#inventory) | The inventory this device is currently assigned to. |
@@ -639,7 +676,7 @@ Updates an existing device.
 ```graphql
 deviceUpdate(
     input: DeviceUpdateInput!
-  ): DevicePayload
+  ): DevicePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -697,7 +734,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
 | `createdAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When this device record was created. |
-| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. |
+| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored activation the server cannot read, such as one with a missing key; the device itself and the list it is in are served. |
 | `identifiers` | [[DeviceIdentifier](#deviceidentifier)!]! | The hardware identifiers for this device (IMEI, serial number, MAC address, etc.). |
 | `asset` | [Asset](../assets/README.md#asset) | The asset this device is currently linked to. |
 | `inventory` | [Inventory](inventory.md#inventory) | The inventory this device is currently assigned to. |
@@ -728,7 +765,7 @@ Deletes a device.
 ```graphql
 deviceDelete(
     input: DeviceDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -780,7 +817,7 @@ Adds an identifier to a device.
 ```graphql
 deviceIdentifierAdd(
     input: DeviceIdentifierAddInput!
-  ): DeviceIdentifierPayload
+  ): DeviceIdentifierPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -862,7 +899,7 @@ Removes an identifier from a device.
 ```graphql
 deviceIdentifierRemove(
     input: DeviceIdentifierRemoveInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -903,17 +940,19 @@ The result of a delete mutation.
 
 ### deviceActivate
 
-Activates a device: creates it with the given IMEI, records SIM/APN data, sets it
-  `awaiting_connection` and queues the SMS with APN and server settings. The first frame makes it
-  `active`. For an IMEI already on a `not_activated` or `awaiting_connection` device of the
-  caller's workspace, replaces that device's SIM/APN data and model and queues the SMS again; an
-  `active` or `inactive` device is refused. The device is returned even when the SMS could not be
-  queued.
+Activates a device: creates it with the given IMEI, records SIM/APN data and sets it
+  `awaiting_connection`. For `AUTOMATIC` setup it also queues the SMS with APN and server settings;
+  for `MANUAL` setup nothing is sent, and the user enters `DeviceActivation.server` on the device.
+  The first frame makes it `active`. For an IMEI already on a `not_activated` or
+  `awaiting_connection` device of the caller's workspace, replaces that device's activation data and
+  model, cancels an SMS of its previous activation still waiting to be sent and, for `AUTOMATIC`
+  setup, queues the SMS again; an `active` or `inactive` device is refused. The device is returned
+  even when the SMS could not be queued.
 
 ```graphql
 deviceActivate(
     input: DeviceActivateInput!
-  ): DevicePayload
+  ): DevicePayload @effect(kinds: [DEVICES, PEOPLE])
 ```
 
 **Arguments**
@@ -929,16 +968,16 @@ deviceActivate(
 <summary>DeviceActivateInput</summary>
 
 Input for activating a device: creates it with the given IMEI, records SIM/APN data, sets it
-`awaiting_connection`, and queues the SMS that pushes APN and server settings to it.
+`awaiting_connection`, and for `AUTOMATIC` setup queues the SMS that pushes APN and server settings to it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
+| `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
 | `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
 | `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
-| `phone` | `String!` | The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation. |
-| `apn` | [ApnSettingsInput](#apnsettingsinput)! | The APN settings pushed to the device. |
-| `activationCode` | `String` | An optional carrier-issued activation code, format-validated only. |
+| `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
+| `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 
 </details>
 
@@ -952,7 +991,7 @@ APN settings for `deviceActivate`.
 | ----- | ---- | ----------- |
 | `name` | `String!` | The APN name: 1-40 characters of letters, digits, `.`, `_` or `-`. |
 | `user` | `String` | The APN username, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. |
-| `password` | `String` | The APN password, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. |
+| `password` | `String` | The APN password, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. Not saved in the device activation: it goes only into the activation SMS text, which the command queue keeps with the queued command. Ignored for `MANUAL` setup. |
 
 </details>
 
@@ -988,7 +1027,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
 | `createdAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When this device record was created. |
-| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. |
+| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored activation the server cannot read, such as one with a missing key; the device itself and the list it is in are served. |
 | `identifiers` | [[DeviceIdentifier](#deviceidentifier)!]! | The hardware identifiers for this device (IMEI, serial number, MAC address, etc.). |
 | `asset` | [Asset](../assets/README.md#asset) | The asset this device is currently linked to. |
 | `inventory` | [Inventory](inventory.md#inventory) | The inventory this device is currently assigned to. |
@@ -1011,7 +1050,7 @@ Creates a relationship between devices.
 ```graphql
 deviceRelationCreate(
     input: DeviceRelationCreateInput!
-  ): DeviceRelationPayload
+  ): DeviceRelationPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1079,7 +1118,7 @@ Removes a device relationship.
 ```graphql
 deviceRelationRemove(
     input: DeviceRelationRemoveInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1125,7 +1164,7 @@ Creates a new device type.
 ```graphql
 deviceTypeCreate(
     input: DeviceTypeCreateInput!
-  ): DeviceTypePayload
+  ): DeviceTypePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1208,7 +1247,7 @@ Updates a device type.
 ```graphql
 deviceTypeUpdate(
     input: DeviceTypeUpdateInput!
-  ): DeviceTypePayload
+  ): DeviceTypePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1296,7 +1335,7 @@ Deletes a device type.
 ```graphql
 deviceTypeDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -1343,7 +1382,7 @@ Creates a new device status.
 ```graphql
 deviceStatusCreate(
     input: DeviceStatusCreateInput!
-  ): DeviceStatusPayload
+  ): DeviceStatusPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1426,7 +1465,7 @@ Updates a device status.
 ```graphql
 deviceStatusUpdate(
     input: DeviceStatusUpdateInput!
-  ): DeviceStatusPayload
+  ): DeviceStatusPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -1514,7 +1553,7 @@ Deletes a device status.
 ```graphql
 deviceStatusDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -1693,7 +1732,7 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 | `model` | [DeviceModel](#devicemodel)! | The specific device model. |
 | `status` | [DeviceStatus](#devicestatus)! | The current operational status. |
 | `createdAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When this device record was created. |
-| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. |
+| `activation` | [DeviceActivation](#deviceactivation) | SIM/APN activation data, present once the device has gone through `deviceActivate`. Null for a device created only via `deviceCreate`. Also null, with an `INTERNAL_ERROR` on this field alone, for a stored activation the server cannot read, such as one with a missing key; the device itself and the list it is in are served. |
 | `identifiers` | [[DeviceIdentifier](#deviceidentifier)!]! | The hardware identifiers for this device (IMEI, serial number, MAC address, etc.). |
 | `asset` | [Asset](../assets/README.md#asset) | The asset this device is currently linked to. |
 | `inventory` | [Inventory](inventory.md#inventory) | The inventory this device is currently assigned to. |
@@ -1717,17 +1756,31 @@ A tracking device such as a GPS tracker, sensor, or beacon.
 
 ### DeviceActivation
 
-SIM/APN data recorded by `deviceActivate` and used to build the `Register` SMS the platform sends
-to the device. Present once activation has run; absent for a device created only via `deviceCreate`.
-Whether the device has connected since is its status: `awaiting_connection` until its first frame
-reaches the platform, `active` after.
+SIM/APN data recorded by `deviceActivate`; for `AUTOMATIC` setup, the `Register` SMS the platform sends
+to the device is built from it. Present once activation has run; absent for a device created only via
+`deviceCreate`. Whether the device has connected since is its status: `awaiting_connection` until its
+first frame reaches the platform, `active` after.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `phone` | `String!` | The SIM phone number the activation SMS is sent to. Globally unique across the installation. |
-| `apn` | [ApnSettings](#apnsettings)! | The APN settings pushed to the device. |
-| `activationCode` | `String` | An optional carrier-issued activation code, format-validated only. |
+| `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
+| `phone` | `String` | The SIM phone number, globally unique across the installation. The activation SMS is sent to it for `AUTOMATIC` setup. Null for `MANUAL` setup activated without one. |
+| `apn` | [ApnSettings](#apnsettings) | The APN settings, pushed to the device for `AUTOMATIC` setup. Null for `MANUAL` setup activated without them. |
+| `server` | [ActivationServerAddress](#activationserveraddress) | The data gateway address the device connects to, to be entered on the device for `MANUAL` setup. Null while the installation publishes no address. |
 | `activatedAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When `deviceActivate` last recorded this activation. |
+
+---
+
+<a id="activationserveraddress"></a>
+
+### ActivationServerAddress
+
+The data gateway address a device connects to.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `host` | `String!` | The host name or IP address. |
+| `port` | `Int!` | The TCP port. |
 
 ---
 
@@ -1856,6 +1909,7 @@ Filtering options for devices.
 | `identifierContains` | `String` | Partial match on device identifier value (case-insensitive contains). |
 | `inventoryIds` | `[ID!]` | Filter by inventories (OR within field). |
 | `titleContains` | `String` | Partial match on title (case-insensitive contains). |
+| `search` | `String` | Free-text search for a device list search box: a device matches when its title or any of its identifier values contains the value (case-insensitive), or its activation SIM phone number contains it. The phone is stored as digits only, so spaces and the characters `+`, `-`, `(`, `)` and `.` are dropped from the value before it is compared with the phone. So `866104` finds a device by IMEI or by phone, and `+49 151` by phone. A value of only those characters still matches by title and identifier. |
 
 ---
 
@@ -1980,7 +2034,7 @@ APN settings for `deviceActivate`.
 | ----- | ---- | ----------- |
 | `name` | `String!` | The APN name: 1-40 characters of letters, digits, `.`, `_` or `-`. |
 | `user` | `String` | The APN username, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. |
-| `password` | `String` | The APN password, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. |
+| `password` | `String` | The APN password, if the carrier requires one: at most 40 characters of letters, digits, `.`, `_`, `-` or `@`. Not saved in the device activation: it goes only into the activation SMS text, which the command queue keeps with the queued command. Ignored for `MANUAL` setup. |
 
 ---
 
@@ -1989,16 +2043,16 @@ APN settings for `deviceActivate`.
 ### DeviceActivateInput
 
 Input for activating a device: creates it with the given IMEI, records SIM/APN data, sets it
-`awaiting_connection`, and queues the SMS that pushes APN and server settings to it.
+`awaiting_connection`, and for `AUTOMATIC` setup queues the SMS that pushes APN and server settings to it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
+| `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
 | `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
 | `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
-| `phone` | `String!` | The SIM phone number the activation SMS is sent to: 5 to 20 digits. Globally unique across the installation. |
-| `apn` | [ApnSettingsInput](#apnsettingsinput)! | The APN settings pushed to the device. |
-| `activationCode` | `String` | An optional carrier-issued activation code, format-validated only. |
+| `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
+| `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 
 ---
 
@@ -2107,6 +2161,19 @@ The type of hardware identifier used to identify a device.
 | `MAC_ADDRESS` | Media Access Control address of a network interface. |
 | `SERIAL_NUMBER` | Manufacturer-assigned serial number. |
 | `CUSTOM` | A custom identifier type defined by the workspace. |
+
+---
+
+<a id="devicesetup"></a>
+
+### DeviceSetup
+
+How a device activated by `deviceActivate` receives its server settings.
+
+| Value | Description |
+| ----- | ----------- |
+| `AUTOMATIC` | The platform queues an SMS that pushes the APN and server settings to the device. Needs `phone` and `apn`. |
+| `MANUAL` | The user enters the server settings on the device by hand, from `DeviceActivation.server`. No SMS is sent. |
 
 ---
 

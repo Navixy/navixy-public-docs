@@ -117,7 +117,7 @@ Subscribes the caller's own workspace to a plan, optionally on a branch.
 ```graphql
 mySubscribe(
     input: BillingMySubscribeInput!
-  ): BillingWorkspaceSubscribePayload
+  ): BillingWorkspaceSubscribePayload @effect(kinds: [MONEY])
 ```
 
 **Arguments**

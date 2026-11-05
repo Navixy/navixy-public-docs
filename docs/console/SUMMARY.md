@@ -9,4 +9,8 @@
 * [Users and roles](users-and-roles/README.md)
   * [Manage users](users-and-roles/manage-users.md)
   * [Manage roles](users-and-roles/manage-roles.md)
+* [API keys](api-keys/README.md)
+  * [Manage API keys](api-keys/manage-api-keys.md)
+* [Audit log](audit-log/README.md)
+  * [Investigate changes](audit-log/investigate-changes.md)
 * [Billing](billing/README.md)

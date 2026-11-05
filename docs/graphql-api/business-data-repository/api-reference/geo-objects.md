@@ -291,7 +291,7 @@ Creates a new geo object.
 ```graphql
 geoObjectCreate(
     input: GeoObjectCreateInput!
-  ): GeoObjectPayload
+  ): GeoObjectPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -476,7 +476,7 @@ Updates an existing geo object.
 ```graphql
 geoObjectUpdate(
     input: GeoObjectUpdateInput!
-  ): GeoObjectPayload
+  ): GeoObjectPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -666,7 +666,7 @@ Deletes a geo object.
 ```graphql
 geoObjectDelete(
     input: GeoObjectDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -713,7 +713,7 @@ Creates a new geo object type.
 ```graphql
 geoObjectTypeCreate(
     input: GeoObjectTypeCreateInput!
-  ): GeoObjectTypePayload
+  ): GeoObjectTypePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -780,8 +780,8 @@ Data for creating a custom field definition within its parent catalog item.
 
 A type carries at most **50 active** definitions, and at most **100 in total** — active and
 archived together. Archiving a field frees an active slot but not a total one: an archived
-definition accepts no new values, so it cannot grow, but it keeps its row and the values already
-stored under it, and only `delete` releases that. System-level fields owned by the entity type
+definition accepts no new values, so it cannot grow, but it still exists and keeps the values
+already stored under it, and only `delete` releases that. System-level fields owned by the entity type
 rather than by the type, such as the platform's own `geojson_data`, sit in a separate scope and
 never reduce either allowance. A type belongs to exactly one workspace, so the allowances are per
 type.
@@ -1063,8 +1063,8 @@ Data for restoring a previously archived custom field definition.
 
 Restoring makes the field active again, so it is refused with `VALIDATION_ERROR` when the type is
 already at the **active** limit stated on `CustomFieldDefinitionCreateData` — otherwise archiving
-would be a way around that limit. The total limit never refuses a restore: the row already exists
-and is already counted, so restoring moves it between the two buckets without adding to the total.
+would be a way around that limit. The total limit never refuses a restore: the definition already
+exists and is already counted, so restoring moves it between the two buckets without adding to the total.
 Restoring a definition that is already active is never refused either, since it adds no field to
 the type; it still bumps the definition's `version`.
 
@@ -1119,7 +1119,7 @@ Updates a geo object type.
 ```graphql
 geoObjectTypeUpdate(
     input: GeoObjectTypeUpdateInput!
-  ): GeoObjectTypePayload
+  ): GeoObjectTypePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -1187,8 +1187,8 @@ Data for creating a custom field definition within its parent catalog item.
 
 A type carries at most **50 active** definitions, and at most **100 in total** — active and
 archived together. Archiving a field frees an active slot but not a total one: an archived
-definition accepts no new values, so it cannot grow, but it keeps its row and the values already
-stored under it, and only `delete` releases that. System-level fields owned by the entity type
+definition accepts no new values, so it cannot grow, but it still exists and keeps the values
+already stored under it, and only `delete` releases that. System-level fields owned by the entity type
 rather than by the type, such as the platform's own `geojson_data`, sit in a separate scope and
 never reduce either allowance. A type belongs to exactly one workspace, so the allowances are per
 type.
@@ -1470,8 +1470,8 @@ Data for restoring a previously archived custom field definition.
 
 Restoring makes the field active again, so it is refused with `VALIDATION_ERROR` when the type is
 already at the **active** limit stated on `CustomFieldDefinitionCreateData` — otherwise archiving
-would be a way around that limit. The total limit never refuses a restore: the row already exists
-and is already counted, so restoring moves it between the two buckets without adding to the total.
+would be a way around that limit. The total limit never refuses a restore: the definition already
+exists and is already counted, so restoring moves it between the two buckets without adding to the total.
 Restoring a definition that is already active is never refused either, since it adds no field to
 the type; it still bumps the definition's `version`.
 
@@ -1530,7 +1530,7 @@ Deletes a geo object type.
 ```graphql
 geoObjectTypeDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

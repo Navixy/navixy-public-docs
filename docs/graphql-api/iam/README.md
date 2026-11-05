@@ -11,7 +11,7 @@ tags:
 
 **IAM** (Identity and Access Management) is the product that decides who may do what in your organization. It's one of the products served by [Navixy GraphQL API](../). IAM stores the organization's roles, what each role gives access to, and who holds each role. Every product checks requests against these roles. IAM has no app of its own. The [Users and roles](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/users-and-roles) page in Navixy Console works with the same roles, so a role that you create through the API appears there, and a role created there is available through the API. This documentation is for Navixy users who call the API for their own organization to set up roles and assign them to members.
 
-All IAM queries are nested under the `iam` field of the `Query` type and IAM mutations under the `iam` field of the `Mutation` type. Authentication and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication.md) and [Error handling](../error-handling.md) to learn that. IAM lists are paged differently from the other products: see [How these lists paginate](api-reference/README.md#how-these-lists-paginate). For the endpoint and request headers, see [Getting started](../getting-started.md).
+All IAM queries are nested under the `iam` field of the `Query` type and IAM mutations under the `iam` field of the `Mutation` type. Authentication and error handling work the same way for every product of Navixy GraphQL API, so see [Authentication](../authentication/README.md) and [Error handling](../error-handling.md) to learn that. IAM lists are paged differently from the other products: see [How these lists paginate](api-reference/README.md#how-these-lists-paginate). For the endpoint and request headers, see [Getting started](../getting-started.md).
 
 ## Purpose and capabilities
 
@@ -21,6 +21,7 @@ IAM API enables you to:
 * Create a role, change what it gives access to, and delete it
 * See which roles a member holds and who holds a role
 * Assign a role to a member, permanently or until a set time, and revoke it
+* Read the audit events of your organization's roles and role assignments
 
 Your access token names one of your organizations and one of its workspaces. IAM works with the roles of that organization. To work with the roles of another organization, you need a token issued for it.
 
@@ -55,6 +56,7 @@ The [IAM API reference](api-reference/) documents the operations and types, expl
 * [Roles](api-reference/roles.md) documents the roles of your organization and the changes that create, replace, and delete a role.
 * [Role access](api-reference/role-access.md) documents what a role gives access to: workspaces, products, features, and data resources.
 * [Role assignments](api-reference/role-assignments.md) documents who holds which role and the changes that assign and revoke a role.
+* [Audit](api-reference/audit.md) documents the queries that read the audit events that IAM records.
 
 For the types that IAM shares with the other products and for an index of the whole API, see [Core API reference](../core-api-reference/).
 

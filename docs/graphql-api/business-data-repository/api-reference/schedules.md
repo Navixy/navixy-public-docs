@@ -132,7 +132,7 @@ Creates a new schedule.
 ```graphql
 scheduleCreate(
     input: ScheduleCreateInput!
-  ): SchedulePayload
+  ): SchedulePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -197,7 +197,7 @@ Updates an existing schedule.
 ```graphql
 scheduleUpdate(
     input: ScheduleUpdateInput!
-  ): SchedulePayload
+  ): SchedulePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -268,7 +268,7 @@ Deletes a schedule.
 ```graphql
 scheduleDelete(
     input: ScheduleDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

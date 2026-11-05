@@ -27,7 +27,7 @@ workspaceProducts(
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to list products for, by its workspace ID. |
+| `workspaceId` | `ID!` | The workspace to list products for, by its workspace ID: the same value as `Workspace.id`. A value that is not a workspace id is refused with VALIDATION_ERROR naming `workspaceId`. |
 
 **Output types:**
 
@@ -35,7 +35,7 @@ workspaceProducts(
 
 <summary>ConsoleWorkspaceProduct</summary>
 
-One product a workspace may or does have enabled.
+One product a workspace may or does have enabled, as Console reports it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -46,7 +46,7 @@ One product a workspace may or does have enabled.
 | `covered` | `Boolean!` | Whether the workspace's current plan covers this product. |
 | `isDefault` | `Boolean!` | Whether the plan covering this product turned it on by default when this workspace was created. |
 | `isRequired` | `Boolean!` | Whether the covering plan requires this product: Console refuses both enabling and disabling it (PRODUCT_MANAGED_BY_PLAN), except re-enabling it after FAILED. |
-| `coveredBySubscriptionId` | `ID` | The subscription covering this product, by its ID in Billing. Non-null exactly when `covered` is true: Console's coverage comes only from subscriptions. |
+| `coveredBySubscriptionId` | `ID` | The subscription covering this product, by its ID in Billing: the same value as `BillingWorkspaceSubscription.id`. Non-null exactly when `covered` is true: Console's coverage comes only from subscriptions. |
 | `coveredByPlanName` | `String` | The name of the plan covering this product, when covered by a plan. |
 | `coverageLostAt` | [DateTime](../../core-api-reference/common.md#datetime) | When coverage from a plan or subscription lapsed, if it ever did. Null while still covered, or never covered. |
 | `desiredState` | `String` | What Console converges the product to, set by a toggle or by a plan that installs the product. Null when the product was never installed in this workspace. |
@@ -125,12 +125,12 @@ workspaceOperation(
 
 <summary>ConsoleWorkspaceOperation</summary>
 
-One workspace operation Console tracked.
+One workspace operation Console tracked, read back in full.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The operation ID, as Console issued it. `node(id:)` returns `null` for it, because no type in this API is an operation. |
-| `workspaceId` | `ID!` | The workspace the operation acted on, by its workspace ID. |
+| `id` | `ID!` | The operation ID, as Console issued it: the `id` that `workspaceOperation` takes. `node(id:)` returns `null` for it, because no type in this API is an operation. |
+| `workspaceId` | `ID!` | The workspace the operation acted on, by its workspace ID: the same value as `Workspace.id`. |
 | `organizationId` | `ID!` | The organization the workspace belongs to: the same value as `ConsoleOrganization.id`. |
 | `operationType` | `String!` | Console's own operation-type vocabulary: provision, update, stop, start, delete, product_attach or product_detach. |
 | `status` | `String!` | Console's own operation-status vocabulary: accepted, in_progress, completed, failed or cancelled. |
@@ -156,7 +156,7 @@ Enables a product on a workspace. Answers once Console accepts the request; the 
 ```graphql
 workspaceProductEnable(
     input: ConsoleWorkspaceProductEnableInput!
-  ): ConsoleWorkspaceOperationPayload
+  ): ConsoleWorkspaceOperationPayload @effect(kinds: [PEOPLE, MONEY])
 ```
 
 **Arguments**
@@ -175,7 +175,7 @@ Input for enabling a product on a workspace.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to enable the product on, by its workspace ID. |
+| `workspaceId` | `ID!` | The workspace to enable the product on, by its workspace ID: the same value as `Workspace.id`. A value that is not a workspace id is refused with VALIDATION_ERROR. |
 | `productCode` | [Code](../../core-api-reference/common.md#code)! | The product's code in Billing, the same value as `BillingProductDomain.code`, for example `bdr`. |
 
 </details>
@@ -204,8 +204,8 @@ back in full. The change is accepted and runs asynchronously; follow it with
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The operation ID, as Console issued it. Pass it to `workspaceOperation` to follow the change until it's done. |
-| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID. |
+| `id` | `ID!` | Console's own operation id. Pass this to workspaceOperation to follow the toggle to completion. |
+| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID: the same value as `Workspace.id`. |
 | `operationType` | `String!` | Console's own operation-type vocabulary: for a toggle, product_attach or product_detach. |
 | `status` | `String!` | Console's own operation-status vocabulary. Starts as \"accepted\" on this receipt. |
 | `createdAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When Console created the operation record. |
@@ -222,7 +222,7 @@ Disables a product on a workspace. Answers once Console accepts the request; the
 ```graphql
 workspaceProductDisable(
     input: ConsoleWorkspaceProductDisableInput!
-  ): ConsoleWorkspaceOperationPayload
+  ): ConsoleWorkspaceOperationPayload @effect(kinds: [PEOPLE, MONEY])
 ```
 
 **Arguments**
@@ -241,8 +241,8 @@ Input for disabling a product on a workspace.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to disable the product on, by its workspace ID. |
-| `productId` | `ID!` | The product to disable, by its ID in Billing: the same value as `BillingProductDomain.id`. |
+| `workspaceId` | `ID!` | The workspace to disable the product on, by its workspace ID: the same value as `Workspace.id`. A value that is not a workspace id is refused with VALIDATION_ERROR. |
+| `productId` | `ID!` | The product to disable, by its ID in Billing: the same value as `ConsoleWorkspaceProduct.productId` and `BillingProductDomain.id`. A value that is not a product id is refused with VALIDATION_ERROR. |
 
 </details>
 
@@ -270,8 +270,8 @@ back in full. The change is accepted and runs asynchronously; follow it with
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The operation ID, as Console issued it. Pass it to `workspaceOperation` to follow the change until it's done. |
-| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID. |
+| `id` | `ID!` | Console's own operation id. Pass this to workspaceOperation to follow the toggle to completion. |
+| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID: the same value as `Workspace.id`. |
 | `operationType` | `String!` | Console's own operation-type vocabulary: for a toggle, product_attach or product_detach. |
 | `status` | `String!` | Console's own operation-status vocabulary. Starts as \"accepted\" on this receipt. |
 | `createdAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When Console created the operation record. |
@@ -300,7 +300,7 @@ Whether the caller may take one action on a workspace product, and why not when 
 
 ### ConsoleWorkspaceProduct
 
-One product a workspace may or does have enabled.
+One product a workspace may or does have enabled, as Console reports it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -311,7 +311,7 @@ One product a workspace may or does have enabled.
 | `covered` | `Boolean!` | Whether the workspace's current plan covers this product. |
 | `isDefault` | `Boolean!` | Whether the plan covering this product turned it on by default when this workspace was created. |
 | `isRequired` | `Boolean!` | Whether the covering plan requires this product: Console refuses both enabling and disabling it (PRODUCT_MANAGED_BY_PLAN), except re-enabling it after FAILED. |
-| `coveredBySubscriptionId` | `ID` | The subscription covering this product, by its ID in Billing. Non-null exactly when `covered` is true: Console's coverage comes only from subscriptions. |
+| `coveredBySubscriptionId` | `ID` | The subscription covering this product, by its ID in Billing: the same value as `BillingWorkspaceSubscription.id`. Non-null exactly when `covered` is true: Console's coverage comes only from subscriptions. |
 | `coveredByPlanName` | `String` | The name of the plan covering this product, when covered by a plan. |
 | `coverageLostAt` | [DateTime](../../core-api-reference/common.md#datetime) | When coverage from a plan or subscription lapsed, if it ever did. Null while still covered, or never covered. |
 | `desiredState` | `String` | What Console converges the product to, set by a toggle or by a plan that installs the product. Null when the product was never installed in this workspace. |
@@ -348,12 +348,12 @@ One entry of Console's own product catalog.
 
 ### ConsoleWorkspaceOperation
 
-One workspace operation Console tracked.
+One workspace operation Console tracked, read back in full.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The operation ID, as Console issued it. `node(id:)` returns `null` for it, because no type in this API is an operation. |
-| `workspaceId` | `ID!` | The workspace the operation acted on, by its workspace ID. |
+| `id` | `ID!` | The operation ID, as Console issued it: the `id` that `workspaceOperation` takes. `node(id:)` returns `null` for it, because no type in this API is an operation. |
+| `workspaceId` | `ID!` | The workspace the operation acted on, by its workspace ID: the same value as `Workspace.id`. |
 | `organizationId` | `ID!` | The organization the workspace belongs to: the same value as `ConsoleOrganization.id`. |
 | `operationType` | `String!` | Console's own operation-type vocabulary: provision, update, stop, start, delete, product_attach or product_detach. |
 | `status` | `String!` | Console's own operation-status vocabulary: accepted, in_progress, completed, failed or cancelled. |
@@ -377,8 +377,8 @@ back in full. The change is accepted and runs asynchronously; follow it with
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The operation ID, as Console issued it. Pass it to `workspaceOperation` to follow the change until it's done. |
-| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID. |
+| `id` | `ID!` | Console's own operation id. Pass this to workspaceOperation to follow the toggle to completion. |
+| `workspaceId` | `ID!` | The workspace the operation acts on, by its workspace ID: the same value as `Workspace.id`. |
 | `operationType` | `String!` | Console's own operation-type vocabulary: for a toggle, product_attach or product_detach. |
 | `status` | `String!` | Console's own operation-status vocabulary. Starts as \"accepted\" on this receipt. |
 | `createdAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When Console created the operation record. |
@@ -407,7 +407,7 @@ Input for enabling a product on a workspace.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to enable the product on, by its workspace ID. |
+| `workspaceId` | `ID!` | The workspace to enable the product on, by its workspace ID: the same value as `Workspace.id`. A value that is not a workspace id is refused with VALIDATION_ERROR. |
 | `productCode` | [Code](../../core-api-reference/common.md#code)! | The product's code in Billing, the same value as `BillingProductDomain.code`, for example `bdr`. |
 
 ---
@@ -420,8 +420,8 @@ Input for disabling a product on a workspace.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `workspaceId` | `ID!` | The workspace to disable the product on, by its workspace ID. |
-| `productId` | `ID!` | The product to disable, by its ID in Billing: the same value as `BillingProductDomain.id`. |
+| `workspaceId` | `ID!` | The workspace to disable the product on, by its workspace ID: the same value as `Workspace.id`. A value that is not a workspace id is refused with VALIDATION_ERROR. |
+| `productId` | `ID!` | The product to disable, by its ID in Billing: the same value as `ConsoleWorkspaceProduct.productId` and `BillingProductDomain.id`. A value that is not a product id is refused with VALIDATION_ERROR. |
 
 ---
 
@@ -431,9 +431,8 @@ Input for disabling a product on a workspace.
 
 ### ConsoleWorkspaceProductState
 
-Console's own workspace-product toggle state (`WorkspaceProductState.resolve`), derived from whether
-a subscription the workspace holds covers the product and what Console last asked for (desired)
-versus what it has last observed.
+Console's own workspace-product toggle state, derived from whether a subscription the workspace
+holds covers the product and what Console last asked for (desired) versus what it has last observed.
 
 | Value | Description |
 | ----- | ----------- |

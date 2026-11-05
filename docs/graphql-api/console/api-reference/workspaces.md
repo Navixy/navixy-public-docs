@@ -52,7 +52,7 @@ A page of workspaces the caller can access.
 | `edges` | [[ConsoleWorkspaceEdge](#consoleworkspaceedge)!]! |  |
 | `nodes` | [[ConsoleWorkspace](#consoleworkspace)!]! |  |
 | `pageInfo` | [PageInfo](../../core-api-reference/common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../../core-api-reference/common.md#countinfo) | The total count of items matching the filter, with precision APPROXIMATE: Console counts every workspace, including any whose ID isn't a workspace ID of this deployment and which this query leaves out of `edges` and `nodes`, so the count can exceed what the connection returns. |
+| `total` | [CountInfo](../../core-api-reference/common.md#countinfo) | The total count of items matching the filter, with precision APPROXIMATE: Console counts every workspace that matches, including one whose ID isn't a workspace ID of this deployment, such as an older workspace or one issued for another region. This query leaves such a workspace out of `edges` and `nodes`, so the count can be higher than what the connection returns. |
 
 </details>
 
@@ -93,7 +93,7 @@ A page of workspaces the caller can access.
 | `edges` | [[ConsoleWorkspaceEdge](#consoleworkspaceedge)!]! |  |
 | `nodes` | [[ConsoleWorkspace](#consoleworkspace)!]! |  |
 | `pageInfo` | [PageInfo](../../core-api-reference/common.md#pageinfo)! | Information about the current page. |
-| `total` | [CountInfo](../../core-api-reference/common.md#countinfo) | The total count of items matching the filter, with precision APPROXIMATE: Console counts every workspace, including any whose ID isn't a workspace ID of this deployment and which this query leaves out of `edges` and `nodes`, so the count can exceed what the connection returns. |
+| `total` | [CountInfo](../../core-api-reference/common.md#countinfo) | The total count of items matching the filter, with precision APPROXIMATE: Console counts every workspace that matches, including one whose ID isn't a workspace ID of this deployment, such as an older workspace or one issued for another region. This query leaves such a workspace out of `edges` and `nodes`, so the count can be higher than what the connection returns. |
 
 ---
 

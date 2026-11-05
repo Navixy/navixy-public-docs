@@ -50,7 +50,7 @@ Creates a new user catalog item.
 ```graphql
 userCatalogItemCreate(
     input: UserCatalogItemCreateInput!
-  ): UserCatalogItemPayload
+  ): UserCatalogItemPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -137,7 +137,7 @@ Updates a user catalog item.
 ```graphql
 userCatalogItemUpdate(
     input: UserCatalogItemUpdateInput!
-  ): UserCatalogItemPayload
+  ): UserCatalogItemPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -228,7 +228,7 @@ Deletes a user catalog item.
 ```graphql
 userCatalogItemDelete(
     input: CatalogItemDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

@@ -40,7 +40,7 @@ One role a member holds in the caller's organization.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the user or API key that holds the role, the same value as `ConsoleMember.actorId`. It's a `UUID`, so `node(id:)` can't return a record for it. |
+| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's id for the actor holding the role, the same id as `ConsoleMember.actorId`. |
 | `role` | [IamRole](roles.md#iamrole)! | The role held. |
 | `expiresAt` | [DateTime](../../core-api-reference/common.md#datetime) | When the assignment expires. Null for a permanent one. |
 
@@ -111,7 +111,7 @@ Assigns a role to a member. IAM refuses the assignment in these cases, and the e
 ```graphql
 memberRoleAssign(
     input: IamMemberRoleAssignInput!
-  ): IamMemberRoleAssignPayload
+  ): IamMemberRoleAssignPayload @effect(kinds: [PEOPLE])
 ```
 
 **Arguments**
@@ -168,7 +168,7 @@ Revokes a role from a member. IAM refuses the revocation in these cases, and the
 ```graphql
 memberRoleRevoke(
     input: IamMemberRoleRevokeInput!
-  ): IamMemberRoleRevokePayload
+  ): IamMemberRoleRevokePayload @effect(kinds: [PEOPLE])
 ```
 
 **Arguments**
@@ -219,7 +219,7 @@ One role a member holds in the caller's organization.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the user or API key that holds the role, the same value as `ConsoleMember.actorId`. It's a `UUID`, so `node(id:)` can't return a record for it. |
+| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's id for the actor holding the role, the same id as `ConsoleMember.actorId`. |
 | `role` | [IamRole](roles.md#iamrole)! | The role held. |
 | `expiresAt` | [DateTime](../../core-api-reference/common.md#datetime) | When the assignment expires. Null for a permanent one. |
 
@@ -233,7 +233,7 @@ One holder of a role.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the user or API key that holds the role, the same value as `ConsoleMember.actorId`. It's a `UUID`, so `node(id:)` can't return a record for it. |
+| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the user or API key that holds the role, the same value as `ConsoleMember.actorId`. It's a `UUID`, so `node(id:)` can't return a record for it. For a member of the organization it is the same id as `ConsoleMember.actorId`. |
 | `principalType` | [IamRolePrincipalType](#iamroleprincipaltype)! | What kind of principal the actor is. |
 | `expiresAt` | [DateTime](../../core-api-reference/common.md#datetime) | When the assignment expires. Null for a permanent one. |
 

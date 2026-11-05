@@ -4,16 +4,20 @@
 * [GraphQL basics](graphql-basics/README.md)
   * [GraphQL tips and patterns](graphql-basics/graphql-tips-and-patterns.md)
 * [Getting started](getting-started.md)
-* [Authentication](authentication.md)
+* [Authentication](authentication/README.md)
+  * [Roles and products](authentication/roles-and-products.md)
 * [Pagination](pagination.md)
 * [Filtering and sorting](filtering-and-sorting/README.md)
   * [Custom field filtering and sorting](filtering-and-sorting/custom-field-filtering.md)
 * [Error handling](error-handling.md)
 * [Optimistic locking](optimistic-locking.md)
 * [Deleting records](deletion.md)
+* [Audit log](audit-log/README.md)
+  * [Audit event codes](audit-log/event-codes.md)
 * [Limits](limits.md)
 * [Core API reference](core-api-reference/README.md)
   * [Common resources](core-api-reference/common.md)
+  * [Audit](core-api-reference/audit.md)
   * [Directives](core-api-reference/directives.md)
 
 ## Products
@@ -88,11 +92,13 @@
     * [Workspaces](console/api-reference/workspaces.md)
     * [Members](console/api-reference/members.md)
     * [Products](console/api-reference/products.md)
+    * [Audit](console/api-reference/audit.md)
 * [IAM overview](iam/README.md "IAM")
   * [IAM API reference](iam/api-reference/README.md "API reference")
     * [Roles](iam/api-reference/roles.md)
     * [Role access](iam/api-reference/role-access.md)
     * [Role assignments](iam/api-reference/role-assignments.md)
+    * [Audit](iam/api-reference/audit.md)
 
 ## Developer resources
 

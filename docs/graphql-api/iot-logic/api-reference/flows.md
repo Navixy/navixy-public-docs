@@ -286,6 +286,7 @@ Creates a flow, which starts disabled. If the graph breaks a validation rule, th
 
 ```graphql
 flowCreate(input: IotLogicFlowCreateInput!): IotLogicFlowPayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DISCLOSURE])
 ```
 
 **Arguments**
@@ -489,6 +490,7 @@ Updates a flow. If the flow after the update breaks a validation rule, the mutat
 
 ```graphql
 flowUpdate(input: IotLogicFlowUpdateInput!): IotLogicFlowPayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DISCLOSURE, DATA_LOSS])
 ```
 
 **Arguments**
@@ -695,6 +697,7 @@ Deletes a flow and removes its devices from it. After the delete, the flow no lo
 
 ```graphql
 flowDelete(input: IotLogicFlowDeleteInput!): IotLogicFlowDeletePayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DATA_LOSS])
 ```
 
 **Arguments**

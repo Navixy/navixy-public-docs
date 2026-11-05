@@ -1,4 +1,4 @@
-# Version: 0.19.0
+# Version: 0.19.1
 
 # @category: iot-logic/flows
 "A user-authored graph that enriches the messages of the devices attached to its data sources."
@@ -652,12 +652,15 @@ type IotLogicMutation {
   # @category: iot-logic/flows
   "Creates a disabled flow. Fails with every violation at once when the graph is invalid."
   flowCreate("The input fields for creating the flow." input: IotLogicFlowCreateInput!): IotLogicFlowPayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DISCLOSURE])
 
   # @category: iot-logic/flows
   "Updates a flow. Fails with every violation at once when the resulting graph is invalid."
   flowUpdate("The input fields for updating the flow." input: IotLogicFlowUpdateInput!): IotLogicFlowPayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DISCLOSURE, DATA_LOSS])
 
   # @category: iot-logic/flows
   "Soft-deletes a flow and removes its device links. Succeeds even when the stored graph is invalid."
   flowDelete("The input fields for deleting the flow." input: IotLogicFlowDeleteInput!): IotLogicFlowDeletePayload!
+    @effect(kinds: [DEVICES, EXTERNAL, DATA_LOSS])
 }

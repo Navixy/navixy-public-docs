@@ -15,7 +15,7 @@ Navixy GraphQL API is separate from the RESTful [Navixy API](https://navixy.com/
 
 **Navixy GraphQL API** is the programming interface of several Navixy products and of the platform services that run your account. Not every Navixy product is described here: some products have no API, and some have an API of their own. Each product based on this API has a separate section: you can read about your workspace's products and ignore the rest. All products share one endpoint, one access token, and one way of sending requests.
 
-The API is based on GraphQL. Every request is an HTTP POST to one endpoint, authenticated with an OpenID Connect access token. The endpoint is `https://nvx4.eu.navixy.com/api/graphql`. To send your first request, see [Getting started](getting-started.md). For the token, see [Authentication](authentication.md). If you're new to GraphQL, start with [GraphQL basics](graphql-basics/).
+The API is based on GraphQL. Every request is an HTTP POST to one endpoint, authenticated with an access token that your app gets by exchanging an API key. The endpoint is `https://nvx4.eu.navixy.com/api/graphql`. To send your first request, see [Getting started](getting-started.md). For the token, see [Authentication](authentication/README.md). If you're new to GraphQL, start with [GraphQL basics](graphql-basics/).
 
 <figure><img src=".gitbook/assets/graphql-api-parts.svg" alt=""><figcaption></figcaption></figure>
 
@@ -23,17 +23,17 @@ The API is based on GraphQL. Every request is an HTTP POST to one endpoint, auth
 
 These terms apply to every part of the API. Each product and platform service defines its own terms on its overview page.
 
-<table><thead><tr><th width="200">Term</th><th>Definition</th></tr></thead><tbody><tr><td><strong>Organization</strong></td><td>A company's account in Navixy Console, with its own workspaces, members, and roles. One person can belong to several organizations, including child organizations that a channel partner created for its customers.</td></tr><tr><td><strong>Workspace</strong></td><td>The space that holds the data of one customer and has its own set of products. Your access token names the workspace, so most operations take no workspace ID. Navixy Console creates workspaces.</td></tr><tr><td><strong>Product</strong></td><td>A part of Navixy that a workspace has or doesn't have, such as Business Data Repository or Tracking. The plan of the workspace decides which products it can have, and each product is billed separately. Each product that this API serves has its own field in the schema.</td></tr><tr><td><strong>Platform service</strong></td><td>A part of the API that works for every workspace, whatever its plan: Console, IAM, and Billing. The platform services manage your account: its organizations and workspaces, its roles, and its plans.</td></tr><tr><td><strong>Access token</strong></td><td>A signed JSON Web Token from the Navixy identity service. It names your organization and your workspace and lists the products of your workspace. Every request sends it in the <code>Authorization</code> header.</td></tr></tbody></table>
+<table><thead><tr><th width="200">Term</th><th>Definition</th></tr></thead><tbody><tr><td><strong>Organization</strong></td><td>A company's account in Navixy Console, with its own workspaces, members, and roles. One person can belong to several organizations, including child organizations that a channel partner created for its customers.</td></tr><tr><td><strong>Workspace</strong></td><td>The space that holds the data of one customer and has its own set of products. Your access token names the workspace, so most operations take no workspace ID. Navixy Console creates workspaces.</td></tr><tr><td><strong>Product</strong></td><td>A part of Navixy that a workspace has or doesn't have, such as Business Data Repository or Tracking. The plan of the workspace decides which products it can have, and each product is billed separately. Each product that this API serves has its own field in the schema.</td></tr><tr><td><strong>Platform service</strong></td><td>A part of the API that works for every workspace, whatever its plan: Console, IAM, and Billing. The platform services manage your account: its organizations and workspaces, its roles, and its plans.</td></tr><tr><td><strong>Access token</strong></td><td>A signed JSON Web Token from the Navixy identity service. It names your organization and your workspace and lists your workspace's products. Every request sends it in the <code>Authorization</code> header.</td></tr></tbody></table>
 
 ## Products
 
-A product works only in a workspace that has access to it. Your access token lists your workspace's products, and the API rejects operations with a product not on the list. See [What your roles and products allow](authentication.md#what-your-roles-and-products-allow).
+A product works only in a workspace that has access to it. Your access token lists your workspace's products, and the API rejects operations with a product not on the list. See [Roles and products](authentication/roles-and-products.md).
 
 Products are billed separately, but they can use each other's records. Tracking and IoT Logic work with the records stored by Business Data Repository, Tracking can use its assets and devices, and IoT Logic can use its devices.
 
 ### Business Data Repository
 
-[Business Data Repository](business-data-repository/) manages your workspace's business data: the assets you track, their types and groups, GPS devices and inventories, geo objects, and schedules. You can add your own custom fields and lists and see who changed a record in the audit log.
+[Business Data Repository](business-data-repository/) manages your workspace's business data: the assets you track, their types and groups, GPS devices and inventories, geo objects, and schedules. You can add your own custom fields and lists and see who changed a record in the [audit log](audit-log/README.md), which Billing, IAM, and Console keep too.
 
 ### Tracking
 
@@ -91,7 +91,8 @@ The pages at the top of this space apply to every product and platform service. 
 
 * [GraphQL basics](graphql-basics/): GraphQL for developers who know REST, record IDs and the `node` query, and how subscriptions connect. See also [tips and patterns](graphql-basics/graphql-tips-and-patterns.md).
 * [Getting started](getting-started.md): Your first authenticated requests.
-* [Authentication](authentication.md): How to obtain and send an access token, and what your roles and products allow.
+* [Authentication](authentication/README.md): How to exchange an API key for an access token, send the token, and renew it.
+* [Roles and products](authentication/roles-and-products.md): What the key's role and your workspace's products allow.
 * [Pagination](pagination.md) and [Filtering and sorting](filtering-and-sorting/): How to page through list results and narrow them down.
 * [Error handling](error-handling.md): Error structure, every error code, and how one request can partly fail.
 * [Optimistic locking](optimistic-locking.md): How the API prevents concurrent updates from overwriting each other.

@@ -54,13 +54,23 @@ deviceTimeline(
 
 How a device's message stream is cut into trips and stops.
 
+Two consecutive points of the requested `TrackingTrackOptions.fitness` that lie more than 25 hours apart are never
+joined: no trip runs through the silence between them, and no `distance` counts a leg across it. A trip or stop whose
+last point is followed by such a gap, or by more than 25 hours without a point up to the end of what the answer covers,
+ends at that last point. When the points before such a gap or such an end finish with a still tail shorter than
+`minStopDuration`, the tail is no stop: a trip before it ends at its last moving point and holds the events of the
+tail's messages, which are later than its `endedAt`. Points that such gaps cut off and that hold only a still period
+shorter than `minStopDuration` give no trip or stop, and their messages belong to none. Messages after the last point
+before a gap and before the next point belong to no trip or stop.
+The same messages can split differently under another `fitness`, since only points of the requested fitness count.
+
 Resolution order per device: the device's own policy, else the policy supplied with the request,
 else the platform default. `TrackingSegmentationApplied.source` reports which one was used, so a
 caller never has to guess whether its request-level policy took effect.
 
-The platform default is a deployment setting, the same one the live `motion` status is folded with
-(`nvx4.tracking.fold.stop-radius-meters`, `moving-speed-threshold-kmh` and `min-stop-duration`), so
-a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides it.
+The platform default is a deployment setting, the same one the live `motion` status is folded
+with, so a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides
+it.
 
 Values are validated before any data is read: a non-positive `minStopDuration`, or a negative or
 non-finite `stopRadius` or `movingSpeedThreshold`, fails with `VALIDATION_ERROR` naming the field
@@ -69,7 +79,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty and whatever movement the window holds is one trip, the shape nvx3's `split: false` returned. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
+| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty, and the movement on each side of two points more than 25 hours apart is one trip (see `TrackingSegmentationInput`), so a window without such a gap holds one trip. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
 | `stopRadius` | `Float` | Radius, metres, within which points count as the same place rather than movement. Not negative. |
 | `movingSpeedThreshold` | `Float` | Speed at or below which the device counts as not moving, km/h. Not negative. |
 
@@ -81,7 +91,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |
@@ -100,15 +110,15 @@ Trips and stops of one device over a window, plus the policy that produced them.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `device` | [Device](../../business-data-repository/api-reference/devices/README.md#device)! |  |
-| `from` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `to` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
+| `from` | [DateTime](../../core-api-reference/common.md#datetime)! | Start of the requested window: the instant of the `from` argument, in UTC. |
+| `to` | [DateTime](../../core-api-reference/common.md#datetime)! | End of the requested window: the instant of the `to` argument, in UTC. The answer covers the window up to `continueFrom` when that is set, and otherwise up to the earlier of `to` and the current time. |
 | `segmentation` | [TrackingSegmentationApplied](#trackingsegmentationapplied)! |  |
 | `tracks` | [[TrackingTrack](#trackingtrack)!]! |  |
 | `stops` | [[TrackingStop](#trackingstop)!]! |  |
 | `totalDistance` | `Float!` | Sum of `TrackingTrack.distance`, km. |
 | `totalDrivingTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of trip durations. |
 | `totalStopTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of stop durations, an unfinished stop counted per `TrackingStop.duration` — which bounds it by what this answer covers, not by `to`, when `continueFrom` is set. Stable for a `to` in the past; grows between calls for a `to` in the future, for the same reason. |
-| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
+| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently, and a trip or stop whose last point is followed by more than 25 hours without a point runs on to a cut at most 25 hours after that point. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
 
 </details>
 
@@ -150,13 +160,23 @@ assetTimeline(
 
 How a device's message stream is cut into trips and stops.
 
+Two consecutive points of the requested `TrackingTrackOptions.fitness` that lie more than 25 hours apart are never
+joined: no trip runs through the silence between them, and no `distance` counts a leg across it. A trip or stop whose
+last point is followed by such a gap, or by more than 25 hours without a point up to the end of what the answer covers,
+ends at that last point. When the points before such a gap or such an end finish with a still tail shorter than
+`minStopDuration`, the tail is no stop: a trip before it ends at its last moving point and holds the events of the
+tail's messages, which are later than its `endedAt`. Points that such gaps cut off and that hold only a still period
+shorter than `minStopDuration` give no trip or stop, and their messages belong to none. Messages after the last point
+before a gap and before the next point belong to no trip or stop.
+The same messages can split differently under another `fitness`, since only points of the requested fitness count.
+
 Resolution order per device: the device's own policy, else the policy supplied with the request,
 else the platform default. `TrackingSegmentationApplied.source` reports which one was used, so a
 caller never has to guess whether its request-level policy took effect.
 
-The platform default is a deployment setting, the same one the live `motion` status is folded with
-(`nvx4.tracking.fold.stop-radius-meters`, `moving-speed-threshold-kmh` and `min-stop-duration`), so
-a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides it.
+The platform default is a deployment setting, the same one the live `motion` status is folded
+with, so a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides
+it.
 
 Values are validated before any data is read: a non-positive `minStopDuration`, or a negative or
 non-finite `stopRadius` or `movingSpeedThreshold`, fails with `VALIDATION_ERROR` naming the field
@@ -165,7 +185,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty and whatever movement the window holds is one trip, the shape nvx3's `split: false` returned. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
+| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty, and the movement on each side of two points more than 25 hours apart is one trip (see `TrackingSegmentationInput`), so a window without such a gap holds one trip. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
 | `stopRadius` | `Float` | Radius, metres, within which points count as the same place rather than movement. Not negative. |
 | `movingSpeedThreshold` | `Float` | Speed at or below which the device counts as not moving, km/h. Not negative. |
 
@@ -177,7 +197,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |
@@ -196,15 +216,15 @@ Trips and stops of one device over a window, plus the policy that produced them.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `device` | [Device](../../business-data-repository/api-reference/devices/README.md#device)! |  |
-| `from` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `to` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
+| `from` | [DateTime](../../core-api-reference/common.md#datetime)! | Start of the requested window: the instant of the `from` argument, in UTC. |
+| `to` | [DateTime](../../core-api-reference/common.md#datetime)! | End of the requested window: the instant of the `to` argument, in UTC. The answer covers the window up to `continueFrom` when that is set, and otherwise up to the earlier of `to` and the current time. |
 | `segmentation` | [TrackingSegmentationApplied](#trackingsegmentationapplied)! |  |
 | `tracks` | [[TrackingTrack](#trackingtrack)!]! |  |
 | `stops` | [[TrackingStop](#trackingstop)!]! |  |
 | `totalDistance` | `Float!` | Sum of `TrackingTrack.distance`, km. |
 | `totalDrivingTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of trip durations. |
 | `totalStopTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of stop durations, an unfinished stop counted per `TrackingStop.duration` — which bounds it by what this answer covers, not by `to`, when `continueFrom` is set. Stable for a `to` in the past; grows between calls for a `to` in the future, for the same reason. |
-| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
+| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently, and a trip or stop whose last point is followed by more than 25 hours without a point runs on to a cut at most 25 hours after that point. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
 
 </details>
 
@@ -246,37 +266,41 @@ later.
 
 `endedAt` is the last point's own time when the trip simply ends there — the device stopped, or
 the requested window ended with nothing left to cut. A server-side budget (`TrackingTimeline.continueFrom`)
-that lands inside the trip instead moves `endedAt` to `continueFrom` itself, one moment past that
-last point; `endPoint` still names the last point's own coordinates. That is what makes the next
+that lands inside the trip, at most 25 hours after its last point, instead moves `endedAt` to `continueFrom` itself,
+one moment past the page's last row, which can be a message without a position later than the last point; `endPoint`
+still names the last point's own coordinates. That is what makes the next
 page's first trip — which starts at `from`, itself set to that same `continueFrom` — touch this one
 exactly, with no gap and no overlap; `id` differs per part because the bounds differ. The same
 rule, for stops, is on `TrackingStop.duration`.
 
-Figures summed across pages equal a one-page answer only in two cases: the cut falls while the
-device is moving, or it falls inside a stop whose parts on both sides of the cut each last at least
-`minStopDuration`. When the still period that crosses the cut is shorter than `minStopDuration` on
-either side, each page classifies its part on its own: a page can end a trip at the cut that a
-one-page answer continues through a pause, or split a stop into parts too short to count as one, so
-`stops`, the number of trips, `duration` and `pointCount` can differ from the one-page answer.
+Figures summed across pages equal a one-page answer when both of these hold: the cut falls while the
+device is moving, or inside a stop whose parts on both sides of the cut each last at least
+`minStopDuration`; and the cut does not lie at most 25 hours after a point followed by more than 25
+hours without a point (see `TrackingSegmentationInput`). Otherwise they can differ. When the still
+period that crosses the cut is shorter than `minStopDuration` on either side, each page classifies its
+part on its own: a page can end a trip at the cut that a one-page answer continues through a pause, or
+split a stop into parts too short to count as one, so `stops`, the number of trips, `duration` and
+`pointCount` can differ from the one-page answer. When the cut lies at most 25 hours after a point
+followed by more than 25 hours without a point, the page before the cut ends its trip at the cut or
+keeps its stop open there, and the next page does not continue it. A one-page answer ends that trip or
+stop at that point, so its `duration` differs. A still tail shorter than `minStopDuration` after the
+trip's last moving point, which a one-page answer drops, can count on the page before the cut as a
+stop open to the cut, so `stops` and the stop time differ as well.
 A caller that needs figures independent of paging requests windows short enough for `continueFrom`
 to stay null.
 
-Typed `String!`, not `ID!`, and that is not cosmetic: the gateway's DGS codegen maps **every**
-`ID` in the schema to `com.navixy.uuid.UuidV8` (`api-gateway/build.gradle.kts` `typeMapping`),
-a value class with a fixed layout — 48 time bits, version, counter, a four-character entity
-discriminator. A content hash is not expressible in it, and squeezing one into the deterministic
-constructor's 16-bit suffix would collide inside a single response, destroying the very
-distinction the device-in-the-hash rule above exists to make.
+Typed `String!`, not `ID!`, and that is not cosmetic: an `ID` the platform mints has a fixed
+layout, and a content hash does not fit in it without collisions inside a single response.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `String!` |  |
-| `startedAt` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
+| `startedAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When the trip started: the event time of the last still point before the first moving one, or of the first point when no still point came before it or the point before it lies more than 25 hours earlier. Never before the timeline's `from`: a trip already under way at `from`, with a point at most 25 hours before its first point in the window, starts there. |
 | `endedAt` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `distance` | `Float!` | Trip length, km. Includes the leg from the last still point before the trip to its first moving point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from the sum. |
+| `distance` | `Float!` | Trip length, km. Includes the leg from the last still point before the trip to its first moving point, which `startedAt` already dates at that still point. LAST_KNOWN repeats are excluded from the sum, and so is a leg between two points more than 25 hours apart, which no trip has. |
 | `duration` | [Duration](../../core-api-reference/common.md#duration)! | Wall-clock duration. |
-| `maxSpeed` | `Float` |  |
-| `avgSpeed` | `Float` |  |
+| `maxSpeed` | `Float` | Highest ground speed the trip's points report, km/h, over all the points `pointCount` counts, whether or not `points` returns them. Null when none of them reports a speed. |
+| `avgSpeed` | `Float` | Mean of the ground speeds the trip's points report, km/h, over all the points `pointCount` counts, each counted once; not `distance` divided by `duration`. Null when none of them reports a speed. |
 | `startPoint` | [GeoPoint](../../business-data-repository/api-reference/geo-objects.md#geopoint)! |  |
 | `endPoint` | [GeoPoint](../../business-data-repository/api-reference/geo-objects.md#geopoint)! |  |
 | `pointCount` | `Int!` |  |
@@ -296,11 +320,11 @@ A stop — the device stayed within `stopRadius` for at least `minStopDuration`.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `id` | `String!` |  |
-| `startedAt` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `endedAt` | [DateTime](../../core-api-reference/common.md#datetime) | When the stop ended. Null for a stop still in progress at the end of the requested window — including the current one, which is the usual case for `to = now`. |
-| `duration` | [Duration](../../core-api-reference/common.md#duration)! | How long the stop lasted. For a finished stop, `endedAt - startedAt`. For one still in progress — `endedAt: null` — it is measured to the end of what this answer actually covers: `min(to, now)`, or `continueFrom` when a server-side budget cut the window short. That is not the same bound as `to`, because truncation can land inside a stop. Never past the end of the requested window and never into the future, so the same `to` in the past yields the same duration on every call. A stop the truncation cut continues in the next page as a stop of its own, starting where that page starts: the parts are adjacent rather than overlapping, and when each part lasts at least `minStopDuration` the stop time summed across pages is the total. A part shorter than that does not count as a stop on its page, so the stop can be missing there and the sum falls short; see `TrackingTrack` for the cases. Separately, the case that does not settle is a `to` in the future — the window has not closed, `min(to, now)` is `now`, and the duration grows between calls. That is the honest answer for an open window rather than a defect. |
+| `startedAt` | [DateTime](../../core-api-reference/common.md#datetime)! | When the stop started: the event time of the first point at which the device was still. Never before the timeline's `from`: a stop already in progress at `from`, with a point at most 25 hours before its first point in the window, starts there. |
+| `endedAt` | [DateTime](../../core-api-reference/common.md#datetime) | When the stop ended. Null for a stop still in progress at the end of what the answer covers — including the current one, which is the usual case for `to = now`. A stop whose last point is followed by more than 25 hours without a point, up to the next point or to the end of what the answer covers, is not in progress: it ended at that last point. |
+| `duration` | [Duration](../../core-api-reference/common.md#duration)! | How long the stop lasted. For a finished stop, `endedAt - startedAt`. A stop that ends at its last point before more than 25 hours without a point counts toward `minStopDuration` only up to that point. For one still in progress — `endedAt: null` — it is measured to the end of what this answer actually covers: `min(to, now)`, or `continueFrom` when a server-side budget cut the window short. That is not the same bound as `to`, because truncation can land inside a stop. Never past the end of the requested window and never into the future, so the same `to` in the past yields the same duration on every call. A stop the truncation cut continues in the next page as a stop of its own, starting where that page starts: the parts are adjacent rather than overlapping, and when each part lasts at least `minStopDuration` the stop time summed across pages is the total. A part shorter than that does not count as a stop on its page, so the stop can be missing there and the sum falls short. A stop whose last point lies at most 25 hours before the cut and is followed by more than 25 hours without a point stays open to the cut and does not continue in the next page; see `TrackingTrack` for the cases. Separately, the case that does not settle is a `to` in the future — the window has not closed, `min(to, now)` is `now`, and the duration grows between calls. That is the honest answer for an open window rather than a defect. |
 | `point` | [GeoPoint](../../business-data-repository/api-reference/geo-objects.md#geopoint)! | Representative point of the stop (centroid of its points). |
-| `messageCount` | `Int!` | Number of messages received during the stop. |
+| `messageCount` | `Int!` | Number of messages from the stop's start to its end, or to the end of what this answer covers for a stop in progress. A stop that ended at its last point before more than 25 hours without a point counts every message at that point's time and none after it. |
 | `events` | [[TrackingEvent](state/README.md#trackingevent)!]! |  |
 
 ---
@@ -311,11 +335,11 @@ A stop — the device stayed within `stopRadius` for at least `minStopDuration`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `at` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
+| `at` | [DateTime](../../core-api-reference/common.md#datetime)! | Event time of the message this point came from; see `TrackingPosition.at`. |
 | `point` | [GeoPoint](../../business-data-repository/api-reference/geo-objects.md#geopoint)! |  |
-| `altitude` | `Float` |  |
-| `speed` | `Float` |  |
-| `heading` | `Float` |  |
+| `altitude` | `Float` | Metres above sea level. |
+| `speed` | `Float` | Ground speed, km/h. |
+| `heading` | `Float` | Course over ground, degrees clockwise from north. |
 | `satellites` | `Int` |  |
 | `fitness` | [TrackingFitness](state/README.md#trackingfitness)! |  |
 | `timeSource` | [TrackingTimeSource](state/README.md#trackingtimesource) | Where `at` came from; see `TrackingPosition.timeSource`. A `SERVER` or `DEVICE_CORRECTED` point stands at its upload moment. |
@@ -334,15 +358,15 @@ Trips and stops of one device over a window, plus the policy that produced them.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `device` | [Device](../../business-data-repository/api-reference/devices/README.md#device)! |  |
-| `from` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
-| `to` | [DateTime](../../core-api-reference/common.md#datetime)! |  |
+| `from` | [DateTime](../../core-api-reference/common.md#datetime)! | Start of the requested window: the instant of the `from` argument, in UTC. |
+| `to` | [DateTime](../../core-api-reference/common.md#datetime)! | End of the requested window: the instant of the `to` argument, in UTC. The answer covers the window up to `continueFrom` when that is set, and otherwise up to the earlier of `to` and the current time. |
 | `segmentation` | [TrackingSegmentationApplied](#trackingsegmentationapplied)! |  |
 | `tracks` | [[TrackingTrack](#trackingtrack)!]! |  |
 | `stops` | [[TrackingStop](#trackingstop)!]! |  |
 | `totalDistance` | `Float!` | Sum of `TrackingTrack.distance`, km. |
 | `totalDrivingTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of trip durations. |
 | `totalStopTime` | [Duration](../../core-api-reference/common.md#duration)! | Sum of stop durations, an unfinished stop counted per `TrackingStop.duration` — which bounds it by what this answer covers, not by `to`, when `continueFrom` is set. Stable for a `to` in the past; grows between calls for a `to` in the future, for the same reason. |
-| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
+| `continueFrom` | [DateTime](../../core-api-reference/common.md#datetime) | Where the answer stops when a server-side budget cut the window short — pass it back as the next call's `from`. Null means the whole window was covered. Figures summed across the pages of a cut window equal a one-page answer only in the cases listed on `TrackingTrack`; otherwise the still period crossing a cut, and the trips beside it, can be classified and measured differently, and a trip or stop whose last point is followed by more than 25 hours without a point runs on to a cut at most 25 hours after that point. A cursor rather than a boolean flag: truncation can land inside a stop, or leave `tracks` empty with only `stops` cut, and then "continue from the last segment's end" names nothing. The budget itself exists because segmentation re-reads the window's raw points on every call. |
 
 ---
 
@@ -354,13 +378,23 @@ Trips and stops of one device over a window, plus the policy that produced them.
 
 How a device's message stream is cut into trips and stops.
 
+Two consecutive points of the requested `TrackingTrackOptions.fitness` that lie more than 25 hours apart are never
+joined: no trip runs through the silence between them, and no `distance` counts a leg across it. A trip or stop whose
+last point is followed by such a gap, or by more than 25 hours without a point up to the end of what the answer covers,
+ends at that last point. When the points before such a gap or such an end finish with a still tail shorter than
+`minStopDuration`, the tail is no stop: a trip before it ends at its last moving point and holds the events of the
+tail's messages, which are later than its `endedAt`. Points that such gaps cut off and that hold only a still period
+shorter than `minStopDuration` give no trip or stop, and their messages belong to none. Messages after the last point
+before a gap and before the next point belong to no trip or stop.
+The same messages can split differently under another `fitness`, since only points of the requested fitness count.
+
 Resolution order per device: the device's own policy, else the policy supplied with the request,
 else the platform default. `TrackingSegmentationApplied.source` reports which one was used, so a
 caller never has to guess whether its request-level policy took effect.
 
-The platform default is a deployment setting, the same one the live `motion` status is folded with
-(`nvx4.tracking.fold.stop-radius-meters`, `moving-speed-threshold-kmh` and `min-stop-duration`), so
-a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides it.
+The platform default is a deployment setting, the same one the live `motion` status is folded
+with, so a timeline and `TrackingDeviceState.motion` use one stop policy unless a request overrides
+it.
 
 Values are validated before any data is read: a non-positive `minStopDuration`, or a negative or
 non-finite `stopRadius` or `movingSpeedThreshold`, fails with `VALIDATION_ERROR` naming the field
@@ -369,7 +403,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty and whatever movement the window holds is one trip, the shape nvx3's `split: false` returned. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
+| `minStopDuration` | [Duration](../../core-api-reference/common.md#duration) | How long a device must stay put before the pause counts as a stop and cuts the trip. A shorter pause is neither: it appears in no `stops` entry and the trip runs through it. Longer than the window, no pause qualifies: `stops` is empty, and the movement on each side of two points more than 25 hours apart is one trip (see `TrackingSegmentationInput`), so a window without such a gap holds one trip. A window without movement yields no trip either way, and a server-side cut (`TrackingTimeline.continueFrom`) still splits the answer. Must be positive. |
 | `stopRadius` | `Float` | Radius, metres, within which points count as the same place rather than movement. Not negative. |
 | `movingSpeedThreshold` | `Float` | Speed at or below which the device counts as not moving, km/h. Not negative. |
 
@@ -381,7 +415,7 @@ Zero is accepted for `stopRadius` and `movingSpeedThreshold`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
+| `fitness` | [[TrackingFitness](state/README.md#trackingfitness)!] | Which points to include. Defaults to `[GNSS, NETWORK]`. Adding `LAST_KNOWN` puts the repeated last position on the map, which is where it belongs; it never enters `distance`, whatever this argument says, because a stop in a tunnel would otherwise read as a trip. |
 | `includePoints` | `Boolean` | Return the points of each trip, not just its summary. Off by default — points dominate the payload. |
 | `maxPoints` | `Int` | Thin each trip's polyline to at most this many points (Douglas–Peucker). Null disables thinning; zero or negative fails with `VALIDATION_ERROR`. |
 | `readingCodes` | [[Code](../../core-api-reference/common.md#code)!] | Include these readings on every point. |

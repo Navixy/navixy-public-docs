@@ -82,7 +82,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
+| `id` | `ID!` | IAM's id for the role, the value `role(id:)` and every `roleId` take. |
 | `organizationId` | `ID!` | The organization the role belongs to: the same value as `ConsoleOrganization.id`. |
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Null when it has none. |
@@ -116,7 +116,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
+| `id` | `ID!` | IAM's id for the role, the value `role(id:)` and every `roleId` take. |
 | `organizationId` | `ID!` | The organization the role belongs to: the same value as `ConsoleOrganization.id`. |
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Null when it has none. |
@@ -140,7 +140,7 @@ Creates a role in the caller's organization.
 ```graphql
 roleCreate(
     input: IamRoleCreateInput!
-  ): IamRolePayload
+  ): IamRolePayload @effect(kinds: [PEOPLE])
 ```
 
 **Arguments**
@@ -271,7 +271,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
+| `id` | `ID!` | IAM's id for the role, the value `role(id:)` and every `roleId` take. |
 | `organizationId` | `ID!` | The organization the role belongs to: the same value as `ConsoleOrganization.id`. |
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Null when it has none. |
@@ -293,7 +293,7 @@ Replaces a role's whole document: every field of the input replaces the stored o
 ```graphql
 roleUpdate(
     input: IamRoleUpdateInput!
-  ): IamRolePayload
+  ): IamRolePayload @effect(kinds: [PEOPLE])
 ```
 
 **Arguments**
@@ -426,7 +426,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
+| `id` | `ID!` | IAM's id for the role, the value `role(id:)` and every `roleId` take. |
 | `organizationId` | `ID!` | The organization the role belongs to: the same value as `ConsoleOrganization.id`. |
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Null when it has none. |
@@ -448,7 +448,7 @@ Deletes a role and every assignment of it.
 ```graphql
 roleDelete(
     input: IamRoleDeleteInput!
-  ): IamRoleDeletePayload
+  ): IamRoleDeletePayload @effect(kinds: [PEOPLE, DATA_LOSS])
 ```
 
 **Arguments**
@@ -498,7 +498,7 @@ A role of the caller's organization. A role belongs to one organization and reac
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `id` | `ID!` | The role ID, as IAM issued it. `IamRole` isn't a `Node`, so `node(id:)` doesn't return a role: read it with `role` or `roles`. |
+| `id` | `ID!` | IAM's id for the role, the value `role(id:)` and every `roleId` take. |
 | `organizationId` | `ID!` | The organization the role belongs to: the same value as `ConsoleOrganization.id`. |
 | `title` | `String!` | The role's name. |
 | `description` | `String` | The role's description. Null when it has none. |

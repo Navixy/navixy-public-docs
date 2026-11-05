@@ -15,7 +15,7 @@ This guide uses Tracking in Navixy GraphQL API for GPS trip history and Business
 
 ## Prerequisites
 
-You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication.md) for how to get a token and how the API picks the workspace.
+You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
 You also need the ID of an asset in your workspace. The examples use a fictional truck, HH-TL 2041.
 
@@ -500,7 +500,7 @@ The timeline queries check their arguments before they read any data, so an inva
 | `VALIDATION_ERROR`    | `options.maxPoints` is zero or negative.                                                                         | `options.maxPoints`                                                                                |
 | `VALIDATION_ERROR`    | `minStopDuration` isn't positive, or `stopRadius` or `movingSpeedThreshold` is negative.                         | `segmentation.minStopDuration`, `segmentation.stopRadius`, or `segmentation.movingSpeedThreshold` |
 | `VALIDATION_ERROR`    | A duration uses a calendar unit, for example `minStopDuration: "P1M"`, a calendar month.                        | None. The message contains "Invalid Duration value: 'P1M'. Expected ISO 8601, e.g. PT5M".        |
-| `PRODUCT_DISABLED`    | Tracking isn't enabled for your workspace in Navixy Console. The whole `data` object is `null`. See [What your roles and products allow](../../authentication.md#what-your-roles-and-products-allow).      | None                                                                                               |
+| `PRODUCT_DISABLED`    | Tracking isn't enabled for your workspace in Navixy Console. The whole `data` object is `null`. See [Roles and products](../../authentication/roles-and-products.md).      | None                                                                                               |
 | `SERVICE_UNAVAILABLE` | Timelines aren't available. `extensions.dependency` is `tracking-timeline`.                                     | None                                                                                               |
 
 ### How to handle an invalid stop duration

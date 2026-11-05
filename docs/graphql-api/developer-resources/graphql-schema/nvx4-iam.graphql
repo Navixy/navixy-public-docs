@@ -1,42 +1,4 @@
-# =============================================================================
-# NAVIXY 4 - GraphQL Schema — IAM public schema
-# Version: 0.5.0
-# =============================================================================
-#
-# The organization and the workspace these fields act in are always
-# the token's `organization_id` and `workspace_id` claims; no field here takes either.
-#
-# Module prefix `Iam` on every declaration
-# IAM's global registries, for
-# staff only, extend `IamQuery` and `IamMutation` from nvx4-iam-admin.graphql, which the SDK does not
-# consume; the two files share this version.
-#
-# Types it references but does not declare: the kernel's `Connection`, `Edge`, `PageInfo`,
-# `CountInfo`, `UUID`, `DateTime`, `Duration`, `Long`.
-#
-# IDENTITY
-# --------
-# `IamRole.id` and every `roleId` are `ID`: IAM mints role ids in the UuidV8 layout with the `IROL`
-# discriminator, and nvx4 checks that structure and that the id carries this deployment's flag and
-# region.
-# `IamRole` does not implement `Node`: a role is reached only through this namespace. `actorId` is a
-# `UUID`: Console mints actor ids under its own scheme, as for `ConsoleWorkspaceOperation.actorUserId`.
-#
-# PAGINATION
-# ----------
-# `roleHolders` pages forward only, over IAM's own page
-# token: `last` and `before` are refused with VALIDATION_ERROR, and `total` is always null.
-#
-# ERRORS
-# ------
-# IAM's refusals carry `extensions.dependency = "iam"`, IAM's own reason in `dependencyCode`
-# (`GRANT_CEILING_EXCEEDED`, `NOT_A_MEMBER`, `LAST_OWNER`, ...), `entityType` `IamRole` or
-# `IamMemberRoleAssignment`, and the role id in `entityId` where the request named one. A deployment
-# without `nvx4.gateway.iam.roles-target` answers every field with SERVICE_UNAVAILABLE.
-
-# =============================================================================
-# 1. ROLES
-# =============================================================================
+# Version: 0.6.3
 
 # @category: iam/role-access
 """
@@ -106,7 +68,7 @@ type IamRoleProductScopes {
 # @category: iam/roles
 "A role of the caller's organization. A role belongs to one organization and reaches no other."
 type IamRole {
-  "IAM's id for the role."
+  "IAM's id for the role, the value `role(id:)` and every `roleId` take."
   id: ID!
   "The organization the role belongs to, by the same id as `ConsoleOrganization.id`."
   organizationId: ID!
@@ -161,7 +123,7 @@ type IamRoleEdge implements Edge {
 # @category: iam/role-assignments
 "One role a member holds in the caller's organization."
 type IamMemberRoleAssignment {
-  "Console's id for the actor holding the role."
+  "Console's id for the actor holding the role, the same id as `ConsoleMember.actorId`."
   actorId: UUID!
   "The role held."
   role: IamRole!
@@ -188,7 +150,10 @@ enum IamRolePrincipalType {
 # @category: iam/role-assignments
 "One holder of a role."
 type IamRoleHolder {
-  "Console's id for the actor holding the role."
+  """
+  Console's id for the actor holding the role. For a member of the organization it is the same id as
+  `ConsoleMember.actorId`.
+  """
   actorId: UUID!
   "What kind of principal the actor is."
   principalType: IamRolePrincipalType!
@@ -398,11 +363,10 @@ type IamMemberRoleRevokePayload {
   roleId: ID!
 }
 
-# =============================================================================
-# 2. QUERY
-# =============================================================================
-
-"IAM module queries: the roles of the caller's organization and who holds them. Reached through `Query.iam`."
+"""
+IAM module queries: the roles of the caller's organization, who holds them, and IAM's audit events of the
+organization. Reached through `Query.iam`.
+"""
 type IamQuery {
   # @category: iam/roles
   "The roles of the caller's organization, inactive ones included, ordered by id."
@@ -460,6 +424,53 @@ type IamQuery {
     "Refused with VALIDATION_ERROR: this list pages forward only."
     before: String
   ): IamRoleHolderConnection!
+
+  # @category: iam/audit
+  """
+  The audit events IAM keeps of the caller's organization, the one the token's `organization_id` claim
+  names: the changes to its roles and to who holds them, newest first by default. IAM authorizes the
+  read itself, as for `roles`: a caller it refuses gets PERMISSION_DENIED with `extensions.dependency`
+  `iam`. Only `iam`'s events are read: `filter.products` absent or empty reads them, and naming any
+  other product fails with VALIDATION_ERROR. IAM records its events with no workspace, so
+  `AuditEvent.workspace` is null. `node(id:)` does not resolve these events. The types are the ones
+  `BdrQuery.myAuditEvents` returns too.
+  """
+  myAuditEvents(
+    "Filtering options for the returned events."
+    filter: AuditEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned events."
+    orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
+  ): AuditEventConnection!
+
+  # @category: iam/audit
+  """
+  The audit events IAM keeps about one entity of the caller's organization, such as a role, newest first
+  by default. The access and the products are as for `myAuditEvents`.
+  """
+  myEntityHistory(
+    "The ID of the entity whose events to return."
+    entityId: ID!
+    "Filtering options for the returned events."
+    filter: AuditEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned events."
+    orderBy: AuditEventOrder = { field: OCCURRED_AT, direction: DESC }
+  ): AuditEventConnection!
 }
 
 "IAM module mutations: creating, replacing, and deleting the roles of the caller's organization, and assigning and revoking them. Reached through `Mutation.iam`."
@@ -469,21 +480,21 @@ type IamMutation {
   roleCreate(
     "The input fields for the new role."
     input: IamRoleCreateInput!
-  ): IamRolePayload
+  ): IamRolePayload @effect(kinds: [PEOPLE])
 
   # @category: iam/roles
   "Replaces a role's whole document: every field of the input replaces the stored one. See `IamRoleUpdateInput`."
   roleUpdate(
     "The input fields for the role's new document."
     input: IamRoleUpdateInput!
-  ): IamRolePayload
+  ): IamRolePayload @effect(kinds: [PEOPLE])
 
   # @category: iam/roles
   "Deletes a role and every assignment of it."
   roleDelete(
     "The input fields for the role to delete."
     input: IamRoleDeleteInput!
-  ): IamRoleDeletePayload
+  ): IamRoleDeletePayload @effect(kinds: [PEOPLE, DATA_LOSS])
 
   # @category: iam/role-assignments
   """
@@ -495,7 +506,7 @@ type IamMutation {
   memberRoleAssign(
     "The input fields for the assignment."
     input: IamMemberRoleAssignInput!
-  ): IamMemberRoleAssignPayload
+  ): IamMemberRoleAssignPayload @effect(kinds: [PEOPLE])
 
   # @category: iam/role-assignments
   """
@@ -506,5 +517,5 @@ type IamMutation {
   memberRoleRevoke(
     "The input fields for the revocation."
     input: IamMemberRoleRevokeInput!
-  ): IamMemberRoleRevokePayload
+  ): IamMemberRoleRevokePayload @effect(kinds: [PEOPLE])
 }

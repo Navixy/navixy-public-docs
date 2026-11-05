@@ -16,7 +16,7 @@ Every operation on this page names the workspace by its ID. Navixy Console decid
 
 ## Prerequisites
 
-You need an access token that names the organization and the workspace you work in. Without it, every `console` operation is refused with `PERMISSION_DENIED`. See [Authentication](../../authentication.md#access-token-claims) to learn what the token contains.
+You need an access token that names the organization and the workspace you work in. Without it, every `console` operation is refused with `PERMISSION_DENIED`. See [Authentication](../../authentication/README.md#access-token-claims) to learn what the token contains.
 
 You also need a role in your organization with the Console administration feature and the `attach_product` and `detach_product` actions on the workspace. The Owner role has both. Roles are set up in Navixy Console.
 
@@ -431,4 +431,4 @@ Read `dependencyCode`. A `CONFLICT` from Console is a refusal in the current sta
 - [Products](../api-reference/products.md): Learn how the products of a workspace, the product catalog, the two mutations, and the operation type work.
 - [Console errors](../errors.md): Learn which refusals Console relays and which fields a Console error has.
 - [Choosing a plan and subscribing](../../billing/guides/choosing-a-plan-and-subscribing.md): Subscribe your workspace to a plan that covers the product.
-- [Authentication](../../authentication.md): Learn how the token names the organization and the workspace that the Console operations act in.
+- [Authentication](../../authentication/README.md): Learn how the token names the organization and the workspace that the Console operations act in.

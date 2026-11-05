@@ -62,12 +62,12 @@ A page of the members of the caller's organization.
 
 ### ConsoleMember
 
-A person or agent in the caller's organization, as Console reports it. Reading members needs Console administration; without it the field answers
-PERMISSION_DENIED.
+A person or agent in the caller's organization, as Console reports it. Reading members needs
+Console administration; without it the field answers PERMISSION_DENIED.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the member, a plain UUID rather than a platform entity ID. It is the `actorId` that the `iam` role assignment operations take. |
+| `actorId` | [UUID](../../core-api-reference/common.md#uuid)! | Console's ID for the member, a plain UUID rather than a platform entity ID. It is the `actorId` that the `iam` role assignment operations take. `node(id:)` doesn't resolve it. |
 | `principalType` | `String!` | Console's own principal vocabulary: \"human\" or \"agent\". |
 | `principalSubtype` | `String` | Console's own vocabulary for the kind of agent (e.g. \"integration\", \"ai_agent\"). Null for a person. |
 | `displayName` | `String` | Human-readable name. Null when Console has none. |

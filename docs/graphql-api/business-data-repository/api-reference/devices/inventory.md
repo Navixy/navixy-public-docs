@@ -132,7 +132,7 @@ Creates a new inventory.
 ```graphql
 inventoryCreate(
     input: InventoryCreateInput!
-  ): InventoryPayload
+  ): InventoryPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -196,7 +196,7 @@ Updates an existing inventory.
 ```graphql
 inventoryUpdate(
     input: InventoryUpdateInput!
-  ): InventoryPayload
+  ): InventoryPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -266,7 +266,7 @@ Deletes an inventory.
 ```graphql
 inventoryDelete(
     input: InventoryDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**
@@ -318,7 +318,7 @@ Links a device to an inventory.
 ```graphql
 deviceInventoryLink(
     input: DeviceInventoryLinkInput!
-  ): DeviceInventoryRelationPayload
+  ): DeviceInventoryRelationPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -388,7 +388,7 @@ Unlinks a device from an inventory.
 ```graphql
 deviceInventoryUnlink(
     input: DeviceInventoryUnlinkInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [NONE])
 ```
 
 **Arguments**

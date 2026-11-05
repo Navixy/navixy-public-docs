@@ -55,7 +55,7 @@ redirects:
   workspaces/members: console/api-reference/members.md
   actors: business-data-repository/api-reference/actors/users.md
   actors/users: business-data-repository/api-reference/actors/users.md
-  actors/integrations: authentication.md
+  actors/integrations: authentication/README.md
   devices: business-data-repository/api-reference/devices/README.md
   devices/inventory: business-data-repository/api-reference/devices/inventory.md
   assets: business-data-repository/api-reference/assets/README.md
@@ -88,7 +88,7 @@ redirects:
   bdr/workspaces/members: console/api-reference/members.md
   bdr/actors: business-data-repository/api-reference/actors/users.md
   bdr/actors/users: business-data-repository/api-reference/actors/users.md
-  bdr/actors/integrations: authentication.md
+  bdr/actors/integrations: authentication/README.md
   bdr/devices: business-data-repository/api-reference/devices/README.md
   bdr/devices/inventory: business-data-repository/api-reference/devices/inventory.md
   bdr/assets: business-data-repository/api-reference/assets/README.md
@@ -118,7 +118,7 @@ redirects:
   business-data-repository/workspaces/members: console/api-reference/members.md
   business-data-repository/actors: business-data-repository/api-reference/actors/users.md
   business-data-repository/actors/users: business-data-repository/api-reference/actors/users.md
-  business-data-repository/actors/integrations: authentication.md
+  business-data-repository/actors/integrations: authentication/README.md
   business-data-repository/devices: business-data-repository/api-reference/devices/README.md
   business-data-repository/devices/inventory: business-data-repository/api-reference/devices/inventory.md
   business-data-repository/assets: business-data-repository/api-reference/assets/README.md
@@ -147,9 +147,9 @@ redirects:
   # workspace members moved to Console, and integrations are no longer in the API
   business-data-repository/api-reference/workspaces/members: console/api-reference/members.md
   business-data-repository/api-reference/actors: business-data-repository/api-reference/actors/users.md
-  business-data-repository/api-reference/actors/integrations: authentication.md
+  business-data-repository/api-reference/actors/integrations: authentication/README.md
   # The same three pages under the address they were published at, which includes the
   # "products" group of the table of contents; the keys above leave it out (TD-445)
   products/business-data-repository/api-reference/workspaces/members: console/api-reference/members.md
   products/business-data-repository/api-reference/actors: business-data-repository/api-reference/actors/users.md
-  products/business-data-repository/api-reference/actors/integrations: authentication.md
+  products/business-data-repository/api-reference/actors/integrations: authentication/README.md

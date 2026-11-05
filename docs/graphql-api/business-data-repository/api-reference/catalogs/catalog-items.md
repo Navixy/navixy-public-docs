@@ -139,7 +139,7 @@ Creates a new user-defined catalog.
 ```graphql
 catalogCreate(
     input: CatalogCreateInput!
-  ): CatalogPayload
+  ): CatalogPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -225,7 +225,7 @@ Updates a user-defined catalog.
 ```graphql
 catalogUpdate(
     input: CatalogUpdateInput!
-  ): CatalogPayload
+  ): CatalogPayload @effect(kinds: [NONE])
 ```
 
 **Arguments**
@@ -315,7 +315,7 @@ Deletes a user-defined catalog.
 ```graphql
 catalogDelete(
     input: CatalogDeleteInput!
-  ): DeletePayload
+  ): DeletePayload @effect(kinds: [DATA_LOSS])
 ```
 
 **Arguments**

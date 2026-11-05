@@ -16,7 +16,7 @@ Every operation on this page reads or changes the data of the workspace named by
 
 ## Prerequisites
 
-You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication.md) for how to get a token and what your roles allow. For each device you also need its IMEI, the phone number of its SIM card, and the APN settings of the carrier.
+You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its IMEI, the phone number of its SIM card, and the APN settings of the carrier.
 
 Activation needs the ID of a supported device model. List the supported models, narrowed to the model you hold:
 
@@ -250,7 +250,6 @@ Key fields:
 * `phone` is 5 to 20 digits, with no `+`, spaces, or dashes.
 * `apn.name` is 1 to 40 characters of letters, digits, `.`, `_`, or `-`. `apn.user` and `apn.password` are optional and at most 40 characters each, with `@` allowed too.
 * `title` is optional. Without it, or when it's blank, the API names a new device after the model and the IMEI, for example, `FMB003 356307042772396`.
-* `activationCode` is optional: a code that the carrier issued with the SIM card, 3 to 20 digits. The API checks its format and stores it with the activation, and `activation.activationCode` returns it. The SMS doesn't include it.
 {% endstep %}
 
 {% step %}
@@ -468,7 +467,7 @@ Three GPS devices were activated in your workspace, one phone number was correct
 
 ## Related operations
 
-**Read the activation of one device.** `device(id:)` returns `activation` with the phone number, the APN name and user, the activation code, and `activatedAt`. The field is `null` for a device created with `deviceCreate` that was never activated. For a device of another workspace, `device` itself returns `null`.
+**Read the activation of one device.** `device(id:)` returns `activation` with how the device receives its settings (`setup`), the phone number, the APN name and user, and `activatedAt`. The field is `null` for a device created with `deviceCreate` that was never activated. For a device of another workspace, `device` itself returns `null`.
 
 **Rename a device.** Once the device is active, change its title with `deviceUpdate`. Send the `version` from your last read, so a concurrent change isn't overwritten. See [Managing device records and identifiers](managing-device-records-and-identifiers.md#update-a-device).
 
@@ -483,7 +482,7 @@ The activation operations return errors in the shared format. See [Error handlin
 | Code                | When it occurs                                                                                                                                                                                                | Resolution                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
-| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `activationCode` isn't 3 to 20 digits, `apn.name` breaks its format, or the model isn't supported. `field` names the argument.                    | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`.                                      |
+| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. `field` names the argument.                    | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`.                                      |
 | `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                     | Send the `id` as `deviceModels` returned it.                                                                                                           |
 | `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
 
