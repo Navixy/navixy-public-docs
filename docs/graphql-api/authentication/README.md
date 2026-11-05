@@ -277,3 +277,4 @@ A response with HTTP 401 has no `data` field. A `PERMISSION_DENIED` response has
 - [Roles and products](roles-and-products.md): Learn what the key's role and your workspace's products allow.
 - [API keys](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/api-keys) in Navixy Console: Read how administrators create and delete keys.
 - [Error handling](../error-handling.md): See the error format and every error code.
+

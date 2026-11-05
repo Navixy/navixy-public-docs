@@ -50,3 +50,4 @@ To pass a change to a developer, follow these steps:
 5. Send the three IDs with the time of the event and the product that recorded it.
 
 For the whole event, select it in the list and click **Export to JSON**. The file contains the event as the product recorded it, including the changed data. See [Audit log](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/audit-log) in Navixy GraphQL API to learn what the developer can do with the IDs.
+

@@ -101,3 +101,4 @@ A security profile sets how strict the sign-in rules are for a member, such as h
 | **Standard**  | Your own employees                                                 | A session lasts up to 12 hours. A single sign-in step, such as a password, is enough.                                                                                       |
 | **Limited**   | Contractors that you trust                                         | A session lasts up to 8 hours. Signing in also needs a one-time code from an authenticator app. A member who hasn't set up an app is asked to set one up when they sign in. |
 | **Protected** | People from outside your company who work in the organization once | A session lasts up to 4 hours. Signing in also needs a one-time code from an authenticator app, the same as for **Limited**.                                                |
+
