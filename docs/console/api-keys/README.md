@@ -26,14 +26,14 @@ Here's what you can do:
 * Find keys: <picture><source srcset="../.gitbook/assets/icons/search-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/search.svg" alt="Search keys" data-size="line"></picture> finds keys by name or by the visible part of the key, and <picture><source srcset="../.gitbook/assets/icons/filter_list-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/filter_list.svg" alt="Filter keys" data-size="line"></picture> narrows the list by role and expiration. The list shows active and expired keys. Deleted keys aren't listed.
 * Check whether a key is in use: Each key shows who created it and when it last signed in. A key that has never signed in shows a dash.
 * Export keys: <picture><source srcset="../.gitbook/assets/icons/download-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/download.svg" alt="Export to CSV" data-size="line"></picture> under the list downloads the keys that match the filters as a CSV file.
-* View the API request: **View API request**, the { } button under the list, shows the request that lists the organization's keys through the Navixy GraphQL API, with a link to the API documentation. The request accepts a member's access token, not a token that an app got with an API key.
+* View the API request: **View API request**, the { } button under the list, shows the request that lists the organization's keys through the Navixy GraphQL API, with links to the authentication guide and the Console API reference. The request accepts a member's access token, not a token that an app got with an API key.
 * Delete keys: You can delete one key or several keys at once. A deleted key can't be restored. See [Delete an API key](manage-api-keys.md#delete-an-api-key).
 
 | Column               | Description                                                                                                                                                             |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Name**             | The name given to the key. The audit log identifies the key by this name.                                                                                               |
 | **Role**             | The key's role. If the role was deleted, the column says that the role is no longer available. Console deletes the key when its role is deleted, so this state is short. |
-| **Expiration**       | The day when the key stops working, or **Never**. The key stops working at the start of that day. An expired key shows its date and stays in the list until you delete it.                                              |
+| **Expiration**       | The day when the key stops working, or **Never**. The key stops working at the start of that day. An expired key shows **Expired** with its date and stays in the list until you delete it.                                              |
 | **Created**          | When the key was created and who created it.                                                                                                                            |
 | **Last sign-in**     | When the key last signed in, with a delay of up to a minute.                                                                                                            |
 | **Key**              | The key's first characters and its last 4 characters. Nobody can see the whole key after it's created.                                                                  |
@@ -46,7 +46,7 @@ A key works in one workspace at a time among the workspaces available to its rol
 
 A key is treated as a member of your organization, but it doesn't appear on the **Users** tab of **Users and roles**, and you can't assign it a second role. The **Roles** tab shows how many keys have each role, in the **API keys** column. Deleting a role deletes its keys, and Console says how many before you confirm. In the log, a key's changes appear under the key's name.
 
-You don't choose a security profile for a key. Every key gets the same profile, which shows only in the CSV export and in the API, and it changes nothing. The key's role decides its access rights, and its expiration date decides how long it works. A key never needs the one-time code from an authenticator app, because no person is there to enter it.
+You don't choose a security profile for a key. Every key gets the same profile, which shows only in the CSV export and in the API. The profile sets how long an access token lasts, and it's the same for every key. The key's role decides its access rights, and its expiration date decides how long it works. A key never needs the one-time code from an authenticator app, because no person is there to enter it.
 
 ## When a key stops working
 
@@ -55,12 +55,13 @@ A key stops signing in when it expires, when you delete it, or when Console dele
 Console deletes a key on its own in these cases:
 
 * The key's role is deleted.
+* Someone revokes the key's role through the IAM API, with `memberRoleRevoke`.
 * A role is assigned to the person who created the key or revoked from them.
 * One of the creator's role assignments expires or gets another expiration date.
 * A role that the creator has is edited or deleted.
 * The creator leaves the organization.
 
-Nobody can give a key more access than their role has, and Console keeps this true after the key is created. Console doesn't compare the old and the new access. Any change to the creator's roles deletes their keys, including a change that gives them more access. Editing the key's role doesn't delete the key, unless the creator has that role too. The key gets the role's new access, like a member would.
+Nobody can give a key more access than their role has, and Console keeps this true after the key is created. Console doesn't compare the old and the new access. Any change to the creator's roles deletes their keys, including a change that gives them more access. Console also checks every 15 minutes that each key's access still matches the records in IAM and deletes a key whose records changed. Editing the key's role doesn't delete the key, unless the creator has that role too. The key gets the role's new access, like a member would.
 
 Console records every deletion with its reason in the [audit log](../audit-log/README.md), as an event on the key. Console doesn't send a notification about a deletion, so the first sign of a deleted key is often that the app's requests fail.
 

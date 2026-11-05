@@ -20,7 +20,7 @@ To find who made a change, follow these steps:
 
 1. Click **Audit log** on the sidebar.
 2. Click <picture><source srcset="../.gitbook/assets/icons/filter_list-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/filter_list.svg" alt="Filter events" data-size="line"></picture> above the list.
-3. Click **Record ID** and paste the ID you previously copied into the row that appears. Otherwise, click **Record type** and select the type, then click **Add filter**, click **Date**, select the day of the change, and click **Done**.
+3. Click **Record ID** and paste the ID you previously copied into the row that appears. Otherwise, click **Record type** and select the type, then click **Add filter**, click **Date**, select the day of the change, and click **Done**. The **Record type** list offers only the types of the events already loaded.
 4. Click **Apply**.
 5. In the list, find the event with the time of the change and click <picture><source srcset="../.gitbook/assets/icons/open_in_full-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/open_in_full.svg" alt="Open event details" data-size="line"></picture> in its **Time** cell. If several records of the type changed that day, compare the ID under **Record** with the one you copied.
 
@@ -28,14 +28,14 @@ The details show who made the change under **Performed by** and the old and new 
 
 ## Find the other changes that a request made
 
-One action in Console or one request from an app can change several records at once. For example, creating an API key also gives the key a role, so the audit log displays an event from Console and an event from IAM. Every event that one request caused has the same trace ID.
+One action in Console or one request from an app can change several records at once. For example, creating an API key also gives the key a role and a security profile, so the audit log displays an event from Console and two events from IAM. Every event that one request caused has the same trace ID.
 
 To find the other changes that a request made, follow these steps:
 
 1. In the audit log, open the details of one of the events.
 2. Click **View related events**.
 
-The list shows every event with the same trace ID, from every product that recorded one. The details panel closes, and the search and the other filters are cleared.
+The list shows every event with the same trace ID, from every product that recorded one. The details panel closes, the search and the other filters are cleared, and a **Trace ID** filter with that ID is set.
 
 ## Pass a change to a developer
 
