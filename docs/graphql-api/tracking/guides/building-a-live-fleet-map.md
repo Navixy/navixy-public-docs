@@ -686,7 +686,7 @@ You now have the position, connectivity, motion, and readings of every asset wit
 
 ## Filtering fleet by connectivity, group, or area
 
-`assetStates` takes a filter. Every device-level condition matches an asset when any of its devices satisfies it, because an asset's state is a list. This query lists the assets in one asset group whose devices aren't connected:
+`assetStates` takes a filter. Every device-level condition matches an asset when any of its devices satisfies it, because an asset's state is a list. To check the primary device only, see [Status of the primary device](#status-of-the-primary-device). This query lists the assets in one asset group whose devices aren't connected:
 
 ```graphql
 query SilentTrucksInGroup {
@@ -744,15 +744,69 @@ Response:
 
 To include devices that never sent a message, add `NEVER_REPORTED` to `connectivityStatus`.
 
-The filter has these fields:
+The filter has these fields. The conditions combine with AND, except `assetGroupIds` and `ungrouped`, which combine with OR:
 
 | Field                | What it selects                                                                                                                                                                           |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assetIds`           | Only these assets. An empty list selects every asset.                                                                                                                                     |
 | `assetGroupIds`      | Assets in any of these asset groups. A group counts only while the token can see it and it isn't deleted, so the ID of a hidden or deleted group matches nothing.                      |
+| `ungrouped`          | With `true`, assets that are in no asset group that the token can see. A hidden or deleted group doesn't count. With `assetGroupIds`, an asset matches when it's in one of those groups or in no group. |
+| `typeIds`            | Assets of any of these asset types.                                                                                                                                                       |
+| `titleContains`      | Assets whose title contains this value, without regard to letter case.                                                                                                                    |
 | `connectivityStatus` | Assets where some device has one of these connectivity values.                                                                                                                            |
 | `motionStatus`       | Assets where some device has one of these motion values.                                                                                                                                  |
 | `updatedSince`       | Assets where some device reported at or after this moment.                                                                                                                                |
+| `primaryDeviceOnly`  | With `true`, `connectivityStatus`, `motionStatus`, and `updatedSince` check the primary device only, not every device of the asset.                                                       |
+
+`ungrouped` and `assetGroupIds` together let a group picker offer "No group" as one more choice. This query lists the assets in one group and the assets in no group:
+
+```graphql
+query GroupOrNoGroup {
+  tracking {
+    assetStates(
+      filter: {
+        assetGroupIds: ["019d48ea-0752-8000-801f-414752500c31"]
+        ungrouped: true
+      }
+      first: 50
+    ) {
+      nodes {
+        asset {
+          title
+        }
+      }
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "tracking": {
+      "assetStates": {
+        "nodes": [
+          { "asset": { "title": "Forklift F-07" } },
+          { "asset": { "title": "HH-TL 1877" } },
+          { "asset": { "title": "HH-TL 2041" } }
+        ]
+      }
+    }
+  }
+}
+```
+
+The two trucks are in the group, and the forklift is in no group.
+
+### Status of the primary device
+
+Without `primaryDeviceOnly`, each device-level condition can match a different device of the same asset. An asset with two devices matches `connectivityStatus: [ONLINE]` and `motionStatus: [MOVING]` when one device is online and the other one moves. With `primaryDeviceOnly: true`, the asset matches only when its primary device is online and moves. The status of the asset is then the status of its primary device, as on the map. An asset without a primary device, or with a primary device that the token can't see, matches none of these conditions.
+
+`primaryDeviceOnly` also changes `updatedAt` of the state and the `UPDATED_AT` order. Without the flag, `updatedAt` is the latest update of any device of the asset. With the flag, it's the latest update of the primary device, and it's `null` when the asset has no primary device that the token can see. Then an asset sorts as `null` under `UPDATED_AT`, even when another of its devices reported.
+
+A page cursor of the `UPDATED_AT` order works only with the same value of `primaryDeviceOnly`. Request the next page with the flag that you used for the first page. A cursor from a request with the flag fails with `VALIDATION_ERROR` in a request without it, and the other way round.
 
 The filter has no area condition. To find the assets inside a depot or a city, see [Checking which assets are inside a geofence](building-a-live-fleet-map.md#checking-which-assets-are-inside-a-geofence).
 

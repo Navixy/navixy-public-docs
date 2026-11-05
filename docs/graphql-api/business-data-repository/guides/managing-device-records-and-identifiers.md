@@ -533,6 +533,7 @@ query FindActiveTrackers {
 | `inventoryIds`       | One or more inventory IDs                               |
 | `titleContains`      | Partial, case-insensitive match on the device title     |
 | `identifierContains` | Partial, case-insensitive match on any identifier value |
+| `search`             | Partial match on the title, on any identifier value, or on the activation phone number. A device matches when any of the three matches. |
 
 `identifierContains` is particularly useful for looking up a device by a partial IMEI or serial number:
 
@@ -552,6 +553,53 @@ query FindByIMEI {
   }
 }
 ```
+
+### Search box filter
+
+`search` is the filter for a search box in a device list, where the user types a value without saying what it is. `titleContains` and `identifierContains` combine with AND, so together they find only a device that matches both. `search` finds a device when its title, any of its identifier values, or its activation phone number contains the value. The title and the identifiers are compared without regard to letter case.
+
+The phone number is the one that `deviceActivate` stored in `activation.phone`. It has digits only, so `search` removes spaces and the `+`, `-`, `(`, `)`, and `.` characters from the value before it compares the value with the phone number. A value such as `866104` can be part of an IMEI or of a phone number, and `search` checks both:
+
+```graphql
+query SearchDevices {
+  bdr {
+    devices(
+      filter: { search: "+49 151-123" }
+      first: 10
+    ) {
+      nodes {
+        id
+        title
+        activation { phone }
+      }
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "devices": {
+        "nodes": [
+          {
+            "id": "019a6b2f-793e-807b-8001-444556430001",
+            "title": "Truck 01",
+            "activation": { "phone": "4915112345678" }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+The value `+49 151-123` becomes `49151123` for the phone number comparison, so it finds the device with the phone number `4915112345678`. For the title and the identifiers, the value stays as you typed it. A value with only removed characters, such as `+`, isn't compared with phone numbers, but `search` still compares it with titles and identifiers.
+
+`search` combines with the other `DeviceFilter` fields by AND. It works the same way in `devices`, `Workspace.devices`, and `Inventory.devices`.
 
 ## Handling version conflicts
 

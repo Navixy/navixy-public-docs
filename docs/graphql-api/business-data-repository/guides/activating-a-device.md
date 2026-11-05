@@ -1,8 +1,8 @@
 ---
 description: >-
-  Activate a batch of GPS devices through Navixy GraphQL API, correct a wrong
-  phone number, resend a lost SMS, and list the devices still waiting to
-  connect.
+  Activate a batch of GPS devices through Navixy GraphQL API with automatic or
+  manual setup, correct a wrong phone number, resend a lost SMS, and list the
+  devices still waiting to connect.
 tags:
   - guide
   - beta
@@ -10,13 +10,13 @@ tags:
 
 # Activating a device
 
-This guide shows how to activate GPS devices in your workspace through the Business Data Repository API and how to handle what goes wrong on the way: a wrong phone number, a lost SMS, and a device that never connects. You will check that the phone numbers are available, activate a batch of devices, correct one of them, resend the settings to another, and list the devices that are still waiting to connect.
+This guide shows how to activate GPS devices in your workspace through the Business Data Repository API and how to handle what goes wrong on the way: a wrong phone number, a lost SMS, and a device that never connects. You will check that the phone numbers are available, activate a batch of devices, correct one of them, resend the settings to another, and list the devices that are still waiting to connect. Then you will activate a device that you set up by hand.
 
 Every operation on this page reads or changes the data of the workspace named by your access token. For the shortest path from a token to one activated device, see [Getting started](../../getting-started.md). This guide starts where that page ends.
 
 ## Prerequisites
 
-You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its IMEI, the phone number of its SIM card, and the APN settings of the carrier.
+You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its IMEI. For automatic setup, which the scenario below uses, you also need the phone number of its SIM card and the APN settings of the carrier.
 
 Activation needs the ID of a supported device model. List the supported models, narrowed to the model you hold:
 
@@ -99,17 +99,56 @@ Save the ID of `awaiting_connection`. Status IDs are the same in every workspace
 
 ## How activation works
 
-`deviceActivate` does three things in one call. It creates the device record with the IMEI as its identifier, stores the SIM phone number and the APN settings on the device, and queues an SMS to the SIM card. The SMS carries the APN settings and the address of the Navixy platform. When the device receives it, the device connects to the platform on its own. Every activated device gets the built-in `gps_tracker` type, so the input takes no type.
+`deviceActivate` creates the device record with the IMEI as its identifier and sets its status to `awaiting_connection`. Before the device can send data, it needs two settings: the address of the Navixy server and the APN of the carrier. The `setup` field of the input says how the device gets them:
 
-The Device Management web app expects a device to connect within 2 minutes after `activatedAt`. If the device is still `awaiting_connection` after that, the app offers **Retry activation**. The retry sends `deviceActivate` again with the same IMEI, as the [correction](#correct-a-wrong-phone-number) and [resend](#resend-a-lost-sms) steps of the scenario below do.
+| `setup` | How the device gets its settings | `phone` and `apn` |
+| --- | --- | --- |
+| `AUTOMATIC`, the default | `deviceActivate` queues an SMS to the SIM card. The SMS contains the APN settings and the address of the Navixy platform. When the device receives it, the device connects to the platform on its own. | Required |
+| `MANUAL` | You enter the server address, the port, and the APN on the device yourself, for example in the configuration tool of the manufacturer. `deviceActivate` sends nothing to the device. | Optional. When you send them, they must have the correct format. `apn.password` is ignored. |
+
+`deviceActivate` stores the phone number and the APN settings that you send, and `activation.setup` of the device returns the setup. Every activated device gets the built-in `gps_tracker` type, so the input takes no type. The scenario below uses automatic setup. For manual setup, see [Activation with manual setup](#activation-with-manual-setup).
+
+The Device Management web app expects a device to connect within 2 minutes after `activatedAt`. The app measures the 2 minutes on the server clock, not on the clock of the browser. To do the same, read `serverTime` at the root of the query and compare it with `activatedAt`:
+
+```graphql
+query ActivationAge {
+  serverTime
+  bdr {
+    device(id: "019a6b2f-793e-807b-8001-444556430001") {
+      status { code }
+      activation { activatedAt }
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "serverTime": "2026-09-30T09:15:02Z",
+    "bdr": {
+      "device": {
+        "status": { "code": "awaiting_connection" },
+        "activation": { "activatedAt": "2026-09-30T09:12:41Z" }
+      }
+    }
+  }
+}
+```
+
+The device was activated 2 minutes and 21 seconds ago by the server clock. Each request reads the clock again, so `serverTime` changes with every request. If a device with automatic setup is still `awaiting_connection` after 2 minutes, the app offers **Retry activation**. The retry sends `deviceActivate` again with the same IMEI, as the [correction](#correct-a-wrong-phone-number) and [resend](#resend-a-lost-sms) steps of the scenario below do.
 
 Three rules decide what happens to a second activation with the same IMEI:
 
-* While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the phone number, the APN settings, and the model, replaces the title when you send a title that isn't blank, and queues the SMS again. Use it to correct a typo or to resend a lost SMS.
+* While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the setup, the phone number, the APN settings, and the model, and it replaces the title when you send a title that isn't blank. If the SMS of the earlier activation is still waiting to be sent, the call cancels it. With automatic setup, it then queues a new SMS. Use it to correct a typo, to resend a lost SMS, or to change the setup of a device that hasn't connected yet.
 * Once the device is `active` or `inactive`, the IMEI is taken, and the call fails with `DUPLICATE` on `input.identifier`.
 * An IMEI that belongs to a device of another workspace fails the same way. The error doesn't say which workspace holds it.
 
-The phone number is unique across the platform too. A second device with the same number fails with `DUPLICATE` on `input.phone`. To check a number before you activate, call `deviceActivationPhoneAvailable`, as the [first step of the scenario](#check-that-the-phone-numbers-are-available) shows. The APN password goes into the SMS only: the API neither stores nor returns it, so every re-run needs it again.
+The second activation replaces the phone number and the APN settings even when it doesn't send them. A re-run with manual setup and without `phone` leaves the device with no phone number, and the number becomes available for another device.
+
+The phone number is unique across the platform too. A second device with the same number fails with `DUPLICATE` on `input.phone`. Devices with manual setup that have no phone number don't conflict with each other. To check a number before you activate, call `deviceActivationPhoneAvailable`, as the [first step of the scenario](#check-that-the-phone-numbers-are-available) shows. With automatic setup, the APN password goes into the SMS only: the API neither stores nor returns it, so every re-run needs it again.
 
 A device that was created with `deviceCreate` can be activated later with the same call. It attaches to the existing record, because that record is `not_activated`.
 
@@ -465,9 +504,106 @@ Truck 01 and Truck 02 connected and left the list. Truck 03 is still waiting aft
 Three GPS devices were activated in your workspace, one phone number was corrected, one SMS was resent, and the list of devices still waiting to connect tells you where to look next. Every call acted in the workspace named by your token.
 {% endhint %}
 
+## Activation with manual setup
+
+With manual setup, you enter the server address, the port, and the APN on the device yourself, and the platform sends no SMS. Use it when you configure devices before you install them, or when the SIM card can't receive SMS.
+
+### Server address for manual setup
+
+Read the server address before you activate, so that you can configure the device first. `deviceActivationServer` accepts the ID of the model that you activate:
+
+```graphql
+query ActivationServer {
+  bdr {
+    deviceActivationServer(modelId: "019a6b2f-793e-807b-8001-43444d4c0005") {
+      host
+      port
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "deviceActivationServer": {
+        "host": "gps.example.com",
+        "port": 47776
+      }
+    }
+  }
+}
+```
+
+`host` is a host name or an IP address, and `port` is a TCP port. Enter both on the device, together with the APN of the carrier.
+
+The query returns `null` when your installation of Navixy publishes no server address. Then you can't set up a device by hand: use automatic setup, or ask the people who run your installation. A model that isn't supported fails with `VALIDATION_ERROR` on `modelId`, as in `deviceActivate`. The query needs the right to create devices.
+
+### Device activation without a phone number
+
+Send `setup: MANUAL`. The phone number and the APN settings are optional, so this device is activated with its IMEI only:
+
+```graphql
+mutation ActivateManually {
+  bdr {
+    deviceActivate(input: {
+      setup: MANUAL
+      modelId: "019a6b2f-793e-807b-8001-43444d4c0005"
+      title: "Truck 04"
+      identifier: "356307042772420"
+    }) {
+      device {
+        id
+        status { code }
+        activation {
+          setup
+          phone
+          apn { name }
+          server { host port }
+          activatedAt
+        }
+      }
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "bdr": {
+      "deviceActivate": {
+        "device": {
+          "id": "019a6b2f-793e-807b-8001-444556430004",
+          "status": { "code": "awaiting_connection" },
+          "activation": {
+            "setup": "MANUAL",
+            "phone": null,
+            "apn": null,
+            "server": { "host": "gps.example.com", "port": 47776 },
+            "activatedAt": "2026-09-30T11:20:07Z"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The device is `awaiting_connection`, and nothing was sent to it. `activation.server` returns the same address as `deviceActivationServer`, so you can read the address from the device later. It's `null` when your installation publishes no address.
+
+If you know the phone number or the APN settings, send them too. `deviceActivate` checks their format and stores them, and the [`search` filter](managing-device-records-and-identifiers.md#filtering) then finds the device by its phone number. A phone number that another device has fails with `DUPLICATE` on `input.phone`, as with automatic setup.
+
+The platform can't read the settings of the device. The device stays `awaiting_connection` until its first message arrives, and then it becomes `active`. You don't need to run the activation again: list the devices that are still waiting, as in the [last step of the scenario](#list-the-devices-that-are-still-waiting-to-connect).
+
 ## Related operations
 
-**Read the activation of one device.** `device(id:)` returns `activation` with how the device receives its settings (`setup`), the phone number, the APN name and user, and `activatedAt`. The field is `null` for a device created with `deviceCreate` that was never activated. For a device of another workspace, `device` itself returns `null`.
+**Read the activation of one device.** `device(id:)` returns `activation` with how the device receives its settings (`setup`), the phone number, the APN name and user, the server address for manual setup (`server`), and `activatedAt`. With manual setup, `phone` and `apn` are `null` when the activation didn't send them. The field is `null` for a device created with `deviceCreate` that was never activated. For a device of another workspace, `device` itself returns `null`.
 
 **Rename a device.** Once the device is active, change its title with `deviceUpdate`. Send the `version` from your last read, so a concurrent change isn't overwritten. See [Managing device records and identifiers](managing-device-records-and-identifiers.md#update-a-device).
 
@@ -481,8 +617,8 @@ The activation operations return errors in the shared format. See [Error handlin
 
 | Code                | When it occurs                                                                                                                                                                                                | Resolution                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
-| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. `field` names the argument.                    | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`.                                      |
+| `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. `deviceActivationServer` needs the right to create devices. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
+| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. Or `setup` is `AUTOMATIC`, the default, and the input has no `phone` (`input.phone`) or no `apn` (`input.apn.name`). `field` names the argument. | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`. To activate without a phone number or APN, send `setup: MANUAL`. |
 | `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                     | Send the `id` as `deviceModels` returned it.                                                                                                           |
 | `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
 
@@ -538,7 +674,7 @@ Activating a second device with a phone number that is already in use returns th
 
 ### How to handle a duplicate phone number
 
-Find the device that holds the number: it's the one you activated with it, so search by the IMEI you used then with `devices(filter: { identifierContains: "<IMEI>" })`. If that record has the wrong IMEI, delete it and activate again. If the number is really shared, the SIM card is in the wrong device.
+Find the device that has the number with `devices(filter: { search: "<phone number>" })`: `search` matches the activation phone number of a device too. An empty result means that the device with this number belongs to another workspace or that your role can't read it. If that record has the wrong IMEI, delete it and activate again. If the number is really shared, the SIM card is in the wrong device.
 
 ## See also
 

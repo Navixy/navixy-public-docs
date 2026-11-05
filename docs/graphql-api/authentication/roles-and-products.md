@@ -60,6 +60,8 @@ The audit log, `bdr.audit`, uses only the `read` action. It covers the events of
 
 Each kind of operation needs a matching action. A query needs `read`, and a create operation needs `create`. An update operation needs `update` and `read` on the same record, and a delete operation needs `delete` and `read`. A new device or asset needs the IDs of its type and model. Types and models are catalog items, so the role also needs `read` on `bdr.catalog` to find them.
 
+A device that you link to an inventory needs rights on that inventory too. `deviceInventoryLink` needs `read` and `update` on the inventory (`bdr.inventory`). `deviceCreate` with `inventoryId` needs them as well, in addition to `create` on devices. Without them, `deviceCreate` returns `PERMISSION_DENIED` and creates no device. An inventory that the role doesn't let your app read returns the same error as an inventory that doesn't exist.
+
 Without a role that covers Business Data Repository, your app can read only `me` in `bdr`.
 
 ### IoT Logic

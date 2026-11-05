@@ -24,13 +24,15 @@ Before you start, make sure that you have the following:
 
 ## How activation works
 
-Activation is one mutation, `deviceActivate`. It creates the device record from the IMEI, stores the SIM phone number and the APN settings, and queues an SMS to the SIM card. The SMS contains the APN settings and the address of the platform, so the device can connect and send its data there. Every activated device has the built-in `gps_tracker` device type, so you don't choose a type.
+Activation is one mutation, `deviceActivate`. It creates the device record from the IMEI and stores the SIM phone number and the APN settings. By default, it also queues an SMS to the SIM card. The SMS contains the APN settings and the address of the platform, so the device can connect and send its data there. This is automatic setup, `setup: AUTOMATIC`, and this guide uses it. Every activated device has the built-in `gps_tracker` device type, so you don't choose a type.
+
+With manual setup, `setup: MANUAL`, you enter the server address, the port, and the APN on the device yourself, and the platform sends no SMS. The phone number and the APN settings are then optional. See [Activation with manual setup](business-data-repository/guides/activating-a-device.md#activation-with-manual-setup).
 
 A device has one of four statuses:
 
-<table><thead><tr><th width="230">Status code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>not_activated</code></td><td>The device record exists, but nothing was sent to the device. A device created with <code>deviceCreate</code> starts here and keeps this status: the platform accepts its messages, but its status doesn't change.</td></tr><tr><td><code>awaiting_connection</code></td><td><code>deviceActivate</code> ran, and the SMS is queued. The device hasn't sent anything yet.</td></tr><tr><td><code>active</code></td><td>The first message from the device reached the platform after <code>deviceActivate</code>.</td></tr><tr><td><code>inactive</code></td><td>The platform refuses messages from the device, and <code>deviceActivate</code> refuses its IMEI. No operation of this API sets this status.</td></tr></tbody></table>
+<table><thead><tr><th width="230">Status code</th><th>Meaning</th></tr></thead><tbody><tr><td><code>not_activated</code></td><td>The device record exists, but nothing was sent to the device. A device created with <code>deviceCreate</code> starts here and keeps this status: the platform accepts its messages, but its status doesn't change.</td></tr><tr><td><code>awaiting_connection</code></td><td><code>deviceActivate</code> ran. With automatic setup, the SMS is queued. The device hasn't sent anything yet.</td></tr><tr><td><code>active</code></td><td>The first message from the device reached the platform after <code>deviceActivate</code>.</td></tr><tr><td><code>inactive</code></td><td>The platform refuses messages from the device, and <code>deviceActivate</code> refuses its IMEI. No operation of this API sets this status.</td></tr></tbody></table>
 
-Until the device connects, you can run `deviceActivate` again with the same IMEI. The second run replaces the phone number, the APN settings, and the model. It also queues the SMS again. Use a second run to resend a lost SMS or to correct a typo in the phone number or the APN settings. Once the device is `active` or `inactive`, a second activation with its IMEI fails with `DUPLICATE`.
+Until the device connects, you can run `deviceActivate` again with the same IMEI. The second run replaces the setup, the phone number, the APN settings, and the model. If the SMS of the first run is still waiting to be sent, the second run cancels it, and with automatic setup it queues a new SMS. Use a second run to resend a lost SMS or to correct a typo in the phone number or the APN settings. Once the device is `active` or `inactive`, a second activation with its IMEI fails with `DUPLICATE`.
 
 ## How to get a token and activate a GPS device
 
@@ -278,6 +280,7 @@ Response:
 
 * `modelId` is the ID from the previous step. The model must be supported. An unsupported model fails with `VALIDATION_ERROR` on `input.modelId`.
 * `identifier` is the device IMEI: exactly 15 digits. It becomes the `IMEI` identifier of the device record. An IMEI is unique across the whole Navixy platform.
+* `setup` isn't in the input, so the activation uses the default, `AUTOMATIC`. With automatic setup, `phone` and `apn` are required. Without one of them, the activation fails with `VALIDATION_ERROR` on `input.phone` or `input.apn.name`.
 * `phone` is the SIM card's phone number: 5 to 20 digits, without `+` or spaces. The SMS goes to this number. The number is unique across the platform, so a second device with the same number fails with `DUPLICATE`. To check a number before you activate, see [Activating a device](business-data-repository/guides/activating-a-device.md#check-that-the-phone-numbers-are-available).
 * `title` is optional. When you leave it out or send it blank, the API builds a title from the model and the IMEI, for example, `FMB003 356307042772396`.
 
@@ -332,7 +335,9 @@ Response after the device connects:
 
 The platform changes the status to `active` when it accepts the first message from the device, before any position data arrives. Nothing notifies you of the change, so read the device again until the status is `active`.
 
-If the status stays `awaiting_connection`, the SMS didn't reach the device or the device couldn't connect. Check the SIM card, the phone number, and the APN settings. Then run `deviceActivate` again with the same IMEI and the corrected values. The second run replaces the stored SIM and APN data and queues the SMS again.
+The Device Management web app expects a device to connect within 2 minutes after `activatedAt`. To measure this time on the server clock rather than on your own, add `serverTime` at the root of the query, next to `bdr`. It returns the current time of the server.
+
+If the status stays `awaiting_connection`, the SMS didn't reach the device or the device couldn't connect. Check the SIM card, the phone number, and the APN settings. Then run `deviceActivate` again with the same IMEI and the corrected values. The second run replaces the stored SIM and APN data, cancels the first SMS if it's still waiting to be sent, and queues a new SMS.
 {% endstep %}
 {% endstepper %}
 
