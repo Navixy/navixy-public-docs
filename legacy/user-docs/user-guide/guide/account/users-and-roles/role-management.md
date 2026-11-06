@@ -44,7 +44,7 @@ Without any rights, a user can view the items assigned to them, but can't change
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Device settings (platform related) | Change device settings that Navixy stores: name, working statuses, LBS radius, sensors and buttons, parking detection, and others. |
 | Device settings (hardware related) | Change settings of the device itself: tracking mode, phone number, harsh driving, ignition source, and others. |
-| Vehicle systems control            | Control vehicle systems through the **Outputs** widget, such as engine cut-off, car alarm, and doors.   |
+| Vehicle systems control            | Control vehicle systems through the **Outputs** widget, such as vehicle immobilization, car alarm, and doors. |
 | Device activation                  | Add and activate GPS devices. A device that the user activates is visible to that user and to the owner. |
 | Reports                            | Build, view, and change reports and scheduled reports. Each user sees only their own reports.          |
 | Alert rules                        | Create and change rules, and assign them to objects.                                                   |

@@ -69,7 +69,7 @@ Safety logic might be implemented in several ways:
 * Trusted sender verification: Some devices only accept commands from trusted senders. If our platform isn't listed as a trusted sender, the commands might be ignored.
 * Configuration of internet commands: Devices may ignore internet commands until they are properly configured to receive them.
 
-It’s important to note that some devices implement safety logic only for internet commands but may still possess a specific emergency command to stop the engine via SMS. However, we do not support such commands due to safety concerns. For instance, this is the case with some Coban devices.
+It’s important to note that some devices implement safety logic only for internet commands but may still accept a specific emergency SMS command that cuts a running engine. However, we do not support such commands due to safety concerns. For instance, this is the case with some Coban devices.
 
 ## Why output control may not work
 

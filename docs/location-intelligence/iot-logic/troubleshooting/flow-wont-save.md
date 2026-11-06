@@ -69,7 +69,7 @@ The settings dialog of a **Device Action** node catches most of these problems b
 
 **The custom mappings of the node have too many target devices.** The custom mappings of one node have more than 1,000 target devices in all. Remove targets, or split the mappings across two **Device Action** nodes.
 
-**Duplicate Switch Output #2 action in nodes: 'Siren on', 'Siren off'** Two **Device Action** nodes that the same message passes through switch the same output. The message gives the output number and the names of the nodes. Switching the output on in one node and off in the other doesn't help, and neither does a custom mapping that sends the commands of each node to different devices. Keep the action for this output in one node only, or put the two nodes on the then and else branches of one **IF/THEN Logic** node: a message follows only one of them, so the two commands never go out together.
+**Another action on the same path switches the same output.** Two **Device Action** nodes that the same message passes through switch the same output. The editor marks both nodes. Switching the output on in one node and off in the other doesn't help, and neither does a custom mapping that sends the commands of each node to different devices. Keep the action for this output in one node only, or put the two nodes on the then and else branches of one **IF/THEN Logic** node: a message follows only one of them, so the two commands never go out together.
 
 **Another Device Action or Webhook node has the same "Node ID".** Two **Device Action** or **Webhook** nodes of the flow have the same **Node ID**. The editor gives every node its own **Node ID**, so this happens only when a program changed the flow through the API. Delete one of the two nodes and add it again: a new node gets a new **Node ID**.
 
@@ -114,6 +114,7 @@ If saving shows an error message and no node shows a problem, your role may not 
 | Too many devices are connected to the flow. | 25,000 device connections. A device in two **Data Source** nodes counts twice |
 | The expression is too long. | 960 characters for a formula in an **Initiate Attribute** node, 480 for a condition in an **IF/THEN Logic** node |
 | The description is too long. | 4,000 characters |
+| The node name is too long. | 255 characters |
 
 The canvas doesn't let you add a node or a connection beyond the limit. It shows **A flow can hold no more than 64 nodes.** or **A flow can hold no more than 96 connections.** instead.
 

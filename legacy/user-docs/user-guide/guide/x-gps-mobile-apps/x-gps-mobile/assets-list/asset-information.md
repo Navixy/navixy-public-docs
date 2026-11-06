@@ -72,7 +72,7 @@ The **Reminders** button is only displayed when there are pending issues, such a
 {% column %}
 Tap the **Sensors** button to see the readings provided by the asset’s GPS device or devices, including engine hours, fuel level, temperature, and custom inputs and outputs.
 
-Outputs allow sending control commands to devices, such as stopping the engine. To send a command, tap <img src="../../../../.gitbook/assets/image-20250508-093253.png" alt="image-20250508-093253.png" data-size="line"> and choose **Send** in the confirmation prompt.
+Outputs let you control the equipment connected to the GPS device, for example to immobilize the vehicle. With a common installation, an immobilized vehicle can't start again after it stops and the ignition is off. What happens depends on the equipment and its installation, so switch outputs with caution. To send a command, tap <img src="../../../../.gitbook/assets/image-20250508-093253.png" alt="image-20250508-093253.png" data-size="line"> and choose **Send** in the confirmation prompt.
 
 Vehicle sensors are configured in the Navixy web platform. To learn about them, see [Vehicle sensors](../../../devices-and-settings/vehicle-sensors/).
 {% endcolumn %}
@@ -100,7 +100,7 @@ Tap the name or label in the **Linked units** entry to access the information sc
 {% column %}
 Tap the device label in the **GPS Data** entry to display its details, including the ID, model, connection and movement status, location, speed, commands, and other technical data.
 
-[Commands](../../../devices-and-settings/object-management/commands.md) are firmware-level instructions sent directly to the device. You can add new commands only in the [Devices and settings](../../../devices-and-settings/) module of the Navixy platform.
+[Commands](../../../devices-and-settings/object-management/commands.md) are actions saved for the device. A device command sends an instruction to the GPS device, for example to restart it. A software command sends a request to another service, for example a message to a team chat. To send a command, tap the send button next to it. You can add or change commands only in the [Devices and settings](../../../devices-and-settings/) module of the Navixy web platform.
 {% endcolumn %}
 
 {% column %}
