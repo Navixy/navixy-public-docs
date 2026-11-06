@@ -6,10 +6,15 @@ description: >-
 
 # Suspending a tracker
 
-In certain situations, you might need to temporarily suspend service for a tracker, for example, due to a missed payment. In these cases, you can transition the tracker to a restricted pricing plan. While suspended, it stops tracking and recording new data until the restriction is lifted.
+You might need to suspend service for a tracker in these cases:
+
+* The customer missed a payment, and you want to stop the service until they pay.
+* The customer doesn't use the device for a while, and you want to stop billing for it but keep its history.
+
+To suspend a tracker, move it to a restricted pricing plan.
 
 {% hint style="warning" %}
-All historical data recorded before the suspension remains securely stored and accessible.
+While a tracker is suspended, it doesn't track, and Navixy doesn't record any new data or history for it. Tracking and history recording start again when the suspension ends, but the history for the suspension period stays empty. History recorded before the suspension stays stored and available.
 {% endhint %}
 
 To create a pricing plan that suspends the service for a device, follow these steps:
