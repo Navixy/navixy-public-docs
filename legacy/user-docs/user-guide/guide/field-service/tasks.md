@@ -90,6 +90,8 @@ Click **Save** to finish creating the task. The selected employee will receive t
 
 **Route tasks** involve multiple checkpoints that the employee must visit in a specific order. This type of task is ideal for situations where the employee needs to visit several locations along a planned route, such as deliveries or inspections.
 
+To learn which status a task, a route task, or a checkpoint gets and when, see [Task statuses](task-statuses.md).
+
 ## Optimize route
 
 **Optimize route** is a feature that helps couriers deliver packages efficiently by determining the best sequence for visiting multiple addresses across a city. It considers the location of each address, specific delivery time windows, and the starting point of the task to create the most optimal route. To use it, click **Optimize route** at the bottom of the left panel of a configured route task. You'll be prompted to enter the start address and time.

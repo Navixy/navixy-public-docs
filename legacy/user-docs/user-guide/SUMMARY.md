@@ -156,6 +156,7 @@
   * [Field service](guide/field-service/README.md)
     * [Staff](guide/field-service/staff.md)
     * [Tasks](guide/field-service/tasks.md)
+    * [Task statuses](guide/field-service/task-statuses.md)
     * [Forms](guide/field-service/forms.md)
     * [Departments](guide/field-service/departments-field-service.md)
     * [Places](guide/field-service/places-field-service.md)
