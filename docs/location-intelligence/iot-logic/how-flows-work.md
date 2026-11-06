@@ -40,9 +40,10 @@ Inside a flow, the message moves from its **Data Source** node along the connect
 * An **Initiate Attribute** node calculates new values and adds them to the message.
 * An **IF/THEN Logic** node evaluates its condition and sends the message down the then branch or the else branch. On the canvas, a check-mark icon marks the then branch and a cross icon marks the else branch.
 * A **Device Action** node sends a command to the device that sent the message, or to the devices that you map to it. The path ends there. See [Device Action](nodes/device-action.md).
+* A **Webhook** node sends a request to a system outside Navixy, with values from the message. The path ends there. See [Webhook](nodes/webhook.md).
 * An **Output Endpoint** node finishes the path and sends the result to the Navixy platform.
 
-When a path reaches an **Output Endpoint** node, the flow keeps what it calculated. A path that finishes anywhere else keeps nothing: the message still reaches the platform, but with only what the device sent. To keep the values for a message that triggers a command, connect an **Output Endpoint** node to the same branch as the **Device Action** node. See [IF/THEN Logic](nodes/logic.md).
+When a path reaches an **Output Endpoint** node, the flow keeps what it calculated. A path that finishes anywhere else keeps nothing: the message still reaches the platform, but with only what the device sent. To keep the values for a message that triggers a command or a request, connect an **Output Endpoint** node to the same branch as the **Device Action** or **Webhook** node. See [IF/THEN Logic](nodes/logic.md).
 
 A value calculated early in a flow is available to every node after it, so you can build one attribute from another.
 {% endstep %}
@@ -79,4 +80,5 @@ A device that belongs to no flow, or whose only flow is switched off, still reac
 * **A calculation sees one device.** It reads the values of the device whose message IoT Logic handles, and the earlier readings of that device.
 * **A formula reads the timestamps of the message.** It reads them through `event_time`, rather than the current time.
 * **Each calculated attribute belongs to one flow per device.** Two flows that share a device can't both produce `temp_celsius`. Two flows that cover separate fleets can. See [Attribute names](expressions/attributes.md).
+* **A Webhook node sends and finishes.** The response of the other system doesn't come back into the flow.
 * **A late message is left out.** IoT Logic handles the messages of each device in the order that they were recorded. A reading that arrives after IoT Logic has handled a newer reading is left out rather than applied out of sequence. A device that stores readings while offline and sends them in a burst loses the readings that arrive too late. See [Troubleshooting](troubleshooting/).

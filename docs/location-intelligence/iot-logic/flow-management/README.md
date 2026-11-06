@@ -102,14 +102,16 @@ The file keeps the flow's structure and logic:
 * The condition and the **Expression name** of each **IF/THEN Logic** node
 * The attribute names and formulas of each **Initiate Attribute** node
 * The actions and the **Node ID** of each **Device Action** node
+* The **Node ID**, URL, headers, and body of each **Webhook** node
 
 The file leaves out anything that belongs to one workspace or is secret:
 
 * The devices selected in **Data Source** nodes
 * The custom mappings of **Device Action** nodes
+* The value of each **Webhook** header whose name contains `authorization`, `token`, `secret`, `signature`, or `api-key`. The header stays in the file with an empty value
 * Whether the flow is switched on
 
-An uploaded flow has the actions of each **Device Action** node, but no custom mappings. Add the mappings again on the node's **Advanced** tab.
+An uploaded flow has the actions of each **Device Action** node, but no custom mappings. Add the mappings again on the node's **Advanced** tab. Enter the emptied **Webhook** header values again too.
 
 To create a flow from a file, click **Upload flow** on the start page. Choose the file, or drag it onto the dialog, and click **Upload**. The flow opens on the canvas as a new flow that isn't saved yet. Its name comes from the file name. When a flow with that name already exists, ` (1)` is added to it.
 
@@ -122,6 +124,7 @@ Each node with settings that the file couldn't store shows **Show warning detail
 | Node | What the warning says |
 | --- | --- |
 | **Data Source** | Select the devices for this Data Source. |
+| **Webhook** | Enter credentials if the receiving service requires them. |
 
 The mark disappears when you open the node. Fill in what is missing, then save the flow. **Flow enabled** is on for an uploaded flow, so the first save also switches it on and checks the whole flow. See [Why flows won't save](../troubleshooting/flow-wont-save.md).
 

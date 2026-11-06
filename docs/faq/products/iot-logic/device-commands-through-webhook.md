@@ -1,6 +1,4 @@
 ---
-hidden: true
-noIndex: true
 title: Device commands through Webhook nodes
 description: "A Webhook node can reach a device only through a receiving system that can command it. A Device Action node acts on the device directly."
 tags:

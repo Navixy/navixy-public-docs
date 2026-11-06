@@ -127,8 +127,9 @@ See [Troubleshooting](troubleshooting/README.md) to learn what to do in each cas
 
 ## Checking the rest of a flow
 
-Data Stream Analyzer shows values: what the devices sent and what your flow calculated. Three things don't show in the table directly:
+Data Stream Analyzer shows values: what the devices sent and what your flow calculated. Four things don't show in the table directly:
 
 * **Which branch a message took.** When the **IF/THEN Logic** node has an **Expression name**, select the attribute with that name, such as `over_limit`. It stores the node's result. `true` means that the message took the then branch. `false`, or no value, means the else branch.
 * **Late messages.** A message that arrives after a newer message is left out, so it never reaches the table. See [How flows work](how-flows-work.md).
 * **Commands.** A command from a **Device Action** node leaves IoT Logic, and the interface doesn't show its status. Check the result on the device itself, such as the state of the output that the command switches. See [Device Action](nodes/device-action.md).
+* **Requests.** A request from a **Webhook** node leaves IoT Logic, and the interface doesn't show whether it arrived. Check the logs of the receiving system. See [Webhook](nodes/webhook.md).

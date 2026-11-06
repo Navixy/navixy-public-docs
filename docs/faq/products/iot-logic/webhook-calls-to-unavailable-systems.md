@@ -1,6 +1,4 @@
 ---
-hidden: true
-noIndex: true
 title: Webhook calls to unavailable systems
 description: "When the receiving system is down, the IoT Logic flow continues and the message still reaches its destination."
 tags:
@@ -17,6 +15,6 @@ What happens to a Webhook call if the receiving system is down?
 
 The flow continues. The **Webhook** node doesn't read the response, so a failed call doesn't stop the message from reaching its destination.
 
-A failed call isn't visible from inside the flow. Check the logs of the receiving system when calls seem to be missing.
+The request isn't sent again, and a request that doesn't finish within 10 seconds is canceled. A failed request isn't visible from inside the flow. Check the logs of the receiving system when requests seem to be missing.
 
 See [Webhook](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/webhook).

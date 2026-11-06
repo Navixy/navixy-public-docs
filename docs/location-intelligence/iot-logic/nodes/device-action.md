@@ -127,6 +127,8 @@ A command is sent at most once: nothing sends a lost command again. The interfac
 
 ## How to configure a Device Action node
 
+Two flow templates already have Device Action nodes: [Device health check and reboot](../flow-management/templates.md#device-health-check-and-reboot) sends reboot commands, and [Driver access control](../flow-management/templates.md#driver-access-control) blocks and unblocks the engine.
+
 To configure the node, follow these steps:
 
 {% stepper %}

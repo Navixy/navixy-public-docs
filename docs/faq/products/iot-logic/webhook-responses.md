@@ -1,6 +1,4 @@
 ---
-hidden: true
-noIndex: true
 title: Webhook responses in IoT Logic flows
 description: "A Webhook node sends its request and ends the path. The flow doesn't receive the response."
 tags:

@@ -1,7 +1,8 @@
 ---
 description: >-
   What to do when an IoT Logic flow won't save, an attribute doesn't
-  appear, a value isn't what you expected, or a device command doesn't arrive.
+  appear, a value isn't what you expected, or a device command or a webhook
+  call doesn't arrive.
 tags:
   - troubleshooting
   - beta
@@ -43,7 +44,7 @@ Then open the flow's **Data Source** node and check the **Selected** tab. When y
 
 Follow the path from the **Data Source** node to the node that calculates the attribute. If a node other than **IF/THEN Logic** connects to two or more nodes on the way, all those paths are live, and the flow keeps the calculated values of only one of them. The flow saves without an error. Split the path with an **IF/THEN Logic** node instead. See [Live paths](../how-flows-work.md#live-paths).
 
-A node that connects to a **Device Action** node and an **Output Endpoint** node on the same branch is safe. The **Device Action** node adds no values, so the flow loses nothing.
+A node that connects to a **Device Action** or **Webhook** node and an **Output Endpoint** node on the same branch is safe. **Device Action** and **Webhook** nodes add no values, so the flow loses nothing.
 {% endstep %}
 
 {% step %}
@@ -140,8 +141,22 @@ A **Device Action** node should have sent a command, and the device didn't act o
 
 The node sends a command on every message that reaches it, not only when a value changes. While the condition holds, a device that reports every 10 seconds gets a command every 10 seconds. See [Device Action](../nodes/device-action.md).
 
+## A webhook call doesn't arrive
+
+A **Webhook** node should have sent a request, and the receiving system shows nothing, or rejected it. The node doesn't read the response, so a rejected request looks the same from inside the flow as an accepted one. Work through these checks:
+
+* **Check the logs of the receiving system first.** They are the only place that shows a rejection and its reason.
+* **Check that the node is on a conditional branch.** If no **IF/THEN Logic** node comes before the **Webhook** node on its path, the node sends a request on every message. If it follows a condition that is never true, it never sends one.
+* **Check the condition.** Look at the attributes in [Flow monitoring](../monitoring.md) and work out whether the condition was true for the message.
+* **Check the URL.** A redirect isn't followed, so enter the final address that the receiving system documents. A host name that leads to a private network address gets no request, and nothing on screen says so.
+* **Check the headers.** A missing or wrong authentication header is the most common reason that a system rejects a request.
+* **Check the body against what the receiving system expects.** Most systems reject a body that isn't in the structure that they document. A value that the message doesn't have becomes empty text, and a number placeholder without quotation marks then makes the body invalid JSON. A name with capital letters or a dot, such as `{{Speed}}`, is sent as written instead of its value.
+* **Check how long the receiving system takes to answer.** A request that doesn't finish within 10 seconds is canceled.
+
+A request is sent at most once, so a request that fails isn't sent again. See [Webhook](../nodes/webhook.md).
+
 ## The flow saves but nothing happens at all
 
 * Confirm that the flow is switched on, in the **Status** column.
-* Confirm that the path reaches an **Output Endpoint** node. A path that stops before an **Output Endpoint** node keeps nothing that the flow calculated. A path that ends at a **Device Action** node keeps nothing either, so connect an **Output Endpoint** node to the same branch as the **Device Action** node.
+* Confirm that the path reaches an **Output Endpoint** node. A path that stops before an **Output Endpoint** node keeps nothing that the flow calculated. A path that ends at a **Device Action** or **Webhook** node keeps nothing either, so connect an **Output Endpoint** node to the same branch as well.
 * Confirm that the reporting devices are the devices that you expect. Check the **Connected devices** count in **Created flows**.

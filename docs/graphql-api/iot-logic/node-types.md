@@ -408,3 +408,4 @@ Placeholders follow these rules:
 * [Creating and updating flows](guides/creating-and-updating-flows.md): Build a flow from these node types, step by step.
 * [Flow validation errors](flow-validation-errors.md): Fix the violations that the rules on this page produce.
 * [Flows](api-reference/flows.md): See every field of every node type.
+* [Webhook node](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/webhook): Set up a Webhook node in the flow editor.

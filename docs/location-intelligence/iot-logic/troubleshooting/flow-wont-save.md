@@ -71,9 +71,33 @@ The settings dialog of a **Device Action** node catches most of these problems b
 
 **Duplicate Switch Output #2 action in nodes: 'Siren on', 'Siren off'** Two **Device Action** nodes that the same message passes through switch the same output. The message gives the output number and the names of the nodes. Switching the output on in one node and off in the other doesn't help, and neither does a custom mapping that sends the commands of each node to different devices. Keep the action for this output in one node only, or put the two nodes on the then and else branches of one **IF/THEN Logic** node: a message follows only one of them, so the two commands never go out together.
 
-**Another Device Action node has the same "Node ID".** Two **Device Action** nodes of the flow have the same **Node ID**. The editor gives every node its own **Node ID**, so this happens only when a program changed the flow through the API. Delete one of the two nodes and add it again: a new node gets a new **Node ID**.
+**Another Device Action or Webhook node has the same "Node ID".** Two **Device Action** or **Webhook** nodes of the flow have the same **Node ID**. The editor gives every node its own **Node ID**, so this happens only when a program changed the flow through the API. Delete one of the two nodes and add it again: a new node gets a new **Node ID**.
 
 A custom mapping can also cause **A device connected here no longer exists.**, for a source or target device that isn't in the workspace any more. See [A device is gone](#a-device-is-gone).
+
+## A Webhook node isn't valid
+
+The settings dialog of a **Webhook** node catches most of these problems before you click **Apply changes**. Three problems only the save finds: a `Content-Type` header that names a type other than JSON, a URL that points to a private network address, and too many **Webhook** nodes in the flow.
+
+**The flow has too many Webhook nodes.** The flow has more than 10 **Webhook** nodes. Delete the nodes that the flow doesn't need.
+
+**The node has too many headers.** A **Webhook** node has more than 10 headers. Delete headers that the receiving system doesn't need.
+
+**The URL of the node isn't valid or points to a private address.** The **URL** has one of these problems:
+
+* It doesn't start with `http://` or `https://`, or it has a space in it.
+* It is longer than 255 characters.
+* It contains a value in double braces other than `{{device_id}}`.
+* It points to `localhost` or to a private network address, such as `127.0.0.1` or `192.168.1.10`. Use an address that the receiving system makes available on the internet.
+
+**A header of the node isn't valid.** A header has one of these problems:
+
+* Its **Key** has a space or another character that a header name can't have, or it is longer than 255 characters.
+* Its **Key** is a header that Navixy sets itself, such as `Host` or `Content-Length`. Delete the header. See [Webhook](../nodes/webhook.md#general-tab) for the full list.
+* Its **Value** is longer than 255 characters, or it contains a value in double braces other than `{{device_id}}`.
+* It is a `Content-Type` header with a type other than JSON, such as `text/plain`, or a second `Content-Type` header. Use `application/json`, or delete the header: the node then sends `application/json` itself.
+
+**The body of the node is too long.** The **Body** is longer than 4,000 characters. Shorten it, and send only the values that the receiving system uses.
 
 ## The save fails without a list of problems
 
@@ -104,5 +128,7 @@ The rule covers the flow's own name and description as well as the settings insi
 ## What the save doesn't check
 
 The save checks that every formula is written correctly. The check uses sample values, not the real data of your devices. A correctly spelled formula is accepted even when it produces nothing on every real message, because no device sends the name that the formula reads.
+
+The save doesn't check the body of a **Webhook** node either. A body that isn't valid JSON, or a name in double braces that no message has, saves without a problem. The receiving system then rejects the request, or receives empty text in place of the value.
 
 A flow can therefore save without problems and still do nothing. See [Flow monitoring](../monitoring.md) to find out whether a flow does anything, and [Troubleshooting](./) to find the cause.

@@ -11,6 +11,8 @@ tags:
 
 When you open a flow, it opens on the canvas, where you build the flow. This page describes the editor itself: what is on the screen and how to use it. See the [Nodes](../nodes/) pages to learn what each node type does.
 
+<figure><img src="../../.gitbook/assets/iot-logic-flow-editor.png" alt="The flow editor with the Nodes panel open, showing its four groups, and a Data Source node selected on the canvas with the Edit and Delete controls above it. The IoT Logic and Data Stream Analyzer tabs are above the canvas, and Save flow is in the toolbar."><figcaption>The flow editor, with a node selected</figcaption></figure>
+
 {% hint style="info" %}
 **Access**
 
@@ -32,13 +34,13 @@ An empty flow shows **How to build a flow** and the instruction to drag a node f
 
 ## The Nodes panel
 
-The **Nodes** panel shows the five node types in four groups, in the order that you usually use them.
+The **Nodes** panel shows the six node types in four groups, in the order that you usually use them.
 
 | Group | Node types | Required |
 | --- | --- | --- |
 | **Start with** | Data Source | Yes |
 | **Process** | Initiate Attribute, IF/THEN Logic | No |
-| **Action** | Device Action | No |
+| **Action** | Device Action, Webhook | No |
 | **End with** | Output Endpoint | Yes |
 
 Each entry carries a one-line description of what that node does. When you need more space for the canvas, collapse the panel with the control in its header.
@@ -79,7 +81,7 @@ The settings dialog has the same controls for every node type. The fields of eac
 | **Apply changes** | Keeps the changes and closes the dialog. Available once you change a field |
 | **Cancel** | Discards them |
 
-The dialog of every node type has a help icon next to its title. For **IF/THEN Logic**, **Initiate Attribute**, and **Device Action** nodes, the icon opens a help dialog about that node type. For **Data Source** and **Output Endpoint** nodes, point at the icon to read a short description of the node.
+The dialog of every node type has a help icon next to its title. For **IF/THEN Logic**, **Initiate Attribute**, **Device Action**, and **Webhook** nodes, the icon opens a help dialog about that node type. For **Data Source** and **Output Endpoint** nodes, point at the icon to read a short description of the node.
 
 {% hint style="info" %}
 **Apply changes** doesn't save the flow. It updates the node on the canvas, and the flow is saved when you click **Save flow**.
