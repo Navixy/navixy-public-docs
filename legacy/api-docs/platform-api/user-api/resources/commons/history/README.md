@@ -17,6 +17,8 @@ History is read through several lists, split by what the events are about: [trac
 
 The event types an entry's `event` field can carry come from [`history/type/list`](history_type.md#post-history-type-list). Date and time values follow the [platform formats](../../../../general/api-conventions.md#data-types).
 
+An entry can also have `files`: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event, such as the clip a dashcam recorded on a harsh braking. To get them, set `add_tracker_files` to `true` on the request. The caller needs the `video_monitoring` right, or the flag is ignored. The objects in `files` are described on the [Video](../../tracking/tracker/multimedia.md) page.
+
 For a walkthrough, see [how to work with notifications](../../../guides/rules-notifications/work-with-notifications.md).
 
 ## API actions

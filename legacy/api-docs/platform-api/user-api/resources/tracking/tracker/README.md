@@ -809,6 +809,17 @@ These errors come in addition to the [general error codes](../../../../general/e
 | [`/tracker/command/unconfirmed/count`](command/README.md#post-tracker-command-unconfirmed-count) | POST | Count queued SMS commands |
 | [`/tracker/command/unconfirmed/reset`](command/README.md#post-tracker-command-unconfirmed-reset) | POST | Clear the SMS command queue |
 
+#### Video
+
+| Endpoint | Method | What it does |
+| --- | --- | --- |
+| [`/tracker/multimedia/video/list`](multimedia.md#post-tracker-multimedia-video-list) | POST | List camera recordings |
+| [`/tracker/multimedia/video/search`](multimedia.md#post-tracker-multimedia-video-search) | POST | Get the recording at a moment |
+| [`/tracker/multimedia/video/interval/search`](multimedia.md#post-tracker-multimedia-video-interval-search) | POST | Find periods with recordings |
+| [`/tracker/multimedia/file/search/create`](multimedia.md#post-tracker-multimedia-file-search-create) | POST | Ask the camera for its file list |
+| [`/tracker/multimedia/video/live_stream/create`](multimedia.md#post-tracker-multimedia-video-live_stream-create) | POST | Start a live stream |
+| [`/tracker/multimedia/video/live_stream/delete`](multimedia.md#post-tracker-multimedia-video-live_stream-delete) | POST | Stop a live stream |
+
 #### Rule
 
 | Endpoint | Method | What it does |

@@ -298,6 +298,17 @@ Most integrations start here, with [Tracker](tracker/README.md) for the device r
 | [`/tracker/command/unconfirmed/count`](tracker/command/README.md#post-tracker-command-unconfirmed-count) | POST | Count queued SMS commands |
 | [`/tracker/command/unconfirmed/reset`](tracker/command/README.md#post-tracker-command-unconfirmed-reset) | POST | Clear the SMS command queue |
 
+#### Video
+
+| Endpoint | Method | What it does |
+| --- | --- | --- |
+| [`/tracker/multimedia/video/list`](tracker/multimedia.md#post-tracker-multimedia-video-list) | POST | List camera recordings |
+| [`/tracker/multimedia/video/search`](tracker/multimedia.md#post-tracker-multimedia-video-search) | POST | Get the recording at a moment |
+| [`/tracker/multimedia/video/interval/search`](tracker/multimedia.md#post-tracker-multimedia-video-interval-search) | POST | Find periods with recordings |
+| [`/tracker/multimedia/file/search/create`](tracker/multimedia.md#post-tracker-multimedia-file-search-create) | POST | Ask the camera for its file list |
+| [`/tracker/multimedia/video/live_stream/create`](tracker/multimedia.md#post-tracker-multimedia-video-live_stream-create) | POST | Start a live stream |
+| [`/tracker/multimedia/video/live_stream/delete`](tracker/multimedia.md#post-tracker-multimedia-video-live_stream-delete) | POST | Stop a live stream |
+
 #### Rule
 
 | Endpoint | Method | What it does |

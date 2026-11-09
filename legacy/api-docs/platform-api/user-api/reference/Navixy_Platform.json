@@ -13085,7 +13085,7 @@
                   },
                   "add_tracker_files": {
                     "type": "boolean",
-                    "description": "Optional. Default `false`. Include tracker file information. Honoured only for a caller holding the `video_monitoring` right, and ignored otherwise."
+                    "description": "Optional. Default `false`. Add `files` to each entry: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event. Applied only when the caller has the `video_monitoring` right, and ignored otherwise."
                   }
                 },
                 "required": [
@@ -13235,7 +13235,7 @@
                   },
                   "add_tracker_files": {
                     "type": "boolean",
-                    "description": "Optional. Default `false`. Include tracker file information. Honoured only for a caller holding the `video_monitoring` right, and ignored otherwise."
+                    "description": "Optional. Default `false`. Add `files` to each entry: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event. Applied only when the caller has the `video_monitoring` right, and ignored otherwise."
                   }
                 },
                 "required": [
@@ -13481,7 +13481,7 @@
                   },
                   "add_tracker_files": {
                     "type": "boolean",
-                    "description": "Optional. Default `false`. Include tracker file information. Honoured only for a caller holding the `video_monitoring` right, and ignored otherwise."
+                    "description": "Optional. Default `false`. Add `files` to each entry: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event. Applied only when the caller has the `video_monitoring` right, and ignored otherwise."
                   }
                 },
                 "required": [
@@ -13640,6 +13640,10 @@
                     "examples": [
                       "2026-08-24 09:00:00"
                     ]
+                  },
+                  "add_tracker_files": {
+                    "type": "boolean",
+                    "description": "Optional. Default `false`. Add `files` to each entry: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event. Applied only when the caller has the `video_monitoring` right, and ignored otherwise."
                   }
                 }
               }
@@ -13777,6 +13781,10 @@
                   "add_tracker_label": {
                     "type": "boolean",
                     "description": "Optional. Add the tracker label to the `message` field."
+                  },
+                  "add_tracker_files": {
+                    "type": "boolean",
+                    "description": "Optional. Default `false`. Add `files` to each entry: the camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event. Applied only when the caller has the `video_monitoring` right, and ignored otherwise."
                   }
                 },
                 "required": [
@@ -22952,6 +22960,636 @@
           },
           "403": {
             "description": "Error 201: no tracker with this device ID belongs to the account.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/video/list": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "List camera recordings",
+        "description": "List the recordings that the camera has reported for a period, including event clips. Each item says whether the recording is still on the camera only or already uploaded to Navixy, and an uploaded one has a download link.\n\nA recording is included when it starts inside the period. The camera reports its recordings on its own every 12 hours. To refresh the list sooner, call `tracker/multimedia/file/search/create`. On a Howen video recorder, the 1-minute parts that `tracker/multimedia/video/search` requested appear as items of their own.\n\nNavixy deletes an uploaded file after a retention period, and the item disappears from this list along with it.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaVideoList",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Start of the period, in the account timezone.",
+                    "examples": [
+                      "2026-11-02 09:00:00"
+                    ]
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "End of the period. Must not be before `from`. The period may be up to 120 days long.",
+                    "examples": [
+                      "2026-11-02 10:00:00"
+                    ]
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Cameras to list recordings from. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  },
+                  "file_types": {
+                    "type": "array",
+                    "description": "Optional. Default `video` and `alarm_video`. Kinds of files to list: `video` for regular recordings, `alarm_video` for event clips.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "video",
+                        "alarm_video",
+                        "photo",
+                        "alarm_photo",
+                        "config",
+                        "unknown"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "tracker_id",
+                  "from",
+                  "to",
+                  "cameras"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The recordings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "list": {
+                      "type": "array",
+                      "description": "Recordings that start inside the period. Empty when there are none.",
+                      "items": {
+                        "$ref": "#/components/schemas/VideoFile"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 211: the period is longer than 120 days. Error 214: the device model has no video support, or lacks one of the requested cameras.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/video/search": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Get the recording at a moment",
+        "description": "Get the recording that covers a moment, from each requested camera. If the recording is still on the camera only, Navixy asks the camera to upload it.\n\nThe upload takes time, so repeat the same request until `has_files_in_progress` is `false`. Then each camera in `data` has the parts of the recording that are ready, with their download links. If an upload request gets no answer within 20 minutes, the next call sends it again.\n\nThe camera must be online for the request to reach it, so check its connection with `tracker/get_state` first. When it is offline, the call doesn't fail, and nothing reaches the camera:\n\n* **Jimi dashcams:** `has_files_in_progress` stays `false`.\n* **Howen video recorders:** Navixy still records a pending upload, so `has_files_in_progress` is `true` for the next 20 minutes although the recorder received nothing.\n\nHow much is uploaded depends on the device:\n\n* **Jimi dashcams** upload the 1-minute recording that contains the moment. Pass a moment inside the minute, such as `09:15:30`: a moment at second 00 also matches the previous recording, which ends at that second, and the earliest match is used.\n* **Howen video recorders** upload from the moment to the end of its minute. The returned part still shows the whole minute. For a full minute, pass a moment at second 00, such as `09:15:00`.\n\nEvery upload uses the camera's mobile data. Only regular recordings are searched: an event clip that the camera hasn't uploaded can't be requested through the API.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaVideoSearch",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Cameras to get the recording from. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  },
+                  "date_time": {
+                    "type": "string",
+                    "description": "The moment to get the recording for, in the account timezone.",
+                    "examples": [
+                      "2026-11-02 09:15:30"
+                    ]
+                  },
+                  "forced_full_file_request": {
+                    "type": "boolean",
+                    "description": "Optional. Default `false`. When `true`, request every recording that covers the moment, not only the earliest one for each camera. In this mode an upload request without an answer is not sent again, and a Howen video recorder uploads whole recordings rather than 1-minute parts, which uses more mobile data."
+                  }
+                },
+                "required": [
+                  "tracker_id",
+                  "cameras",
+                  "date_time"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The parts that are ready, and whether uploads are still running",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "One item per camera that has an uploaded part ready. Empty when no recording covers the moment, or while the upload is still running.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "camera": {
+                            "type": "string",
+                            "description": "The camera.",
+                            "enum": [
+                              "front_camera",
+                              "inward_camera",
+                              "channel_1",
+                              "channel_2",
+                              "channel_3",
+                              "channel_4",
+                              "channel_5",
+                              "channel_6",
+                              "channel_7",
+                              "channel_8"
+                            ]
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "description": "Uploaded parts of the recording.",
+                            "items": {
+                              "$ref": "#/components/schemas/VideoInterval"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "has_files_in_progress": {
+                      "type": "boolean",
+                      "description": "`true` while an upload is still running. Repeat the request until it is `false`."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 214: the device model has no video support, or lacks one of the requested cameras. Error 8: the request could not be passed to the device, retry later.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/video/interval/search": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Find periods with recordings",
+        "description": "Find the periods for which the cameras have recordings, grouped by day, hour or minute. Use it to see what is available before you request a recording with `tracker/multimedia/video/search`. Only regular recordings are counted, not event clips.\n\nThe cameras in `cameras` are combined into one result, so call once per camera to see each one separately. Groups follow the account timezone. A group is included when it starts inside the period.\n\nFor a device model without video support, the list is empty rather than an error.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaVideoIntervalSearch",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "from": {
+                    "type": "string",
+                    "description": "Start of the period, in the account timezone.",
+                    "examples": [
+                      "2026-11-02 09:00:00"
+                    ]
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "End of the period. Must not be before `from`. The period may be up to 120 days long.",
+                    "examples": [
+                      "2026-11-02 10:00:00"
+                    ]
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Cameras to search. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  },
+                  "group_by": {
+                    "type": "string",
+                    "description": "Optional. Default `day`. How to group the periods.",
+                    "enum": [
+                      "day",
+                      "hour",
+                      "minute"
+                    ]
+                  }
+                },
+                "required": [
+                  "tracker_id",
+                  "from",
+                  "to",
+                  "cameras"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The periods with recordings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "list": {
+                      "type": "array",
+                      "description": "One item per group. Empty when there are no recordings.",
+                      "items": {
+                        "$ref": "#/components/schemas/VideoCoverage"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 211: the period is longer than 120 days.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/file/search/create": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Ask the camera for its file list",
+        "description": "Ask the camera to report the recordings on its memory card. The call returns as soon as the request is sent. The recordings appear in `tracker/multimedia/video/list` and `tracker/multimedia/video/interval/search` once the camera answers.\n\nNavixy also asks for the list on its own every 12 hours, so call this only when you need recordings newer than that.\n\nHow the filters apply depends on the device:\n\n* **Jimi dashcams** ignore the filters. Models with newer firmware, whose model code ends in `_fw163`, report the last 30 days. Other Jimi models report the last 5 days.\n* **Howen video recorders** apply the filters. Without filters they report regular recordings and event clips from all channels, starting 24 hours ago.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaFileSearchCreate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "start_date": {
+                    "type": "string",
+                    "description": "Optional. Start of the period to report.",
+                    "examples": [
+                      "2026-11-02 00:00:00"
+                    ]
+                  },
+                  "end_date": {
+                    "type": "string",
+                    "description": "Optional. End of the period to report.",
+                    "examples": [
+                      "2026-11-02 23:59:59"
+                    ]
+                  },
+                  "file_types": {
+                    "type": "array",
+                    "description": "Optional. Default `video` and `alarm_video`. Kinds of files to report.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "video",
+                        "alarm_video",
+                        "photo",
+                        "alarm_photo",
+                        "config",
+                        "unknown"
+                      ]
+                    }
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Optional. Cameras to report. All cameras when absent. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "tracker_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was sent to the camera",
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 213: the device is offline. Error 214: the device model can't report its files. Error 8: the request could not be passed to the device, retry later.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/video/live_stream/create": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Start a live stream",
+        "description": "Ask the camera to start streaming live video, and get an HLS playlist address for each requested camera. The stream uses the camera's mobile data until it is stopped with `tracker/multimedia/video/live_stream/delete`.\n\nA Jimi dashcam streams the camera requested when there is one, and both cameras when `cameras` has both.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaVideoLiveStreamCreate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Cameras to stream. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "tracker_id",
+                  "cameras"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The stream addresses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "video_streams": {
+                      "type": "array",
+                      "description": "One stream per requested camera.",
+                      "items": {
+                        "$ref": "#/components/schemas/VideoStream"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 213: the device is offline. Error 214: the device model has no live video, or lacks one of the requested cameras. Error 8: the request could not be passed to the device, retry later.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/multimedia/video/live_stream/delete": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Stop a live stream",
+        "description": "Ask the camera to stop streaming live video. The playlist address can keep answering for some minutes after the stop, with no new video in it.\n\nHow it applies depends on the device:\n\n* **Jimi dashcams** stop every camera, whatever `cameras` lists.\n* **Howen video recorders** don't receive a stop request, although the call succeeds.\n\nRequires the `video_monitoring` right.",
+        "operationId": "trackerMultimediaVideoLiveStreamDelete",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tracker_id": {
+                    "type": "integer",
+                    "description": "ID of the tracker, also known as the object ID. Must belong to the current account and not be blocked.",
+                    "examples": [
+                      123456
+                    ]
+                  },
+                  "cameras": {
+                    "type": "array",
+                    "description": "Optional. Cameras to stop. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "front_camera",
+                        "inward_camera",
+                        "channel_1",
+                        "channel_2",
+                        "channel_3",
+                        "channel_4",
+                        "channel_5",
+                        "channel_6",
+                        "channel_7",
+                        "channel_8"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "tracker_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The stop request was sent",
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `video_monitoring` right. Error 201: no tracker with this ID belongs to the account. Error 208: the tracker exists but is blocked, normally because its tariff ended. Error 213: the device is offline. Error 214: the device model has no live video, or lacks one of the requested cameras. Error 8: the request could not be passed to the device, retry later.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -33059,6 +33697,13 @@
               }
             }
           },
+          "files": {
+            "type": "array",
+            "description": "Camera recordings and photos uploaded to Navixy that start within 10 seconds before or after the event, from any camera of the tracker. Present only when the request sets `add_tracker_files` and the caller holds the `video_monitoring` right, and only when such files exist. A recording still on the camera is not included until it is uploaded.",
+            "items": {
+              "$ref": "#/components/schemas/TrackerFile"
+            }
+          },
           "extra": {
             "type": "object",
             "description": "Event-specific extras. Which of these appear depends on the event type.",
@@ -35644,8 +36289,31 @@
             ]
           },
           "multimedia": {
-            "type": "boolean",
-            "description": "`true` when the device supports multimedia. Undocumented on the page, returned by the API."
+            "type": "object",
+            "description": "What the model supports for video. Present only for models with cameras, such as Jimi dashcams and Howen video recorders.",
+            "properties": {
+              "features": {
+                "type": "array",
+                "description": "Video features of the model: `video_live_stream` for live video, `file_listing` for reporting the files on its memory card, `playback_v1` for uploading whole recordings, `playback_v1_by_time` for uploading one minute from any moment.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cameras": {
+                "type": "array",
+                "description": "Cameras the model has: `front_camera` and `inward_camera` for Jimi dashcams, `channel_1` up to `channel_8` for Howen video recorders.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "file_type_filters": {
+                "type": "array",
+                "description": "File types the model can filter by when it reports its files. Empty when it ignores the filter.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
           },
           "rules": {
             "type": "array",
@@ -35759,6 +36427,262 @@
             "items": {
               "type": "object"
             }
+          }
+        }
+      },
+      "TrackerFile": {
+        "type": "object",
+        "description": "A file that a device uploaded to Navixy, such as a video recording or a photo. Returned only once the upload is complete.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "File ID in Navixy file storage."
+          },
+          "storage_id": {
+            "type": "integer",
+            "description": "ID of the storage holding the file."
+          },
+          "user_id": {
+            "type": "integer",
+            "description": "ID of the user who owns the file."
+          },
+          "subuser_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "ID of the sub-user the file belongs to, if any."
+          },
+          "type": {
+            "type": "string",
+            "description": "`image` for a picture, `file` for anything else, including video.",
+            "enum": [
+              "image",
+              "file"
+            ]
+          },
+          "created": {
+            "type": "string",
+            "description": "When the file record was created."
+          },
+          "uploaded": {
+            "type": "string",
+            "description": "When the upload finished."
+          },
+          "name": {
+            "type": "string",
+            "description": "File name.",
+            "examples": [
+              "2026_11_02_08_15_00_22_861234567890123_HVIDEO_HD.mp4"
+            ]
+          },
+          "size": {
+            "type": "integer",
+            "description": "Size in bytes."
+          },
+          "mime_type": {
+            "type": "string",
+            "description": "MIME type of the file.",
+            "examples": [
+              "video/mp4"
+            ]
+          },
+          "storage_data": {
+            "type": "object",
+            "description": "Storage details for internal use. Don't rely on its contents.",
+            "additionalProperties": true
+          },
+          "metadata": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Metadata for the file. For an image this has `orientation`, the EXIF orientation.",
+            "additionalProperties": true
+          },
+          "state": {
+            "type": "string",
+            "description": "Where the file is in its lifecycle. Always `uploaded` here.",
+            "enum": [
+              "created",
+              "in_progress",
+              "uploaded",
+              "deleted"
+            ]
+          },
+          "previews": {
+            "type": "array",
+            "description": "Preview images, each with a `download_url`. Present only when previews exist.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "download_url": {
+            "type": "string",
+            "description": "Signed link to download the file, valid for 7 days from the request. Request the file again for a fresh link instead of storing this one."
+          },
+          "view_url": {
+            "type": "string",
+            "description": "Signed link to view an image in the browser. Present for images only."
+          },
+          "file_source_key": {
+            "type": "string",
+            "description": "The camera that recorded the file. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+            "examples": [
+              "front_camera"
+            ]
+          }
+        }
+      },
+      "VideoFile": {
+        "type": "object",
+        "description": "A recording that a camera has listed, whether or not it has been uploaded to Navixy yet.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Navixy ID of the recording."
+          },
+          "file_name": {
+            "type": "string",
+            "description": "File name on the camera."
+          },
+          "multimedia_file_type": {
+            "type": "string",
+            "description": "`video` for a regular recording, `alarm_video` for a clip the camera recorded on an event.",
+            "enum": [
+              "video",
+              "alarm_video",
+              "photo",
+              "alarm_photo",
+              "config",
+              "unknown"
+            ]
+          },
+          "camera": {
+            "type": "string",
+            "description": "The camera that recorded the file. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+            "enum": [
+              "front_camera",
+              "inward_camera",
+              "channel_1",
+              "channel_2",
+              "channel_3",
+              "channel_4",
+              "channel_5",
+              "channel_6",
+              "channel_7",
+              "channel_8"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "description": "Where the recording is. `LISTED_ON_DEVICE`: on the camera only. `REQUESTED_FOR_DOWNLOAD`: Navixy has asked the camera to upload it. `RECEIVED`: uploaded to Navixy.",
+            "enum": [
+              "LISTED_ON_DEVICE",
+              "REQUESTED_FOR_DOWNLOAD",
+              "RECEIVED"
+            ]
+          },
+          "start": {
+            "type": "string",
+            "description": "When the recording starts."
+          },
+          "end": {
+            "type": "string",
+            "description": "When the recording ends."
+          },
+          "file": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrackerFile"
+              }
+            ],
+            "description": "The uploaded file. Present only once the upload to Navixy is complete."
+          },
+          "metadata": {
+            "type": "string",
+            "description": "Extra details from the device, as a JSON string. Howen recorders send the file size and type here. Jimi dashcams send nothing, and the field is absent."
+          }
+        }
+      },
+      "VideoInterval": {
+        "type": "object",
+        "description": "A part of a recording that is ready to play.",
+        "properties": {
+          "start": {
+            "type": "string",
+            "description": "When this part starts."
+          },
+          "end": {
+            "type": "string",
+            "description": "When this part ends."
+          },
+          "file": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TrackerFile"
+              }
+            ],
+            "description": "The uploaded file with this part of the recording."
+          }
+        }
+      },
+      "VideoCoverage": {
+        "type": "object",
+        "description": "A period for which a camera has recordings.",
+        "properties": {
+          "start": {
+            "type": "string",
+            "description": "Start of the earliest recording in the group."
+          },
+          "end": {
+            "type": "string",
+            "description": "End of the latest recording in the group. Gaps between recordings inside the group are not shown."
+          },
+          "group_start": {
+            "type": "string",
+            "description": "Start of the day, hour or minute this group belongs to, as set by `group_by`."
+          },
+          "files_locations": {
+            "type": "array",
+            "description": "Where the recordings in this group are. `device`: on the camera only, so playing them needs an upload. `local_storage`: already uploaded to Navixy.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "device",
+                "local_storage"
+              ]
+            }
+          }
+        }
+      },
+      "VideoStream": {
+        "type": "object",
+        "description": "A live stream from one camera.",
+        "properties": {
+          "link": {
+            "type": "string",
+            "description": "Playlist address of the stream, in [HLS](https://datatracker.ietf.org/doc/html/rfc8216) (HTTP Live Streaming) format. The address is returned before the camera starts sending, so the playlist can take a few seconds to become available.",
+            "examples": [
+              "https://rtmp.navixy.com/hls0/861234567890123.m3u8"
+            ]
+          },
+          "camera": {
+            "type": "string",
+            "description": "The camera this stream comes from. A Jimi dashcam has `front_camera` and `inward_camera`. A Howen video recorder has `channel_1` up to the number of channels its model has.",
+            "enum": [
+              "front_camera",
+              "inward_camera",
+              "channel_1",
+              "channel_2",
+              "channel_3",
+              "channel_4",
+              "channel_5",
+              "channel_6",
+              "channel_7",
+              "channel_8"
+            ]
           }
         }
       },
