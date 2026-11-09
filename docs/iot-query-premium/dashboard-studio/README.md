@@ -28,16 +28,16 @@ Dashboard Studio builds the fleet dashboards that no ready-made view has, such a
 
 Dashboard Studio is for analysts and for the fleet managers and operations teams who read their dashboards:
 
-* **Analysts** write the queries and build dashboards and reports for the rest of the organization, instead of setting up a separate BI tool.
-* **Fleet managers and operations teams** open the dashboards to monitor assets, trips, and sensor values, instead of waiting for exported reports. They choose the period or the values that a dashboard shows, and they don't need SQL to read a dashboard. They can also describe a dashboard to the AI assistant and preview the result.
+* **Analysts** write the queries and build dashboards and reports for the fleet managers and operations teams, instead of setting up a separate BI tool.
+* **Fleet managers and operations teams** open the dashboards to monitor assets, trips, and sensor values, instead of waiting for exported reports. They choose the period or the values that a dashboard shows, and they don't need SQL to read a dashboard.
 
 To write or change a query, you need basic knowledge of SQL. What each person can do depends on their role in Dashboard Studio:
 
 | Role | What the role can do |
 | --- | --- |
-| Viewer | Open dashboards and reports, choose parameter values, export results, and talk to the AI assistant and preview a result |
-| Editor | Everything that a viewer can do, and also create and change dashboards, reports, and sections (folders in the sidebar), save dashboards that the AI assistant builds, and run queries in the SQL editor |
-| Admin | Everything that an editor can do, and also manage global variables: values that every query can use |
+| Viewer | Open dashboards and reports, choose parameter values, and export results |
+| Editor | Everything that a viewer can do, and also create and change dashboards, reports, and sections (folders in the sidebar), talk to the AI assistant, and save the dashboards that it builds |
+| Admin | Everything that an editor can do, and also run queries that aren't saved yet: in the SQL editor, with **Test query**, and with **Detect columns**. An admin also manages global variables: values that every query can use |
 
 ## Core concepts
 
@@ -71,7 +71,7 @@ Dashboards and reports suit different jobs:
 
 ## Open Dashboard Studio
 
-Dashboard Studio is a separate web service with its own address, and it works with IoT Query Premium data only. You need IoT Query Premium for your workspace. The data on a dashboard is as current as the PTL tables. See [How often the data is updated](../data-access/#how-often-the-data-is-updated). Open it in a web browser. After you open it, the **Home** page offers the AI assistant, and the sidebar lists the dashboards and reports of your organization.
+Dashboard Studio is a separate web service with its own address, and it works with IoT Query Premium data only. You need IoT Query Premium for your workspace. The data on a dashboard is as current as the PTL tables. See [How often the data is updated](../data-access/#how-often-the-data-is-updated). Open it in a web browser. After you open it, the **Home** page offers the AI assistant to the Admin and Editor roles. With the Viewer role, the **Home** page asks you to open a dashboard or report from the sidebar. The sidebar lists the dashboards and reports that you made. With the Viewer role, it lists the ones that your administrator made.
 
 Dashboard Studio reads the [PTL](../data-access/) tables of your workspace, the same tables that BI tools and your own applications query. [Data schema](../data-access/data-schema/) describes these tables and the rules that every query needs.
 

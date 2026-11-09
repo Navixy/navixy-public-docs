@@ -25,7 +25,7 @@ This guide is for analysts who write panel and report queries in Dashboard Studi
 
 This page covers what is particular to Dashboard Studio. The [Data schema](../data-access/data-schema/) page describes the tables and the joins between them. It also describes the rules that every ClickHouse query needs, such as `FINAL` and table names with their database. Read it first.
 
-Before you start, you need the Admin or Editor role in Dashboard Studio and basic knowledge of SQL.
+Before you start, you need the Admin role in Dashboard Studio and basic knowledge of SQL. Only the Admin role can run a query that isn't saved yet: in the SQL editor, with **Test query** in the panel editor, or with **Detect columns** in the report editor. The Editor role can write and save panel and report queries.
 
 ## 1. Explore the data in the SQL editor
 
@@ -34,7 +34,7 @@ Dashboard Studio runs SQL in three places:
 
 * **Panel queries** are written in the **SQL query** tab of the panel editor. Each panel runs one query, and its result must have the shape that the panel type needs.
 * **Report queries** are written in the report editor. One query provides the data for the data table, the chart, and the location map of the report.
-* **The SQL editor** runs any `SELECT` query and shows the full result. Use it to explore a table and to test a query before you put it in a panel.
+* **The SQL editor** runs any `SELECT` query and shows the full result. Use it to explore a table and to test a query before you put it in a panel. The SQL editor needs the Admin role.
 
 Every query is read-only: Dashboard Studio runs `SELECT` statements only.
 

@@ -1,6 +1,6 @@
 ---
 description: >-
-  The tables of the core_bdr database in IoT Query Premium: workspaces, users,
+  The tables of the core_bdr database in IoT Query Premium: workspaces,
   devices, assets, asset groups, geo objects, schedules, catalogs, and custom
   fields.
 tags:
@@ -14,16 +14,16 @@ tags:
 IoT Query Premium is coming soon. This page describes how it works at release. To learn when it becomes available for your organization, [contact Navixy](https://navixy.com/en/contact?utm_source=navixy-docs\&utm_campaign=iot-query-premium).
 {% endhint %}
 
-`core_bdr` is the database of business data in IoT Query Premium: a copy of [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/bdr) for your workspace. It has the workspace, its users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields that you manage in Location Intelligence. This page lists its tables by category, with the columns that queries use most, and ends with example queries. It is for developers and analysts who join business data to telemetry or to calculated tables. `core_bdr` belongs to the [raw data layer](./).
+`core_bdr` is the database of business data in IoT Query Premium: a copy of [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/bdr) for your workspace. It has the workspace, its devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields that you manage in Location Intelligence. This page lists its tables by category, with the columns that queries use most, and ends with example queries. It is for developers and analysts who join business data to telemetry or to calculated tables. `core_bdr` belongs to the [raw data layer](./).
 
 ## How core_bdr stores rows
 
 Navixy copies Business Data Repository into `core_bdr` automatically. The following rules apply to the tables:
 
 * **Read with `FINAL`.** A table can contain more than one version of a row until ClickHouse merges the versions. `FROM core_bdr.asset FINAL` returns the current version only. In the main tables, the `version` column numbers the versions, and the highest `version` is the current one. See [Data schema](../#read-the-current-version-of-each-row) to learn why a row can have several versions.
-* **Deleted items stay in the main tables.** The tables of workspaces, actors, members, devices, inventories, device inventory links, assets, asset groups, geo objects, schedules, custom field definitions, and catalog items (`ci_base`) have `deleted_at`. An item that you delete in Business Data Repository keeps its row in these tables. `deleted_at` has the time of deletion, and `deleted_by` has the ID of the actor, the person or integration, who deleted it. Filter with `deleted_at IS NULL` to read only the items that exist.
+* **Deleted items stay in the main tables.** The tables of workspaces, devices, inventories, device inventory links, assets, asset groups, geo objects, schedules, custom field definitions, and catalog items (`ci_base`) have `deleted_at`. An item that you delete in Business Data Repository keeps its row in these tables. `deleted_at` has the time of deletion, and `deleted_by` has the ID of the user or integration that deleted it. `core_bdr` has no table of users or integrations, so the ID has no name to join to. Filter with `deleted_at IS NULL` to read only the items that exist.
 * **The other tables have no deletion marker.** In tables without `deleted_at`, such as `device_identifier`, `asset_group_item`, the `custom_field_value_*` tables, and the `ci_*` extension tables, a row that Business Data Repository removes disappears. `WHERE deleted_at IS NULL` on these tables returns an error, because the column doesn't exist.
-* **Times are UTC.** `created_at`, `updated_at`, and `deleted_at` are the times in Business Data Repository, in the tables that have them. `record_added_at` is the time when the row reached IoT Query Premium.
+* **Times are UTC.** `created_at`, `updated_at`, and `deleted_at` are the times in Business Data Repository, in the tables that have them. `record_added_at` is the time when Navixy last copied the row into IoT Query Premium. Each copy writes every row again, so this time changes with every copy.
 * **IDs are `UUID`.** They are the same IDs as in Business Data Repository and in the Navixy GraphQL API.
 
 ## Tables by category
@@ -32,14 +32,14 @@ The tables belong to six categories:
 
 | Category | Tables | What they contain |
 | --- | --- | --- |
-| [Organization and access](#organization-and-access) | `workspace`, `actor`, `user`, `member`, `integration` | Workspaces, the people and integrations that work in them, and their membership |
+| [Workspaces](#workspaces) | `workspace` | The workspaces of your organization |
 | [Devices](#devices) | `device`, `device_identifier`, `device_relation`, `inventory`, `device_inventory_relation` | GPS devices, their identifiers, links between devices, and inventories |
 | [Assets and groups](#assets-and-groups) | `asset`, `asset_group`, `asset_group_item`, `asset_group_type_to_asset_type_relation` | The objects that you monitor, and the groups that they belong to |
 | [Geo objects and schedules](#geo-objects-and-schedules) | `geo_object`, `schedule` | Zones, points of interest, routes, and schedules |
 | [Catalogs](#catalogs) | `ci_base`, `ci_catalog`, the `ci_*` tables of each catalog, and `tag_to_entity_type` | Types, statuses, models, tags, and your own catalog items |
 | [Custom fields](#custom-fields) | `custom_field_definition`, `custom_field_value_*`, `custom_field_ref_history`, `i18n_text` | The custom fields of each entity type and their values, including the link from an asset to its GPS devices |
 
-### Organization and access
+### Workspaces
 
 A workspace is the unit that your organization divides its data into. Every business data table that belongs to a workspace has `workspace_id`.
 
@@ -52,13 +52,6 @@ A workspace is the unit that your organization divides its data into. Every busi
 | `organization_id` | `UUID` | The organization that the workspace belongs to |
 | `parent_workspace_id` | `Nullable(UUID)` | The parent workspace, if the workspace is nested |
 | `is_active` | `UInt8` | `1` if the workspace is active |
-
-The other tables of this category describe who works in a workspace:
-
-* `actor` is any party that can act in the Navixy platform: a person or an integration. `actor_type` is `USER` for a person, `INTEGRATION` for an integration, or `SYSTEM` for Navixy itself. Columns such as `deleted_by` and `assigned_by` in other tables contain an actor ID.
-* `user` has the people: `given_names`, `family_names`, and `email`.
-* `member` links a user to a workspace with `user_id` and `workspace_id`. `assigned_at` is the time when the user joined the workspace.
-* `integration` has the integrations of a workspace, with `title` and `is_active`.
 
 ### Devices
 
@@ -260,4 +253,4 @@ The result has one row per asset in the group:
 
 * [telemetry database](telemetry.md): Find the columns that contain positions and sensor values.
 * [report database](../transformation-layer/report.md) and [agg database](../transformation-layer/agg.md): Find the calculated tables that you join to `core_bdr` for names.
-* [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/bdr): Learn how assets, geo objects, and schedules work in Location Intelligence.
+* [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/bdr): Learn how assets, geo objects, and schedules work in Location Intelligence.

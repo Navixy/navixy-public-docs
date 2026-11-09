@@ -21,7 +21,7 @@ The assistant is part of Dashboard Studio. It is separate from the Navixy AI ass
 
 Before you start, you need the following:
 
-* Any role in Dashboard Studio to talk to the assistant and preview a result. To save a dashboard, you need the Admin or Editor role.
+* The Admin or Editor role in Dashboard Studio. With the Viewer role, the assistant doesn't open.
 * A desktop browser. The chat and the canvas are built for desktop screens.
 
 To build the panels and write their queries yourself, see [Create dashboard](create-dashboard.md).
@@ -105,7 +105,6 @@ If **Save** stays unavailable, point to it to read why:
 | "Available once the canvas has run this dashboard. Check the status above the panels." | Wait until the panels finish running. |
 | "A dashboard needs at least one panel" | Ask the assistant to add a panel. |
 | "This dashboard is saved. Change something on the canvas to save it again." | Nothing changed since the last save. |
-| "Save this dashboard with the Editor role" | Your role can't save. Ask a user with the Admin or Editor role to save it. |
 
 {% hint style="warning" %}
 Don't delete or rename the **AI Dashboards** section. If you delete it, the next save can't create the section again and fails. If you rename it, the next save creates a second **AI Dashboards** section, and the renamed section doesn't receive new dashboards.

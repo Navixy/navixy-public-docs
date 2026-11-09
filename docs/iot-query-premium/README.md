@@ -50,7 +50,7 @@ Analysts, fleet managers and operations teams, and developers each use IoT Query
 
 ## Before you start
 
-IoT Query Premium is included in a paid plan in Navixy Console. After your organization has the plan, your organization's administrator receives the connection details.
+IoT Query Premium is a product that you enable for a workspace in Navixy Console, when the tariff plan of the workspace covers it. After you enable it, your organization's administrator receives the connection details.
 
 ## Where to start
 

@@ -17,7 +17,7 @@ A report shows the result of one SQL query in three views: a data table, a chart
 
 Before you start, you need:
 
-* The Admin or Editor role in Dashboard Studio.
+* The Admin role in Dashboard Studio. With the Editor role, you can create a report, but **Detect columns** doesn't run the query, because only the Admin role runs a query before it's saved.
 * A query that returns detailed rows with a time or category column, a numeric column, and coordinates. [Write SQL queries](write-sql-queries.md#id-3.-write-one-query-for-a-report) explains which columns each view needs.
 
 ## 1. Create the report
@@ -185,12 +185,14 @@ An Excel file can start with a header above the column names, with the title in 
 To export only the data table, click **Download** in the **Data table** section and select **Excel (.xlsx)** or **CSV (.csv)**. Then click **Export as .xlsx** or **Export as .csv** in the window that opens.
 
 {% hint style="success" %}
-You have a saved report with parameters, which anyone in Dashboard Studio can run with their own values and export.
+You have a saved report with parameters. Its readers can run it with their own values and export the result.
 {% endhint %}
 
 ## Change or delete the report later
 
 To change the query, open the report, expand **SQL query**, and edit the statement. Click **Save and run** to save the query and run it immediately. Click **Save** to save the query and run it later with **Refresh**. To turn the map on or off, use the **Map** switch in the report header.
+
+With the Viewer role, you see the query but can't change it. **Save**, **Save and run**, the **Map** switch, and the table settings aren't shown. You can still change the parameter values, click **Refresh**, and export the result.
 
 To delete the report, follow these steps:
 

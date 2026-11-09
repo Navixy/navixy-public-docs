@@ -106,7 +106,7 @@ Every time column is in UTC, with millisecond precision. Convert a time to a loc
 ## Tables by layer
 
 * [Raw data layer](raw-data-layer/): Learn what raw data is and when to query it instead of the transformation layer.
-  * [core_bdr database](raw-data-layer/core-bdr.md): Find the tables of the workspaces, users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields.
+  * [core_bdr database](raw-data-layer/core-bdr.md): Find the tables of the workspaces, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields.
   * [telemetry database](raw-data-layer/telemetry.md): Find the columns that store positions and sensor values.
 * [Transformation layer](transformation-layer/): Learn which tables Navixy calculates and when to query them.
   * [report database](transformation-layer/report.md): Find the columns of trips and stops.

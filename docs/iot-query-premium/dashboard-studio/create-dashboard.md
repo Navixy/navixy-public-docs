@@ -18,7 +18,7 @@ This guide takes you from an empty sidebar to a dashboard with panels that show 
 
 Before you start, you need the following:
 
-* The Admin or Editor role in Dashboard Studio. The Viewer role can open dashboards but can't create them.
+* The Admin role in Dashboard Studio. With the Editor role, you can create a dashboard, but **Test query** doesn't run the query, because only the Admin role runs a query before it's saved. The Viewer role can open dashboards but can't create them.
 * Basic knowledge of SQL. The tables are described in [Data schema](../data-access/data-schema/).
 
 ## 1. Create the dashboard

@@ -1,7 +1,7 @@
 ---
 description: >-
-  Get IoT Query Premium with your Console plan, receive your connection
-  details, and run a first query to check that they work.
+  Enable IoT Query Premium for your workspace in Console, receive your
+  connection details, and run a first query to check that they work.
 tags:
   - guide
   - preview
@@ -20,19 +20,19 @@ This guide shows how to get access to IoT Query Premium and run a first query on
 
 Before you start, you need one of the following:
 
-* Administrator access to your organization in [Navixy Console](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/).
+* The Owner role in [Navixy Console](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/), or a role that includes the **Console** product.
 * The contact details of your telematics service provider, if another company manages Navixy Console for you.
 
 ## 1. Get IoT Query Premium
 
-IoT Query Premium is included in a paid plan of Navixy Console. Your organization gets it when its plan includes IoT Query Premium.
+IoT Query Premium is a product that you enable for each workspace in Navixy Console. You can enable it when the tariff plan of the workspace covers IoT Query Premium.
 
-* If your organization manages its own plan in Navixy Console, choose a plan that includes IoT Query Premium. See [Getting started with Navixy Console](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/getting-started).
-* If a telematics service provider manages Navixy for you, ask them to add IoT Query Premium to the plan of your organization.
+* To enable it, click **Enable** next to IoT Query Premium under **My products** in **Console hub**. See [Enable or disable a product](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/organization/manage-workspaces#enable-or-disable-a-product).
+* If the plan doesn't cover IoT Query Premium, contact <sales@navixy.com> to change the plan. If a telematics service provider manages Navixy for you, ask them instead.
 
 ## 2. Receive your connection details
 
-After IoT Query Premium is added, the administrator of your organization receives the connection details. Each workspace of your organization has its own set:
+After IoT Query Premium is enabled, the administrator of your organization receives the connection details. Each workspace of your organization has its own set:
 
 * The host of your IoT Query Premium database
 * The port of the HTTP interface, which most clients and BI tools use
@@ -44,7 +44,7 @@ Share the details only with the people and the tools that need them. Anyone who 
 
 ## 3. Run your first query
 
-Run one query to confirm that the details work. IoT Query Premium is a ClickHouse database, so any ClickHouse client can run the query, for example `clickhouse-client` or DBeaver. If you work in Dashboard Studio, run the query in its SQL editor instead, as described in [Write SQL queries](dashboard-studio/write-sql-queries.md#id-1.-explore-the-data-in-the-sql-editor).
+Run one query to confirm that the details work. IoT Query Premium is a ClickHouse database, so any ClickHouse client can run the query, for example `clickhouse-client` or DBeaver. If you work in Dashboard Studio with the Admin role, run the query in its SQL editor instead, as described in [Write SQL queries](dashboard-studio/write-sql-queries.md#id-1.-explore-the-data-in-the-sql-editor).
 
 To count the assets of your workspace, connect with your details and run the following query:
 

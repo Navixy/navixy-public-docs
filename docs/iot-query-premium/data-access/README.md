@@ -48,7 +48,7 @@ Query the transformation layer for common questions, such as how far an asset dr
 
 PTL combines two sources:
 
-* **Business data** comes from [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/bdr): your workspace and its users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields and their values. Navixy copies this data into PTL automatically.
+* **Business data** comes from [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/bdr): your workspace and its devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields and their values. Navixy copies this data into PTL automatically.
 * **Telemetry** comes from your GPS devices: positions, speed, ignition, sensor values, and the state of digital inputs and outputs. It arrives as the devices send it.
 
 A query can combine both sources. For example, one query can read the trips of an asset from telemetry-based tables and the name of the asset from business data.

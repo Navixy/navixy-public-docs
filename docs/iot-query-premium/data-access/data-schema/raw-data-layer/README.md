@@ -20,7 +20,7 @@ The raw data layer stores your data as it arrives in IoT Query Premium, before N
 
 Each database of the raw data layer has one source:
 
-* **`core_bdr`** is a copy of [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/bdr): your workspace and its users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom field definitions. Navixy copies it automatically. Each table keeps the columns of Business Data Repository, so an asset in `core_bdr.asset` has the same ID and name as in Business Data Repository.
+* **`core_bdr`** is a copy of [Business Data Repository](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/bdr): your workspace and its devices, assets, asset groups, geo objects, schedules, catalogs, and custom field definitions. Navixy copies it automatically. Each table keeps the columns of Business Data Repository, so an asset in `core_bdr.asset` has the same ID and name as in Business Data Repository.
 * **`telemetry`** stores the messages of your GPS devices: time, position, speed, ignition, odometer, and sensor values. Navixy writes each message as it arrives.
 
 Navixy calculates nothing from other rows in the raw data layer. A position in `telemetry` is the position that the device sent. The only change before Navixy writes a message is the calibration of its sensor values into their units. A trip, a stop, or a visit to a geo object doesn't exist in the raw data layer: it is a result of the transformation layer.
@@ -38,5 +38,5 @@ For totals, durations, and time in geo objects, query the transformation layer. 
 
 ## Databases of the raw data layer
 
-* [core_bdr database](core-bdr.md): Find the tables of the workspaces, users, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields.
+* [core_bdr database](core-bdr.md): Find the tables of the workspaces, devices, assets, asset groups, geo objects, schedules, catalogs, and custom fields.
 * [telemetry database](telemetry.md): Find the columns that store positions and sensor values.
