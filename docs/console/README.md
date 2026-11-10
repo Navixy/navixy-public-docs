@@ -7,14 +7,13 @@ tags:
   - beta
 noIndex: true
 ---
-
 # Navixy Console
 
 <figure><img src=".gitbook/assets/image (1).png" alt="The Console hub for a workspace of an organization. The top navigation bar has the organization and workspace dropdown menus and a search field. Under the workspace name, a line names the organization, the region, and the tariff plan. My products lists five products: four with a green status dot and the buttons Disable and Open, and one with a red status dot and an Enable button. Below is Recent activity."><figcaption><p>The Console hub</p></figcaption></figure>
 
 A fleet business runs on several Navixy products at once: one stores the vehicles and people, one processes what the devices send, others turn it into reports and dashboards. Someone decides which teams get which products, who may see which data, and what it all costs. Navixy Console is where you make those decisions, for your own company and for every company you serve.
 
-<p align="center"><a href="http://console.navixy.com/signup?utm_source=navixy-docs\&#x26;utm_campaign=console-overview" class="button primary" data-icon="right-to-bracket">Create a Console account</a></p>
+<p align="center"><a href="http://console.navixy.com/signup?utm_source=navixy-docs\&utm_campaign=console-overview" class="button primary" data-icon="right-to-bracket">Create a Console account</a></p>
 
 ## What you can do in Navixy Console
 
@@ -28,7 +27,7 @@ A fleet business runs on several Navixy products at once: one stores the vehicle
 
 **Serve your customers from your own organization.** If you run Navixy for other companies, Navixy can make your organization a channel partner. You can then create an organization for each customer, called a child organization, with its own users, data, and administrator, and manage all of them from your account. A major partner adds levels for their branches and customers. When your support staff need to work in a customer's organization, they can get access for that task only. Billing across organizations is planned and coming soon: your child organizations' usage will be charged at your tariff plan's prices.
 
-**Connect your own systems.** Your developers work with the same organizations, workspaces, and products through the Navixy APIs. An API key that you create in Console lets a script or an app sign in with one of your roles, and you delete the key when it's no longer needed. The audit log shows who changed what in your organization, and when, whether in Console or through the API.
+**Connect your own systems.** Your developers work with the same organizations, workspaces, and products through the Navixy APIs. An API key that you create in Console lets an AI agent, an app, or an integration sign in with one of your roles, and you delete the key when it's no longer needed. The audit log shows who changed what in your organization, and when, whether in Console or through the API.
 
 ## Who it is for
 
@@ -50,7 +49,7 @@ Every product works inside a workspace, and every workspace belongs to one organ
 * **User and member:** A user is a person's Navixy account. A member is a user who belongs to an organization. A member's roles decide what they can access, and a member without roles can access nothing. The same person can be a member of several organizations.
 * **Role:** Which workspaces, products, and records members can access. The Owner role, automatically received by the person who created the organization, has full access to everything within their organization. Every new organization also has the Admin role, with the same full access, to give to the people who manage the organization with you.
 * **Security profile:** The sign-in rules for one member.
-* **API key:** A credential that lets a script or an app call Navixy APIs with one role of your organization. Console shows it once, when it's created.
+* **API key:** A credential that lets an AI agent, an app, or an integration call Navixy APIs with one role of your organization. You can copy it only once, when it's created.
 * **Audit log:** The record of who changed the organization's setup, and when: its workspaces, users, roles, API keys, and plans.
 * **Channel partner:** An organization that can create child organizations. This status is granted by Navixy.
 
@@ -69,7 +68,7 @@ Every product works inside a workspace, and every workspace belongs to one organ
   * [Manage users](users-and-roles/manage-users.md): Invite people, assign and revoke roles, set role expiration dates, remove and rename members, and change security profiles.
   * [Manage roles](users-and-roles/manage-roles.md): Create, configure, copy, edit, and delete roles.
 * [API keys](api-keys/): Learn what an API key can do and when it stops working.
-  * [Manage API keys](api-keys/manage-api-keys.md): Create, replace, and delete API keys.
+  * [Manage API keys](api-keys/manage-api-keys.md): Create and delete API keys, and give an app a new key.
 * [Audit log](audit-log/): Learn which changes Console records and what each event shows.
   * [Investigate changes](audit-log/investigate-changes.md): Find who changed a workspace, a role, or an API key, and the other changes of the same request.
 * [Billing](billing/): Learn what the Billing page shows about a workspace's plans and balance.
