@@ -19,6 +19,7 @@ Here's what you can do:
 - See the workspace's plans: The summary next to the title names the workspace's active plans and how many there are. Click it to see each plan with the number of products that it covers.
 - Check the balance: **Balance** displays how much money the workspace has, in US dollars. A negative balance is red.
 - Follow the balance: **Balance history** lists every change to the balance, such as an invoice, a top-up, or a manual correction, with its date, its amount, and the balance after it.
-- See the usage: **Usage** shows what each enabled product used in a period, by metric.
+- See the usage: **Usage** shows what each enabled product used in a period, by metric. <picture><source srcset="../.gitbook/assets/icons/filter_list-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/filter_list.svg" alt="Filter usage" data-size="line"></picture> narrows down the list to one product or one metric.
+- Hide columns: <picture><source srcset="../.gitbook/assets/icons/visibility_off-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/visibility_off.svg" alt="Hide columns" data-size="line"></picture> hides any column of **Balance history** or **Usage** except the first one. The choice is saved in your browser.
 
 You can't top up the balance, set up auto-payment, compare plans, or manage payment methods in Console: these four buttons are dimmed. To change a workspace's plan, contact <sales@navixy.com>.

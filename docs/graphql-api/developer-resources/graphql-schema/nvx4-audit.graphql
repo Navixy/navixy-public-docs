@@ -1,20 +1,22 @@
-# Version: 0.17.13
+# Version: 0.17.19
 
 # @category: common/audit
 "The source type identifying the origin of an API request."
 enum SourceType {
-  "Not recorded: every event has API, INTERNAL or AGENT."
+  "Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT."
   WEB
-  "Not recorded: every event has API, INTERNAL or AGENT."
+  "Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT."
   MOBILE
   "A request from a person or an API key through the API."
   API
   "A change the server made on its own, such as mirroring a workspace from Console."
   INTERNAL
-  "Not recorded: every event has API, INTERNAL or AGENT."
+  "Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT."
   INTEGRATION
   "A call an AI client made through the MCP server, whatever the kind of actor."
   AGENT
+  "A call Navixy's own AI assistant made for a person through its internal adapter, whatever the kind of actor."
+  ASSISTANT
 }
 
 # @category: common/audit

@@ -18,7 +18,7 @@ The guide is for developers who are comfortable with HTTP and JSON. It doesn't a
 Before you start, make sure that you have the following:
 
 * An API key. Your organization's administrator creates it in Navixy Console and gives it a role. For this guide, the role must allow `read`, `create`, and `update` on devices (`bdr.device`) and `read` on catalog items (`bdr.catalog`). Ask the administrator for the key and for the example request that Console shows next to it. The example request has the ID of your workspace, which the first step needs. See [Get an API key](authentication/README.md#get-an-api-key).
-* A GPS device of a model supported by the Navixy platform, its IMEI, and a SIM card with a known phone number. At the moment, seven Teltonika models are supported: FMB920, FMC130, FMB140, FMB125, FMB003, FMC650, and FTC305. The third step shows how to list them.
+* A GPS device of a model supported by the Navixy platform, its IMEI, and a SIM card with a known phone number. This guide uses a Teltonika model, because the platform sends the setup SMS to Teltonika models only. The third step shows how to list the supported models.
 * The APN settings of your SIM carrier: the APN name and, if the carrier requires them, the user name and the password.
 * A terminal with `curl` and [`jq`](https://jqlang.org/). The examples use `jq` to read the access token from a JSON response.
 
@@ -134,7 +134,7 @@ If the response has an `errors` array instead of `data`, the token or the reques
 {% step %}
 ### Find a supported device model
 
-`deviceActivate` accepts only a supported model: a model whose data the platform can decode and whose GPS devices it can configure by SMS. List the supported models with the `supported` filter:
+`deviceActivate` accepts only a supported model: a model whose data the platform can decode. List the supported models with the `supported` filter:
 
 ```graphql
 query SupportedModels {
@@ -221,6 +221,7 @@ mutation ActivateDevice($input: DeviceActivateInput!) {
           activatedAt
         }
       }
+      activationSms
     }
   }
 }
@@ -267,7 +268,8 @@ Response:
             "apn": { "name": "internet.example.net", "user": "iot" },
             "activatedAt": "2026-09-30T09:12:41Z"
           }
-        }
+        },
+        "activationSms": "QUEUED"
       }
     }
   }
@@ -289,7 +291,7 @@ Response:
 * `name` is the APN of the carrier: 1 to 40 characters of letters, digits, `.`, `_`, or `-`.
 * `user` and `password` are optional. Each is at most 40 characters and can also contain `@`. The password goes into the SMS only. The API doesn't store or return it, so send it again when you run the activation again.
 
-The response confirms that the platform recorded the activation and queued the SMS. It doesn't say whether the SMS arrived. The device is now `awaiting_connection`, and `activation` contains the values that were sent, without the password. Save the device `id`: the next step and every later update will use it.
+The response confirms that the platform recorded the activation, and `activationSms` is `QUEUED`, so the SMS is queued. It doesn't say whether the SMS arrived. With any other value of `activationSms`, the device is created, but you set it up by hand: see [How activation works](business-data-repository/guides/activating-a-device.md#how-activation-works). The device is now `awaiting_connection`, and `activation` contains the values that were sent, without the password. Save the device `id`: the next step and every later update will use it.
 {% endstep %}
 
 {% step %}

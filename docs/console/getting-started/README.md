@@ -95,7 +95,7 @@ If you close the browser before you finish, sign in again. Registration resumes 
 
 ## 2. Check your products in the Console hub
 
-After **Launch**, Console opens on the Console hub. The top of the hub shows your workspace name, organization, region, and tariff plan. To come back to the hub later, click **Console hub** on the sidebar.
+After **Launch**, Console opens on the Console hub. The top of the hub shows your workspace name and tariff plan. To come back to the hub later, click **Console hub** on the sidebar.
 
 While Navixy creates your workspace, the hub tells you that instead of listing products. This usually takes less than a minute, and the hub updates automatically.
 

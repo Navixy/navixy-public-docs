@@ -98,12 +98,13 @@ The source type identifying the origin of an API request.
 
 | Value | Description |
 | ----- | ----------- |
-| `WEB` | Not recorded: every event has API, INTERNAL or AGENT. |
-| `MOBILE` | Not recorded: every event has API, INTERNAL or AGENT. |
+| `WEB` | Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT. |
+| `MOBILE` | Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT. |
 | `API` | A request from a person or an API key through the API. |
 | `INTERNAL` | A change the server made on its own, such as mirroring a workspace from Console. |
-| `INTEGRATION` | Not recorded: every event has API, INTERNAL or AGENT. |
+| `INTEGRATION` | Not recorded: every event has API, INTERNAL, AGENT or ASSISTANT. |
 | `AGENT` | Reserved for a call that an AI client makes through the MCP server. Not recorded yet: every event has `API` or `INTERNAL`. |
+| `ASSISTANT` | Reserved for a call that the Navixy AI assistant makes for a person. Not recorded yet: every event has `API` or `INTERNAL`. |
 
 ---
 

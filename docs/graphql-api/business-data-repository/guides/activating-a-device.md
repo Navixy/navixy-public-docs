@@ -16,7 +16,7 @@ Every operation on this page reads or changes the data of the workspace named by
 
 ## Prerequisites
 
-You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its IMEI. For automatic setup, which the scenario below uses, you also need the phone number of its SIM card and the APN settings of the carrier.
+You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its identifier: the IMEI or, for a Suntech model, the serial number. For automatic setup, which the scenario below uses, you also need the phone number of its SIM card and the APN settings of the carrier.
 
 Activation needs the ID of a supported device model. List the supported models, narrowed to the model you hold:
 
@@ -99,14 +99,34 @@ Save the ID of `awaiting_connection`. Status IDs are the same in every workspace
 
 ## How activation works
 
-`deviceActivate` creates the device record with the IMEI as its identifier and sets its status to `awaiting_connection`. Before the device can send data, it needs two settings: the address of the Navixy server and the APN of the carrier. The `setup` field of the input says how the device gets them:
+`deviceActivate` creates the device record with the value of `identifier` as its identifier and sets its status to `awaiting_connection`. The identifier is the value that the protocol of the model names a device by:
+
+| Model | `identifier` | Stored as |
+| --- | --- | --- |
+| Suntech models | The serial number that the device sends: 6 to 10 digits, not all zeros. Leading zeros are kept. | The `SERIAL_NUMBER` identifier of the device, in the `suntech` namespace |
+| Every other model | The IMEI: exactly 15 digits | The `IMEI` identifier of the device |
+
+The API checks the value against the model. The examples on this page activate Teltonika devices, so they send an IMEI.
+
+Before the device can send data, it needs two settings: the address of the Navixy server and the APN of the carrier. The `setup` field of the input says how the device gets them:
 
 | `setup` | How the device gets its settings | `phone` and `apn` |
 | --- | --- | --- |
-| `AUTOMATIC`, the default | `deviceActivate` queues an SMS to the SIM card. The SMS contains the APN settings and the address of the Navixy platform. When the device receives it, the device connects to the platform on its own. | Required |
+| `AUTOMATIC`, the default | `deviceActivate` queues an SMS to the SIM card. The SMS contains the APN settings and the address of the Navixy platform. When the device receives it, the device connects to the platform on its own. The platform sends this SMS to Teltonika models only. | Required |
 | `MANUAL` | You enter the server address, the port, and the APN on the device yourself, for example in the configuration tool of the manufacturer. `deviceActivate` sends nothing to the device. | Optional. When you send them, they must have the correct format. `apn.password` is ignored. |
 
 `deviceActivate` stores the phone number and the APN settings that you send, and `activation.setup` of the device returns the setup. Every activated device gets the built-in `gps_tracker` type, so the input takes no type. The scenario below uses automatic setup. For manual setup, see [Activation with manual setup](#activation-with-manual-setup).
+
+With automatic setup, `activationSms` in the response says whether the SMS was queued:
+
+| `activationSms` | Meaning |
+| --- | --- |
+| `QUEUED` | Every SMS is queued for sending. Some models take the settings in several SMS. The value doesn't say whether an SMS was sent or delivered. |
+| `SERVICE_UNAVAILABLE` | Your installation of Navixy can't send activation SMS. No SMS is queued. |
+| `MODEL_NOT_SUPPORTED` | The platform can't build the SMS for this device. The model or its protocol has no such command, the installation publishes no server address, or the device lacks the identifier that its protocol needs. No SMS is queued. |
+| `QUEUE_REFUSED` | The command queue refused an SMS, for example, because the queue is full. The SMS queued before it stay queued, but they don't contain all the settings. |
+
+With any value except `QUEUED`, the device is still created and `awaiting_connection`. Enter the server address, the port, and the APN on the device yourself, from `activation.server` when it isn't `null`. With manual setup, `activationSms` is `null`, because nothing is sent.
 
 The Device Management web app expects a device to connect within 2 minutes after `activatedAt`. The app measures the 2 minutes on the server clock, not on the clock of the browser. To do the same, read `serverTime` at the root of the query and compare it with `activatedAt`:
 
@@ -140,7 +160,7 @@ Response:
 
 The device was activated 2 minutes and 21 seconds ago by the server clock. Each request reads the clock again, so `serverTime` changes with every request. If a device with automatic setup is still `awaiting_connection` after 2 minutes, the app offers **Retry activation**. The retry sends `deviceActivate` again with the same IMEI, as the [correction](#correct-a-wrong-phone-number) and [resend](#resend-a-lost-sms) steps of the scenario below do.
 
-Three rules decide what happens to a second activation with the same IMEI:
+A second activation with the serial number of a Suntech device always fails with `DUPLICATE` on `input.identifier`, whatever the status of the device. Three rules decide what happens to a second activation with the same IMEI:
 
 * While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the setup, the phone number, the APN settings, and the model, and it replaces the title when you send a title that isn't blank. If the SMS of the earlier activation is still waiting to be sent, the call cancels it. With automatic setup, it then queues a new SMS. Use it to correct a typo, to resend a lost SMS, or to change the setup of a device that hasn't connected yet.
 * Once the device is `active` or `inactive`, the IMEI is taken, and the call fails with `DUPLICATE` on `input.identifier`.
@@ -193,11 +213,11 @@ Response:
 Key fields:
 
 * `phone` is 5 to 20 digits, as in `deviceActivate`.
-* `identifier` is optional. It's the IMEI of the device that you activate. Send it when you run the activation again for a device of your workspace. Then the number that this device has returns `true`, because the re-run keeps the number. Without `identifier`, the same number returns `false`.
+* `identifier` is optional. It's the identifier of the device that you activate, as in `deviceActivate`. Send it when you run the activation again for a device of your workspace. Then the number that this device has returns `true`, because the re-run keeps the number. Without `identifier`, the same number returns `false`.
 
 The check doesn't reserve the number. If another device gets the number before your activation, `deviceActivate` still fails with `DUPLICATE`. The check doesn't find a typo either: a wrong number that no device has returns `true`. See [Correct a wrong phone number](#correct-a-wrong-phone-number) for an example.
 
-A `phone` or an `identifier` in the wrong format returns `VALIDATION_ERROR`, and `field` is `phone` or `identifier`, without the `input.` prefix. `deviceActivationPhoneAvailable` never returns `null`, so an error on one alias makes the whole `data` `null`: the other numbers get no result either. Before you send the query, check that every number has 5 to 20 digits and nothing else.
+A `phone` in the wrong format or an `identifier` of more than 64 characters returns `VALIDATION_ERROR`, and `field` is `phone` or `identifier`, without the `input.` prefix. A shorter `identifier` in any format is accepted and matches no device. `deviceActivationPhoneAvailable` never returns `null`, so an error on one alias makes the whole `data` `null`: the other numbers get no result either. Before you send the query, check that every number has 5 to 20 digits and nothing else.
 
 The query needs the rights to read and create devices, because the response can show that a device of another workspace has the number. Without these rights, it returns `PERMISSION_DENIED`.
 {% endstep %}
@@ -231,6 +251,7 @@ mutation ActivateDevice($input: DeviceActivateInput!) {
           activatedAt
         }
       }
+      activationSms
     }
   }
 }
@@ -274,21 +295,22 @@ Response:
             "apn": { "name": "internet.example.net", "user": "iot" },
             "activatedAt": "2026-09-30T09:12:41Z"
           }
-        }
+        },
+        "activationSms": "QUEUED"
       }
     }
   }
 }
 ```
 
-The device exists, holds its IMEI, and is `awaiting_connection`. The response says that the platform queued the SMS, not that the SMS arrived. `activation` shows what was sent, without the password.
+The device exists, holds its IMEI, and is `awaiting_connection`. `activationSms` says that the platform queued the SMS, not that the SMS arrived. `activation` shows what was sent, without the password.
 
 Key fields:
 
-* `identifier` must be exactly 15 digits. It becomes the `IMEI` identifier of the device.
+* `identifier` is the IMEI for this model: exactly 15 digits. It becomes the `IMEI` identifier of the device.
 * `phone` is 5 to 20 digits, with no `+`, spaces, or dashes.
 * `apn.name` is 1 to 40 characters of letters, digits, `.`, `_`, or `-`. `apn.user` and `apn.password` are optional and at most 40 characters each, with `@` allowed too.
-* `title` is optional. Without it, or when it's blank, the API names a new device after the model and the IMEI, for example, `FMB003 356307042772396`.
+* `title` is optional. Without it, or when it's blank, the API names a new device after the model and the identifier, for example, `FMB003 356307042772396`.
 {% endstep %}
 
 {% step %}
@@ -307,6 +329,7 @@ mutation ActivateShipment {
       apn: { name: "internet.example.net", user: "iot", password: "iot" }
     }) {
       device { id title status { code } }
+      activationSms
     }
   }
   truck03: bdr {
@@ -318,6 +341,7 @@ mutation ActivateShipment {
       apn: { name: "internet.example.net", user: "iot", password: "iot" }
     }) {
       device { id title status { code } }
+      activationSms
     }
   }
 }
@@ -330,19 +354,21 @@ Response:
   "data": {
     "truck02": {
       "deviceActivate": {
-        "device": { "id": "019a6b2f-793e-807b-8001-444556430002", "title": "Truck 02", "status": { "code": "awaiting_connection" } }
+        "device": { "id": "019a6b2f-793e-807b-8001-444556430002", "title": "Truck 02", "status": { "code": "awaiting_connection" } },
+        "activationSms": "QUEUED"
       }
     },
     "truck03": {
       "deviceActivate": {
-        "device": { "id": "019a6b2f-793e-807b-8001-444556430003", "title": "Truck 03", "status": { "code": "awaiting_connection" } }
+        "device": { "id": "019a6b2f-793e-807b-8001-444556430003", "title": "Truck 03", "status": { "code": "awaiting_connection" } },
+        "activationSms": "QUEUED"
       }
     }
   }
 }
 ```
 
-When one activation fails, the others still run. The failed alias holds `null`, and its error names the alias in `path`, for example `["truck03", "deviceActivate"]`. Read `errors` for every alias before you treat the batch as done.
+When one activation fails, the others still run. The failed alias holds `null`, and its error names the alias in `path`, for example `["truck03", "deviceActivate"]`. Read `errors` and `activationSms` for every alias before you treat the batch as done.
 {% endstep %}
 
 {% step %}
@@ -421,6 +447,7 @@ mutation ResendSettings {
         status { code }
         activation { activatedAt }
       }
+      activationSms
     }
   }
 }
@@ -437,14 +464,15 @@ Response:
           "id": "019a6b2f-793e-807b-8001-444556430003",
           "status": { "code": "awaiting_connection" },
           "activation": { "activatedAt": "2026-09-30T10:05:02Z" }
-        }
+        },
+        "activationSms": "QUEUED"
       }
     }
   }
 }
 ```
 
-The response confirms that the SMS was queued, not that it left the platform. An SMS that the platform couldn't send is logged on the server and not reported to you.
+`activationSms` is `QUEUED` again, so the SMS is in the queue. The value doesn't say whether the SMS left the platform or reached the device.
 {% endstep %}
 
 {% step %}
@@ -538,7 +566,7 @@ Response:
 }
 ```
 
-`host` is a host name or an IP address, and `port` is a TCP port. Enter both on the device, together with the APN of the carrier.
+`host` is a host name or an IP address, and `port` is a TCP port. The port is the port of the model's protocol, so models of different vendors can return different ports. Enter both on the device, together with the APN of the carrier.
 
 The query returns `null` when your installation of Navixy publishes no server address. Then you can't set up a device by hand: use automatic setup, or ask the people who run your installation. A model that isn't supported fails with `VALIDATION_ERROR` on `modelId`, as in `deviceActivate`. The query needs the right to create devices.
 
@@ -595,7 +623,7 @@ Response:
 }
 ```
 
-The device is `awaiting_connection`, and nothing was sent to it. `activation.server` returns the same address as `deviceActivationServer`, so you can read the address from the device later. It's `null` when your installation publishes no address.
+The device is `awaiting_connection`, and nothing was sent to it. `activation.server` returns the same address as `deviceActivationServer`, so you can read the address from the device later. The port follows the model of the device: after `deviceUpdate` changes the model, `activation.server` returns the port of the new model. It's `null` when your installation publishes no address, or when the platform doesn't know the protocol of the device's model.
 
 If you know the phone number or the APN settings, send them too. `deviceActivate` checks their format and stores them, and the [`search` filter](managing-device-records-and-identifiers.md#filtering) then finds the device by its phone number. A phone number that another device has fails with `DUPLICATE` on `input.phone`, as with automatic setup.
 
@@ -618,22 +646,22 @@ The activation operations return errors in the shared format. See [Error handlin
 | Code                | When it occurs                                                                                                                                                                                                | Resolution                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. `deviceActivationServer` needs the right to create devices. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
-| `VALIDATION_ERROR`  | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. Or `setup` is `AUTOMATIC`, the default, and the input has no `phone` (`input.phone`) or no `apn` (`input.apn.name`). `field` names the argument. | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`. To activate without a phone number or APN, send `setup: MANUAL`. |
+| `VALIDATION_ERROR`  | `identifier` doesn't fit the model (15 digits for an IMEI, 6 to 10 digits for the serial number of a Suntech model), `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. Or `setup` is `AUTOMATIC`, the default, and the input has no `phone` (`input.phone`) or no `apn` (`input.apn.name`). `field` names the argument. | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`. To activate without a phone number or APN, send `setup: MANUAL`. |
 | `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                     | Send the `id` as `deviceModels` returned it.                                                                                                           |
-| `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
+| `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the serial number of a Suntech model belongs to any device (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
 
 Activating with a model that the platform doesn't support returns this error:
 
 ```json
 {
   "errors": [{
-    "message": "Device model 'fmb900' is not supported by the platform",
+    "message": "Device model 'gl300' is not supported by the platform",
     "path": ["bdr", "deviceActivate"],
     "extensions": {
       "type": "https://api.navixy.com/errors/validation",
       "title": "Validation Error",
       "status": 400,
-      "detail": "Device model 'fmb900' is not supported by the platform",
+      "detail": "Device model 'gl300' is not supported by the platform",
       "instance": "/graphql",
       "code": "VALIDATION_ERROR",
       "field": "input.modelId",
@@ -647,7 +675,7 @@ Activating with a model that the platform doesn't support returns this error:
 
 ### How to handle an unsupported model
 
-Read `field`: `input.modelId` means that the model exists but isn't supported. List the supported models with `deviceModels(filter: { supported: true })` and pick the one that matches the hardware. If your hardware isn't in that list, the platform can't activate it by SMS. Register it with `deviceCreate` instead and configure it by other means.
+Read `field`: `input.modelId` means that the model exists but isn't supported. List the supported models with `deviceModels(filter: { supported: true })` and pick the one that matches the hardware. If your hardware isn't in that list, the platform can't activate it. Register it with `deviceCreate` instead and configure it by other means.
 
 Activating a second device with a phone number that is already in use returns this error:
 

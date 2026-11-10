@@ -520,9 +520,9 @@ A paginated list of Device items.
 ### deviceActivationServer
 
 The data gateway address a device of this model is pointed at: what the user enters on the device for
-  `MANUAL` setup, before `deviceActivate`, and what the `Register` SMS carries for `AUTOMATIC`. Null while
-  the installation publishes no address. Refused for a model that is not `supported`, as `deviceActivate` is.
-  Needs the `create` right on devices.
+  `MANUAL` setup, before `deviceActivate`, and what the `Register` SMS carries for `AUTOMATIC`. The port is that of
+  the model's protocol. Null while the installation publishes no address. Refused for a model that is not
+  `supported`, as `deviceActivate` is. Needs the `create` right on devices.
 
 ```graphql
 deviceActivationServer(
@@ -571,7 +571,7 @@ deviceActivationPhoneAvailable(
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | `phone` | `String!` | The SIM phone number, as `DeviceActivateInput.phone` takes it: 5 to 20 digits. |
-| `identifier` | `String` | The IMEI the form activates. The phone of the caller's device with this IMEI counts as available, since re-running activation for that device keeps it. |
+| `identifier` | `String` | The identifier the form activates, as `DeviceActivateInput.identifier` takes it. The phone of the caller's device with this identifier counts as available, since re-running activation for that device keeps it. |
 
 ---
 
@@ -940,19 +940,20 @@ The result of a delete mutation.
 
 ### deviceActivate
 
-Activates a device: creates it with the given IMEI, records SIM/APN data and sets it
+Activates a device: creates it with the given identifier, records SIM/APN data and sets it
   `awaiting_connection`. For `AUTOMATIC` setup it also queues the SMS with APN and server settings;
   for `MANUAL` setup nothing is sent, and the user enters `DeviceActivation.server` on the device.
   The first frame makes it `active`. For an IMEI already on a `not_activated` or
   `awaiting_connection` device of the caller's workspace, replaces that device's activation data and
   model, cancels an SMS of its previous activation still waiting to be sent and, for `AUTOMATIC`
-  setup, queues the SMS again; an `active` or `inactive` device is refused. The device is returned
-  even when the SMS could not be queued.
+  setup, queues the SMS again; an `active` or `inactive` device is refused. A serial number already
+  on any device is refused as `DUPLICATE`, whatever its status. The device is returned even when the
+  SMS could not be queued, and `activationSms` says whether it was.
 
 ```graphql
 deviceActivate(
     input: DeviceActivateInput!
-  ): DevicePayload @effect(kinds: [DEVICES, PEOPLE])
+  ): DeviceActivatePayload @effect(kinds: [DEVICES, PEOPLE])
 ```
 
 **Arguments**
@@ -967,15 +968,15 @@ deviceActivate(
 
 <summary>DeviceActivateInput</summary>
 
-Input for activating a device: creates it with the given IMEI, records SIM/APN data, sets it
+Input for activating a device: creates it with the given identifier, records SIM/APN data, sets it
 `awaiting_connection`, and for `AUTOMATIC` setup queues the SMS that pushes APN and server settings to it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
-| `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
-| `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
+| `title` | `String` | The device display name. For a new device, `<model title> <identifier>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
+| `identifier` | `String!` | The identifier the model's protocol names a device by: the IMEI (15 digits) for most models, the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the namespace of its protocol (`suntech`). Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
 | `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 
@@ -999,13 +1000,14 @@ APN settings for `deviceActivate`.
 
 <details>
 
-<summary>DevicePayload</summary>
+<summary>DeviceActivatePayload</summary>
 
-The result of a device mutation.
+The result of `deviceActivate`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
-| `device` | [Device](#device)! | The created or updated device. |
+| `device` | [Device](#device)! | The activated device. |
+| `activationSms` | [ActivationSmsOutcome](#activationsmsoutcome) | Whether the activation SMS was queued, for `AUTOMATIC` setup. Null for `MANUAL` setup, which sends no SMS. |
 
 </details>
 
@@ -1766,7 +1768,7 @@ first frame reaches the platform, `active` after.
 | `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `phone` | `String` | The SIM phone number, globally unique across the installation. The activation SMS is sent to it for `AUTOMATIC` setup. Null for `MANUAL` setup activated without one. |
 | `apn` | [ApnSettings](#apnsettings) | The APN settings, pushed to the device for `AUTOMATIC` setup. Null for `MANUAL` setup activated without them. |
-| `server` | [ActivationServerAddress](#activationserveraddress) | The data gateway address the device connects to, to be entered on the device for `MANUAL` setup. Null while the installation publishes no address. |
+| `server` | [ActivationServerAddress](#activationserveraddress) | The data gateway address the device connects to, to be entered on the device for `MANUAL` setup. The port is that of the protocol of the device's model, and follows the model when it changes. Null while the installation publishes no address, and for a device whose model has no protocol the gateway knows. |
 | `activatedAt` | [DateTime](../../../core-api-reference/common.md#datetime)! | When `deviceActivate` last recorded this activation. |
 
 ---
@@ -1841,6 +1843,19 @@ The result of a device mutation.
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `device` | [Device](#device)! | The created or updated device. |
+
+---
+
+<a id="deviceactivatepayload"></a>
+
+### DeviceActivatePayload
+
+The result of `deviceActivate`.
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| `device` | [Device](#device)! | The activated device. |
+| `activationSms` | [ActivationSmsOutcome](#activationsmsoutcome) | Whether the activation SMS was queued, for `AUTOMATIC` setup. Null for `MANUAL` setup, which sends no SMS. |
 
 ---
 
@@ -2042,15 +2057,15 @@ APN settings for `deviceActivate`.
 
 ### DeviceActivateInput
 
-Input for activating a device: creates it with the given IMEI, records SIM/APN data, sets it
+Input for activating a device: creates it with the given identifier, records SIM/APN data, sets it
 `awaiting_connection`, and for `AUTOMATIC` setup queues the SMS that pushes APN and server settings to it.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
 | `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
-| `title` | `String` | The device display name. For a new device, `<model title> <IMEI>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
-| `identifier` | `String!` | The device's IMEI (15 digits). Becomes the device's IMEI identifier. |
+| `title` | `String` | The device display name. For a new device, `<model title> <identifier>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
+| `identifier` | `String!` | The identifier the model's protocol names a device by: the IMEI (15 digits) for most models, the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the namespace of its protocol (`suntech`). Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
 | `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 
@@ -2174,6 +2189,25 @@ How a device activated by `deviceActivate` receives its server settings.
 | ----- | ----------- |
 | `AUTOMATIC` | The platform queues an SMS that pushes the APN and server settings to the device. Needs `phone` and `apn`. |
 | `MANUAL` | The user enters the server settings on the device by hand, from `DeviceActivation.server`. No SMS is sent. |
+
+---
+
+<a id="activationsmsoutcome"></a>
+
+### ActivationSmsOutcome
+
+Whether `deviceActivate` with `AUTOMATIC` setup queued the SMS with the APN and server settings; some models take
+them in several SMS. Whether a queued SMS is sent and delivered later is not part of it. With `SERVICE_UNAVAILABLE`
+and `MODEL_NOT_SUPPORTED` no SMS is queued. With `QUEUE_REFUSED` the SMS queued before the refused one stay queued,
+but they do not carry all the settings. With any value but `QUEUED` the user enters the server settings on the device
+by hand, from `DeviceActivation.server` when it is set.
+
+| Value | Description |
+| ----- | ----------- |
+| `QUEUED` | Every SMS is queued for sending. |
+| `SERVICE_UNAVAILABLE` | The installation cannot send activation SMS. |
+| `MODEL_NOT_SUPPORTED` | The platform cannot build the SMS for this device: its model or protocol has no such command, the installation publishes no server address, or the device lacks the identifier its protocol needs. |
+| `QUEUE_REFUSED` | The command queue refused an SMS, for example because the queue is full. The SMS queued before it stay queued. |
 
 ---
 
