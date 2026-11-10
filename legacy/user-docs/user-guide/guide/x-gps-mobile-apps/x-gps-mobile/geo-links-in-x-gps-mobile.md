@@ -1,52 +1,56 @@
 ---
-description: Create, share, and manage geo links for tracked devices in X-GPS Mobile.
+description: >-
+  Share a vehicle's live location from your phone with a link that anyone can
+  open, for example to show a customer where their delivery is.
 ---
 
 # Geo links in X-GPS Mobile
 
 {% columns %}
 {% column %}
-The **Geo links** screen allows you to create and manage [Geo links](../../geo-links/), service-independent links for displaying tracked objects on the map. They enable sharing specific tracking data with end users through automatically generated URLs, offering flexible control over content visibility and access duration.
+A geo link is a web link that shows the live location of one of your vehicles or other assets on a map. For example, you can show a customer where their delivery is, or help a contractor find your vehicle. The person who opens the link needs no Navixy account and no app, because the map opens in a web browser. You create the link in X-GPS Mobile and send it from your phone by SMS, WhatsApp, Telegram, email, or any other app.
 
-In this section, you can:
+You decide what the link shows, such as the speed or the address, and how long it works. You can switch a link off at any time. To learn more about the feature, see [Geo links](../../geo-links/).
 
-* View all existing geo links (both created in the app and in the Navixy platform)
-* Create new geo links
-* Enable or disable geo links
+The **Geo links** screen lists all your geo links, both the ones created in the app and the ones created in the Navixy web platform. Here's what you can do:
+
+* Create a geo link and share it
+* Switch a geo link off or on
 * Duplicate, edit, and delete geo links
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../.gitbook/assets/image (6).png" alt="Geo link screen in X-GPS Mobile"><figcaption><p>Geo links screen</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (6).png" alt="Geo links screen in X-GPS Mobile with a list of geo links"><figcaption><p>Geo links screen</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
-## How to create geo links in X-GPS Mobile
+## How to create and share a geo link
 
 {% columns %}
 {% column %}
-Follow these steps to create a new geo link:
+A new geo link starts to work as soon as you create it. You can also create a geo link from an asset's [information screen](assets-list/asset-information.md) in the **Tracking** section.
 
-1. Tap **+** in the bottom-right corner of the main **Geo links** screens.
-2. Select the GPS device whose location you want the geo link to display.
-3. Configure the optional parameters:
+To create and share a geo link, follow these steps:
 
-* **Description:** Name or description of the geo link.
-* **Lifetime:** How long the geo link remains valid. Permanent geo links never expire.
-* **Label:** Customizable device name (shown in the geo link list).
-* **Attributes:** Device attributes displayed in the geo link interface, e.g., speed and address.
-* **Map provider:** Google by default.
-* **Trace history:** Tracking history period.
-* **Tracking options:** Show or hide the device based on geofence (inside, outside, or everywhere).
-* **Autoscale:** Auto-adjust zoom and position to accommodate multiple device movement.
-* **Show icons:** Display device icon.
-* **POI and geofences:** Display selected Places and geofences.
-
-4. Tap **Create geo link** to finalize creation. You'll see a pop-up window allowing you to preview the geo link in the browser, copy it, or share it.
+1. On the **Geo links** screen, tap **+** in the bottom-right corner.
+2. Select the GPS device whose location the link shows.
+3. Optionally, change the link settings:
+   * **Description:** The name or description of the geo link.
+   * **Lifetime:** How long the geo link works. A permanent geo link never expires.
+   * **Label:** The device name that the geo link shows.
+   * **Attributes:** The device data that the map shows next to the device, for example the speed and the address.
+   * **Map provider:** The map that the link shows. The default is Google.
+   * **Trace history:** How much of the recent route the map shows.
+   * **Tracking options:** Show the device everywhere, or only when it is inside or outside the geofences that you select.
+   * **Autoscale:** The map changes its zoom and position to keep the device in view.
+   * **Show icons:** Show the device icon on the map.
+   * **POI and geofences:** The Places and geofences that the map shows.
+4. Tap **Create geo link**.
+5. In the window that opens, share the link, or copy it and paste it into a message. You can also open the link in the browser to check what the recipient sees.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../.gitbook/assets/image (27).png" alt="Creating a new geo link in X-GPS Mobile"><figcaption><p>Creating a new geo link</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (27).png" alt="New geo link screen in X-GPS Mobile with the device and the link settings"><figcaption><p>Creating a new geo link</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
 
@@ -54,20 +58,20 @@ Follow these steps to create a new geo link:
 
 {% columns %}
 {% column %}
-To view geo link information, tap it in the geo link list. This screen shows all settings chosen during its creation.
+To see a geo link's settings, tap the link in the list.
 
-Tap <img src="../../../.gitbook/assets/image (10).png" alt="Toggle icon" data-size="line"> to enable or disable the geo link.
+To switch a geo link off or on, tap <img src="../../../.gitbook/assets/image (10).png" alt="Toggle icon" data-size="line">. While a link is off, the people who have it can't see the location. Switching it on again makes the same link work again.
 
-Tap **⋮** to open the options menu and access the following settings:
+To open more actions, tap **⋮**:
 
-* **Open:** Opens the geo link in the browser
-* **Copy link:** Copies the link address to the clipboard
-* **Edit:** Opens the **Edit** screen (similar to the [New geo link](geo-links-in-x-gps-mobile.md#how-to-create-geo-links-in-x-gps-mobile) screen)
-* **Duplicate:** Opens the **New geo link** screen with all settings identical to the selected geo link's.
+* **Open:** Opens the geo link in the browser.
+* **Copy link:** Copies the link to the clipboard.
+* **Edit:** Opens the **Edit** screen, which has the same settings as a [new geo link](#how-to-create-and-share-a-geo-link).
+* **Duplicate:** Opens the **New geo link** screen with the same settings as the selected geo link.
 * **Delete:** Deletes the geo link.
 {% endcolumn %}
 
 {% column %}
-<figure><img src="../../../.gitbook/assets/image (7).png" alt="Geo link information in X-GPS Mobile"><figcaption><p>Geo link information</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (7).png" alt="Geo link information screen in X-GPS Mobile with the link settings"><figcaption><p>Geo link information</p></figcaption></figure>
 {% endcolumn %}
 {% endcolumns %}
