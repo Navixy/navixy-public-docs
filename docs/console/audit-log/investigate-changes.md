@@ -28,7 +28,7 @@ The details show who made the change under **Performed by** and the old and new 
 
 ## Find the other changes that a request made
 
-One action in Console or one request from an app can change several records at once. For example, creating an API key also gives the key a role and a security profile, so the audit log displays an event from Console and two events from IAM. Every event that one request caused has the same trace ID.
+One action in Console or one request from an app can change records in several products at once. For example, creating an API key also gives the key a role, so the audit log shows events from both Console and IAM. To see the full effect of an action, such as which role a new API key received, list every event that it caused. These events have the same trace ID.
 
 To find the other changes that a request made, follow these steps:
 
