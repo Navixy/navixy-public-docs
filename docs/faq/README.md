@@ -17,7 +17,7 @@ The section grows from Support cases. Questions are grouped by what they are abo
 
 * **Technologies**: whether a device can resist jamming, and why CAN mileage and the odometer differ.
 * **Devices**: questions grouped by manufacturer. Input and output capabilities, BLE sensors, static navigation and I/O elements on [Teltonika](devices/teltonika/README.md) devices.
-* **Products**: how [IoT Logic](products/iot-logic/README.md) flows handle devices, attributes, conditions, commands, webhooks, and outputs, grouped by node. Asset statuses in [Tracking](products/tracking/README.md) when a device loses its GPS signal.
+* **Products**: how [IoT Logic](products/iot-logic/README.md) flows handle devices, attributes, conditions, commands, webhooks, and outputs, grouped by node. Asset statuses in [Tracking](products/tracking/README.md) when a device loses its GPS signal. Why the Trips and stops report in [Reports](products/reports/README.md) shows more stops than expected.
 * **Platform**: how to get raw device data, and what to check when a device stops transmitting.
 
 ## Question not answered here?

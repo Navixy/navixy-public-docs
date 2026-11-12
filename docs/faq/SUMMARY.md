@@ -57,6 +57,8 @@
   * [Two branches into one Output Endpoint node](products/iot-logic/two-branches-into-one-output-endpoint.md)
 * [Tracking](products/tracking/README.md)
   * [Parked vehicle shows Moving](products/tracking/parked-vehicle-shows-moving.md)
+* [Reports](products/reports/README.md)
+  * [Trips and stops report shows too many stops](products/reports/trips-and-stops-report-shows-too-many-stops.md)
 
 ## Platform
 
