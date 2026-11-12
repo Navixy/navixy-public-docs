@@ -24,7 +24,7 @@ The **System Health** dashboard shows your instance's current operational status
 
 ## Configuring data processing
 
-Your **PTL Configuration** panel shows your **Dealer ID** and **Client ID**, confirming your **Navixy** account context.
+Your **PTL Configuration** panel shows your **Dealer ID**, the ID of the telematics service provider that serves your account, and your **Client ID**, confirming your **Navixy** account context.
 
 ### Historical data loading
 

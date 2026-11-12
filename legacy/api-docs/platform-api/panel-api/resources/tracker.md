@@ -26,7 +26,7 @@ API path: `panel/tracker`.
 _required permissions_: `trackers: "report"`.
 
 {% hint style="info" %}
-This operation needs the `report` operation on `trackers`, which is distinct from `read`. A dealer granted only `read` receives error code 13.
+This operation needs the `report` operation on `trackers`, which is distinct from `read`. A telematics service provider (TSP) granted only `read` receives error code 13.
 {% endhint %}
 
 {% openapi-operation spec="admin-panel" path="/panel/tracker/active/history/list" method="post" %}
@@ -47,7 +47,7 @@ _required permissions_: `trackers: "create"`.
 
 * 219 - Not allowed for clones of the device - when the source tracker is itself a clone.
 * 201 - Not found in the database - when the specified `tracker_id` is not found.
-* 246 - Invalid user ID - when the user ID matches the owner of the source tracker, or does not exist or belong to the authorized dealer.
+* 246 - Invalid user ID - when the user ID matches the owner of the source tracker, or does not exist or belong to the authorized TSP account.
 * 247 - Entity already exists - if the destination user already has a clone of this tracker.
 * 252 - Device already corrupted - when the source of the tracker is corrupted.
 
@@ -145,7 +145,7 @@ The `id` in the response is the **new** tracker ID. Moving a tracker to another 
 
 * 219 - Not allowed for clones of the device - when the source tracker is a clone.
 * 201 - Not found in the database - when the tracker is not found.
-* 246 - Invalid user ID - when `user_id` matches the current owner, or does not exist or belong to the authorized dealer.
+* 246 - Invalid user ID - when `user_id` matches the current owner, or does not exist or belong to the authorized TSP account.
 * 247 - Entity already exists - when the destination user already has a clone of this tracker.
 * 252 - Device already corrupted - when the source of the tracker is corrupted.
 
@@ -241,5 +241,5 @@ This is the only operation on this page that identifies the device by `device_id
 #### Errors
 
 * 7 - Invalid parameters.
-* 201 - Not found in the database - if no tracker with that device ID belongs to the authorized dealer.
+* 201 - Not found in the database - if no tracker with that device ID belongs to the authorized TSP account.
 * 252 - Device already corrupted - if the source of the tracker is corrupted.

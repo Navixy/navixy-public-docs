@@ -27,7 +27,7 @@ They are two separate APIs with separate credentials, and each has its own getti
     </tr>
     <tr>
       <td><strong>⚙️ Admin Panel API</strong></td>
-      <td>Manage a reseller deployment: user accounts, devices, tariffs, billing, and dealer-level operations.</td>
+      <td>Manage a reseller deployment: user accounts, devices, tariffs, billing, and operations on the telematics service provider (TSP) account.</td>
       <td><a href="panel-api/getting-started.md">panel-api/getting-started.md</a></td>
     </tr>
   </tbody>
@@ -35,12 +35,12 @@ They are two separate APIs with separate credentials, and each has its own getti
 
 ## Which API do you need?
 
-Both APIs are JSON over HTTPS, and both are documented from an OpenAPI specification. The dividing line is whose data you are acting on. The Platform API acts **as a platform user, on that user's own account**. The Admin Panel API acts **as a dealer, on the accounts the dealer manages**.
+Both APIs are JSON over HTTPS, and both are documented from an OpenAPI specification. The dividing line is whose data you are acting on. The Platform API acts **as a platform user, on that user's own account**. The Admin Panel API acts **as a TSP, on the accounts the TSP manages**.
 
 | Dimension | Platform API | Admin Panel API |
 | --- | --- | --- |
-| You are | a platform user, or an application acting for one | a dealer or reseller administering a deployment |
-| It covers | the signed-in user's own account, sessions and settings, tracking (trackers, tracks, geofences, sensors, rules), fleet vehicles and maintenance, field service (tasks, places, employees), reports and tags, billing, and sub-users | dealer accounts, the end users beneath them, device registration and plans, activation codes, tariffs, sub-dealers, and panel branding and notification settings |
+| You are | a platform user, or an application acting for one | a TSP or reseller administering a deployment |
+| It covers | the signed-in user's own account, sessions and settings, tracking (trackers, tracks, geofences, sensors, rules), fleet vehicles and maintenance, field service (tasks, places, employees), reports and tags, billing, and sub-users | TSP accounts, the end users beneath them, device registration and plans, activation codes, tariffs, resellers, and panel branding and notification settings |
 | You authenticate with | a user session hash, or an API key | a panel session hash |
 | Reference | [Resources](user-api/resources/README.md) | [Admin Panel resources](panel-api/resources/README.md) |
 | Start here | [Navixy platform API](user-api/getting-started.md) | [Navixy Admin Panel API](panel-api/getting-started.md) |

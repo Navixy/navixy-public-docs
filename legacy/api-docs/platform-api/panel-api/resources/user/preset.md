@@ -49,8 +49,8 @@ All `title` values on presets, groups, items, and tabs are **localization keys**
 
 `owner` reports who defined the preset:
 
-* `dealer` - created by the dealer, and editable by them.
-* `platform` - supplied by Navixy. Visible to the dealer but not editable.
+* `dealer` - created by the telematics service provider (TSP), and editable by them.
+* `platform` - supplied by Navixy. Visible to the TSP but not editable.
 
 ### Menu preset assignment type
 

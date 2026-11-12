@@ -19,7 +19,7 @@ The `permissions` object in the response is described under panel account [permi
 
 #### Errors
 
-* 11 - Access denied - if dealer blocked.
+* 11 - Access denied - if the TSP account is blocked.
 * 12 - Dealer not found.
 
 ***

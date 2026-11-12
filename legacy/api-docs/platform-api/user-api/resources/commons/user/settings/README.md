@@ -9,7 +9,7 @@ User settings are the account's own preferences: the timezone and formats everyt
 
 Two of these are stored separately from the rest and are visible only to a master user, which is worth knowing before reading the response. `balance_alert_settings` and `file_storage_settings`, along with `first_user_balance_warning_period` and `second_user_balance_warning_period`, are **absent entirely** unless the caller holds the `admin` right, rather than merely being read-only.
 
-The rest of the `settings` object is filtered by the dealer's GIS package before it is returned, so a field can be absent or null on a platform with a restricted package.
+The rest of the `settings` object is filtered by the GIS package of the telematics service provider (TSP) before it is returned, so a field can be absent or null on a platform with a restricted package.
 
 ## Settings object
 

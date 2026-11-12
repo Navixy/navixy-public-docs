@@ -11,7 +11,7 @@ The SMS Gateway section is disabled. How do I edit it?
 
 ## Answer
 
-Only Support can adjust the SMS gateway settings for your dealer.
+Only Support can adjust the SMS gateway settings of your Admin Panel.
 
 Provide gateway details, for example:
 
@@ -27,7 +27,7 @@ Generic SMPP v3.4:
 * login (system id)
 * password
 
-Please note that this change is for your dealer panel as a whole, and can't be set on a per-user basis.
+Please note that this change is for your Admin Panel as a whole, and can't be set on a per-user basis.
 
 ## Links
 

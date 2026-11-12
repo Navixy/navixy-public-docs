@@ -1,10 +1,10 @@
 ---
-description: API call to get information about a dealer.
+description: API call to get information about a telematics service provider (TSP) account.
 ---
 
 # Dealer
 
-In Navixy, a Dealer is an entity that acts as a reseller or distributor of the Navixy platform services. Dealers have access to the Navixy Admin Panel, where they can manage various aspects of the platform, including users, devices, and service plans.
+In Navixy, a telematics service provider (TSP) is a company that sells Navixy platform services to its own customers. In the API, a TSP account is called a dealer, so its methods and fields use the word `dealer`. TSPs have access to the Navixy Admin Panel, where they can manage various aspects of the platform, including users, devices, and service plans.
 
 ## Dealer object
 
@@ -14,10 +14,10 @@ In Navixy, a Dealer is an entity that acts as a reseller or distributor of the N
 
 Notes on individual fields:
 
-* `features` lists the allowed [dealer features](../../../user-api/resources/commons/dealer.md#dealer-features).
+* `features` lists the allowed [TSP account features](../../../user-api/resources/commons/dealer.md#dealer-features).
 * `default_user_time_zone` is a [time zone ID](../timezone.md) applied to users created via [user/upload](../user/README.md#post-panel-user-upload). The same zone is preselected when creating a user in the Navixy Admin Panel.
-* `store_period` on the dealer applies to users on a `demo_tariff`. The `store_period` inside `tariff` is the plan's own maximum data store period. The two are separate values.
-* `password_policy` reports the complexity rules enforced for this dealer, and applies to [dealer/password/update](password.md) as well as to end user passwords.
+* `store_period` on the TSP account applies to users on a `demo_tariff`. The `store_period` inside `tariff` is the plan's own maximum data store period. The two are separate values.
+* `password_policy` reports the complexity rules enforced for this TSP account, and applies to [dealer/password/update](password.md) as well as to end user passwords.
 
 ## API Actions
 

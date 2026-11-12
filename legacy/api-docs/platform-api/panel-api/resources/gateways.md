@@ -2,14 +2,14 @@
 title: Gateways
 description: >-
   Information about email gateways objects. Email gateway can be owned by a
-  dealer or leased from platform owner.
+  telematics service provider (TSP) or leased from platform owner.
 ---
 
 # Gateways
 
 ## Email gateway object
 
-A dealer can send notification mail either through a gateway it owns, or through one leased from the platform owner. The two are separate objects, and the list operation returns them separately.
+A telematics service provider (TSP) can send notification mail either through a gateway it owns, or through one leased from the platform owner. The two are separate objects, and the list operation returns them separately.
 
 Own gateways currently support the SMTP provider only. Leased gateways are not limited to SMTP: `router` and `mandrill_smtp` have both been observed.
 
@@ -31,7 +31,7 @@ _required permissions_: `email_gateways: "read"`.
 [OpenAPI admin-panel](../reference/Admin_Panel.json)
 {% endopenapi-operation %}
 
-A dealer that is itself the platform owner receives an empty `leasable` list.
+A TSP that is itself the platform owner receives an empty `leasable` list.
 
 The originators used when sending through the bound gateway are configured in [notification settings](dealer/settings/notification.md).
 

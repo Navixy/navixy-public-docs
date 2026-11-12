@@ -44,7 +44,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
 
 * 217 - List contains nonexistent entities, when one of the given tracker IDs belongs to no tracker, or to a tracker owned by another user.
-* 221 - Device limit exceeded, when the device limit set for the user's dealer has been exceeded.
+* 221 - Device limit exceeded, when the device limit set for the user's telematics service provider (TSP) has been exceeded.
 * 236 - Feature unavailable due to tariff restrictions, when no tracker on the account has the `statuses` tariff feature.
 
 ***

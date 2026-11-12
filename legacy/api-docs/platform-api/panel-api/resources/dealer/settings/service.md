@@ -59,4 +59,4 @@ Wallpapers, logos, and favicons cannot be edited here. Use the [branding image](
 
 #### Errors
 
-* 247 - Entity already exists(409) - when `domain` already used by other dealer.
+* 247 - Entity already exists(409) - when `domain` already used by another telematics service provider (TSP) account.

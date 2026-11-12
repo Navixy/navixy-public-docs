@@ -19,7 +19,7 @@ Definitions the response refers to but does not repeat:
 
 * `paas_settings` - object. The same as `settings` in the [`dealer/get_ui_config` response](../dealer.md#post-dealer-get_ui_config).
 * `user_info.master` - object. Returned only when the current user is a sub-user. Its fields mean the same as in `user_info`, but describe the master account.
-* `features` - string array. The [dealer features](../dealer.md#dealer-features) that are enabled.
+* `features` - string array. The [features of the telematics service provider (TSP) account](../dealer.md#dealer-features) that are enabled.
 * `privileges.rights` - string array. The rights granted to a sub-user, described in [security group rights](../subuser/security_group.md#security-group-rights).
 * `user_menu` - a [menu preset](../../../../panel-api/resources/user/preset.md#menu-preset). Its `account`, `main`, `applications`, and `footer.items` entries are [menu item](../../../../panel-api/resources/user/preset.md#menu-item) arrays.
 * `tariff_restrictions` - the tariff restrictions object, which [`user/get_tariff_restrictions`](README.md#post-user-get_tariff_restrictions) also returns on its own.
@@ -49,7 +49,7 @@ When multi-factor authentication is enabled, the response carries `type: "second
 
 These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
 
-* 11 - Access denied, when the dealer is blocked.
+* 11 - Access denied, when the TSP account is blocked.
 * 102 - Wrong login or password.
 * 103 - User not activated.
 * 104 - Logins limit exceeded. Reuse an existing session instead, see [`user/session/renew`](session/README.md#post-user-session-renew).

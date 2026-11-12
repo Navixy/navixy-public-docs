@@ -5,7 +5,7 @@ description: API calls for the Tariff resource, covering service plans and devic
 
 # Tariff (plan)
 
-A tariff is a service plan a dealer offers to its users. This resource manages those plans and the per-device-type defaults applied when a device is registered.
+A tariff is a service plan a telematics service provider (TSP) offers to its users. This resource manages those plans and the per-device-type defaults applied when a device is registered.
 
 {% hint style="info" %}
 **Tariff and plan are the same thing.** The API uses both words. The path is `panel/tariff`, the permission key is `"tariffs"`, and the field naming one is `tariff_id`, but the object returned is `Plan` and the operation summaries below say "List plans", "Create plan", and so on. The Admin Panel interface calls it a plan.
@@ -22,7 +22,7 @@ This page uses tariff for the resource and `Plan` for the object it returns.
 Notes on individual fields:
 
 * `type`, `device_type`, and the map codes inside `map_filter` use platform-wide enums described in the [data types](../../general/api-conventions.md#data-types) section.
-* `store_period` uses a short duration form here, such as `1y`, which is **not** the ISO 8601 form used by `store_period` on the [dealer object](dealer/README.md).
+* `store_period` uses a short duration form here, such as `1y`, which is **not** the ISO 8601 form used by `store_period` on the [TSP account object](dealer/README.md).
 * `early_change_price` is omitted from the response when it has no value, in which case users cannot change plan frequently.
 
 ## API actions
@@ -33,7 +33,7 @@ API path: `panel/tariff`.
 
 _required permissions_: `"tariffs": "create"`.
 
-Plan creation counts against the dealer's plan quota.
+Plan creation counts against the plan quota of the TSP account.
 
 {% openapi-operation spec="admin-panel" path="/panel/tariff/create" method="post" %}
 [OpenAPI admin-panel](../reference/Admin_Panel.json)
@@ -47,7 +47,7 @@ _required permissions_: `"tariffs": "read"`.
 [OpenAPI admin-panel](../reference/Admin_Panel.json)
 {% endopenapi-operation %}
 
-`wholesale_service_prices` reports the prices the dealer itself is charged, and is not part of any individual plan.
+`wholesale_service_prices` reports the prices the TSP itself is charged, and is not part of any individual plan.
 
 ***
 
@@ -59,7 +59,7 @@ _required permissions_: `"tariffs": "read"`.
 
 #### Errors
 
-* 201 - Not found in the database - if the plan does not exist or belongs to another dealer.
+* 201 - Not found in the database - if the plan does not exist or belongs to another TSP account.
 
 ***
 

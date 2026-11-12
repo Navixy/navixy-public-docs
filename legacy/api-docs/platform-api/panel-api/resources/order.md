@@ -27,4 +27,4 @@ _required permissions_: `tracker_bundles: "read"`.
 
 #### Errors
 
-* 201 – Not found in the database - if the specified order does not exist, or belongs to another dealer.
+* 201 – Not found in the database - if the specified order does not exist, or belongs to another telematics service provider (TSP) account.

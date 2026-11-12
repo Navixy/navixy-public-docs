@@ -39,7 +39,7 @@ Two entries matter before anything else works. [User](user/README.md) turns cred
 
 | Endpoint | Method | What it does |
 | --- | --- | --- |
-| [`/dealer/get_ui_config`](dealer.md#post-dealer-get_ui_config) | POST | Get dealer UI config |
+| [`/dealer/get_ui_config`](dealer.md#post-dealer-get_ui_config) | POST | Get TSP UI config |
 
 #### Feedback
 

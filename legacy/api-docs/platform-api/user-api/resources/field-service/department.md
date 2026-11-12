@@ -29,7 +29,7 @@ These errors come in addition to the [general error codes](../../../general/erro
 
 * 7 - Invalid parameters.
 * 217 - The list contains non-existent entities.
-* 221 - Device limit exceeded - if device limit set for the user's dealer has been exceeded.
+* 221 - Device limit exceeded - if device limit set for the user's telematics service provider (TSP) has been exceeded.
 
 ***
 
@@ -45,7 +45,7 @@ These errors come in addition to the [general error codes](../../../general/erro
 
 * 7 - Invalid parameters.
 * 217 - The list contains non-existent entities.
-* 221 - Device limit exceeded - if device limit set for the user's dealer has been exceeded.
+* 221 - Device limit exceeded - if device limit set for the user's TSP has been exceeded.
 
 ***
 

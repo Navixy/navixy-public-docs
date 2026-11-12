@@ -31,4 +31,4 @@ Operations that list no errors of their own return only the [general error codes
 
 #### Standalone-specific
 
-When neither the user nor their dealer has any plugin enabled, the defaults apply instead, set by the `plugin.tracker.register.defaultIds` and `plugin.tracker.report.defaultIds` configuration options.
+When neither the user nor their telematics service provider (TSP) has any plugin enabled, the defaults apply instead, set by the `plugin.tracker.register.defaultIds` and `plugin.tracker.report.defaultIds` configuration options.

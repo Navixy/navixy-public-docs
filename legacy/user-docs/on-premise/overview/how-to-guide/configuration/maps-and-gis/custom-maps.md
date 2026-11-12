@@ -26,7 +26,7 @@ The application has two parameters:
 If you are using an HTTPS connection, it is important that the link to the app is also HTTPS. Otherwise, you may encounter a mixed content error.
 {% endhint %}
 
-Once you have the necessary data, you simply need to add a line to your MySQL database. Map layers can be added to the entire service (a.k.a. Dealer PaaS account) or only to specific users.
+Once you have the necessary data, you simply need to add a line to your MySQL database. Map layers can be added to the entire service, which is the main telematics service provider account of the installation, or only to specific users.
 
 ### Enabling the layer for the entire service (for all user accounts)
 

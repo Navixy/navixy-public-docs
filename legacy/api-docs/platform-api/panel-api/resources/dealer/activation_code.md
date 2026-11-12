@@ -7,7 +7,7 @@ description: API calls for interacting with activation codes used for device reg
 
 Activation codes in Navixy simplify the device activation process by allowing users to set up devices themselves, ensuring they are configured with the appropriate plan and benefits from the start. These codes can include bonuses, free days, and monetary credits to a user's balance upon activation, and are tied to specific plans.
 
-Depending on the dealer's preference, activation codes can be optional or required. Dealers can choose to restrict device activation to only those they supply, preventing users from adding devices purchased elsewhere without an activation code received from the dealer.
+Depending on the preference of the telematics service provider (TSP), activation codes can be optional or required. TSPs can choose to restrict device activation to only those they supply, preventing users from adding devices purchased elsewhere without an activation code received from the TSP.
 
 ## Activation Code Object
 
@@ -29,7 +29,7 @@ _required permissions_: `activation_code: ["read", "create"]`.
 
 #### Errors
 
-* 201 - Not found in the database - when tariff with `tariff_id` not found for a current dealer.
+* 201 - Not found in the database - when tariff with `tariff_id` not found for a current TSP account.
 
 ***
 
@@ -46,7 +46,7 @@ Entities are returned only if the `filter` string matches one of `code`, `tariff
 Only codes that meet all of the following are changed:
 
 * the `code` is listed in the `codes` parameter,
-* it belongs to the current dealer,
+* it belongs to the current TSP account,
 * it has not been activated yet,
 * it belongs to the same `device_type` as the new plan.
 
@@ -58,4 +58,4 @@ _required permissions_: `activation_code: "update"`.
 
 #### Errors
 
-* 201 - Not found in the database - when a plan with `tariff_id` is not found for the current dealer.
+* 201 - Not found in the database - when a plan with `tariff_id` is not found for the current TSP account.

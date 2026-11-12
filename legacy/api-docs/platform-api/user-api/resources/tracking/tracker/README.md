@@ -527,7 +527,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 * 201 - No bundle with this IMEI.
 * 204 - The group does not exist.
 * 220 - Unknown device model.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the telematics service provider (TSP) is exceeded.
 * 222 - The plugin was not found or does not support this model.
 * 223 - The phone number is already in use.
 * 224 - The device ID is already registered.
@@ -554,7 +554,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 * 13 - The user lacks the right.
 * 204 - The group does not exist.
 * 220 - Unknown device model.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the TSP is exceeded.
 * 222 - The plugin was not found or does not support this model.
 * 223 - The phone number is already in use.
 * 224 - The device ID is already registered.
@@ -579,7 +579,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 * 201 - No bundle with this IMEI.
 * 204 - The group does not exist.
 * 220 - Unknown device model.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the TSP is exceeded.
 * 222 - The plugin was not found or does not support this model.
 * 223 - The phone number is already in use.
 * 224 - The device ID is already registered.

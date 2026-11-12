@@ -31,6 +31,6 @@ These errors come in addition to the [general error codes](../../../../general/e
 
 * 13 - The user lacks the right.
 * 204 - The group does not exist.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the telematics service provider (TSP) is exceeded.
 * 224 - The device ID is already registered.
 * 225 - The tariff is not compatible with the account's legal type.

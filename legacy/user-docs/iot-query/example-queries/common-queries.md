@@ -208,7 +208,7 @@ WHERE device_time > (CURRENT_DATE - INTERVAL '1 day')
 LIMIT 1000;
 ```
 
-6. **Utilize hierarchical relationships**: Structure complex queries following the entity hierarchy (**dealer → client → user/device → object**) for more efficient joins and filtering.
+6. **Utilize hierarchical relationships**: Structure complex queries following the entity hierarchy (**telematics service provider → client → user/device → object**) for more efficient joins and filtering.
 7. **Manage connections properly**: Close database connections when they're not in use, especially in BI tools or scheduled scripts, to avoid resource locking or timeout issues.
 
 ## Next steps

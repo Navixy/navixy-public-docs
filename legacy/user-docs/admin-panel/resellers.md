@@ -1,14 +1,14 @@
 ---
 description: >-
-  Create and manage resellers (sub-dealers), configure permissions, and control
+  Create and manage resellers, configure permissions, and control
   activation and suspension statuses
 ---
 
 # Resellers
 
-Navixy's channel partners have the ability to expand their business by creating a network of sub-dealers or resellers. This section describes how to create a reseller and the various options of configuring them.
+Navixy's channel partners have the ability to expand their business by creating a network of resellers. This section describes how to create a reseller and the various options of configuring them.
 
-With the reseller feature, partners can invite new organizations to become their sub-dealers and assign them a set of permissions that fit their specific needs. The reseller has access to a dedicated Admin Panel with the ability to manage their own customers, IoT devices, and billing.
+With the reseller feature, partners can invite new organizations to become their resellers and assign them a set of permissions that fit their specific needs. The reseller has access to a dedicated Admin Panel with the ability to manage their own customers, IoT devices, and billing.
 
 <figure><img src=".gitbook/assets/image (96) (1).png" alt="Resellers page"><figcaption><p>Resellers page</p></figcaption></figure>
 

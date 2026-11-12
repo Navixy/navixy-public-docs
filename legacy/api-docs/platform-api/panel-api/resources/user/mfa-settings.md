@@ -26,7 +26,7 @@ _required permissions_: `users: "read"`.
 [OpenAPI admin-panel](../../reference/Admin_Panel.json)
 {% endopenapi-operation %}
 
-`value` is `null` when the dealer has not configured a default.
+`value` is `null` when the telematics service provider (TSP) has not configured a default.
 
 ***
 

@@ -14,7 +14,7 @@ API base path: `panel/subpaas/session`.
 _required permissions_: `subpaas: "create"`.
 
 {% hint style="warning" %}
-The returned `hash` grants access to the sub-dealer's panel. Treat it as a credential and handle it exactly as you would a hash from [authentication](../../authentication.md).
+The returned `hash` grants access to the reseller's panel. Treat it as a credential and handle it exactly as you would a hash from [authentication](../../authentication.md).
 {% endhint %}
 
 {% openapi-operation spec="admin-panel" path="/panel/subpaas/session/create" method="post" %}
@@ -24,7 +24,7 @@ The returned `hash` grants access to the sub-dealer's panel. Treat it as a crede
 #### Errors
 
 * 13 –
-  * The dealer is not PaaS type.
-  * The dealer has a status other than `NOT_BLOCKED`.
-  * The dealer's tariff does not allow SubPaaS accounts.
+  * The telematics service provider (TSP) account is not PaaS type.
+  * The TSP account has a status other than `NOT_BLOCKED`.
+  * The tariff plan of the TSP account does not allow SubPaaS accounts.
   * The found SubPaaS is not in `NOT_BLOCKED` status.

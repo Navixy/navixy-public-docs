@@ -47,7 +47,7 @@ You can also use it without signing in at [assistant.navixy.com](https://assista
 Two endpoints are available:
 
 * [User MCP](navixy-mcp-server/navixy-user-mcp.md): For [Navixy platform](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/446mKak1zDrGv70ahuYZ/) users. Covers devices, vehicles, groups, tags, track history, sensor readings, IoT Logic flows, and geocoding.
-* [Admin Panel MCP](navixy-mcp-server/navixy-panel-mcp.md): For telematics providers managing a dealer account. Connects to [Navixy Admin Panel](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/KdgeXg71LpaDrwexQYwp/) and covers users, trackers, tariff plans, and billing data.
+* [Admin Panel MCP](navixy-mcp-server/navixy-panel-mcp.md): For telematics service providers that manage their customers in Admin Panel. Connects to [Navixy Admin Panel](https://app.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/s/KdgeXg71LpaDrwexQYwp/) and covers users, trackers, tariff plans, and billing data.
 
 ## Navixy Documentation MCP
 

@@ -3,8 +3,8 @@
   "info": {
     "version": "1.2.0",
     "title": "Navixy Admin Panel API",
-    "summary": "API calls for dealer, reseller, and account administration",
-    "description": "This is an API reference for the Navixy Admin Panel API. Use these endpoints to authenticate a dealer session, read dealer information, manage activation codes, and read or update panel service, notification, and branding settings.\n\nThis specification covers every documented Admin Panel API resource family.\n\n**Parameters.** All parameters are documented in the JSON request body. The API also accepts the same parameters as form-encoded body fields or as query-string parameters, but those forms are not documented per operation. See the authentication guide for details.\n\n**Errors.** Detect an error by checking the HTTP status code: anything other than `200 OK` carries an error body with `success: false` and a `status.code` giving the API-level error code. The default error status is `400`, with some codes mapping to `402`, `403`, `404`, `409`, or `500`. Validation failures also include an `errors` array naming the offending parameter.",
+    "summary": "API calls for telematics service provider (TSP), reseller, and account administration",
+    "description": "This is an API reference for the Navixy Admin Panel API. Use these endpoints to authenticate a telematics service provider (TSP) session, read TSP account information, manage activation codes, and read or update panel service, notification, and branding settings. In the API, a TSP account is called a TSP, so its methods and fields use the word `dealer`.\n\nThis specification covers every documented Admin Panel API resource family.\n\n**Parameters.** All parameters are documented in the JSON request body. The API also accepts the same parameters as form-encoded body fields or as query-string parameters, but those forms are not documented per operation. See the authentication guide for details.\n\n**Errors.** Detect an error by checking the HTTP status code: anything other than `200 OK` carries an error body with `success: false` and a `status.code` giving the API-level error code. The default error status is `400`, with some codes mapping to `402`, `403`, `404`, `409`, or `500`. Validation failures also include an `errors` array naming the offending parameter.",
     "contact": {
       "name": "Navixy support",
       "email": "support@navixy.com",
@@ -32,27 +32,27 @@
   "tags": [
     {
       "name": "Account",
-      "description": "Operations for authenticating a dealer into the Admin Panel, inspecting the permissions granted to the current session, and ending that session. All resources under the /panel/account/ path."
+      "description": "Operations for authenticating a TSP into the Admin Panel, inspecting the permissions granted to the current session, and ending that session. All resources under the /panel/account/ path."
     },
     {
       "name": "Dealer",
-      "description": "Operations for reading dealer information, managing activation codes, changing the dealer password, and reading or updating panel settings covering service configuration, notification originators, and branding images. All resources under the /panel/dealer/ path."
+      "description": "Operations for reading TSP account information, managing activation codes, changing the password of the TSP account, and reading or updating panel settings covering service configuration, notification originators, and branding images. All resources under the /panel/dealer/ path."
     },
     {
       "name": "Gateways",
-      "description": "Email gateways a dealer can send notification mail through, either owned by the dealer or leased from the platform owner. All resources under the /panel/gateways/ path."
+      "description": "Email gateways a TSP can send notification mail through, either owned by the TSP or leased from the platform owner. All resources under the /panel/gateways/ path."
     },
     {
       "name": "Order",
-      "description": "Equipment orders placed by the dealer. All resources under the /panel/order/ path."
+      "description": "Equipment orders placed by the TSP. All resources under the /panel/order/ path."
     },
     {
       "name": "Subpaas",
-      "description": "Sub-dealers, also called Sub-PaaS accounts: dealers operating underneath another dealer. Covers listing, reading, creating and updating them, changing their password, and opening a session as one. All resources under the /panel/subpaas/ path."
+      "description": "Resellers, also called Sub-PaaS accounts: TSP accounts operating underneath another TSP account. Covers listing, reading, creating and updating them, changing their password, and opening a session as one. All resources under the /panel/subpaas/ path."
     },
     {
       "name": "Tariff",
-      "description": "Service plans a dealer offers to its users, and the per-device-type defaults applied on device registration. Called plans in the interface and tariffs in the API paths. All resources under the /panel/tariff/ path."
+      "description": "Service plans a TSP offers to its users, and the per-device-type defaults applied on device registration. Called plans in the interface and tariffs in the API paths. All resources under the /panel/tariff/ path."
     },
     {
       "name": "Timezone",
@@ -60,11 +60,11 @@
     },
     {
       "name": "Tracker",
-      "description": "Devices belonging to the dealer, their clones, settings, and plans. All resources under the /panel/tracker/ path."
+      "description": "Devices belonging to the TSP, their clones, settings, and plans. All resources under the /panel/tracker/ path."
     },
     {
       "name": "User",
-      "description": "End users belonging to the dealer: their profiles, sessions, balance transactions, menu presets, and multi-factor authentication settings. All resources under the /panel/user/ path."
+      "description": "End users belonging to the TSP: their profiles, sessions, balance transactions, menu presets, and multi-factor authentication settings. All resources under the /panel/user/ path."
     }
   ],
   "paths": {
@@ -73,8 +73,8 @@
         "tags": [
           "Account"
         ],
-        "summary": "Authenticate dealer",
-        "description": "Authenticate a dealer into the Admin Panel and obtain a session hash. This is the only Admin Panel operation that requires no existing session and no permissions. The returned hash is the credential for every other operation, and the response also reports the full permission set granted to the session, so a client can discover what it is allowed to do without a second call.",
+        "summary": "Authenticate TSP",
+        "description": "Authenticate a TSP into the Admin Panel and obtain a session hash. This is the only Admin Panel operation that requires no existing session and no permissions. The returned hash is the credential for every other operation, and the response also reports the full permission set granted to the session, so a client can discover what it is allowed to do without a second call.",
         "operationId": "accountAuth",
         "security": [],
         "requestBody": {
@@ -137,7 +137,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Access denied, error code 11: the dealer is blocked",
+            "description": "Access denied, error code 11: the TSP is blocked",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -152,7 +152,7 @@
           "Account"
         ],
         "summary": "Get account permissions",
-        "description": "Return the permission set granted to the current panel session. Takes no parameters beyond the session credential. Use it to re-check permissions without re-authenticating, for example after a dealer's permissions have been changed by the platform owner.",
+        "description": "Return the permission set granted to the current panel session. Takes no parameters beyond the session credential. Use it to re-check permissions without re-authenticating, for example after a TSP's permissions have been changed by the platform owner.",
         "operationId": "accountGetPermissions",
         "responses": {
           "200": {
@@ -221,12 +221,12 @@
         "tags": [
           "Dealer"
         ],
-        "summary": "Get dealer info",
-        "description": "Read information about the authorized dealer: PaaS plan and its service prices, balance, active tracker counts and limits, branding paths, block status, enabled features, and defaults applied to newly created users. Takes no parameters beyond the session credential. Note that the dealer fields are returned at the top level of the response rather than nested under a `value` key.",
+        "summary": "Get TSP account info",
+        "description": "Read information about the authorized TSP account: PaaS plan and its service prices, balance, active tracker counts and limits, branding paths, block status, enabled features, and defaults applied to newly created users. Takes no parameters beyond the session credential. Note that the TSP fields are returned at the top level of the response rather than nested under a `value` key.",
         "operationId": "dealerGetInfo",
         "responses": {
           "200": {
-            "description": "Dealer information",
+            "description": "TSP account information",
             "content": {
               "application/json": {
                 "schema": {
@@ -270,7 +270,7 @@
           "Dealer"
         ],
         "summary": "Create activation codes",
-        "description": "Create a batch of activation codes bound to a plan. Activation codes let an end user register a device themselves and have it configured with the correct plan, bonus balance, and free period from the start. The plan referenced by `tariff_id` must belong to the current dealer. Returns the number of codes actually created, which can be lower than requested.",
+        "description": "Create a batch of activation codes bound to a plan. Activation codes let an end user register a device themselves and have it configured with the correct plan, bonus balance, and free period from the start. The plan referenced by `tariff_id` must belong to the current TSP account. Returns the number of codes actually created, which can be lower than requested.",
         "operationId": "dealerActivationCodeCreate",
         "requestBody": {
           "required": true,
@@ -293,7 +293,7 @@
                   },
                   "tariff_id": {
                     "type": "integer",
-                    "description": "ID of the plan the new codes apply. Must belong to the current dealer.",
+                    "description": "ID of the plan the new codes apply. Must belong to the current TSP account.",
                     "example": 12457
                   },
                   "bonus_amount": {
@@ -357,7 +357,7 @@
           "Dealer"
         ],
         "summary": "List activation codes",
-        "description": "List the current dealer's activation codes, with optional text filtering, ordering, and pagination. When `filter` is used, a code is returned only if the filter string matches one of `code`, `tariff_id`, `device_id`, or `device_type`. Every parameter is optional; calling with no parameters returns the unfiltered list.",
+        "description": "List the current TSP account's activation codes, with optional text filtering, ordering, and pagination. When `filter` is used, a code is returned only if the filter string matches one of `code`, `tariff_id`, `device_id`, or `device_type`. Every parameter is optional; calling with no parameters returns the unfiltered list.",
         "operationId": "dealerActivationCodeList",
         "requestBody": {
           "required": false,
@@ -459,7 +459,7 @@
           "Dealer"
         ],
         "summary": "Update activation codes",
-        "description": "Change the plan, bonus amount, and free period on a set of existing activation codes. A code is updated only if it is listed in `codes`, belongs to the current dealer, has not been activated yet, and has the same `device_type` as the new plan. Returns the number of codes actually updated, which can be lower than the number supplied.",
+        "description": "Change the plan, bonus amount, and free period on a set of existing activation codes. A code is updated only if it is listed in `codes`, belongs to the current TSP account, has not been activated yet, and has the same `device_type` as the new plan. Returns the number of codes actually updated, which can be lower than the number supplied.",
         "operationId": "dealerActivationCodeUpdate",
         "requestBody": {
           "required": true,
@@ -488,7 +488,7 @@
                   },
                   "tariff_id": {
                     "type": "integer",
-                    "description": "ID of the new plan. Must belong to the current dealer.",
+                    "description": "ID of the new plan. Must belong to the current TSP account.",
                     "example": 12457
                   },
                   "bonus_amount": {
@@ -551,8 +551,8 @@
         "tags": [
           "Dealer"
         ],
-        "summary": "Update dealer password",
-        "description": "Change the password of the authorized dealer.\n\n**All panel sessions for this dealer are deleted on success, including the one making the request.** The session hash stops working immediately and you must authenticate again to continue.\n\nThe new password must differ from the current one, must satisfy the dealer's complexity rules, and must not match any recently used password. The enforced rules are returned as `password_policy` by the dealer get info operation. Both values are trimmed and must contain printable characters only.",
+        "summary": "Update TSP account password",
+        "description": "Change the password of the authorized TSP account.\n\n**All panel sessions for this TSP account are deleted on success, including the one making the request.** The session hash stops working immediately and you must authenticate again to continue.\n\nThe new password must differ from the current one, must satisfy the TSP's complexity rules, and must not match any recently used password. The enforced rules are returned as `password_policy` by the TSP account get info operation. Both values are trimmed and must contain printable characters only.",
         "operationId": "dealerPasswordUpdate",
         "requestBody": {
           "required": true,
@@ -567,13 +567,13 @@
                 "properties": {
                   "old_password": {
                     "type": "string",
-                    "description": "Current dealer password. Trimmed before comparison; printable characters only.",
+                    "description": "Current password of the TSP account. Trimmed before comparison; printable characters only.",
                     "format": "password",
                     "example": "qwerty"
                   },
                   "new_password": {
                     "type": "string",
-                    "description": "New dealer password. Must differ from the current one, satisfy the dealer's password policy, and not match a recently used password.",
+                    "description": "New password of the TSP account. Must differ from the current one, satisfy the password policy of the TSP account, and not match a recently used password.",
                     "format": "password",
                     "example": "Hh6FXTt%E!Rx*%f3"
                   }
@@ -606,7 +606,7 @@
           "Dealer"
         ],
         "summary": "Upload branding image",
-        "description": "Upload a branding image of the given type. Unlike every other Admin Panel operation, this one requires a `multipart/form-data` request, with the image supplied as a part named `file`. Branding must be enabled for the dealer's plan.\n\n`type` must be sent as a form part. Supplying it as a query parameter instead fails with error code 234.\n\nThe session credential travels in the `Authorization` header here exactly as it does on the JSON operations.\n\nIf `redirect_target` is supplied, the API answers `302` with a `Location` of `<redirect_target>?response=<urlencoded response json>` instead of returning the JSON body directly.",
+        "description": "Upload a branding image of the given type. Unlike every other Admin Panel operation, this one requires a `multipart/form-data` request, with the image supplied as a part named `file`. Branding must be enabled for the tariff plan of the TSP account.\n\n`type` must be sent as a form part. Supplying it as a query parameter instead fails with error code 234.\n\nThe session credential travels in the `Authorization` header here exactly as it does on the JSON operations.\n\nIf `redirect_target` is supplied, the API answers `302` with a `Location` of `<redirect_target>?response=<urlencoded response json>` instead of returning the JSON body directly.",
         "operationId": "dealerSettingsImageUpload",
         "requestBody": {
           "required": true,
@@ -650,7 +650,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "402": {
-            "description": "Feature unavailable, error code 236: branding is disabled by the dealer plan",
+            "description": "Feature unavailable, error code 236: branding is disabled by the tariff plan of the TSP account",
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
@@ -669,7 +669,7 @@
           "Dealer"
         ],
         "summary": "Delete branding image",
-        "description": "Delete the branding image of the given type. The dealer's interface falls back to the platform default for that element.",
+        "description": "Delete the branding image of the given type. The TSP's interface falls back to the platform default for that element.",
         "operationId": "dealerSettingsImageDelete",
         "requestBody": {
           "required": true,
@@ -713,7 +713,7 @@
           "Dealer"
         ],
         "summary": "Read notification settings",
-        "description": "Read the current dealer's notification settings: the originators used when the platform sends email, SMS, and voice notifications to that dealer's end users. Takes no parameters beyond the session credential.",
+        "description": "Read the current TSP account's notification settings: the originators used when the platform sends email, SMS, and voice notifications to that TSP's end users. Takes no parameters beyond the session credential.",
         "operationId": "dealerSettingsNotificationRead",
         "responses": {
           "200": {
@@ -757,7 +757,7 @@
           "Dealer"
         ],
         "summary": "Update notification settings",
-        "description": "Update the current dealer's notification settings.\n\n**This is a full replacement, not a partial update.** Any writable field you omit is reset to its default rather than left alone. Omitting the optional `email_special`, for example, clears it. Always read the current settings first, change what you need, and send the complete object back.\n\n`email_from`, `email_footer`, `sms_originator`, and `caller_id` are mandatory on every call. Omitting any of them fails with error code 7 and an `errors` array naming the missing field.",
+        "description": "Update the current TSP account's notification settings.\n\n**This is a full replacement, not a partial update.** Any writable field you omit is reset to its default rather than left alone. Omitting the optional `email_special`, for example, clears it. Always read the current settings first, change what you need, and send the complete object back.\n\n`email_from`, `email_footer`, `sms_originator`, and `caller_id` are mandatory on every call. Omitting any of them fails with error code 7 and an `errors` array naming the missing field.",
         "operationId": "dealerSettingsNotificationUpdate",
         "requestBody": {
           "required": true,
@@ -806,7 +806,7 @@
           "Dealer"
         ],
         "summary": "Read service settings",
-        "description": "Read the current dealer's service settings: branding paths, available maps and the default map, currency, locale, demo credentials, registration and mobile app behavior, colour themes, legal texts, and the defaults applied to newly created users. Takes no parameters beyond the session credential.",
+        "description": "Read the current TSP account's service settings: branding paths, available maps and the default map, currency, locale, demo credentials, registration and mobile app behavior, colour themes, legal texts, and the defaults applied to newly created users. Takes no parameters beyond the session credential.",
         "operationId": "dealerSettingsServiceRead",
         "responses": {
           "200": {
@@ -850,7 +850,7 @@
           "Dealer"
         ],
         "summary": "Update service settings",
-        "description": "Update the current dealer's service settings. Branding images, that is wallpapers, logos, and favicons, cannot be changed here: use the branding image upload and delete operations instead.\n\n**This is a full replacement, not a partial update, and it covers more fields than are listed below.** Any writable setting you omit is reset to its default, including settings this schema does not enumerate. Sending only the fields documented here was observed to silently clear `email_special` and flip `no_auto_create_rules` from `true` to `false`.\n\nAlways call the service settings read operation first, modify the fields you intend to change, and send everything back. Do not construct a request from this schema alone.",
+        "description": "Update the current TSP account's service settings. Branding images, that is wallpapers, logos, and favicons, cannot be changed here: use the branding image upload and delete operations instead.\n\n**This is a full replacement, not a partial update, and it covers more fields than are listed below.** Any writable setting you omit is reset to its default, including settings this schema does not enumerate. Sending only the fields documented here was observed to silently clear `email_special` and flip `no_auto_create_rules` from `true` to `false`.\n\nAlways call the service settings read operation first, modify the fields you intend to change, and send everything back. Do not construct a request from this schema alone.",
         "operationId": "dealerSettingsServiceUpdate",
         "requestBody": {
           "required": true,
@@ -875,7 +875,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "409": {
-            "description": "Entity already exists, error code 247: the domain is already used by another dealer",
+            "description": "Entity already exists, error code 247: the domain is already used by another TSP account",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -957,7 +957,7 @@
         ],
         "summary": "Read order",
         "operationId": "orderRead",
-        "description": "Read a single equipment order belonging to the current dealer.\n\nAn order that exists but belongs to another dealer returns error code 201, the same as one that does not exist, so a caller cannot use this operation to probe for other dealers' order IDs.",
+        "description": "Read a single equipment order belonging to the current TSP account.\n\nAn order that exists but belongs to another TSP account returns error code 201, the same as one that does not exist, so a caller cannot use this operation to probe for the order IDs of other TSP accounts.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1022,7 +1022,7 @@
         ],
         "summary": "List email gateways",
         "operationId": "gatewaysEmailList",
-        "description": "List the email gateways available to the current dealer, and report which one is currently bound.\n\nThe response separates gateways the dealer owns from gateways that can be leased from the platform owner. Takes no parameters beyond the session credential.\n\nA dealer that *is* the platform owner receives an empty `leasable` list, since there is nobody to lease from.",
+        "description": "List the email gateways available to the current TSP account, and report which one is currently bound.\n\nThe response separates gateways the TSP owns from gateways that can be leased from the platform owner. Takes no parameters beyond the session credential.\n\nA TSP that *is* the platform owner receives an empty `leasable` list, since there is nobody to lease from.",
         "responses": {
           "200": {
             "description": "Email gateways",
@@ -1042,13 +1042,13 @@
                         "integer",
                         "null"
                       ],
-                      "description": "ID of the gateway currently bound to this dealer, or `null` when none is bound.",
+                      "description": "ID of the gateway currently bound to this TSP account, or `null` when none is bound.",
                       "readOnly": true,
                       "example": 2
                     },
                     "own": {
                       "type": "array",
-                      "description": "Gateways owned by this dealer.",
+                      "description": "Gateways owned by this TSP account.",
                       "readOnly": true,
                       "items": {
                         "$ref": "#/components/schemas/DealerOwnEmailGateway"
@@ -1086,9 +1086,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "List sub-dealers",
+        "summary": "List resellers",
         "operationId": "subpaasList",
-        "description": "List the sub-dealers belonging to the current dealer, with per-sub-dealer user and device counts, plus optional text filtering, ordering and pagination.\n\nEvery parameter is optional.",
+        "description": "List the resellers belonging to the current TSP account, with per-reseller user and device counts, plus optional text filtering, ordering and pagination.\n\nEvery parameter is optional.",
         "requestBody": {
           "required": false,
           "content": {
@@ -1136,7 +1136,7 @@
         },
         "responses": {
           "200": {
-            "description": "Sub-dealers",
+            "description": "Resellers",
             "content": {
               "application/json": {
                 "schema": {
@@ -1151,7 +1151,7 @@
                     "list": {
                       "type": "array",
                       "readOnly": true,
-                      "description": "The matching sub-dealers.",
+                      "description": "The matching resellers.",
                       "items": {
                         "$ref": "#/components/schemas/SubpaasListEntry"
                       }
@@ -1172,7 +1172,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1186,9 +1186,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "Read sub-dealer",
+        "summary": "Read reseller",
         "operationId": "subpaasRead",
-        "description": "Read a single sub-dealer belonging to the current dealer.",
+        "description": "Read a single reseller belonging to the current TSP account.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1201,7 +1201,7 @@
                 "properties": {
                   "subpaas_id": {
                     "type": "integer",
-                    "description": "Sub-dealer ID.",
+                    "description": "Reseller ID.",
                     "example": 97834
                   }
                 }
@@ -1211,7 +1211,7 @@
         },
         "responses": {
           "200": {
-            "description": "The sub-dealer",
+            "description": "The reseller",
             "content": {
               "application/json": {
                 "schema": {
@@ -1236,7 +1236,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1250,9 +1250,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "Create sub-dealer",
+        "summary": "Create reseller",
         "operationId": "subpaasCreate",
-        "description": "Create a sub-dealer under the current dealer.\n\n**This operation sends email.** On success the platform notifies both the parent dealer and the platform managers.\n\nThe current dealer must be of the PaaS contract type, must not be blocked, and its plan must permit sub-dealer accounts. Failing any of those returns error code 13.",
+        "description": "Create a reseller under the current TSP account.\n\n**This operation sends email.** On success the platform notifies both the parent TSP and the platform managers.\n\nThe current TSP account must be of the PaaS contract type, must not be blocked, and its plan must permit reseller accounts. Failing any of those returns error code 13.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1271,11 +1271,11 @@
                   "password": {
                     "type": "string",
                     "format": "password",
-                    "description": "Sub-dealer's password. Must satisfy the platform password policy."
+                    "description": "Reseller's password. Must satisfy the platform password policy."
                   },
                   "title": {
                     "type": "string",
-                    "description": "Sub-dealer display name.",
+                    "description": "Reseller display name.",
                     "minLength": 1,
                     "maxLength": 50,
                     "example": "Rus Sub-PaaS"
@@ -1294,13 +1294,13 @@
                   },
                   "jur_country": {
                     "type": "string",
-                    "description": "Sub-dealer's country.",
+                    "description": "Reseller's country.",
                     "maxLength": 255,
                     "example": "country"
                   },
                   "link_monitoring": {
                     "type": "string",
-                    "description": "Sub-dealer's monitoring domain. Must be a valid internationalized domain name and must not be empty.",
+                    "description": "Reseller's monitoring domain. Must be a valid internationalized domain name and must not be empty.",
                     "maxLength": 255,
                     "example": "sub.navixy.com"
                   },
@@ -1329,7 +1329,7 @@
         },
         "responses": {
           "200": {
-            "description": "Sub-dealer created",
+            "description": "Reseller created",
             "content": {
               "application/json": {
                 "schema": {
@@ -1343,7 +1343,7 @@
                     },
                     "id": {
                       "type": "integer",
-                      "description": "ID of the created sub-dealer.",
+                      "description": "ID of the created reseller.",
                       "readOnly": true,
                       "example": 18
                     }
@@ -1357,7 +1357,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1371,9 +1371,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "Update sub-dealer",
+        "summary": "Update reseller",
         "operationId": "subpaasUpdate",
-        "description": "Update an existing sub-dealer.\n\nUnlike create, this operation requires `subpaas_id` and `block_type`, and does not accept `password`. Use the password change operation for that.",
+        "description": "Update an existing reseller.\n\nUnlike create, this operation requires `subpaas_id` and `block_type`, and does not accept `password`. Use the password change operation for that.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1392,12 +1392,12 @@
                 "properties": {
                   "subpaas_id": {
                     "type": "integer",
-                    "description": "ID of the sub-dealer to update.",
+                    "description": "ID of the reseller to update.",
                     "example": 97834
                   },
                   "block_type": {
                     "type": "string",
-                    "description": "Block status of the sub-dealer panel and its users.",
+                    "description": "Block status of the reseller panel and its users.",
                     "enum": [
                       "NOT_BLOCKED",
                       "INITIAL_BLOCK",
@@ -1408,7 +1408,7 @@
                   },
                   "title": {
                     "type": "string",
-                    "description": "Sub-dealer display name.",
+                    "description": "Reseller display name.",
                     "minLength": 1,
                     "maxLength": 50,
                     "example": "Rus Sub-PaaS"
@@ -1427,13 +1427,13 @@
                   },
                   "jur_country": {
                     "type": "string",
-                    "description": "Sub-dealer's country.",
+                    "description": "Reseller's country.",
                     "maxLength": 255,
                     "example": "country"
                   },
                   "link_monitoring": {
                     "type": "string",
-                    "description": "Sub-dealer's monitoring domain. Must be a valid internationalized domain name and must not be empty.",
+                    "description": "Reseller's monitoring domain. Must be a valid internationalized domain name and must not be empty.",
                     "maxLength": 255,
                     "example": "sub.navixy.com"
                   },
@@ -1469,7 +1469,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1483,9 +1483,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "Change sub-dealer password",
+        "summary": "Change reseller password",
         "operationId": "subpaasPasswordChange",
-        "description": "Set a new password for a sub-dealer.\n\nThe current password is **not** required: a parent dealer can reset a sub-dealer's password directly. The new password must satisfy the platform password policy and must not match a recently used one.",
+        "description": "Set a new password for a reseller.\n\nThe current password is **not** required: a parent TSP can reset a reseller's password directly. The new password must satisfy the platform password policy and must not match a recently used one.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1499,7 +1499,7 @@
                 "properties": {
                   "subpaas_id": {
                     "type": "integer",
-                    "description": "Sub-dealer ID.",
+                    "description": "Reseller ID.",
                     "example": 97834
                   },
                   "new_password": {
@@ -1521,7 +1521,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1535,9 +1535,9 @@
         "tags": [
           "Subpaas"
         ],
-        "summary": "Create sub-dealer session",
+        "summary": "Create reseller session",
         "operationId": "subpaasSessionCreate",
-        "description": "Open a panel session as one of your sub-dealers and return its session hash.\n\nUse the returned hash exactly as one returned by the authenticate operation. It grants access to that sub-dealer's panel, so treat it as a credential.",
+        "description": "Open a panel session as one of your resellers and return its session hash.\n\nUse the returned hash exactly as one returned by the authenticate operation. It grants access to that reseller's panel, so treat it as a credential.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1550,7 +1550,7 @@
                 "properties": {
                   "subpaas_id": {
                     "type": "integer",
-                    "description": "Sub-dealer ID.",
+                    "description": "Reseller ID.",
                     "example": 97834
                   }
                 }
@@ -1560,7 +1560,7 @@
         },
         "responses": {
           "200": {
-            "description": "Session opened as the sub-dealer",
+            "description": "Session opened as the reseller",
             "content": {
               "application/json": {
                 "schema": {
@@ -1574,7 +1574,7 @@
                     },
                     "hash": {
                       "type": "string",
-                      "description": "Session key for the sub-dealer's panel. Pass it in the `Authorization` header as `NVX <hash>`.",
+                      "description": "Session key for the reseller's panel. Pass it in the `Authorization` header as `NVX <hash>`.",
                       "readOnly": true,
                       "example": "fa7bf873fab9333144e171372a321b06"
                     }
@@ -1588,7 +1588,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the dealer is not eligible to have sub-dealers.",
+            "description": "Operation not permitted, error code 13: the session lacks the required permission, or the TSP is not eligible to have resellers.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -1604,7 +1604,7 @@
         ],
         "summary": "List plans",
         "operationId": "tariffList",
-        "description": "List the plans belonging to the current dealer, with optional filtering by device type, text filtering, ordering and pagination.\n\nThe response also carries `wholesale_service_prices`, the prices the dealer itself is charged, which is not part of any individual plan.",
+        "description": "List the plans belonging to the current TSP account, with optional filtering by device type, text filtering, ordering and pagination.\n\nThe response also carries `wholesale_service_prices`, the prices the TSP itself is charged, which is not part of any individual plan.",
         "requestBody": {
           "required": false,
           "content": {
@@ -1687,7 +1687,7 @@
                         }
                       ],
                       "readOnly": true,
-                      "description": "Per-unit service prices charged to the dealer, as opposed to the prices in each plan."
+                      "description": "Per-unit service prices charged to the TSP, as opposed to the prices in each plan."
                     },
                     "count": {
                       "type": "integer",
@@ -1721,7 +1721,7 @@
         ],
         "summary": "Read plan",
         "operationId": "tariffRead",
-        "description": "Read a single plan belonging to the current dealer.",
+        "description": "Read a single plan belonging to the current TSP account.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1786,7 +1786,7 @@
         ],
         "summary": "Create plan",
         "operationId": "tariffCreate",
-        "description": "Create a plan for the current dealer.\n\nThe plan definition is passed as a `tariff` object with no `id`, since the platform assigns one. Plan creation counts against the dealer's plan quota.",
+        "description": "Create a plan for the current TSP account.\n\nThe plan definition is passed as a `tariff` object with no `id`, since the platform assigns one. Plan creation counts against the TSP's plan quota.",
         "requestBody": {
           "required": true,
           "content": {
@@ -1983,7 +1983,7 @@
         ],
         "summary": "List users",
         "operationId": "userList",
-        "description": "List the end users of the dealer, with optional text filtering, ordering and pagination.",
+        "description": "List the end users of the TSP account, with optional text filtering, ordering and pagination.",
         "requestBody": {
           "required": false,
           "content": {
@@ -2072,7 +2072,7 @@
         ],
         "summary": "Read user",
         "operationId": "userRead",
-        "description": "Read a single end user.\n\nThe response carries five sibling keys rather than a single `value`: the user profile, any discount, the default plan ID of the dealer, the block parameters of the user, and the dealer-level MFA settings.\n\nA sub-user, or a user belonging to another dealer, returns error code 201 exactly as a missing one does.",
+        "description": "Read a single end user.\n\nThe response carries five sibling keys rather than a single `value`: the user profile, any discount, the default plan ID of the TSP account, the block parameters of the user, and the MFA settings of the TSP account.\n\nA sub-user, or a user belonging to another TSP account, returns error code 201 exactly as a missing one does.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2085,7 +2085,7 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   }
@@ -2127,7 +2127,7 @@
                         "integer",
                         "null"
                       ],
-                      "description": "ID of the default plan of the dealer."
+                      "description": "ID of the default plan of the TSP account."
                     },
                     "block_parameters": {
                       "type": [
@@ -2142,7 +2142,7 @@
                         "object",
                         "null"
                       ],
-                      "description": "Dealer-level multi-factor authentication settings that apply to this user.",
+                      "description": "Multi-factor authentication settings of the TSP account that apply to this user.",
                       "additionalProperties": true
                     }
                   }
@@ -2251,7 +2251,7 @@
         ],
         "summary": "Change user password",
         "operationId": "userChangePassword",
-        "description": "Set a new password for an end user.\n\nNote the parameter is `password`, not `new_password` as the dealer and subpaas equivalents use, and no current password is required: a dealer sets a user password without knowing the old one.\n\nThe value must satisfy the password policy of the dealer, returned as `password_policy` by the dealer get info operation.",
+        "description": "Set a new password for an end user.\n\nNote the parameter is `password`, not `new_password` as the `dealer` and `subpaas` password operations use, and no current password is required: a TSP sets a user password without knowing the old one.\n\nThe value must satisfy the password policy of the TSP account, returned as `password_policy` by the TSP account get info operation.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2265,14 +2265,14 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   },
                   "password": {
                     "type": "string",
                     "format": "password",
-                    "description": "New password. Must satisfy the password policy of the dealer and must not match a recently used password."
+                    "description": "New password. Must satisfy the password policy of the TSP account and must not match a recently used password."
                   }
                 }
               }
@@ -2318,7 +2318,7 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   },
@@ -2363,7 +2363,7 @@
         ],
         "summary": "Create user session",
         "operationId": "userSessionCreate",
-        "description": "Create a session for an end user and return its hash, letting a dealer act on behalf of that user in the user-facing API without knowing their password.",
+        "description": "Create a session for an end user and return its hash, letting a TSP act on behalf of that user in the user-facing API without knowing their password.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2376,7 +2376,7 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   }
@@ -2446,7 +2446,7 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   },
@@ -2534,7 +2534,7 @@
                 "properties": {
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the user. Must belong to the current dealer and must not be a sub-user.",
+                    "description": "ID of the user. Must belong to the current TSP account and must not be a sub-user.",
                     "minimum": 1,
                     "example": 231485
                   },
@@ -2607,7 +2607,7 @@
                   "password": {
                     "type": "string",
                     "format": "password",
-                    "description": "Initial password. Must satisfy the password policy of the dealer."
+                    "description": "Initial password. Must satisfy the password policy of the TSP account."
                   },
                   "locale": {
                     "type": "string",
@@ -2635,7 +2635,7 @@
                       "integer",
                       "null"
                     ],
-                    "description": "Optional. Plan the user is placed on. Must exist and belong to the dealer."
+                    "description": "Optional. Plan the user is placed on. Must exist and belong to the TSP."
                   },
                   "comment": {
                     "type": "string",
@@ -2727,7 +2727,7 @@
                       "integer",
                       "null"
                     ],
-                    "description": "Optional. Plan the user is placed on. Must exist and belong to the dealer."
+                    "description": "Optional. Plan the user is placed on. Must exist and belong to the TSP."
                   },
                   "comment": {
                     "type": "string",
@@ -2841,7 +2841,7 @@
         ],
         "summary": "List menu presets",
         "operationId": "userMenuPresetList",
-        "description": "List the menu presets available to the dealer, each with its owner and current assignments.\n\nPresets owned by `platform` are supplied by Navixy. Takes no parameters beyond the session credential.",
+        "description": "List the menu presets available to the TSP, each with its owner and current assignments.\n\nPresets owned by `platform` are supplied by Navixy. Takes no parameters beyond the session credential.",
         "responses": {
           "200": {
             "description": "Menu presets",
@@ -2889,7 +2889,7 @@
         ],
         "summary": "Create menu preset",
         "operationId": "userMenuPresetCreate",
-        "description": "Create a menu preset for the dealer. The layout is passed as a `preset` object with no `id`.",
+        "description": "Create a menu preset for the TSP. The layout is passed as a `preset` object with no `id`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2998,7 +2998,7 @@
         ],
         "summary": "Delete menu preset",
         "operationId": "userMenuPresetDelete",
-        "description": "Delete a menu preset. Users assigned to it fall back to the dealer default.",
+        "description": "Delete a menu preset. Users assigned to it fall back to the default of the TSP account.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3045,7 +3045,7 @@
         ],
         "summary": "Assign menu preset",
         "operationId": "userMenuPresetAssign",
-        "description": "Assign a menu preset, either as the dealer default or to an explicit list of users.\n\nThe `target` object is a discriminated union on `type`: `default` makes the preset the fallback for users with no explicit assignment, and `users` assigns it to up to 10000 named user IDs.",
+        "description": "Assign a menu preset, either as the default of the TSP account or to an explicit list of users.\n\nThe `target` object is a discriminated union on `type`: `default` makes the preset the fallback for users with no explicit assignment, and `users` assigns it to up to 10000 named user IDs.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3192,7 +3192,7 @@
         ],
         "summary": "Read default MFA settings",
         "operationId": "userMfaSettingsDefaultRead",
-        "description": "Read the dealer-level default multi-factor authentication policy, applied to users with no explicit setting.\n\n`value` is `null` when no default has been configured. Takes no parameters beyond the session credential.",
+        "description": "Read the default multi-factor authentication policy of the TSP account, applied to users with no explicit setting.\n\n`value` is `null` when no default has been configured. Takes no parameters beyond the session credential.",
         "responses": {
           "200": {
             "description": "The default policy",
@@ -3244,7 +3244,7 @@
         ],
         "summary": "Update default MFA settings",
         "operationId": "userMfaSettingsDefaultUpdate",
-        "description": "Set the dealer-level default multi-factor authentication policy. It applies to users with no explicit setting of their own.",
+        "description": "Set the default multi-factor authentication policy of the TSP account. It applies to users with no explicit setting of their own.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3288,7 +3288,7 @@
         ],
         "summary": "List trackers",
         "operationId": "trackerList",
-        "description": "List the dealer's trackers, with optional filtering by owner, plan, and clone status.",
+        "description": "List the trackers of the TSP account, with optional filtering by owner, plan, and clone status.",
         "requestBody": {
           "required": false,
           "content": {
@@ -3401,7 +3401,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   }
@@ -3468,7 +3468,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -3638,7 +3638,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   }
@@ -3781,7 +3781,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -3820,7 +3820,7 @@
         ],
         "summary": "Move tracker",
         "operationId": "trackerMove",
-        "description": "Reassign a tracker to a different user of the same dealer. The tracker must not be a clone.\n\nThe response returns the **new** tracker ID. Changing the owner creates a new tracker record, so the ID sent in the request no longer refers to the moved tracker afterwards.",
+        "description": "Reassign a tracker to a different user of the same TSP account. The tracker must not be a clone.\n\nThe response returns the **new** tracker ID. Changing the owner creates a new tracker record, so the ID sent in the request no longer refers to the moved tracker afterwards.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3834,13 +3834,13 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
                   "user_id": {
                     "type": "integer",
-                    "description": "ID of the destination user. Must differ from the current owner and belong to the same dealer.",
+                    "description": "ID of the destination user. Must differ from the current owner and belong to the same TSP account.",
                     "minimum": 1,
                     "example": 214034
                   }
@@ -3908,7 +3908,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -3947,7 +3947,7 @@
         ],
         "summary": "Update tracker settings",
         "operationId": "trackerSettingsUpdate",
-        "description": "Update the dealer-editable settings of a tracker.\n\nThe settings sit at the **top level** of the request alongside `tracker_id`, not nested under a wrapper.",
+        "description": "Update the settings of a tracker that the TSP can edit.\n\nThe settings sit at the **top level** of the request alongside `tracker_id`, not nested under a wrapper.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3960,7 +3960,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -4017,7 +4017,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -4072,7 +4072,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   },
@@ -4135,7 +4135,7 @@
                 "properties": {
                   "tracker_id": {
                     "type": "integer",
-                    "description": "Tracker ID. Must belong to the current dealer.",
+                    "description": "Tracker ID. Must belong to the current TSP account.",
                     "minimum": 1,
                     "example": 134537
                   }
@@ -4417,7 +4417,7 @@
     "schemas": {
       "PanelPermissions": {
         "type": "object",
-        "description": "Permissions granted to a panel session, grouped by category. Each value lists the actions permitted in that category. Which categories appear depends on the features enabled for the dealer, so a category can be absent rather than empty. Treat an absent category as granting nothing.",
+        "description": "Permissions granted to a panel session, grouped by category. Each value lists the actions permitted in that category. Which categories appear depends on the features enabled for the TSP, so a category can be absent rather than empty. Treat an absent category as granting nothing.",
         "readOnly": true,
         "properties": {
           "base": {
@@ -4527,7 +4527,7 @@
           },
           "password": {
             "type": "array",
-            "description": "Permissions on the dealer password.",
+            "description": "Permissions on the password of the TSP account.",
             "items": {
               "type": "string"
             },
@@ -4551,7 +4551,7 @@
           },
           "subpaas": {
             "type": "array",
-            "description": "Permissions on sub-dealers. Present only when sub-dealer functionality is enabled for the dealer.",
+            "description": "Permissions on resellers. Present only when reseller functionality is enabled for the TSP.",
             "items": {
               "type": "string"
             },
@@ -4575,7 +4575,7 @@
           },
           "paas_tariff": {
             "type": "array",
-            "description": "Permissions on the dealer's own PaaS plan.",
+            "description": "Permissions on the TSP's own PaaS plan.",
             "items": {
               "type": "string"
             },
@@ -4587,7 +4587,7 @@
       },
       "PasswordPolicy": {
         "type": "object",
-        "description": "Password complexity rules enforced for this dealer. Applies to the dealer password update operation and to end user passwords.",
+        "description": "Password complexity rules enforced for this TSP account. Applies to the TSP account password update operation and to end user passwords.",
         "readOnly": true,
         "properties": {
           "min_length": {
@@ -4629,7 +4629,7 @@
       },
       "BrandingImageType": {
         "type": "string",
-        "description": "Branding image slot. `app_logo` requires the `branding_mobile` dealer feature; every other slot requires `branding_web`. Requesting a slot whose feature is disabled fails with error code 236.",
+        "description": "Branding image slot. `app_logo` requires the `branding_mobile` feature of the TSP account; every other slot requires `branding_web`. Requesting a slot whose feature is disabled fails with error code 236.",
         "enum": [
           "logo",
           "favicon",
@@ -4718,22 +4718,22 @@
       },
       "Dealer": {
         "type": "object",
-        "description": "A dealer: a reseller or distributor of Navixy platform services, with access to the Admin Panel.",
+        "description": "A telematics service provider (TSP) account. A TSP is a company that sells Navixy platform services to its own customers and has access to the Admin Panel. In the API, a TSP account is called a dealer, so its methods and fields use the word `dealer`.",
         "readOnly": true,
         "properties": {
           "id": {
             "type": "integer",
-            "description": "Dealer ID.",
+            "description": "ID of the TSP account.",
             "example": 9000
           },
           "seller_id": {
             "type": "integer",
-            "description": "ID of the seller this dealer buys from.",
+            "description": "ID of the seller this TSP buys from.",
             "example": 3
           },
           "parent_dealer_id": {
             "type": "integer",
-            "description": "Parent dealer ID.",
+            "description": "ID of the parent TSP account.",
             "example": 5001
           },
           "contract_type": {
@@ -4783,7 +4783,7 @@
           },
           "title": {
             "type": "string",
-            "description": "Dealer display name.",
+            "description": "Display name of the TSP account.",
             "example": "Navixy Demo"
           },
           "block_status": {
@@ -4799,22 +4799,22 @@
           },
           "legal_name": {
             "type": "string",
-            "description": "Dealer legal name.",
+            "description": "Legal name of the TSP.",
             "example": "Company"
           },
           "active_amount": {
             "type": "integer",
-            "description": "Total number of active trackers, including those of sub-dealers.",
+            "description": "Total number of active trackers, including those of resellers.",
             "example": 99
           },
           "active_amount_own": {
             "type": "integer",
-            "description": "Number of active trackers, excluding those of sub-dealers.",
+            "description": "Number of active trackers, excluding those of resellers.",
             "example": 80
           },
           "active_amount_subpaas": {
             "type": "integer",
-            "description": "Number of active trackers belonging to sub-dealers.",
+            "description": "Number of active trackers belonging to resellers.",
             "example": 19
           },
           "active_limit": {
@@ -4824,12 +4824,12 @@
           },
           "locale": {
             "type": "string",
-            "description": "Dealer's default locale.",
+            "description": "Default locale of the TSP account.",
             "example": "en_US"
           },
           "domain": {
             "type": "string",
-            "description": "Dealer's domain.",
+            "description": "Domain of the TSP account.",
             "example": "demo.navixy.com"
           },
           "favicon": {
@@ -4837,7 +4837,7 @@
               "string",
               "null"
             ],
-            "description": "Path or URL to the dealer's interface favicon.",
+            "description": "Path or URL to the TSP's interface favicon.",
             "example": "paas/5001/custom.ico"
           },
           "logo": {
@@ -4845,17 +4845,17 @@
               "string",
               "null"
             ],
-            "description": "Path or URL to the dealer's logotype.",
+            "description": "Path or URL to the TSP's logotype.",
             "example": "paas/5001/logo.png"
           },
           "subpaas": {
             "type": "boolean",
-            "description": "`true` if this dealer is itself a sub-dealer of another.",
+            "description": "`true` if this TSP account is itself a reseller of another TSP.",
             "example": false
           },
           "allow_branding": {
             "type": "boolean",
-            "description": "`true` if the dealer's plan permits branding customization.",
+            "description": "`true` if the tariff plan of the TSP account permits branding customization.",
             "example": true
           },
           "password_policy": {
@@ -4877,12 +4877,12 @@
           },
           "seller_currency": {
             "type": "string",
-            "description": "Currency the seller bills this dealer in.",
+            "description": "Currency the seller bills this TSP in.",
             "example": "USD"
           },
           "features": {
             "type": "array",
-            "description": "Enabled dealer features.",
+            "description": "Enabled features of the TSP account.",
             "items": {
               "type": "string"
             },
@@ -4911,7 +4911,7 @@
       },
       "PaasTariff": {
         "type": "object",
-        "description": "The PaaS plan a dealer is on.",
+        "description": "The PaaS plan a TSP is on.",
         "readOnly": true,
         "properties": {
           "id": {
@@ -4981,7 +4981,7 @@
                 "$ref": "#/components/schemas/ServicePrices"
               }
             ],
-            "description": "Per-unit prices for chargeable services on the dealer's own PaaS plan."
+            "description": "Per-unit prices for chargeable services on the TSP's own PaaS plan."
           },
           "store_period": {
             "type": "string",
@@ -4992,7 +4992,7 @@
       },
       "NotificationSettings": {
         "type": "object",
-        "description": "Originators the platform uses when sending email, SMS, and voice notifications to a dealer's end users.",
+        "description": "Originators the platform uses when sending email, SMS, and voice notifications to a TSP's end users.",
         "properties": {
           "email_from": {
             "type": "string",
@@ -5050,7 +5050,7 @@
       },
       "DefaultUserSettings": {
         "type": "object",
-        "description": "Settings applied by default to the dealer's newly created end users.",
+        "description": "Settings applied by default to the TSP's newly created end users.",
         "properties": {
           "geocoder": {
             "type": "string",
@@ -5092,14 +5092,14 @@
           },
           "default_hide_device_id": {
             "type": "boolean",
-            "description": "When `true`, the web interface hides device IMEIs from the dealer's end users. Applies to every user who has no `hide_device_id` of their own, including users created before this value was changed.",
+            "description": "When `true`, the web interface hides device IMEIs from the TSP's end users. Applies to every user who has no `hide_device_id` of their own, including users created before this value was changed.",
             "example": false
           }
         }
       },
       "ServiceSettings": {
         "type": "object",
-        "description": "A dealer's service settings, as returned by the service settings read operation. Branding image paths are read-only here and are changed through the branding image operations.",
+        "description": "A TSP's service settings, as returned by the service settings read operation. Branding image paths are read-only here and are changed through the branding image operations.",
         "properties": {
           "service_title": {
             "type": "string",
@@ -5108,7 +5108,7 @@
           },
           "locale": {
             "type": "string",
-            "description": "Dealer's default locale.",
+            "description": "Default locale of the TSP account.",
             "example": "en_US"
           },
           "demo_login": {
@@ -5147,7 +5147,7 @@
               "string",
               "null"
             ],
-            "description": "Link to the dealer's payment system.",
+            "description": "Link to the TSP's payment system.",
             "example": "http://payme.ru"
           },
           "promo_url": {
@@ -5189,7 +5189,7 @@
               "string",
               "null"
             ],
-            "description": "Path or URL to the dealer logotype. Read-only here.",
+            "description": "Path or URL to the TSP logotype. Read-only here.",
             "example": "paas/5001/logo.png"
           },
           "document_logo": {
@@ -5249,7 +5249,7 @@
           },
           "allowed_maps": {
             "type": "array",
-            "description": "Maps the dealer may choose to include in `maps`. Set by the platform owner, not writable by the dealer.",
+            "description": "Maps the TSP may choose to include in `maps`. Set by the platform owner, not writable by the TSP.",
             "items": {
               "type": "string"
             },
@@ -5323,12 +5323,12 @@
           },
           "monitoring_logo_clickable": {
             "type": "boolean",
-            "description": "When `true`, the monitoring interface logotype links to the dealer's promo URL.",
+            "description": "When `true`, the monitoring interface logotype links to the TSP's promo URL.",
             "example": true
           },
           "has_https": {
             "type": "boolean",
-            "description": "`true` if the dealer's domain is served over HTTPS.",
+            "description": "`true` if the TSP's domain is served over HTTPS.",
             "example": true
           },
           "no_auto_create_rules": {
@@ -5358,7 +5358,7 @@
           },
           "gis_package": {
             "type": "string",
-            "description": "GIS package active for this dealer.",
+            "description": "GIS package active for this TSP account.",
             "example": "premium"
           },
           "gis_package_definition": {
@@ -5438,7 +5438,7 @@
       },
       "ServiceSettingsUpdate": {
         "type": "object",
-        "description": "The writable subset of a dealer's service settings. Branding images, that is wallpapers, logos, and favicons, are absent by design and are changed through the branding image operations instead.",
+        "description": "The writable subset of a TSP's service settings. Branding images, that is wallpapers, logos, and favicons, are absent by design and are changed through the branding image operations instead.",
         "properties": {
           "service_title": {
             "type": "string",
@@ -5484,7 +5484,7 @@
               "string",
               "null"
             ],
-            "description": "Link to the dealer's payment system.",
+            "description": "Link to the TSP's payment system.",
             "example": "http://payme.ru",
             "format": "uri"
           },
@@ -5504,7 +5504,7 @@
           },
           "domain": {
             "type": "string",
-            "description": "Domain the monitoring interface is served on. Must not already be used by another dealer.",
+            "description": "Domain the monitoring interface is served on. Must not already be used by another TSP account.",
             "example": "track.agent.com",
             "maxLength": 255
           },
@@ -5590,12 +5590,12 @@
           },
           "locale": {
             "type": "string",
-            "description": "Dealer's default locale.",
+            "description": "Default locale of the TSP account.",
             "example": "en_US"
           },
           "monitoring_logo_clickable": {
             "type": "boolean",
-            "description": "When `true`, the monitoring interface logotype links to the dealer's promo URL.",
+            "description": "When `true`, the monitoring interface logotype links to the TSP's promo URL.",
             "example": true
           }
         },
@@ -5657,7 +5657,7 @@
       },
       "Order": {
         "type": "object",
-        "description": "An equipment order placed by the dealer. Null fields are omitted from the response.",
+        "description": "An equipment order placed by the TSP. Null fields are omitted from the response.",
         "readOnly": true,
         "properties": {
           "id": {
@@ -5798,7 +5798,7 @@
       },
       "DealerOwnEmailGateway": {
         "type": "object",
-        "description": "An email gateway owned by the dealer. Only the SMTP provider is currently supported.",
+        "description": "An email gateway owned by the TSP. Only the SMTP provider is currently supported.",
         "readOnly": true,
         "properties": {
           "id": {
@@ -5808,7 +5808,7 @@
           },
           "leasable": {
             "type": "boolean",
-            "description": "Whether this dealer offers the gateway for lease to sub-dealers.",
+            "description": "Whether this TSP account offers the gateway for lease to resellers.",
             "example": false
           },
           "label": {
@@ -5857,17 +5857,17 @@
       },
       "SubpaasListEntry": {
         "type": "object",
-        "description": "A sub-dealer as returned by the list operation, with its user and device counts. Carries fewer fields than the read operation.",
+        "description": "A reseller as returned by the list operation, with its user and device counts. Carries fewer fields than the read operation.",
         "readOnly": true,
         "properties": {
           "subpaas_id": {
             "type": "integer",
-            "description": "Sub-dealer ID.",
+            "description": "Reseller ID.",
             "example": 18
           },
           "title": {
             "type": "string",
-            "description": "Sub-dealer display name.",
+            "description": "Reseller display name.",
             "example": "SubppaasTitle"
           },
           "jur_name": {
@@ -5877,18 +5877,18 @@
           },
           "login": {
             "type": "string",
-            "description": "Sub-dealer's panel login.",
+            "description": "Reseller's panel login.",
             "example": "subpaaslogin"
           },
           "creation_date": {
             "type": "string",
             "format": "date",
-            "description": "When the sub-dealer was created.",
+            "description": "When the reseller was created.",
             "example": "2018-11-15"
           },
           "block_type": {
             "type": "string",
-            "description": "Block status of the sub-dealer panel and its users.",
+            "description": "Block status of the reseller panel and its users.",
             "enum": [
               "NOT_BLOCKED",
               "INITIAL_BLOCK",
@@ -5899,25 +5899,25 @@
           },
           "users_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's users.",
+            "description": "Number of the reseller's users.",
             "readOnly": true,
             "example": 2
           },
           "active_users_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's active users.",
+            "description": "Number of the reseller's active users.",
             "readOnly": true,
             "example": 1
           },
           "trackers_count": {
             "type": "integer",
-            "description": "Total number of the sub-dealer's devices.",
+            "description": "Total number of the reseller's devices.",
             "readOnly": true,
             "example": 0
           },
           "active_trackers_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's active devices.",
+            "description": "Number of the reseller's active devices.",
             "readOnly": true,
             "example": 0
           }
@@ -5925,17 +5925,17 @@
       },
       "Subpaas": {
         "type": "object",
-        "description": "A sub-dealer, also called a Sub-PaaS account: a dealer operating underneath another dealer.",
+        "description": "A reseller, also called a Sub-PaaS account: a TSP account operating underneath another TSP account.",
         "readOnly": true,
         "properties": {
           "subpaas_id": {
             "type": "integer",
-            "description": "Sub-dealer ID.",
+            "description": "Reseller ID.",
             "example": 18
           },
           "block_type": {
             "type": "string",
-            "description": "Block status of the sub-dealer panel and its users.",
+            "description": "Block status of the reseller panel and its users.",
             "enum": [
               "NOT_BLOCKED",
               "INITIAL_BLOCK",
@@ -5947,17 +5947,17 @@
           "creation_date": {
             "type": "string",
             "format": "date",
-            "description": "When the sub-dealer was created.",
+            "description": "When the reseller was created.",
             "example": "2018-11-15"
           },
           "login": {
             "type": "string",
-            "description": "Sub-dealer's panel login.",
+            "description": "Reseller's panel login.",
             "example": "subpaaslogin"
           },
           "title": {
             "type": "string",
-            "description": "Sub-dealer display name.",
+            "description": "Reseller display name.",
             "example": "Rus Sub-PaaS"
           },
           "jur_name": {
@@ -5973,12 +5973,12 @@
           },
           "jur_country": {
             "type": "string",
-            "description": "Sub-dealer's country.",
+            "description": "Reseller's country.",
             "example": "country"
           },
           "link_monitoring": {
             "type": "string",
-            "description": "Sub-dealer's monitoring domain.",
+            "description": "Reseller's monitoring domain.",
             "example": "link"
           },
           "contact_fio": {
@@ -5998,25 +5998,25 @@
           },
           "users_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's users.",
+            "description": "Number of the reseller's users.",
             "readOnly": true,
             "example": 2
           },
           "active_users_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's active users.",
+            "description": "Number of the reseller's active users.",
             "readOnly": true,
             "example": 1
           },
           "trackers_count": {
             "type": "integer",
-            "description": "Total number of the sub-dealer's devices.",
+            "description": "Total number of the reseller's devices.",
             "readOnly": true,
             "example": 0
           },
           "active_trackers_count": {
             "type": "integer",
-            "description": "Number of the sub-dealer's active devices.",
+            "description": "Number of the reseller's active devices.",
             "readOnly": true,
             "example": 0
           }
@@ -6069,7 +6069,7 @@
       },
       "Plan": {
         "type": "object",
-        "description": "A service plan offered to a dealer's users. Called a plan in the interface and a tariff in the API paths.",
+        "description": "A service plan offered to a TSP's users. Called a plan in the interface and a tariff in the API paths.",
         "readOnly": true,
         "properties": {
           "id": {
@@ -6126,7 +6126,7 @@
           },
           "store_period": {
             "type": "string",
-            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the dealer object.",
+            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the TSP account object.",
             "example": "1y"
           },
           "proportional_charge": {
@@ -6223,7 +6223,7 @@
           },
           "store_period": {
             "type": "string",
-            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the dealer object.",
+            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the TSP account object.",
             "example": "1y"
           },
           "proportional_charge": {
@@ -6328,7 +6328,7 @@
           },
           "store_period": {
             "type": "string",
-            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the dealer object.",
+            "description": "Data storage period, as a short duration: `2h`, `3d`, `5m`, `1y`. Note this differs from the ISO 8601 form used by `store_period` on the TSP account object.",
             "example": "1y"
           },
           "proportional_charge": {
@@ -6394,7 +6394,7 @@
       "User": {
         "type": "object",
         "readOnly": true,
-        "description": "An end user of the dealer service. The response form is flat: every legal field is present regardless of `legal_type`, with empty strings where a field does not apply. The request form used by create and update is a discriminated union on `legal_type` instead.",
+        "description": "An end user of the TSP's service. The response form is flat: every legal field is present regardless of `legal_type`, with empty strings where a field does not apply. The request form used by create and update is a discriminated union on `legal_type` instead.",
         "properties": {
           "id": {
             "type": "integer",
@@ -6403,7 +6403,7 @@
           },
           "dealer_id": {
             "type": "integer",
-            "description": "ID of the owning dealer.",
+            "description": "ID of the owning TSP account.",
             "example": 28152
           },
           "login": {
@@ -6540,7 +6540,7 @@
           },
           "hide_device_id": {
             "type": "boolean",
-            "description": "When `true`, the web interface hides device IMEIs from this user. Falls back to `default_hide_device_id` in the dealer's service settings when the user has no value of their own.",
+            "description": "When `true`, the web interface hides device IMEIs from this user. Falls back to `default_hide_device_id` in the TSP's service settings when the user has no value of their own.",
             "example": false
           },
           "mfa_allowed": {
@@ -6694,7 +6694,7 @@
           },
           "hide_device_id": {
             "type": "boolean",
-            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the TSP's service settings drops the user's own value, so the user follows that default again.",
             "example": false
           },
           "activated": {
@@ -6811,7 +6811,7 @@
           },
           "hide_device_id": {
             "type": "boolean",
-            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the TSP's service settings drops the user's own value, so the user follows that default again.",
             "example": false
           },
           "activated": {
@@ -6980,7 +6980,7 @@
           },
           "hide_device_id": {
             "type": "boolean",
-            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the dealer's service settings drops the user's own value, so the user follows that default again.",
+            "description": "Optional. When `true`, the web interface hides device IMEIs from this user. Omitting it on update keeps the current value. A value equal to `default_hide_device_id` in the TSP's service settings drops the user's own value, so the user follows that default again.",
             "example": false
           },
           "activated": {
@@ -7243,7 +7243,7 @@
       "MenuPresetAssignmentAll": {
         "type": "object",
         "title": "default",
-        "description": "Assign the preset as the dealer default, applying to users with no explicit assignment.",
+        "description": "Assign the preset as the default of the TSP account, applying to users with no explicit assignment.",
         "required": [
           "type"
         ],
@@ -7315,7 +7315,7 @@
           },
           "owner": {
             "type": "string",
-            "description": "Who defined the preset. Platform-owned presets are supplied by Navixy and are not editable by the dealer.",
+            "description": "Who defined the preset. Platform-owned presets are supplied by Navixy and are not editable by the TSP.",
             "enum": [
               "dealer",
               "platform"
@@ -7418,7 +7418,7 @@
       "MfaTargetAll": {
         "type": "object",
         "title": "all",
-        "description": "Apply to every user of the dealer.",
+        "description": "Apply to every user of the TSP account.",
         "required": [
           "type"
         ],
@@ -7568,7 +7568,7 @@
           },
           "dealer_id": {
             "type": "integer",
-            "description": "ID of the owning dealer.",
+            "description": "ID of the owning TSP account.",
             "example": 28152
           },
           "owner_name": {

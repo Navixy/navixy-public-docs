@@ -28,13 +28,13 @@ You can download the raw specification as [JSON](https://raw.githubusercontent.c
 
 ## Resource families
 
-Every operation belongs to one of the 10 resource families below. For how dealers, sub-dealers, users, trackers, and plans relate to each other, see [Key concepts](../getting-started.md#key-concepts).
+Every operation belongs to one of the 10 resource families below. For how telematics service providers (TSPs), resellers, users, trackers, and plans relate to each other, see [Key concepts](../getting-started.md#key-concepts).
 
 | Family | Operations for |
 | --- | --- |
 | [Account](account.md) | Session lifecycle and permission checks |
-| [Dealer](dealer/README.md) | Dealer profile, activation codes, and panel settings |
-| [Subpaas](subpaas/README.md) | Sub-dealer accounts and their credentials |
+| [Dealer](dealer/README.md) | TSP account profile, activation codes, and panel settings |
+| [Subpaas](subpaas/README.md) | Reseller accounts and their credentials |
 | [User](user/README.md) | User accounts, balances, menu presets, and multi-factor authentication |
 | [Tracker](tracker.md) | Devices, clones, settings, and plans |
 | [Tariff (plan)](tariff.md) | Service plans and device registration defaults |
@@ -50,7 +50,7 @@ The tables below list every operation grouped by family. Each endpoint links to 
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| [`/panel/account/auth`](account.md#post-panel-account-auth) | POST | Authenticate a dealer and open a panel session. |
+| [`/panel/account/auth`](account.md#post-panel-account-auth) | POST | Authenticate a TSP and open a panel session. |
 | [`/panel/account/get_permissions`](account.md#post-panel-account-get_permissions) | POST | Get the permissions granted to the current session. |
 | [`/panel/account/logout`](account.md#post-panel-account-logout) | POST | End the current session. |
 
@@ -58,11 +58,11 @@ The tables below list every operation grouped by family. Each endpoint links to 
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| [`/panel/dealer/get_info`](dealer/README.md#post-panel-dealer-get_info) | POST | Get the current dealer's profile information. |
+| [`/panel/dealer/get_info`](dealer/README.md#post-panel-dealer-get_info) | POST | Get the profile information of the current TSP account. |
 | [`/panel/dealer/activation_code/create`](dealer/activation_code.md#post-panel-dealer-activation_code-create) | POST | Generate device activation codes. |
 | [`/panel/dealer/activation_code/list`](dealer/activation_code.md#post-panel-dealer-activation_code-list) | POST | List existing activation codes. |
 | [`/panel/dealer/activation_code/update`](dealer/activation_code.md#post-panel-dealer-activation_code-update) | POST | Update the status of activation codes. |
-| [`/panel/dealer/password/update`](dealer/password.md#post-panel-dealer-password-update) | POST | Update the dealer's password. |
+| [`/panel/dealer/password/update`](dealer/password.md#post-panel-dealer-password-update) | POST | Update the password of the TSP account. |
 | [`/panel/dealer/settings/image/upload`](dealer/settings/image.md#post-panel-dealer-settings-image-upload) | POST | Upload a branding image. |
 | [`/panel/dealer/settings/image/delete`](dealer/settings/image.md#post-panel-dealer-settings-image-delete) | POST | Delete a branding image. |
 | [`/panel/dealer/settings/notification/read`](dealer/settings/notification.md#post-panel-dealer-settings-notification-read) | POST | Read notification settings. |
@@ -74,12 +74,12 @@ The tables below list every operation grouped by family. Each endpoint links to 
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| [`/panel/subpaas/list`](subpaas/README.md#post-panel-subpaas-list) | POST | List sub-dealers under the current dealer. |
-| [`/panel/subpaas/read`](subpaas/README.md#post-panel-subpaas-read) | POST | Read a single sub-dealer. |
-| [`/panel/subpaas/create`](subpaas/README.md#post-panel-subpaas-create) | POST | Create a sub-dealer. |
-| [`/panel/subpaas/update`](subpaas/README.md#post-panel-subpaas-update) | POST | Update a sub-dealer. |
-| [`/panel/subpaas/password/change`](subpaas/password.md#post-panel-subpaas-password-change) | POST | Change a sub-dealer's password. |
-| [`/panel/subpaas/session/create`](subpaas/session.md#post-panel-subpaas-session-create) | POST | Open a session as a sub-dealer. |
+| [`/panel/subpaas/list`](subpaas/README.md#post-panel-subpaas-list) | POST | List resellers under the current TSP account. |
+| [`/panel/subpaas/read`](subpaas/README.md#post-panel-subpaas-read) | POST | Read a single reseller. |
+| [`/panel/subpaas/create`](subpaas/README.md#post-panel-subpaas-create) | POST | Create a reseller. |
+| [`/panel/subpaas/update`](subpaas/README.md#post-panel-subpaas-update) | POST | Update a reseller. |
+| [`/panel/subpaas/password/change`](subpaas/password.md#post-panel-subpaas-password-change) | POST | Change a reseller's password. |
+| [`/panel/subpaas/session/create`](subpaas/session.md#post-panel-subpaas-session-create) | POST | Open a session as a reseller. |
 
 ### User
 

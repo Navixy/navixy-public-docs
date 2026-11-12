@@ -25,4 +25,4 @@ These errors come in addition to the [general error codes](../../../../../genera
 
 * 211 - The period is longer than the Navixy platform allows.
 * 217 - The list names trackers that do not exist.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the telematics service provider (TSP) is exceeded.

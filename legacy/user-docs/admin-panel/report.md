@@ -6,7 +6,7 @@ description: >-
 
 # Report
 
-The **Report** page of the Admin Panel provides an easy way to access data on platform usage, including the number of active devices. This allows you to learn how many active devices you and your dealers had during a specific period of time.
+The **Report** page of the Admin Panel provides an easy way to access data on platform usage, including the number of active devices. This allows you to learn how many active devices you and your resellers had during a specific period of time.
 
 <figure><img src=".gitbook/assets/image (1).png" alt="Report page"><figcaption><p>Report page</p></figcaption></figure>
 

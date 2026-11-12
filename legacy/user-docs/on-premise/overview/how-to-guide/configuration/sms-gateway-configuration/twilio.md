@@ -62,7 +62,7 @@ INSERT INTO google.sms_gates_to_dealers (dealer_id, gate_id) VALUES (0, 1);
 ```
 {% endcode %}
 
-`TWILIO_PHONE` stands for the phone number you have leased from Twilio. The first SQL query adds the phone number that will be used in the '**from**' field with Twilio API. The second query one links the SMS gateway with the dealer (PaaS) account.
+`TWILIO_PHONE` stands for the phone number you have leased from Twilio. The first SQL query adds the phone number that will be used in the '**from**' field with Twilio API. The second query one links the SMS gateway with the PaaS account of the telematics service provider.
 
 ### **Incoming messages**
 

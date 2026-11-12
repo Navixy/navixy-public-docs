@@ -80,7 +80,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
 
 * 217 - The list names trackers that do not exist, are blocked, or lack the required tariff feature.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the telematics service provider (TSP) is exceeded.
 
 ***
 
@@ -93,7 +93,7 @@ These errors come in addition to the [general error codes](../../../../general/e
 These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
 
 * 217 - The list names trackers that do not exist, are blocked, or lack the required tariff feature.
-* 221 - The dealer's device limit is exceeded.
+* 221 - The device limit of the TSP is exceeded.
 
 ***
 

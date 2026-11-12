@@ -27,10 +27,10 @@ Uploaded files are stored under `static/paas/<dealer_id>/<type>_<timestamp>.png`
 
 #### Errors
 
-* 201 - Not found in the database - when there are no settings for dealer in the db.
+* 201 - Not found in the database - when there are no settings for the telematics service provider (TSP) account in the db.
 * 233 - No data file - if `file` part not passed.
 * 234 - Invalid data format - if passed `file` with unexpected `mime` type, or if `type` was not sent as a form part.
-* 236 - Feature unavailable due to tariff restrictions - if branding feature disabled for this dealer.
+* 236 - Feature unavailable due to tariff restrictions - if branding feature disabled for this TSP account.
 * 254 - Cannot save file - on some file system errors.
 
 ***
@@ -45,4 +45,4 @@ The image reverts to the platform default for that element.
 
 #### Errors
 
-* 201 - Not found in the database - when there are no settings for a dealer in the db.
+* 201 - Not found in the database - when there are no settings for a TSP account in the db.

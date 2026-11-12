@@ -69,7 +69,7 @@ SELECT * FROM raw_business_data.objects;
 
 The system uses metadata tables to enable proper data isolation and multi-tenant support:
 
-* **Dealer metadata** tracks dealer-to-client relationships and infrastructure parameters
+* **Telematics service provider metadata** tracks which clients belong to each telematics service provider, and infrastructure parameters
 * **Client metadata** maps business and telematics data across schemas
 * **Client-device mapping** ensures telematic data is correctly associated with the right client
 

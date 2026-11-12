@@ -4,7 +4,7 @@ description: API calls on work with users in the admin panel.
 
 # User
 
-In the Navixy Admin Panel, a User refers to the accounts of Organizations or Individuals who are customers of the Dealer (or Sub Dealer). For example, an organization 'ABC Inc.' can be a User with the type "legal\_entity," and John Doe can be a User with the type "individual."
+In the Navixy Admin Panel, a User refers to the accounts of Organizations or Individuals who are customers of the telematics service provider (TSP) or of one of its resellers. For example, an organization 'ABC Inc.' can be a User with the type "legal\_entity," and John Doe can be a User with the type "individual."
 
 > User accounts may have additional sub-accounts, commonly referred to as 'sub-users,' allowing larger organizations to grant access to multiple employees.
 
@@ -20,7 +20,7 @@ The read operations return this flat form, with every legal field present regard
 
 The create and update operations take a different and stricter shape that varies by `legal_type`. It is documented as `UserEditForm` on those two operations below, and the three variants are cumulative: a sole trader is an individual plus registration details, and a legal entity is a sole trader plus a company name and interbranch code. The legal variants also tighten the postal fields, which may be empty for an individual but not for a sole trader or legal entity.
 
-`hide_device_id` behaves unlike the other fields, because the user does not always own its value. A user carries a value of their own only while it differs from `default_hide_device_id` in the dealer's [service settings](../dealer/settings/service.md#service-settings-object); otherwise they follow that default, and follow it again whenever it changes. So sending a value equal to the current default clears the user's own value rather than pinning it, and a read of a user who has no value of their own returns the default. Omitting the field on update leaves whatever the user has.
+`hide_device_id` behaves unlike the other fields, because the user does not always own its value. A user carries a value of their own only while it differs from `default_hide_device_id` in the TSP's [service settings](../dealer/settings/service.md#service-settings-object); otherwise they follow that default, and follow it again whenever it changes. So sending a value equal to the current default clears the user's own value rather than pinning it, and a read of a user who has no value of their own returns the default. Omitting the field on update leaves whatever the user has.
 
 ## Discount Object Structure
 
@@ -54,7 +54,7 @@ _required permissions_: `users: "read"`.
 
 #### Errors
 
-* 201 - Not found in the database - when the user does not exist, is a sub-user, or belongs to another dealer.
+* 201 - Not found in the database - when the user does not exist, is a sub-user, or belongs to another TSP account.
 
 ***
 
@@ -66,7 +66,7 @@ _required permissions_: `users: "update"`.
 
 #### Errors
 
-* 201 - Not found in the database - if the specified user does not exist or belongs to a different dealer.
+* 201 - Not found in the database - if the specified user does not exist or belongs to a different TSP account.
 * 206 - Login already in use - if the specified `login` is used by another user.
 
 ***
@@ -87,7 +87,7 @@ _required permissions_: `users: "corrupt"`.
 
 #### Errors
 
-* 201 - Not found in the database - if the specified user does not exist or belongs to a different dealer.
+* 201 - Not found in the database - if the specified user does not exist or belongs to a different TSP account.
 
 ***
 
@@ -151,7 +151,7 @@ _required permissions_: `users: "read"` and `user_sessions: "create"`.
 
 #### Errors
 
-* 201 - Not found in the database - if the specified user does not exist or belongs to a different dealer.
+* 201 - Not found in the database - if the specified user does not exist or belongs to a different TSP account.
 
 ***
 

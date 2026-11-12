@@ -14,16 +14,16 @@ The function is available in two node fields:
 * `data.items[].value` of an `initiate_attributes` node, where the returned name becomes the value of a calculated attribute.
 * `data.condition` of a `logic` node, where the returned name can be compared with a string.
 
-`geofenceName()` is a paid option, and Navixy enables it for each dealer separately. Read [Availability](#availability) before you add it to a flow.
+`geofenceName()` is a paid option, and Navixy enables it for each telematics service provider (TSP) separately. Read [Availability](#availability) before you add it to a flow.
 
 ## Availability
 
-`geofenceName()` requires the account feature `iot_logic_geofence_search`, which is disabled by default for every dealer. Navixy enables it on request for the dealer that owns your account. Quote the feature name when you ask for it.
+`geofenceName()` requires the account feature `iot_logic_geofence_search`, which is disabled by default for every TSP. Navixy enables it on request for the TSP that owns your account. Quote the feature name when you ask for it.
 
 Three conditions apply to the feature:
 
 * Trial and demo accounts never receive it.
-* A sub-dealer account doesn't inherit it from the parent dealer. Navixy enables it for the sub-dealer directly.
+* A reseller account doesn't inherit it from the parent TSP. Navixy enables it for the reseller directly.
 * No Admin Panel control switches it on. Only Navixy can enable it.
 
 {% hint style="warning" %}
@@ -71,7 +71,7 @@ The function returns the geofence name as a string. It returns `null` in each of
 | `index` is above 11 | The flow saves without an error, and the attribute stays empty for every message |
 | The tag matches no geofence | Including a tag name that doesn't exist in the account |
 | The account holds more than 15,000 geofences and the call passes no tag | See [Accounts with many geofences](#accounts-with-many-geofences) |
-| The dealer doesn't have `iot_logic_geofence_search` | Only in flows saved while the feature was active |
+| The TSP doesn't have `iot_logic_geofence_search` | Only in flows saved while the feature was active |
 
 A `null` result is not distinguishable from a device outside all geofences. When a formula needs a value in both cases, add a fallback with the `?:` operator:
 
@@ -184,7 +184,7 @@ The response names every node that adds the call. When the same formula also has
 
 ### How to handle "Function geofenceName() is not available for your account"
 
-Ask Navixy to enable `iot_logic_geofence_search` for the dealer that owns your account, or remove the call from the node named in the message and save again. `node_ids` gives the node IDs, so a flow editor can mark them.
+Ask Navixy to enable `iot_logic_geofence_search` for the TSP that owns your account, or remove the call from the node named in the message and save again. `node_ids` gives the node IDs, so a flow editor can mark them.
 
 The check reads the text of the node expressions, not the result of running them. Two consequences follow.
 

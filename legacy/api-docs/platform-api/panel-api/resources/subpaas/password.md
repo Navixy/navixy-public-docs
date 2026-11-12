@@ -5,7 +5,7 @@ description: API call to change subpaas password.
 
 # Change password
 
-API call to change the password of a Subdealer (SubPaaS) account.
+API call to change the password of a reseller (SubPaaS) account.
 
 ## API actions
 
@@ -15,7 +15,7 @@ API base path: `panel/subpaas/password`.
 
 _required permissions_: `subpaas: "update"`.
 
-The current password is not required: a parent dealer can reset a sub-dealer's password directly.
+The current password is not required: a parent telematics service provider (TSP) can reset a reseller's password directly.
 
 {% include "../../../../.gitbook/includes/password-requirements.md" %}
 
@@ -26,8 +26,8 @@ The current password is not required: a parent dealer can reset a sub-dealer's p
 #### Errors
 
 * 13 –
-  * The dealer is not paas.
-  * The dealer has different status than `NOT_BLOCKED`.
-  * The dealer's tariff does not allow subpaases.
+  * The TSP account is not paas.
+  * The TSP account has different status than `NOT_BLOCKED`.
+  * The tariff plan of the TSP account does not allow resellers.
   * Found subpaas is in `DELETED` status.
 * 294 - Password was recently used - if `new_password` matches one of the recently used passwords.

@@ -24,7 +24,7 @@ If you plan to use an SMS gateway not listed in this section, verify with your g
 
 To configure an SMS gateway in Navixy, navigate to the **'sms\_gates'** table in the **'google'** database. Here, you'll find all the necessary settings, which are stored in JSON format. Navixy can work with multiple SMS gateways simultaneously, so you can add and update settings for each gateway as needed.
 
-In addition to the 'sms\_gates' table, there is also an 'sms\_gates\_to\_dealers' table that links specific SMS gateways to dealers.
+In addition to the 'sms\_gates' table, there is also an 'sms\_gates\_to\_dealers' table that links specific SMS gateways to telematics service provider accounts.
 
 To see the relevant rows in these tables, use the following commands in MySQL:
 

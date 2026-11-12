@@ -1,5 +1,5 @@
 ---
-description: "Manage your Navixy dealer account: configure the GPS tracking platform, create user accounts, manage devices, and set up billing and reseller plans"
+description: "Run Navixy for your customers: configure the GPS tracking platform, create user accounts, manage devices, and set up billing and reseller plans"
 ---
 
 # Admin Panel

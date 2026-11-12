@@ -7,7 +7,7 @@ description: Mobile-internet settings a SIM needs before a device on it can reac
 
 An access point name, or APN, is the mobile-internet configuration a SIM needs before the device holding it can reach the platform. This resource looks those settings up from a phone number.
 
-The lookup is by number rather than by device, so the number does not have to belong to a registered tracker. Settings are resolved against the dealer that the current account belongs to.
+The lookup is by number rather than by device, so the number does not have to belong to a registered tracker. Settings are resolved against the telematics service provider (TSP) that the current account belongs to.
 
 ## API actions
 

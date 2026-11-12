@@ -118,4 +118,4 @@ This could happen because of several reasons:
 
 1. **The device can’t get a GPS signal because of its location**: Tour device might be in the garage or in underground parking. Check the device installation in the car.
 2. **The GPS antenna of the device does not work**: Check its connection with the device and its placement: the best place is under the windshield.
-3. **GPS module of the device is not working**: We recommend contacting your local dealer to replace the device with a working version.
+3. **GPS module of the device is not working**: We recommend contacting your device supplier to replace the device with a working version.

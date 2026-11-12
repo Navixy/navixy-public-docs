@@ -71,15 +71,15 @@ The assistant is available directly from the left sidebar in the Admin Panel. Se
 With an active Admin Panel session, the assistant can access:
 
 * **Users:** List your users with filtering options, or get detailed information about a specific user including their balance, contacts, and tracker count.
-* **Trackers:** Browse all trackers across your dealer account, filter by user or tariff plan, or get detailed data for a specific device including its connection status and current tariff.
+* **Trackers:** Browse all trackers across your account, filter by user or tariff plan, or get detailed data for a specific device including its connection status and current tariff.
 * **Tariff plans:** Look up available tariff plans with pricing and limits, or get details about a specific plan.
 * **Billing and transactions:** View billing transactions for a user within a date range, or check active tracker history by month.
-* **Dealer account:** Get information about your dealer tariff, limits, available features, and current balance.
+* **Your telematics service provider account:** Get information about its tariff plan, limits, available features, and current balance.
 
 Example prompts:
 
 * "Show me all users with a negative balance."
 * "What tariff is tracker 12345 currently on?"
 * "List all transactions for user john@example.com in March."
-* "What are the limits on our current dealer plan?"
+* "What are the limits on our current tariff plan?"
 * "How many trackers were active last month?"

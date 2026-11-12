@@ -157,7 +157,7 @@
                   },
                   "dealer_id": {
                     "type": "integer",
-                    "description": "Optional. If specified, the API checks that the user belongs to this dealer and returns error 102 if not."
+                    "description": "Optional. If specified, the API checks that the user belongs to this telematics service provider (TSP) account and returns error 102 if not."
                   }
                 },
                 "required": [
@@ -213,7 +213,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Access denied, error code 11, when the dealer is blocked. Error codes 102 wrong login or password, 103 user not activated, 104 logins limit exceeded, and 105 login attempts limit exceeded return the default 400.",
+            "description": "Access denied, error code 11, when the TSP account is blocked. Error codes 102 wrong login or password, 103 user not activated, 104 logins limit exceeded, and 105 login attempts limit exceeded return the default 400.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -687,7 +687,7 @@
           "Users"
         ],
         "summary": "Read user settings",
-        "description": "Return the current user's settings.\n\n`file_storage_settings`, `balance_alert_settings`, `first_user_balance_warning_period`, and `second_user_balance_warning_period` are **absent entirely** unless the caller holds the `admin` right, rather than merely read-only.\n\nThe `settings` object is filtered by the dealer's GIS package before being returned, so some fields may be absent or null on platforms with a restricted package.\n\nAlso accepts GET with the same parameters as query-string values.",
+        "description": "Return the current user's settings.\n\n`file_storage_settings`, `balance_alert_settings`, `first_user_balance_warning_period`, and `second_user_balance_warning_period` are **absent entirely** unless the caller holds the `admin` right, rather than merely read-only.\n\nThe `settings` object is filtered by the GIS package of the telematics service provider (TSP) before being returned, so some fields may be absent or null on platforms with a restricted package.\n\nAlso accepts GET with the same parameters as query-string values.",
         "operationId": "userSettingsRead",
         "responses": {
           "200": {
@@ -3456,7 +3456,7 @@
           "Billing"
         ],
         "summary": "List payment systems",
-        "description": "List the payment systems available to the current user.\n\nOnly systems enabled for the user's dealer and allowed for the user's legal type are returned, so an account with none configured gets an empty list rather than an error.\n\nCallable with an empty body. Also accepts GET.\n\nRequires the `payment_create` right.",
+        "description": "List the payment systems available to the current user.\n\nOnly systems enabled for the user's telematics service provider (TSP) and allowed for the user's legal type are returned, so an account with none configured gets an empty list rather than an error.\n\nCallable with an empty body. Also accepts GET.\n\nRequires the `payment_create` right.",
         "operationId": "paymentSystemList",
         "responses": {
           "200": {
@@ -3587,7 +3587,7 @@
           "Billing"
         ],
         "summary": "List subscriptions",
-        "description": "List the active 2Checkout subscriptions, meaning renewals, of the current user.\n\n2Checkout was formerly Avangate, which is where the path segment comes from.\n\n**Returns error 201 when 2Checkout is not configured for the caller's dealer**, which is the usual outcome on a platform that does not use it.\n\nCallable with an empty body. Also accepts GET.\n\nRequires the `payment_create` right.",
+        "description": "List the active 2Checkout subscriptions, meaning renewals, of the current user.\n\n2Checkout was formerly Avangate, which is where the path segment comes from.\n\n**Returns error 201 when 2Checkout is not configured for the caller's telematics service provider (TSP)**, which is the usual outcome on a platform that does not use it.\n\nCallable with an empty body. Also accepts GET.\n\nRequires the `payment_create` right.",
         "operationId": "subscriptionAvangateList",
         "responses": {
           "200": {
@@ -3651,7 +3651,7 @@
           "Billing"
         ],
         "summary": "List plans",
-        "description": "List the device plans available to the current user.\n\nPlans come from the user's dealer when that dealer is the default dealer or a PaaS dealer, and from the parent dealer otherwise. Only plans allowed for the user's legal type are listed.\n\nCallable with an empty body. Also accepts GET.",
+        "description": "List the device plans available to the current user.\n\nPlans come from the user's telematics service provider (TSP) when that TSP is the default TSP or has the PaaS contract type, and from the parent TSP otherwise. Only plans allowed for the user's legal type are listed.\n\nCallable with an empty body. Also accepts GET.",
         "operationId": "tariffList",
         "responses": {
           "200": {
@@ -3765,7 +3765,7 @@
           "Billing"
         ],
         "summary": "Change tracker plan",
-        "description": "Move a tracker from its current plan to the plan given by `tariff_id`.\n\nThe change is allowed only when all of the following hold: the tracker belongs to the user and is not a clone; the last change was more than the freeze period ago, 30 days by default; the new plan differs from the current one; both plans belong to the user's effective dealer; the new plan is active; both plans are in the same group; the new plan is for trackers; and the new plan is available to the user's legal type.\n\nWhen the last change was too recent but the current plan has an `early_change_price`, the change proceeds and that price is charged. Without one it fails with error 240.\n\n**Master users only.** A sub-user gets error 13, which the published error list does not mention.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
+        "description": "Move a tracker from its current plan to the plan given by `tariff_id`.\n\nThe change is allowed only when all of the following hold: the tracker belongs to the user and is not a clone; the last change was more than the freeze period ago, 30 days by default; the new plan differs from the current one; both plans belong to the user's effective telematics service provider (TSP); the new plan is active; both plans are in the same group; the new plan is for trackers; and the new plan is available to the user's legal type.\n\nWhen the last change was too recent but the current plan has an `early_change_price`, the change proceeds and that price is charged. Without one it fails with error 240.\n\n**Master users only.** A sub-user gets error 13, which the published error list does not mention.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
         "operationId": "tariffTrackerChange",
         "requestBody": {
           "required": true,
@@ -10318,7 +10318,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 211: the requested time span is too big. Error 217: one of the given trackers does not exist, is blocked, or lacks the required plan features. Error 221: the device limit set for the user's dealer has been exceeded.",
+            "description": "Error 211: the requested time span is too big. Error 217: one of the given trackers does not exist, is blocked, or lacks the required plan features. Error 221: the device limit set for the user's TSP has been exceeded.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -12357,8 +12357,8 @@
         "tags": [
           "Account and platform"
         ],
-        "summary": "Get dealer UI config",
-        "description": "Return the branding and interface configuration of a dealer: maps, default map position, currency, logos, wallpapers, locale, and the demo account credentials.\n\n**No authentication is required.** This is how a monitoring interface finds out how to present itself before anyone has logged in. Identify the dealer either by `domain`, or by `hash` when a user session already exists.",
+        "summary": "Get TSP UI config",
+        "description": "Return the branding and interface configuration of a telematics service provider (TSP): maps, default map position, currency, logos, wallpapers, locale, and the demo account credentials.\n\n**No authentication is required.** This is how a monitoring interface finds out how to present itself before anyone has logged in. Identify the TSP either by `domain`, or by `hash` when a user session already exists.",
         "operationId": "dealerGetUiConfig",
         "security": [],
         "requestBody": {
@@ -12370,11 +12370,11 @@
                 "properties": {
                   "domain": {
                     "type": "string",
-                    "description": "The dealer's monitoring interface domain, such as `panel.navixy.com`."
+                    "description": "The TSP's monitoring interface domain, such as `panel.navixy.com`."
                   },
                   "hash": {
                     "type": "string",
-                    "description": "A user session hash, used instead of `domain` to identify the dealer when a session exists."
+                    "description": "A user session hash, used instead of `domain` to identify the TSP when a session exists."
                   }
                 }
               }
@@ -12383,7 +12383,7 @@
         },
         "responses": {
           "200": {
-            "description": "The dealer configuration",
+            "description": "The TSP configuration",
             "content": {
               "application/json": {
                 "schema": {
@@ -12399,15 +12399,15 @@
                     },
                     "dealer": {
                       "type": "object",
-                      "description": "Identity of the dealer.",
+                      "description": "Identity of the TSP account. In the API, a TSP account is called a dealer, so its methods and fields use the word `dealer`.",
                       "properties": {
                         "id": {
                           "type": "integer",
-                          "description": "Dealer ID."
+                          "description": "ID of the TSP account."
                         },
                         "ui_domain": {
                           "type": "string",
-                          "description": "Domain of the dealer monitoring interface."
+                          "description": "Domain of the TSP monitoring interface."
                         },
                         "company_url": {
                           "type": "string",
@@ -12423,19 +12423,19 @@
                         "string",
                         "null"
                       ],
-                      "description": "When the demo for this dealer ends. Null when the dealer is not on a trial plan."
+                      "description": "When the demo for this TSP ends. Null when the TSP is not on a trial plan."
                     },
                     "allow_branding": {
                       "type": "boolean",
-                      "description": "True when the dealer may replace the platform branding on the web interface."
+                      "description": "True when the TSP may replace the platform branding on the web interface."
                     },
                     "premium_gis": {
                       "type": "boolean",
-                      "description": "True when the dealer has the Premium GIS package."
+                      "description": "True when the TSP has the Premium GIS package."
                     },
                     "features": {
                       "type": "array",
-                      "description": "Features allowed for this dealer. See the dealer features table on the page.",
+                      "description": "Features allowed for this TSP account. See the features table on the page.",
                       "items": {
                         "type": "string",
                         "enum": [
@@ -12497,7 +12497,7 @@
                     },
                     "redirect_to": {
                       "type": "string",
-                      "description": "Where the caller should be sent instead, when the dealer is configured to redirect. Absent when there is no redirect."
+                      "description": "Where the caller should be sent instead, when the TSP is configured to redirect. Absent when there is no redirect."
                     }
                   }
                 }
@@ -12509,7 +12509,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "404": {
-            "description": "Error 12: no dealer was found for the given domain or hash. Error 201: not found in the database.",
+            "description": "Error 12: no TSP account was found for the given domain or hash. Error 201: not found in the database.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -17172,7 +17172,7 @@
           "Tracking services"
         ],
         "summary": "Read APN settings",
-        "description": "Look up the mobile-internet APN settings for a phone number, so a device on that SIM can be configured to reach the platform.\n\nThe lookup is by number, not by tracker: the number does not have to belong to a registered device. Settings are resolved against the dealer the current account belongs to.\n\nAlso accepts GET with the same parameters as query-string values.",
+        "description": "Look up the mobile-internet APN settings for a phone number, so a device on that SIM can be configured to reach the platform.\n\nThe lookup is by number, not by tracker: the number does not have to belong to a registered device. Settings are resolved against the telematics service provider (TSP) the current account belongs to.\n\nAlso accepts GET with the same parameters as query-string values.",
         "operationId": "apnSettingsRead",
         "requestBody": {
           "required": true,
@@ -18868,7 +18868,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 217: one or more of the tracker IDs does not exist or belongs to another user. Error 221: the device limit set for the account's dealer has been exceeded.",
+            "description": "Error 217: one or more of the tracker IDs does not exist or belongs to another user. Error 221: the device limit set for the account's TSP has been exceeded.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -22363,7 +22363,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the dealer's device limit is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the new device's tariff is not compatible with the account's legal type. Error 226: unknown ICCID, plugin specific. Error 227: the activation code is unknown or already used, plugin specific. Error 258: no bundle for this device ID, plugin specific.",
+            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the device limit of the TSP is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the new device's tariff is not compatible with the account's legal type. Error 226: unknown ICCID, plugin specific. Error 227: the activation code is unknown or already used, plugin specific. Error 258: no bundle for this device ID, plugin specific.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -22449,7 +22449,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 13: the user lacks the right. Error 201: no bundle with this IMEI. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the dealer's device limit is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID. Error 227: the activation code is unknown or already used.",
+            "description": "Error 13: the user lacks the right. Error 201: no bundle with this IMEI. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the device limit of the TSP is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID. Error 227: the activation code is unknown or already used.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -22648,7 +22648,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the dealer's device limit is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID, plugin specific. Error 258: no bundle for this device ID, plugin specific. Error 266: the device is not activated yet.",
+            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the device limit of the TSP is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID, plugin specific. Error 258: no bundle for this device ID, plugin specific. Error 266: the device is not activated yet.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -22724,7 +22724,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 13: the user lacks the right. Error 201: no bundle with this IMEI. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the dealer's device limit is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID. Error 266: the device is not activated yet.",
+            "description": "Error 13: the user lacks the right. Error 201: no bundle with this IMEI. Error 204: the group does not exist. Error 220: unknown device model. Error 221: the device limit of the TSP is exceeded. Error 222: the plugin was not found or does not support this model. Error 223: the phone number is already in use. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type. Error 226: unknown ICCID. Error 266: the device is not activated yet.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -24595,7 +24595,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 211: the period is longer than the platform allows. Error 217: the list names trackers that do not exist. Error 221: the dealer's device limit is exceeded.",
+            "description": "Error 211: the period is longer than the platform allows. Error 217: the list names trackers that do not exist. Error 221: the device limit of the TSP is exceeded.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -24822,7 +24822,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 221: the dealer's device limit is exceeded. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type.",
+            "description": "Error 13: the user lacks the right. Error 204: the group does not exist. Error 221: the device limit of the TSP is exceeded. Error 224: the device ID is already registered. Error 225: the tariff is not compatible with the account's legal type.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -25218,7 +25218,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 217: the list names trackers that do not exist, are blocked, or lack the required tariff feature. Error 221: the dealer's device limit is exceeded.",
+            "description": "Error 217: the list names trackers that do not exist, are blocked, or lack the required tariff feature. Error 221: the device limit of the TSP is exceeded.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -25409,7 +25409,7 @@
             "$ref": "#/components/responses/ResponseError"
           },
           "403": {
-            "description": "Error 217: the list names trackers that do not exist, are blocked, or lack the required tariff feature. Error 221: the dealer's device limit is exceeded.",
+            "description": "Error 217: the list names trackers that do not exist, are blocked, or lack the required tariff feature. Error 221: the device limit of the TSP is exceeded.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -29265,7 +29265,7 @@
     "schemas": {
       "UserSettings": {
         "type": "object",
-        "description": "A user's locale, display, and provider preferences. Filtered by the dealer's GIS package before being returned, so a field may be absent on a restricted package.",
+        "description": "A user's locale, display, and provider preferences. Filtered by the GIS package of the telematics service provider (TSP) before being returned, so a field may be absent on a restricted package.",
         "properties": {
           "locale": {
             "type": "string",
@@ -30636,7 +30636,7 @@
       },
       "PaymentSystem": {
         "type": "object",
-        "description": "A payment system available to the user, with the settings its dealer configured.\n\nThe object is open: a payment system may return further properties specific to its type. `prices`, a map of product code to price, appears for `ios_inapp`. Stripe adds the `auto_payment_min`, `auto_payment_threshold_min` and `auto_payment_monthly_min` limits. Yandex adds `merchant_receipt_required` and, when that is set, `merchant_receipt`.",
+        "description": "A payment system available to the user, with the settings its telematics service provider (TSP) configured.\n\nThe object is open: a payment system may return further properties specific to its type. `prices`, a map of product code to price, appears for `ios_inapp`. Stripe adds the `auto_payment_min`, `auto_payment_threshold_min` and `auto_payment_monthly_min` limits. Yandex adds `merchant_receipt_required` and, when that is set, `merchant_receipt`.",
         "properties": {
           "type": {
             "type": "string",
@@ -30648,7 +30648,7 @@
           },
           "account": {
             "type": "string",
-            "description": "Optional. The dealer's account in the payment system, which is the eshopId for RBK and the merchant code for 2Checkout."
+            "description": "Optional. The TSP's account in the payment system, which is the eshopId for RBK and the merchant code for 2Checkout."
           },
           "currency": {
             "type": "string",
@@ -30820,7 +30820,7 @@
           },
           "dealer_id": {
             "type": "integer",
-            "description": "ID of the dealer."
+            "description": "ID of the TSP account."
           },
           "tracker_id": {
             "type": "integer",
@@ -33381,7 +33381,7 @@
       },
       "DealerUiSettings": {
         "type": "object",
-        "description": "How a dealer monitoring interface should present itself. Returned to an unauthenticated caller, so it carries branding and defaults but no account data.",
+        "description": "How the monitoring interface of a TSP should present itself. Returned to an unauthenticated caller, so it carries branding and defaults but no account data.",
         "properties": {
           "domain": {
             "type": "string",
@@ -33405,7 +33405,7 @@
           },
           "maps": {
             "type": "array",
-            "description": "Map types available to this dealer users.",
+            "description": "Map types available to the users of this TSP.",
             "items": {
               "type": "string"
             }
@@ -33440,7 +33440,7 @@
           },
           "currency": {
             "type": "string",
-            "description": "The dealer currency, as an ISO 4217 code."
+            "description": "The TSP currency, as an ISO 4217 code."
           },
           "payment_link": {
             "type": [
@@ -33508,11 +33508,11 @@
           },
           "allow_registration": {
             "type": "boolean",
-            "description": "True when self-registration is available to this dealer users."
+            "description": "True when self-registration is available to the users of this TSP."
           },
           "show_mobile_apps": {
             "type": "boolean",
-            "description": "True when mobile applications are offered to this dealer users."
+            "description": "True when mobile applications are offered to the users of this TSP."
           },
           "show_call_notifications": {
             "type": "boolean",
