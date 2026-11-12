@@ -51,6 +51,6 @@ This section answers common questions about IoT Logic flows, grouped by node. Ea
 * [Output Endpoint nodes in command-only flows](output-endpoint-in-command-only-flows.md)
 * [Two branches into one Output Endpoint node](two-branches-into-one-output-endpoint.md)
 
-## Still need a hand?
+## Question not answered here?
 
 If the answer isn't here, write to [support@navixy.com](mailto:support@navixy.com). Questions that recur become pages in this section.

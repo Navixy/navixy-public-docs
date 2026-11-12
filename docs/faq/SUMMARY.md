@@ -55,6 +55,8 @@
   * [Format of messages that IoT Logic flows send](products/iot-logic/format-of-messages-at-destination.md)
   * [Output Endpoint nodes in command-only flows](products/iot-logic/output-endpoint-in-command-only-flows.md)
   * [Two branches into one Output Endpoint node](products/iot-logic/two-branches-into-one-output-endpoint.md)
+* [Tracking](products/tracking/README.md)
+  * [Parked vehicle shows Moving](products/tracking/parked-vehicle-shows-moving.md)
 
 ## Platform
 

@@ -8,10 +8,10 @@ tags:
 
 # ERM
 
-Answers to common questions about ERM devices of the Starlink line. Each page is one question and its answer.
+This section answers common questions about ERM devices of the Starlink line. Each page is one question and its answer.
 
 * [How to control and read digital inputs and outputs on Starlink devices](how-to-control-and-read-digital-inputs-outputs-on-starlink-devices.md)
 
-## Still need a hand?
+## Question not answered here?
 
 If the answer isn't here, write to [support@navixy.com](mailto:support@navixy.com). Questions that recur become pages in this section.
