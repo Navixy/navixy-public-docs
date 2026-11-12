@@ -1,11 +1,11 @@
 ---
-title: Static navigation on Teltonika devices
+title: Teltonika device position doesn't change
 description: In static navigation mode, a Teltonika device keeps sending data but stops updating its position. Turn the mode off or change its source in the device configuration
 tags:
   - troubleshooting
 ---
 
-# Static navigation on Teltonika devices
+# Teltonika device position doesn't change
 
 ## Question
 

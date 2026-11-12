@@ -2,7 +2,7 @@
 title: Two branches into one Webhook node
 description: "Two branches can reach one Webhook node when only one of them runs for any message, such as then and else."
 tags:
-  - troubleshooting
+  - reference
 ---
 
 # Two branches into one Webhook node

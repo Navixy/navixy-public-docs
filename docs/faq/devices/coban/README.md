@@ -10,7 +10,7 @@ tags:
 
 This section answers common questions about Coban devices, such as the Coban 403. Each page is one question and its answer.
 
-* [Coban devices: SMS and GPRS command differences](coban-devices-sms-and-gprs-differences.md)
+* [Coban output works by SMS but not from server](coban-devices-sms-and-gprs-differences.md)
 
 ## Question not answered here?
 

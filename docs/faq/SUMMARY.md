@@ -10,8 +10,8 @@
 ## Devices
 
 * [Jimi IoT](devices/jimi-iot/README.md)
-  * [Camera light indicators (JC261)](devices/jimi-iot/camera-light-indicators-jc261.md)
-  * [GSENSOR calibration failure on JC261](devices/jimi-iot/gsensor-calibration-failure-on-jc261.md)
+  * [JC261 blue LED blinks without sending data](devices/jimi-iot/camera-light-indicators-jc261.md)
+  * [JC261 reports failed GSENSOR calibration](devices/jimi-iot/gsensor-calibration-failure-on-jc261.md)
   * [HVIDEO vs EVIDEO commands](devices/jimi-iot/hvideo-vs-evideo-commands.md)
 * [Howen](devices/howen/README.md)
   * [MC40-02 Howen event sensitivity](devices/howen/mc40-02-howen-event-sensitivity.md)
@@ -19,12 +19,12 @@
 * [Teltonika](devices/teltonika/README.md)
   * [FMC150 (QJIBO/QKIBO) input and output capabilities](devices/teltonika/fmc150-qjibo-qkibo-input-and-output-capabilities.md)
   * [Codec 8 Extended for BLE sensors on Teltonika devices](devices/teltonika/codec-8-extended-for-ble-sensors.md)
-  * [Static navigation on Teltonika devices](devices/teltonika/static-navigation-on-teltonika-devices.md)
+  * [Teltonika device position doesn't change](devices/teltonika/static-navigation-on-teltonika-devices.md)
   * [Teltonika I/O elements in Navixy](devices/teltonika/teltonika-io-elements-in-navixy.md)
 * [ERM](devices/erm/README.md)
   * [How to control and read digital inputs and outputs on Starlink devices](devices/erm/how-to-control-and-read-digital-inputs-outputs-on-starlink-devices.md)
 * [Coban](devices/coban/README.md)
-  * [Coban devices: SMS and GPRS command differences](devices/coban/coban-devices-sms-and-gprs-differences.md)
+  * [Coban output works by SMS but not from server](devices/coban/coban-devices-sms-and-gprs-differences.md)
 
 ## Products
 
@@ -62,4 +62,4 @@
 
 * [Navixy SMS gateway](platform/navixy-sms-gateway.md)
 * [Ways to get raw device data](platform/typical-use-cases-for-raw-data-export.md)
-* [Why GPS devices stop transmitting](platform/determining-why-a-device-stopped-transmitting.md)
+* [GPS device stops sending data](platform/determining-why-a-device-stopped-transmitting.md)

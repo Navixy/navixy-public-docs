@@ -2,7 +2,7 @@
 title: IoT Logic formulas that can't be calculated
 description: "When a formula can't be calculated, IoT Logic skips that attribute for the message and the rest of the flow continues."
 tags:
-  - troubleshooting
+  - reference
 ---
 
 # IoT Logic formulas that can't be calculated

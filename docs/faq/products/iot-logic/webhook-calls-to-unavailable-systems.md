@@ -2,7 +2,7 @@
 title: Webhook calls to unavailable systems
 description: "When the receiving system is down, the IoT Logic flow continues and the message still reaches its destination."
 tags:
-  - troubleshooting
+  - reference
 ---
 
 # Webhook calls to unavailable systems

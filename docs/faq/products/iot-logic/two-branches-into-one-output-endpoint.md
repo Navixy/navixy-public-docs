@@ -2,7 +2,7 @@
 title: Two branches into one Output Endpoint node
 description: "Two branches can reach one Output Endpoint node when only one of them runs for any message."
 tags:
-  - troubleshooting
+  - reference
 ---
 
 # Two branches into one Output Endpoint node

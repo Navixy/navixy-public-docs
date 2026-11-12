@@ -11,7 +11,7 @@ This section answers common questions about Teltonika devices, such as the FMC15
 
 * [FMC150 (QJIBO/QKIBO) input and output capabilities](fmc150-qjibo-qkibo-input-and-output-capabilities.md)
 * [Codec 8 Extended for BLE sensors on Teltonika devices](codec-8-extended-for-ble-sensors.md)
-* [Static navigation on Teltonika devices](static-navigation-on-teltonika-devices.md)
+* [Teltonika device position doesn't change](static-navigation-on-teltonika-devices.md)
 * [Teltonika I/O elements in Navixy](teltonika-io-elements-in-navixy.md)
 
 ## Question not answered here?

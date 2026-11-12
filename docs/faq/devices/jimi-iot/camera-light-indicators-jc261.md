@@ -1,7 +1,7 @@
 ---
 hidden: true
 noIndex: true
-title: Camera light indicators (JC261)
+title: JC261 blue LED blinks without sending data
 description: >-
   Diagnose JC261 LED status: red indicates power, green shows GPS lock, and
   blinking blue signals missing cellular connectivity. Verify APN configuration
@@ -9,7 +9,7 @@ tags:
   - troubleshooting
 ---
 
-# Camera light indicators (JC261)
+# JC261 blue LED blinks without sending data
 
 ## Question
 

@@ -1,7 +1,7 @@
 ---
 hidden: true
 noIndex: true
-title: 'Coban devices: SMS and GPRS command differences'
+title: Coban output works by SMS but not from server
 description: >-
   Why a Coban output command works over SMS but not from the server: the two
   channels use different command formats, and what to send over GPRS instead.
@@ -9,7 +9,7 @@ tags:
   - troubleshooting
 ---
 
-# Coban devices: SMS and GPRS command differences
+# Coban output works by SMS but not from server
 
 ## Question
 

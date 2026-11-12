@@ -2,7 +2,7 @@
 title: Same attribute name in two IoT Logic flows
 description: "Two IoT Logic flows can calculate the same attribute name only if they share no devices."
 tags:
-  - troubleshooting
+  - reference
 ---
 
 # Same attribute name in two IoT Logic flows
