@@ -98,6 +98,7 @@
   * [SMS commands are not delivered](admin-panel/sms-commands-are-not-delivered.md)
   * [Troubleshoot custom domain issues](admin-panel/troubleshoot-custom-domain-issues.md)
   * [Blocking Tariff Plan - Billing Question](admin-panel/blocking-tariff-plan-billing-question.md)
+  * [AI Assistant missing from user interface](admin-panel/ai-assistant-missing-from-user-interface.md)
 * [On-Premise](on-premise/README.md)
   * [What do I need to have my own Navixy instance?](on-premise/prerequisites.md)
   * [On-Premise licensing FAQ](on-premise/on-premise-licensing-faq.md)
