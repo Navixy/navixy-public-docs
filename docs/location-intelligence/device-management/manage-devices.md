@@ -20,7 +20,7 @@ Each task on this page needs a role that allows it. For example, to rename a dev
 The **Devices** list in Device management shows every device in your workspace. Search finds a device by its name, its device identifier, or the phone number of its SIM card. You can enter a phone number with spaces, brackets, dashes, or a plus sign.
 
 1. Go to **Device management**.
-2. In the search field, enter the name of the device, its IMEI, or its phone number.
+2. In the search field, enter the name of the device, its device identifier, such as the IMEI, or its phone number.
 3. Click the device.
    The device page opens.
 

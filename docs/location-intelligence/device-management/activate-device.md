@@ -21,7 +21,7 @@ Choose automatic setup when the SIM card can receive SMS. Choose manual setup wh
 **Before you start**, prepare the following:
 
 - A GPS device of a supported model, with its SIM card installed and the device powered on
-- The IMEI of the device
+- The IMEI of the device, or the device factory ID of a Suntech device
 - A SIM card with mobile data
 - The APN of the mobile carrier of the SIM card, with the APN username and password if the carrier uses them
 - For automatic setup: the phone number of the SIM card, which must be able to receive SMS
@@ -109,13 +109,20 @@ The **Details** step of manual setup has no phone number and no APN fields. Inst
 2. In **IMEI**, enter the 15-digit IMEI of the device.
    The IMEI is printed on the device and on its box.
 
-You set the server address and the port on the device in [4. Activate the device](#id-4.-activate-the-device). The device page shows them again after activation.
+You set the server address and the port on the device in [4. Activate the device](#id-4.-activate-the-device). The device page shows them again after activation. The port depends on the model.
 
 If the server address doesn't load, the form shows "Failed to load the server address." You can still activate the device. If the form shows "The server address isn't available yet.", your installation of Navixy doesn't publish a server address yet, and you can't set up the device by hand. Use automatic setup, or ask the people who set up your workspace.
 
+### Enter the details of a Suntech device
+
+A Suntech device reports its device factory ID instead of the IMEI. For a Suntech model, the **Details** step has a **Device factory ID** field in place of **IMEI**, with both setups. The other fields are the same.
+
+- In **Device factory ID**, enter the factory ID of the device: 6 to 10 digits, for example `205952162`. The device factory ID is printed on the device label.
+- If you leave **Name (optional)** empty, Navixy names the device after its model and device factory ID.
+
 ### Check the IMEI
 
-Check the IMEI before you click **Activate**. To correct a wrong IMEI later, you cancel the activation and activate the device again: see [Cancel the activation](#cancel-the-activation).
+Check the IMEI, or the device factory ID of a Suntech device, before you click **Activate**. To correct a wrong IMEI later, you cancel the activation and activate the device again: see [Cancel the activation](#cancel-the-activation).
 
 ## 4. Activate the device
 
@@ -126,7 +133,7 @@ Check the IMEI before you click **Activate**. To correct a wrong IMEI later, you
 
 If you started from an asset, Navixy shows the same message and closes the panel. No device page opens, and the **Device** field of the asset shows the new device. If the field already had a device, the new device replaces it. Click **Save** to save the asset. To follow the activation, go to **Device management** and click the device.
 
-If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device. For example, an IMEI that doesn't have 15 digits shows "Use 15 digits". A phone number that is too short or too long shows "Use 5 to 20 digits". If an APN field has an error, **GPRS settings** expands so you can see it.
+If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device. For example, an IMEI that doesn't have 15 digits shows "Use 15 digits", and a device factory ID that doesn't have 6 to 10 digits shows "Use 6 to 10 digits". A phone number that is too short or too long shows "Use 5 to 20 digits". If an APN field has an error, **GPRS settings** expands so you can see it.
 
 {% hint style="warning" %}
 **If Navixy refuses the activation**
@@ -135,6 +142,7 @@ Two messages mean that the phone number or the device is already in use. Each sh
 
 - "This phone number is already in use": a device already uses this SIM card, in this workspace or in any other. Check the phone number. If the SIM card moved from another device in your workspace, deactivate that device or cancel its activation first. The form checks the number when you leave the **Phone number** or the **IMEI** field, so this message can show before you click **Activate**.
 - "A device with this IMEI is already on the platform": the IMEI belongs to a device that is already connected, to a device in another workspace, or to a device that was deactivated or whose activation was canceled. Check the IMEI on the device label.
+- "A device with this factory ID is already on the platform": the device factory ID of a Suntech device belongs to a device that is already on the platform, in any workspace and with any status, also one that is still awaiting connection. Check the device factory ID on the device label.
 {% endhint %}
 
 ## 5. Wait for the device to connect

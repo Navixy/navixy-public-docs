@@ -14,11 +14,11 @@ A GPS device that you install in a vehicle sends nothing to your workspace until
 
 ## What you can do here
 
-**Connect a device in one form, by SMS or by hand.** You choose the model and enter the IMEI of the device. With automatic setup, you also enter the phone number of the SIM card and the APN of the mobile carrier. Navixy then sends the device an SMS with its settings. With manual setup, Navixy shows the server address and the port, and you set them on the device yourself, together with the APN.
+**Connect a device in one form, by SMS or by hand.** You choose the model and enter the identifier of the device: the IMEI, or the device factory ID of a Suntech device. With automatic setup, you also enter the phone number of the SIM card and the APN of the mobile carrier. Navixy then sends the device an SMS with its settings. With manual setup, Navixy shows the server address and the port, and you set them on the device yourself, together with the APN.
 
 **Follow each activation until the device connects.** The device page shows the activation progress, and the device list marks each device that is still awaiting connection. If the device doesn't connect, the page lists the possible causes. For a device with automatic setup, you can also send the configuration SMS again from the page.
 
-**See every device in one list.** For each device, the list shows the model, the device identifier, the phone number, and the time when the device last sent data. Search finds a device by its name, its IMEI, or the phone number of its SIM card.
+**See every device in one list.** For each device, the list shows the model, the device identifier, the phone number, and the time when the device last sent data. Search finds a device by its name, its device identifier, or the phone number of its SIM card.
 
 **Activate a device from its asset.** Start the activation from the **Device** field of the asset that the device will belong to. You activate the device and assign it to the asset in one step.
 
@@ -32,16 +32,16 @@ A device is the hardware. The thing that the device is fitted to, such as a vehi
 
 * **Device:** a piece of tracking hardware, such as a GPS device, a sensor, or a beacon.
 * **Device model:** the product of one vendor, such as Teltonika FMB920. The model defines how Navixy reads the data of the device and which settings the configuration SMS sends.
-* **Device identifier:** the number that the device reports to Navixy, printed on its label. For a GPS device with a SIM card, the identifier is the IMEI, a 15-digit number. Two devices can't have the same identifier, because Navixy uses it to recognize which device sent the data.
+* **Device identifier:** the number that the device reports to Navixy, printed on its label. For most GPS devices, the identifier is the IMEI, a 15-digit number. For a Suntech device, it's the device factory ID, 6 to 10 digits. Two devices can't have the same identifier, because Navixy uses it to recognize which device sent the data.
 * **Activation:** connecting a device to Navixy. Navixy registers the device and waits for its first data. The device gets its settings in one of two ways. With automatic setup, Navixy sends them in a configuration SMS. With manual setup, you set them on the device. You activate a device once.
 
 ## How device data reaches Navixy
 
-A device connects to Navixy over mobile data and reports its IMEI. Navixy accepts data only from devices that it knows and refuses data from an unknown device. Navixy then processes the data in the [IoT Logic](../iot-logic/README.md) flows that the device is in. Navixy also shows the data on the asset that the device is assigned to.
+A device connects to Navixy over mobile data and reports its device identifier. Navixy accepts data only from devices that it knows and refuses data from an unknown device. Navixy then processes the data in the [IoT Logic](../iot-logic/README.md) flows that the device is in. Navixy also shows the data on the asset that the device is assigned to.
 
 A device decides on its own when to send a position, for example after a set time, a set distance, or a change of direction. Many devices also have sleep or power-saving modes, in which they turn off satellite positioning or the mobile data connection between reports. These settings are in the configuration of the device, not in Navixy. When Navixy activates a Teltonika device by SMS, it sets most models to report every 60 seconds while moving and every 180 seconds while stopped. With manual setup, Navixy doesn't change these settings.
 
-Navixy reads the time in a message as UTC and doesn't adjust it for each device. Keep the clock of the device on UTC: a device set to local time shows its positions and readings shifted by its time zone offset. The configuration SMS doesn't set the clock of the device.
+Navixy reads the time in a message as UTC and doesn't adjust it for each device. Keep the clock of the device on UTC: a device set to local time shows its positions and readings shifted by its time zone offset. If the time in a message is more than 70 minutes ahead of the time when Navixy receives it, or more than a year behind, Navixy replaces it with the time of receipt. The configuration SMS doesn't set the clock of the device.
 
 A device can keep data in its internal memory, for example while it has no coverage, and send it later. Navixy accepts this stored data, whatever its age. The first data that arrives completes the activation, even when that data is old.
 
