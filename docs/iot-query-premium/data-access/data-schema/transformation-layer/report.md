@@ -26,7 +26,7 @@ Navixy reads the positions of a device in time order and splits them into moving
 * A position counts as moving when the speed is more than 3 km/h. `detection_method` is `speed` for a trip and empty for a stop.
 * A standing period of at least 5 minutes is a stop. A shorter standing period stays part of the trip and counts as its parked time.
 * A gap of more than 15 minutes between two positions ends the current trip or stop.
-* A trip shorter than 50 m isn't recorded as a trip.
+* A trip shorter than 100 m isn't recorded as a trip.
 
 Trip counts in IoT Query Premium can differ slightly from [Reports](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/reports) in Location Intelligence for the same asset.
 

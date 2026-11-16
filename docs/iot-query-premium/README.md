@@ -59,7 +59,7 @@ Start with [Getting started](getting-started.md). It takes you from getting IoT 
 ## Section contents
 
 * [Getting started](getting-started.md): Get IoT Query Premium, receive your connection details, and run your first query.
-* [Private Telematics Lakehouse](data-access/): Learn where the data comes from, whose data you can see, and how often it is updated.
+* [Private Telematics Lakehouse](data-access/): Learn where the data comes from, whose data you can see, how often it is updated, and how long it is kept.
   * [Connection setup](data-access/connection-setup.md): Find the connection details and run a first query.
   * [Data schema](data-access/data-schema/): Find the tables and columns of the raw data layer and the transformation layer.
   * [Use third-party BI tools](data-access/third-party-bi-tools/): Choose a BI tool and connect Power BI, Apache Superset, Grafana, or Streamlit.

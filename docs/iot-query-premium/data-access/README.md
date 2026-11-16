@@ -67,6 +67,22 @@ Each kind of data is updated in its own way:
 
 For a query that must include the latest positions, read `telemetry`. For a query about completed trips, sensor values per minute, or time in geo objects, read the transformation layer.
 
+## How long data is kept
+
+Each table of the raw data and transformation layers deletes its rows after a fixed period. A query over a longer period returns only the rows that are still kept.
+
+| Table | Rows are kept for | Counted from |
+| --- | --- | --- |
+| `telemetry.records` | 14 days | `received_time`, when Navixy received the message |
+| `agg.sensor_readings_5m` | 3 months | `bucket_time`, the start of the minute |
+| `agg.digital_io_5m` | 3 months | `bucket_time`, the start of the minute |
+| `agg.device_geofence_status_hist` | 1 month | `inserted_at`, when Navixy added the row |
+| `report.trips_stops` | 6 months | `start_time`, when the trip or stop started |
+
+`core_bdr` has no time limit. Each copy replaces it with the current business data of your workspace.
+
+For a period longer than 14 days, read the transformation layer instead of `telemetry`. To keep data longer than these periods, copy it to your own storage.
+
 ## Where to start
 
 You need IoT Query Premium for your workspace and its connection details: [Getting started](../getting-started.md) explains how to get them. Then start with [Connection setup](connection-setup.md). It gives you the connection details and a first query. Then read [Data schema](data-schema/) and [Use third-party BI tools](third-party-bi-tools/), in that order.

@@ -79,5 +79,5 @@ You have IoT Query Premium, working connection details, and a first result from 
 ## Next steps
 
 * [Dashboard Studio](dashboard-studio/): Build dashboards and reports from your own SQL queries, or with an AI assistant.
-* [Private Telematics Lakehouse](data-access/): Learn where the data comes from and how it is updated, then connect your own tools.
+* [Private Telematics Lakehouse](data-access/): Learn where the data comes from, how it is updated, and how long it is kept, then connect your own tools.
 * [Data schema](data-access/data-schema/): Find the tables and columns of the raw data layer and the transformation layer.
