@@ -30636,7 +30636,7 @@
       },
       "PaymentSystem": {
         "type": "object",
-        "description": "A payment system available to the user, with the settings its telematics service provider (TSP) configured.\n\nThe object is open: a payment system may return further properties specific to its type. `prices`, a map of product code to price, appears for `ios_inapp`. Stripe adds the `auto_payment_min`, `auto_payment_threshold_min` and `auto_payment_monthly_min` limits. Yandex adds `merchant_receipt_required` and, when that is set, `merchant_receipt`.",
+        "description": "A payment system available to the user, with the settings its telematics service provider (TSP) configured.\n\nThe object is open: a payment system may return further properties specific to its type. `prices`, a map of product code to price, appears for `ios_inapp`. Stripe adds the `auto_payment_min`, `auto_payment_threshold_min` and `auto_payment_monthly_min` limits.",
         "properties": {
           "type": {
             "type": "string",
