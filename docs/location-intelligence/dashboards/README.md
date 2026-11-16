@@ -71,7 +71,7 @@ The Navixy platform updates each part of the data at a different rate:
 * **Connection status:** Navixy updates it with each message that a GPS device sends, and again after 5 minutes and after 1 hour without a message.
 * **Movement status:** Navixy updates it only when a message arrives. An asset whose device stopped sending keeps the movement status of its last message.
 * **Geofences:** Navixy updates which assets are inside each geofence every 30 minutes.
-* **Trips:** Navixy builds trips every 4 hours, and a trip appears only after it ends. A vehicle that is driving now has no trip for this drive yet. For the details, see [How Navixy detects a trip](trips.md#how-navixy-detects-a-trip).
+* **Trips:** Navixy builds trips every 4 hours, and a trip appears only after it ends. A vehicle that is driving now has no trip for this drive yet, unless the drive has lasted more than 24 hours. For the details, see [How Navixy detects a trip](trips.md#how-navixy-detects-a-trip).
 * **Sensor values:** Navixy updates the battery, voltage, odometer, and RPM values every 4 hours. So they can be several hours older than the connection status.
 * **A new device:** After you assign a device to an asset, the dashboards can take up to 30 minutes to show the asset with that device.
 

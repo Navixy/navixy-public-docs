@@ -43,7 +43,7 @@ The rules are the same for every workspace:
 
 * The asset is moving when its speed is above 3 km/h.
 * A standstill shorter than 5 minutes, such as at a traffic light or in a traffic jam, is part of the trip. Its time counts in the duration of the trip, but not in the driving time.
-* When the GPS device sends no data for more than 15 minutes, the trip ends at the last position before the gap. The trip appears in reports when the GPS device sends data again, or about 24 hours after the trip started.
+* When the GPS device sends no data for more than 15 minutes, the trip ends at the last position before the gap. The trip appears in reports when the GPS device sends data again, or about 32 hours after the trip started.
 * A trip must cover at least 50 m. A shorter movement, such as moving a vehicle inside a yard, isn't a trip.
 * A trip that lasts longer than about 24 hours is split into more than one trip.
 

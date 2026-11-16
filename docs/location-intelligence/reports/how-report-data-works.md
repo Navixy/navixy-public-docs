@@ -17,7 +17,7 @@ A report shows trips, stops, and sensor readings up to the moment when you run i
 
 Navixy adds a trip to report data only after the trip ends. A trip ends when the asset stands still for at least 5 minutes. As a result, a trip that is in progress isn't in any report.
 
-When the GPS device sends no data for more than 15 minutes, the trip ends at the last position before the gap. Navixy adds this trip when the GPS device sends data again, or about 24 hours after the trip started. To see where an asset is now, use [Tracking](../tracking/).
+When the GPS device sends no data for more than 15 minutes, the trip ends at the last position before the gap. Navixy adds this trip when the GPS device sends data again, or about 32 hours after the trip started. To see where an asset is now, use [Tracking](../tracking/).
 
 ## How far back report data goes
 

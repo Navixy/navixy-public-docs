@@ -40,7 +40,7 @@ The report is working when the **Trips** tile in Trips and stops, or the **Sampl
 
 The trip is still in progress, or it ended after you ran the report. A trip appears in a report after it ends. A trip ends when the asset stands still for at least 5 minutes.
 
-If the GPS device stopped sending data during the trip, the trip appears later. It appears when the device sends data again, or about 24 hours after the trip started. Check where the asset is now in [Tracking](../tracking/), and click **Run** to run the report again.
+If the GPS device stopped sending data during the trip, the trip appears later. It appears when the device sends data again, or about 32 hours after the trip started. Check where the asset is now in [Tracking](../tracking/), and click **Run** to run the report again.
 
 ## A trip is missing or shorter than expected
 

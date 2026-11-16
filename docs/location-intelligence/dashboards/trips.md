@@ -29,9 +29,10 @@ Navixy also applies these rules:
 
 * A trip shorter than 50 m doesn't count. Navixy treats it as GPS noise, such as a position that drifts while the vehicle is parked.
 * When the GPS device sends no position for more than 15 minutes, the trip ends there. The next position starts a new trip or stop. So a drive through a long tunnel can appear as two trips.
-* A trip appears on the dashboard only after it ends. A vehicle that is driving now has no trip for the current drive yet.
+* A trip lasts at most 24 hours. When an asset drives for more than 24 hours without a stop, each 24 hours of the drive count as a separate trip.
+* A trip appears on the dashboard only after it ends. A vehicle that is driving now has no trip for the current drive yet, unless the drive has lasted more than 24 hours.
 * Navixy builds trips every 4 hours. A trip is complete when the asset has stood still for 5 minutes and the GPS device kept sending positions during that time. Then the trip appears after the next run, up to about 4 hours later.
-* Some GPS devices stop sending when a vehicle parks. Then the trip appears when the device sends again, at the latest about 24 hours after the trip started.
+* Some GPS devices stop sending when a vehicle parks. Then the trip appears when the device sends again, at the latest about 32 hours after the trip started.
 * The distance of a trip comes from the odometer of the vehicle when the GPS device reports the odometer. Otherwise, Navixy adds up the distances between the positions of the trip.
 
 ## Fleet totals
