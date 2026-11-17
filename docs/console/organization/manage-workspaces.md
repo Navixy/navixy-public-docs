@@ -13,19 +13,18 @@ tags:
 
 Create another workspace when a fleet, a team, or a department needs its own business data, products, or tariff plan. A workspace belongs to one organization, and its data isn't visible from that organization's other workspaces. To create a workspace, you need the Owner role or a role that includes the **Console** product.
 
-The **Create workspace** window has three steps: **Region**, **Deployment**, and **Products**. Click **Continue** to move to the next step, and **Launch** on the last one.
+The **Create workspace** window has two steps: **Deployment** and **Products**. Click **Continue** to move to the next step, and **Launch** on the last one.
 
 To create a workspace, follow these steps:
 
 1. In the top navigation bar, select your organization from the left dropdown menu.
 2. On the sidebar, click **Organization**, then click **Create workspace**.
-3. Select a **Region**. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
-4. Keep the selected **Deployment** option.
-5. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-6. On the same step, enter a **Workspace name** of up to 128 characters.
-7. Click **Launch**.
+3. Keep the selected **Deployment** option.
+4. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
+5. On the same step, enter a **Workspace name** of up to 128 characters.
+6. Click **Launch**.
 
-The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
+Navixy sets the workspace's region. The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
 
 ## Switch to another workspace
 

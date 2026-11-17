@@ -60,11 +60,10 @@ Enter an **Organization name** of up to 128 characters. Use your company's name.
 
 A workspace stores your business data, such as devices and assets. Each workspace has its own products and tariff plan, so you can use separate workspaces for separate fleets, teams, or departments.
 
-The **Set up your workspace** page has three steps. The **Launch preview** panel beside them shows what you have chosen so far.
+The **Set up your workspace** page has two steps. The **Launch preview** panel beside them shows what you have chosen so far.
 
-1. **Region**: Where the workspace's data is stored. **EU (Germany)** is selected. The other regions are marked **Coming soon** and can't be selected.
-2. **Profile**: Keep the selected profile. Profiles marked as **Legacy** can't be selected.
-3. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything. Enter a **Workspace name** on this step too. It's required and can be up to 128 characters long. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
+1. **Profile**: Keep the selected profile. Profiles marked as **Legacy** can't be selected.
+2. **Products**: The standard set of Navixy products. They are already selected and marked as **Included**, so you don't need to change anything. Enter a **Workspace name** on this step too. It's required and can be up to 128 characters long. Every organization needs at least one workspace, and you can add more later. The workspace starts on the default tariff plan.
 
 Click **Continue** to move to the next step and **Launch** on the last one.
 {% endstep %}
@@ -76,7 +75,7 @@ Registration is complete. Now you have:
 * An organization with the name you entered. Navixy sets its home region, where its data is stored.
 * The Owner role, assigned to you. It has full rights in the organization and all its workspaces, and nobody can edit or delete it.
 * The Admin role, assigned to nobody. It has the same full rights as the Owner role, and you can give it to the people you invite. See [Roles that Navixy creates](../users-and-roles/README.md#roles-that-navixy-creates).
-* One workspace with its name, region, and the standard set of products.
+* One workspace with its name and the standard set of products. Navixy sets its region.
 * A subscription for that workspace to the default tariff plan.
 
 If you want to create another workspace, see [Create a workspace](../organization/manage-workspaces.md#create-a-workspace).

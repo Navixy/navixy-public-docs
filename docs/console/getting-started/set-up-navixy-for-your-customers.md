@@ -76,11 +76,10 @@ Click **Continue**.
 
 ### Set up the first workspace
 
-The next three steps set up the new organization's first workspace:
+The next two steps set up the new organization's first workspace:
 
-1. **Region**: Where the workspace's data is stored. Only **EU (Germany)** can be selected. The other regions are marked **Coming soon**.
-2. **Deployment**: Keep the selected option. Options marked as **Legacy** can't be selected.
-3. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs. On the same step, check the **Workspace name**. By default, it's the organization's name. You can change it, up to 128 characters.
+1. **Deployment**: Keep the selected option. Options marked as **Legacy** can't be selected.
+2. **Products**: The standard set of Navixy products is already selected and marked as **Included**. Select any other products that the customer needs. On the same step, check the **Workspace name**. By default, it's the organization's name. You can change it, up to 128 characters.
 
 The **Launch preview** panel shows what you have chosen so far. Click **Continue** to move to the next step, and **Launch** on the last one.
 {% endstep %}
