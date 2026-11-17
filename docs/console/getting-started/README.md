@@ -53,12 +53,6 @@ On the **Create your password** page, enter a **Password** of at least 12 charac
 An organization is your company in Navixy. It owns the users, the roles, and the workspaces you create under it.
 
 Enter an **Organization name** of up to 128 characters. Use your company's name. It is how your organization appears to everyone you invite. You can change it later.
-
-**Home region** shows where your organization's data is stored. It's where your data is kept, not where your company operates.
-
-{% hint style="info" %}
-Navixy stores data in three regions: the European Union, the United States, and Saudi Arabia. The **Home region** field shows **European Union** and can't be changed, so your organization and all its workspaces store their data there.
-{% endhint %}
 {% endstep %}
 
 {% step %}
@@ -79,7 +73,7 @@ Click **Continue** to move to the next step and **Launch** on the last one.
 Registration is complete. Now you have:
 
 * A Navixy user record: Your identity on the platform. It exists on its own, so the same user can later belong to several organizations.
-* An organization with the name you entered and its home region.
+* An organization with the name you entered. Navixy sets its home region, where its data is stored.
 * The Owner role, assigned to you. It has full rights in the organization and all its workspaces, and nobody can edit or delete it.
 * The Admin role, assigned to nobody. It has the same full rights as the Owner role, and you can give it to the people you invite. See [Roles that Navixy creates](../users-and-roles/README.md#roles-that-navixy-creates).
 * One workspace with its name, region, and the standard set of products.
@@ -95,7 +89,7 @@ If you close the browser before you finish, sign in again. Registration resumes 
 
 ## 2. Check your products in the Console hub
 
-After **Launch**, Console opens on the Console hub. The top of the hub shows your workspace name and tariff plan. To come back to the hub later, click **Console hub** on the sidebar.
+After **Launch**, Console opens on the Console hub. The top of the hub shows your tariff plan. To come back to the hub later, click **Console hub** on the sidebar.
 
 While Navixy creates your workspace, the hub tells you that instead of listing products. This usually takes less than a minute, and the hub updates automatically.
 

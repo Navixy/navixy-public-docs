@@ -46,7 +46,7 @@ To configure the access to a product, follow these steps:
 2. Under **Products**, click <picture><source srcset="../.gitbook/assets/icons/chevron_right-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/chevron_right.svg" alt="Set access by feature and resource" data-size="line"></picture> next to a selected product. Its features and resources appear.
 3. If the product has **Features**, set them to **All** or **Specific**. With **Specific**, select the features that the role allows.
 4. Under **Resources**, find each type of data in the product. Set it to **All** or **Specific**. With **Specific**, select the records that the role gives access to. If the records belong to groups, you can group the list with **Group by** and select a whole group.
-5. For each type, select the actions that the role allows, such as **View**, **Create**, **Edit**, and **Delete**.
+5. For each type, select the actions that the role allows, such as **View**, **Create**, **Edit**, and **Delete**. The **Console** product has its own actions, such as **Invite user** and **Enable product**.
 6. Click **Save role** or **Save changes**.
 
 **All** means current and future items. A role set to **All** doesn't need editing when a new feature or record appears. **Specific** is available only for the types of data whose records the product can list.
