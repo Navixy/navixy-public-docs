@@ -23,6 +23,8 @@ If the issue still persists, the device likely didn't send necessary GPS points 
 
 In the example above, points are missing for **one hour on December 10, 2025**, from **04:11:57 to 05:13:20**. This confirms that the tracker did not transmit any data to the platform during the reviewed time interval.
 
+The platform also discards points with invalid coordinates, for example when the device sees too few satellites. Other data from the same moment, such as input states, still arrives. That is why **Raw data** can show records for a time when the track has a gap.
+
 Additionally, there are cases where trip history is repeatedly interrupted, resulting in small gaps between detected trips. In such cases, most likely the user needs to adjust tracker data acquisition settings within the tracker configuration.
 
 Try starting from adjusting the **Tracking mode** settings (if it's available for the tracker in the **Devices and settings** menu):
