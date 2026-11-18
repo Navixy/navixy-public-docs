@@ -141,7 +141,7 @@ If a field is missing or has the wrong format, the form shows the error under th
 Two messages mean that the phone number or the device is already in use. Each shows under its field:
 
 - "This phone number is already in use": a device already uses this SIM card, in this workspace or in any other. Check the phone number. If the SIM card moved from another device in your workspace, deactivate that device or cancel its activation first. The form checks the number when you leave the **Phone number** or the **IMEI** field, so this message can show before you click **Activate**.
-- "A device with this IMEI is already on the platform": the IMEI belongs to a device that is already connected, to a device in another workspace, or to a device that was deactivated or whose activation was canceled. Check the IMEI on the device label.
+- "A device with this IMEI is already on the platform": the IMEI belongs to a device that is already connected, or to a device in another workspace. Check the IMEI on the device label.
 - "A device with this factory ID is already on the platform": the device factory ID of a Suntech device belongs to a device that is already on the platform, in any workspace and with any status, also one that is still awaiting connection. Check the device factory ID on the device label.
 {% endhint %}
 
@@ -245,13 +245,9 @@ If the device still doesn't connect, you can cancel the activation. **Cancel act
 2. Select the **I understand that this action can't be undone** check box.
 3. Click **Cancel activation**.
 
-Navixy shows "Activation canceled" and returns you to the **Devices** list. Navixy removes the device from the **Devices** list, and the device stops reporting to the platform. Its phone number becomes available for another device. If the device is in an optional device field of an asset, Navixy clears that field. You can't undo the cancellation.
+Navixy shows "Activation canceled" and returns you to the **Devices** list. Navixy removes the device from the **Devices** list, and the device stops reporting to the platform. Its phone number and its IMEI, or the device factory ID of a Suntech device, become available again. You can activate the device later, in this workspace or in any other. If the device is in an optional device field of an asset, Navixy clears that field. You can't undo the cancellation.
 
 You can't cancel the activation of a device that an IoT Logic flow uses. Remove the device from every **Data Source** node that has it, or delete the flow, and then cancel the activation. If you try while a flow still uses the device, canceling fails with the message "Failed to complete the action. Try again." You also can't cancel the activation while the device is in a required device field of an asset or a geo object: assign another device to the field first.
-
-{% hint style="warning" %}
-After you cancel, Navixy keeps the IMEI of the device in use. You can't activate a device with this IMEI again, in this workspace or in any other: activation shows "A device with this IMEI is already on the platform". Cancel an activation only when its IMEI is wrong or when you won't use the device again.
-{% endhint %}
 
 To correct a wrong IMEI, cancel the activation, and then [activate the device](#id-1.-start-activation) again with the correct IMEI.
 
