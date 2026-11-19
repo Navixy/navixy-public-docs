@@ -62,7 +62,7 @@ To enable the full range of Navixy functionality, you will need a total of three
 3. Key will be displayed in a new window
 4. Press _Restrict key_ to make changes, you will be taken to a setup page
 5. Name the key so would be easier to distinguish it from others
-6. In _Application restrictions_ select _HTTP referrer_ and specify the domain you use for the platform. E.g [contoso.com/\*](http://contoso.com/*) [gps.contoso.com/\*](http://gps.contoso.com/*)
+6. In _Application restrictions_ select _HTTP referrer_ and specify the domain you use for the platform. E.g. `contoso.com/*` or `gps.contoso.com/*`
 7. In _API restrictions_ select _Restrict key_ and choose Maps JavaScript API
 8. Press _Save_ to apply the changes
 
@@ -104,7 +104,7 @@ To enable the full range of Navixy functionality, you will need a total of three
 3. Key will be displayed in a new window
 4. Press _Restrict key_ to make changes, you will be taken to a setup page
 5. Name the key so would be easier to distinguish it from others
-6. In _Application restrictions_ select _HTTP referrer_ and specify the domain you use for the platform. E.g [contoso.com/\*](http://contoso.com/*) [gps.contoso.com/\*](http://gps.contoso.com/*)
+6. In _Application restrictions_ select _HTTP referrer_ and specify the domain you use for the platform. E.g. `contoso.com/*` or `gps.contoso.com/*`
 7. In _API restrictions_ select _Restrict key_ and choose Maps Static API
 8. Press _Save_ to apply the changes
 

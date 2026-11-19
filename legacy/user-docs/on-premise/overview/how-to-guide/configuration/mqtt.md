@@ -26,7 +26,7 @@ To configure Xirgo Global devices to work via MQTT:
 1. Log into [BCE configuration manager FMSET](https://xdm.xgfleet.eu/login)
 2. Choose Connectivity → Telemetry server → MQTT broker address settings and specify:
 
-* Host: your host for Navixy User Interface (e.g. [ui.mydomain.com](http://ui.mydomain.com))
+* Host: your host for Navixy User Interface (e.g. `ui.mydomain.com`)
 * Port: 1883
 
 ![](../../../../.gitbook/assets/image-20230810-133722.png)
@@ -52,7 +52,7 @@ To configure Xirgo Global devices to work via MQTT:
 
 To configure the Globalmatix device to work via MQTT:
 
-* Specify your host for Navixy User Interface (e.g. [ui.mydomain.com](http://ui.mydomain.com))
+* Specify your host for Navixy User Interface (e.g. `ui.mydomain.com`)
 * Port: 1883
 * User: globalmatix\_device
 * Password: secretword

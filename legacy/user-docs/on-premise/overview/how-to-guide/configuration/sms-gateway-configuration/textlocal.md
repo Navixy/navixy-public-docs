@@ -6,7 +6,11 @@ description: >-
 
 # Textlocal
 
-[Textlocal](http://www.textlocal.com/) is a cloud-based SMS messaging platform that enables businesses to send and receive text messages. The company is based in the UK and operates globally.
+Textlocal is a cloud-based SMS messaging platform that enables businesses to send and receive text messages. The company is based in the UK and operates globally.
+
+{% hint style="warning" %}
+Textlocal no longer sends messages, because its service moved to [Webex Interact](https://www.webexinteract.com/). Starting from build 2026.10, set up the Webex Interact gateway with `configure.sh` instead. See the [2026 changelog](../../../../versions/2026.md).
+{% endhint %}
 
 ## Navixy JSON configuration for Textlocal
 
@@ -36,11 +40,11 @@ Alternatively, you may use API key from Textlocal:
  provider: textlocal
 ```
 
-where `api_key` is the API key created in your [Messenger Control Panel](https://control.txtlocal.co.uk/settings/apikeys/):
+where `api_key` is the API key created in your Messenger Control Panel:
 
 ![On-Premise - SMS gateway configuration - Textlocal](../../../../../.gitbook/assets/image-20230810-133538.png)
 
-If you use Textlocal in India ([textlocal.in](http://textlocal.in/)) you need to add the `URL` parameter:
+If you use Textlocal in India (textlocal.in), you need to add the `URL` parameter:
 
 ```json5
  {
@@ -82,4 +86,3 @@ Where:
 * `$GATEID` - id of sms gate which is processing incoming messages
 * `22000` - port used to listen connects(default value)
 
-For more information please refer to the Textlocal [docs](https://control.txtlocal.co.uk/docs/)

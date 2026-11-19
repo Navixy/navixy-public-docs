@@ -11,8 +11,8 @@ Navixy highly recommends using an SMS center (SMSC) for outgoing messages and le
 1. **Cloud-based SMS service.** We support the following popular global SMS services:
 
 * [https://www.twilio.com/](https://www.twilio.com/)
-* [https://www.nexmo.com/](https://www.nexmo.com/)
-* [https://www.textlocal.com/](https://www.textlocal.com/)
+* [https://www.vonage.com/](https://www.vonage.com/)
+* [https://www.webexinteract.com/](https://www.webexinteract.com/)
 * [https://www.infobip.com/](https://www.infobip.com/)
 * [https://www.tyntec.com/](https://www.tyntec.com/)
 

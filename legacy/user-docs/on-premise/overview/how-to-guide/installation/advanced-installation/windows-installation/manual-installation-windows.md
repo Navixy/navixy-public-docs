@@ -24,7 +24,7 @@ To perform the installation, you need a Windows account with **administrator pri
 
 Download and install the pre-requisites described in [Server software](../../../requirements/server-software.md) document. Essentially, you will need these components to get the platform up and running:
 
-* [MySQL 8.4](https://dev.mysql.com/downloads/installer/) - only Server is required, other components are optional;
+* [MySQL 8.4](https://dev.mysql.com/downloads/mysql/8.4.html) - the Windows MSI installer of MySQL Community Server;
   * Microsoft Visual C++ may be required for installation. Setup wizard will notify you about it.
 * [Java SE Development Kit 25](https://www.oracle.com/java/technologies/downloads/#jdk25-windows);
 * [Nginx](https://nginx.org/en/download.html) - any recent version (it does not need installation, just extract it);
@@ -186,7 +186,7 @@ UPDATE google.variables SET value='<FINGERPRINT>' WHERE var='fingerprint';
 ```
 
 {% hint style="info" %}
-Fingerprint is dynamic. It is updated each time your server connects to the [auth.navixy.com](http://auth.navixy.com/) licensing server. This happens every 3 days and at every service startup. So you do not need to store it separately from the platform as it is constantly changing. Also for this reason you cannot use it on multiple instances. The key can only be used for a single Navixy On-premise instance.
+Fingerprint is dynamic. It is updated each time your server connects to the `auth.navixy.com` licensing server. This happens every 3 days and at every service startup. So you do not need to store it separately from the platform as it is constantly changing. Also for this reason you cannot use it on multiple instances. The key can only be used for a single Navixy On-premise instance.
 {% endhint %}
 
 ## Frontend

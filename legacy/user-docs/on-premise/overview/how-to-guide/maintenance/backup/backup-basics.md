@@ -30,7 +30,7 @@ The following MySQL databases are used by Navixy:
 
 If your Navixy platform runs on a VM in a cloud platform, you can make a periodic snapshots of the machine, and additionally perform a MySQL dump. Creating a dump is required to maintain database consistency. You can find more information on MySQL dump here:
 
-[https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html](https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html)
+[https://dev.mysql.com/doc/refman/8.4/en/mysqldump.html](https://dev.mysql.com/doc/refman/8.4/en/mysqldump.html)
 
 Both "google" and "tracking" databases should be backed up. You can create MySQL dump on a running database without locking tables and interrupting the service by using `--single-transaction` option.
 

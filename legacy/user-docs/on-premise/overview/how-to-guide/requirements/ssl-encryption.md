@@ -19,9 +19,9 @@ Several companies act as certificate authorities that provide SSL certificates, 
 
 Typically, three domains are used in working with Navixy, such as:
 
-* [my.domain.com](http://my.domain.com) – for user web interface
-* [panel.domain.com](http://panel.domain.com) – for Admin panel
-* [api.domain.com](http://api.domain.com) – for API calls
+* `my.domain.com` – for user web interface
+* `panel.domain.com` – for Admin panel
+* `api.domain.com` – for API calls
 
 You have several options to use SSL encryption for your domains, such as issuing a wildcard certificate for all subdomains **\*.domain.com**, separate certificates for each subdomain, or a multi-domain certificate that includes all three domains.
 

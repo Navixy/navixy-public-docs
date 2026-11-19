@@ -12,7 +12,7 @@ As no one can completely exclude any faults in hardware or software - it's bette
 
 In our [Backup strategies](backup-basics.md) document, we explained an example of mysqldump backup process.
 
-[Mysqldump](https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html) is a built-in application that comes with your MySQL server package. It allows you to unload data from the selected databases into SQL, CSV or XML files. This gives you the possibility to edit data before restoring it. However, as it essentially creates a text copy, on high load servers backup creation and restoration from it can take a significant amount of time.
+[Mysqldump](https://dev.mysql.com/doc/refman/8.4/en/mysqldump.html) is a built-in application that comes with your MySQL server package. It allows you to unload data from the selected databases into SQL, CSV or XML files. This gives you the possibility to edit data before restoring it. However, as it essentially creates a text copy, on high load servers backup creation and restoration from it can take a significant amount of time.
 
 This means your recovery time increases and we want to keep it as low as possible.
 

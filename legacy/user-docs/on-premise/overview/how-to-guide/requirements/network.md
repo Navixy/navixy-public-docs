@@ -17,12 +17,12 @@ List of network ports used for devices can be shortened to only allow [ports act
 
 Additionally, the following **outbound** ports needs to be open:
 
-* Ports 443 and 32233 to [auth.navixy.com](http://auth.navixy.com) and [httpauth.navixy.com](http://httpauth.navixy.com) hosts - mandatory for license authorization and tracking service operation
-* Port 443 to [sms.navixy.com](http://sms.navixy.com) and [geocoder.navixy.com](http://geocoder.navixy.com) - required for operation of application push service and geocodr service (if applicable according to tariff)
+* Ports 443 and 32233 to the `auth.navixy.com` and `httpauth.navixy.com` hosts - mandatory for license authorization and tracking service operation
+* Port 443 to `sms.navixy.com` and `geocoder.navixy.com` - required for operation of application push service and geocoder service (if applicable according to tariff)
 * Port 123 to public network, or to selected NTP server - For time synchronization (correct time is critical for platform functioning)
 
 {% hint style="danger" %}
-Connection to [auth.navixy.com](http://auth.navixy.com) is crucial. Services will not work without proper authorization.
+Connection to `auth.navixy.com` is crucial. Services will not work without proper authorization.
 {% endhint %}
 
 ## Traffic

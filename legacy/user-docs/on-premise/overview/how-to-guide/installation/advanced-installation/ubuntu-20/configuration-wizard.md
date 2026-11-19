@@ -36,14 +36,14 @@ The Configuration Wizard allows you to perform configuration with either a singl
 
 In the case of a **single domain name**, you only need to specify the domain for your service in the first step, leave the other two domains blank. In this case, the API and admin panel will be configured as subdirectories (this is made automatically). Examples:
 
-* [my.domain.com/api](http://my.domain.com/api)
-* [my.domain.com/panel](http://my.domain.com/panel)
+* `my.domain.com/api`
+* `my.domain.com/panel`
 
 If you are performing a **three domain names** configuration, you need to specify sequentially:
 
-* Service domain (used for user interface and device activation). E.g.: [my.domain.com](http://my.domain.com)
-* API domain (used for all API operations). E.g.: [api.domain.com](http://api.domain.com)
-* Admin panel domain (used to access Admin panel). E.g.: panel.domain.com
+* Service domain (used for user interface and device activation). E.g.: `my.domain.com`
+* API domain (used for all API operations). E.g.: `api.domain.com`
+* Admin panel domain (used to access Admin panel). E.g.: `panel.domain.com`
 
 ![On-Premise - Domain settings](../../../../../../.gitbook/assets/image-20230804-112159.png)
 

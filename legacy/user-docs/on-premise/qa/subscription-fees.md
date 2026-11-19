@@ -37,4 +37,4 @@ As soon as the necessary payment is received for the suspended instance, the ser
 
 ## On-Premise license verification and renewal
 
-The On-Premise instances transmit information to the authentication server [auth.navixy.com](http://auth.navixy.com) through port **32233** that is necessary for billing purposes, such as the number and models of active devices. This transmission is critical for ensuring correct billing and license renewal for the following month while the subscription is active.
+The On-Premise instances transmit information to the authentication server `auth.navixy.com` through port **32233** that is necessary for billing purposes, such as the number and models of active devices. This transmission is critical for ensuring correct billing and license renewal for the following month while the subscription is active.
