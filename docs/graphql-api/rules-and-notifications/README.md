@@ -15,7 +15,7 @@ The API has two namespaces for the product. A namespace is a field that groups r
 
 Every operation reads or changes the data of the workspace named by your access token, so no operation has a workspace ID argument. The shared pages of this space cover the request format, [authentication](../authentication/README.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
 
-Users of Location Intelligence create the same rules in the **Notification rules** screen and see the notifications on the map. See [Rules and notifications](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/rules-and-notifications) in the Location Intelligence documentation to learn how users work with rules.
+Users of Location Intelligence create the same rules in the **Notification rules** screen and see the notifications on the map. See [Notification rules](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/rules-and-notifications) in the Location Intelligence documentation to learn how users work with rules.
 
 ## Purpose and capabilities
 

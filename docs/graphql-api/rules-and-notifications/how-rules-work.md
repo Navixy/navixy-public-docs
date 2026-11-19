@@ -178,4 +178,4 @@ See [Rule errors](rule-errors.md) to learn what each limit error means and how t
 
 * [Creating and managing rules](guides/creating-and-managing-rules.md): Create a rule, turn it on, change it, and delete it.
 * [Reading rule history](guides/reading-rule-history.md): Find out why a rule sent a notification, or why it didn't.
-* [How rules work](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/rules-and-notifications/how-rules-work) in Location Intelligence: Learn how users see the same rules in the rule editor.
+* [How rules work](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/rules-and-notifications/how-rules-work) in Location Intelligence: Learn how users see the same rules in the rule editor.

@@ -1,8 +1,8 @@
 ---
 description: >-
-  How to find an asset on the map, follow it, check its readings, show a field
-  in the asset list, view trip history, show trips on the map, and show geo
-  objects.
+  How to find and follow an asset, check its readings, show a field in the
+  asset list, view trips, show geo objects, and go to a notification's
+  position.
 tags:
   - how-to
   - beta
@@ -98,3 +98,12 @@ Geo objects, such as depots, customer sites, and delivery zones, are hidden on t
 2. Select the geo objects you want to see.
 
 The map will draw their shapes and move to show all of them. Clear a geo object to hide it again.
+
+## Go to where a notification happened
+
+A notification from a [notification rule](../rules-and-notifications/README.md) appears on every Location Intelligence screen. On **Tracking**, a notification that has a position can also move the map to the place where the event happened.
+
+1. Click **Tracking** on the sidebar.
+2. When a notification appears, click its text.
+
+The map moves to the event's position, and the notification closes.

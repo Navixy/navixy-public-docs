@@ -106,5 +106,5 @@ When you edit a rule, an asset with two GPS devices can get a second notificatio
 
 ## See also
 
-* [Notification rules](notification-rules.md): Learn which equations, operators, and covered assets a rule can have, and what its limits are.
+* [Notification rules page](notification-rules.md): Learn which equations, operators, and covered assets a rule can have, and what its limits are.
 * [Schedules](../bdr/schedules/README.md): Learn how schedules and their time slots work.

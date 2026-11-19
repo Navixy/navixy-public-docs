@@ -8,7 +8,7 @@ tags:
   - beta
 ---
 
-# Notification rules
+# Notification rules page
 
 A notification rule sends a notification when its equations become true for one of your assets. An equation is one check in a rule, such as a speed over 90 km/h or a position inside a geo object. For example, a rule can tell you when a vehicle goes faster than 90 km/h inside a depot during working hours.
 
@@ -17,10 +17,10 @@ This page describes the **Notification rules** page and the rule editor. To lear
 {% hint style="info" %}
 **Access**
 
-The page lists rules only when notification rules are enabled for your workspace. Your role decides whether you see rules on this page and whether you can create, edit, or delete them. A role gives access to all the workspace's rules or to none of them. See [Access to Rules and notifications](README.md#access-to-rules-and-notifications) to learn which permissions a role can give.
+**Notification rules** is on the sidebar only when your workspace has the Rules product. Your role decides whether you see rules on this page and whether you can create, edit, or delete them. A role gives access to all the workspace's rules or to none of them. See [Access to Notification rules](README.md#access-to-notification-rules) to learn which products and permissions you need.
 {% endhint %}
 
-## Notification rules page
+## Rule list
 
 **Notification rules** is where you search, create, edit, and delete your workspace's rules and turn them on or off. To open it, click **Notification rules** on the sidebar.
 
