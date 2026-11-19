@@ -76,6 +76,7 @@ A subscription keeps a connection open, so it has limits of its own. The transpo
 | Subscriptions per WebSocket connection | 10 | The 11th subscription gets one `next` message with a [validation error](error-handling.md#validation-error-400), then `complete` |
 | Open subscriptions to `trackingAssetStates` per caller, over the WebSocket and server-sent events together | 12 | The new subscription ends with a [`RATE_LIMITED`](error-handling.md#error-codes) error |
 | Assets that one `trackingAssetStates` subscription follows | 1,000 | The subscription ends with a validation error |
+| Open subscriptions to `notificationsEvents` per user, on each API server | 12 | The new subscription ends with a [`RATE_LIMITED`](error-handling.md#error-codes) error |
 | Time to send `connection_init` after the handshake | 10 seconds | The server closes the connection with code 4408 |
 | Time without any message from the client | 45 seconds | The server closes the connection with code 1001 |
 
@@ -94,6 +95,7 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 | Input                                | Limit                                       |
 | ------------------------------------ | ------------------------------------------- |
 | Custom field definitions per entity type | 50 active, 100 including archived        |
+| Equations in a rule | 16 |
 
 ### Length limits
 
@@ -107,6 +109,7 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 | Name fields on users (`givenNames`, `familyNames`)                                                        | 255 characters                                                        |
 | `STRING` custom field values                                                                              | 255 characters, restricted further by the definition's `maxLength`    |
 | `TEXT` custom field values                                                                                | 65,535 characters, restricted further by the definition's `maxLength` |
+| `notificationText` of a rule | 1,000 characters |
 
 ### Value ranges and formats
 
@@ -125,6 +128,8 @@ Exceeding any of the limits below returns a [validation error](error-handling.md
 | `assetIds` in `assetGroupCreate`, `assetGroupUpdate`, `assetGroupItemsAdd`, and `assetGroupItemsRemove` | 2,000 IDs per call |
 | `filter.deviceIds` in the IoT Logic `deviceFlowLinks` query | 1,000 IDs |
 | `deviceIds` in the IoT Logic `flowDebugValues` query | 1 to 10 IDs |
+| `assetIds` in `ruleCreate` and `ruleUpdate` | 25,000 IDs |
+| `ruleIds`, `assetIds`, and `deviceIds` in the filter of the rules `events` query | 100 IDs each |
 
 ## What has no fixed limit
 

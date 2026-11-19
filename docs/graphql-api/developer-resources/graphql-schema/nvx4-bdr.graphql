@@ -2596,6 +2596,12 @@ type Query @dataClass(class: ORDINARY) {
 
   "Entry point for IAM queries — the roles of the caller's organization and who holds them."
   iam: IamQuery!
+
+  "Entry point for notifications queries — the stored notifications of the caller's workspace. The workspace needs Notifications enabled in Console; otherwise the query is refused with PRODUCT_DISABLED. Refused with PERMISSION_DENIED for a caller who is not a user."
+  notifications: NotificationsQuery!
+
+  "Entry point for Rules queries — the rules a workspace writes over its assets' telemetry, and their history."
+  rules: RulesQuery!
 }
 
 """
@@ -3144,6 +3150,12 @@ type Mutation {
 
   "Entry point for IAM mutations — roles and role assignments."
   iam: IamMutation!
+
+  "Entry point for notifications mutations — the caller's own read mark. The workspace needs Notifications enabled in Console; otherwise the mutation is refused with PRODUCT_DISABLED. Refused with PERMISSION_DENIED for a caller who is not a user."
+  notifications: NotificationsMutation!
+
+  "Entry point for Rules mutations — creating, updating and deleting rules."
+  rules: RulesMutation!
 }
 
 """
@@ -3679,4 +3691,29 @@ type Subscription {
     "What to follow, and how much of each state to deliver."
     input: TrackingAssetStateSubscriptionInput!
   ): TrackingAssetStateBatch!
+
+  # @category: notifications/stream
+  """
+  Every notification published for the caller's workspace that the caller may receive, one message
+  each, from the moment the stream opens: nothing earlier is replayed; what a session missed is in
+  `Query.notifications { events }`, which keeps every notification for the deployment's retention.
+
+  Acts on the workspace the caller's token names, captured when the WebSocket connection is
+  initialised or with the request over SSE. A notification is delivered when the caller is a user
+  and the caller's `bdr.asset` read access admits the notification's asset; the access is re-read
+  on a period while the stream is open.
+
+  The workspace needs Notifications enabled in Console; otherwise the subscription is refused with
+  `PRODUCT_DISABLED` before the stream opens.
+
+  Refused at open with `PERMISSION_DENIED` for an API key, a member of staff or the system actor;
+  with `UNAUTHORIZED` for a token without an expiry or already expired. A caller that already
+  holds as many notification sessions as its limit allows is refused with `RATE_LIMITED`; a slot
+  frees when one of its streams ends. Each subscription spends one request from the caller's rate
+  limit, as `trackingAssetStates` does.
+
+  Ended by the server with `UNAUTHORIZED` when the token expires and with `SERVICE_UNAVAILABLE`
+  when the caller's workspace or access can no longer be read. Resubscribe with a backoff.
+  """
+  notificationsEvents: NotificationsEvent!
 }

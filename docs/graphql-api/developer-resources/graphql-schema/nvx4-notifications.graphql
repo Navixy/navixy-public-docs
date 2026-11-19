@@ -1,0 +1,179 @@
+# Version: 0.16.31
+
+# @category: notifications/stream
+"""
+How urgent a notification is. The platform publishes `INFO` only for now; `WARNING` and `CRITICAL`
+are named so that using them later is no contract change.
+"""
+enum NotificationsSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+# @category: notifications/stream
+"""
+One notification, as the stream delivers it and the list returns it: the fields a toast or a row
+shows, the ids a click needs and the two instants. `node(id:)` resolves one the caller may read, as
+long as the retention keeps it.
+"""
+type NotificationsEvent implements Node
+  @dataClass(class: ORDINARY) {
+  "The notification's id, minted once per accepted command and the same on every replica and session."
+  id: ID!
+  "When the platform accepted the command; the retention and the list's window count from here."
+  publishedAt: DateTime!
+  """
+  When the event happened. A buffered upload delivers events hours or months old, so this may be long
+  before `publishedAt`; it is the instant to show, and the list's order.
+  """
+  occurredAt: DateTime! @dataClass(class: PERSONAL)
+  "The text to show, rendered by the producer. At most 1000 characters."
+  text: String! @dataClass(class: PERSONAL)
+  severity: NotificationsSeverity!
+  "A short heading, the rule's name for the Rules service. Absent when the producer sent none."
+  title: String
+  "The asset the notification is about, in the caller's workspace."
+  assetId: ID!
+  "The device whose event triggered the notification, when there is one."
+  deviceId: ID
+  "Where the event happened; a click moves the map there. Absent for an event with no place."
+  point: GeoPoint @dataClass(class: PERSONAL)
+}
+
+# @category: notifications/history
+"A paginated list of NotificationsEvent items."
+type NotificationsEventConnection implements Connection {
+  "A list of edges."
+  edges: [NotificationsEventEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [NotificationsEvent!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  """
+  How many notifications the filter matches within the caller's window and access, counted up to one
+  thousand: `EXACT` up to that, `APPROXIMATE` with a `count` of one thousand when there are more.
+  """
+  total: CountInfo
+}
+
+# @category: notifications/history
+"An edge in the NotificationsEvent connection."
+type NotificationsEventEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The notification at the end of the edge."
+  node: NotificationsEvent!
+}
+
+# @category: notifications/history
+"Filtering options for the list. All criteria are ANDed."
+input NotificationsEventFilter {
+  "Only notifications about these assets; one the caller may not read contributes nothing."
+  assetIds: [ID!]
+  "Only these severities."
+  severities: [NotificationsSeverity!]
+  "Only events that happened at or after this instant (`occurredAt`)."
+  occurredFrom: DateTime
+  "Only events that happened at or before this instant (`occurredAt`)."
+  occurredTo: DateTime
+}
+
+# @category: notifications/history
+"Ordering options for the list."
+input NotificationsEventOrder {
+  "The field to order by."
+  field: NotificationsEventOrderField!
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: notifications/history
+"Fields available for ordering the list; the id breaks ties, so a page is stable."
+enum NotificationsEventOrderField {
+  "By when the event happened."
+  OCCURRED_AT
+}
+
+"""
+Notifications module queries — the stored notifications of the caller's workspace.
+"""
+type NotificationsQuery {
+  # @category: notifications/history
+  """
+  Lists the notifications of the caller's workspace that the caller may read: the caller is a user,
+  and the assets its `bdr.asset` read access admits, evaluated when the list is read. Reaches
+  back the deployment's retention from `publishedAt`; newest by `occurredAt` first unless ordered
+  otherwise. A notification the stream missed is here.
+
+  Refused with `PRODUCT_DISABLED` when the workspace does not have Notifications enabled in Console, and
+  then with `PERMISSION_DENIED` for an API key, a member of staff or the system actor.
+  """
+  events(
+    "Filtering options for the returned notifications."
+    filter: NotificationsEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned notifications."
+    orderBy: NotificationsEventOrder = { field: OCCURRED_AT, direction: DESC }
+  ): NotificationsEventConnection!
+
+  # @category: notifications/history
+  """
+  The instant up to which the caller has marked the workspace's notifications as read, by `publishedAt`;
+  null before the caller's first `eventsMarkRead` in the workspace. A notification is unread when its
+  `publishedAt` is later, so unread and read notifications interleave in a list ordered by `occurredAt`,
+  and a client tells them apart by `publishedAt > readUpTo`.
+  """
+  readUpTo: DateTime
+
+  # @category: notifications/history
+  """
+  How many notifications `events` would list that were published after `readUpTo`, every one of them
+  before the first mark; the same window and access as the list, counted up to one thousand: `EXACT` up
+  to that, `APPROXIMATE` with a `count` of one thousand when there are more.
+  """
+  unreadCount: CountInfo!
+}
+
+# @category: notifications/history
+"The input of `NotificationsMutation.eventsMarkRead`."
+input NotificationsEventsMarkReadInput {
+  """
+  The largest `publishedAt` the client has shown, not the client's clock: a mark taken from the clock
+  would count as read what was published between the client's read of the list and the click. An instant
+  past the server's clock is cut to the clock.
+  """
+  upTo: DateTime!
+}
+
+# @category: notifications/history
+"What `eventsMarkRead` answers."
+type NotificationsEventsMarkReadPayload {
+  """
+  The caller's mark in the workspace as stored: the later of the one stored before and the one given, the given
+  one cut to the server's clock.
+  """
+  readUpTo: DateTime!
+}
+
+"""
+Notifications module mutations — the caller's own read mark.
+"""
+type NotificationsMutation {
+  # @category: notifications/history
+  """
+  Moves the caller's "read up to" mark of the workspace forward to `upTo` and returns the stored mark.
+  A mark never moves backwards, so a stale tab cannot undo a newer one; `unreadCount` counts the
+  notifications published after it. Refused with `PRODUCT_DISABLED` and `PERMISSION_DENIED` as
+  `Query.notifications` is.
+  """
+  eventsMarkRead(input: NotificationsEventsMarkReadInput!): NotificationsEventsMarkReadPayload!
+    @effect(kinds: [NONE])
+}

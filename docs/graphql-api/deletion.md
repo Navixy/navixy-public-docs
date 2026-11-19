@@ -11,7 +11,7 @@ tags:
 
 A delete in Navixy GraphQL API is final for you: no operation returns or restores a deleted record. While other records still refer to a record, the API refuses to delete it with an [`IN_USE`](error-handling.md#in-use-409) error. This page explains both rules and the few operations that work differently.
 
-The rules apply to Business Data Repository and to IoT Logic flows. Tracking stores no records of its own, and Billing and Console have no delete operations. For the IAM operations that delete roles and revoke them, see [Roles](iam/api-reference/roles.md) and [Role assignments](iam/api-reference/role-assignments.md).
+The rules apply to Business Data Repository, to IoT Logic flows, and to rules of Rules and notifications. Tracking stores no records of its own, and Billing and Console have no delete operations. For the IAM operations that delete roles and revoke them, see [Roles](iam/api-reference/roles.md) and [Role assignments](iam/api-reference/role-assignments.md).
 
 ## What a delete does
 
@@ -45,7 +45,7 @@ Device identifiers are different. The identifiers of a deleted device stay reser
 
 A delete fails with `IN_USE` while another record that isn't deleted still refers to the record. Nothing is deleted and nothing else changes. The error has a `blockers` list that names what still refers to the record. Each entry covers one kind of record and one of its fields: `entityType` is the kind of record, `path` is the field, and `ids` lists up to 20 of those records that your role can read. An empty `ids` list means that such records exist, but you can't read them. [In use (409)](error-handling.md#in-use-409) shows a complete response.
 
-The list has at most five entries. They come in a fixed order: the record's own fields first, then custom field values, then custom field definitions, then the other references, such as an IoT Logic flow. When there are more than five, `extensions.hasMoreBlockers` is `true`. Clear the entries you got and send the delete again: the next refusal names the next blockers, up to five, or the delete succeeds.
+The list has at most five entries. They come in a fixed order: the record's own fields first, then custom field values, then custom field definitions, then the other references, such as an IoT Logic flow or a rule. When there are more than five, `extensions.hasMoreBlockers` is `true`. Clear the entries you got and send the delete again: the next refusal names the next blockers, up to five, or the delete succeeds.
 
 | Record you delete | What blocks the delete | Path in the error |
 | --- | --- | --- |
@@ -61,6 +61,8 @@ The list has at most five entries. They come in a fixed order: the record's own 
 | Device | A relation from another device to this device | `relationsFrom` |
 | Device | A required `DEVICE` custom field that holds the device | `customFields.<code>` |
 | Device | An IoT Logic flow that lists the device in its data source node, in a workspace that has IoT Logic | `nodes.devices` |
+| Asset | A rule that lists the asset in `assetIds` | `assetIds` |
+| Geo object, schedule | A rule with an equation that names the geo object or the schedule | `equations` |
 | Any record that a `REFERENCE` custom field can name | An asset or a geo object whose `REFERENCE` field holds it | `customFields.<code>` |
 | Any record that a custom field definition can name | The asset type or geo object type that owns a field whose `refSubtypeIds` or `defaultRefIds` name it | `customFieldDefinitions.<code>.params.refSubtypes`, `customFieldDefinitions.<code>.params.defaultRefs` |
 
@@ -71,7 +73,9 @@ These rules apply to every row of the table:
 * A record doesn't block its own delete. An asset that names itself in a `REFERENCE` field can be deleted, and a field definition never blocks the delete of the type that owns it.
 * An IoT Logic flow counts whether it's enabled or disabled. The flow IDs appear in `ids` only when your role can read IoT Logic flows.
 * `flowDelete` succeeds even while the flow lists devices.
-* When a delete and a change that adds a reference to the same record run at the same time, only one of them succeeds. If the delete runs first, the change fails with `VALIDATION_ERROR` or `NOT_FOUND`, because the record that it refers to no longer exists. If the change runs first, the delete fails with `IN_USE`. This doesn't apply to IoT Logic flows: a flow saved at the same moment as a device delete can still list the deleted device.
+* A rule counts whether it's on or off. A rule that covers every asset names no asset, so it blocks no asset's delete. The rule IDs appear in `ids` only when your role has `read` on `bdr.rule`.
+* `ruleDelete` succeeds even while the rule names assets, geo objects, and schedules.
+* When a delete and a change that adds a reference to the same record run at the same time, only one of them succeeds. If the delete runs first, the change fails with `VALIDATION_ERROR` or `NOT_FOUND`, because the record that it refers to no longer exists. If the change runs first, the delete fails with `IN_USE`. This doesn't apply to IoT Logic flows and rules. A flow saved at the same moment as a device delete can still list the deleted device. A rule saved at the same moment as the delete of its asset, geo object, or schedule can still name the deleted record.
 
 ### How to clear the blockers of a delete
 
@@ -89,10 +93,12 @@ Change the records in `blockers` through their own mutations, then send the dele
 | `customFields.<code>` | Change the value on the asset or geo object, unset it if the field isn't required, delete the field with `onValues: CASCADE`, or delete the record that holds it. The value of an archived field can only be unset. For a required `DEVICE` field, put another device in the field or make the field not required |
 | `customFieldDefinitions.<code>.params.*` | Change `refSubtypeIds` or `defaultRefIds` of the field on its type, delete the field, or delete the type |
 | `nodes.devices` | Remove the device from the flow's data source node with `flowUpdate`, or delete the flow |
+| `assetIds` | Send `ruleUpdate` with an `assetIds` list without the asset, or delete the rule with `ruleDelete`. Don't send an empty list: it makes the rule cover every asset |
+| `equations` | Send `ruleUpdate` with an `equations` list without the equation that names the geo object or the schedule, or delete the rule |
 
 ## Best practices
 
-1. Send `version` with every delete. A delete without `version` can remove a record that someone changed after you last read it. `flowDelete` always requires it. See [Optimistic locking](optimistic-locking.md).
+1. Send `version` with every delete. A delete without `version` can remove a record that someone changed after you last read it. `flowDelete` and `ruleDelete` always require it. See [Optimistic locking](optimistic-locking.md).
 2. Read what you need first. The API doesn't return a deleted record, so fetch an asset group's `history` before you delete the group.
 3. Handle `IN_USE` as a normal result of a delete in your app. Show the user the records in `blockers`, so they know what to change. When `hasMoreBlockers` is `true`, tell the user that more records refer to the record, and that the next delete attempt names them.
 4. Before you delete a device whose hardware you want to use again, remove its identifiers. The identifiers of a deleted device stay reserved.

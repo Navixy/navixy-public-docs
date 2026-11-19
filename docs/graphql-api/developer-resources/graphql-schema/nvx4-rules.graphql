@@ -1,0 +1,570 @@
+# Version: 0.16.43
+
+# @category: rules/rules
+"A rule a workspace wrote over the telemetry of its assets."
+type RulesRule implements Node & Titled & Versioned
+  @dataClass(class: ORDINARY) {
+  id: ID!
+  version: Int!
+  title: String!
+  "The text a notification carries when the rule fires. Absent when the rule sends its title."
+  notificationText: String
+  "Whether the rule covers every asset of the workspace, the ones that exist now and the ones added later."
+  coversAllAssets: Boolean!
+  """
+  The covered assets the caller may read, in id order; empty when the rule covers all. Assets outside
+  the caller's `bdr.asset` read access are left out and stay attached.
+  """
+  assetIds: [ID!]!
+  "The count of `assetIds`."
+  assetCount: Int!
+  "The chain, in evaluation order. The first equation carries no connector."
+  equations: [RulesEquation!]!
+  "Whether the engine evaluates this rule. A rule is created disabled."
+  isEnabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# @category: rules/rules
+"One link of a rule's chain."
+type RulesEquation
+  @dataClass(class: ORDINARY) {
+  "How this equation joins the one before it. Absent on the first equation."
+  connector: RulesConnector
+  condition: RulesCondition!
+}
+
+# @category: rules/rules
+"""
+What an equation asks. No field name repeats across the members (the relations are `geofenceRelation`
+and `scheduleRelation`), so a selection reading several members needs no aliases.
+"""
+union RulesCondition = RulesParameterCondition | RulesGeofenceCondition | RulesScheduleCondition
+
+# @category: rules/rules
+"A telemetry field of the asset's devices compared with a threshold."
+type RulesParameterCondition
+  @dataClass(class: ORDINARY) {
+  "The field's name as the telemetry carries it, without the channel suffix."
+  field: String!
+  "The channel, for a field that has one (`lls_level` with index 2 is `lls_level_2`). Absent otherwise."
+  index: Int
+  operator: RulesOperator!
+  threshold: RulesThreshold!
+}
+
+# @category: rules/rules
+"The asset's position against a geo object."
+type RulesGeofenceCondition
+  @dataClass(class: ORDINARY) {
+  "The geo object; resolves to nothing for a caller who may not read it."
+  geoObjectId: ID!
+  geofenceRelation: RulesGeofenceRelation!
+}
+
+# @category: rules/rules
+"The message's time against a schedule."
+type RulesScheduleCondition
+  @dataClass(class: ORDINARY) {
+  "The schedule; resolves to nothing for a caller who may not read it."
+  scheduleId: ID!
+  scheduleRelation: RulesScheduleRelation!
+}
+
+# @category: rules/rules
+"What a parameter condition compares the field with."
+type RulesThreshold
+  @dataClass(class: ORDINARY) {
+  "The bound, or the lower bound of a range."
+  value: RulesValue!
+  "The upper bound of a range, for IN_RANGE and OUT_OF_RANGE; absent for every other operator."
+  upper: RulesValue
+  "The unit both bounds are given in, as a UCUM code (`km/h`, `Cel`); only a number has one."
+  unit: String
+}
+
+# @category: rules/rules
+"""
+A typed value: a threshold's bound, or a value an equation was satisfied with. Each member names
+its field after the kind of value it holds (`numberValue`, `boolValue`, …), as `TrackingValue`'s
+members do, so a selection reading several members needs no aliases.
+"""
+union RulesValue =
+    RulesNumberValue
+  | RulesBoolValue
+  | RulesStringValue
+  | RulesTimestampValue
+  | RulesDurationValue
+
+# @category: rules/rules
+type RulesNumberValue
+  @dataClass(class: ORDINARY) {
+  numberValue: Decimal!
+}
+
+# @category: rules/rules
+type RulesBoolValue
+  @dataClass(class: ORDINARY) {
+  boolValue: Boolean!
+}
+
+# @category: rules/rules
+type RulesStringValue
+  @dataClass(class: ORDINARY) {
+  stringValue: String!
+}
+
+# @category: rules/rules
+type RulesTimestampValue
+  @dataClass(class: ORDINARY) {
+  timestampValue: DateTime!
+}
+
+# @category: rules/rules
+type RulesDurationValue
+  @dataClass(class: ORDINARY) {
+  durationValue: Duration!
+}
+
+# @category: rules/rules
+"How a parameter condition compares the field with its threshold."
+enum RulesOperator {
+  EQ
+  NE
+  GT
+  GE
+  LT
+  LE
+  "Within `value` and `upper`, both inclusive."
+  IN_RANGE
+  "Below `value` or above `upper`."
+  OUT_OF_RANGE
+}
+
+# @category: rules/rules
+"How an equation joins the one before it."
+enum RulesConnector {
+  AND
+  OR
+}
+
+# @category: rules/rules
+"The asset's position against the geo object."
+enum RulesGeofenceRelation {
+  INSIDE
+  OUTSIDE
+  "Inside now and outside at the previous position."
+  ENTRY
+  "Outside now and inside at the previous position."
+  EXIT
+}
+
+# @category: rules/rules
+"The message's time against the schedule."
+enum RulesScheduleRelation {
+  WITHIN
+  OUTSIDE
+}
+
+# @category: rules/rules
+"Which condition an equation in a write holds."
+enum RulesEquationKind {
+  PARAMETER
+  GEOFENCE
+  SCHEDULE
+}
+
+# @category: rules/rules
+"A paginated list of RulesRule items."
+type RulesRuleConnection implements Connection {
+  "A list of edges."
+  edges: [RulesRuleEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [RulesRule!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: rules/rules
+"An edge in the RulesRule connection."
+type RulesRuleEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The rule at the end of the edge."
+  node: RulesRule!
+}
+
+# @category: rules/rules
+"Filtering options for rules. All criteria are ANDed."
+input RulesRuleFilter {
+  "Partial match on title (case-insensitive contains)."
+  titleContains: String @trim
+  "Only enabled, or only disabled, rules."
+  isEnabled: Boolean
+  """
+  Only rules that apply to this asset: those naming it and those covering all. None for an asset the caller may not
+  read.
+  """
+  assetId: ID
+}
+
+# @category: rules/rules
+"Ordering options for rules."
+input RulesRuleOrder {
+  "The standard field to order by."
+  field: RulesRuleOrderField
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: rules/rules
+"Fields available for ordering rules."
+enum RulesRuleOrderField {
+  "Order by title."
+  TITLE
+  "Order by creation time."
+  CREATED_AT
+  "Order by last modification time."
+  UPDATED_AT
+}
+
+# @category: rules/rules
+"""
+A typed value in a write. Exactly one field must be set (`@oneOf`); the field names the type, and
+the scalar's own coercion refuses a malformed value.
+"""
+input RulesValueInput @oneOf {
+  """
+  Arbitrary-precision decimal, string-encoded: at most 38 significant digits with the decimal point within 38 places
+  of them.
+  """
+  number: Decimal
+  boolean: Boolean
+  "Compared exactly. Cannot contain the NUL character."
+  string: String
+  timestamp: DateTime
+  "ISO 8601 duration, such as `PT5M`."
+  duration: Duration
+}
+
+# @category: rules/rules
+"A threshold in a write."
+input RulesThresholdInput {
+  "The bound, or the lower bound of a range."
+  value: RulesValueInput!
+  "The upper bound of a range, required for IN_RANGE and OUT_OF_RANGE and refused for every other operator."
+  upper: RulesValueInput
+  "A UCUM code among `km/h`, `Cel`, `L`, `%`, `V`, `kPa`, `h`; only a number takes one."
+  unit: String @trim
+}
+
+# @category: rules/rules
+"""
+An equation in a write. The fields below belong to one kind each and must be absent for the others:
+`field`, `index`, `operator` and `threshold` to PARAMETER, `geoObjectId` and `geofenceRelation` to
+GEOFENCE, `scheduleId` and `scheduleRelation` to SCHEDULE. A field of another kind set, or a field
+of the equation's own kind missing (`index` excepted), is refused on parse with the field's path.
+"""
+input RulesEquationInput {
+  "How this equation joins the one before it. Required from the second equation on, refused on the first."
+  connector: RulesConnector
+  kind: RulesEquationKind!
+  "GEOFENCE. A geo object of the caller's workspace with a polygon or multipolygon geometry."
+  geoObjectId: ID
+  "GEOFENCE."
+  geofenceRelation: RulesGeofenceRelation
+  "SCHEDULE. A schedule of the caller's workspace."
+  scheduleId: ID
+  "SCHEDULE."
+  scheduleRelation: RulesScheduleRelation
+  """
+  PARAMETER. The field's name as the telemetry carries it: `^[a-z0-9]+(_[a-z0-9]+)*$`, at most 48
+  characters, without the channel suffix, which goes in `index`.
+  """
+  field: String @trim
+  "PARAMETER. The channel of a field that has one, zero or above. Omit for a field without one."
+  index: Int
+  "PARAMETER."
+  operator: RulesOperator
+  "PARAMETER."
+  threshold: RulesThresholdInput
+}
+
+# @category: rules/rules
+"Input for creating a rule. The rule is created disabled."
+input RulesRuleCreateInput {
+  "Non-blank, at most 255 characters."
+  title: String! @trim
+  "Sent with the notification instead of the title. Non-blank, at most 1000 characters. Not trimmed."
+  notificationText: String
+  "The assets the rule covers. An empty list covers every asset of the workspace. At most 25 000."
+  assetIds: [ID!]!
+  "At most 16."
+  equations: [RulesEquationInput!]!
+}
+
+# @category: rules/rules
+"""
+Input for updating a rule. `assetIds` and `equations` are the whole lists, not patches over them.
+An omitted field keeps its value; `notificationText: null` clears the text; an explicit null on any
+other field is refused.
+"""
+input RulesRuleUpdateInput {
+  "The rule to update."
+  id: ID!
+  "The current version for optimistic locking."
+  version: Int!
+  "Non-blank, at most 255 characters."
+  title: String @trim
+  "Sent with the notification instead of the title. Non-blank, at most 1000 characters. Not trimmed. Null clears it."
+  notificationText: String
+  """
+  The assets the rule covers, replacing the stored list among the assets the caller may read; the
+  stored assets outside the caller's access stay attached. An empty list covers every asset of the
+  workspace, for every caller. At most 25 000.
+  """
+  assetIds: [ID!]
+  "At most 16."
+  equations: [RulesEquationInput!]
+  "Enabling validates the whole rule; a patch that only disables validates nothing."
+  isEnabled: Boolean
+}
+
+# @category: rules/rules
+"Input for deleting a rule."
+input RulesRuleDeleteInput {
+  "The rule to delete."
+  id: ID!
+  "The current version for optimistic locking."
+  version: Int!
+}
+
+# @category: rules/rules
+"The rule a write produced."
+type RulesRulePayload {
+  rule: RulesRule!
+}
+
+# @category: rules/rules
+"The outcome of deleting a rule."
+type RulesRuleDeletePayload {
+  "The id of the deleted rule."
+  id: ID!
+}
+
+# @category: rules/history
+"""
+One transition of a rule's alarm for an asset: the message that caused it and the values that
+satisfied the equations. An activation's id is the key the notification service deduplicates its
+notification on; the notification has an id of its own and does not carry this one.
+"""
+type RulesRuleEvent implements Node
+  @dataClass(class: ORDINARY) {
+  id: ID!
+  kind: RulesRuleEventKind!
+  ruleId: ID!
+  "The asset whose alarm changed."
+  assetId: ID!
+  "The device whose message caused the transition."
+  deviceId: ID!
+  "The telemetry message's own id, as the platform's telemetry contract minted it."
+  messageId: UUID!
+  "When the message's event happened; a buffered upload delivers events hours or months old."
+  eventTime: DateTime! @dataClass(class: PERSONAL)
+  """
+  Whether the message's delivery allowed a notification: a live message does, a buffered one only within the module's
+  notification window, a replay never. Only an activation notifies; a deactivation records the same decision.
+  """
+  mayNotify: Boolean!
+  "The values the equations were satisfied with, one per satisfied parameter equation."
+  values: [RulesEvaluatedValue!]! @dataClass(class: PERSONAL)
+  "The activation in the engine's own terms, carried by its notification as a reference. Absent on a deactivation."
+  sourceEventId: String
+  "How many times this rule's alarm has turned on for this asset, this activation included. Absent on a deactivation."
+  activationCounter: Long
+}
+
+# @category: rules/history
+"A value an equation was satisfied with and where it came from: the device's own message or another device's."
+type RulesEvaluatedValue
+  @dataClass(class: PERSONAL) {
+  field: String!
+  "The channel, for a field that has one. Absent otherwise."
+  index: Int
+  value: RulesValue!
+  "The unit as the device's decoder labelled it. Absent when the field carried none."
+  unit: String
+  "The device that reported the value."
+  deviceId: ID!
+  "When that device's message happened."
+  eventTime: DateTime!
+}
+
+# @category: rules/history
+"The two transitions of an alarm."
+enum RulesRuleEventKind {
+  ACTIVATION
+  DEACTIVATION
+}
+
+# @category: rules/history
+"A paginated list of RulesRuleEvent items."
+type RulesRuleEventConnection implements Connection {
+  "A list of edges."
+  edges: [RulesRuleEventEdge!]!
+  "A list of nodes in the connection (without edge metadata)."
+  nodes: [RulesRuleEvent!]!
+  "Information about the current page."
+  pageInfo: PageInfo!
+  "The total count of items matching the filter."
+  total: CountInfo
+}
+
+# @category: rules/history
+"An edge in the RulesRuleEvent connection."
+type RulesRuleEventEdge implements Edge {
+  "An opaque cursor for this edge."
+  cursor: String!
+  "The event at the end of the edge."
+  node: RulesRuleEvent!
+}
+
+# @category: rules/history
+"""
+Filtering options for events. All criteria are ANDed; each list holds at most 100 ids, and an empty list matches
+nothing.
+"""
+input RulesRuleEventFilter {
+  ruleIds: [ID!]
+  assetIds: [ID!]
+  deviceIds: [ID!]
+  kinds: [RulesRuleEventKind!]
+  "Events at or after this time."
+  occurredFrom: DateTime
+  "Events at or before this time."
+  occurredTo: DateTime
+}
+
+# @category: rules/history
+"Ordering options for events."
+input RulesRuleEventOrder {
+  "The standard field to order by."
+  field: RulesRuleEventOrderField
+  "The direction to order."
+  direction: OrderDirection!
+}
+
+# @category: rules/history
+"Fields available for ordering events. Within one event time the id breaks the tie."
+enum RulesRuleEventOrderField {
+  "Order by the event's time."
+  EVENT_TIME
+}
+
+# @category: rules/rules
+"""
+A field a parameter equation may name, as the devices of the assets report it. `field` and `index` are what
+`RulesEquationInput` takes; `valueType` says which member of `RulesValueInput` the threshold sets.
+"""
+type RulesParameterField
+  @dataClass(class: ORDINARY) {
+  "The field's name as the telemetry carries it, without the channel suffix."
+  field: String!
+  "The channel, for a field that has one (`lls_level` with index 2 is `lls_level_2`). Absent otherwise."
+  index: Int
+  "The type of the field's values; BOOLEAN and STRING take EQ and NE only."
+  valueType: RulesValueType!
+  """
+  The unit the devices label the field with, or the telemetry contract's unit of `board_voltage`, `battery_voltage`,
+  `battery_level` and `hw_mileage` when they send none. Absent for a field without one, and for every type but NUMBER.
+  A threshold may name it only when it is one of the codes `RulesThresholdInput.unit` takes.
+  """
+  unit: String
+}
+
+# @category: rules/rules
+"The type of a field's values, which decides the threshold's member of `RulesValueInput` and the operators."
+enum RulesValueType {
+  NUMBER
+  BOOLEAN
+  STRING
+  TIMESTAMP
+  DURATION
+}
+
+"Rules module queries — the rules a workspace writes over its assets' telemetry, and their history."
+type RulesQuery {
+  # @category: rules/rules
+  "Reads one rule. Null when no live rule of the caller's workspace has that id."
+  rule("The rule to read." id: ID!): RulesRule
+
+  # @category: rules/rules
+  "Lists the rules of the caller's workspace."
+  rules(
+    "Filtering options for the returned rules."
+    filter: RulesRuleFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned rules."
+    orderBy: RulesRuleOrder = { field: TITLE, direction: ASC }
+  ): RulesRuleConnection!
+
+  # @category: rules/history
+  "Lists the transitions of the rules' alarms in the caller's workspace, about the assets the caller may read."
+  events(
+    "Filtering options for the returned events."
+    filter: RulesRuleEventFilter
+    "The first `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    first: Int
+    "The elements that come after the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    after: String
+    "The last `n` elements from the [paginated list](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    last: Int
+    "The elements that come before the specified [cursor](https://navixy.com/docs/navixy-graphql-api/pagination)."
+    before: String
+    "The ordering options for the returned events."
+    orderBy: RulesRuleEventOrder = { field: EVENT_TIME, direction: DESC }
+  ): RulesRuleEventConnection!
+
+  # @category: rules/rules
+  """
+  The fields a parameter equation may name for the assets in `assetIds`, or for every asset the caller may read when
+  `assetIds` is omitted or empty: the comparable fields tracking holds for their devices, plus `speed`, `altitude` and
+  `heading` when they have a device, whether or not a position ever arrived. Sorted by field, index, type and unit; a
+  field reported with two types or units appears once for each. An id the caller may not read, or of another
+  workspace, contributes nothing. The list holds what the devices have reported, not every field they can report, and
+  carries no titles, which belong to the field dictionary of the telemetry contract; SERVICE_UNAVAILABLE when
+  tracking's readings are off or cannot be read.
+  """
+  parameterFields(
+    "The assets the rule covers, at most as many as a rule may name. Omitted or empty: every asset the caller may read."
+    assetIds: [ID!]
+  ): [RulesParameterField!]!
+}
+
+"Rules module mutations."
+type RulesMutation {
+  # @category: rules/rules
+  "Creates a disabled rule. Fails with every violation one pass finds, under `extensions.violations`, when it is invalid."
+  ruleCreate("The input fields for creating the rule." input: RulesRuleCreateInput!): RulesRulePayload!
+    @effect(kinds: [PEOPLE])
+
+  # @category: rules/rules
+  "Updates a rule. Validates the resulting rule unless the patch only disables; fails with the violations found."
+  ruleUpdate("The input fields for updating the rule." input: RulesRuleUpdateInput!): RulesRulePayload!
+    @effect(kinds: [PEOPLE])
+
+  # @category: rules/rules
+  "Soft-deletes a rule. Succeeds even when the stored rule is invalid."
+  ruleDelete("The input fields for deleting the rule." input: RulesRuleDeleteInput!): RulesRuleDeletePayload!
+    @effect(kinds: [PEOPLE, DATA_LOSS])
+}

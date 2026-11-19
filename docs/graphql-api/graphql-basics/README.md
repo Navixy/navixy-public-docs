@@ -291,7 +291,7 @@ mutation {
 
 A **subscription** keeps a connection open and receives data every time it changes. A query returns one response and ends. A subscription returns a new message on the same connection whenever the data changes. Your app doesn't have to send the same query again and again.
 
-Navixy GraphQL API has one subscription, `trackingAssetStates`. It sends the state of assets every time their devices report.
+Navixy GraphQL API has two subscriptions. `trackingAssetStates` sends the state of assets every time their devices report. `notificationsEvents` sends each notification that a rule sends to the user.
 
 Here's a subscription that follows the connectivity of every asset in your workspace:
 
@@ -352,7 +352,7 @@ These rules apply to every WebSocket connection. They use the message types of t
 * Every subscription that you send counts as one request toward your [request rate](../limits.md#request-rate), even one that the server then refuses. A subscription over the limit gets one `next` message with a `RATE_LIMITED` error, then `complete`, and the connection stays open.
 * A subscription ends with an `UNAUTHORIZED` error when its access token expires. Get a new token and subscribe again.
 
-[Subscription limits](../limits.md#subscription-limits) lists every limit with its default value. [Building a live fleet map](../tracking/guides/building-a-live-fleet-map.md#connect-to-the-subscription-endpoint) shows how to connect, authenticate, and handle errors on both transports. [State streams](../tracking/api-reference/state/streams.md) documents every field of the subscription.
+[Subscription limits](../limits.md#subscription-limits) lists every limit with its default value. [Building a live fleet map](../tracking/guides/building-a-live-fleet-map.md#connect-to-the-subscription-endpoint) shows how to connect, authenticate, and handle errors on both transports. [State streams](../tracking/api-reference/state/streams.md) documents every field of the subscription. For the notification stream, see [Receiving notifications](../rules-and-notifications/guides/receiving-notifications.md).
 
 ## Fields
 

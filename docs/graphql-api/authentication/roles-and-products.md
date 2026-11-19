@@ -55,6 +55,7 @@ Business Data Repository uses the actions `read`, `create`, `update`, and `delet
 | Schedules | `bdr.schedule` |
 | Inventories | `bdr.inventory` |
 | Catalog items that belong to your workspace | `bdr.catalog` |
+| Rules of [Rules and notifications](../rules-and-notifications/README.md) | `bdr.rule` |
 
 The audit log, `bdr.audit`, uses only the `read` action. It covers the events of every record in the workspace, even the records that the role doesn't let your app read.
 
@@ -67,6 +68,12 @@ Without a role that covers Business Data Repository, your app can read only `me`
 ### IoT Logic
 
 IoT Logic flows use the actions `read`, `create`, `update`, and `delete`. Their code is `iot_logic.flow`. An action applies to every flow in the workspace: a role can't grant the right to operate on only some flows. A flow shows and changes only the devices that the role lets your app read in Business Data Repository. The other devices remain in the flow. See [Who does what](../iot-logic/#who-does-what) in IoT Logic.
+
+### Rules and notifications
+
+Rules use the resource code `bdr.rule`. An action on it applies to every rule in the workspace. A rule shows only the covered assets that the role lets your app read, and its history lists only their events. Rules have no product of their own: they need Business Data Repository.
+
+Notifications have no resource of their own, and only users can receive them. An API key can't open the notification stream or read the stored notifications: the API returns `PERMISSION_DENIED`. A user needs `read` on `bdr.asset` and receives the notifications of the assets that their roles let them read. See [Who does what](../rules-and-notifications/#who-does-what) in Rules and notifications.
 
 ### Tracking and Billing
 
@@ -88,13 +95,14 @@ Your workspace contains enabled products covered by its plan. The token lists th
 | [Business Data Repository](../business-data-repository/README.md) | `bdr` |
 | [Tracking](../tracking/README.md) | `tracking` |
 | [IoT Logic](../iot-logic/README.md) | `iot_logic` |
+| [Notifications](../rules-and-notifications/README.md) | `notifications` |
 | [Billing](../billing/README.md) | `billing` |
 | [Console](../console/README.md) | `console` |
 | [IAM](../iam/README.md) | `iam` |
 
 Console and IAM work for every workspace, whatever its plan. The token can also list products that this API doesn't serve.
 
-The API refuses a product's operations when your workspace doesn't have the product. A product's operations are the queries, mutations, and subscriptions under the product's field. For example, `bdr { devices }` and `bdr { deviceCreate }` are Business Data Repository's operations, `tracking { deviceStates }` and the `trackingAssetStates` subscription are Tracking operations, and `iotLogic { flows }` and `iotLogic { flowCreate }` are IoT Logic operations. The error is `PRODUCT_DISABLED` or `PERMISSION_DENIED`, depending on the product. A `PRODUCT_DISABLED` error names the product in its `productCode` field. A `PERMISSION_DENIED` error doesn't name it. See [How to handle permission errors](#how-to-handle-permission-errors).
+The API refuses a product's operations when your workspace doesn't have the product. A product's operations are the queries, mutations, and subscriptions under the product's field. For example, `bdr { devices }` and `bdr { deviceCreate }` are Business Data Repository's operations, `tracking { deviceStates }` and the `trackingAssetStates` subscription are Tracking operations, `iotLogic { flows }` and `iotLogic { flowCreate }` are IoT Logic operations, and `notifications { events }` and the `notificationsEvents` subscription are Notifications operations. The error is `PRODUCT_DISABLED` or `PERMISSION_DENIED`, depending on the product. A `PRODUCT_DISABLED` error names the product in its `productCode` field. A `PERMISSION_DENIED` error doesn't name it. See [How to handle permission errors](#how-to-handle-permission-errors).
 
 A change to your workspace's products takes effect when your app gets a new token. To get a new token, exchange the key again.
 
