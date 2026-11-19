@@ -70,7 +70,7 @@ A GPS device that is connected to the vehicle reads the codes and sends them to 
 
 Navixy stores the codes as the device sends them, separated by commas. It doesn't filter or decode the codes and has no list of code meanings. To learn what a code means, look it up as described in [Where to find what a code means](#where-to-find-what-a-code-means).
 
-The **Conditions, 14 days** dashboard lists the fault codes of the last 14 days, without a description. When several codes are active, the dashboard shows them together in one **DTC code** cell, separated by commas. To learn what the dashboard shows, see [Fault codes](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/dashboards/conditions#fault-codes).
+The **Conditions** dashboard of Location Intelligence has a panel for fault codes, **Assets with active fault codes**. The panel shows no data, because the data that Dashboards reads doesn't include fault codes. To learn which panels show no data, see [Panels without data](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/dashboards/conditions#panels-without-data).
 
 ## See also
 

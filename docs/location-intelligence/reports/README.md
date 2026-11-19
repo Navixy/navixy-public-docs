@@ -12,15 +12,21 @@ noIndex: true
 
 Reports answers the questions that a fleet manager asks about a whole period. How far did each van drive last week, how long did it stand still, and how warm did the refrigerated trailer get? Reports shows how your fleet worked over the period that you choose. You see the totals first, then one asset, trip, or sensor. [Tracking](../tracking/) shows where your assets are now, and Reports shows what they did.
 
-<figure><img src="../.gitbook/assets/reports-trips-and-stops.png" alt="The Trips and stops report on the Summary tab, next to the Reports menu. The menu lists the report types in four groups: Fleet activities, Sensors and equipment, Safety and security, and Employee activities. Trips and stops and Sensor readings have no lock, and the other report types show a lock. At the top right is the Ask AI button. At the top of the report are the All assets button, the period button for yesterday, and the Run button, with the time zone of the report under them. Six tiles show the totals: Trips, Distance, Driving time, Stops, Stop time, and Max speed. The By asset table has one row for the asset of the report. Under it, the Trip and stop log lists trips and stops with their start, end, duration, distance, driving time, speeds, and coordinates."><figcaption><p>Trips and stops: the totals for the period, one row for each asset, and the log of trips and stops</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/reports-trips-and-stops.png" alt="The Trips and stops report on the Summary tab, next to the Reports menu. The menu lists the report types in four groups: Fleet activities, Sensors and equipment, Safety and security, and Employee activities. Trips and stops and Sensor readings have no lock, and the other report types show a lock. The Ask AI button is at the top of the page. At the top of the report are the All assets button, the period button for yesterday, and the Run button, with the time zone of the report under them. Six tiles show the totals: Trips, Distance, Driving time, Stops, Stop time, and Max speed. The By asset table has one row for the asset of the report. Under it, the Trip and stop log lists trips and stops with their start, end, duration, distance, driving time, speeds, and coordinates."><figcaption><p>Trips and stops: the totals for the period, one row for each asset, and the log of trips and stops</p></figcaption></figure>
+
+{% hint style="info" %}
+**Get a report by asking for it**
+
+Click **Ask AI** on any page in Reports and describe the report that you need, for example "Trips of all my assets yesterday". Navixy AI Assistant proposes the report type, the period, and the assets, and one click opens and runs the report.
+
+<a href="https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports" class="button primary">Learn how to use Ask AI</a>
+{% endhint %}
 
 ## What you can do with Reports
 
 **See how your fleet moved, from the totals to a single trip.** At the end of a week or a month, the [Trips and stops](trips-and-stops.md) report shows the totals for the period in tiles. The tiles show the number of trips and stops, the distance, the driving time, the stop time, and the maximum speed. The **By asset** table splits these totals by asset, and the **By day** table splits them by day. Open a tab for one asset to see its days. The **Trip and stop log** lists every trip and stop with its start, end, duration, distance, and speed. Click a trip in the log to see where it started and ended on a map.
 
-**Check what the sensors reported.** When a load arrives too warm or a tank runs low, the [Sensor readings](sensor-readings.md) report shows the readings of every sensor on the GPS devices of your assets over a period. Sensors measure values such as fuel level, temperature, or battery voltage. For each sensor, the report shows the average, the lowest and the highest reading, how much the value changed, and how much of the period has readings. A chart for each unit of measure shows how the readings changed. Click a sensor to open its reading panel, which also lists the pauses: the gaps when the sensor sent no readings for longer than usual.
-
-**Ask for a report in plain language.** Describe the report that you need, such as the trips of all your assets yesterday, and **Ask AI** proposes the report with its period and assets. One click opens and runs it.
+**Check what the sensors reported.** When a load arrives too warm or a tank runs low, open the [Sensor readings](sensor-readings.md) report. It shows the readings of every sensor on your assets' GPS devices over a period. Sensors measure values such as fuel level, temperature, or battery voltage. For each sensor, the report shows the average, the lowest and the highest reading, how much the value changed, and how much of the period has readings. A chart for each unit of measure shows how the readings changed. Click a sensor to open its reading panel, which also lists the pauses: the gaps when the sensor sent no readings for longer than usual.
 
 **Share a report and download its tables.** The page address keeps the assets and the period that you chose, so a link to the page opens the same report. Hide the columns that you don't need and download each table as a CSV or Excel file. See [Manage reports](manage-reports.md) to learn how to run a report, share it, and download its tables.
 
@@ -46,7 +52,7 @@ Reports has a set of ready report types. To build your own reports and dashboard
 ## Core concepts
 
 * **Report type**: What a report answers. The Reports menu groups the report types under **Fleet activities**, **Sensors and equipment**, **Safety and security**, and **Employee activities**. You can run two report types: [Trips and stops](trips-and-stops.md) and [Sensor readings](sensor-readings.md). The other report types show a lock and are offered as paid options. See [Report types with a lock](manage-reports.md#report-types-with-a-lock).
-* **Ask AI**: Builds a report from a request in plain language. Open it with the **Ask AI** button at the top right of every page in Reports. See [Ask for a report in plain language](manage-reports.md#ask-for-a-report-in-plain-language).
+* **Ask AI**: Navixy AI Assistant in Reports. It builds a report from a request in plain language and answers with totals. Open it with the **Ask AI** button, which is on every page in Reports. See [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports).
 * **Report**: A report type run for the assets and the period that you choose.
 * **Trip**: A movement of an asset from the moment it starts to move until it stands still for at least 5 minutes.
 * **Stop**: A period of at least 5 minutes when the asset stands still and its GPS device keeps sending positions.
@@ -82,7 +88,9 @@ To run a report, you need both permissions. A report type that you can't see isn
 
 The [report types with a lock](manage-reports.md#report-types-with-a-lock) appear in the Reports menu for everyone, whatever their role.
 
-A report can include every asset in the workspace, including an asset that your role doesn't let you see in **Assets**.
+A report includes only the assets that your roles let you see in **Assets**. For each asset, it includes only the data of the GPS devices that your roles let you see. If your roles let you see no asset, both reports show **No data yet**.
+
+Anyone who can open Reports can use **Ask AI**. Ask has no access settings of its own. It proposes only the report types that you can run, and it uses only the assets that your roles let you see.
 
 If you need a report type that isn't in your Reports menu, ask the people who set up your workspace. See [Access and roles](../access-and-roles.md) to learn how roles give access to the products.
 

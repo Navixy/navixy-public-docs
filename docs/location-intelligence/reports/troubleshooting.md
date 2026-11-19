@@ -30,7 +30,7 @@ Check the following, in this order:
 4. **The age of the data.** Navixy keeps trips for 6 months, sensor readings in 5- to 30-minute steps for 3 months, and sensor readings in 1-hour steps for 12 months. A period older than these limits has no data. For details, see [How far back report data goes](how-report-data-works.md#how-far-back-report-data-goes).
 5. **The filters.** In Sensor readings, the **Sensors** and **Devices** filters can leave no rows. The report then shows "No sensor matches the filters." Click **Clear filters** to show every sensor again.
 
-**No data yet** means that Navixy has no report data for your workspace yet. For example, no asset of the workspace has a GPS device. Assign a GPS device to an asset, and open the report again after about 30 minutes. If the message stays, contact Navixy support.
+**No data yet** means that Navixy has no report data for your workspace yet. For example, no asset of the workspace has a GPS device. Assign a GPS device to an asset, and open the report again after about 30 minutes. **No data yet** also appears when your roles let you see no asset. In this case, ask the people who set up your workspace for access to the assets. If the message stays, contact Navixy support.
 
 When you open Sensor readings, it shows "Choose the assets whose readings to show, then Run." The report has no assets yet. Click the button that shows the assets, choose the assets or **All assets**, then click **Run**.
 
@@ -50,13 +50,14 @@ Check the following:
 * **The distance was under 50 m.** A movement shorter than 50 m isn't a trip.
 * **The GPS device was assigned later.** Trips from before the GPS device was assigned to the asset never appear. If you moved the GPS device from another asset, the earlier trips stay with the other asset.
 * **The positions were unreliable.** Navixy doesn't use positions from a mobile network or Wi-Fi, or positions with poor satellite reception. A trip in an area with poor reception can be shorter or missing.
-* **The GPS device reports rarely.** A trip ends when the GPS device sends no data for longer than the gap described in [How a trip is detected](trips-and-stops.md#how-a-trip-is-detected). A device that is set to send positions less often than that gap while moving gives split or missing trips, although it keeps sending data. When the device sends no odometer reading, too few positions also make the distance too short, because the straight lines between distant positions are shorter than the road. Shorten the reporting interval in the configuration of the GPS device, both for moving and for standing still. A shorter interval uses more mobile data on the SIM card.
+* **The GPS device reports rarely.** A trip ends when the GPS device sends no data for longer than the gap described in [How a trip is detected](trips-and-stops.md#how-a-trip-is-detected). Some devices are set to send positions less often than that gap while moving. Such a device gives split or missing trips, although it keeps sending data. When the device sends no odometer reading, too few positions also make the distance too short. The reason is that the straight lines between distant positions are shorter than the road. Shorten the reporting interval in the configuration of the GPS device, both for moving and for standing still. A shorter interval uses more mobile data on the SIM card.
 
 ## An asset is missing from the report
 
 Check the following:
 
 * **The asset has no GPS device.** An asset without a GPS device isn't included in any report. Assign a GPS device to the asset in [Manage assets](../bdr/assets/manage-assets.md).
+* **Your roles don't let you see the asset.** A report includes only the assets that your roles let you see in **Assets**, and only the data of the GPS devices that your roles let you see. Ask the people who set up your workspace for access to the asset and its GPS devices. See [Access to Reports](./#access-to-reports).
 * **The asset isn't chosen.** Click the button that shows the chosen assets, such as **All assets**. In the list, choose the asset or **All assets**. Then click **Run**. The search in the list of assets finds an asset by its name or ID. You can choose at most 200 assets one by one. To include more, choose **All assets**.
 
 In Trips and stops, the **By asset** table has a row for every asset in the report, including an asset that made no trips. When the asset has a row with no trips, the asset is in the report but has no trips in the period. See [The report is empty](#the-report-is-empty).
@@ -132,29 +133,7 @@ A report that is too large doesn't run at all. Reports never shows only a part o
 
 ## Ask AI doesn't answer
 
-The **Ask** panel shows one of the following messages instead of a reply:
-
-| Message | What to do |
-| --- | --- |
-| "Ask could not answer this." | Click **Ask again**. If the message appears again, change the question, for example name the report type, the period, and the assets. |
-| "Ask is busy. Try again in a minute." | Wait a minute and send the question again. |
-| "Ask is still answering your last question." | Wait for the reply to your last question, then send the next one. |
-| "You have asked N questions in the last 24 hours, as many as Ask takes. Try again later." | Ask answers up to 50 of your questions in a workspace in 24 hours. Wait until your earliest question of the last 24 hours is more than 24 hours old. |
-| "This conversation is gone. Ask keeps a conversation for 30 days after its last question." | Click **New conversation** to start a new one. |
-| "This conversation could not be read." | Click **Try again**. If the message appears again, start a new conversation with <picture><source srcset="../.gitbook/assets/icons/reports-add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-add.svg" alt="New conversation" data-size="line"></picture>. |
-
-## Dictation doesn't fill in the question
-
-The **Ask** panel shows one of the following messages under the box:
-
-| Message | What to do |
-| --- | --- |
-| "The browser does not let this page use the microphone. Allow it in the site settings, then try again." | Allow the microphone for Reports in your browser's site settings, then click <picture><source srcset="../.gitbook/assets/icons/reports-mic-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-mic.svg" alt="Dictate" data-size="line"></picture> again. |
-| "No microphone is available. Connect one, or close the app using it, then try again." | Connect a microphone. If one is connected, close the other app that uses it. |
-| "Nothing was heard. Speak closer to the microphone, then try again." | Speak closer to the microphone, and check that the microphone isn't muted. |
-| "The text does not fit in the question, which takes 2000 characters. Shorten the question, then dictate again." | Delete part of the text in the box, then dictate again. |
-| "You have dictated N phrases in the last 24 hours, as many as Ask takes. Type the question instead." | You can dictate up to 100 phrases in a workspace in 24 hours. Type the question instead. |
-| "Voice input is unavailable right now. Try again later, or type the question." | Try again later, or type the question. |
+The **Ask** panel can show a message in three places: instead of a reply, under a reply, or under the question box. To learn what each message means and what to do, see the [Messages in the Ask panel](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports#messages-in-the-ask-panel) section of Ask AI in Reports.
 
 ## The chart, the map, or a download doesn't appear
 

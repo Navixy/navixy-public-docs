@@ -48,7 +48,7 @@ Notification rules tells you when an asset does something that you need to know 
 
 ### Reports
 
-Reports shows what your assets did over a period. You choose a report, the assets, and a period. Reports then shows the report's totals and tables, such as a log of trips and stops. You can download each table as a CSV or Excel file.
+Reports shows what your assets did over a period. You choose a report, the assets, and a period. Reports then shows the report's totals and tables, such as a log of trips and stops. You can download each table as a CSV or Excel file. [Ask AI](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) builds a report from a request in plain language.
 
 * **Trips and stops** lists every trip of every asset: when it started and ended, its distance and duration, and the average and maximum speed. It also shows how long each asset stood still between trips.
 * **Sensor readings** shows the values that your assets' GPS devices sent over the period, such as fuel level or temperature. For each value, it shows the lowest, highest, and average reading.
@@ -60,10 +60,10 @@ A report shows data up to the moment when you run it.
 Dashboards shows ready-made dashboards for the whole fleet, so you don't build them or write queries.
 
 * **Live status** counts your assets by connection status and by movement, and lists the assets that haven't reported the longest. It reloads its data every 90 seconds.
-* **Trips, 14 days** adds up the trips, distance, and driving time of the last 14 days, and ranks the assets by distance, number of trips, and top speed.
-* **Conditions, 14 days** shows where GPS accuracy is poor and lists the fault codes that vehicles report. It also marks the batteries and power supplies whose voltage drops below their own 14-day average.
+* **Trips** adds up the trips, distance, and driving time of a period that you choose. It also ranks the assets by distance, number of trips, and top speed.
+* **Conditions** shows where GPS accuracy is poor and marks the batteries and power supplies whose voltage drops below their own average.
 
-You can export a dashboard to PDF, or a single panel to CSV or Excel.
+You can export a dashboard to PDF, or a single panel to CSV or Excel. [Ask AI](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards) answers questions about the dashboards in plain language.
 
 ### IoT Query Premium
 

@@ -61,10 +61,8 @@ A role gives access to a product as a whole, or to parts of it. The table shows 
 | [Tracking](tracking/README.md#access-to-tracking) | The assets and devices that you see on the map. Tracking follows your access to assets and devices in Business Data Repository |
 | [IoT Logic](iot-logic/flow-management/README.md#access-to-flows) | What you can do with flows: view, create, edit, or delete them. Access applies to all the flows of the workspace. Which devices you can add to a flow follows your access to devices |
 | [Notification rules](rules-and-notifications/README.md#access-to-notification-rules) | What you can do with rules: see, create, edit, or delete them. Access applies to all the workspace's rules. The notifications that you get follow your access to assets |
-| [Reports](reports/README.md#access-to-reports) | Which report types you can see, and which of them you can run |
-| [Dashboards](dashboards/README.md#access-to-dashboards) | Only the product as a whole |
-
-Reports and Dashboards show the data of all the assets of the workspace. A role that lets you see only some assets in **Assets** doesn't limit the assets in a report or on a dashboard.
+| [Reports](reports/README.md#access-to-reports) | Which report types you can see, and which of them you can run. The assets and devices in a report follow your access to assets and devices in Business Data Repository |
+| [Dashboards](dashboards/README.md#access-to-dashboards) | Which dashboards you can open. What a dashboard shows follows your access to assets, devices, and geo objects in Business Data Repository |
 
 ## When a change to your access applies
 

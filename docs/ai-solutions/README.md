@@ -31,7 +31,7 @@ Navixy offers three AI tools:
 
 | Tool | What it does | Setup required |
 | ---- | ------------ | -------------- |
-| [Navixy AI Assistant](navixy-ai-assistant/README.md) | A chat built into Navixy. It answers questions about your fleet from your live data. | None |
+| [Navixy AI Assistant](navixy-ai-assistant/README.md) | Built into Navixy products. It answers questions about your work from your live data. | None |
 | Navixy MCP Server | Connects your AI client to the live data of your Navixy workspace and lets it make changes that you ask for. | Coming soon |
 | [Navixy Documentation MCP Server](use-navixy-documentation-with-ai.md) | Gives your AI client access to the full Navixy documentation, so it can find an answer on any page when it needs one. | Connect your client to the documentation address. It needs no key. |
 
@@ -39,7 +39,7 @@ The three tools work independently. You can use any of them or all three.
 
 ## Navixy AI Assistant
 
-[Navixy AI Assistant](navixy-ai-assistant/README.md) is a chat built into Navixy. Ask it where your assets are, which trips they made, or how their sensor readings changed. It works with your own sign-in and needs no setup.
+[Navixy AI Assistant](navixy-ai-assistant/README.md) is built into Navixy products. In each product, it's specialized in the work that you do there. For example, it builds a report from a request in plain language, or answers questions about the figures on a dashboard. It works with your own sign-in and needs no setup.
 
 ## Navixy MCP Server
 
@@ -110,7 +110,7 @@ An app that a coding agent builds for you doesn't use Navixy MCP Server. It call
 
 ## Where to start
 
-* [Navixy AI Assistant](navixy-ai-assistant/README.md): Ask the chat built into Navixy about your fleet.
+* [Navixy AI Assistant](navixy-ai-assistant/README.md): Ask the assistant built into Navixy products about your fleet.
 * [Use Navixy documentation with AI](use-navixy-documentation-with-ai.md): Connect your AI client to the Navixy documentation.
 
 ## See also

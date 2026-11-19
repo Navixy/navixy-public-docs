@@ -81,7 +81,7 @@ A report's dates and times are in your computer's time zone. The report names th
 
 ## Share a report by its link
 
-A report's page address keeps the assets, the dates, the open tabs, and the filters. It also keeps the interval of **Sensor readings**, and the trip panel, stop panel, or reading panel that is open. A link to the page or a bookmark opens the same report.
+A report's page address keeps the assets, the dates, the open tabs, and the filters. It also keeps the interval of **Sensor readings** and the trip panel, stop panel, or reading panel that is open. A link to the page or a bookmark opens the same report.
 
 To share a report, follow these steps:
 
@@ -130,43 +130,7 @@ If the file isn't saved, the menu shows "The file could not be written. Try agai
 
 ## Ask for a report in plain language
 
-**Ask AI** builds a report from a request in plain language. Describe the report that you need, and Ask proposes the report type, the period, and the assets. Ask works with the report types that you can run.
-
-To ask for a report, follow these steps:
-
-1. Click **Ask AI** at the top right of the page. The **Ask** panel opens next to the report.
-2. In the box at the bottom of the panel, describe the report that you need, for example "Trips of all my assets yesterday". In a new conversation, you can also click one of the examples in the panel. The example appears in the box, where you can change it.
-3. Press Enter to send the question. To start a new line instead, press Shift+Enter.
-4. Wait while the panel shows **Thinking…**. The reply appears under your question.
-5. If the reply proposes a report, check the report type, the days, and the assets in the proposal, then click **Open report**.
-
-The report opens for the period and the assets of the proposal and runs. On a narrow screen, the panel closes so that the report shows.
-
-You can name assets by their names and periods in everyday words. "Last week" and the other periods of the period menu cover the same days as in the menu. A proposal follows the rules of the report: at most 31 days and at most 200 assets chosen one by one. Ask can also answer with figures from a report, such as the distance that each asset drove, and tell you which reports you can run.
-
-A question can be up to 2,000 characters long. Ask answers one question at a time, and up to 50 of your questions in a workspace in 24 hours.
-
-### Dictate a question
-
-You can speak your question instead of typing it. To dictate, your browser needs a microphone and permission to use it.
-
-1. Check the language at the bottom left of the box, for example **EN**. To change it, click it and choose a language. The browser remembers your choice.
-2. Click <picture><source srcset="../.gitbook/assets/icons/reports-mic-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-mic.svg" alt="Dictate" data-size="line"></picture> and speak. A clock shows how long you have spoken, up to 30 seconds.
-3. To finish, click <picture><source srcset="../.gitbook/assets/icons/reports-stop-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-stop.svg" alt="Stop and transcribe" data-size="line"></picture>. After 30 seconds, the recording stops by itself. To cancel the recording, press Esc.
-
-The panel shows **Transcribing…**, and the text appears in the box, after anything that you typed. Check the text, change it if needed, and send the question.
-
-Speak in the language that the box shows. Speech in another language turns into wrong text. You can dictate up to 100 phrases in a workspace in 24 hours. If the text doesn't appear, see [Dictation doesn't fill in the question](troubleshooting.md#dictation-doesnt-fill-in-the-question).
-
-### Continue or start a conversation
-
-Ask keeps your conversation while you move between reports in the same browser tab. Each workspace has its own conversation. Ask keeps a conversation for 30 days after its last question.
-
-* To start a new conversation, click <picture><source srcset="../.gitbook/assets/icons/reports-add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-add.svg" alt="New conversation" data-size="line"></picture> at the top of the panel.
-* To close the panel, click **Ask AI** again or press Esc. Your conversation stays when you open the panel again.
-* To make the panel wider or narrower, drag its left edge. The browser remembers the width.
-
-If Ask doesn't answer, see [Ask AI doesn't answer](troubleshooting.md#ask-ai-doesnt-answer).
+**Ask AI**, or Ask, builds a report from a request in plain language. Describe the report that you need, for example "Trips of all my assets yesterday", and Ask proposes the report type, the period, and the assets. To learn how to ask for a report, dictate a question, and continue a conversation, see [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) in the AI solutions documentation.
 
 ## Report types with a lock
 
