@@ -89,7 +89,7 @@ Now you have configured domain names, and your website is SSL-protected.
 
 #### Your own SSL certificate
 
-Selecting the **No** option in response to the question about Let's Encrypt SSL certificates will take you to the menu for installing your own SSL certificates. To proceed, you must have a valid full-chain certificate as well as its private key. Place them somewhere on your server. The standard location is `/etc/nginx/ssl`.
+Selecting the **No** option in response to the question about Let's Encrypt SSL certificates will take you to the menu for installing your own SSL certificates. To proceed, you must have a valid full-chain certificate as well as its private key. Place them somewhere on your server. The standard location is `/etc/nginx/ssl`. On AlmaLinux, Rocky Linux, and Red Hat Enterprise Linux, the files must be under `/etc`: SELinux doesn't let Nginx read certificates from other folders.
 
 First you need to specify a path to the certificate file:
 

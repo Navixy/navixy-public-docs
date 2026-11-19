@@ -1,5 +1,5 @@
 ---
-description: Manually update Navixy on-premise on Windows. Apply database changes, replace Java service files, update web services, and reconfigure services for Java 21.
+description: Manually update Navixy on-premise on Windows. Apply database changes, replace Java service files, update web services, and reconfigure services for Java 25.
 ---
 
 # Manual update - Windows
@@ -14,10 +14,10 @@ In general, the Navixy platform update consists of three parts:
 
 Before installing, please make sure that your system meets the following prerequisites:
 
-1. **Java Development Kit 21**\
-   Starting from March 2025, the platform deprecated version 17 and older.
-2. **MySQL 8.0**\
-   Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
+1. **Java Development Kit 25**\
+   Starting from build 2026.07, the platform requires Java 25.
+2. **MySQL 8.4 or 8.0**\
+   New installations get MySQL 8.4. Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
 
 {% hint style="danger" %}
 Non-compliance with the required software will result in the new version of the platform being unable to start. However, a preliminary update of prerequisites will keep the platform functional.
@@ -82,7 +82,7 @@ If there are any new parameters in the examples, add them to the corresponding f
 
 ## Windows services configuration
 
-f you are upgrading to Java 21 from a previous version, you will need to reinstall Navixy services as the wrapper app from the previous version will not work with Java 21. To do this, take the Wrapper folder from the installation package and follow the same steps as for the initial installation. Read more: [Install on Windows.](../../advanced-installation/windows-installation/)
+The wrapper app from earlier versions doesn't work with Java 25. If you upgrade to Java 25 from an earlier version, reinstall the Navixy services. To do this, take the Wrapper folder from the installation package and follow the same steps as for the initial installation. Read more: [Install on Windows.](../../advanced-installation/windows-installation/)
 
 The batch file will update the settings of the existing services, so there is no need to delete them beforehand.
 

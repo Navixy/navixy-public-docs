@@ -10,16 +10,16 @@ This guide describes Navixy On-Premise platform update using automated script. T
 
 For the initial installation of the platform, refer to the [installation instructions](../../advanced-installation/windows-installation/).
 
-For Linux servers, please refer to the [Easy installation](../../easy-installation.md) instruction or to [advanced installation section for Ubuntu](../../advanced-installation/ubuntu-20/).
+For Linux servers, see the [Easy installation](../../easy-installation.md) instruction or [Linux installation script](../../advanced-installation/ubuntu-20/).
 
 ## Prerequisites for update
 
 Before starting the update, please make sure that your system meets the following prerequisites:
 
-1. **Java Development Kit 21**\
-   Starting from March 2025, the platform deprecated version 17 and older.
-2. **MySQL 8.0**\
-   Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
+1. **Java Development Kit 25**\
+   Starting from build 2026.07, the platform requires Java 25. If your installation runs on Java 21, install JDK 25. Then add the JDK 25 `bin` folder to the `PATH` system variable, and set `JAVA_HOME` to the JDK 25 folder before you run the updater.
+2. **MySQL 8.4 or 8.0**\
+   New installations get MySQL 8.4. Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
 
 Non-compliance with the required software will result in the new version of the platform being unable to start. However, a preliminary update of prerequisites will keep the platform functional.
 
@@ -75,5 +75,7 @@ After a successful update, the script will notify you of completion and terminat
 ## Final steps
 
 When the update is complete, check that the platform admin panel and user accounts are available and everything is working correctly. If you were expecting any specific innovations, check if they are present among the platform functionality.
+
+Then check that the database part of the update finished, as described in [Check the database version after each update](../../advanced-installation/windows-installation/checks-after-installation-and-update-windows.md#check-the-database-version-after-each-update).
 
 If you find any issues, proceed to the troubleshooting section or contact technical support.

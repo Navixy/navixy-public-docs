@@ -98,5 +98,6 @@ Configs are usually located at /etc/mysql/mysql.conf.d/mysqld.cnf\
 Logs are usually located at /var/log/mysql
 
 **Windows:**\
-Configs are usually located at C:\ProgramData\MySQL\MySQL Server 8.0\my.ini\
-Logs are usually located at C:\ProgramData\MySQL\MySQL Server 8.0\Data
+Configs are usually located at C:\ProgramData\MySQL\MySQL Server 8.4\my.ini\
+Logs are usually located at C:\ProgramData\MySQL\MySQL Server 8.4\Data\
+On installations with MySQL 8.0, the folder is `MySQL Server 8.0`.

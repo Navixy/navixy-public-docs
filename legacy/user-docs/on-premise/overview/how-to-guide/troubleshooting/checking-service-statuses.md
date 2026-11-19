@@ -118,7 +118,9 @@ Make sure that Nginx has started and is running normally, and if not, check for 
 
 #### Windows
 
-On Windows, Nginx is not a service but just a small application running in the background. To check if it is launched, open the Task manager (Details tab) and look for **nginx.exe** processes - there are usually two or more of them.
+Installations made or updated with the Windows scripts of build 2026.10 run Nginx as the **Navixy nginx** service. Check its status in **Services**, the same way as for the Java services. If the service doesn't start, check `C:\nginx\logs\error.log`.
+
+On earlier installations and on manual installations, Nginx is a program that runs in the background. To check that it runs, open the Task Manager (**Details** tab) and look for **nginx.exe** processes. There are usually two or more.
 
 ![Checking Nginx status - Windows](../../../../.gitbook/assets/image-20230823-090304.png)
 

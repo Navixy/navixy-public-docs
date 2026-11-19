@@ -13,7 +13,8 @@ This section provides detailed technical documentation on how to install and mai
 
 ### 🗒️ **Advanced installation**
 
-* [Ubuntu 20 and newer](advanced-installation/ubuntu-20/)
+* [Linux installation script](advanced-installation/ubuntu-20/)\
+  Installation on Ubuntu, Debian, AlmaLinux, Rocky Linux, and Red Hat Enterprise Linux without Docker
 * [Windows installation](advanced-installation/windows-installation/)\
   Detailed guide on how to install Navixy with a dedicated database server
 

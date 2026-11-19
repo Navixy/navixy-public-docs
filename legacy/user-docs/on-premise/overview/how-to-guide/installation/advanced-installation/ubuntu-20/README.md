@@ -1,10 +1,16 @@
 ---
-description: Install Navixy on-premise on Ubuntu 20, 22, or 24 using an automated script. Complete the installation and configuration wizards, then log in to the admin panel.
+description: Install Navixy On-Premise on Ubuntu, Debian, AlmaLinux, Rocky Linux, or Red Hat Enterprise Linux with the installation script, then open the Admin Panel.
 ---
 
-# Ubuntu 20+
+# Linux installation script
 
-This guide describes Navixy On-Premise platform installation using automated scripts. This type of installation is designed for and supported only on **Ubuntu 20, 22 and 24**.
+This guide describes Navixy On-Premise platform installation using automated scripts. This type of installation is designed for and supported only on these 64-bit Linux distributions:
+
+* Ubuntu 22.04, 24.04, and 26.04
+* Debian 12 and 13
+* AlmaLinux, Rocky Linux, and Red Hat Enterprise Linux 9 and 10
+
+On AlmaLinux, Rocky Linux, and Red Hat Enterprise Linux, SELinux stays in enforcing mode. If firewalld is active, the script asks whether to open the HTTP and HTTPS ports. Open the ports for your GPS devices yourself. Store your own HTTPS certificates under `/etc`: SELinux doesn't let Nginx read certificates from other folders.
 
 For other Linux distros, only manual installation is available.
 
@@ -17,12 +23,16 @@ First, you need to have the following before you start the installation:
 * A server (or servers) meeting all the [Server hardware](../../../requirements/server-hardware.md) requirements
 * Registered domain names that you will use for your Navixy instance
 * Navixy software package and License key provided by the Navixy team
+* Internet access from the server to the repositories that the script installs software from:
+  * `repo.mysql.com`, for MySQL 8.4
+  * `packages.adoptium.net`, on Debian 12, for Temurin JDK 25
+  * the EPEL and CRB repositories, on AlmaLinux, Rocky Linux, and Red Hat Enterprise Linux. On Red Hat Enterprise Linux, also `dl.fedoraproject.org`.
 
 This automatic process will install all the software prerequisites listed in [Server software](../../../requirements/server-software.md) document meaning that you don't need to install them yourself manually.
 
 ## Navixy package
 
-Navixy On-premise distribution package is always available for download at the [direct link](https://get.navixy.com/latest). On Ubuntu, you can download it with `wget` using the following command:
+The Navixy On-Premise distribution package is always available for download at the [direct link](https://get.navixy.com/latest). On Linux, you can download it with `wget` using the following command:
 
 ```
 wget https://get.navixy.com/latest --content-disposition

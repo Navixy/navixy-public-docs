@@ -51,7 +51,7 @@ On a **Basics** tab, you need to select the main parameters of the virtual machi
   * Region - choose the one that best suits your users in terms of accessibility. Indicates physical location of a data center.
   * Availability options - here you can choose differen high availability solutions provided by Azure. For more information, check [Azure instructions](https://learn.microsoft.com/en-us/azure/virtual-machines/availability).
   * Security type - advanced security features provided by Azure.
-  * Image - pre-installed OS that will be deployed to your instance. Ubuntu 20 or 22 recommended.
+  * Image - pre-installed OS that will be deployed to your instance. Ubuntu 22.04 or newer is recommended.
   * VM architecture - x64 recommended.
   * Run with Azure Spot discount - select **for tests only**, this option is not suitable for product solutions.
   * Size - one of the most important options. It determines the hardware parameters of your server and directly affects performance. You should make a selection based on the planned loads on the server. The selection dramatically affects the pricing.\

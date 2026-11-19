@@ -58,10 +58,10 @@ ENCLOSED BY '"' LINES
 TERMINATED BY '\n';
 ```
 
-For Windows the path is like:
+For Windows, the path looks like the example below. On installations with MySQL 8.0, the folder is `MySQL Server 8.0`.
 
 ```
-INTO OUTFILE "C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/987654321012345.csv"
+INTO OUTFILE "C:/ProgramData/MySQL/MySQL Server 8.4/Uploads/987654321012345.csv"
 ```
 
 ## File-by-file structure
@@ -88,10 +88,10 @@ ENCLOSED BY '"' LINES
 TERMINATED BY '\n';
 ```
 
-For Windows the path is like:
+For Windows, the path looks like the example below. On installations with MySQL 8.0, the folder is `MySQL Server 8.0`.
 
 ```
-INTO OUTFILE "C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/987654321012345.csv"
+INTO OUTFILE "C:/ProgramData/MySQL/MySQL Server 8.4/Uploads/987654321012345.csv"
 ```
 
 ## Data output

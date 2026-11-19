@@ -16,8 +16,8 @@ In general, when calculating the parameters of the new server, you can rely on t
 
 From a software standpoint, the same third-party software must be installed as on the source server. This includes:
 
-* Java SE Development Kit (JDK) 17
-* MySQL Server 8.0
+* Java SE Development Kit (JDK) 25
+* MySQL Server 8.4 or 8.0
 * NGINX 1.2 or newer
 
 Only major versions matter here, and the difference in minor versions will have no effect on functionality.

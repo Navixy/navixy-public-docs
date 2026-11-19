@@ -14,10 +14,12 @@ If any errors or other difficulties occur during the update process, please cont
 
 Before installing, please make sure that your system meets the following prerequisites:
 
-1. **Java Development Kit 21**\
-   Starting from March 2025, the platform deprecated version 17 and older.
-2. **MySQL 8.0**\
-   Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
+1. **Java Development Kit 25**\
+   Starting from build 2026.07, the platform requires Java 25.
+2. **MySQL 8.4 or 8.0**\
+   New installations get MySQL 8.4. Starting from March 2024, the platform deprecated MySQL 5.7. This version reached its EOL and is no longer supported.
+3. **About 2 GB of free disk space**\
+   The update script checks the free space and asks for confirmation when less is left.
 
 {% hint style="info" %}
 Non-compliance with the required software will result in the new version of the platform being unable to start. However, a preliminary update of prerequisites will keep the platform functional.

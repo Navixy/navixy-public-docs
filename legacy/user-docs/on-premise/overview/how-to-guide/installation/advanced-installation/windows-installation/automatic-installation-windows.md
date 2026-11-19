@@ -182,6 +182,10 @@ For the user interface to be available, you need to specify its domain in the Ad
 
 If the above is not done, the user interface will not be able to open.
 
+### Check settings after installation
+
+The installation script doesn't set the server address for GPS devices. Up to build 2026.10.356, it also leaves wrong addresses in links. Set them as described in [Checks after installation and update - Windows](checks-after-installation-and-update-windows.md).
+
 ### Updates
 
 To update Navixy deployed on Windows system to the most current version, please refer to this document: [Update on Windows](../../update/update-windows/)

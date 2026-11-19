@@ -89,7 +89,8 @@ location / {proxy_pass http://127.0.0.1:8084;
 Restart Nginx web server:
 
 * For Linux: `nginx -t && nginx -s reload`
-* For Windows, you need to terminate all Nginx processes and then start **nginx.exe** from `C:\nginx`.
+* For Windows, when Nginx runs as the **Navixy nginx** service: run `C:\nginx\nginx-reload.bat` as administrator. It checks the configuration and reloads Nginx.
+* For Windows installations made before build 2026.10, or installed manually: terminate all Nginx processes, and then start **nginx.exe** from `C:\nginx`.
 
 Make sure Nginx has started and doesn't give any error related to SSL.
 

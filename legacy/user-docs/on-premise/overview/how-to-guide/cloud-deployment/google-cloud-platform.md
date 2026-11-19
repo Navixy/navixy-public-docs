@@ -52,7 +52,7 @@ Here you need to do the following.
    <img src="../../../../.gitbook/assets/image-20240117-132016.png" alt="GCP instance region" data-size="original">
 3. Select machine configuration. In this section you choose your server configuration depending on the tasks and planned loads. You can find more information on possible instance configurations in [Google Cloud Platform documentation](https://cloud.google.com/compute/docs/instances). For high-loaded huge instances, it is recommended to select compute optimized configuration. The type and configuration of the instance greatly affect the cost.\
    ![GCP instance configuration](../../../../.gitbook/assets/image-20240117-132153.png)
-4. Configure boot disk. Here you select the operating system version (Ubuntu 20 or newer is recommended), disk type (SSD is recommended) and disk capacity (must be calculated according to [server hardware requirements](../requirements/server-hardware.md)).\
+4. Configure boot disk. Here you select the operating system version (Ubuntu 22.04 or newer is recommended), disk type (SSD is recommended) and disk capacity (must be calculated according to [server hardware requirements](../requirements/server-hardware.md)).\
    ![GCP disk](../../../../.gitbook/assets/image-20240117-132329.png)
 5. Configure firewall settings. Basically you need to have HTTP and HTTPS traffic allowed.\
    ![GCP firewall settings](../../../../.gitbook/assets/image-20240117-132502.png)

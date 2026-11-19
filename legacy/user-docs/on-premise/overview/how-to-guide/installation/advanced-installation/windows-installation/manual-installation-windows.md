@@ -24,9 +24,9 @@ To perform the installation, you need a Windows account with **administrator pri
 
 Download and install the pre-requisites described in [Server software](../../../requirements/server-software.md) document. Essentially, you will need these components to get the platform up and running:
 
-* [MySQL 8.0](https://dev.mysql.com/downloads/installer/) - only Server is required, other components are optional;
+* [MySQL 8.4](https://dev.mysql.com/downloads/installer/) - only Server is required, other components are optional;
   * Microsoft Visual C++ may be required for installation. Setup wizard will notify you about it.
-* [Java SE Development Kit 21](https://www.oracle.com/java/technologies/downloads/#jdk21-windows);
+* [Java SE Development Kit 25](https://www.oracle.com/java/technologies/downloads/#jdk25-windows);
 * [Nginx](https://nginx.org/en/download.html) - any recent version (it does not need installation, just extract it);
 
 In addition to the basic components, it is also recommended to install the following software to make further work easier:
@@ -42,7 +42,7 @@ It is strongly recommended to install third-party software only from official re
 
 After installing MySQL Server, you need to apply changes to its configuration for Navixy platform to work correctly with the database. The configuration is specified in **my.ini** file located at the following path:
 
-`C:\ProgramData\MySQL\MySQL Server 8.0\my.ini`
+`C:\ProgramData\MySQL\MySQL Server 8.4\my.ini`
 
 In this file you need to set the parameters below under `[mysqld]` section. If they are already present - change them accordingly.
 
@@ -60,8 +60,8 @@ After the configuration is changed, save the file and **restart MySQL** from Win
 
 Java and MySQL `bin` folders must be specified in Windows `PATH` system environment variable. These folders are (by default) as follows:
 
-* `C:\Program Files\Java\jdk-21\bin`
-* `C:\Program Files\MySQL\MySQL Server 8.0\bin`
+* `C:\Program Files\Java\jdk-25\bin`
+* `C:\Program Files\MySQL\MySQL Server 8.4\bin`
 
 Java installation folder must also be added to the new `JAVA_HOME` system variable. This is required for the backend services to work properly
 
@@ -72,8 +72,8 @@ Folder names may vary from version to version, so check the actual paths first.
 You can update the environment variables with the following commands from command line:
 
 ```
-setx /m Path "%PATH%;C:\Program Files\Java\jdk-21\bin;C:\Program Files\MySQL\MySQL Server 8.0\bin"
-setx /m JAVA_HOME "C:\Program Files\Java\jdk-21"
+setx /m Path "%PATH%;C:\Program Files\Java\jdk-25\bin;C:\Program Files\MySQL\MySQL Server 8.4\bin"
+setx /m JAVA_HOME "C:\Program Files\Java\jdk-25"
 ```
 
 This will create the required values.
