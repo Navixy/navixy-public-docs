@@ -18,7 +18,7 @@ Your account administrator is the person who manages Navixy for your company: th
 
 ### Your company set up Navixy itself
 
-Someone in your company registered with Navixy and became the owner of your company's organization. That person, and the colleagues they choose, set up the workspaces, invite users, and decide what each role allows. They do this in [Navixy Console](https://console.navixy.com/?utm_source=navixy-docs\&utm_campaign=account-administrator), the app where an organization is managed.
+Someone in your company registered with Navixy and became the owner of your company's organization. That person, and the colleagues they choose, set up the workspaces, invite users, and decide what each role allows. They do this in [Navixy Console](https://account.navixy.com/?utm_source=navixy-docs\&utm_campaign=account-administrator), the app where an organization is managed.
 {% endcolumn %}
 
 {% column %}

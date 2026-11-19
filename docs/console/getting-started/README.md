@@ -34,7 +34,7 @@ Go to the [Navixy registration page](https://account.navixy.com/signup?utm_sourc
 
 Enter your email address. In the **Data region** field, select where your organization's data is stored: **United States** or **European Union**. Navixy preselects the region of the country you connect from, or **United States** when it can't tell. You can change it. Click **Continue**.
 
-The region applies to your organization and to every workspace in it. You can't change it after registration. Your developers need it to connect to [Navixy GraphQL API](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/graphql-basics).
+The region applies to your organization and to every workspace in it. You can't change it after registration. Your developers need it to connect to [Navixy GraphQL API](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/graphql-basics#endpoint-and-region).
 {% endstep %}
 
 {% step %}

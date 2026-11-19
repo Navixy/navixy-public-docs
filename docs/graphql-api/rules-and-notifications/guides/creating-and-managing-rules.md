@@ -19,7 +19,7 @@ You need an access token for the workspace that you work in, with a role that ha
 
 A rule checks a device only through the asset that the device is assigned to. Before you create a rule, assign each device to an asset. See [Creating assets and assigning devices](../../business-data-repository/guides/creating-assets-and-assigning-devices.md).
 
-Every request on this page is a GraphQL query or mutation with variables. Send each request as an HTTP POST request to `https://nvx4.<REGION>.navixy.com/api/graphql`. Replace `<REGION>` with the region of your organization: `eu` for the European Union or `us` for the United States. The example request that Navixy Console shows next to your API key already has the addresses of your region. Put the text of the operation in the `query` field of a JSON body, and the variables in the `variables` field. The following request lists the rules of your workspace:
+Every request on this page is a GraphQL query or mutation with variables. Send each request as an HTTP POST request to `https://nvx4.<REGION>.navixy.com/api/graphql`. Replace `<REGION>` with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region). Put the text of the operation in the `query` field of a JSON body, and the variables in the `variables` field. The following request lists the rules of your workspace:
 
 ```bash
 curl -L \

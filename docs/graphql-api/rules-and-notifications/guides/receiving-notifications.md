@@ -17,7 +17,7 @@ This guide shows how to open the stream, what a client receives, how the stream 
 
 You need an access token of a user, in a workspace that has the Notifications product, and a client for the `graphql-transport-ws` protocol. This guide uses the [graphql-ws](https://github.com/enisdenjo/graphql-ws) library for JavaScript. The protocol and the connection rules that every subscription shares are in [Subscriptions](../../graphql-basics/#subscriptions).
 
-The stream is served over a WebSocket at `wss://nvx4.<REGION>.navixy.com/api/graphql/ws`. The same subscription is also served as server-sent events: a POST request to `https://nvx4.<REGION>.navixy.com/api/graphql` with the `Accept: text/event-stream` header and the access token in the `Authorization` header. This guide describes the WebSocket. Replace `<REGION>` in both addresses with the region of your organization: `eu` for the European Union or `us` for the United States. The address of Navixy Console shows your region, for example `console.us.navixy.com`.
+The stream is served over a WebSocket at `wss://nvx4.<REGION>.navixy.com/api/graphql/ws`. The same subscription is also served as server-sent events: a POST request to `https://nvx4.<REGION>.navixy.com/api/graphql` with the `Accept: text/event-stream` header and the access token in the `Authorization` header. This guide describes the WebSocket. Replace `<REGION>` in both addresses with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region).
 
 ## Who receives a notification
 
