@@ -1,0 +1,19 @@
+root: ./
+
+structure:
+  readme: README.md
+  summary: SUMMARY.md
+
+# Add a redirect whenever a published page moves or is renamed.
+# Keys are old published paths; values are current files. Read the gitbook skill first.
+redirects:
+  # 2026-11-19: the legacy Navixy MCP space's page, replaced by the current one.
+  using-navixy-documentation-with-ai: use-navixy-documentation-with-ai.md
+  navixy-mcp-server: README.md
+  navixy-mcp-server/getting-started: README.md
+  navixy-mcp-server/getting-started/configuring-navixy-mcp-in-claude-desktop: README.md
+  navixy-mcp-server/getting-started/configuring-navixy-mcp-in-cursor: README.md
+  navixy-mcp-server/getting-started/configuring-navixy-mcp-in-chatgpt: README.md
+  navixy-mcp-server/getting-started/connecting-other-ai-tools: README.md
+  navixy-mcp-server/navixy-user-mcp: README.md
+  navixy-mcp-server/navixy-panel-mcp: README.md
