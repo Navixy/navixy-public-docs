@@ -24,7 +24,7 @@ To create a workspace, follow these steps:
 5. On the same step, enter a **Workspace name** of up to 128 characters.
 6. Click **Launch**.
 
-Navixy sets the workspace's region. The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
+The workspace is in the region of its organization. The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
 
 ## Switch to another workspace
 

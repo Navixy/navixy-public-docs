@@ -20,6 +20,7 @@ Before you start, make sure that you have the following:
 * An API key. Your organization's administrator creates it in Navixy Console and gives it a role. For this guide, the role must allow `read`, `create`, and `update` on devices (`bdr.device`) and `read` on catalog items (`bdr.catalog`). Ask the administrator for the key and for the example request that Console shows next to it. The example request has the ID of your workspace, which the first step needs. See [Get an API key](authentication/README.md#get-an-api-key).
 * A GPS device of a model supported by the Navixy platform, its IMEI, and a SIM card with a known phone number. This guide uses a Teltonika model, because the platform sends the setup SMS to Teltonika models only. The third step shows how to list the supported models.
 * The APN settings of your SIM carrier: the APN name and, if the carrier requires them, the user name and the password.
+* The region of your organization: `eu` for the European Union or `us` for the United States. The example request that Console shows next to the API key already has the addresses of your region. Replace `<REGION>` with your region in every command of this guide. See [Endpoint and region](graphql-basics/#endpoint-and-region).
 * A terminal with `curl` and [`jq`](https://jqlang.org/). The examples use `jq` to read the access token from a JSON response.
 
 ## How activation works
@@ -55,7 +56,7 @@ Then exchange the key and save the access token in the `ACCESS_TOKEN` variable:
 ```bash
 ACCESS_TOKEN=$(curl -L -s \
   --request POST \
-  --url 'https://iam.eu.navixy.com/realms/quickstart/protocol/openid-connect/token' \
+  --url 'https://iam.<REGION>.navixy.com/realms/quickstart/protocol/openid-connect/token' \
   --header 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
   --data-urlencode 'client_id=api-key-exchange' \
@@ -92,12 +93,12 @@ If the command prints `null`, the exchange failed. Run the `curl` command withou
 {% step %}
 ### Send your first request
 
-Navixy GraphQL API has one main endpoint: `https://nvx4.eu.navixy.com/api/graphql`. Send every operation to this endpoint as an HTTP POST request with a JSON body. The body has a `query` field and, optionally, a `variables` field. The following request reads your workspace and confirms that the token works:
+Navixy GraphQL API has one main endpoint in each region: `https://nvx4.<REGION>.navixy.com/api/graphql`. Send every operation to this endpoint as an HTTP POST request with a JSON body. The body has a `query` field and, optionally, a `variables` field. The following request reads your workspace and confirms that the token works:
 
 ```bash
 curl -L \
   --request POST \
-  --url 'https://nvx4.eu.navixy.com/api/graphql' \
+  --url 'https://nvx4.<REGION>.navixy.com/api/graphql' \
   --header "Authorization: Bearer $ACCESS_TOKEN" \
   --header 'Content-Type: application/json' \
   --data '{

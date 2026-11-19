@@ -17,12 +17,12 @@ The guide is for developers who are comfortable with GraphQL. For the rules that
 
 You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
-Every request on this page is a GraphQL document with variables. Send each one as an HTTP POST request to `https://nvx4.eu.navixy.com/api/graphql`, with the document in the `query` field of a JSON body and the variables in the `variables` field. The following request reads one flow:
+Every request on this page is a GraphQL document with variables. Send each one as an HTTP POST request to `https://nvx4.<REGION>.navixy.com/api/graphql`, with the document in the `query` field of a JSON body and the variables in the `variables` field. Replace `<REGION>` with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region). The following request reads one flow:
 
 ```bash
 curl -L \
   --request POST \
-  --url 'https://nvx4.eu.navixy.com/api/graphql' \
+  --url 'https://nvx4.<REGION>.navixy.com/api/graphql' \
   --header 'Authorization: Bearer <ACCESS_TOKEN>' \
   --header 'Content-Type: application/json' \
   --data '{

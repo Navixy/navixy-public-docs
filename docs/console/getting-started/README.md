@@ -18,7 +18,7 @@ The guide ends when your team can start working. If you also run Navixy for othe
 
 ## 1. Register
 
-Registration takes an email address and a few choices: your organization name, your first workspace name, and the products you need. It ends with you signed in to Navixy Console.
+Registration takes an email address and a few choices: your region, your organization name, your first workspace name, and the products you need. It ends with you signed in to Navixy Console.
 
 To create a Navixy Console account, follow these steps:
 
@@ -26,13 +26,15 @@ To create a Navixy Console account, follow these steps:
 {% step %}
 **Open the registration page**
 
-Go to the [Navixy registration page](http://console.navixy.com/signup?utm_source=navixy-docs\&utm_campaign=console-getting-started).
+Go to the [Navixy registration page](https://account.navixy.com/signup?utm_source=navixy-docs\&utm_campaign=console-getting-started).
 {% endstep %}
 
 {% step %}
-**Enter your email address**
+**Enter your email address and select a region**
 
-Enter your email address and click **Continue**.
+Enter your email address. In the **Data region** field, select where your organization's data is stored: **United States** or **European Union**. Navixy preselects the region of the country you connect from, or **United States** when it can't tell. You can change it. Click **Continue**.
+
+The region applies to your organization and to every workspace in it. You can't change it after registration. Your developers need it to connect to [Navixy GraphQL API](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/graphql-basics).
 {% endstep %}
 
 {% step %}
@@ -72,11 +74,13 @@ Click **Continue** to move to the next step and **Launch** on the last one.
 Registration is complete. Now you have:
 
 * A Navixy user record: Your identity on the platform. It exists on its own, so the same user can later belong to several organizations.
-* An organization with the name you entered. Navixy sets its home region, where its data is stored.
+* An organization with the name you entered, in the region you selected. Its data is stored in that region.
 * The Owner role, assigned to you. It has full rights in the organization and all its workspaces, and nobody can edit or delete it.
 * The Admin role, assigned to nobody. It has the same full rights as the Owner role, and you can give it to the people you invite. See [Roles that Navixy creates](../users-and-roles/README.md#roles-that-navixy-creates).
-* One workspace with its name and the standard set of products. Navixy sets its region.
+* One workspace with its name and the standard set of products, in the region of the organization.
 * A subscription for that workspace to the default tariff plan.
+
+The address of Navixy Console shows your region, for example `console.eu.navixy.com` or `console.us.navixy.com`.
 
 If you want to create another workspace, see [Create a workspace](../organization/manage-workspaces.md#create-a-workspace).
 

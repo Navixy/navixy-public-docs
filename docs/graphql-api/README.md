@@ -1,7 +1,8 @@
 ---
 description: >-
   Navixy GraphQL API is the programming interface of several Navixy products and
-  of the platform services that run your account, through one endpoint.
+  of the platform services that run your account, through one endpoint per
+  region.
 tags:
   - overview
   - beta
@@ -15,7 +16,7 @@ Navixy GraphQL API is separate from the RESTful [Navixy API](https://navixy.com/
 
 **Navixy GraphQL API** is the programming interface of several Navixy products and of the platform services that run your account. Not every Navixy product is described here: some products have no API, and some have an API of their own. Each product based on this API has a separate section: you can read about your workspace's products and ignore the rest. All products share one endpoint, one access token, and one way of sending requests.
 
-The API is based on GraphQL. Every request is an HTTP POST to one endpoint, authenticated with an access token that your app gets by exchanging an API key. The endpoint is `https://nvx4.eu.navixy.com/api/graphql`. To send your first request, see [Getting started](getting-started.md). For the token, see [Authentication](authentication/README.md). If you're new to GraphQL, start with [GraphQL basics](graphql-basics/).
+The API is based on GraphQL. Every request is an HTTP POST to one endpoint, authenticated with an access token that your app gets by exchanging an API key. The endpoint is `https://nvx4.<REGION>.navixy.com/api/graphql`, where `<REGION>` is the region of your organization: `eu` for the European Union or `us` for the United States. See [Endpoint and region](graphql-basics/#endpoint-and-region). To send your first request, see [Getting started](getting-started.md). For the token, see [Authentication](authentication/README.md). If you're new to GraphQL, start with [GraphQL basics](graphql-basics/).
 
 <figure><img src=".gitbook/assets/graphql-api-parts.svg" alt=""><figcaption></figcaption></figure>
 

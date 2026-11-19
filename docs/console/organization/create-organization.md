@@ -25,7 +25,7 @@ To create an independent organization, follow these steps:
 6. On the same step, enter a **Workspace name** of up to 128 characters. By default, it's the organization's name.
 7. Click **Launch**.
 
-The new workspace is on the default tariff plan. To open the organization, click **Go to organization**.
+The new organization and its workspace are in the same region as your organization. The new workspace is on the default tariff plan. To open the organization, click **Go to organization**.
 
 ## Create a child organization
 
@@ -46,4 +46,4 @@ To create a child organization, follow these steps:
 7. On the same step, enter a **Workspace name** of up to 128 characters. By default, it's the organization's name.
 8. Click **Launch**.
 
-The child organization appears in the left dropdown menu of the top navigation bar, indented under your organization. You are its Owner, and its first workspace is on the default tariff plan. To open the child organization, click **Go to organization**.
+The child organization appears in the left dropdown menu of the top navigation bar, indented under your organization. You are its Owner, and its first workspace is on the default tariff plan. The child organization and its workspace are in the same region as your organization. To open the child organization, click **Go to organization**.

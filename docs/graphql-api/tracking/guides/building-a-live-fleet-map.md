@@ -17,6 +17,8 @@ The Tracking API stores what devices report. [Business Data Repository](../../bu
 
 You need an access token for the workspace you work in. The API takes the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) for how to get a token and how the API chooses the workspace.
 
+Every address on this page has `<REGION>` in it. Replace it with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region).
+
 You also need assets with a linked GPS device. Tracking places an asset on the map based on the position of its primary device, so an asset without a primary device has no marker. To check which of your assets have one, run this query:
 
 ```graphql
@@ -460,14 +462,14 @@ A subscription doesn't use one POST request and one response. It keeps a connect
 
 | Transport                                 | Address                                                                                        | Where the access token goes                                    |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| WebSocket, with the `graphql-transport-ws` protocol | `wss://nvx4.eu.navixy.com/api/graphql/ws`                                                    | The `Authorization` field in the payload of `connection_init` |
-| Server-sent events                        | `https://nvx4.eu.navixy.com/api/graphql`, the same URL as for queries, with the `Accept: text/event-stream` header | The `Authorization` header                                     |
+| WebSocket, with the `graphql-transport-ws` protocol | `wss://nvx4.<REGION>.navixy.com/api/graphql/ws`                                                    | The `Authorization` field in the payload of `connection_init` |
+| Server-sent events                        | `https://nvx4.<REGION>.navixy.com/api/graphql`, the same URL as for queries, with the `Accept: text/event-stream` header | The `Authorization` header                                     |
 
 Use the WebSocket for a map in a web or mobile app, because one connection can run several subscriptions. Use server-sent events when your client can't open a WebSocket, or to test a subscription with `curl`.
 
 To follow the fleet over the WebSocket, send these messages in order:
 
-1. Open the connection to `wss://nvx4.eu.navixy.com/api/graphql/ws` with the subprotocol `graphql-transport-ws`.
+1. Open the connection to `wss://nvx4.<REGION>.navixy.com/api/graphql/ws` with the subprotocol `graphql-transport-ws`.
 2. Send `connection_init` with your token: `{"type": "connection_init", "payload": {"Authorization": "Bearer <ACCESS_TOKEN>"}}`.
 3. Wait for `connection_ack`.
 4. Send `subscribe` with an ID that you choose and the subscription document of the next step: `{"id": "fleet-1", "type": "subscribe", "payload": {"query": "subscription FleetStream { ... }"}}`.
@@ -486,7 +488,7 @@ To test the stream with server-sent events, send the subscription as a POST requ
 curl -L \
   --no-buffer \
   --request POST \
-  --url 'https://nvx4.eu.navixy.com/api/graphql' \
+  --url 'https://nvx4.<REGION>.navixy.com/api/graphql' \
   --header 'Authorization: Bearer <ACCESS_TOKEN>' \
   --header 'Content-Type: application/json' \
   --header 'Accept: text/event-stream' \

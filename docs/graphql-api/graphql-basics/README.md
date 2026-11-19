@@ -86,9 +86,24 @@ The response contains only what you asked for:
 }
 ```
 
-## Single endpoint
+## Endpoint and region
 
-Navixy GraphQL API has one endpoint: `https://nvx4.eu.navixy.com/api/graphql`.
+Navixy runs in two regions: the European Union and the United States. Navixy GraphQL API has one endpoint in each region:
+
+| Region | `<REGION>` | Endpoint |
+| --- | --- | --- |
+| European Union | `eu` | `https://nvx4.eu.navixy.com/api/graphql` |
+| United States | `us` | `https://nvx4.us.navixy.com/api/graphql` |
+
+Use the endpoint of your organization's region. The person who registers the organization selects its region. An organization created in Navixy Console is in the same region as the organization it was created from. Every workspace of an organization is in the organization's region.
+
+To find your region, check any of these:
+
+* The example request that Navixy Console shows next to your API key. It already has the addresses of your region.
+* The address of Navixy Console in your browser, for example `console.us.navixy.com`.
+* The **Region** field of your organization in Navixy Console: **EU** or **US**.
+
+The examples in this documentation write the region as `<REGION>`. Replace it with `eu` or `us`. The same applies to every other address of the API: the WebSocket address for subscriptions and the address of the identity service that issues access tokens.
 
 Every query and mutation goes to the same URL, and the request body tells the API what you want to do. The body is a JSON object with `query`, and with `variables` and `extensions` as objects when you send them. Any other body is refused with `VALIDATION_ERROR` and HTTP 400, see [Error handling](../error-handling.md#http-status-codes). A subscription uses the same URL over server-sent events, or a WebSocket connection with its own path. See [Subscriptions](./#subscriptions).
 
@@ -340,7 +355,7 @@ Every message has the same shape as a query response. The API first sends the cu
 
 A subscription isn't sent as a plain POST request that gets one response. The API accepts it over two transports:
 
-* A WebSocket connection with the `graphql-transport-ws` protocol, at `wss://nvx4.eu.navixy.com/api/graphql/ws`. The WebSocket accepts subscriptions only.
+* A WebSocket connection with the `graphql-transport-ws` protocol, at `wss://nvx4.<REGION>.navixy.com/api/graphql/ws`. The WebSocket accepts subscriptions only.
 * Server-sent events: a POST request to the usual endpoint with the `Accept: text/event-stream` header. The response stays open and delivers each message as an event.
 
 These rules apply to every WebSocket connection. They use the message types of the `graphql-transport-ws` protocol. The client sends `connection_init` to authenticate and `subscribe` to start a subscription. The server sends `next` with data, and `complete` when a subscription ends.
