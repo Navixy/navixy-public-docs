@@ -1,5 +1,5 @@
 ---
-description: Central hub for configuring your Navixy instance, including service, maps, branding, menus, defaults, security, and gateways
+description: Central hub for configuring your Navixy instance, including service, maps, branding, applications, menus, defaults, security, and gateways
 ---
 
 # Settings
@@ -9,6 +9,7 @@ The **Settings** page consists of the following tabs, each describing various cu
 * [Service preferences](service-preferences/)
 * [Maps preferences](maps/)
 * [Branding](branding-options.md)
+* [Applications](applications.md)
 * [Menu editor](custom-menu-editor.md)
 * [User defaults](user-defaults.md)
 * [Security](two-factor-authentication.md)

@@ -29,6 +29,7 @@
     * [Navixy GIS packages](settings/maps/navixy-gis-packages-compare.md)
     * [Overcoming GIS limits](settings/maps/overcoming-gis-limits.md)
   * [Branding](settings/branding-options.md)
+  * [Applications](settings/applications.md)
   * [Menu editor](settings/custom-menu-editor.md)
   * [User defaults](settings/user-defaults.md)
   * [Security](settings/two-factor-authentication.md)

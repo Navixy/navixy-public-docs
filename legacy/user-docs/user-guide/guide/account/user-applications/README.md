@@ -39,6 +39,12 @@ You'll see a comprehensive list displaying all your existing add-ons, along with
 
 ![UI path to User applications](../../../.gitbook/assets/User_Apps_Navigation.gif)
 
+## Applications from your service provider
+
+Your service provider, the company that gives you access to Navixy, can also add its own web applications to your sidebar. For example, it can add a support portal or a form to book vehicle service. These applications appear where your service provider placed them in the menu. The account's own applications appear at the end of the sidebar, after a separator.
+
+Applications from your service provider open inside Navixy or in a new browser tab, like your own applications. You can't edit, hide, or delete them. The **User applications** page doesn't list them. To change such an application, contact your service provider.
+
 ## Section content
 
 Learn more about how to create and configure User applications:
