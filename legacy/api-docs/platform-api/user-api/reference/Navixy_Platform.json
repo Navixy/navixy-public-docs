@@ -1497,7 +1497,7 @@
           "Users"
         ],
         "summary": "List user applications",
-        "description": "List the custom applications registered for the account, enabled or not.\n\n**This operation needs no right of its own, only a valid session, and it returns the stored key of every application whose `authorization.type` is `api_key`.**\n\nCallable with an empty body. Also accepts GET.",
+        "description": "List the custom applications of the account, enabled or not, followed by the applications that the telematics service provider (TSP) of the account added to user menus.\n\n`origin` tells the two apart. `user` is an application of the account, managed with `user/application/create`, `user/application/update`, and `user/application/delete`. `dealer` is an application of the TSP, managed in the Admin Panel. Only TSP applications that are turned on are returned, and the user can't change or delete them. A TSP application appears in the menu only where the user's menu preset places it, as a tab whose `destination` is `custom_app` in the `user_menu` of `user/get_info`.\n\n**The IDs of the two kinds are independent and can be equal.** Identify an application by `origin` and `id` together.\n\nIn a demo session, only the TSP applications are returned, not the applications of the demo account.\n\n**This operation needs no right of its own, only a valid session, and it returns the stored key of every application of the account whose `authorization.type` is `api_key`.**\n\nCallable with an empty body. Also accepts GET.",
         "operationId": "userApplicationList",
         "responses": {
           "200": {
@@ -1518,7 +1518,7 @@
                     "list": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/UserApplication"
+                        "$ref": "#/components/schemas/UserApplicationListItem"
                       }
                     }
                   }
@@ -1542,7 +1542,7 @@
           "Users"
         ],
         "summary": "Create user application",
-        "description": "Register a custom application for the account.\n\n`id` and `enabled` are accepted and ignored: a new application is always created enabled, and `user/application/enabled/set` hides it afterwards.\n\n**`icon` is not length-checked and is stored in a 50-character column**, so a longer value fails with error code 1, a database error, rather than a validation error.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
+        "description": "Register a custom application for the account.\n\n`id` and `enabled` are accepted and ignored: a new application is always created enabled, and `user/application/enabled/set` hides it afterwards.\n\n`url_template` must start with `http://` or `https://`. Any other address fails with error code 7 on `application.url_template`.\n\n**`icon` is not length-checked and is stored in a 50-character column**, so a longer value fails with error code 1, a database error, rather than a validation error.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
         "operationId": "userApplicationCreate",
         "requestBody": {
           "required": true,
@@ -1616,7 +1616,7 @@
           "Users"
         ],
         "summary": "Update user application",
-        "description": "Replace an existing application.\n\n**This is a full replacement, not a merge.** Every optional field left out is reset to its default: `enabled` to `true`, `authorization` to `user_session`, `display_method` to `new_tab`, `icon` to `extension`, and `description` to empty. Send the whole object, not only the fields being changed.\n\n**The length limits are not enforced here, unlike on create.** An over-long `label`, `url_template`, `description`, or `icon` fails with error code 1, a database error, instead of error code 7. Types and enum values are still checked and still give error code 7.\n\n`id` has to name an existing application of this account. Naming one that does not exist, or leaving `id` out, returns error code 201, not found in database.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
+        "description": "Replace an existing application.\n\n**This is a full replacement, not a merge.** Every optional field left out is reset to its default: `enabled` to `true`, `authorization` to `user_session`, `display_method` to `new_tab`, `icon` to `extension`, and `description` to empty. Send the whole object, not only the fields being changed.\n\n**The length limits are not enforced here, unlike on create.** An over-long `label`, `url_template`, `description`, or `icon` fails with error code 1, a database error, instead of error code 7. Types and enum values are still checked and still give error code 7, and so is the rule that `url_template` starts with `http://` or `https://`.\n\n`id` has to name an existing application of this account. Naming one that does not exist returns error code 201, not found in database. This operation acts only on the applications of the account. If you pass the ID of a TSP application, with `origin` `dealer` in `user/application/list`, it acts on the account's own application with that ID, if one exists.\n\nAlso accepts GET with the same parameters as query-string values.\n\nRequires the `admin` right.",
         "operationId": "userApplicationUpdate",
         "requestBody": {
           "required": true,
@@ -29624,7 +29624,7 @@
       },
       "UserMenu": {
         "type": "object",
-        "description": "The current user's menu. Each section is a list of menu items, described on the Admin Panel menu preset page.",
+        "description": "The current user's menu. Each section is a list of menu items, described on the Admin Panel menu preset page. A tab whose `destination` is `custom_app` opens an application of the telematics service provider (TSP). Its `options.app_id` is the `id` of an application with `origin` `dealer` in `user/application/list`.",
         "properties": {
           "title": {
             "type": [
@@ -29696,7 +29696,7 @@
           },
           "url_template": {
             "type": "string",
-            "description": "URL the application opens at. May carry placeholders that the interface substitutes when a user opens it: `{locale_code}`, `{user_identifier}`, and `{timezone}`. 4 to 1000 characters, trimmed before it is stored.",
+            "description": "URL the application opens at. Must start with `http://` or `https://`. May contain placeholders that the interface substitutes when a user opens it: `{locale}`, `{user_id}`, and `{timezone}`. 4 to 1000 characters, trimmed before it is stored.",
             "minLength": 4,
             "maxLength": 1000
           },
@@ -29744,6 +29744,30 @@
         "required": [
           "label",
           "url_template"
+        ]
+      },
+      "UserApplicationListItem": {
+        "description": "An application in the list of the current user: one of the account, or one that the telematics service provider (TSP) added to user menus. `origin` tells which.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserApplication"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "origin": {
+                "type": "string",
+                "description": "Who the application belongs to. `user`: the account, which manages it with `user/application/create`, `user/application/update`, and `user/application/delete`. `dealer`: the telematics service provider (TSP), which manages it in the Admin Panel. The user can only open a TSP application.",
+                "enum": [
+                  "user",
+                  "dealer"
+                ]
+              }
+            },
+            "required": [
+              "origin"
+            ]
+          }
         ]
       },
       "AuditLogRecord": {

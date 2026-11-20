@@ -37,7 +37,23 @@ Note the asymmetry between the two layout areas: `main` is an **array** of group
 [OpenAPI admin-panel](../../reference/Admin_Panel.json)
 {% endopenapi-schemas %}
 
-All `title` values on presets, groups, items, and tabs are **localization keys** such as `common.menu.dashboard`, not display strings. The interface resolves them against the user's locale.
+All `title` values on presets, groups, items, and tabs are **localization keys** such as `common.menu.dashboard`, not display strings. The interface resolves them against the user's locale. A title that is not a localization key is shown as it is, as with the tabs of TSP applications below.
+
+#### Tabs of TSP applications
+
+A tab whose `destination` is `custom_app` opens a [TSP application](../dealer/application.md) of the current TSP account. Its `options.app_id` names the application:
+
+```json
+{
+  "title": "Service booking",
+  "destination": "custom_app",
+  "options": {
+    "app_id": 12
+  }
+}
+```
+
+The tab can be the only tab of a menu item or one of several. Users see the tab only while the application is turned on. A turned-off application stays in the preset and appears again when it is turned on. Deleting the application removes its tabs from every preset of the TSP account. A menu item left without tabs is removed, and so is a menu group left without menu items.
 
 ### Menu preset assignment
 
@@ -80,6 +96,7 @@ _required permissions_: `users: "create"`.
 
 #### Errors
 
+* 7 - Invalid parameters - if a `custom_app` tab names no application of the current TSP account. The `errors` array names the tab by its position, such as `preset.main[0].items[2].tabs[0]`, with the error `forbidden`.
 * 201 - Not found in the database - if a referenced menu item or destination does not exist.
 
 ***
@@ -92,11 +109,12 @@ _required permissions_: `users: "update"`.
 
 #### Errors
 
+* 7 - Invalid parameters - if a `custom_app` tab names no application of the current TSP account. The `errors` array names the tab by its position, such as `preset.main[0].items[2].tabs[0]`, with the error `forbidden`.
 * 201 - Not found in the database - if there is no preset with the specified ID.
 
 ***
 
-_required permissions_: `users: "delete"`.
+_required permissions_: `users: "update"`.
 
 {% openapi-operation spec="admin-panel" path="/panel/user/menu/preset/delete" method="post" %}
 [OpenAPI admin-panel](../../reference/Admin_Panel.json)

@@ -546,6 +546,272 @@
         }
       }
     },
+    "/panel/dealer/application/list": {
+      "post": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "List TSP applications",
+        "description": "List the applications of the current TSP account, turned on and turned off, ordered by ID. Takes no parameters beyond the session credential.\n\nThese applications are separate from the applications that end users create in their own accounts. Users see a TSP application only when a menu preset places it in their menu.",
+        "operationId": "dealerApplicationList",
+        "responses": {
+          "200": {
+            "description": "The applications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "example": true
+                    },
+                    "list": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DealerApplication"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/panel/dealer/application/create": {
+      "post": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "Create TSP application",
+        "description": "Create an application for the current TSP account. A new application is always turned on: `id` and `enabled` are accepted and ignored. It appears in no user's menu until a menu preset places it there.\n\n**`authorization.type` can't be `api_key`.** An API key belongs to one user account, so the request fails with error code 7 on `application.authorization`. Use `user_session` or `none`.\n\n`url_template` must start with `http://` or `https://`. Any other address fails with error code 7 on `application.url_template`.\n\n**`icon` is not length-checked and is stored in a 50-character column**, so a longer value fails with error code 1, a database error, rather than a validation error.",
+        "operationId": "dealerApplicationCreate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "application"
+                ],
+                "properties": {
+                  "application": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/DealerApplication"
+                      }
+                    ],
+                    "description": "The application to create. Omit `id`."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Application created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "example": true
+                    },
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the created application.",
+                      "readOnly": true,
+                      "example": 12
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/panel/dealer/application/update": {
+      "post": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "Update TSP application",
+        "description": "Replace an existing application of the current TSP account. The change applies at once to every user whose menu has the application.\n\n**This is a full replacement, not a merge.** Every optional field left out is reset to its default: `enabled` to `true`, `authorization` to `user_session`, `display_method` to `new_tab`, `icon` to `extension`, and `description` to empty. A turned-off application that is updated without `enabled: false` is turned on again. Send the whole object, not only the fields being changed.\n\n**The length limits of create are not checked here.** An over-long `label`, `url_template`, `description`, or `icon` fails with error code 1, a database error, instead of error code 7. The `url_template` rule still applies: an address that doesn't start with `http://` or `https://` fails with error code 7.\n\n`authorization.type` can't be `api_key`, as on create.",
+        "operationId": "dealerApplicationUpdate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "application"
+                ],
+                "properties": {
+                  "application": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/DealerApplication"
+                      }
+                    ],
+                    "description": "The replacement application, identified by its `id`."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/panel/dealer/application/delete": {
+      "post": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "Delete TSP application",
+        "description": "Delete an application of the current TSP account. The application is also removed from every menu preset of the TSP account, so it leaves the menu of every user at once. A menu item that had the application as its only tab is removed with it. A menu group left without menu items is removed as well.\n\nThis can't be undone.",
+        "operationId": "dealerApplicationDelete",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "application_id"
+                ],
+                "properties": {
+                  "application_id": {
+                    "type": "integer",
+                    "description": "ID of the application to delete.",
+                    "minimum": 1,
+                    "example": 12
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/panel/dealer/application/enabled/set": {
+      "post": {
+        "tags": [
+          "Dealer"
+        ],
+        "summary": "Turn TSP application on or off",
+        "description": "Turn an application on or off for all users at once, leaving everything else about it unchanged.\n\nA turned-off application disappears from the menu of every user, and `user/application/list` of the Platform API no longer returns it. It stays in the menu presets, so it comes back to the same place in the menu when it is turned on again.",
+        "operationId": "dealerApplicationEnabledSet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "application_id",
+                  "enabled"
+                ],
+                "properties": {
+                  "application_id": {
+                    "type": "integer",
+                    "description": "ID of the application to turn on or off.",
+                    "minimum": 1,
+                    "example": 12
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "`true` to show the application to users, `false` to hide it.",
+                    "example": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
     "/panel/dealer/password/update": {
       "post": {
         "tags": [
@@ -2889,7 +3155,7 @@
         ],
         "summary": "Create menu preset",
         "operationId": "userMenuPresetCreate",
-        "description": "Create a menu preset for the TSP. The layout is passed as a `preset` object with no `id`.",
+        "description": "Create a menu preset for the TSP. The layout is passed as a `preset` object with no `id`.\n\nA `custom_app` tab must name an application of the current TSP account in `options.app_id`. A tab that names another application, or no application, fails the request with error code 7. The `errors` array then names the tab by its position, for example `preset.main[0].items[2].tabs[0]`, with the error `forbidden`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2954,7 +3220,7 @@
         ],
         "summary": "Update menu preset",
         "operationId": "userMenuPresetUpdate",
-        "description": "Update a menu preset. The `preset` object must carry its `id`. Presets owned by `platform` cannot be updated.",
+        "description": "Update a menu preset. The `preset` object must carry its `id`. Presets owned by `platform` cannot be updated.\n\nA `custom_app` tab must name an application of the current TSP account in `options.app_id`. A tab that names another application, or no application, fails the request with error code 7. The `errors` array then names the tab by its position, for example `preset.main[0].items[2].tabs[0]`, with the error `forbidden`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -7098,17 +7364,28 @@
       },
       "MenuTab": {
         "type": "object",
-        "description": "A single destination within a menu item. Titles are localization keys, not display strings.",
+        "description": "A single destination within a menu item. Titles are localization keys, not display strings, except for the tabs of TSP applications.",
         "properties": {
           "title": {
             "type": "string",
-            "description": "Localization key for the tab title.",
+            "description": "Localization key for the tab title, such as `common.menu.dashboard`. For a `custom_app` tab, the title is shown as it is.",
             "example": "common.menu.dashboard"
           },
           "destination": {
             "type": "string",
-            "description": "Application destination this tab opens.",
+            "description": "Application destination this tab opens. `custom_app` opens a TSP application, named by `options.app_id`.",
             "example": "dashboard"
+          },
+          "options": {
+            "type": "object",
+            "description": "Used only when `destination` is `custom_app`.",
+            "properties": {
+              "app_id": {
+                "type": "integer",
+                "description": "ID of the TSP application that the tab opens, from `dealer/application/list`. It must belong to the current TSP account. Turned-off applications are accepted, and users don't see them until they are turned on.",
+                "example": 12
+              }
+            }
           }
         }
       },
@@ -7649,6 +7926,75 @@
                 }
               }
             }
+          }
+        }
+      },
+      "DealerApplication": {
+        "type": "object",
+        "description": "A web application of the TSP account that menu presets can place in the menu of end users. It has the same fields as a user application of the Platform API, except that `authorization.type` can't be `api_key`.",
+        "required": [
+          "label",
+          "url_template"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Application ID. Absent when creating, required when updating.",
+            "example": 12
+          },
+          "label": {
+            "type": "string",
+            "description": "Name of the application. Menu Editor adds the application to a preset with this name, and the preset can rename it. Not blank, 1 to 50 characters, trimmed before it is stored.",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Service booking"
+          },
+          "url_template": {
+            "type": "string",
+            "description": "Address the application opens. Must start with `http://` or `https://`. May contain placeholders that the user interface fills in when a user opens the application: `{locale}`, `{user_id}`, and `{timezone}`. 4 to 1000 characters, trimmed before it is stored.",
+            "minLength": 4,
+            "maxLength": 1000,
+            "example": "https://booking.example.com/?user_id={user_id}&locale={locale}"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether users see the application in their menu. Ignored on create, where a new application is always turned on. Defaults to `true` on update.",
+            "example": true
+          },
+          "authorization": {
+            "type": "object",
+            "description": "How the application is authorized when a user opens it. Defaults to `user_session`.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "`user_session` passes the session of the user who opens the application in the `session_key` parameter. `none` passes no credential. `api_key` is rejected.",
+                "enum": [
+                  "none",
+                  "user_session"
+                ],
+                "example": "user_session"
+              }
+            }
+          },
+          "display_method": {
+            "type": "string",
+            "description": "How the application opens: `new_tab` in a new browser tab, `embedded` inside the platform interface. Defaults to `new_tab`.",
+            "enum": [
+              "new_tab",
+              "embedded"
+            ],
+            "example": "embedded"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Name of the icon shown next to the label in the menu, for example `dashboard` or `camera`. Defaults to `extension`. Not checked against a list of names and not length-checked, while the column holds 50 characters.",
+            "example": "build"
+          },
+          "description": {
+            "type": "string",
+            "description": "Plain-text description of the application. Up to 1000 characters, trimmed before it is stored. Defaults to empty.",
+            "maxLength": 1000,
+            "example": "Book a service visit for a vehicle"
           }
         }
       }

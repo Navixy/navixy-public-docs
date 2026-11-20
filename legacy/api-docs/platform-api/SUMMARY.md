@@ -213,6 +213,7 @@
   * [Tracker](panel-api/resources/tracker.md)
   * [Dealer](panel-api/resources/dealer/README.md)
     * [Activation code](panel-api/resources/dealer/activation_code.md)
+    * [Application](panel-api/resources/dealer/application.md)
     * [Password](panel-api/resources/dealer/password.md)
     * [Settings](panel-api/resources/dealer/settings/README.md)
       * [Branding Customization](panel-api/resources/dealer/settings/image.md)
