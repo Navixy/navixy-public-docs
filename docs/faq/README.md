@@ -1,7 +1,7 @@
 ---
 description: >-
   Answers to questions customers ask Support about devices, data and
-  positioning, kept where the answer holds for the current platform.
+  positioning, kept where the answer holds for Navixy 4.
 tags:
   - overview
 noIndex: true
@@ -9,7 +9,7 @@ noIndex: true
 
 # FAQ
 
-FAQ collects the questions customers ask Navixy Support and the answers that hold for the current platform: how a device behaves, how to set it up, why data looks the way it does. Each page is one question and its answer, with the device or feature named in the title so a search finds it.
+FAQ collects the questions customers ask Navixy Support and the answers that hold for Navixy 4, the new generation of the Navixy platform: how a device behaves, how to set it up, why data looks the way it does. Each page is one question and its answer, with the device or feature named in the title so a search finds it. Questions about Navixy 3, the previous generation of the Navixy platform, are answered in [Q\&A](https://app.gitbook.com/s/5dyjvbUVXEbs60EnxnDz/).
 
 The section grows from Support cases. Questions are grouped by what they are about: a technology, a device, a product, or the platform as a whole. Questions about one product, such as how a setting or a node behaves, get a section for that product, and the product's guide links to it.
 

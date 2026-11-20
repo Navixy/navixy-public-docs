@@ -22,4 +22,4 @@ Read this section when you are deciding which sensor to buy, installing one, con
   * [Legislation](vehicle-telematics-technology/legislation/README.md): the certifications a GPS device needs in the US, Canada, Mexico and Latin America.
 * [How to integrate your devices](platform-essentials/how-to-integrate-your-devices.md): how devices reach the platform through the Navixy Generic Protocol, and what it reads from them.
 
-More articles follow as they are adapted to the current platform.
+More articles follow.

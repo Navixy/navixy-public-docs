@@ -35,9 +35,9 @@ These points apply to the assistant in every product:
 
 Each product has its own rules for questions and conversations: how many questions you can ask, whether you can go back to an earlier conversation, and how long the assistant keeps a conversation. To learn the rules for a product, see [AI Assistant in Console](console.md), [Ask AI in Reports](reports.md), or [Ask AI in Dashboards](dashboards.md).
 
-## AI Assistant in the legacy Navixy 3 platform
+## AI Assistant in Navixy 3
 
-The [legacy Navixy 3 platform](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/) and its [Admin Panel](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/) have an AI Assistant of their own. It answers questions about Navixy features, GPS devices, and the Navixy APIs from the Navixy documentation. It also answers from the live data of your account: your trackers and their routes in the platform, and your users, trackers, tariff plans, and billing in its Admin Panel.
+[Navixy 3](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/), the previous generation of the Navixy platform, and its [Admin Panel](https://app.gitbook.com/s/KdgeXg71LpaDrwexQYwp/) have an AI Assistant of their own. It answers questions about Navixy features, GPS devices, and the Navixy APIs from the Navixy documentation. It also answers from the live data of your account: your trackers and their routes in the platform, and your users, trackers, tariff plans, and billing in its Admin Panel.
 
 To open it in the platform, click the assistant in the lower-right corner of the screen. In its Admin Panel, select it on the sidebar. To learn how to use it, see [Navixy AI Assistant](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/navixy-ai-assistant) in the Navixy 3 documentation.
 
