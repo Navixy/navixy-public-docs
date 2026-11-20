@@ -230,6 +230,56 @@ This operation has billing consequences and can create a transaction against the
 
 ***
 
+_required permissions_: `trackers: "update"` and `transactions: "create"`.
+
+{% hint style="warning" %}
+This operation has billing consequences and can create transactions against the balances of the users.
+{% endhint %}
+
+`tracker/tariff/batch_change` moves up to 1000 trackers to one plan in a single call. It applies the same checks to each tracker as [`tracker/tariff/change`](#post-panel-tracker-tariff-change), and processes each tracker on its own. A tracker that can't move is listed in `failed`, and the other trackers still move. Trackers that moved aren't returned to their previous plan.
+
+{% openapi-operation spec="admin-panel" path="/panel/tracker/tariff/batch_change" method="post" %}
+[OpenAPI admin-panel](../reference/Admin_Panel.json)
+{% endopenapi-operation %}
+
+The following response shows one tracker that moved and one clone that stayed on its plan:
+
+```json
+{
+  "success": true,
+  "changed": [134537],
+  "failed": [
+    {
+      "id": 458412,
+      "code": 219,
+      "description": "Not allowed for clones of the device"
+    }
+  ]
+}
+```
+
+#### Errors
+
+These errors fail the whole request, and no tracker changes:
+
+* 7 - Invalid parameters - when `tracker_ids` is empty, has more than 1000 IDs, or repeats an ID.
+* 239 - New tariff doesn't exist - when the plan in `tariff_id` doesn't belong to the current TSP account.
+
+#### Reasons in the failed list
+
+Each entry in `failed` has one of these codes:
+
+* 6 - Unexpected error - when the change fails for another reason. With `repay` set to `true`, the code also appears when the tracker moved to the new plan but the repayment failed. Read the tracker with [`tracker/read`](#post-panel-tracker-read) and check `source.tariff_id` to see which plan it is on.
+* 204 - Entity not found - when the tracker doesn't belong to the current TSP account.
+* 219 - Not allowed for clones of the device - when the tracker is a clone.
+* 221 - Device limit exceeded - when the device limit of the new plan is lower than the tracker count of the user.
+* 237 - Invalid tariff - when the current plan of the tracker is not found.
+* 238 - Changing tariff is not allowed - when the tracker is already on the new plan, when the new plan is for a different device type than the current plan, or when the new plan isn't enabled for the legal type of the user.
+* 250 - Not allowed for deleted devices - when the tracker is deleted.
+* 252 - Device already corrupted - when the source of the tracker is corrupted.
+
+***
+
 _required permissions_: `trackers: "update"`.
 
 {% openapi-operation spec="admin-panel" path="/panel/tracker/raw_command/send" method="post" %}

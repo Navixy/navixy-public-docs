@@ -496,6 +496,26 @@ These errors come in addition to the [general error codes](../../../../general/e
 
 _Required sub-user rights:_ `tracker_register`.
 
+`tracker/activation/schema/read` returns the parameters needed to activate a device of one model. The response is a [JSON Schema](https://json-schema.org/draft-07), so a client can build an activation form from it. The top-level `properties` are the parameters every activation method needs, such as `label` and `device_id`. Each `oneOf` branch is one activation method, meaning one [registration plugin](../../commons/plugin/README.md). The branch gives the plugin ID in `x-plugin-id` and lists the parameters that the plugin adds.
+
+To register one device, send the shared parameters and the parameters of one branch to `tracker/register`. To activate many devices from a file, the same schema gives the columns for [tracker import](import.md).
+
+{% openapi-operation spec="navixy-platform" path="/tracker/activation/schema/read" method="post" %}
+[OpenAPI navixy-platform](../../../reference/Navixy_Platform.json)
+{% endopenapi-operation %}
+
+#### Errors
+
+These errors come in addition to the [general error codes](../../../../general/errors.md#error-codes):
+
+* 13 - The user lacks the right.
+* 220 - Unknown device model.
+* 222 - The user can't register this model, or no activation method is available for it.
+
+***
+
+_Required sub-user rights:_ `tracker_register`.
+
 {% openapi-operation spec="navixy-platform" path="/tracker/register_retry" method="post" %}
 [OpenAPI navixy-platform](../../../reference/Navixy_Platform.json)
 {% endopenapi-operation %}
@@ -759,6 +779,16 @@ These errors come in addition to the [general error codes](../../../../general/e
 | [`/tracker/group/delete`](group.md#post-tracker-group-delete) | POST | Delete a group |
 | [`/tracker/group/list`](group.md#post-tracker-group-list) | POST | List tracker groups |
 | [`/tracker/group/update`](group.md#post-tracker-group-update) | POST | Update a group |
+
+#### Tracker import
+
+| Endpoint | Method | What it does |
+| --- | --- | --- |
+| [`/tracker/import/start`](import.md#post-tracker-import-start) | POST | Start tracker import |
+| [`/tracker/import/read`](import.md#post-tracker-import-read) | POST | Read tracker import |
+| [`/tracker/import/list`](import.md#post-tracker-import-list) | POST | List tracker imports |
+| [`/tracker/import/download_failed`](import.md#post-tracker-import-download_failed) | POST | Download failed tracker rows |
+| [`/tracker/import/finish`](import.md#post-tracker-import-finish) | POST | Finish tracker import |
 
 #### LED
 

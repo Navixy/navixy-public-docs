@@ -4381,6 +4381,135 @@
         }
       }
     },
+    "/panel/tracker/tariff/batch_change": {
+      "post": {
+        "tags": [
+          "Tracker"
+        ],
+        "summary": "Change plan of many trackers",
+        "operationId": "trackerTariffBatchChange",
+        "description": "Move up to **1000** trackers to one plan in a single call, with the same `repay` and `charge` choices for all of them.\n\nThis operation has billing consequences: it can create transactions against the balances of the users.\n\n**Each tracker is processed on its own.** A tracker that can't move to the new plan is listed in `failed` with the reason, and the other trackers still move. Trackers that moved stay on the new plan. The request fails as a whole only when its parameters are invalid or the new plan doesn't exist, and then no tracker changes.\n\nThe checks per tracker are the same as in `tracker/tariff/change`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "tracker_ids",
+                  "tariff_id",
+                  "repay",
+                  "charge"
+                ],
+                "properties": {
+                  "tracker_ids": {
+                    "type": "array",
+                    "description": "Trackers to move. Between 1 and 1000 IDs, with no ID repeated. Each tracker must belong to the current TSP account.",
+                    "minItems": 1,
+                    "maxItems": 1000,
+                    "uniqueItems": true,
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      134537,
+                      458412
+                    ]
+                  },
+                  "tariff_id": {
+                    "type": "integer",
+                    "description": "ID of the destination plan. Must belong to the current TSP account.",
+                    "minimum": 1,
+                    "example": 15843
+                  },
+                  "repay": {
+                    "type": "boolean",
+                    "description": "Whether to repay the unused remainder of the current plan of each tracker.",
+                    "example": false
+                  },
+                  "charge": {
+                    "type": "boolean",
+                    "description": "Whether to charge for the new plan immediately.",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The trackers that moved and the trackers that didn't",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "example": true
+                    },
+                    "changed": {
+                      "type": "array",
+                      "readOnly": true,
+                      "description": "IDs of the trackers moved to the new plan, in request order.",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "example": [
+                        134537
+                      ]
+                    },
+                    "failed": {
+                      "type": "array",
+                      "readOnly": true,
+                      "description": "The trackers that stayed on their current plan, in request order, each with the reason. Empty when every tracker moved.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "Tracker ID.",
+                            "example": 458412
+                          },
+                          "code": {
+                            "type": "integer",
+                            "description": "Error code that explains why the plan didn't change, as in the general list of error codes. For example, 219 for a clone or 252 for a corrupted device.",
+                            "example": 219
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "Error description in English, the same text as for the code in the general list of error codes.",
+                            "example": "Not allowed for clones of the device"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Operation not permitted, error code 13: the session lacks the required permission.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "404": {
+            "description": "Error code 239: the new plan doesn't exist for the current TSP account. No tracker changes.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
     "/panel/tracker/console/connect": {
       "post": {
         "tags": [

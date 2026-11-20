@@ -12799,7 +12799,7 @@
                 "properties": {
                   "file": {
                     "type": "string",
-                    "description": "The spreadsheet to upload, in XLSX, XLS or CSV format.",
+                    "description": "The spreadsheet to upload, in XLSX, XLS or CSV format. In a CSV file, the columns can be separated by `;` or `,`, and the server chooses the separator from the first line. When that line has a `;` outside quotes, or has neither `;` nor `,`, the separator is `;`. Otherwise it is `,`.",
                     "format": "binary"
                   },
                   "preview_count": {
@@ -12851,6 +12851,13 @@
                         "type": "object",
                         "additionalProperties": true
                       }
+                    },
+                    "rows_count": {
+                      "type": "integer",
+                      "description": "Number of data rows written to the TSV file. Rows where every cell is empty are skipped and not counted. With `parse_header` set to `true`, the header row is not counted either. Check it before an import with a row limit: `tracker/import/start` accepts at most 1000 rows.",
+                      "examples": [
+                        6
+                      ]
                     }
                   }
                 }
@@ -12898,7 +12905,8 @@
                         "driver",
                         "fsm_employee",
                         "zone",
-                        "customer"
+                        "customer",
+                        "tracker"
                       ]
                     }
                   }
@@ -12974,7 +12982,8 @@
                       "driver",
                       "fsm_employee",
                       "zone",
-                      "customer"
+                      "customer",
+                      "tracker"
                     ]
                   }
                 },
@@ -22558,6 +22567,75 @@
         }
       }
     },
+    "/tracker/activation/schema/read": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Read the activation schema of a model",
+        "description": "Return the parameters needed to activate a device of one model, as a JSON Schema: the parameters every activation method shares, and one branch per activation method available to the user.\n\nUse it to build an activation form, to choose `plugin_id` for `tracker/register`, and to find which columns a file for `tracker/import/start` needs. Texts such as field titles and hints are in the user's language.\n\nRequires the `tracker_register` right.",
+        "operationId": "trackerActivationSchemaRead",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "description": "Code of a supported model, from `tracker/list_models`. Lowercase letters, digits, `-` and `_`, up to 255 characters.",
+                    "pattern": "^[-a-z0-9_]{1,255}$",
+                    "examples": [
+                      "qlgv55lite"
+                    ]
+                  }
+                },
+                "required": [
+                  "model"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The activation schema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "value": {
+                      "$ref": "#/components/schemas/TrackerActivationSchema"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 7: `model` is missing or has the wrong format. Error 220: unknown device model. Error 222: the user cannot register this model, or no activation method is available for it.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user lacks the `tracker_register` right.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
     "/tracker/replace": {
       "post": {
         "tags": [
@@ -22960,6 +23038,360 @@
           },
           "403": {
             "description": "Error 201: no tracker with this device ID belongs to the account.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/import/start": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Start tracker import",
+        "description": "Start the background process that activates devices from a preloaded TSV file, one device per row, and return the process ID. Each row is registered the same way as `tracker/register`. The model, the activation method and the group apply to the whole file.\n\n**Master users only.** A sub-user gets error 13, even with the `tracker_register` right.\n\nCreate the file first with `data/spreadsheet/parse`, which converts a spreadsheet to TSV and returns its name as `file_id`. Pass that name here as `filename`. Read the columns that the model and the activation method need from `tracker/activation/schema/read`.\n\n**At most 1000 rows.** Rows where every cell is empty are not counted. A larger file returns error 7 for `filename`.\n\n**One tracker import at a time.** Error 15 is returned while another tracker import of the account is waiting to start, or has updated its progress in the last 30 minutes. A waiting import stops blocking new ones after `tracker/import/finish`. Error 15 is also returned when the account already has as many imports of any type in progress as the server allows.",
+        "operationId": "trackerImportStart",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filename": {
+                    "type": "string",
+                    "description": "Name of the server-side TSV file, as returned by `data/spreadsheet/parse` in its `file_id`. Must not be empty.",
+                    "minLength": 1,
+                    "examples": [
+                      "tmp-sheet8123456789.tsv"
+                    ]
+                  },
+                  "headers": {
+                    "type": "array",
+                    "description": "What each column of the file holds, in order. Must not be empty, and must not repeat a name other than `undefined`.\n\nAccepted names are `label`, `device_id`, `register_fields.<field name>` for each model field from the activation schema, and the activation method's own parameters, such as `phone`, `iccid`, `activation_code`, `apn_name`, `apn_user` and `apn_password`. Columns with `undefined` or any other name are ignored.\n\nThe file must have a column for every required parameter of the model and the method, otherwise error 7 names the missing ones. `label` is never required.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "examples": [
+                      [
+                        "label",
+                        "device_id",
+                        "phone",
+                        "activation_code"
+                      ]
+                    ]
+                  },
+                  "user_headers": {
+                    "type": "array",
+                    "description": "Optional. Display labels for the columns, used in row error messages and in the file of failed rows. Must be the same length as `headers`.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "examples": [
+                      [
+                        "Name",
+                        "IMEI",
+                        "Phone",
+                        "Activation code"
+                      ]
+                    ]
+                  },
+                  "model": {
+                    "type": "string",
+                    "description": "Code of the model of every device in the file, from `tracker/list_models`.",
+                    "pattern": "^[-a-z0-9_]{1,255}$",
+                    "examples": [
+                      "qlgv55lite"
+                    ]
+                  },
+                  "plugin_id": {
+                    "type": "integer",
+                    "description": "ID of the activation method, from `x-plugin-id` in `tracker/activation/schema/read`. The method must be available for the model, and must not be a mobile app method, which has `x-import: false`.",
+                    "minimum": 1,
+                    "examples": [
+                      52
+                    ]
+                  },
+                  "group_id": {
+                    "type": "integer",
+                    "description": "Optional. Default `0`, meaning no group. Tracker group for every new tracker. The group must exist.",
+                    "minimum": 0,
+                    "examples": [
+                      0
+                    ]
+                  },
+                  "send_register_commands": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Optional. Default null, meaning follow the platform setting. Whether to send activation commands to the devices over SMS or GPRS."
+                  }
+                },
+                "required": [
+                  "filename",
+                  "headers",
+                  "model",
+                  "plugin_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The started import",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "id": {
+                      "type": "integer",
+                      "description": "ID of the created import process.",
+                      "examples": [
+                        4821
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 7: invalid parameters, including a file over 1000 rows, missing columns for required parameters, and a mobile app activation method. Error 220: unknown device model. Error 222: the user cannot register this model, or the activation method is not available for it. Error 233: the preloaded file was not found. Error 234: the file is not a TSV.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "403": {
+            "description": "Error 13: the user is a sub-user.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "404": {
+            "description": "Error 204: the tracker group does not exist.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "409": {
+            "description": "Error 247: another import already uses the same file.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "429": {
+            "description": "Error 15: another tracker import is active, or the account already has as many imports of any type in progress as the server allows.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/import/read": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Read tracker import",
+        "description": "Return one tracker import process by ID, including its progress.\n\nThe import process object is the same shape every import family returns. Here `type` is `tracker`, and `params.tracker` has the model, the activation method and the group that the import was started with.",
+        "operationId": "trackerImportRead",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "process_id": {
+                    "type": "integer",
+                    "description": "ID of the import process.",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "process_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The import process",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "value": {
+                      "$ref": "#/components/schemas/ImportProcess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error 7: `process_id` is missing or invalid. Error 201: the import process was not found.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/import/list": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "List tracker imports",
+        "description": "List the account's unfinished tracker import processes: every process not yet closed with `tracker/import/finish`.\n\nCallable with an empty body.",
+        "operationId": "trackerImportList",
+        "responses": {
+          "200": {
+            "description": "Unfinished import processes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "`true` if request finished successfully.",
+                      "readOnly": true,
+                      "examples": [
+                        true
+                      ]
+                    },
+                    "list": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ImportProcess"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/import/download_failed": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Download failed tracker rows",
+        "description": "Return a file of the rows that were not activated, so they can be corrected and imported again. An import with no failed rows returns the header row only.\n\nThe response is the file itself, not a JSON envelope. It is a CSV file with `;` as the separator. The first row has the column labels from `user_headers`, or from `headers` when `user_headers` was not given, plus one more column with the errors of each row.",
+        "operationId": "trackerImportDownloadFailed",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "process_id": {
+                    "type": "integer",
+                    "description": "ID of the import process.",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "process_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The failed rows as a file",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. The response body carries the API-level error code in `status.code`. Validation failures also include an `errors` array naming each offending parameter.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "404": {
+            "description": "Error 204: the import has not started processing rows yet, so there is no file of failed rows.",
+            "$ref": "#/components/responses/ResponseError"
+          },
+          "default": {
+            "$ref": "#/components/responses/ResponseError"
+          }
+        }
+      }
+    },
+    "/tracker/import/finish": {
+      "post": {
+        "tags": [
+          "Trackers"
+        ],
+        "summary": "Finish tracker import",
+        "description": "Mark an import process as finished, which removes it from `tracker/import/list`.\n\n**A running process cannot be finished.** A process with status `in_progress` returns error 280. A process still waiting to start can be finished, which also lets a new tracker import start.",
+        "operationId": "trackerImportFinish",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "process_id": {
+                    "type": "integer",
+                    "description": "ID of the import process.",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "process_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Import marked finished",
+            "$ref": "#/components/responses/OK"
+          },
+          "400": {
+            "description": "Error 7: `process_id` is missing or invalid. Error 201: the import process was not found. Error 280: the import process is still running.",
             "$ref": "#/components/responses/ResponseError"
           },
           "default": {
@@ -32507,7 +32939,8 @@
               "driver",
               "fsm_employee",
               "zone",
-              "customer"
+              "customer",
+              "tracker"
             ]
           },
           "params": {
@@ -32526,6 +32959,35 @@
                 "description": "Optional. Display labels for the columns.",
                 "items": {
                   "type": "string"
+                }
+              },
+              "tracker": {
+                "type": "object",
+                "description": "Tracker import only: the parameters given to `tracker/import/start`, shared by every row of the file.",
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "description": "Code of the model of every device in the file."
+                  },
+                  "plugin_id": {
+                    "type": "integer",
+                    "description": "ID of the activation method."
+                  },
+                  "group_id": {
+                    "type": "integer",
+                    "description": "Tracker group of the new trackers. `0` means no group."
+                  },
+                  "send_register_commands": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Whether activation commands are sent to the devices. `null` means the platform setting decides."
+                  },
+                  "connected_before": {
+                    "type": "integer",
+                    "description": "Number of the account's trackers that had connected before the import started. Together with the trackers that this import has registered, it decides whether a new tracker still gets the free period of its plan."
+                  }
                 }
               }
             }
@@ -32559,7 +33021,7 @@
               },
               "failed": {
                 "type": "integer",
-                "description": "Rows that did not pass validation."
+                "description": "Rows that were not imported."
               },
               "percent": {
                 "type": [
@@ -36453,6 +36915,149 @@
             }
           }
         }
+      },
+      "TrackerActivationSchema": {
+        "type": "object",
+        "description": "The activation parameters of one tracker model, written as a [JSON Schema](https://json-schema.org/draft-07) (a subset of draft-07) with Navixy `x-` extensions.\n\nThe top-level `properties` are the parameters every activation method shares. Each `oneOf` branch is one activation method, meaning one registration plugin, with the parameters that method adds. To activate a device, send the shared parameters plus the parameters of exactly one branch.\n\nThe available activation methods differ between accounts, so read the plugin ID from `x-plugin-id` rather than hard-coding it.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Always `object`.",
+            "examples": [
+              "object"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Model name.",
+            "examples": [
+              "Queclink GV55 Lite"
+            ]
+          },
+          "x-model": {
+            "type": "string",
+            "description": "Model code, the value to send as `model`.",
+            "examples": [
+              "qlgv55lite"
+            ]
+          },
+          "properties": {
+            "type": "object",
+            "description": "The parameters shared by every activation method.\n\n`label` is always present: a string of 1 to 60 characters without `<` or `>`.\n\n`device_id` is present when the device has a fixed ID, such as an IMEI. Its `pattern` is the accepted format, and `x-id-type` is the model's ID type, as in `tracker/list_models`. Without `device_id`, the server generates the device ID.\n\n`register_fields` is present when the model has additional registration fields. It is an object schema with one string property per field. Each field can have `title`, which is the field name in the user's language, and `default`, `minLength`, `maxLength` and `pattern`. A field `pattern` is searched for inside the value, ignoring case, as `x-pattern-flags: \"i\"` states. `x-options.messages.pattern` is the hint text for a value that does not match.",
+            "additionalProperties": true
+          },
+          "required": {
+            "type": "array",
+            "description": "`label`, then `device_id` when the model has a fixed device ID, then `register_fields` when at least one model field is required.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "oneOf": {
+            "type": "array",
+            "description": "One branch per activation method available to the user for this model. Each branch has:\n\n- `title`: the plugin module name, such as `bundled_sim` or `custom_sim`.\n- `x-plugin-id`: the plugin ID, the value to send as `plugin_id`.\n- `x-import`: `false` for mobile app methods, which `tracker/import/start` does not accept.\n- `properties`: `plugin_id` as a constant, then the method's own parameters, such as `phone`, `iccid`, `activation_code`, `apn_name`, `apn_user` and `apn_password`. Each is a string, with `pattern` and `maxLength` where the method checks them.\n- `required`: `plugin_id` and every parameter the method needs.\n- `anyOf`, when the method needs at least one parameter of a group, for example `activation_code` or `iccid`. With several such groups, the branch has `allOf` with one `anyOf` per group.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "examples": [
+          {
+            "type": "object",
+            "title": "Queclink GV55 Lite",
+            "x-model": "qlgv55lite",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "pattern": "^(?:[^<>]*)$"
+              },
+              "device_id": {
+                "type": "string",
+                "pattern": "^(?:[0-9]{15,16})$",
+                "x-id-type": "imei"
+              }
+            },
+            "required": [
+              "label",
+              "device_id"
+            ],
+            "oneOf": [
+              {
+                "title": "bundled_sim",
+                "x-plugin-id": 51,
+                "x-import": true,
+                "properties": {
+                  "plugin_id": {
+                    "const": 51
+                  },
+                  "iccid": {
+                    "type": "string",
+                    "pattern": "^(?:89[0-9]{17,18})$"
+                  }
+                },
+                "required": [
+                  "plugin_id",
+                  "iccid"
+                ]
+              },
+              {
+                "title": "custom_sim",
+                "x-plugin-id": 52,
+                "x-import": true,
+                "properties": {
+                  "plugin_id": {
+                    "const": 52
+                  },
+                  "phone": {
+                    "type": "string",
+                    "pattern": "^(?:^[0-9]{8,20}$)$"
+                  },
+                  "apn_name": {
+                    "type": "string",
+                    "pattern": "^(?:[-a-zA-Z0-9_.@ ]*)$",
+                    "maxLength": 40
+                  },
+                  "apn_user": {
+                    "type": "string",
+                    "pattern": "^(?:[-a-zA-Z0-9_.@ ]*)$",
+                    "maxLength": 40
+                  },
+                  "apn_password": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "activation_code": {
+                    "type": "string",
+                    "pattern": "^(?:[0-9]{3,20})$"
+                  },
+                  "iccid": {
+                    "type": "string",
+                    "pattern": "^(?:89[0-9]{17,18})$"
+                  }
+                },
+                "required": [
+                  "plugin_id",
+                  "phone"
+                ],
+                "anyOf": [
+                  {
+                    "required": [
+                      "activation_code"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "iccid"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "TrackerFile": {
         "type": "object",

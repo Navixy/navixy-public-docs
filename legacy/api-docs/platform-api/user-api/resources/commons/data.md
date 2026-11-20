@@ -5,9 +5,9 @@ description: Turn a spreadsheet into the tab-separated file every import operati
 
 # Data
 
-Every import in this API starts here. `data/spreadsheet/parse` takes an uploaded spreadsheet, converts it to a tab-separated file on the server, and returns that file's name along with a preview of the parsed rows.
+Every import in this API starts here. `data/spreadsheet/parse` takes an uploaded spreadsheet, converts it to a tab-separated file on the server, and returns that file's name, the number of data rows in it, and a preview of the parsed rows. Check the number of rows, `rows_count`, before an import that has a row limit: [tracker import](../tracking/tracker/import.md) accepts at most 1000 rows.
 
-The returned name is what the import operations take as `filename`: [geofence import](../tracking/zone/import.md), place import, employee import, vehicle import, and the rest. The two remaining operations here read the import processes that follow.
+The returned name is what the import operations take as `filename`: [geofence import](../tracking/zone/import.md), [tracker import](../tracking/tracker/import.md), place import, employee import, vehicle import, and the rest. The two remaining operations here read the import processes that follow.
 
 ## API actions
 

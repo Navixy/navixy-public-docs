@@ -162,6 +162,7 @@ Most integrations start here, with [Tracker](tracker/README.md) for the device r
 | [`/tracker/tags/set`](tracker/README.md#post-tracker-tags-set) | POST | Set a tracker's tags |
 | [`/tracker/location_request`](tracker/README.md#post-tracker-location_request) | POST | Request the current location |
 | [`/tracker/register`](tracker/README.md#post-tracker-register) | POST | Register a tracker |
+| [`/tracker/activation/schema/read`](tracker/README.md#post-tracker-activation-schema-read) | POST | Read the activation schema of a model |
 | [`/tracker/register_retry`](tracker/README.md#post-tracker-register_retry) | POST | Resend registration commands |
 | [`/tracker/register_quick`](tracker/README.md#post-tracker-register_quick) | POST | Register a preconfigured device by IMEI |
 | [`/tracker/replace`](tracker/README.md#post-tracker-replace) | POST | Replace the device behind a tracker |
@@ -248,6 +249,16 @@ Most integrations start here, with [Tracker](tracker/README.md) for the device r
 | [`/tracker/group/delete`](tracker/group.md#post-tracker-group-delete) | POST | Delete a group |
 | [`/tracker/group/list`](tracker/group.md#post-tracker-group-list) | POST | List tracker groups |
 | [`/tracker/group/update`](tracker/group.md#post-tracker-group-update) | POST | Update a group |
+
+#### Tracker import
+
+| Endpoint | Method | What it does |
+| --- | --- | --- |
+| [`/tracker/import/start`](tracker/import.md#post-tracker-import-start) | POST | Start tracker import |
+| [`/tracker/import/read`](tracker/import.md#post-tracker-import-read) | POST | Read tracker import |
+| [`/tracker/import/list`](tracker/import.md#post-tracker-import-list) | POST | List tracker imports |
+| [`/tracker/import/download_failed`](tracker/import.md#post-tracker-import-download_failed) | POST | Download failed tracker rows |
+| [`/tracker/import/finish`](tracker/import.md#post-tracker-import-finish) | POST | Finish tracker import |
 
 #### LED
 

@@ -1,12 +1,12 @@
 ---
 description: >-
-  Change a tracker’s pricing plan in Admin Panel and choose how billing is
-  handled immediately or at the next billing cycle
+  Change the pricing plan of one tracker or of up to 1,000 selected trackers
+  in Admin Panel, and choose how the user is billed for the change
 ---
 
 # Changing plan
 
-Changing the pricing plan for a tracker in the Navixy platform is a straightforward process that can be completed in just a few steps via Admin Panel.
+You can change the plan of one tracker or of several selected trackers in Admin Panel.
 
 ## Pricing plans for users
 
@@ -54,5 +54,24 @@ Save the new configuration and close the **Change plan** window.
 {% hint style="danger" %}
 When changing a plan to non-monthly billing (such as daily or annual), the new plan will only take effect after the current plan's billing cycle ends. This means that the user will continue to be charged according to the current plan until the end of the current billing cycle, at which point the new plan will take effect.
 {% endhint %}
+
+## Changing plan for several trackers
+
+You can move up to 1,000 trackers to one plan in one step, for example all trackers of a user who moves to a new plan. The [payment options](change-plan.md#configure-payment-options) are the same as for one tracker, and so is the rule for non-monthly plans in [Changing pricing plan](change-plan.md#changing-pricing-plan).
+
+The plan of a clone can't be changed. If the selection contains a clone, **Change plan for selected trackers** is unavailable: clear the checkboxes of the clones first.
+
+To change the plan for several trackers:
+
+1. Go to **Trackers** and select the checkboxes of the trackers.
+2. Click the icon with the tooltip **Change plan for selected trackers**.
+3. In the **New tracker plan** field, select the plan.
+4. Check how many of the selected trackers will change their plan. Deleted trackers and trackers that already have the selected plan are skipped.
+5. Select or clear **Repay remainder of current plan payment** and **Charge user now (according to the new plan)**.
+6. Click **Save**.
+
+When the plan of some trackers can't change, a message after the window closes lists each of them with its ID and the reason.
+
+The change for several trackers needs the same rights as the change for one tracker. For the rights of each role, see [Access](../access.md).
 
 For more information on plans, see the [Plans](../plans/) documentation.

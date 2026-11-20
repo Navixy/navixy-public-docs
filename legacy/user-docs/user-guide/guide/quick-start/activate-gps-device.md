@@ -1,7 +1,7 @@
 ---
 description: >-
-  Add a GPS tracking device to Navixy using automatic or manual activation,
-  including APN and SIM setup for cellular, MQTT, LoRa, and satellite devices.
+  Add a GPS device to Navixy with automatic or manual activation, or activate
+  many devices of one model at once from an Excel or CSV file.
 ---
 
 # Activate GPS device
@@ -14,6 +14,8 @@ In Navixy, activating a device means adding a new device to your user account. T
 
 1. [Activate GPS device automatically (recommended)](activate-gps-device.md#activate-gps-device-automatically): Simplifies device setup by automatically configuring your device without any manual intervention. This method is recommended for most cases except when [manual activation is required or preferred](activate-gps-device.md#when-manual-activation-is-required-or-preferred).
 2. [Activate GPS device manually](activate-gps-device.md#activate-gps-device-manually): Requires you to physically enter configuration settings into the device using its configurator, or more directly through SMS. This option is useful if the automatic configuration isn't feasible due to specific technical or regional constraints.
+
+To add many GPS devices of the same model at once, [activate them from a file](activate-gps-device.md#activate-many-devices-from-a-file).
 
 {% include "../../.gitbook/includes/device-limit-hint (1).md" %}
 
@@ -95,6 +97,62 @@ In case of further issues, contact your [Service provider](about-service-provide
 {% hint style="success" %}
 Within about 15 minutes, the device should come online and be ready for use, depending on default device reporting settings.
 {% endhint %}
+
+## Activate many devices from a file
+
+When you have many GPS devices of the same model, you can activate them all at once from an Excel or CSV file. You don't need to go through the activation wizard for each device. For example, you can add the GPS devices of 200 new delivery vans in one import.
+
+Before you start, check these limits:
+
+* Only the account owner can import devices. Users that you add in [Users and roles](../account/users-and-roles/README.md) don't see **Import from file**.
+* **Import from file** is available in the web interface on a computer, in a full-width browser window.
+* All devices in one file are the same model, use the same activation method, and go to the same group. For devices of different models, prepare one file per model.
+* A file has one row per device and at most 1,000 rows. For more than 1,000 devices, split the list into files of up to 1,000 rows and import them one after another.
+* Your account runs one device import at a time. Start the next file when the previous import has finished.
+* Mobile apps, such as X-GPS Tracker, can't be activated from a file.
+
+{% hint style="warning" %}
+The last step, **Activate**, starts the activation, and the import can't be stopped. Every row that activates adds a device to your account, with a plan, the same as an activation in the wizard. To remove a device added by mistake, delete it.
+{% endhint %}
+
+To activate devices from a file:
+
+1. Go to **Device activation** on the sidebar.
+2. Select the device model and click **Next**.
+3. In the **Group** field, select the group for the new devices.
+4. Click **Import from file**.
+5. If the **Device import** window asks for options, set them and click **Continue**:
+   * If the model has more than one activation method, select one. The activation method decides which SIM card details the file needs: the ICCID, the phone number and APN, or an activation code.
+   * If you [configure the devices yourself](activate-gps-device.md#activate-gps-device-manually), clear **Send setup commands to the devices**.
+6. Click **Example file** to download a template for your model and activation method.
+7. Fill in one row per device and save the file. See [Fill in the import file](activate-gps-device.md#fill-in-the-import-file).
+8. Click **Browse** and select your file.
+9. Click **Continue**.
+10. Check the column preview. If a column has no field, or the window lists required fields in red, select the field for that column. Click **Continue**.
+11. Check the number of devices and click **Activate**.
+
+The import window shows how many devices were activated and how many rows have errors, with the first 25 errors. You can close the window while the import runs: a notification shows when it finishes.
+
+If rows have errors, click **Download error rows**. The file has every row that wasn't activated, with its errors. Correct the rows and import the file again.
+
+The import stops early when your account reaches its device limit or when the group of the new devices is deleted. The rows after that point aren't processed, and the error file has them too.
+
+### Fill in the import file
+
+The template has only the columns that your model and activation method need. The import window lists which of them are required: a required column must have a value in every row.
+
+* **Label**: the name of the object. If you leave it empty, the device gets the model name and the device ID as its label.
+* The device ID column, such as **IMEI**: its name and format depend on the model.
+* Model-specific fields: the template has them when the model needs them.
+* The fields of the activation method: **SIM card ICCID**, **SIM card phone number**, **APN**, **APN username**, **APN password**, or **Activation code**. If the activation method accepts both an activation code and an ICCID, fill in one of the two.
+
+Values must follow these formats:
+
+* **SIM card phone number**: 8 to 20 digits, with the country code and without "+".
+* **SIM card ICCID**: 19 or 20 digits that start with 89.
+* **Activation code**: 3 to 20 digits.
+* **APN** and **APN username**: up to 40 characters. Use letters, digits, spaces, and the characters `-`, `_`, `.`, and `@`.
+* **APN password**: up to 40 characters.
 
 ## Activate GPS device manually
 

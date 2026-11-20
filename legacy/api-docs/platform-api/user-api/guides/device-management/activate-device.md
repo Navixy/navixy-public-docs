@@ -7,6 +7,8 @@ Within a user account, you can activate:
 * Any GPS tracking device listed in the [supported models](https://navixy.com/devices) list
 * X-GPS Mobile Apps
 
+To activate many devices of one model at once from a spreadsheet, use [tracker import](../../resources/tracking/tracker/import.md) instead of one `tracker/register` call per device.
+
 {% include "https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/~/reusable/nl6xxobcEsdA5WkJrhd8/" %}
 
 Follow these steps to successfully activate your device on the platform:

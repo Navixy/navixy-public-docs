@@ -72,6 +72,7 @@
       * [Employee](user-api/resources/tracking/tracker/employee.md)
       * [Engine immobilizer](user-api/resources/tracking/tracker/engine_immobilizer.md)
       * [Group](user-api/resources/tracking/tracker/group.md)
+      * [Tracker import](user-api/resources/tracking/tracker/import.md)
       * [LED](user-api/resources/tracking/tracker/led.md)
       * [Mobile app register](user-api/resources/tracking/tracker/mobile.md)
       * [Digital output](user-api/resources/tracking/tracker/output.md)
