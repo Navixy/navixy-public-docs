@@ -1,6 +1,6 @@
 ---
 title: Trips report shows No driver key
-description: "The Trips report assigns a trip to a driver only when the device sends the driver's hardware key at the start of the trip."
+description: "The Trips report shows No driver key for trips made while no driver was assigned to the object. A key touch assigns a driver until the next change."
 ---
 
 # Trips report shows No driver key
@@ -11,13 +11,22 @@ Why does the Trips report show "No driver key" when the driver is already identi
 
 ## Answer
 
-The **Trips** report takes the driver from the hardware key that the device sends at the start of each trip. When the first records of a trip have no key, the report puts the trip under **No driver key**, even if the object widget in **Tracking** shows the driver.
+The **Trips** report shows **No driver key** for trips made while no driver was assigned to the object. The report doesn't check the key at the start of each trip. It follows the history of driver assignments, so a trip without a key touch goes to the last assigned driver.
 
-This happens most often after sleep mode or a power cut. It also happens when the driver scans the key briefly and the key clears before the vehicle starts moving.
+When the device sends a key that matches the **Hardware key** of a driver in **Drivers**, the platform assigns that driver to the object. Switching the ignition off and records without a key don't remove the driver. The driver stays assigned until one of these happens:
 
-To find the cause, open **Raw data** for the start of the trip and check that the first records have the key. Then check that the key matches the hardware key in the driver's record in **Drivers**. Also check that the device is configured to keep sending RFID, iButton or BLE identification.
+* another key is read on the object;
+* the same key is read on another object;
+* a user assigns another driver or removes the driver manually.
+
+To see when the driver changed, build the [**Driver shift change**](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/reports/report-types#business-reports) report for the object. If a trip shows **No driver key** after a key touch, open **Raw data** for the time of the touch. Check that a record has the key and that it matches the driver's **Hardware key**.
+
+{% hint style="warning" %}
+The platform has no setting that removes the driver when the ignition is switched off. To get this, remove the driver through the API call [`tracker/employee/assign`](https://app.gitbook.com/s/6dtcPLayxXVB2qaaiuIL/user-api/resources/tracking/tracker/employee#post-tracker-employee-assign) without `new_employee_id` when the ignition switches off.
+{% endhint %}
 
 ## Links
 
 * [Drivers](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/fleet-management/drivers)
 * [Set up driver identification](set-up-driver-identification.md)
+* [Report types](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/reports/report-types#business-reports)
