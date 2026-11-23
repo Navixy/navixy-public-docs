@@ -3,7 +3,6 @@ title: Ways to get raw device data
 description: Navixy has no raw data export tool. Query the stored messages in IoT Query Premium (coming soon), read the latest values through the GraphQL API, or watch a flow in Data Stream Analyzer
 tags:
   - reference
-noIndex: true
 ---
 
 # Ways to get raw device data

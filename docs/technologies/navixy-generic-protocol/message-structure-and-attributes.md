@@ -2,7 +2,6 @@
 description: "Define NGP message payloads using mandatory and optional attributes: location, events, mobile cells, Wi-Fi, device motion, sensors, I/O, and custom fields."
 tags:
   - reference
-noIndex: true
 ---
 
 # Message structure and attributes

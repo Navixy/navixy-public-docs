@@ -5,7 +5,6 @@ description: >-
 tags:
   - overview
   - beta
-noIndex: true
 ---
 # Navixy Console
 

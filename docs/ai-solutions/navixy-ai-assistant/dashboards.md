@@ -5,7 +5,6 @@ description: >-
 tags:
   - reference
   - beta
-noIndex: true
 ---
 
 # Ask AI in Dashboards

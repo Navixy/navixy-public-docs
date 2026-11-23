@@ -2,7 +2,6 @@
 description: "Questions about Tracking: asset statuses on the map and what they mean when a device loses its GPS signal."
 tags:
   - overview
-noIndex: true
 ---
 
 # Tracking

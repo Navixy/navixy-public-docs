@@ -4,7 +4,6 @@ description: >-
   another AI tool: open a page in an AI chat or connect the documentation.
 tags:
   - guide
-noIndex: true
 ---
 
 # Use Navixy documentation with AI

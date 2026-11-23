@@ -1,5 +1,4 @@
 ---
-noIndex: true
 description: >-
   The Notification rules page and the rule editor: a rule's equations, their
   operators, and the assets that a rule covers.

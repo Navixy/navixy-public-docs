@@ -2,7 +2,6 @@
 description: Guides on CAN and OBD protocols, MQTT connectivity, fuel management, device certification, positioning techniques, and vehicle sensors.
 tags:
   - overview
-noIndex: true
 ---
 
 # Vehicle telematics technology

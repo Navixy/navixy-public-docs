@@ -2,7 +2,6 @@
 description: Write JEXL-based expressions in IoT Logic flows to transform raw device data, compute custom attributes, and route telemetry conditionally in logic nodes.
 tags:
   - overview
-noIndex: true
 ---
 
 # Expression language overview

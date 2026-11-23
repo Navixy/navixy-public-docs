@@ -3,7 +3,6 @@ title: Slight difference between GPS CAN mileage and physical odometer
 description: Vehicle control modules report mileage asynchronously; CAN data is more precise than dashboard odometer readings. Small differences are normal and expected
 tags:
   - fundamentals
-noIndex: true
 ---
 
 # Slight difference between GPS CAN mileage and physical odometer

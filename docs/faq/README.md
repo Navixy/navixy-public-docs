@@ -4,7 +4,6 @@ description: >-
   positioning, kept where the answer holds for Navixy 4.
 tags:
   - overview
-noIndex: true
 ---
 
 # FAQ

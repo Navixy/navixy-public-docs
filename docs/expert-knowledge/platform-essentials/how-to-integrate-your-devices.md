@@ -4,7 +4,6 @@ description: >-
   through the Navixy Generic Protocol, and what the platform reads from them.
 tags:
   - guide
-noIndex: true
 ---
 
 # How to integrate your devices

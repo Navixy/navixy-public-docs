@@ -5,7 +5,6 @@ description: >-
   how devices connect to Navixy.
 tags:
   - overview
-noIndex: true
 ---
 
 # Expert knowledge

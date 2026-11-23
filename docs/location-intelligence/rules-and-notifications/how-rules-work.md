@@ -1,5 +1,4 @@
 ---
-noIndex: true
 description: >-
   Which GPS device data a notification rule checks, how its equations combine,
   and when Navixy sends a notification.

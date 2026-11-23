@@ -3,7 +3,6 @@ title: Anti-jammer devices
 description: No GPS device is protected from jamming. Navixy can't detect jamming itself, but some devices detect it and report it as a reading
 tags:
   - fundamentals
-noIndex: true
 ---
 
 # Anti-jammer devices

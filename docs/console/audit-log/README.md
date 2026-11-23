@@ -2,7 +2,6 @@
 description: >-
   The Audit log page of Console: which changes it records, what each event
   shows, and how to find, inspect, and export events.
-noIndex: true
 tags:
   - reference
   - beta

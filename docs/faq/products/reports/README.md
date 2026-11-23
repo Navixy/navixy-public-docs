@@ -2,7 +2,6 @@
 description: "Questions about Reports: how trips and stops are counted and why a report shows more of them than expected."
 tags:
   - overview
-noIndex: true
 ---
 
 # Reports

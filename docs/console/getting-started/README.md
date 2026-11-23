@@ -5,7 +5,6 @@ description: >-
 tags:
   - guide
   - beta
-noIndex: true
 ---
 
 # Getting started

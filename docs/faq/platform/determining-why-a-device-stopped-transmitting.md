@@ -3,7 +3,6 @@ title: GPS device stops sending data
 description: Navixy sees only that messages stopped, not why. The battery, power, and signal values that the device sent before it went silent point to the cause
 tags:
   - troubleshooting
-noIndex: true
 ---
 
 # GPS device stops sending data

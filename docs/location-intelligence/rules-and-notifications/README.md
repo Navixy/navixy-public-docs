@@ -1,5 +1,4 @@
 ---
-noIndex: true
 description: >-
   Set rules that check the speed, position, and time of your assets, and get a
   notification in Location Intelligence when a rule's equations become true.
