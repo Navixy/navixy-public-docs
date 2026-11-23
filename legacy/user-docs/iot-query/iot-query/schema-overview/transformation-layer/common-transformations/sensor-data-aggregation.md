@@ -124,7 +124,7 @@ Each reading is converted from its stored representation to a usable numeric val
 
 Decoded values are grouped into time buckets by truncating `device_time` to the bucket boundary. Within each bucket, the function computes `AVG`, `MIN`, and `MAX` of the decoded value. Grouping also includes sensor metadata columns, so aggregates are calculated per sensor per device per bucket.
 
-In the built-in transformation, the bucket is one hour. Custom transformations can use any positive interval. See [Customizing the transformation](https://claude.ai/chat/32cacafe-fe34-476d-b7d0-c93b4ce82da6#customizing-the-transformation) below.&#x20;
+In the built-in transformation, the bucket is one hour. Custom transformations can use any positive interval. See [Customizing the transformation](#customizing-the-transformation) below.&#x20;
 {% endstep %}
 
 {% step %}

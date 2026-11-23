@@ -15,7 +15,7 @@ Wireless technologies allow the transmission of values from different sensors to
 
 ## What is BLE
 
-Bluetooth Low Energy (BLE) is a low-power wireless communication technology that can be used over a short distance to [enable smart devices to communicate](https://www.centare.com/blog/what_is_bluetooth_low_energy/). BLE technology was integrated into Bluetooth 4.0 in December 2009.
+Bluetooth Low Energy (BLE) is a low-power wireless communication technology that can be used over a short distance to enable smart devices to communicate. BLE technology was integrated into Bluetooth 4.0 in December 2009.
 
 Compared to classic Bluetooth, Bluetooth Low Energy offers a significant reduction in power consumption and cost while maintaining a similar range. This allowed device manufacturers to add a low-power communication interface to existing solutions. It has also been used to create new low-power devices, such as [beacons](https://www.navixy.com/blog/teltonika-ble-beacons/), that can run on a small battery for months or even years.
 

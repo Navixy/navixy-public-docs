@@ -9,7 +9,7 @@ tags:
 
 These operations attach a [form](../../form/README.md) to a [task](../README.md), read it back, and download it. A task carrying a form cannot be completed until the form is submitted, which is how a job is made to produce a record rather than just a completion.
 
-Forms are filled by field employees in the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190). This API attaches and manages them.
+Forms are filled by field employees in the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534). This API attaches and manages them.
 
 For the field and value structures, see [Form fields and values](../../form/field-types.md#form-fields-and-values). `task/form/list` is the exception on this page: it returns forms of every kind, not only task forms.
 

@@ -7,7 +7,7 @@ tags:
 
 # Route with Progorod
 
-This is [`route/get`](README.md#post-route-get) with the provider pinned to the [Progorod router](https://giswiki.tmcrussia.com/index.php?title=%D0%9C%D0%B0%D1%80%D1%88%D1%80%D1%83%D1%82%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F). Use it when the route must come from Progorod regardless of the account's default provider.
+This is [`route/get`](README.md#post-route-get) with the provider pinned to the Progorod router. Use it when the route must come from Progorod regardless of the account's default provider.
 
 What differs from the generic operation is the failure detail. The `errors` array identifies which point Progorod rejected and why, down to the position of a bad waypoint.
 

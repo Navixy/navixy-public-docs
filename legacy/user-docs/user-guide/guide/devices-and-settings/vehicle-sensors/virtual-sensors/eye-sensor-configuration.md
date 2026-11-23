@@ -47,7 +47,7 @@ To configure data transmission from these sensors within your device packets, na
 The reading of this sensor is fully configurable with virtual sensors with [the Bit index calculation method](./#bit-index). The motion state data comes in bit 16 (the 17th bit position, counting from zero) of the BLE 1 Custom 1 field. Configuring the motion state requires the following steps:
 
 1. Create a virtual sensor and specify its name.
-2. Select the [appropriate AVL ID](https://wiki.teltonika-mobility.com/view/Full_AVL_ID_List#BLE_Sensor_I.2FO_elements) as the input. An AVL ID is Teltonika's numeric identifier for a specific data parameter. For BLE 1 Custom 1, use number 331.
+2. Select the appropriate AVL ID as the input. An AVL ID is Teltonika's numeric identifier for a specific data parameter. For BLE 1 Custom 1, use number 331.
 3. Define the Bit Number that corresponds to motion state data. In this case, select Bit 16 of the BLE 1 Custom 1 field.
 4. Define the state names as needed. For example, "Standstill" and "Moves".
 5. Specify the corresponding values: 0 means no movement detected, 1 means movement recorded.

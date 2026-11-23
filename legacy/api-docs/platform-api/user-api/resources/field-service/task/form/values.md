@@ -7,7 +7,7 @@ tags:
 
 # Task form values
 
-This operation corrects a form that was already filled. It exists for fixing data submitted by mistake, not for filling an empty form: values can only be updated when the form was previously submitted from the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190).
+This operation corrects a form that was already filled. It exists for fixing data submitted by mistake, not for filling an empty form: values can only be updated when the form was previously submitted from the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534).
 
 When it can be called depends on the task's state. Any caller can update values while the task is `unassigned`, `assigned`, or `arrived`, and the device must not be deleted. A sub-user holding the `completed_form_update` right can also update values once the task is `done`, `failed`, or `delayed`.
 

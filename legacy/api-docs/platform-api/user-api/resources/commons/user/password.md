@@ -13,7 +13,7 @@ Two operations change a password, and which to use depends on what the caller ho
 
 Both work only with a standard user session. Calling either with an API key returns error 4, "User or API key not found or session ended", even though the key itself is valid.
 
-{% include "../../../../../../.gitbook/includes/password-requirements.md" %}
+{% include "../../../../../.gitbook/includes/password-requirements.md" %}
 
 ## API actions
 

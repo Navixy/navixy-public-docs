@@ -36,7 +36,7 @@ A field adds custom information to an [entity](README.md). Each field belongs to
 
 * `responsible` - boolean. Only one employee field per entity can set this to `true`.
 
-Setting `responsible` has an effect in the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190). When an [employee is assigned](../../tracking/tracker/employee.md#post-tracker-employee-assign) to a device running the app, and a [place](../../field-service/place/work-with-poi.md) carries a responsible-employee field naming them, that place becomes visible to them in the app. This is what lets an employee see the places they are expected to visit.
+Setting `responsible` has an effect in the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534). When an [employee is assigned](../../tracking/tracker/employee.md#post-tracker-employee-assign) to a device running the app, and a [place](../../field-service/place/work-with-poi.md) carries a responsible-employee field naming them, that place becomes visible to them in the app. This is what lets an employee see the places they are expected to visit.
 
 ## API actions
 

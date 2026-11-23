@@ -17,7 +17,7 @@ This page uses "place" throughout, because that is what the API says. Reading PO
 
 Places do two things beyond sitting on a map. An event that happens inside one is labelled with the place name after the address in reports, and a place can be extended with [custom fields](../../commons/entity/fields.md) so it carries whatever else the business needs.
 
-One custom field type changes what field staff see. When a place carries a responsible-employee field, and that [employee](../employee/README.md) is [assigned](../../tracking/tracker/employee.md#post-tracker-employee-assign) to a device running the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190), the place appears in the app for them. That is how a driver sees the places they are expected to visit.
+One custom field type changes what field staff see. When a place carries a responsible-employee field, and that [employee](../employee/README.md) is [assigned](../../tracking/tracker/employee.md#post-tracker-employee-assign) to a device running the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534), the place appears in the app for them. That is how a driver sees the places they are expected to visit.
 
 For a walkthrough, see [how to manage POIs](../../../guides/places/manage-pois.md).
 

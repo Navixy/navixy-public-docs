@@ -9,7 +9,7 @@ tags:
 
 A task is a job assigned to a tracked device. It completes when that device reaches the task's checkpoint at the right time and meets whatever else the task requires, such as filling a [form](../form/README.md) or staying in the task's zone for a set period. Otherwise it fails, or completes with warnings.
 
-A task assigned to a device running the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190), is visible to the person carrying it, who is also notified when a task is assigned or changed.
+A task assigned to a device running the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) or [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534), is visible to the person carrying it, who is also notified when a task is assigned or changed.
 
 Tasks that repeat are [scheduled](schedule/README.md) rather than created one by one, and tasks that must be done in sequence are grouped into a [route](route/README.md). For a walkthrough, see [how to create and assign tasks](../../../guides/field-service-management/manage-tasks.md).
 

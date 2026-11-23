@@ -9,7 +9,7 @@ tags:
 
 A check-in is what a field employee sends from where they are standing: the time, the address and coordinates, and whatever they added, which can be a comment, a photo, or a filled [form](form/README.md). It is how someone on site tells the office what they found without a phone call, whether that is photographic proof of work done or a report of a fault.
 
-Check-ins come from the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/us/app/x-gps-tracker/id802887190), rather than from this API. [`checkin/create`](checkin.md#post-checkin-create) exists for exceptional cases only and is described in [how to work with check-ins](../../guides/field-service-management/check-ins.md), so treat this resource as read-mostly.
+Check-ins come from the Mobile Tracker App, for [Android](https://play.google.com/store/apps/details?id=com.navixy.xgps.tracker\&hl=ru) and [iOS](https://apps.apple.com/app/x-gps-tracker/id1612047534), rather than from this API. [`checkin/create`](checkin.md#post-checkin-create) exists for exceptional cases only and is described in [how to work with check-ins](../../guides/field-service-management/check-ins.md), so treat this resource as read-mostly.
 
 ## Check-in object
 
