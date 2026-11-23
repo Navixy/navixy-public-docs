@@ -111,7 +111,7 @@ The **Details** step of manual setup has no phone number and no APN fields. Inst
 
 You set the server address and the port on the device in [4. Activate the device](#id-4.-activate-the-device). The device page shows them again after activation. The port depends on the model.
 
-If the server address doesn't load, the form shows "Failed to load the server address." You can still activate the device. If the form shows "The server address isn't available yet.", your installation of Navixy doesn't publish a server address yet, and you can't set up the device by hand. Use automatic setup, or ask the people who set up your workspace.
+If the server address doesn't load, the form shows "Failed to load the server address." You can still activate the device. If the form shows "The server address isn't available yet.", your installation of Navixy doesn't publish a server address yet, and you can't set up the device by hand. Use automatic setup, or ask [your account administrator](../who-manages-your-workspace.md).
 
 ### Enter the details of a Suntech device
 
@@ -216,7 +216,7 @@ The page shows three groups of causes: **Device**, **SIM card**, and **Platform*
 - **Roaming:** The SIM card is roaming while data roaming is off.
 - **Carrier:** The carrier blocks connections to the platform server, or it shut down the network standard that the device uses, such as 2G or 3G, in this region.
 
-The **Platform** group lists the reasons why the configuration SMS might not reach the device. "Configuration SMS queued" doesn't confirm that the SMS was sent. Three of the reasons are settings of your installation of Navixy: the SMS gateway isn't configured, the daily SMS limit is reached or the SMS balance is too low, or the platform doesn't send default settings. Report them to the people who set up your workspace. The fourth reason is an SMS that was lost on the way: retrying the activation sends the SMS again.
+The **Platform** group lists the reasons why the configuration SMS might not reach the device. "Configuration SMS queued" doesn't confirm that the SMS was sent. Three of the reasons are settings of your installation of Navixy: the SMS gateway isn't configured, the daily SMS limit is reached or the SMS balance is too low, or the platform doesn't send default settings. Report them to your account administrator. The fourth reason is an SMS that was lost on the way: retrying the activation sends the SMS again.
 
 Other settings on the device can also make it reject the configuration SMS. Navixy sends the SMS with an empty SMS login and password, so a device that has its own SMS login rejects it. A device that accepts SMS only from authorized phone numbers rejects it too. For most Teltonika models, the SMS starts with two spaces: the empty login and the empty password. If a carrier or an SMS gateway between Navixy and the device removes these spaces, the device can reject the command.
 

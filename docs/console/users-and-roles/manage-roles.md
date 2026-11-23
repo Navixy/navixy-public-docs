@@ -34,7 +34,7 @@ The role becomes active immediately. There is no separate publishing step.
 A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **IAM** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **IAM**, they can't do any of these things.
 {% endhint %}
 
-You can't grant more access than you have yourself. If a role gives more access than your own roles, Console refuses to save it.
+You can't grant more access rights than you have yourself. If a role gives more access rights than your own roles, Console refuses to save it.
 
 ## Configure what a role allows
 
@@ -66,7 +66,7 @@ The copy has no users. Assign it under **Assign to users** before you save, or l
 
 ## Edit a role
 
-A change to a role applies to everyone who has it. To edit a role, you need the Owner role or a role that includes the **Console** and **IAM** products. To give one person more access, assign them another role instead. See [Assign a role to a user](manage-users.md#assign-a-role-to-a-user).
+A change to a role applies to everyone who has it. To edit a role, you need the Owner role or a role that includes the **Console** and **IAM** products. To give one person more access rights, assign them another role instead. See [Assign a role to a user](manage-users.md#assign-a-role-to-a-user).
 
 To edit a role, follow these steps:
 

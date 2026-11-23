@@ -25,3 +25,5 @@ redirects:
   # 2026-09-28: the Devices chapter took the product name the interface shows, Device Management.
   devices: device-management/README.md
   devices/manage-devices: device-management/manage-devices.md
+  # 2026-11-23: Your account administrator became Who manages your workspace (TD-521).
+  your-account-administrator: who-manages-your-workspace.md

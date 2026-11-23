@@ -191,7 +191,7 @@ You can also assign the role to members of the organization on this page, under 
 A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **IAM** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **IAM**, they can't do any of these things.
 {% endhint %}
 
-You can't grant more access than you have yourself. A role with wider access than your own is rejected when you save it.
+You can't grant more access rights than you have yourself. A role with wider access than your own is rejected when you save it.
 
 When the role is saved, invite the people who need it. Follow the steps in [4. Invite a user](#id-4.-invite-a-user), and select this role under **Roles**.
 

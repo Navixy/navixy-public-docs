@@ -88,7 +88,7 @@ Your access applies to all the flows of the workspace. A role can't give access 
 
 A flow shows only the devices that your role lets you see. The **Connected devices** count and the **Data Source** device lists leave out the other devices. You can add to a flow only the devices that you can see.
 
-**Create flow**, **Upload flow**, and the actions in each row's context menu are shown to everyone. If your role doesn't allow the action, an error message appears when you try it. To get more access, ask the people who set up your workspace. To learn more, see [Access and roles](../../access-and-roles.md).
+**Create flow**, **Upload flow**, and the actions in each row's context menu are shown to everyone. If your role doesn't allow the action, an error message appears when you try it. To get more access rights, ask [your account administrator](../../who-manages-your-workspace.md). To learn more, see [Access and roles](../../access-and-roles.md).
 
 ## Downloading and uploading a flow
 

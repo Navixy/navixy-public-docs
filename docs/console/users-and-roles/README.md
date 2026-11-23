@@ -72,7 +72,7 @@ The organization's [audit log](../audit-log/README.md) shows who invited, rename
 A role that manages the organization, its workspaces, and its users needs the **Console** product. To create, edit, delete, assign, or revoke roles, to change when an assignment expires, or to invite users, the role needs the **IAM** product as well. Without **Console**, Console refuses every request from the people who have the role, including read-only requests. Without **IAM**, they can't do any of these things.
 {% endhint %}
 
-You can't grant more access permissions than you have yourself. Console refuses to save a role with more access than your own roles give you.
+You can't grant more access rights than you have yourself. Console refuses to save a role with more access rights than your own roles give you.
 
 ## Roles that Navixy creates
 

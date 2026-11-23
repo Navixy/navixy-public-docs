@@ -19,7 +19,7 @@ To invite a user, follow these steps:
 
 1. Go to **Users and roles** and click **Invite user**. The **Invite user** page opens.
 2. In **Email addresses**, enter the address of each person that you want to invite. Put each address on its own line, or separate the addresses with commas. You can invite up to 100 addresses at once.
-3. Under **Access**, select one or more **Roles**. Every person that you invite at once receives all the selected roles. The list shows only active roles that give no more access than your own roles.
+3. Under **Access**, select one or more **Roles**. Every person that you invite at once receives all the selected roles. The list shows only active roles that give no more access rights than your own roles.
 4. Under **Product to open**, select the product that opens when the person accepts the invitation. The list shows the products that the selected roles give access to. Later sign-ins aren't affected.
 5. Under **Security profile**, keep **Standard** for your own employees. For contractors and for people from other companies, select **Limited** or **Protected**.
 6. Click **Send invitation**.
@@ -95,7 +95,7 @@ The person loses access rights within about 5 minutes. A member whose last role 
 
 ## Remove a member
 
-Removing a member revokes all their roles in the organization, and they lose access to it. You can't undo it, but you can invite the person again. To remove a member, you need the Owner role or a role that includes the **Console** product. You can't remove a member whose roles give more access than yours. You also can't remove yourself, the organization's only Owner, or a person who belongs to no other organization.
+Removing a member revokes all their roles in the organization, and they lose access to it. You can't undo it, but you can invite the person again. To remove a member, you need the Owner role or a role that includes the **Console** product. You can't remove a member whose roles give more access rights than yours. You also can't remove yourself, the organization's only Owner, or a person who belongs to no other organization.
 
 To remove a member, follow these steps:
 

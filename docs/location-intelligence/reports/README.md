@@ -70,7 +70,7 @@ A report shows data up to the moment when you run it. See [How report data is pr
 
 Check the following before you run your first report:
 
-* **You have access to Reports.** Reports is on the sidebar when your workspace includes Reports and one of your roles includes it. If it isn't on the sidebar, ask the people who set up your workspace. See [Access to Reports](./#access-to-reports).
+* **You have access to Reports.** Reports is on the sidebar when your workspace includes Reports and one of your roles includes it. If it isn't on the sidebar, ask [your account administrator](../who-manages-your-workspace.md). See [Access to Reports](./#access-to-reports).
 * **Your assets have GPS devices.** An asset without an assigned GPS device isn't included in any report. Assign the device before you need the data. Trips that a device recorded before it was assigned to the asset never appear in the reports of this asset. See [Manage assets](../bdr/assets/manage-assets.md).
 
 ## Access to Reports
@@ -92,7 +92,7 @@ A report includes only the assets that your roles let you see in **Assets**. For
 
 Anyone who can open Reports can use **Ask AI**. Ask has no access settings of its own. It proposes only the report types that you can run, and it uses only the assets that your roles let you see.
 
-If you need a report type that isn't in your Reports menu, ask the people who set up your workspace. See [Access and roles](../access-and-roles.md) to learn how roles give access to the products.
+If you need a report type that isn't in your Reports menu, ask your account administrator. See [Access and roles](../access-and-roles.md) to learn how roles give access to the products.
 
 ## Where to start
 

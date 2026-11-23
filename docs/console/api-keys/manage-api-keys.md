@@ -11,7 +11,7 @@ tags:
 
 ## Create an API key
 
-An API key lets an app call Navixy APIs with one role of your organization. An app is any program that uses the key, such as an AI agent, a script, or an integration. To give an AI agent access to Navixy, create a key for it: the key is how the agent signs in under its own name. Anyone with access to Console can create API keys. The key gets no more access than your own roles give you. If your own access ends on a set date, the key needs an expiration date on or before that date. If you select a later date or leave **Never**, Console doesn't create the key and names the last date that you can select.
+An API key lets an app call Navixy APIs with one role of your organization. An app is any program that uses the key, such as an AI agent, a script, or an integration. To give an AI agent access to Navixy, create a key for it: the key is how the agent signs in under its own name. Anyone with access to Console can create API keys. The key gets no more access rights than your own roles give you. If your own access ends on a set date, the key needs an expiration date on or before that date. If you select a later date or leave **Never**, Console doesn't create the key and names the last date that you can select.
 
 To create an API key, follow these steps:
 

@@ -3,7 +3,7 @@
 * [Location Intelligence](README.md)
 * [Getting started](getting-started.md)
 * [Access and roles](access-and-roles.md)
-  * [Your account administrator](your-account-administrator.md)
+  * [Who manages your workspace](who-manages-your-workspace.md)
 
 ## Products
 

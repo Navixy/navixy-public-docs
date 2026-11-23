@@ -63,7 +63,7 @@ A key stops working in any of these cases:
 * A role that the creator has is edited or deleted.
 * The creator leaves the organization.
 
-Nobody can give a key more access than their role has. Any change to the roles of the person who created the key deletes all their keys, even a change that gives that person more access. This is a security measure. A key can't get more access than its creator has, and nobody can keep using a key after the creator's access rights change.
+Nobody can give a key more access rights than their role has. Any change to the roles of the person who created the key deletes all their keys. This includes a change that gives that person more access rights. This is a security measure. A key can't get more access rights than its creator has, and nobody can keep using a key after the creator's access rights change.
 
 An expired key can't be renewed, and a deleted key can't be restored. The only way to keep the app working is to create a new key.
 

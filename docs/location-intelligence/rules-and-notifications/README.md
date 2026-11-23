@@ -49,7 +49,7 @@ Each of them gets a notification at the moment when an event happens. They don't
 
 Check the following before you create your first rule:
 
-* **Your workspace has the Rules and Notifications products.** If it doesn't, ask the people who set up your workspace. See [Access to Notification rules](#access-to-notification-rules) to learn which permissions you also need.
+* **Your workspace has the Rules and Notifications products.** If it doesn't, ask [your account administrator](../who-manages-your-workspace.md). See [Access to Notification rules](#access-to-notification-rules) to learn which permissions you also need.
 * **Your assets have GPS devices.** A rule checks only the GPS devices that are assigned to its assets. See [Manage assets](../bdr/assets/manage-assets.md#assign-a-device-to-an-asset) to learn how to assign a GPS device.
 * **You have the geo objects and schedules that your rules need.** A rule can use only a geo object that is one area. See [Create geo object](../bdr/geo-objects/create-geo-object.md) and [Set up schedule](../bdr/schedules/set-up-schedule.md) to learn how to create them.
 
@@ -57,7 +57,7 @@ Check the following before you create your first rule:
 
 Two things decide what you can do: your workspace's products and your role.
 
-Notification rules needs two products in your workspace. The people who set up your workspace enable them in Console:
+Notification rules needs two products in your workspace. Your account administrator enables them in Console:
 
 * **Rules**: Creates and checks your rules. **Notification rules** is on the sidebar only when your workspace has this product.
 * **Notifications**: Shows the notifications. Without this product, your rules still run, but no notification appears.
@@ -81,7 +81,7 @@ Without the permission to see rules, the **Notification rules** page says that y
 
 You get a notification about an asset only when your role lets you see that asset in **Assets**. A user whose role gives no access to assets gets no notifications.
 
-If you need more access, ask the people who set up your workspace. See [Access and roles](../access-and-roles.md) to learn how roles give access to the products.
+If you need more access rights, ask your account administrator. See [Access and roles](../access-and-roles.md) to learn how roles give access to the products.
 
 ## Where to start
 

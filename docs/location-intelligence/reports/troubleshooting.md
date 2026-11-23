@@ -30,7 +30,7 @@ Check the following, in this order:
 4. **The age of the data.** Navixy keeps trips for 6 months, sensor readings in 5- to 30-minute steps for 3 months, and sensor readings in 1-hour steps for 12 months. A period older than these limits has no data. For details, see [How far back report data goes](how-report-data-works.md#how-far-back-report-data-goes).
 5. **The filters.** In Sensor readings, the **Sensors** and **Devices** filters can leave no rows. The report then shows "No sensor matches the filters." Click **Clear filters** to show every sensor again.
 
-**No data yet** means that Navixy has no report data for your workspace yet. For example, no asset of the workspace has a GPS device. Assign a GPS device to an asset, and open the report again after about 30 minutes. **No data yet** also appears when your roles let you see no asset. In this case, ask the people who set up your workspace for access to the assets. If the message stays, contact Navixy support.
+**No data yet** means that Navixy has no report data for your workspace yet. For example, no asset of the workspace has a GPS device. Assign a GPS device to an asset, and open the report again after about 30 minutes. **No data yet** also appears when your roles let you see no asset. In this case, ask [your account administrator](../who-manages-your-workspace.md) for access to the assets. If the message stays, contact Navixy support.
 
 When you open Sensor readings, it shows "Choose the assets whose readings to show, then Run." The report has no assets yet. Click the button that shows the assets, choose the assets or **All assets**, then click **Run**.
 
@@ -57,7 +57,7 @@ Check the following:
 Check the following:
 
 * **The asset has no GPS device.** An asset without a GPS device isn't included in any report. Assign a GPS device to the asset in [Manage assets](../bdr/assets/manage-assets.md).
-* **Your roles don't let you see the asset.** A report includes only the assets that your roles let you see in **Assets**, and only the data of the GPS devices that your roles let you see. Ask the people who set up your workspace for access to the asset and its GPS devices. See [Access to Reports](./#access-to-reports).
+* **Your roles don't let you see the asset.** A report includes only the assets that your roles let you see in **Assets**, and only the data of the GPS devices that your roles let you see. Ask your account administrator for access to the asset and its GPS devices. See [Access to Reports](./#access-to-reports).
 * **The asset isn't chosen.** Click the button that shows the chosen assets, such as **All assets**. In the list, choose the asset or **All assets**. Then click **Run**. The search in the list of assets finds an asset by its name or ID. You can choose at most 200 assets one by one. To include more, choose **All assets**.
 
 In Trips and stops, the **By asset** table has a row for every asset in the report, including an asset that made no trips. When the asset has a row with no trips, the asset is in the report but has no trips in the period. See [The report is empty](#the-report-is-empty).
@@ -154,15 +154,15 @@ Reports shows one of the following messages:
 
 | Message | What to do |
 | --- | --- |
-| "The Reports product is not enabled." | Ask the people who set up your workspace to check that the workspace includes Reports and that your role includes it. |
-| "You do not have the rights for this — contact your administrator." | Ask the people who set up your workspace for a role that gives access to this report type. |
-| "No reports are available to you in this workspace." | Your roles give access to no report type in this workspace. Ask the people who set up your workspace for a role that gives access to Reports. |
-| "This report is not available to you in this workspace." | Your role doesn't give access to this report type, for example when you open it from a link. Ask the people who set up your workspace for a role that gives access to it. |
-| "You can see this report but not run it. Running it takes a role with the run permission, which is granted in Console." | Ask the people who set up your workspace for a role that lets you run this report type. |
+| "The Reports product is not enabled." | Ask your account administrator to check that the workspace includes Reports and that your role includes it. |
+| "You do not have the rights for this — contact your administrator." | Ask your account administrator for a role that gives access to this report type. |
+| "No reports are available to you in this workspace." | Your roles give access to no report type in this workspace. Ask your account administrator for a role that gives access to Reports. |
+| "This report is not available to you in this workspace." | Your role doesn't give access to this report type, for example when you open it from a link. Ask your account administrator for a role that gives access to it. |
+| "You can see this report but not run it. Running it takes a role with the run permission, which is granted in Console." | Ask your account administrator for a role that lets you run this report type. |
 | "Your permissions could not be read. Please contact support." | Contact Navixy support. Trying again doesn't fix this error. |
 | "Your session is incomplete. Please sign in again." | Click **Sign in again**. |
 | "Your session has ended. Sign in again." | Click **Sign in again**. |
-| "Your account has access to no organization or workspace." | Ask the people who set up your workspace to give you a role in the workspace. |
+| "Your account has access to no organization or workspace." | Ask your account administrator to give you a role in the workspace. |
 | "This workspace asks you to sign in with a second factor, and the sign-in did not complete one." | Click **Sign out**, then sign in again and complete the second factor. |
 | "Signing in is temporarily unavailable. Try again shortly." | Wait a minute and click **Try again**. If the message appears again, contact Navixy support. |
 | "Something went wrong on our side. Please try again." | Wait a few minutes and click **Try again**. If the message appears again, contact Navixy support. |

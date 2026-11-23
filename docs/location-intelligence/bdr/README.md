@@ -33,31 +33,31 @@ Assets are at the center. You assign devices, geo objects, and schedules to asse
 
 - **Asset:** Something your business tracks, such as a vehicle, a trailer, a person, or a container. It gets its position and readings from the GPS device assigned to it. A device can be assigned to one asset at a time.
 - **Asset type:** The template an asset is based on, such as Vehicle or Generator. It decides which fields the asset has. Every workspace starts with three preset asset types, **Vehicle**, **Workforce**, and **Cargo**, and you can build your own.
-- **Custom field:** A property of your own on an asset or a geo object, such as a VIN or an opening time. You add a field to a type, and every record of that type has it.
+- **Custom field:** A property of your own on an asset or a geo object, such as a VIN or an opening time. You add a field to a type, and every asset or geo object of that type has it.
 - **Asset group:** A set of assets you handle together, such as the vans of one depot. An asset has exactly one type and can be in any number of groups.
 - **Geo object:** A place or an area drawn on the map, such as a depot, a customer's site, or a delivery zone. Like an asset, it is based on a type, which decides its fields. You create the geo object types you need.
 - **Schedule:** When something happens and how often it repeats, such as a depot's opening hours, a vehicle's service window, or a team's shift. A schedule is made of time slots, and you can assign one schedule to any number of assets and geo objects.
 
 ## Access to Business Data Repository
 
-Your role decides which records of Business Data Repository you can see and what you can do with them. A role sets this separately for each kind of record: assets, asset groups, geo objects, schedules, devices, inventories, and the types with their custom fields and tags. For each kind, a role gives access to all the records of the workspace, to some of them, or to none. It also allows some or all of these actions:
+Your role decides which items in Business Data Repository you can see and what you can do with them. A role sets this separately for each kind of item: assets, asset groups, geo objects, schedules, devices, inventories, and the types with their custom fields and tags. For each kind, a role gives access to all the workspace's items, to some of them, or to none. It also allows some or all of these actions:
 
 | Action | What it allows |
 | --- | --- |
-| View | See the records in lists and open them |
-| Create | Create records |
-| Edit | Change records |
-| Delete | Delete records |
+| View | See the items in lists and open them |
+| Create | Create items |
+| Edit | Change items |
+| Delete | Delete items |
 
-To edit or delete a record, your role must also let you view it.
+To edit or delete an item, your role must also let you view it.
 
-When your role lets you see only some records, Business Data Repository leaves out the others everywhere:
+When your role lets you see only some items, Business Data Repository leaves out the others everywhere:
 
-* **Assets**, **Geo objects**, and **Schedules** list and count only the records that you can see.
+* **Assets**, **Geo objects**, and **Schedules** list and count only the items that you can see.
 * An asset group shows only the assets in it that you can see.
 * An asset shows its GPS device only if you can also see the device.
 
-The buttons that create, change, and delete records are shown to everyone. If your role doesn't allow the action, an error message appears when you click the button. To learn more, see [Access and roles](../access-and-roles.md).
+The buttons that create, change, and delete items are shown to everyone. If your role doesn't allow the action, an error message appears when you click the button. To learn more, see [Access and roles](../access-and-roles.md).
 
 ## Where to start
 

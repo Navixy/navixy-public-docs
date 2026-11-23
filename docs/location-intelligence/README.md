@@ -79,7 +79,7 @@ Location Intelligence is for the people who run a fleet every day: fleet manager
 
 ## Access to products
 
-What you can do in Location Intelligence depends on the products of your workspace and on your roles. Your roles decide which records you see in each product and what you can do with them. The people who set up your workspace decide both. [Access and roles](access-and-roles.md) explains what a role can limit in each product and what you see when something isn't allowed.
+What you can do in Location Intelligence depends on the products of your workspace and on your roles. Your roles decide which assets, devices, and other items you see in each product and what you can do with them. [Your account administrator](who-manages-your-workspace.md) decides both. [Access and roles](access-and-roles.md) explains what a role can limit in each product and what you see when something isn't allowed.
 
 ## Where to start
 
