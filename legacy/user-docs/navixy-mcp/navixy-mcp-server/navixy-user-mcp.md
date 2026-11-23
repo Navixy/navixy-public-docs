@@ -5,6 +5,7 @@ description: >-
   available through Navixy User MCP.
 tags:
   - legacy
+noIndex: true
 ---
 
 # Navixy User MCP (navixy-user)

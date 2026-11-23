@@ -5,6 +5,7 @@ description: >-
   reference of the tools available through Navixy Panel MCP.
 tags:
   - legacy
+noIndex: true
 ---
 
 # Navixy Panel MCP (navixy-panel)
