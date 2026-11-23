@@ -34,8 +34,8 @@ The expression language uses JEXL (Java Expression Language) as its foundation, 
 
 Attribute names must exactly match names from device telemetry. To make sure you use correct names, you can:
 
-* Use the [Autofill attribute names](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/expressions/attributes) option
-* Lookup attribute names in [Data Stream Analyzer](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/monitoring)
+* Use the [Autofill attribute names](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/expressions/attributes) option
+* Lookup attribute names in [Data Stream Analyzer](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/monitoring)
 
 ## Attribute access
 
@@ -305,7 +305,7 @@ The `JexlArithmetic` methods in [Apache Commons JEXL](https://commons.apache.org
 The check consults `JexlArithmetic.isStrict(JexlOperator)`, which exempts `EQ` and `CONTAINS`. That is why `==`, `!=`, `=~` and `!~` accept a `null` operand while the relational, arithmetic and bitwise operators and `!` do not. `STARTSWITH` and `ENDSWITH` are not exempt either, but the check reaches them only on one of the two code paths, which is why those four operators depend on the syntax. Confirmed by testing against the live platform for `+`, `-`, `*`, `/`, `&`, `<`, `<=`, `!`, `=^`, `!^`, `=$`, `!$`, `=~`, `!~`, `==` and `!=`, in both syntaxes.
 {% endhint %}
 
-For how these results affect branching in a Logic node's condition, see [IF/THEN Logic node](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/nodes/logic). For what happens to the attribute itself, see [When a saved formula fails on a message](formula-errors.md#when-a-saved-formula-fails-on-a-message). For the same behavior written for the flow builder rather than the API, see [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/expressions) in the IoT Logic chapter.
+For how these results affect branching in a Logic node's condition, see [IF/THEN Logic node](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/logic). For what happens to the attribute itself, see [When a saved formula fails on a message](formula-errors.md#when-a-saved-formula-fails-on-a-message). For the same behavior written for the flow builder rather than the API, see [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/expressions) in the IoT Logic chapter.
 
 #### Attribute name versus value()
 

@@ -28,7 +28,7 @@ Navixy reads the positions of a device in time order and splits them into moving
 * A gap of more than 15 minutes between two positions ends the current trip or stop.
 * A trip shorter than 100 m isn't recorded as a trip.
 
-Trip counts in IoT Query Premium can differ slightly from [Reports](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/reports) in Location Intelligence for the same asset.
+Trip counts in IoT Query Premium can differ slightly from [Reports](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports) in Location Intelligence for the same asset.
 
 If the device sends an odometer, the distance of a trip is the difference between the odometer values at the start and at the end of the trip. Otherwise, it is the sum of the straight-line distances between consecutive positions.
 

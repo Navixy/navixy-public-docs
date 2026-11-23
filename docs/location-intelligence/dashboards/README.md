@@ -59,7 +59,7 @@ To choose your own metrics and build your own dashboards, use Dashboard Studio, 
 * **Workspace**: A dashboard shows the assets of the workspace that you work in. You don't choose a workspace in Dashboards.
 * **Period**: Trips and Conditions show a period that ends now: 1, 6, 12, or 24 hours, or 7, 14, or 31 days. Both dashboards show the last 14 days when you open them, and you choose another period in the period menu. Live status shows the current moment and the last 24 hours and has no period menu. For a period that doesn't end now, use [Reports](../reports/).
 * **Message**: The data that a GPS device sends to Navixy, such as a position, a speed, or a sensor reading. An asset's connection status depends on when its device sent the last message.
-* **Ask AI**: A chat next to the dashboard that answers questions about the dashboards from their panels. It's Navixy AI Assistant in Dashboards. See [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards).
+* **Ask AI**: A chat next to the dashboard that answers questions about the dashboards from their panels. It's Navixy AI Assistant in Dashboards. To learn how to use it, see [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards).
 
 Each of the three dashboards answers its own question:
 

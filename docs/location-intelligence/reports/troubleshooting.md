@@ -133,7 +133,7 @@ A report that is too large doesn't run at all. Reports never shows only a part o
 
 ## Ask AI doesn't answer
 
-The **Ask** panel can show a message in three places: instead of a reply, under a reply, or under the question box. To learn what each message means and what to do, see the [Messages in the Ask panel](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports#messages-in-the-ask-panel) section of Ask AI in Reports.
+The **Ask** panel can show a message in three places: instead of a reply, under a reply, or under the question box. To learn what each message means and what to do, see [Messages in the Ask panel](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports#messages-in-the-ask-panel) in Ask AI in Reports.
 
 ## The chart, the map, or a download doesn't appear
 

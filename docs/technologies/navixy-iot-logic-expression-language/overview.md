@@ -19,7 +19,7 @@ The language operates within IoT Logic flows, where expressions power two critic
 * **Binary data processing:** Decode complex device protocols, parse BLE sensor data, extract bit-level status flags, and handle proprietary binary formats through specialized utility functions.
 * **Conditional logic:** Route data based on real-time conditions using comparison operators, boolean logic, and pattern matching to create intelligent decision points.
 
-For implementation details about using expressions within IoT Logic flows, see the [IoT Logic documentation](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic).
+For implementation details about using expressions within IoT Logic flows, see the [IoT Logic documentation](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic).
 
 ## Where expressions are used
 
@@ -45,7 +45,7 @@ Example condition that creates a conditional branch for high-speed, low-fuel sce
 speed > 80 && fuel_level < 20
 ```
 
-For comprehensive details on node configuration and flow architecture, see the [Node documentation](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/nodes).
+For comprehensive details on node configuration and flow architecture, see the [Node documentation](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes).
 
 ## Core concepts
 
@@ -237,15 +237,15 @@ util:checkBit(device_status, 3)
 
 Expression results integrate with the Navixy platform through multiple channels:
 
-[**Data Stream Analyzer**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/monitoring)**:** Monitor expression results in real-time. View calculated attributes, historical values, and expression evaluation results for debugging and validation.
+[**Data Stream Analyzer**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/monitoring)**:** Monitor expression results in real-time. View calculated attributes, historical values, and expression evaluation results for debugging and validation.
 
-[**Custom sensors**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/nodes/initiate-attribute)**:** Convert calculated attributes into dashboard-visible sensors when connected to Navixy output endpoints.
+[**Custom sensors**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/initiate-attribute)**:** Convert calculated attributes into dashboard-visible sensors when connected to Navixy output endpoints.
 
-[**Third-party integration**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/nodes/output-endpoint)**:** Forward transformed data to external systems via MQTT output endpoints.
+[**Third-party integration**](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/nodes/output-endpoint)**:** Forward transformed data to external systems via MQTT output endpoints.
 
 ### Additional resources
 
 * [Expression syntax reference](expression-syntax-reference.md)
 * [Formula error reference](formula-errors.md)
-* [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/expressions) in the IoT Logic chapter
-* [IoT Logic user guide](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic)
+* [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/expressions) in the IoT Logic chapter
+* [IoT Logic user guide](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic)

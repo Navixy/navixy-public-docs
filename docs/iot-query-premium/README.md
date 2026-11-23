@@ -46,7 +46,7 @@ Analysts, fleet managers and operations teams, and developers each use IoT Query
 
 ## How IoT Query Premium differs from Reports and Dashboards
 
-[Reports](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/reports) and [Dashboards](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/dashboards) in Location Intelligence use the same kind of data and need no SQL, but you can't change what they calculate. In IoT Query Premium, you decide what to calculate and how to show the result.
+[Reports](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/reports) and [Dashboards](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/dashboards) in Location Intelligence use the same kind of data and need no SQL, but you can't change what they calculate. In IoT Query Premium, you decide what to calculate and how to show the result.
 
 ## Before you start
 

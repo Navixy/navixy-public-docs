@@ -96,4 +96,4 @@ On a screen narrower than 768 pixels, the panels of a dashboard appear in one co
 * [Live status](live-status.md): Learn what the panels of the Live status dashboard show.
 * [Trips](trips.md): Learn what the panels of the Trips dashboard show.
 * [Conditions](conditions.md): Learn what the panels of the Conditions dashboard show.
-* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask questions about the dashboard on screen.
+* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask questions about the dashboard on the screen.

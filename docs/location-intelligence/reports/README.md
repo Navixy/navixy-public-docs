@@ -52,7 +52,7 @@ Reports has a set of ready report types. To build your own reports and dashboard
 ## Core concepts
 
 * **Report type**: What a report answers. The Reports menu groups the report types under **Fleet activities**, **Sensors and equipment**, **Safety and security**, and **Employee activities**. You can run two report types: [Trips and stops](trips-and-stops.md) and [Sensor readings](sensor-readings.md). The other report types show a lock and are offered as paid options. See [Report types with a lock](manage-reports.md#report-types-with-a-lock).
-* **Ask AI**: Navixy AI Assistant in Reports. It builds a report from a request in plain language and answers with totals. Open it with the **Ask AI** button, which is on every page in Reports. See [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports).
+* **Ask AI**: Navixy AI Assistant in Reports. It builds a report from a request in plain language and answers with totals. Open it with the **Ask AI** button, which is on every page in Reports. To learn how to use it, see [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports).
 * **Report**: A report type run for the assets and the period that you choose.
 * **Trip**: A movement of an asset from the moment it starts to move until it stands still for at least 5 minutes.
 * **Stop**: A period of at least 5 minutes when the asset stands still and its GPS device keeps sending positions.

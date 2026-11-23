@@ -130,7 +130,7 @@ If the file isn't saved, the menu shows "The file could not be written. Try agai
 
 ## Ask for a report in plain language
 
-**Ask AI**, or Ask, builds a report from a request in plain language. Describe the report that you need, for example "Trips of all my assets yesterday", and Ask proposes the report type, the period, and the assets. To learn how to ask for a report, dictate a question, and continue a conversation, see [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) in the AI solutions documentation.
+**Ask AI**, or Ask, builds a report from a request in plain language. Describe the report that you need, for example "Trips of all my assets yesterday", and Ask proposes the report type, the period, and the assets. To learn how to ask for a report, dictate a question, and continue a conversation, see [Ask AI in Reports](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) in the AI solutions section.
 
 ## Report types with a lock
 

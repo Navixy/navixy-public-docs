@@ -48,7 +48,7 @@ Notification rules tells you when an asset does something that you need to know 
 
 ### Reports
 
-Reports shows what your assets did over a period. You choose a report, the assets, and a period. Reports then shows the report's totals and tables, such as a log of trips and stops. You can download each table as a CSV or Excel file. [Ask AI](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) builds a report from a request in plain language.
+Reports shows what your assets did over a period. You choose a report, the assets, and a period. Reports then shows the report's totals and tables, such as a log of trips and stops. You can download each table as a CSV or Excel file. [Ask AI](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/reports) builds a report from your request in plain language.
 
 * **Trips and stops** lists every trip of every asset: when it started and ended, its distance and duration, and the average and maximum speed. It also shows how long each asset stood still between trips.
 * **Sensor readings** shows the values that your assets' GPS devices sent over the period, such as fuel level or temperature. For each value, it shows the lowest, highest, and average reading.

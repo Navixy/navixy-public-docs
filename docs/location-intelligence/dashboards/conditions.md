@@ -130,5 +130,5 @@ The **DTC codes**, **DTC events**, **SOS events**, **Seatbelt events**, and **Ma
 
 * [Live status](live-status.md): Learn which assets report right now and what the connection statuses mean.
 * [Trips](trips.md): Learn how the fleet was used in a period that you choose.
-* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask which assets need attention.
+* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask about the assets that need attention.
 * [Dashboard tools](dashboard-tools.md): Learn how to choose columns and export a panel's data.

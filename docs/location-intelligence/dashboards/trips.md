@@ -91,4 +91,4 @@ To find a trip, sort the table by a column or use the search, as described in [D
 
 * [Live status](live-status.md): Learn which assets move or stand right now.
 * [Conditions](conditions.md): Learn which devices report poor GPS accuracy. Poor accuracy affects a trip's distance when the device reports no odometer.
-* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to compare a period with the period before it.
+* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to compare a period with the one before it.

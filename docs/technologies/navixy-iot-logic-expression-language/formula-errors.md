@@ -76,7 +76,7 @@ Compare against the value that you expect instead of relying on the attribute be
 
 The guard has to come first. `&&` reads its operands from left to right, so `temperature + 10 > 30 && temperature != null` fails before the guard is ever read.
 
-For the operator-by-operator rules, see [Null propagation](expression-syntax-reference.md#null-propagation). For the same behavior written for the flow builder rather than the API, see [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/iot-logic/expressions) in the IoT Logic chapter.
+For the operator-by-operator rules, see [Null propagation](expression-syntax-reference.md#null-propagation). For the same behavior written for the flow builder rather than the API, see [Expressions](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic/expressions) in the IoT Logic chapter.
 
 ## Quick reference
 

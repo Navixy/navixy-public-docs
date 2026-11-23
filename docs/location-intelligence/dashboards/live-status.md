@@ -112,5 +112,5 @@ The **Address** and **Satellites** columns always show "—". To choose which co
 
 * [Trips](trips.md): Learn how the fleet was used in a period that you choose.
 * [Conditions](conditions.md): Learn which devices report poor GPS accuracy or falling voltage.
-* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask questions about this dashboard.
+* [Ask AI in Dashboards](https://app.gitbook.com/s/QZR0A6r78SoqVYXZIB0p/navixy-ai-assistant/dashboards): Learn how to ask questions about the Live status dashboard.
 * [Dashboard tools](dashboard-tools.md): Learn how to hide panels, choose columns, and export a panel's data.
