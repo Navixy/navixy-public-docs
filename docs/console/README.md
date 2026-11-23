@@ -9,7 +9,7 @@ noIndex: true
 ---
 # Navixy Console
 
-<figure><img src=".gitbook/assets/image (1).png" alt="The Console hub for a workspace of an organization. The top navigation bar has the organization and workspace dropdown menus and a search field. Under the workspace name, a line names the organization, the region, and the tariff plan. My products lists five products: four with a green status dot and the buttons Disable and Open, and one with a red status dot and an Enable button. Below is Recent activity."><figcaption><p>The Console hub</p></figcaption></figure>
+<figure><img src=".gitbook/assets/image (1).png" alt="The Console hub for a workspace. The top navigation bar has the organization and workspace dropdown menus and a search field. Next to the Console hub title is the name of the workspace&#x27;s plan. My products shows how many products are enabled and lists all products. An enabled product has a green status dot and the buttons Disable and Open. A product that isn&#x27;t enabled has a red status dot and an Enable button. Below is Recent activity, which lists the latest changes and has a link to the audit log."><figcaption><p>The Console hub</p></figcaption></figure>
 
 A fleet business runs on several Navixy products at once: one stores the vehicles and people, one processes what the devices send, others turn it into reports and dashboards. Someone decides which teams get which products, who may see which data, and what it all costs. Navixy Console is where you make those decisions, for your own company and for every company you serve.
 

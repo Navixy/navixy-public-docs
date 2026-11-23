@@ -96,7 +96,7 @@ After **Launch**, Console opens on the Console hub. The top of the hub shows you
 
 While Navixy creates your workspace, the hub tells you that instead of listing products. This usually takes less than a minute, and the hub updates automatically.
 
-Under **My products**, each product shows its status. A product shows as **Enabling** while Navixy sets it up, which takes a few minutes. When the product is ready, a green dot appears on its icon, and the **Open** button appears next to it.
+Under **My products**, each product shows its status. A product shows as **Enabling** while Navixy sets it up, which takes a few minutes. When the product is ready, a green dot appears on its icon, and the **Open** button appears next to it. A product that isn't enabled has a red dot and an **Enable** button. The label next to **My products** shows how many products are enabled, such as **6 of 9 enabled**.
 
 The products that your plan requires stay enabled. You can enable or disable the other products with **Enable** and **Disable**. Disabling a product removes user access to it, but its data is kept. To use a product not covered by your plan, contact [sales@navixy.com](mailto:sales@navixy.com).
 
