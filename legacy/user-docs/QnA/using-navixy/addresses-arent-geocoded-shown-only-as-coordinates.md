@@ -1,6 +1,8 @@
-﻿---
+---
 title: Addresses aren't geocoded (shown only as coordinates)
 description: "System reaches geocoding limit (100k–500k daily calls); Basic plan allows 100k, Premium allows 500k geocoding requests per day"
+tags:
+  - legacy
 ---
 
 # Addresses aren't geocoded (shown only as coordinates)

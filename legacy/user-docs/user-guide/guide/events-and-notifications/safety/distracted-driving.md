@@ -1,5 +1,7 @@
 ---
 description: Detect distracted driving such as phone use or smoking, captured by dash cams or GPS devices with camera capabilities. Requires compatible hardware support.
+tags:
+  - legacy
 ---
 
 # Distracted driving

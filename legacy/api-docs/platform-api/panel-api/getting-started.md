@@ -1,6 +1,9 @@
 ---
 title: Getting started
 description: What the Admin Panel API manages, its core concepts, and how to use this documentation.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy Admin Panel API

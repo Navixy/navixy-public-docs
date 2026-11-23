@@ -2,6 +2,8 @@
 description: >-
   Configure tow detection sensitivity and delay so the device triggers an alert
   when a parked vehicle moves without the ignition on.
+tags:
+  - legacy
 ---
 
 # Tow detection

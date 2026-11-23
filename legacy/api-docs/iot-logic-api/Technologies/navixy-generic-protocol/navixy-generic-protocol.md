@@ -1,5 +1,8 @@
 ---
 description: Send device telemetry to Navixy using NGP, an open JSON telematics protocol. Start with the quick-start, then see transport, encoding, and message format.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy Generic Protocol

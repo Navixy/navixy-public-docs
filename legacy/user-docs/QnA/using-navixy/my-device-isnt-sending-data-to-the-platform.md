@@ -1,6 +1,8 @@
-﻿---
+---
 title: My device isn't sending data to the platform
 description: Verify that the device is correctly configured using Air Console; for Teltonika, adjust the tracking priority and check the server address
+tags:
+  - legacy
 ---
 
 # My device isn't sending data to the platform

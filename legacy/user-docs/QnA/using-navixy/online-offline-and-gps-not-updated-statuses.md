@@ -1,6 +1,8 @@
 ---
 title: 'Online, Offline and GPS not updated statuses'
 description: "Online means valid coordinates arrive, GPS not updated means none for 5 minutes, and Offline means no data for the connection timeout."
+tags:
+  - legacy
 ---
 
 # Online, Offline and GPS not updated statuses

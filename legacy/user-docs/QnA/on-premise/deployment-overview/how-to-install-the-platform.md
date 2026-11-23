@@ -1,6 +1,8 @@
 ---
 title: How to install the platform?
 description: Download and install via easy 3-command wizard or advanced Linux/Windows scripts. Docker or manual setup, scale from 500 to 5000+ assets
+tags:
+  - legacy
 ---
 
 # How to install the platform?

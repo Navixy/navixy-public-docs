@@ -1,5 +1,7 @@
 ---
 description: "Manage User applications in Navixy: edit, enable, disable, or delete integrations. Account Owners have full control; Users have access based on enabled apps."
+tags:
+  - legacy
 ---
 
 # Managing existing user applications

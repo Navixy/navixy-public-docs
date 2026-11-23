@@ -1,5 +1,7 @@
 ---
 description: Install Navixy on-premise with the advanced method on Ubuntu or Windows Server. Recommended for instances with over 5,000 assets using a separate database server.
+tags:
+  - legacy
 ---
 
 # Advanced installation

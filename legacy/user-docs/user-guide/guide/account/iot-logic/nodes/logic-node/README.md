@@ -3,6 +3,8 @@ description: >-
   Route IoT Logic data flows based on conditions with the IF/THEN Logic node.
   Evaluate telemetry values, trigger actions for matching records, and skip the
   rest.
+tags:
+  - legacy
 ---
 
 # IF/THEN Logic

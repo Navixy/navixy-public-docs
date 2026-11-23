@@ -1,5 +1,7 @@
 ---
 description: IoT Query data is organized in Raw, Transformation, and Insight layers. Browse available schemas, table structures, and learn how to reference them in SQL
+tags:
+  - legacy
 ---
 
 # Schema overview

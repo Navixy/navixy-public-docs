@@ -3,6 +3,8 @@ title: Completed with errors status (Field Service)
 description: >-
   A route task gets this status when the employee visits checkpoints out of
   order or completes the last checkpoint late, even if every checkpoint is done.
+tags:
+  - legacy
 ---
 
 # Completed with errors status (Field Service)

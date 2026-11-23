@@ -3,6 +3,8 @@ description: >-
   Configure Teltonika device sensors by selecting parameters in the
   configurator, applying settings remotely, and creating sensor entries in
   Navixy.
+tags:
+  - legacy
 ---
 
 # Configuring sensors on Teltonika devices

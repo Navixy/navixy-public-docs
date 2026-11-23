@@ -1,6 +1,8 @@
 ---
 title: Sensor
 description: The three kinds of sensor a tracker can carry, and the operations that manage them.
+tags:
+  - legacy
 ---
 
 # Sensor

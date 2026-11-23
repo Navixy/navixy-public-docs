@@ -1,5 +1,7 @@
 ---
 description: Reset the Navixy admin panel password on-premise using a Java command-line tool. Use when the password is lost or changed without authorization.
+tags:
+  - legacy
 ---
 
 # Password reset

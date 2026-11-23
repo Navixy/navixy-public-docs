@@ -1,5 +1,7 @@
 ---
 description: Set up fuel sensors in Navixy, assess reading quality, and analyze consumption with reports, widgets, and Grafana dashboards.
+tags:
+  - legacy
 ---
 
 # Fuel control in Navixy

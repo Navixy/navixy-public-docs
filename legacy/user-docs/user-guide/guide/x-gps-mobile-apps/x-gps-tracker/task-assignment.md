@@ -1,5 +1,7 @@
 ---
 description: View and update assigned tasks in X-GPS Tracker. Employees receive push notifications when a manager assigns a new task or changes an existing one.
+tags:
+  - legacy
 ---
 
 # Task assignment

@@ -3,6 +3,8 @@ description: >-
   Set up Suntech ST4410G master-slave redundancy in Navixy. Covers slave
   mapping, distance monitoring parameters, and alert integration for asset
   security.
+tags:
+  - legacy
 ---
 
 # Configuring Suntech ST4410G master-slave in Navixy

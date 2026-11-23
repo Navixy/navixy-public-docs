@@ -1,6 +1,8 @@
 ---
 title: Place import
 description: Create many places at once from a spreadsheet, through a background import process.
+tags:
+  - legacy
 ---
 
 # Place import

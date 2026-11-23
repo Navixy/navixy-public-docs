@@ -1,6 +1,8 @@
 ---
 title: Geofence
 description: Named map areas that limit where a rule applies and that name locations in reports.
+tags:
+  - legacy
 ---
 
 # Geofence

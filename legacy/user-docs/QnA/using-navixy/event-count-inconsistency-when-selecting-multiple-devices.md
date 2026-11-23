@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Event count inconsistency when selecting multiple devices
 
 ## Question

@@ -1,6 +1,8 @@
 ---
 title: Vehicle status listing
 description: Deprecated. The list of statuses a vehicle could be set to.
+tags:
+  - legacy
 ---
 
 # Vehicle status listing

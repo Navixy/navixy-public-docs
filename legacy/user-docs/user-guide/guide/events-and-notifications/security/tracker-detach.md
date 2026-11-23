@@ -1,5 +1,7 @@
 ---
 description: Get alerted when a GPS tracking device is removed from the vehicle or asset it monitors. Essential for theft prevention in logistics and transportation.
+tags:
+  - legacy
 ---
 
 # Tracker detach

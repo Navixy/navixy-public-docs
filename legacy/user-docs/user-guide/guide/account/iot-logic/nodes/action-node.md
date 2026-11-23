@@ -3,6 +3,8 @@ description: >-
   Use Device action nodes in IoT Logic to send automated commands to GPS
   devices, such as switching outputs or sending GPRS commands when triggered by
   data flows.
+tags:
+  - legacy
 ---
 
 # Device action

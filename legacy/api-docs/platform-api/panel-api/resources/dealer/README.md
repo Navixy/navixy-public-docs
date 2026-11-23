@@ -1,5 +1,7 @@
 ---
 description: API call to get information about a telematics service provider (TSP) account.
+tags:
+  - legacy
 ---
 
 # Dealer

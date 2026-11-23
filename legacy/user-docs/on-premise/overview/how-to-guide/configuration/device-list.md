@@ -1,5 +1,7 @@
 ---
 description: Filter GPS device manufacturers and models visible in Navixy on-premise. Configure show or hide rules in the database to control device visibility per vendor.
+tags:
+  - legacy
 ---
 
 # Device list

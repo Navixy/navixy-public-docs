@@ -1,5 +1,7 @@
 ---
 description: List, inspect, and update IoT Logic flows and endpoints via the REST API. Shows how to view node configs and modify existing flows with curl request examples.
+tags:
+  - legacy
 ---
 
 # Managing your flows and endpoints

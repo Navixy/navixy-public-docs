@@ -1,6 +1,8 @@
 ---
 title: Field service
 description: Employees in the field, the tasks assigned to them, and what they report back.
+tags:
+  - legacy
 ---
 
 # Field service

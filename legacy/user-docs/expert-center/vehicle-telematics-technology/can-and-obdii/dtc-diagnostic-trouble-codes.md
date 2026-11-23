@@ -1,5 +1,7 @@
 ---
 description: Diagnostic Trouble Codes flag vehicle system faults via onboard diagnostics. Decode DTC structures, interpret error categories, and apply fault data.
+tags:
+  - legacy
 ---
 
 # DTC (Diagnostic Trouble Codes)

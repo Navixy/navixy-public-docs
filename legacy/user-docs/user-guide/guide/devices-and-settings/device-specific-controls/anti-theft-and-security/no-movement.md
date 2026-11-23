@@ -1,5 +1,7 @@
 ---
 description: Alert in Navixy when a vehicle on an active route stays stationary longer than the configured no-movement timeout. Optionally set a pre-alarm for early notice
+tags:
+  - legacy
 ---
 
 # No movement

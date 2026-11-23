@@ -1,6 +1,8 @@
-﻿---
+---
 title: Analog-digital input not showing in the Inputs widget
 description: Manually map analog-digital inputs in Sensors and Settings by creating virtual or measurement sensors for each input parameter
+tags:
+  - legacy
 ---
 
 # Analog-digital input not showing in the Inputs widget

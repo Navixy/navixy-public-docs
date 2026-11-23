@@ -3,6 +3,8 @@ description: >-
   Start quickly with pre-configured IoT Logic flows for common data processing
   scenarios. Select a template from the start page and customize it for your
   needs.
+tags:
+  - legacy
 ---
 
 # Templates

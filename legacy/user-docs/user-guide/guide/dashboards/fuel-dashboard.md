@@ -2,6 +2,8 @@
 description: >-
   See how much fuel the fleet holds, which tanks are close to empty, and which
   objects consumed the most over the CAN bus in the last 24 hours.
+tags:
+  - legacy
 ---
 
 # Fuel dashboard

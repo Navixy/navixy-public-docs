@@ -1,6 +1,8 @@
 ---
 title: Datalogger
 description: Upload track data a device recorded offline, so it joins the tracker's history.
+tags:
+  - legacy
 ---
 
 # Datalogger

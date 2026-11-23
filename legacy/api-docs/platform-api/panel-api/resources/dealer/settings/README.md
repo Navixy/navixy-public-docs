@@ -1,5 +1,7 @@
 ---
 description: Overview of Admin Panel settings, covering branding, notifications, and service configuration.
+tags:
+  - legacy
 ---
 
 # Settings

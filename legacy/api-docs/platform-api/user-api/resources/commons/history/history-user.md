@@ -1,6 +1,8 @@
 ---
 title: User events
 description: The account's own event history, as opposed to a tracker's.
+tags:
+  - legacy
 ---
 
 # User events

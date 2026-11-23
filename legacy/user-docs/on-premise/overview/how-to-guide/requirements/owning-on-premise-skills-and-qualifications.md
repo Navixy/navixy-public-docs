@@ -1,5 +1,7 @@
 ---
 description: "Review the IT skills required to operate Navixy on-premise: server administration, networking, Linux or Windows management, and database operations."
+tags:
+  - legacy
 ---
 
 # Owning On-Premise: skills and qualifications

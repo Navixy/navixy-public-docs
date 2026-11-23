@@ -3,6 +3,8 @@ description: >-
   A step-by-step example showing how to build an IoT Logic flow that collects
   device telemetry, calculates derived metrics, and forwards enriched data
   externally.
+tags:
+  - legacy
 ---
 
 # Flow configuration example

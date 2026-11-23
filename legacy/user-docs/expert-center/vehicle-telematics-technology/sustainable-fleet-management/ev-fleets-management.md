@@ -2,6 +2,8 @@
 description: >-
   Manage EV fleets in Navixy by monitoring State of Charge and State of Health,
   tracking charging sessions, and optimizing battery performance.
+tags:
+  - legacy
 ---
 
 # EV fleets management

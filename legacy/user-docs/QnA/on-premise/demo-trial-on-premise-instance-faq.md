@@ -1,6 +1,8 @@
 ---
 title: Demo (trial) On-Premise instance FAQ
 description: Request and manage trial licenses. Test functionality, features, and installation on your infrastructure within a limited timeframe
+tags:
+  - legacy
 ---
 
 # Demo (trial) On-Premise instance FAQ

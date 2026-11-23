@@ -1,5 +1,7 @@
 ---
 description: Set sensitivity and timing so the device detects tampering or vibration after the ignition switches off, then reports an event to Navixy
+tags:
+  - legacy
 ---
 
 # Vibration detection

@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Tracking stationary objects with BLE tags
 
 Integrating objects into the Internet of Things (IoT) is simplified with the Navixy platform, which supports tracking both **movable** and **stationary** objects. Examples of stationary objects include heavy equipment, agricultural machinery, cargo, goods, and security equipment. Installing GPS devices on each of these objects can be very expensive. A more cost-effective solution is to install one device on a vehicle or site and track the rest using inexpensive Bluetooth Low Energy (BLE) tags.

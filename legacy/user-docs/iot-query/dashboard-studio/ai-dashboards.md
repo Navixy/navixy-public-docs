@@ -3,6 +3,8 @@ title: Building dashboards with AI
 description: >-
   Describe what you want to monitor in plain language and let the AI Assistant
   build a SQL-backed dashboard you review on the canvas before saving it
+tags:
+  - legacy
 ---
 
 # Building dashboards with AI

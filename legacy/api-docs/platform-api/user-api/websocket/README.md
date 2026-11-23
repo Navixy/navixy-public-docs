@@ -1,5 +1,8 @@
 ---
 description: Information about WebSocket API and how to open connection.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Websocket

@@ -2,6 +2,8 @@
 description: >-
   How to set the server address for GPS devices and the addresses used in
   links after a Windows installation, and check the database after each update.
+tags:
+  - legacy
 ---
 
 # Checks after installation and update - Windows

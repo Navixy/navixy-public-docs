@@ -3,6 +3,8 @@ title: Creation and submission date are different for forms
 description: >-
   Task form creation date precedes submission; check-in form creation date
   follows submission due to platform database processing logic
+tags:
+  - legacy
 ---
 
 # Creation and submission date are different for forms

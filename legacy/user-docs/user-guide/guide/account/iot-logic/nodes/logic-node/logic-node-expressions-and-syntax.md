@@ -1,5 +1,7 @@
 ---
 description: Write IF/THEN Logic expressions using the Navixy JEXL-based expression language. Expressions route data by evaluating to true or false, though a missing value can behave differently.
+tags:
+  - legacy
 ---
 
 # IF/THEN Logic expressions and syntax

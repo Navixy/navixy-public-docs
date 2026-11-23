@@ -3,6 +3,8 @@ description: >-
   Process telematics data without coding in IoT Logic. Receive data from GPS
   trackers, apply transformations, and route results to Navixy or external
   systems.
+tags:
+  - legacy
 ---
 
 # IoT Logic

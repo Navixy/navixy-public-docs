@@ -2,6 +2,8 @@
 description: >-
   Analyze trips and stops by work shift with the Trips and stops by shifts
   report. Compare shift-based mileage, time, idling, and fuel data.
+tags:
+  - legacy
 ---
 
 # Trips and stops by shifts report

@@ -1,6 +1,8 @@
 ---
 title: Tracker
 description: The device registered in the Navixy platform, and the operations that register, read, configure, and command it.
+tags:
+  - legacy
 ---
 
 # Tracker

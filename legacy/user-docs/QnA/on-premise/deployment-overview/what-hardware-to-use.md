@@ -1,6 +1,8 @@
 ---
 title: What hardware to use?
 description: "Minimum: 4 CPU cores, 8 GB RAM, 500 GB SSD storage. Physical or virtual servers work; use dedicated DB for 5000+ active devices"
+tags:
+  - legacy
 ---
 
 # What hardware to use?

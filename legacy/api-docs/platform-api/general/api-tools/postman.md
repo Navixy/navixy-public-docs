@@ -1,6 +1,8 @@
 ---
 title: Postman
 description: Testing API with Postman
+tags:
+  - legacy
 ---
 
 # Using Postman with Navixy

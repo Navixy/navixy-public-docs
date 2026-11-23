@@ -1,6 +1,8 @@
 ---
 title: Audit
 description: Record that a user opened or returned to the interface, for the audit log.
+tags:
+  - legacy
 ---
 
 # Audit

@@ -3,6 +3,8 @@ description: >-
   Keep Navixy up to date on PaaS or on-premise. Covers update frequency,
   eligibility requirements, and links to OS-specific update procedures for Linux
   and Windows.
+tags:
+  - legacy
 ---
 
 # Software updates

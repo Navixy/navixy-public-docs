@@ -3,6 +3,8 @@ description: >-
   Manage places of interest for field service: add customer sites and key
   locations your staff visits, and use them to streamline task assignments and
   routes.
+tags:
+  - legacy
 ---
 
 # Places

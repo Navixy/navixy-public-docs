@@ -2,6 +2,8 @@
 description: >-
   View detailed information for a tracked asset in X-GPS Mobile: map location,
   trip and event history, linked GPS device, tags, reminders, and custom fields.
+tags:
+  - legacy
 ---
 
 # Asset information

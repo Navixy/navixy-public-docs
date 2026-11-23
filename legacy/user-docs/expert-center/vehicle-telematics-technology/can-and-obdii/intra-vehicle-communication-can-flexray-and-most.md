@@ -3,6 +3,8 @@ description: >-
   In-vehicle networks use CAN, FlexRay, MOST, and Ethernet for ECU
   communication. Each protocol targets different speed, reliability, and
   bandwidth needs.
+tags:
+  - legacy
 ---
 
 # Intra-vehicle communication: CAN, FlexRay, and MOST

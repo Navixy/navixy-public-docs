@@ -1,5 +1,7 @@
 ---
 description: Determine parking locations by calling track/list and computing gaps between trip times or analyzing daily end locations
+tags:
+  - legacy
 ---
 
 # Identify a usual / longest parking location via API

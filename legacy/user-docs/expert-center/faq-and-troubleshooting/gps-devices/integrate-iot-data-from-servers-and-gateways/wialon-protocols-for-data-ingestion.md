@@ -1,5 +1,7 @@
 ---
 description: "Three Wialon protocols supported by Navixy for IoT data ingestion: connection parameters, supported inputs, event types, and message formats for each."
+tags:
+  - legacy
 ---
 
 # Wialon protocols for data ingestion

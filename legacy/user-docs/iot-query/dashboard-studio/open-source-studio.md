@@ -1,6 +1,8 @@
 ---
 title: Open-source Studio
 description: Deploy Dashboard Studio in your infrastructure with full React frontend customization. Maintain feature parity while controlling branding and design
+tags:
+  - legacy
 ---
 
 # Open-source Studio

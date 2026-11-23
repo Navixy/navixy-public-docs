@@ -2,6 +2,8 @@
 description: >-
   Activate the X-GPS Tracker app to turn a smartphone into a GPS tracker. Send
   an invitation to the employee and configure the app on their device.
+tags:
+  - legacy
 ---
 
 # Activate X-GPS tracker app

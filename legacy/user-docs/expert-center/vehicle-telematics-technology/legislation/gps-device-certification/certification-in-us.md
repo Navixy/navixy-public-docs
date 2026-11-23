@@ -2,6 +2,8 @@
 description: >-
   US GPS device certification requires FCC approval, RoHS compliance, and
   operator certifications from PTCRB, AT&T, T-Mobile, and Verizon.
+tags:
+  - legacy
 ---
 
 # Certification in US

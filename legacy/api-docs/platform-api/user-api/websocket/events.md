@@ -3,6 +3,8 @@ title: WebSocket Events
 description: >-
   Information about WebSocket events with conditions for obtaining and message
   samples.
+tags:
+  - legacy
 ---
 
 # WebSocket events

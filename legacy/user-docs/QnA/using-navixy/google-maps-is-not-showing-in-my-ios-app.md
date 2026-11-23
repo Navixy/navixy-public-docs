@@ -1,6 +1,8 @@
 ---
 title: Google Maps is not showing in my iOS app
 description: "X-GPS Monitor iOS uses Apple Maps; upgrade X-GPS Mobile to v1.5.0 or later to access Google Maps in the mobile app"
+tags:
+  - legacy
 ---
 
 # Google Maps is not showing in my iOS app

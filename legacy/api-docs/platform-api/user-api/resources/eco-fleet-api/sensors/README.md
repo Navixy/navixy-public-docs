@@ -1,6 +1,8 @@
 ---
 title: Fuel sensor quality index
 description: Contains API calls to interact with fuel sensor quality index.
+tags:
+  - legacy
 ---
 
 # Fuel sensor quality index

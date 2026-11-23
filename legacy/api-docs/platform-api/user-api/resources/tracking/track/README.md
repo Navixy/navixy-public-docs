@@ -1,6 +1,8 @@
 ---
 title: Track
 description: A tracker's movement over a period, as trips with totals, as raw points, or as a KML file.
+tags:
+  - legacy
 ---
 
 # Track

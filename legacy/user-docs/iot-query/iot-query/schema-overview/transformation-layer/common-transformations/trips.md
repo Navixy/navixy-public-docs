@@ -1,5 +1,7 @@
 ---
 description: Vehicle trip records derived from raw telematics data. Includes start and end times, distance, speed statistics, and zone detection
+tags:
+  - legacy
 ---
 
 # Trips

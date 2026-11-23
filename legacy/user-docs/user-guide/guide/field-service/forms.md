@@ -2,6 +2,8 @@
 description: >-
   Design electronic forms for field tasks and let employees submit text,
   signatures, and photos via the X-GPS Tracker app when completing assignments.
+tags:
+  - legacy
 ---
 
 # Forms

@@ -1,6 +1,8 @@
 ---
 title: Route schedules
 description: Scheduled routes, created on a repeating basis like recurring tasks.
+tags:
+  - legacy
 ---
 
 # Route schedules

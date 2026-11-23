@@ -2,6 +2,8 @@
 description: >-
   Retrieve raw telematics data from Navixy using AirConsole, API calls, database
   export, device logging, and CSV export for analysis.
+tags:
+  - legacy
 ---
 
 # Access IoT data

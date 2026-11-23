@@ -2,6 +2,8 @@
 description: >-
   Create fuel sensor entries in Navixy and configure calibration settings,
   filtering options, and measurement parameters for accurate readings.
+tags:
+  - legacy
 ---
 
 # Sensors setup and configuration

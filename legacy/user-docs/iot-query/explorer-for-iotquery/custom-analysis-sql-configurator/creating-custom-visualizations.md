@@ -1,6 +1,8 @@
 ---
 title: Creating custom visualizations
 description: Create interactive charts from SQL query results using drag-and-drop configuration. Add filters, switch chart types, and arrange panels side by side
+tags:
+  - legacy
 ---
 
 # Creating custom visualizations

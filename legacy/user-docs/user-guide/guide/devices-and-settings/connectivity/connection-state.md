@@ -2,6 +2,8 @@
 description: >-
   Control the offline timeout for each device so power-saving and low-frequency
   trackers stay accurately shown as connected in Navixy.
+tags:
+  - legacy
 ---
 
 # Connection state

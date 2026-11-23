@@ -1,5 +1,7 @@
 ---
 description: Add custom map layers to Navixy from tile servers or SVG files. Use for restricted area cartography or custom routes not available in standard map providers.
+tags:
+  - legacy
 ---
 
 # Custom maps

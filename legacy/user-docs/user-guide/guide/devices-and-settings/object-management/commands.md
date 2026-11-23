@@ -3,6 +3,8 @@ description: >-
   How to save commands for a GPS device, such as a reboot, vehicle
   immobilization, or a team chat alert, and send them from Tracking or X-GPS
   Mobile.
+tags:
+  - legacy
 ---
 
 # Commands

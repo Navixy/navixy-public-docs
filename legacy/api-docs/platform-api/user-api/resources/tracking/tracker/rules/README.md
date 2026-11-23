@@ -1,6 +1,8 @@
 ---
 title: Rules
 description: The conditions that make the Navixy platform log an event and notify someone, and the rule types available.
+tags:
+  - legacy
 ---
 
 # Rules

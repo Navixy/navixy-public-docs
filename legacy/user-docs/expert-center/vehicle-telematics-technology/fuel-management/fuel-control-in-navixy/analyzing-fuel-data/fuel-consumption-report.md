@@ -2,6 +2,8 @@
 description: >-
   Actual fuel consumption from flow meters in Navixy: compare recorded usage
   against manufacturer specifications and calculate operating costs per vehicle.
+tags:
+  - legacy
 ---
 
 # Fuel consumption report

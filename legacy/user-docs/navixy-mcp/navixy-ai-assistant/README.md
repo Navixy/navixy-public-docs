@@ -2,6 +2,9 @@
 description: >-
   Ask Navixy AI Assistant about the Navixy platform or your live account data
   from the website, the platform, or the standalone assistant page.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy AI Assistant
@@ -18,16 +21,16 @@ Navixy AI Assistant is a chat interface built into the Navixy platform and websi
 
 You can type your question or speak it aloud. The assistant streams answers in real time and includes links to the sources it used.
 
-You can also use the assistant without signing in at [assistant.navixy.com](https://assistant.navixy.com/).
+You can also use the assistant without signing in, on the Navixy website or at [assistant.navixy.com](https://assistant.navixy.com/). Without signing in, the assistant answers about the current Navixy platform, not about the previous generation that this documentation describes.
 
 **See also:**
 
 * [Navixy MCP Server](https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/navixy-mcp-server): Connect your own AI client to Navixy account data
 * [Documentation MCP](../using-navixy-documentation-with-ai.md): Give your AI client access to Navixy documentation
 
-## What AI Assistant can always do <a href="#what-the-assistant-can-always-do" id="what-the-assistant-can-always-do"></a>
+## What you can ask about this platform <a href="#what-the-assistant-can-always-do" id="what-the-assistant-can-always-do"></a>
 
-Regardless of where you open the assistant, you can ask about:
+When you open the assistant from the Navixy interface or the Admin Panel, it answers from this documentation, about the previous generation of the platform. You can ask about:
 
 * **API documentation:** Endpoints, authentication, parameters, responses, and error codes for both the User API and Admin Panel API.
 * **Device specifications:** GPS trackers and IoT devices compatible with the Navixy platform.

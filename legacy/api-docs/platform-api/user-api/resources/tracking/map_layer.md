@@ -1,6 +1,8 @@
 ---
 title: Map layer
 description: User-supplied KML overlays drawn on top of the Navixy platform's map.
+tags:
+  - legacy
 ---
 
 # Map layer

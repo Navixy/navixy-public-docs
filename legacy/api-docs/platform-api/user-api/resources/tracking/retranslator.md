@@ -1,6 +1,8 @@
 ---
 title: Retranslator
 description: Forward the data a device sends to the Navixy platform on to a third-party server.
+tags:
+  - legacy
 ---
 
 # Retranslator

@@ -1,6 +1,8 @@
 ---
 title: Special
 description: Model-specific settings that only some device models expose, each with its own object shape.
+tags:
+  - legacy
 ---
 
 # Special

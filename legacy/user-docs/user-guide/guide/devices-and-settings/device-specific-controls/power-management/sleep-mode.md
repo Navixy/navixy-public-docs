@@ -1,5 +1,7 @@
 ---
 description: Configure power-save sleep conditions on a battery GPS device in Navixy with the Sleep mode block. Available fields depend on the device model.
+tags:
+  - legacy
 ---
 
 # Sleep mode

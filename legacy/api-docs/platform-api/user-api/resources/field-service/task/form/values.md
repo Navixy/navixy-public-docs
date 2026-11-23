@@ -1,6 +1,8 @@
 ---
 title: Task form values
 description: Correct the values of a form that has already been submitted from the mobile app.
+tags:
+  - legacy
 ---
 
 # Task form values

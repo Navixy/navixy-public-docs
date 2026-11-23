@@ -2,6 +2,8 @@
 description: >-
   Resolve missing points and signal loss in the X-GPS Tracker mobile app. Covers
   required permissions, battery optimization, and operating system restrictions.
+tags:
+  - legacy
 ---
 
 # Troubleshooting guide: X-GPS Tracker

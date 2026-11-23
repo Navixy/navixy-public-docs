@@ -1,6 +1,9 @@
 ---
 title: Guides and examples
 description: Whole tasks worked end to end, with the calls in the order an integration makes them.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Guides and examples

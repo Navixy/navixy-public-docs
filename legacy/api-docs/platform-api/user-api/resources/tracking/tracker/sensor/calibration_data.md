@@ -1,6 +1,8 @@
 ---
 title: Sensor calibration data
 description: The curve that converts a sensor's raw readings into meaningful units.
+tags:
+  - legacy
 ---
 
 # Sensor calibration data

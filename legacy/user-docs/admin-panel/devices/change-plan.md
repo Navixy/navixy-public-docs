@@ -2,6 +2,8 @@
 description: >-
   Change the pricing plan of one tracker or of up to 1,000 selected trackers
   in Admin Panel, and choose how the user is billed for the change
+tags:
+  - legacy
 ---
 
 # Changing plan

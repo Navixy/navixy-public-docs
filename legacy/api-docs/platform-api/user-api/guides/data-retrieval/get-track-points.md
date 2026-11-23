@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Getting track points
 
 In many scenarios, it becomes essential to retrieve all location points of a track to gain comprehensive insights into the movements of an object equipped with a GPS tracker. This guide will demonstrate how to accomplish this using the Navixy API.

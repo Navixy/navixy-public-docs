@@ -1,5 +1,7 @@
 ---
 description: Get alerted when an OBD GPS tracker is plugged in or disconnected from the vehicle's OBD port, helping you prevent tracking gaps from unauthorized removal.
+tags:
+  - legacy
 ---
 
 # OBDII device plug/unplug

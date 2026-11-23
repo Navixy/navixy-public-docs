@@ -1,5 +1,7 @@
 ---
 description: Monitor live GPS device positions in the Objects list, review trip and event history, and manage map tools including geofences and points of interest.
+tags:
+  - legacy
 ---
 
 # GPS tracking

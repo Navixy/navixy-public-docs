@@ -1,6 +1,8 @@
 ---
 title: Navixy SMS gateway
 description: Use the built-in SMS gateway to send commands and alerts for a limited time and message volume; contact Support to configure a custom gateway
+tags:
+  - legacy
 ---
 
 # Navixy SMS gateway

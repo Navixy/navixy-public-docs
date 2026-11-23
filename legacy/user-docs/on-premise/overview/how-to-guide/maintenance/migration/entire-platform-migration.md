@@ -1,5 +1,7 @@
 ---
 description: Migrate the full Navixy on-premise platform to a new server. Covers prerequisites, database migration strategies, service transfer, IP management, and startup procedures.
+tags:
+  - legacy
 ---
 
 # Entire platform migration

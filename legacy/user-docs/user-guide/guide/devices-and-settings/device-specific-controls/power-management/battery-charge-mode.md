@@ -1,5 +1,7 @@
 ---
 description: Choose when a GPS device's backup battery charges in Navixy, with options for automatic, ignition-on only, or ignition-on with low-battery fallback.
+tags:
+  - legacy
 ---
 
 # Battery charge mode

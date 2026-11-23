@@ -3,6 +3,8 @@ title: Platform not displaying tracks even though trip history exists
 description: >-
   Disable Split by stops and Smart filter settings in History to remove all
   filters and display the raw location data from the device
+tags:
+  - legacy
 ---
 
 # Platform not displaying tracks even though trip history exists

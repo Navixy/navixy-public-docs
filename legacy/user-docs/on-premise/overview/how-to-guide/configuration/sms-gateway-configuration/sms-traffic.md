@@ -1,5 +1,7 @@
 ---
 description: Configure the SMS Traffic gateway in Navixy on-premise for messaging in Russia and Kazakhstan. Add the provider settings using the SQL configuration example.
+tags:
+  - legacy
 ---
 
 # SMS Traffic

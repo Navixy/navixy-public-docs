@@ -1,5 +1,7 @@
 ---
 description: Configure the device-side Fuel consumption calculation block in Navixy by setting fuel type, engine volume, and a multiplier for the estimate.
+tags:
+  - legacy
 ---
 
 # Fuel consumption calculation

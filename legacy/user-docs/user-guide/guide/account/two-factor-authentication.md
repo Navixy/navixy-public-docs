@@ -2,6 +2,8 @@
 description: >-
   Enable two-factor authentication for your Navixy account. A one-time passcode
   sent to your email is required alongside your password on each login.
+tags:
+  - legacy
 ---
 
 # Two-factor authentication

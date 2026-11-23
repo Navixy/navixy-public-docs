@@ -1,5 +1,8 @@
 ---
 description: Central hub for configuring your Navixy instance, including service, maps, branding, applications, menus, defaults, security, and gateways
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Settings

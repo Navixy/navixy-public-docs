@@ -1,5 +1,7 @@
 ---
 description: Request DDD files from a vehicle's tachograph over the air without a physical connection. Covers on-demand download options by device type.
+tags:
+  - legacy
 ---
 
 # DDD files download

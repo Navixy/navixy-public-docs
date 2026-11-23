@@ -1,5 +1,7 @@
 ---
 description: Manually update Navixy on-premise on Windows. Apply database changes, replace Java service files, update web services, and reconfigure services for Java 25.
+tags:
+  - legacy
 ---
 
 # Manual update - Windows

@@ -1,5 +1,7 @@
 ---
 description: Manage payment methods, set up AutoPay, configure low balance alerts, and review transaction history in Navixy Account settings.
+tags:
+  - legacy
 ---
 
 # Balance

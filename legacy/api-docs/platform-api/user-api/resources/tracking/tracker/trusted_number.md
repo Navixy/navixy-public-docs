@@ -1,6 +1,8 @@
 ---
 title: Trusted number
 description: The phone numbers a device accepts SMS commands from.
+tags:
+  - legacy
 ---
 
 # Trusted number

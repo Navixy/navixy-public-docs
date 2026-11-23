@@ -1,6 +1,8 @@
 ---
 title: Connecting Streamlit
 description: Build custom Streamlit apps connected to IoT Query via PostgreSQL. Query tracker data in Python and display live fleet status in custom dashboards
+tags:
+  - legacy
 ---
 
 # Connecting Streamlit

@@ -1,5 +1,7 @@
 ---
 description: Get notified when a field employee updates their work status via the X-GPS Tracker app. Define which statuses trigger alerts for better dispatch coordination.
+tags:
+  - legacy
 ---
 
 # Work status change

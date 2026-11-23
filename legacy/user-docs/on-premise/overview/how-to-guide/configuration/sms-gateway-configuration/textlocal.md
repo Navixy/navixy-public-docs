@@ -2,6 +2,8 @@
 description: >-
   Configure the Textlocal SMS gateway for Navixy on-premise deployments in the
   UK. Set up API key authentication and optional incoming message handling.
+tags:
+  - legacy
 ---
 
 # Textlocal

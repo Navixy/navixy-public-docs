@@ -1,5 +1,7 @@
 ---
 description: Receive immediate alerts when a GPS bracelet or ankle sensor is removed without authorization. Designed for legal monitoring applications such as house arrest.
+tags:
+  - legacy
 ---
 
 # Bracelet or ankle sensor

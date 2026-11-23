@@ -1,5 +1,7 @@
 ---
 description: Process raw IoT sensor readings into hourly time-bucketed records with decoded calibration, fuel volume calculations, and device-level aggregation
+tags:
+  - legacy
 ---
 
 # Sensor data aggregation

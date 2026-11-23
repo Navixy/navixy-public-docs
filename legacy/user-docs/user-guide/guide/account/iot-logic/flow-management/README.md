@@ -3,6 +3,8 @@ description: >-
   Build custom IoT Logic flows on a visual canvas: connect nodes to receive
   device telemetry, process and transform data, and route it to external
   systems.
+tags:
+  - legacy
 ---
 
 # Flow management

@@ -3,6 +3,8 @@ description: >-
   Fix common sensor issues in Navixy: missing readings, incorrect units, and
   measurement gaps. Includes steps for adding sensors and calibrating fuel
   levels.
+tags:
+  - legacy
 ---
 
 # Manage sensors

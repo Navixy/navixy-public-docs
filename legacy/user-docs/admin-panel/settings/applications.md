@@ -2,6 +2,8 @@
 description: >-
   Give your users your own web applications, such as a support portal or a
   service booking form, in their Navixy menu.
+tags:
+  - legacy
 ---
 
 # Applications

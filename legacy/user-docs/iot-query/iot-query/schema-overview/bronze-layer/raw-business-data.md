@@ -1,6 +1,8 @@
 ---
 description: >-
   raw_business_data holds 40+ tables covering users, objects, vehicles, tasks, and geofences. Browse the schema definition and key table descriptions for SQL analysis
+tags:
+  - legacy
 ---
 
 # `raw_business_data` schema

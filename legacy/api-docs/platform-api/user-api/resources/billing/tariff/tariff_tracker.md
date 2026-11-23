@@ -1,6 +1,8 @@
 ---
 title: Tracker tariff
 description: Which tariff a device is on, and the rules governing a change to another.
+tags:
+  - legacy
 ---
 
 # Tracker tariff

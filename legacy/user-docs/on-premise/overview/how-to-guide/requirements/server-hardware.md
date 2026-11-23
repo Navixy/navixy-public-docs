@@ -1,5 +1,7 @@
 ---
 description: Size server hardware for Navixy on-premise based on active device count from 100 to 15,000+. Covers CPU, RAM, disk storage, and RAID configuration recommendations.
+tags:
+  - legacy
 ---
 
 # Server hardware

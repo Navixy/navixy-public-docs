@@ -1,6 +1,8 @@
 ---
 title: Check-ins
 description: What a field employee reported from site, with a comment, a photo, and a filled form.
+tags:
+  - legacy
 ---
 
 # Check-ins

@@ -1,6 +1,8 @@
 ---
 title: Route optimization
 description: Reorder a set of points so the total travel time between them is as small as possible.
+tags:
+  - legacy
 ---
 
 # Route optimization

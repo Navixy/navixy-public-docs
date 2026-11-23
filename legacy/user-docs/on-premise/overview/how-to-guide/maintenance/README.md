@@ -1,5 +1,7 @@
 ---
 description: Maintain Navixy on-premise with guides for data archiving, backups, instance restarts, server credentials, monitoring, and platform migration.
+tags:
+  - legacy
 ---
 
 # Maintenance

@@ -1,6 +1,8 @@
 ---
 title: Add custom links inside the platform (User Applications)
 description: Open User Applications in Admin Panel to add custom sidebar links with external URLs that open in an iframe or new tab
+tags:
+  - legacy
 ---
 
 # Add custom links inside the platform (User Applications)

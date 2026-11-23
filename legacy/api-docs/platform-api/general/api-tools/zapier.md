@@ -1,6 +1,8 @@
 ---
 title: Automation with Zapier
 description: Work with API using Zapier.
+tags:
+  - legacy
 ---
 
 # Zapier Integration

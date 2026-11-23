@@ -2,6 +2,8 @@
 description: >-
   Manage the GPS device's name, group, tags, and model in Navixy. Labels and
   tags make it easier to organize and filter devices across the platform.
+tags:
+  - legacy
 ---
 
 # Object label

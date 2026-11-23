@@ -2,6 +2,8 @@
 description: >-
   Deploy Navixy on-premise on Microsoft Azure. Create a virtual machine, set
   network security rules, configure disks and networking, and connect via SSH.
+tags:
+  - legacy
 ---
 
 # Microsoft Azure

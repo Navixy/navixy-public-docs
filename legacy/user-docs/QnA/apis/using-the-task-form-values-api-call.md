@@ -2,6 +2,8 @@
 description: >-
   Submit and update form values for active tasks via the API. Task must be
   assigned and form submitted; completed or delayed tasks prevent modifications
+tags:
+  - legacy
 ---
 
 # Using the Task Form Values API call

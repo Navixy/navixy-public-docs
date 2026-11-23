@@ -1,5 +1,7 @@
 ---
 description: The Transformation layer reshapes raw IoT Query data into analytics-ready entities. Browse pre-built transformations and understand how data is processed
+tags:
+  - legacy
 ---
 
 # Transformation layer

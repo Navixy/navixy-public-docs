@@ -1,5 +1,7 @@
 ---
 description: Activate engine hours by choosing an ignition or CAN-bus data source and setting an initial value, then use the counter to trigger maintenance reminders.
+tags:
+  - legacy
 ---
 
 # Engine hours

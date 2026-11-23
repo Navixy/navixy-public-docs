@@ -1,5 +1,7 @@
 ---
 description: Create and manage garage (depot) profiles in Navixy, storing location, mechanic, and dispatcher details for better multi-site fleet coordination and reporting.
+tags:
+  - legacy
 ---
 
 # Garages

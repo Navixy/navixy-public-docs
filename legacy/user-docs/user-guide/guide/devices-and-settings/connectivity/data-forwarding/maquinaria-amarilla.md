@@ -2,6 +2,8 @@
 description: >-
   Comply with Colombian Decree 723 by forwarding heavy machinery GPS data from
   Navixy to the National Police through the Maquinaria Amarilla SOAP protocol.
+tags:
+  - legacy
 ---
 
 # Maquinaria Amarilla

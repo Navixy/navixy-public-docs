@@ -1,6 +1,8 @@
 ---
 title: Route
 description: A named, ordered set of checkpoints that must be visited in sequence.
+tags:
+  - legacy
 ---
 
 # Route

@@ -3,6 +3,8 @@ title: Pricing plans conflicts
 description: >-
   Resolve device visibility and feature restrictions caused by conflicting
   pricing plan settings across user accounts
+tags:
+  - legacy
 ---
 
 # Pricing plans conflicts

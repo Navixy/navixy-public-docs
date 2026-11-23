@@ -2,6 +2,8 @@
 description: >-
   Configure device buttons and access keys in Navixy: call buttons, SOS button
   action, switch off button, unlocking, and temporary password.
+tags:
+  - legacy
 ---
 
 # Buttons and keys

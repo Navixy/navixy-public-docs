@@ -1,5 +1,7 @@
 ---
 description: Set up high availability and disaster recovery for Navixy on-premise with distributed data centers. Covers licensing and ongoing monitoring requirements.
+tags:
+  - legacy
 ---
 
 # High availability and Disaster Recovery

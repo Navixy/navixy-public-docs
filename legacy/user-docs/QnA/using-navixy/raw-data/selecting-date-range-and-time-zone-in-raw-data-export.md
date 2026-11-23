@@ -1,6 +1,8 @@
 ---
 title: Selecting date range and time zone in raw data export
 description: Filter raw data exports by date range (up to 30 days) and time zone to unify timestamps for downstream analytics and reporting
+tags:
+  - legacy
 ---
 
 # Selecting date range and time zone in raw data export

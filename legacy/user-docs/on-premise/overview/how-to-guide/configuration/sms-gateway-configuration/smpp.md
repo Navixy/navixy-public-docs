@@ -1,5 +1,7 @@
 ---
 description: Connect any SMPP-compatible SMS center to Navixy on-premise using JSON gateway configuration. Covers minimal and complete parameter sets for SMPP protocol setup.
+tags:
+  - legacy
 ---
 
 # SMPP

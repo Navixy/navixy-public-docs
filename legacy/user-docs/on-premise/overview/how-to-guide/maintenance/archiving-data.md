@@ -1,5 +1,7 @@
 ---
 description: Archive old tracking data in Navixy on-premise to control database growth. Use pt-archiver from Percona to move aged records and free disk space with OPTIMIZE TABLE.
+tags:
+  - legacy
 ---
 
 # Archiving data

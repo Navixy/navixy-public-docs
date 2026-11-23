@@ -1,6 +1,8 @@
 ---
 title: User audit log
 description: What the account's users did, so an owner can review activity across sub-users.
+tags:
+  - legacy
 ---
 
 # User audit log

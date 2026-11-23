@@ -1,5 +1,7 @@
 ---
 description: "Full syntax reference for the IoT Logic Expression Language: literals, operators, attribute access, built-in functions, data types, and null handling rules."
+tags:
+  - legacy
 ---
 
 # Expression syntax reference

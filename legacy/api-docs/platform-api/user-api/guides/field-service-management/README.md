@@ -1,6 +1,8 @@
 ---
 title: Field service management
 description: Worked examples of assigning work to field employees and collecting what they report back.
+tags:
+  - legacy
 ---
 
 # Field service management

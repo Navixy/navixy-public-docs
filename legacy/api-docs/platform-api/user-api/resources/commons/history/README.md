@@ -1,6 +1,8 @@
 ---
 title: History
 description: The record of what trackers, assets, and users did, and the operations that read and mark it.
+tags:
+  - legacy
 ---
 
 # History

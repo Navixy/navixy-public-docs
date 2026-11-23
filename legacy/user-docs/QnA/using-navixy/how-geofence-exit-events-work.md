@@ -1,6 +1,8 @@
-﻿---
+---
 title: How geofence exit events work
 description: "Platform checks location updates against geofences in real time; a 60-second timer prevents duplicate entry and exit events"
+tags:
+  - legacy
 ---
 
 # How geofence exit events work

@@ -1,5 +1,7 @@
 ---
 description: Diagnose and fix GPS device activation failures in Navixy. Covers device, SIM card, and platform configuration causes for connection problems.
+tags:
+  - legacy
 ---
 
 # Troubleshoot device activation

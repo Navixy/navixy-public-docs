@@ -1,6 +1,8 @@
 ---
 title: Is there an anti-jammer device?
 description: No GPS hardware can block jammers, but LBS positioning provides a location radius to help narrow the area when a device stops transmitting
+tags:
+  - legacy
 ---
 
 # Is there an anti-jammer device?

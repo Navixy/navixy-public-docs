@@ -3,6 +3,8 @@ description: >-
   Set up SSH key authentication for Navixy on-premise Linux servers as a secure
   alternative to passwords. Generate keys on Linux or Windows and disable
   password login.
+tags:
+  - legacy
 ---
 
 # SSH keys

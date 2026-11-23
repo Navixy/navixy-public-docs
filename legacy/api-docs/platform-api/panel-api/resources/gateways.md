@@ -3,6 +3,8 @@ title: Gateways
 description: >-
   Information about email gateways objects. Email gateway can be owned by a
   telematics service provider (TSP) or leased from platform owner.
+tags:
+  - legacy
 ---
 
 # Gateways

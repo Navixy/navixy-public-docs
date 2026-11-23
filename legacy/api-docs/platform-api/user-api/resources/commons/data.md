@@ -1,6 +1,8 @@
 ---
 title: Data
 description: Turn a spreadsheet into the tab-separated file every import operation starts from.
+tags:
+  - legacy
 ---
 
 # Data

@@ -2,6 +2,8 @@
 description: >-
   Track equipment uptime, motion time, and idle time with the Equipment working
   time report. Configure parameters and interpret the results.
+tags:
+  - legacy
 ---
 
 # Equipment working time report

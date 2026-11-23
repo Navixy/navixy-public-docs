@@ -1,5 +1,7 @@
 ---
 description: Track GPS driver identification events via iButton, RFID, or facial recognition. Ensure only authorized drivers operate vehicles and receive real-time alerts.
+tags:
+  - legacy
 ---
 
 # Driver identification

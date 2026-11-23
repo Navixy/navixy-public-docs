@@ -2,6 +2,8 @@
 description: >-
   Copy calibration tables across multiple devices using sensor cloning, CSV
   import, or the API. Choose the best method for your fleet.
+tags:
+  - legacy
 ---
 
 # How to copy calibration table across multiple devices

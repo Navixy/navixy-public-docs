@@ -1,5 +1,7 @@
 ---
 description: Install Navixy on-premise on Windows Server using automatic or manual deployment. Covers OS version requirements and third-party software coexistence considerations.
+tags:
+  - legacy
 ---
 
 # Windows

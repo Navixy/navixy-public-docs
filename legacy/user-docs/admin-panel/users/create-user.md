@@ -2,6 +2,8 @@
 description: >-
   Create individual user accounts in Admin Panel or bulk-import multiple users
   at once from an XLSX or CSV file using the provided template
+tags:
+  - legacy
 ---
 
 # Creating users

@@ -2,6 +2,8 @@
 description: >-
   Apply advanced backup methods for high-load Navixy instances using xtrabackup,
   database replication, and combined application and database backup approaches.
+tags:
+  - legacy
 ---
 
 # Advanced backup strategies

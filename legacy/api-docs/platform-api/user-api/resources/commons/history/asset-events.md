@@ -1,6 +1,8 @@
 ---
 title: Asset events
 description: The event history of assets over a period, listed or counted.
+tags:
+  - legacy
 ---
 
 # Asset events

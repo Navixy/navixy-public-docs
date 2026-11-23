@@ -2,6 +2,9 @@
 description: >-
   Access guides for Navixy on-premise installation, configuration, maintenance,
   and upgrades. Compare on-premise and PaaS options in the Q&A section.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # On-Premise

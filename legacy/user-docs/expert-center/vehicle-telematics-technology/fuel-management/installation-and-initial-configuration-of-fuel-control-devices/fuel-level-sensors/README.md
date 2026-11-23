@@ -2,6 +2,8 @@
 description: >-
   Mechanical, magnetic, pressure, electrostatic, and ultrasonic sensor types
   each suit different tank designs and measurement requirements.
+tags:
+  - legacy
 ---
 
 # Fuel level sensors

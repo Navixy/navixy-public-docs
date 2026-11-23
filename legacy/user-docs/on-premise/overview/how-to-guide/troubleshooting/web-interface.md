@@ -3,6 +3,8 @@ description: >-
   Troubleshoot Navixy on-premise web interface issues including Nginx
   configuration errors, DNS failures, SSL certificate problems, and database
   unavailability.
+tags:
+  - legacy
 ---
 
 # Web interface

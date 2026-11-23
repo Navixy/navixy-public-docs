@@ -1,6 +1,8 @@
 ---
 title: User personal info
 description: The billing identity stored for an account, replaced wholesale on each update.
+tags:
+  - legacy
 ---
 
 # User personal info

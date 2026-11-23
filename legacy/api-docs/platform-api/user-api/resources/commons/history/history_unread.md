@@ -1,6 +1,8 @@
 ---
 title: Unread events
 description: The history entries a user has not read yet, listed or counted.
+tags:
+  - legacy
 ---
 
 # Unread events

@@ -2,6 +2,8 @@
 description: >-
   Alert when a GPS device sensor enters or exits a defined value range. Supports
   measurement sensors and virtual sensors, with a configurable accuracy buffer.
+tags:
+  - legacy
 ---
 
 # Parameter in range

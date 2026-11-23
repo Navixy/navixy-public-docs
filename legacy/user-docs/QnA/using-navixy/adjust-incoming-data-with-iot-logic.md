@@ -1,6 +1,8 @@
-﻿---
+---
 title: Adjust incoming data with IoT Logic
 description: Use IoT Logic to convert and adjust incoming device data with mathematical functions via the Initiate Attribute node
+tags:
+  - legacy
 ---
 
 # Adjust incoming data with IoT Logic

@@ -3,6 +3,9 @@ title: IoT Query
 description: >-
   Query telematics and business data from IoT Query via PostgreSQL. Connect BI
   tools, run custom analytics, and build integrations with your complete dataset
+tags:
+  - legacy
+noIndex: true
 ---
 
 # IoT Query

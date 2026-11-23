@@ -3,6 +3,8 @@ description: >-
   Navixy's pre-built dashboards answer your fleet's daily operational questions
   the moment you open the app, with telemetry from every device already
   aggregated and ready to act on.
+tags:
+  - legacy
 ---
 
 # Dashboards

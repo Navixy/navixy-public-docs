@@ -3,6 +3,8 @@ title: Difference between fuel level and fuel level 2.0 reports
 description: >-
   Fuel Level 2.0 uses machine learning to smooth noisy sensor data but cannot
   track drains; use Fuel Level for drain detection
+tags:
+  - legacy
 ---
 
 # Difference between fuel level and fuel level 2.0 reports

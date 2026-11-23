@@ -1,6 +1,8 @@
 ---
 title: Update password
 description: API call to update the password of the telematics service provider (TSP) account.
+tags:
+  - legacy
 ---
 
 # Password

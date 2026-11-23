@@ -1,6 +1,8 @@
 ---
 title: Engine hours
 description: How long a tracker's engine ran over a period, counted per day.
+tags:
+  - legacy
 ---
 
 # Engine hours

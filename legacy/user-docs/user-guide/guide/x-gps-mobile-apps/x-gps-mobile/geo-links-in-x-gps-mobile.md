@@ -2,6 +2,8 @@
 description: >-
   Share a vehicle's live location from your phone with a link that anyone can
   open, for example to show a customer where their delivery is.
+tags:
+  - legacy
 ---
 
 # Geo links in X-GPS Mobile

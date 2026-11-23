@@ -1,5 +1,8 @@
 ---
 description: Resolve GPS device setup issues, configure sensors, troubleshoot IoT Logic flows, and access raw tracking data from connected devices.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # FAQ and troubleshooting

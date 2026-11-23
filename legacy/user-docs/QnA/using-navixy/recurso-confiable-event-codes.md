@@ -4,6 +4,8 @@ description: >-
   The main Recurso Confiable protocol passes Navixy's platform event ID through
   unchanged, but a second protocol option replaces it with its own three-value
   code
+tags:
+  - legacy
 ---
 
 # Recurso Confiable event codes

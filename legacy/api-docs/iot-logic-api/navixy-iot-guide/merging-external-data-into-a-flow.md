@@ -1,5 +1,7 @@
 ---
 description: Configure the Data Source node's connector fields to merge readings from an external system into the data stream of a device already in your flow, with a full request and troubleshooting reference.
+tags:
+  - legacy
 ---
 
 # Merging external system data into a flow

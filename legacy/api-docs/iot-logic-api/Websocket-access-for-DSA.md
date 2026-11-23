@@ -1,5 +1,8 @@
 ---
 description: Subscribe to real-time device events via WebSocket using the iot_monitor stream. Receive location updates, state changes, and telemetry without polling.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Websocket access to Data Stream Analyzer

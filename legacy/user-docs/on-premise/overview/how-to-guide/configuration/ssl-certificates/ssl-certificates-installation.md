@@ -1,5 +1,7 @@
 ---
 description: Install SSL certificates on Navixy on-premise and convert HTTP to HTTPS. Covers certificate preparation, Nginx configuration, and platform configuration updates.
+tags:
+  - legacy
 ---
 
 # SSL certificates installation

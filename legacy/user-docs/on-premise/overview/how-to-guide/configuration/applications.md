@@ -2,6 +2,8 @@
 description: >-
   Add custom web applications to the Navixy main menu using SQL queries. Enable
   apps for entire service accounts or individual users, with HTTPS required.
+tags:
+  - legacy
 ---
 
 # Applications

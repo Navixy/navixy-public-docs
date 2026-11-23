@@ -1,6 +1,8 @@
 ---
 title: Export a list of devices
 description: Export tracker data from Admin Panel or contact Support for hosted systems; on-premise device data exists in the Objects table
+tags:
+  - legacy
 ---
 
 # Export a list of devices

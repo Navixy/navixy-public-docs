@@ -2,6 +2,8 @@
 description: >-
   Give each team member their own sign-in to your Navixy account. Add, edit,
   deactivate, and delete users, and check what each user sees.
+tags:
+  - legacy
 ---
 
 # User administration

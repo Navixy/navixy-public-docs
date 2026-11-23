@@ -2,6 +2,8 @@
 description: >-
   Other device-side blocks in Navixy: LED display, SMS channel usage, virtual
   ignition, and tracks upload. Availability depends on the device model.
+tags:
+  - legacy
 ---
 
 # Other controls

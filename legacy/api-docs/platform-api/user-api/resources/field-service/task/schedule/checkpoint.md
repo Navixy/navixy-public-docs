@@ -1,6 +1,8 @@
 ---
 title: Task schedule checkpoints
 description: Delete or convert a checkpoint on a scheduled route.
+tags:
+  - legacy
 ---
 
 # Task schedule checkpoints

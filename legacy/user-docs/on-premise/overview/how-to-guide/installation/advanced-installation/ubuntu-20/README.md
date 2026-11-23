@@ -1,5 +1,7 @@
 ---
 description: Install Navixy On-Premise on Ubuntu, Debian, AlmaLinux, Rocky Linux, or Red Hat Enterprise Linux with the installation script, then open the Admin Panel.
+tags:
+  - legacy
 ---
 
 # Linux installation script

@@ -1,5 +1,7 @@
 ---
 description: Organize fleet drivers into departments in Navixy. Create department profiles with names and addresses, and link them to drivers for better task coordination.
+tags:
+  - legacy
 ---
 
 # Departments

@@ -1,5 +1,7 @@
 ---
 description: Configure Email and SMS gateways for user notifications, alerts, and device messaging (commands and activation)
+tags:
+  - legacy
 ---
 
 # Messaging gateways

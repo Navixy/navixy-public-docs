@@ -3,6 +3,8 @@ description: >-
   Send HTTP POST requests to external APIs when IoT Logic receives device data.
   Build custom JSON payloads with static values and dynamic telemetry
   attributes.
+tags:
+  - legacy
 ---
 
 # Webhook

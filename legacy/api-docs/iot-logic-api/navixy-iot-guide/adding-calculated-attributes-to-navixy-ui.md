@@ -1,5 +1,7 @@
 ---
 description: Configure Initiate Attribute nodes in IoT Logic flows to calculate custom values and expose them as sensor parameters in the Navixy UI via the platform API.
+tags:
+  - legacy
 ---
 
 # Adding calculated attributes to Navixy UI

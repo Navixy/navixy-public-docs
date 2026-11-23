@@ -1,5 +1,7 @@
 ---
 description: Configure Yeastar TG Series GSM gateway hardware for Navixy on-premise SMS delivery. Suited for smaller instances with limited SMS load requirements.
+tags:
+  - legacy
 ---
 
 # Yeastar

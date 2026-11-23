@@ -1,5 +1,7 @@
 ---
 description: Call tracker/settings/update with correct group_id to update the label. Retrieve current group_id via tracker/list to avoid moving tracker
+tags:
+  - legacy
 ---
 
 # Update tracker label via API

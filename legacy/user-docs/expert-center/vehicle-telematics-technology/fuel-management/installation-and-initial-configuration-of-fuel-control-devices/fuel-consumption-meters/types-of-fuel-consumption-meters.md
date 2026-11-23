@@ -3,6 +3,8 @@ description: >-
   Single-chamber, dual-chamber, and CAN-bus fuel meters each suit different
   engine types. Compare specifications to select the right meter for your
   vehicle.
+tags:
+  - legacy
 ---
 
 # Types of fuel consumption meters

@@ -2,6 +2,8 @@
 description: >-
   Forward GPS positions, cargo temperature, and humidity from Navixy to the
   Recurso Confiable platform over SOAP, used across Mexico and Central America.
+tags:
+  - legacy
 ---
 
 # Recurso Confiable

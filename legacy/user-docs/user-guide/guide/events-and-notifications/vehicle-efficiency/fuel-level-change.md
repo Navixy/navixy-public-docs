@@ -1,5 +1,7 @@
 ---
 description: Alert when the fuel sensor detects a significant level change, signaling refueling or potential fuel theft. Requires a configured fuel level sensor per device.
+tags:
+  - legacy
 ---
 
 # Fuel level change

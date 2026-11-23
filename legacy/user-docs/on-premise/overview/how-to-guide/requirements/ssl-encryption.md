@@ -1,5 +1,7 @@
 ---
 description: Configure SSL certificates for Navixy on-premise. Choose a provider, meet domain requirements, and manage expiration using commercial or free Let's Encrypt certificates.
+tags:
+  - legacy
 ---
 
 # SSL encryption

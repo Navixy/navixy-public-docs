@@ -1,5 +1,7 @@
 ---
 description: Receive an alert when the Malfunction Indicator Lamp (check engine light) activates on a vehicle. Requires a GPS device with OBD or CAN data support.
+tags:
+  - legacy
 ---
 
 # Check engine (MIL)

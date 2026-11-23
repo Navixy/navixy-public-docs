@@ -2,6 +2,8 @@
 description: >-
   Manage power on battery devices in Navixy: configure battery charge mode and
   sleep mode conditions. Available controls depend on the device model.
+tags:
+  - legacy
 ---
 
 # Power management

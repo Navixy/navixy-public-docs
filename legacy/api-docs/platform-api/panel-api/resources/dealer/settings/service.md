@@ -1,6 +1,8 @@
 ---
 title: Service
 description: API calls to read and update panel's service settings.
+tags:
+  - legacy
 ---
 
 # Service Settings

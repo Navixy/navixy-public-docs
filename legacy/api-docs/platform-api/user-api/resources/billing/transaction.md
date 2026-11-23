@@ -1,6 +1,8 @@
 ---
 title: Transaction
 description: The account's billing history over a period.
+tags:
+  - legacy
 ---
 
 # Transaction

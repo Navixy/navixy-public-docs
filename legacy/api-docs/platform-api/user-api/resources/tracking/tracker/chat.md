@@ -1,6 +1,8 @@
 ---
 title: Chat
 description: Text messages exchanged between a supervisor and the person carrying a tracker.
+tags:
+  - legacy
 ---
 
 # Chat

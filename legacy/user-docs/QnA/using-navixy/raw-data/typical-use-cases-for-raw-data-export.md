@@ -1,6 +1,8 @@
 ---
 title: Typical use cases for raw data export
 description: Export raw data for analytics pipelines, ML systems, sensor debugging, event verification, and custom report building outside the platform
+tags:
+  - legacy
 ---
 
 # Typical use cases for raw data export

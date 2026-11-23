@@ -1,5 +1,7 @@
 ---
 description: Update Navixy on-premise on Windows Server using automatic or manual procedures. Select the method based on your deployment configuration and requirements.
+tags:
+  - legacy
 ---
 
 # Update - Windows

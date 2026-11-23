@@ -3,6 +3,8 @@ title: Set up a fuel sensor in Navixy
 description: >-
   Create a measurement sensor in Devices and Settings, then select fuel as the
   parameter type, set units, and choose the sensor category
+tags:
+  - legacy
 ---
 
 # Set up a fuel sensor in Navixy

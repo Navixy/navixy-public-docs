@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Using driver journals
 
 Driver Journals log all trips made by an employee within a selected period, categorizing them by status: business, private, or other. Users can view a summary of all trips, highlighting their statuses, or filter to show only specific types. This data can be exported as PDF/Excel files or printed directly.

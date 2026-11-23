@@ -1,6 +1,8 @@
 ---
 title: Tariff (plan)
 description: API calls for the Tariff resource, covering service plans and device registration defaults.
+tags:
+  - legacy
 ---
 
 # Tariff (plan)

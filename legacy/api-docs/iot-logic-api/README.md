@@ -1,5 +1,8 @@
 ---
 description: Build and manage IoT data flows with the Navixy IoT Logic API. Connect devices, transform data in real time, and route processed telemetry to external systems.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy IoT Logic API

@@ -1,6 +1,8 @@
 ---
 title: Entity fields
 description: Custom fields added to an entity, and the types they can take.
+tags:
+  - legacy
 ---
 
 # Entity fields

@@ -2,6 +2,8 @@
 description: >-
   View a user’s profile and run admin actions such as editing details, logging
   as the user, changing balance/password, and managing trackers
+tags:
+  - legacy
 ---
 
 # User details

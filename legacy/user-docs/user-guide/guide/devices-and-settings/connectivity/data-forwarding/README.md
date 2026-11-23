@@ -3,6 +3,8 @@ description: >-
   Forward a live copy of GPS and telematics data from Navixy to a third-party
   server, using one of 29 supported protocols for compliance, enterprise
   integration, or data consolidation.
+tags:
+  - legacy
 ---
 
 # Data forwarding

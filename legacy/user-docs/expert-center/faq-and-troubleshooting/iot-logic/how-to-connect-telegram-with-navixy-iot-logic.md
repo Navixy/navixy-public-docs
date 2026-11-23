@@ -2,6 +2,8 @@
 description: >-
   Integrate a Telegram bot with Navixy IoT Logic to send automated
   notifications. Set up the bot, configure the chat ID, and connect the webhook.
+tags:
+  - legacy
 ---
 
 # How to connect Telegram with Navixy IoT Logic

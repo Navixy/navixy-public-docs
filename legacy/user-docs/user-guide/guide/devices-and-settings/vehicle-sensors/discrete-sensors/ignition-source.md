@@ -1,5 +1,7 @@
 ---
 description: Configure the ignition source for GPS devices that use virtual ignition detection via motion sensor or voltage instead of a direct ignition cable connection.
+tags:
+  - legacy
 ---
 
 # Ignition source

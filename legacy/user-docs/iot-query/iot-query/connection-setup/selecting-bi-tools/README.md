@@ -1,6 +1,8 @@
 ---
 title: Selecting BI tools
 description: Compare Power BI, Apache Superset, Grafana, and Streamlit to find the right BI tool for visualizing your IoT Query telematics data
+tags:
+  - legacy
 ---
 
 # Selecting BI tools

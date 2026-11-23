@@ -1,6 +1,8 @@
 ---
 title: Timezone
 description: Every timezone the Navixy platform supports, with localized descriptions.
+tags:
+  - legacy
 ---
 
 # Timezone

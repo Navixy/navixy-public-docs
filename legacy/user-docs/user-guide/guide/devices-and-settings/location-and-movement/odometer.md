@@ -2,6 +2,8 @@
 description: >-
   Set up the odometer data source, match it to the vehicle's actual reading, and
   apply a correction multiplier to keep mileage totals accurate.
+tags:
+  - legacy
 ---
 
 # Odometer

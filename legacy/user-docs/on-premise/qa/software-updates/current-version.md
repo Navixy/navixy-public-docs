@@ -1,5 +1,7 @@
 ---
 description: Find the Navixy on-premise platform version number in the VERSION file on your server. Understand the major and minor build numbering scheme.
+tags:
+  - legacy
 ---
 
 # Current version

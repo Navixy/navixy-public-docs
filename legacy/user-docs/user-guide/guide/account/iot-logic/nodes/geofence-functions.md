@@ -2,6 +2,8 @@
 description: >-
   Use the geofences you already have in Navixy inside IoT Logic flows, to act
   when a device enters or leaves an area, or to record which area it is in.
+tags:
+  - legacy
 ---
 
 # Geofence functions

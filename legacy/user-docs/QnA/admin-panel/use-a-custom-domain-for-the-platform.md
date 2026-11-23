@@ -1,6 +1,8 @@
 ---
 title: Use a custom domain for the platform
 description: "Configure a CNAME subdomain record pointing to saas.navixy.com, then enable it in Service preferences in Admin Panel"
+tags:
+  - legacy
 ---
 
 # Use a custom domain for the platform

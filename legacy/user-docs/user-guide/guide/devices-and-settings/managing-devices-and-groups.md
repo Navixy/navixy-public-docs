@@ -1,5 +1,7 @@
 ---
 description: Find devices in the settings list by name or tag, and create, rename, color-code, and delete device groups to organize your fleet.
+tags:
+  - legacy
 ---
 
 # Managing devices and groups

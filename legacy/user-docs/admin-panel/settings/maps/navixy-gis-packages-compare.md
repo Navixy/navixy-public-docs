@@ -1,5 +1,7 @@
 ---
 description: Compare Basic vs Premium GIS packages, including Google Maps licensing, geocoding, routing, traffic, and LBS support
+tags:
+  - legacy
 ---
 
 # Navixy GIS packages

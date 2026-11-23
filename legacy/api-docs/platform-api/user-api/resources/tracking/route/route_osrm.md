@@ -1,6 +1,8 @@
 ---
 title: Route with OSRM
 description: Build a driving route with OSRM, and read back OSRM's own failure detail.
+tags:
+  - legacy
 ---
 
 # Route with OSRM

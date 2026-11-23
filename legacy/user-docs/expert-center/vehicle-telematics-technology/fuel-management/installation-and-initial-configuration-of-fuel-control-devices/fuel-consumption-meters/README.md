@@ -2,6 +2,8 @@
 description: >-
   Fuel flow meters measure actual consumption using internal chambers. Covers
   operating principles, vehicle applications, and fluid specifications.
+tags:
+  - legacy
 ---
 
 # Fuel consumption meters

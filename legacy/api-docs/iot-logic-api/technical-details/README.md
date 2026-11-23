@@ -1,5 +1,8 @@
 ---
 description: "IoT Logic API technical reference: environments, authentication, rate limits, request formats, response structure, error codes, and flow architecture."
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Technical reference

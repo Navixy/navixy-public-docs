@@ -2,6 +2,8 @@
 description: >-
   Device-side anti-theft blocks in Navixy: unauthorized movement, no movement,
   vibration detection, accelerometer, security mode, and social distance.
+tags:
+  - legacy
 ---
 
 # Anti-theft and security

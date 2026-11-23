@@ -1,6 +1,8 @@
 ---
 title: Employee import
 description: Create many employees at once from a spreadsheet, through a background import process.
+tags:
+  - legacy
 ---
 
 # Employee import

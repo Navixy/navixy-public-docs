@@ -1,5 +1,7 @@
 ---
 description: Run the update.sh script to update Navixy on-premise on Linux. The script checks prerequisites, updates the database and Java services, then restarts all components.
+tags:
+  - legacy
 ---
 
 # Automatic Update - Linux

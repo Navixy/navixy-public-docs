@@ -1,5 +1,7 @@
 ---
 description: Receive alerts when a personal GPS tracker detects a sudden fall, protecting elderly individuals, lone workers, or vulnerable people in real time.
+tags:
+  - legacy
 ---
 
 # Fall detection

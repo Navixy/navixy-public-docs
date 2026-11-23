@@ -1,6 +1,8 @@
 ---
 title: Can't log in to X-GPS Monitor or X-GPS Mobile
 description: "Log in with the same username and password as in the web interface, and reset a forgotten password from the app."
+tags:
+  - legacy
 ---
 
 # Can't log in to X-GPS Monitor or X-GPS Mobile

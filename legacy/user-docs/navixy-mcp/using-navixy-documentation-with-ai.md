@@ -2,6 +2,9 @@
 description: >-
   Copy pages, open them directly in AI assistants, and connect the MCP server to
   keep your AI tools aligned with published documentation.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Using Navixy documentation with AI
@@ -59,7 +62,7 @@ Once connected, your AI tool retrieves answers directly from published documenta
 The MCP server is public and requires no authentication:
 
 ```
-https://navixy.com/docs/~gitbook/mcp
+https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp
 ```
 
 You can also copy this URL directly from the **Connect with MCP** option in the page shortcuts menu.
@@ -84,11 +87,11 @@ See the [official Claude documentation](https://code.claude.com/docs/en/mcp) for
 ```json
 {
   "mcpServers": {
-    "navixy-docs": {
+    "navixy-legacy-docs": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://navixy.com/docs/~gitbook/mcp"
+        "https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp"
       ]
     }
   }
@@ -110,11 +113,11 @@ See the [official Cursor documentation](https://cursor.com/docs/mcp) for the lat
 ```json
 {
   "mcpServers": {
-    "navixy-docs": {
+    "navixy-legacy-docs": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://navixy.com/docs/~gitbook/mcp"
+        "https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp"
       ]
     }
   }
@@ -138,11 +141,11 @@ If you use VS Code, this is the fastest setup path. Select **Connect to VSCode**
 ```json
 {
   "mcpServers": {
-    "navixy-docs": {
+    "navixy-legacy-docs": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://navixy.com/docs/~gitbook/mcp"
+        "https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp"
       ]
     }
   }
@@ -152,7 +155,7 @@ If you use VS Code, this is the fastest setup path. Select **Connect to VSCode**
 * If the extension supports direct HTTP MCP endpoints, use the URL instead:
 
 ```
-https://www.navixy.com/docs/~gitbook/mcp
+https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp
 ```
 
 Use the method your extension documents.
@@ -166,11 +169,11 @@ If your tool supports MCP with a local command, paste the following configuratio
 ```json
 {
   "mcpServers": {
-    "navixy-docs": {
+    "navixy-legacy-docs": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://navixy.com/docs/~gitbook/mcp"
+        "https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp"
       ]
     }
   }
@@ -180,7 +183,7 @@ If your tool supports MCP with a local command, paste the following configuratio
 If it supports MCP over HTTP directly, use the endpoint URL instead:
 
 ```
-https://www.navixy.com/docs/~gitbook/mcp
+https://squaregps.gitbook.io/legacy-documentation/~gitbook/mcp
 ```
 
 In both cases, restart the tool fully after adding the server.
@@ -192,7 +195,7 @@ In both cases, restart the tool fully after adding the server.
 After setup, run this prompt to confirm the server is responding:
 
 ```
-Use the docs MCP server navixy-docs.
+Use the docs MCP server navixy-legacy-docs.
 What pages cover IoT Logic flows?
 List the pages you found and link each one.
 ```

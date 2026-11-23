@@ -2,6 +2,8 @@
 description: >-
   Configure Navixy-provided or custom SMTP email delivery for notifications,
   reports, and billing alerts, including sender settings
+tags:
+  - legacy
 ---
 
 # Email gateway

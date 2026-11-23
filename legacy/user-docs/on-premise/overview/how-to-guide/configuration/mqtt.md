@@ -2,6 +2,8 @@
 description: >-
   Configure MQTT support for IoT devices in Navixy on-premise. Set host, port,
   and authentication settings for compatible devices including Xirgo Global.
+tags:
+  - legacy
 ---
 
 # MQTT

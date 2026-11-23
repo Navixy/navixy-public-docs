@@ -2,6 +2,8 @@
 description: >-
   Troubleshoot Jimi JC400 connectivity and registration issues in Navixy by
   checking IMEI, SIM status, firmware version, and SMS activation commands.
+tags:
+  - legacy
 ---
 
 # Jimi JC400 troubleshooting

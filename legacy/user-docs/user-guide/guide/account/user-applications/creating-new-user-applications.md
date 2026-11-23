@@ -2,6 +2,8 @@
 description: >-
   Set up a new User application in Navixy by configuring the integration URL and
   other parameters to connect an external tool to the platform interface.
+tags:
+  - legacy
 ---
 
 # Creating new User applications

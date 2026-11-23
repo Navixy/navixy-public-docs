@@ -1,6 +1,8 @@
 ---
 title: Bill
 description: An invoice raised against the account, and the payment link that settles it.
+tags:
+  - legacy
 ---
 
 # Bill

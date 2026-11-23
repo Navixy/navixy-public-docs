@@ -3,6 +3,8 @@ description: >-
   Understand Navixy subscription billing based on active devices, payment
   deadlines, and service suspension rules for both PaaS and on-premise
   instances.
+tags:
+  - legacy
 ---
 
 # Subscription fees

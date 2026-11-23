@@ -1,5 +1,7 @@
 ---
 description: Diagnose devices going offline on Navixy on-premise. Covers TCP-server failures, network issues, mobile connectivity problems, and data processing troubleshooting.
+tags:
+  - legacy
 ---
 
 # Device operation and connection

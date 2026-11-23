@@ -3,6 +3,8 @@ description: >-
   Check the status of Navixy Java services, Nginx, and MySQL on Linux or
   Windows. Use platform health check commands to identify which component is not
   running.
+tags:
+  - legacy
 ---
 
 # Checking service statuses

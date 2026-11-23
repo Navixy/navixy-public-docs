@@ -3,6 +3,8 @@ description: >-
   Enable Cell ID location services in Navixy on-premise using Mozilla Location
   Services or Google LBS. Configure the provider connection and fallback
   coordinates.
+tags:
+  - legacy
 ---
 
 # Cell ID / LBS

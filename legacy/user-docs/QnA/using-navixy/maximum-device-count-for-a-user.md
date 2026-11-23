@@ -1,6 +1,8 @@
 ---
 title: Maximum device count for a user
 description: The platform supports up to 2 million devices per user account; the objects list shows up to 25,000 at a time due to browser rendering limits
+tags:
+  - legacy
 ---
 
 # Maximum device count for a user

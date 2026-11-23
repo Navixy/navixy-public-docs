@@ -1,6 +1,8 @@
 ---
 title: Report tracker
 description: Generate, poll, retrieve, and download the account's tracker reports.
+tags:
+  - legacy
 ---
 
 # Report tracker

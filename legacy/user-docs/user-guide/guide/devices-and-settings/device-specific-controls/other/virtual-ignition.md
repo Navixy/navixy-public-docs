@@ -1,5 +1,7 @@
 ---
 description: Use on-board voltage or motion as the ignition source when the GPS device has no ignition wire. Set the voltage threshold or motion timing in Navixy.
+tags:
+  - legacy
 ---
 
 # Virtual ignition

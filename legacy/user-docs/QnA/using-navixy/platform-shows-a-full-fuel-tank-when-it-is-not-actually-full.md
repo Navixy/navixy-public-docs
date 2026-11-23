@@ -1,6 +1,8 @@
 ---
 title: Platform shows a full fuel tank when it is not actually full
 description: "Check the fuel sensor connection and calibration table; error codes 65454 or 65455 in raw data indicate a sensor communication failure"
+tags:
+  - legacy
 ---
 
 # Platform shows a full fuel tank when it is not actually full

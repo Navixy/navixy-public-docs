@@ -1,6 +1,8 @@
 ---
 title: Vehicle import
 description: Create many vehicles at once from a spreadsheet, through a background import process.
+tags:
+  - legacy
 ---
 
 # Vehicle import

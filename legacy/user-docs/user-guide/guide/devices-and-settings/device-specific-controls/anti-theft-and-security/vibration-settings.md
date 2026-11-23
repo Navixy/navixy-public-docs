@@ -1,5 +1,7 @@
 ---
 description: Adjust the device's motion sensor sensitivity to control how tow detection, impact alarms, and stop-time tracking respond to movement
+tags:
+  - legacy
 ---
 
 # Vibration settings

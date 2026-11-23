@@ -1,5 +1,7 @@
 ---
 description: "Check which operating system and which Java, MySQL, and Nginx versions a server needs before you install Navixy On-Premise."
+tags:
+  - legacy
 ---
 
 # Server software

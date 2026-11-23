@@ -1,5 +1,7 @@
 ---
 description: Practical examples for writing attribute calculations in the IoT Logic Expression Language. Includes guidance on attribute naming and handling null values safely.
+tags:
+  - legacy
 ---
 
 # Calculation examples

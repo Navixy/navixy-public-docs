@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Fleet live status dashboard
 
 **Live status** is the first tab of the Dashboards app, and it answers "what is the fleet doing right now?" (the [Trips dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It brings connection status, movement state, speed, and location data together into a single view. That way, you can assess your fleet's current situation without switching between the Objects list, the map, and individual reports.

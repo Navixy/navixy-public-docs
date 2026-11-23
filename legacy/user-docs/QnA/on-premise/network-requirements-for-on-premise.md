@@ -1,6 +1,8 @@
 ---
 title: Network requirements for On-premise
 description: "Open ports: 80, 443 (HTTP/HTTPS), 8383 (WebSocket), 32233 (license), 123 (NTP), device ports. Allow outbound access to Navixy servers"
+tags:
+  - legacy
 ---
 
 # Network requirements for On-premise

@@ -1,5 +1,7 @@
 ---
 description: Upload recorded track and datalogger files from a GPS device into Navixy with the Tracks upload block. A one-off upload, not a stored setting.
+tags:
+  - legacy
 ---
 
 # Tracks upload

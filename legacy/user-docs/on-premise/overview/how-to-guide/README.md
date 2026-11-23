@@ -1,5 +1,7 @@
 ---
 description: Deploy and maintain Navixy on-premise with guides covering requirements, installation methods, configuration options, maintenance tasks, and troubleshooting procedures.
+tags:
+  - legacy
 ---
 
 # Deployment guides

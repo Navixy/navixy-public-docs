@@ -1,6 +1,8 @@
 ---
 title: AI Assistant missing from user interface
 description: "AI Assistant appears for users only when Display Help is on and uses the default link. Set both in Admin Panel Service preferences."
+tags:
+  - legacy
 ---
 
 # AI Assistant missing from user interface

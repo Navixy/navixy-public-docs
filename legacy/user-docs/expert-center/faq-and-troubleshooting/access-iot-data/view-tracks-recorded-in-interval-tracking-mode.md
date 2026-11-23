@@ -2,6 +2,8 @@
 description: >-
   Display interval-mode device data as map tracks by generating tracks and
   disabling the Split by stops option in the Navixy tracking settings.
+tags:
+  - legacy
 ---
 
 # View tracks recorded in interval tracking mode

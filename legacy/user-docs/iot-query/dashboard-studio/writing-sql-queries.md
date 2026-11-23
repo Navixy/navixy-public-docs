@@ -1,6 +1,8 @@
 ---
 title: Writing SQL queries
 description: Write PostgreSQL queries optimized for Dashboard Studio visualizations. Learn data access patterns, layer selection, and performance best practices
+tags:
+  - legacy
 ---
 
 # Writing SQL queries

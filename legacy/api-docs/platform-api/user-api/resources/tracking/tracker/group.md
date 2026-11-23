@@ -1,6 +1,8 @@
 ---
 title: Group
 description: A visual grouping of trackers in the interface, with a title and a colour.
+tags:
+  - legacy
 ---
 
 # Group

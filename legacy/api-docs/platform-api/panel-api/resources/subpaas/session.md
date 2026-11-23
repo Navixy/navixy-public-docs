@@ -1,6 +1,8 @@
 ---
 title: Session
 description: API call to create a subpaas session.
+tags:
+  - legacy
 ---
 
 # Subpaas session key

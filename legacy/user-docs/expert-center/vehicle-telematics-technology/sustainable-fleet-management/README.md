@@ -1,5 +1,7 @@
 ---
 description: Electric vehicle fleet management in Navixy covers EV types, charging levels, State of Charge monitoring, and battery optimization strategies.
+tags:
+  - legacy
 ---
 
 # Sustainable fleet management

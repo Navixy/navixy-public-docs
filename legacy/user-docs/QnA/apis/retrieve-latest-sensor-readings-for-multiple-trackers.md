@@ -2,6 +2,8 @@
 description: >-
   Call batch_list with a list of tracker IDs to retrieve latest sensor readings.
   Get all trackers first, then filter for those with data
+tags:
+  - legacy
 ---
 
 # Retrieve latest sensor readings for multiple trackers

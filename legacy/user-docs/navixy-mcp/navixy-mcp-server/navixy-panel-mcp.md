@@ -3,6 +3,8 @@ description: >-
   Manage users, monitor devices across your account, check billing
   transactions, and review tariff plans from your AI client, with a full
   reference of the tools available through Navixy Panel MCP.
+tags:
+  - legacy
 ---
 
 # Navixy Panel MCP (navixy-panel)

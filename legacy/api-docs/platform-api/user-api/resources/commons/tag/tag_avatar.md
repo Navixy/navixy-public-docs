@@ -1,6 +1,8 @@
 ---
 title: Tag avatar
 description: The icon shown for a tag, uploaded as an image or assigned from the built-in set.
+tags:
+  - legacy
 ---
 
 # Tag avatar

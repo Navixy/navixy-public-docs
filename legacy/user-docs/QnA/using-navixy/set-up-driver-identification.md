@@ -3,6 +3,8 @@ title: Set up driver identification
 description: >-
   Configure the tracker for RFID, iButton, or BLE data; populate the driver list
   in Field Service and map each driver to a hardware key
+tags:
+  - legacy
 ---
 
 # Set up driver identification

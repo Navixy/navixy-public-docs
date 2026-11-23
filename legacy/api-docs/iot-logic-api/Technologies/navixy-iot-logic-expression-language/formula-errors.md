@@ -1,5 +1,7 @@
 ---
 description: "Formula errors in Navixy IoT Logic: every JEXL validation message with its cause and fix, and what happens when a saved formula fails while a message is processed."
+tags:
+  - legacy
 ---
 
 # Formula error reference

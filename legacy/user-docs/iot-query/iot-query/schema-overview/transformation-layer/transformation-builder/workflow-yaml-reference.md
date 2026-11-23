@@ -1,5 +1,7 @@
 ---
 description: The workflow YAML format captures Transformation Builder node graphs, parameters, and edges for export, import, and sharing between environments
+tags:
+  - legacy
 ---
 
 # Workflow YAML reference

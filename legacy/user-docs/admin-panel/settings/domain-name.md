@@ -1,5 +1,7 @@
 ---
 description: Point your custom subdomain to Navixy via CNAME, update instance settings, and enable SSL for secure access
+tags:
+  - legacy
 ---
 
 # Domain name

@@ -2,6 +2,8 @@
 description: >-
   Understand why an IoT Logic formula or condition produces no value when a
   value it needs is missing, and which comparison patterns prevent it.
+tags:
+  - legacy
 ---
 
 # Missing values in expressions

@@ -1,6 +1,8 @@
 ---
 title: BLE beacon data
 description: What a tracker saw of the radio tags around it, as history or as last known values.
+tags:
+  - legacy
 ---
 
 # BLE beacon data

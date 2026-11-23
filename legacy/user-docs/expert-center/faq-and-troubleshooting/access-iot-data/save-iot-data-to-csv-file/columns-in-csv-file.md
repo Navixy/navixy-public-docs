@@ -2,6 +2,8 @@
 description: >-
   Reference for the CSV raw data file structure exported from Navixy: parameter
   types, event IDs, and how to interpret GPS, sensor, and state fields.
+tags:
+  - legacy
 ---
 
 # Columns in the CSV file

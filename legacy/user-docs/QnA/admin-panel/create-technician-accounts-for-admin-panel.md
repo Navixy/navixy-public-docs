@@ -1,6 +1,8 @@
 ---
 title: Create technician accounts for Admin Panel
 description: Request technician accounts from Support to delegate user and device management without full admin panel access
+tags:
+  - legacy
 ---
 
 # Create technician accounts for Admin Panel

@@ -1,5 +1,7 @@
 ---
 description: Configure inbound and outbound firewall rules for Navixy on-premise. Includes port requirements and estimated bandwidth for deployments with 2,000 active GPS devices.
+tags:
+  - legacy
 ---
 
 # Network

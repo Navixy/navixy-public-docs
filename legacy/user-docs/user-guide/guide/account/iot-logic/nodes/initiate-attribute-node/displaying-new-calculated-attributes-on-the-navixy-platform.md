@@ -2,6 +2,8 @@
 description: >-
   Show calculated IoT Logic attributes in Navixy's Tracking module and Data
   Stream Analyzer by adding them as custom attributes to the relevant devices.
+tags:
+  - legacy
 ---
 
 # Displaying new calculated attributes on the Navixy platform

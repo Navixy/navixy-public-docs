@@ -1,6 +1,8 @@
 ---
 title: Use your own email gateway for notifications
 description: Configure SMTP with DKIM and DMARC DNS records in Admin Panel to route platform emails through your own server
+tags:
+  - legacy
 ---
 
 # Use your own email gateway for notifications

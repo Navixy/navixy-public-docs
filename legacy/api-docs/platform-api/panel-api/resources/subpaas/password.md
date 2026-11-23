@@ -1,6 +1,8 @@
 ---
 title: Password
 description: API call to change subpaas password.
+tags:
+  - legacy
 ---
 
 # Change password

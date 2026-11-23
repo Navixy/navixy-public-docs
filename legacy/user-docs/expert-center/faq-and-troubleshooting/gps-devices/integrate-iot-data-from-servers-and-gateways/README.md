@@ -1,5 +1,7 @@
 ---
 description: Receive telematics data from third-party gateways and servers using Wialon Retranslator, Combine, and IPS retranslation protocols in Navixy.
+tags:
+  - legacy
 ---
 
 # Integrate IoT data from servers and gateways

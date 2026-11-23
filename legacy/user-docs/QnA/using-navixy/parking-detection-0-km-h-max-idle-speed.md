@@ -1,6 +1,8 @@
-﻿---
+---
 title: Parking detection 0 km/h max idle speed
 description: Set maximum idle speed above 0 km/h in Parking Detection to classify vehicles as parked; a value of 0 disables parking detection entirely
+tags:
+  - legacy
 ---
 
 # Parking detection 0 km/h max idle speed

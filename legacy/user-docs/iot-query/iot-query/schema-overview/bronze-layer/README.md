@@ -1,5 +1,7 @@
 ---
 description: Raw data layer stores business entities, device telemetry, and asset records in three schemas. Browse key tables and field formats for direct SQL analysis
+tags:
+  - legacy
 ---
 
 # Raw data layer

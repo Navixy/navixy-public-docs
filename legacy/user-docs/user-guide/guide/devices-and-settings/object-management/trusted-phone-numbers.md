@@ -1,5 +1,7 @@
 ---
 description: Control which phone numbers may send SMS and USSD commands to a GPS device, protecting it from unauthorized configuration. Up to five numbers.
+tags:
+  - legacy
 ---
 
 # Trusted phone numbers

@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Why a Teltonika Output Won’t Activate When Immobilizer Is Enabled
 
 ### Question

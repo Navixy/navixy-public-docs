@@ -1,5 +1,7 @@
 ---
 description: Set up basic backups for Navixy on-premise using MySQL dump scripts and file system snapshots. Always back up the license key file separately from database data.
+tags:
+  - legacy
 ---
 
 # Backup basics

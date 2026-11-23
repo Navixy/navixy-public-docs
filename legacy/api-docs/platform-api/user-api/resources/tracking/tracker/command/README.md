@@ -1,6 +1,8 @@
 ---
 title: Unconfirmed commands
 description: The SMS commands still queued for a tracker, and a way to clear the queue.
+tags:
+  - legacy
 ---
 
 # Unconfirmed commands

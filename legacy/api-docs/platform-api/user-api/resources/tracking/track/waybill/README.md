@@ -1,6 +1,8 @@
 ---
 title: Waybill
 description: Build a waybill document from a tracker's tracks over a period, returned as a DOCX file.
+tags:
+  - legacy
 ---
 
 # Waybill

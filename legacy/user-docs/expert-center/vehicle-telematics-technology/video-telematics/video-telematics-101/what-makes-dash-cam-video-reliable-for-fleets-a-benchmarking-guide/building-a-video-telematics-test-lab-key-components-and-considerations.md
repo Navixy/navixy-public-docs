@@ -2,6 +2,8 @@
 description: >-
   Set up a video telematics test lab using a projector, windshield mount,
   lighting controls, and steering wheel rig to evaluate dashcam performance.
+tags:
+  - legacy
 ---
 
 # Building a video telematics test lab: key components and considerations

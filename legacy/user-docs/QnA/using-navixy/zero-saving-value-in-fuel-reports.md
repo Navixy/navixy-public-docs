@@ -3,6 +3,8 @@ title: Zero saving value in fuel reports
 description: >-
   Fuel saving column compares standard consumption to actual usage; link the
   tracker to a vehicle and configure the standard consumption value
+tags:
+  - legacy
 ---
 
 # Zero saving value in fuel reports

@@ -1,6 +1,8 @@
 ---
 title: Raw IoT Data
 description: Contains API calls to retrieve trackers raw data.
+tags:
+  - legacy
 ---
 
 # Raw IoT Data

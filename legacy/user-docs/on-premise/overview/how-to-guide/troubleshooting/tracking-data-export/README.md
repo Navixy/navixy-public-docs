@@ -1,5 +1,7 @@
 ---
 description: Export raw tracking data from the Navixy on-premise database. Covers both bucket-structure and file-by-file database organization with SQL query examples.
+tags:
+  - legacy
 ---
 
 # Tracking data export

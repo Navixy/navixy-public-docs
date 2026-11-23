@@ -2,6 +2,8 @@
 description: >-
   Identify speeding episodes with the Speed violation report. Configure speed
   and duration thresholds and review violation graphs and tables.
+tags:
+  - legacy
 ---
 
 # Speed violation report

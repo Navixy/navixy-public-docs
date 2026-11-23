@@ -2,6 +2,8 @@
 description: >-
   Create a geo link to share tracking data with external users. Configure the
   link's lifespan, visible objects, and map display options in the setup dialog.
+tags:
+  - legacy
 ---
 
 # Creating geo links

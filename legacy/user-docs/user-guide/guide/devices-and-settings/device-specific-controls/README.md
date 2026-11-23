@@ -2,6 +2,8 @@
 description: >-
   Configure hardware-specific device blocks in Navixy: anti-theft alarms,
   buttons and keys, power saving, external sensors, and diagnostics.
+tags:
+  - legacy
 ---
 
 # Device-specific controls

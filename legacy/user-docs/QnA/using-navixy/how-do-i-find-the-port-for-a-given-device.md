@@ -1,6 +1,8 @@
-﻿---
+---
 title: How do I find the port for a given device?
 description: "Find device port and server address on navixy.com/devices; EU uses tracker.navixy.com, US uses tracker.us.navixy.com"
+tags:
+  - legacy
 ---
 
 # How do I find the port for a given device?

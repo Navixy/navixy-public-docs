@@ -2,6 +2,8 @@
 description: >-
   Set up multi-conditional sensor alerts in Navixy for cold chain, fuel theft,
   and equipment monitoring. Includes use cases and rule configuration examples.
+tags:
+  - legacy
 ---
 
 # Monitor sensor values

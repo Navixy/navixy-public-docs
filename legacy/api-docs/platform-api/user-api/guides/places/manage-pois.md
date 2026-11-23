@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Managing POIs
 
 Points of Interest (POI), or places, can serve various purposes, such as organizing a list of frequently visited clients, simplifying task management, and analyzing business data through reports. Custom fields can be added to these places to store additional information about locations and customers, enabling the creation of custom CRM or ERP systems and easy integration with third-party systems. These fields can include phone numbers, emails, and other relevant customer data, as well as assign specific employees to customers for better management.

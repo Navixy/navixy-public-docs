@@ -1,6 +1,8 @@
 ---
 title: User password
 description: Change a password with the current one, or set one from a restore link.
+tags:
+  - legacy
 ---
 
 # User password

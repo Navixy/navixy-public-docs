@@ -1,5 +1,7 @@
 ---
 hidden: true
+tags:
+  - legacy
 ---
 
 # AI flow generation guide

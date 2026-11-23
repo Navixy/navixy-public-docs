@@ -2,6 +2,8 @@
 description: >-
   Score driver safety from 0 to 100 using penalties for speeding, harsh driving,
   and excessive idling. Configure thresholds and export or schedule PDF reports.
+tags:
+  - legacy
 ---
 
 # Eco Driving

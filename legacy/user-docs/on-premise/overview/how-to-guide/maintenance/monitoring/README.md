@@ -1,5 +1,7 @@
 ---
 description: "Monitor Navixy on-premise server health and service availability. Guides cover three tools: UptimeRobot, Uptime Kuma, and Zabbix for tracking platform performance."
+tags:
+  - legacy
 ---
 
 # Monitoring

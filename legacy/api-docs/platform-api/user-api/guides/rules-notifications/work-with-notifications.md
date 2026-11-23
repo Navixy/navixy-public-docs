@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Working with notifications
 
 Notifications are a crucial part of tracking. A [created rule](use-rules.md#creating-a-rule) tracks the triggering of specified conditions and sends events to emails and phones. Notifications alert users when a condition is triggered. Sometimes, it is necessary to store these notifications and history entries for special reports or for use in scripts built on APIs. This guide will show you how to work with them using the Navixy API.

@@ -1,6 +1,8 @@
 ---
 title: Eco Fleet API
 description: Overview of Navixy Eco Fleet API
+tags:
+  - legacy
 ---
 
 # Eco Fleet API

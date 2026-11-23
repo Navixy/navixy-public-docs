@@ -1,5 +1,7 @@
 ---
 description: Configure how a GPS device uses its SMS channel in Navixy with the SMS channel usage block, including a low-battery alert mode.
+tags:
+  - legacy
 ---
 
 # SMS channel usage

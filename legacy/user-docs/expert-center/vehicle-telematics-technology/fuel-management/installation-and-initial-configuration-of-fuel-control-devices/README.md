@@ -1,5 +1,7 @@
 ---
 description: Fuel control device setup guides covering OEM level sensors, fuel consumption meters, and aftermarket fuel level sensors for fleet vehicles.
+tags:
+  - legacy
 ---
 
 # Installation and initial configuration of fuel control devices

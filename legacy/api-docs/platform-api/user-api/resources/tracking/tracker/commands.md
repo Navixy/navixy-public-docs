@@ -1,6 +1,8 @@
 ---
 title: Commands
 description: Reusable commands defined on a tracker, sent to the device or to a URL on demand.
+tags:
+  - legacy
 ---
 
 # Commands

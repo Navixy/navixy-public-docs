@@ -1,5 +1,7 @@
 ---
 description: Detect when a driver is absent from their seat while the vehicle is in operation, using AI-equipped cameras. Alerts fleet managers to potential safety risks.
+tags:
+  - legacy
 ---
 
 # Driver absence

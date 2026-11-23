@@ -2,6 +2,8 @@
 description: >-
   View and manage all files uploaded through Navixy and the X-GPS Tracker app.
   Access task attachments, check-in photos, and form submissions in one place.
+tags:
+  - legacy
 ---
 
 # File Manager

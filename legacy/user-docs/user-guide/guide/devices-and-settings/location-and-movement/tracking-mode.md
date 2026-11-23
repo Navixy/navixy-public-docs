@@ -2,6 +2,8 @@
 description: >-
   Control how often a GPS device reports position by interval, distance, and
   cornering, plus power-save, freeze, and sleep options.
+tags:
+  - legacy
 ---
 
 # Tracking mode

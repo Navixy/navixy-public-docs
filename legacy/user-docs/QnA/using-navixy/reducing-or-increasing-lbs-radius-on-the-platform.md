@@ -3,6 +3,8 @@ title: Reducing or increasing LBS radius on the platform
 description: >-
   Adjust the LBS detection radius in Devices and Settings to expand or limit the
   area used for cell-tower-based location accuracy
+tags:
+  - legacy
 ---
 
 # Reducing or increasing LBS radius on the platform

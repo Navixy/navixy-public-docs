@@ -1,5 +1,7 @@
 ---
 description: Set up Galileosky and PP-01 sensor integration in Navixy to log real-time passenger entry and exit counts for transit vehicles and ridership reporting.
+tags:
+  - legacy
 ---
 
 # Passenger counter (Galileosky)

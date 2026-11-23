@@ -1,6 +1,8 @@
 ---
 title: Mileage
 description: How far a tracker travelled over a period, in kilometres, grouped by tracker and day.
+tags:
+  - legacy
 ---
 
 # Mileage

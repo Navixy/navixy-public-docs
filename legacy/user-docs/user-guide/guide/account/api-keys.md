@@ -2,6 +2,8 @@
 description: >-
   Create and manage API keys to connect third-party or custom applications to
   your Navixy account securely without sharing your main credentials.
+tags:
+  - legacy
 ---
 
 # API keys

@@ -1,10 +1,13 @@
 ---
 description: Navixy Q&A hub with troubleshooting guides, configuration help, API integration patterns, and on-premise deployment tips for all user types
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Q\&A
 
-This is a comprehensive community-driven knowledge base containing solutions to common questions, troubleshooting guides, and best practices for the Navixy GPS tracking platform. Whether you're an end user managing a fleet, an administrator configuring the system, a developer integrating via APIs, or running an on-premise deployment, you'll find practical answers here.
+This is a comprehensive community-driven knowledge base containing solutions to common questions, troubleshooting guides, and best practices for Navixy 3, the previous generation of the Navixy GPS tracking platform. Whether you're an end user managing a fleet, an administrator configuring the system, a developer integrating via APIs, or running an on-premise deployment, you'll find practical answers here.
 
 {% hint style="info" %}
 This section works best with AI. Instead of browsing manually, <a href="https://app.gitbook.com/s/gh5cGQ23uFYTcp7Fj7Yd/navixy-ai-assistant" class="button primary">Ask Navixy AI Assistant</a>

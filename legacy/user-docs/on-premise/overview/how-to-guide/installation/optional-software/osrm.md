@@ -1,5 +1,7 @@
 ---
 description: Install OSRM for local routing in Navixy on-premise with no request limits. Choose a routing profile, check hardware requirements, and access routes via REST API.
+tags:
+  - legacy
 ---
 
 # OSRM

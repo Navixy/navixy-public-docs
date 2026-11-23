@@ -3,6 +3,8 @@ description: >-
   Create and track fleet maintenance tasks by date, mileage, or engine hours.
   Set up repeating schedules, add costs and attachments, and monitor service
   status.
+tags:
+  - legacy
 ---
 
 # Maintenance

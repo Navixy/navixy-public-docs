@@ -1,5 +1,7 @@
 ---
 description: Diagnose report generation issues on Navixy on-premise. Disk space shortages cause timeout errors, and hardware resources directly affect report generation speed.
+tags:
+  - legacy
 ---
 
 # Reports

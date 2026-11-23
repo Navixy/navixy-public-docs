@@ -1,5 +1,7 @@
 ---
 description: View and manage video events captured by connected cameras in X-GPS Monitor on Android. Access event-triggered recordings from your fleet devices.
+tags:
+  - legacy
 ---
 
 # Video events (Android only)

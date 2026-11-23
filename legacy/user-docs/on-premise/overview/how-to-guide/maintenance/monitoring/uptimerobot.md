@@ -3,6 +3,8 @@ description: >-
   Use UptimeRobot to monitor Navixy on-premise availability from the cloud. Free
   tier covers basic uptime checks; consider local alternatives for secure
   infrastructures.
+tags:
+  - legacy
 ---
 
 # UptimeRobot

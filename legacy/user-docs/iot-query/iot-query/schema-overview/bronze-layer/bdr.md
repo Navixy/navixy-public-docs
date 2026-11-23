@@ -1,6 +1,8 @@
 ---
 description: >-
   BDR organizes devices and business entities into assets, with custom fields, relationships, and audit trails. Browse the schema definition and key table descriptions
+tags:
+  - legacy
 ---
 
 # BDR schema

@@ -2,6 +2,8 @@
 description: >-
   How the Input change events table detects discrete input changes and how to
   query it.
+tags:
+  - legacy
 ---
 
 # Input change events

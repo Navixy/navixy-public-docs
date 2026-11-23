@@ -1,6 +1,8 @@
 ---
 title: Task
 description: A job assigned to a tracked device, completed by visiting a place and meeting its conditions.
+tags:
+  - legacy
 ---
 
 # Task

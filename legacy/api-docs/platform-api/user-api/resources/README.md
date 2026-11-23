@@ -1,6 +1,9 @@
 ---
 title: Resources
 description: The operation reference for the Platform API, grouped by resource family.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Resources

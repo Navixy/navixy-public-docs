@@ -2,6 +2,8 @@
 description: >-
   Add custom KML map layers to display city districts, responsibility areas,
   specialized routes, or terrain data not available in the standard map views.
+tags:
+  - legacy
 ---
 
 # Layers

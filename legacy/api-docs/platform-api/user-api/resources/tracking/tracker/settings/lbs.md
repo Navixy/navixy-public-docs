@@ -1,6 +1,8 @@
 ---
 title: LBS settings
 description: The maximum radius accepted for a tracker's cell-tower and Wi-Fi positions.
+tags:
+  - legacy
 ---
 
 # LBS settings

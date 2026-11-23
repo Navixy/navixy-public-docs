@@ -3,6 +3,8 @@ description: >-
   Float, capacitive, and ultrasonic fuel sensors differ in accuracy and tank
   compatibility. Use the selection guide to choose the right type for your
   vehicles.
+tags:
+  - legacy
 ---
 
 # Types of fuel level sensors

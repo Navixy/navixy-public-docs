@@ -1,5 +1,7 @@
 ---
 description: Handle empty lists gracefully in your client code. Empty responses with success=true indicate no data for your query parameters
+tags:
+  - legacy
 ---
 
 # Empty list in API response

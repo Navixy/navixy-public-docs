@@ -2,6 +2,8 @@
 description: >-
   Analyze fuel level changes with the Fuel volume report. Detect refueling and
   drain events, review daily consumption, and assess sensor quality.
+tags:
+  - legacy
 ---
 
 # Fuel volume report

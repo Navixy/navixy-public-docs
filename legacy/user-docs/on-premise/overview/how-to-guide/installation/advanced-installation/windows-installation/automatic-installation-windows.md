@@ -3,6 +3,8 @@ description: >-
   Install Navixy on-premise on Windows Server using the NavixyInstaller
   PowerShell script. Configure domain and SSL options in a single or two-server
   deployment.
+tags:
+  - legacy
 ---
 
 # Automatic installation - Windows

@@ -1,5 +1,7 @@
 ---
 description: Detect signs of driver fatigue using tracker cameras and send dispatch alerts immediately when drowsiness is identified, enabling preventive action.
+tags:
+  - legacy
 ---
 
 # Fatigue driving

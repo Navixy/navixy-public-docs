@@ -1,6 +1,8 @@
 ---
 title: Route with Google
 description: Build a driving route with the Google Directions API, and read back Google's own failure codes.
+tags:
+  - legacy
 ---
 
 # Route with Google

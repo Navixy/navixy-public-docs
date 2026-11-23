@@ -1,6 +1,8 @@
 ---
 title: Push token
 description: Bind a device's push notification token to the current session, and filter what it receives.
+tags:
+  - legacy
 ---
 
 # Push token

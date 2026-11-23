@@ -3,6 +3,8 @@ description: >-
   Export users from Wialon and import them into the Navixy Admin panel. Use the
   template file format with required fields: email, password, and account
   status.
+tags:
+  - legacy
 ---
 
 # Users migration from Wialon

@@ -3,6 +3,8 @@ description: >-
   Copy sensor configurations from Wialon to Navixy in bulk and import
   calibration tables via CSV files. Use Navixy sensor migration tools to
   transfer settings.
+tags:
+  - legacy
 ---
 
 # Sensors migration from Wialon

@@ -1,6 +1,9 @@
 ---
 title: Platform authentication
 description: How to authenticate to the Platform API, and how to send the credential with a request.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Platform authentication

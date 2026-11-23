@@ -1,6 +1,8 @@
 ---
 title: Connecting Apache Superset
 description: Connect Apache Superset to IoT Query via the PostgreSQL driver. Configure the database connection and build interactive fleet monitoring dashboards
+tags:
+  - legacy
 ---
 
 # Connecting Apache Superset

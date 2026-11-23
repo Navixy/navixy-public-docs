@@ -3,6 +3,8 @@ title: Idling alert is not triggering
 description: >-
   Set the idling duration threshold and verify an ignition input sensor exists;
   check manufacturer documentation for ignition pin mapping
+tags:
+  - legacy
 ---
 
 # Idling alert is not triggering

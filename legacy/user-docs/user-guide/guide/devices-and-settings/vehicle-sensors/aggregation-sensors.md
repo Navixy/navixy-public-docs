@@ -2,6 +2,8 @@
 description: >-
   Average or sum readings from multiple fuel level sensors in Navixy to track
   total fuel across tanks or get a balanced reading from sensors in one tank.
+tags:
+  - legacy
 ---
 
 # Aggregation sensors

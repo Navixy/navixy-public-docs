@@ -2,6 +2,8 @@
 description: >-
   Navixy's three mobile apps: X-GPS Mobile for fleet monitoring, X-GPS Monitor
   for tracking and dispatching, and X-GPS Tracker for field employee GPS.
+tags:
+  - legacy
 ---
 
 # X-GPS mobile apps

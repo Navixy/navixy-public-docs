@@ -1,5 +1,7 @@
 ---
 description: Configure the Social distance block in Navixy so the device reports when another tagged device stays within a set distance for too long.
+tags:
+  - legacy
 ---
 
 # Social distance

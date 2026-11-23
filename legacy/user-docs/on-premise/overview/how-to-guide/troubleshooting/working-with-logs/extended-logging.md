@@ -1,5 +1,7 @@
 ---
 description: Enable extended device logging in Navixy on-premise by editing the TCP-server configuration. Captures detailed operation data for diagnosing device-specific issues.
+tags:
+  - legacy
 ---
 
 # Extended logging

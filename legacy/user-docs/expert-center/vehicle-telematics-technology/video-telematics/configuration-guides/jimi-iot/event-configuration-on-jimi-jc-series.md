@@ -2,6 +2,8 @@
 description: >-
   Configure custom event alerts on Jimi JC series dashcams in Navixy using state
   field value rules with a reference table of supported event codes.
+tags:
+  - legacy
 ---
 
 # Event configuration on Jimi JC series

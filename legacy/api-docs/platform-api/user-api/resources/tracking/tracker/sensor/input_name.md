@@ -1,6 +1,8 @@
 ---
 title: Sensor inputs
 description: Every sensor input and state field the Navixy platform knows, with its description.
+tags:
+  - legacy
 ---
 
 # Sensor inputs

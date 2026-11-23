@@ -1,6 +1,8 @@
 ---
 title: GPRS commands for offline devices
 description: "A GPRS command reaches the device only while it is connected, and the platform sends a command for an offline device after it reconnects."
+tags:
+  - legacy
 ---
 
 # GPRS commands for offline devices

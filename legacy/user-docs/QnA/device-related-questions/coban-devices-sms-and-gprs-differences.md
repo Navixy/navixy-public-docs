@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Coban Devices SMS and GPRS differences
 
 ## Question:

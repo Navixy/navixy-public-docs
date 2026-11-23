@@ -2,6 +2,8 @@
 description: >-
   Compare GPS-based fuel estimates, flow meters, and level sensors by accuracy
   and application to select the right monitoring method for your fleet.
+tags:
+  - legacy
 ---
 
 # Choosing the optimal method and device for fuel monitoring

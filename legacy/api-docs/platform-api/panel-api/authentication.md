@@ -1,5 +1,8 @@
 ---
 description: Authenticate to the Navixy Admin Panel API.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Admin Panel authentication

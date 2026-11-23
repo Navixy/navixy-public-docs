@@ -1,5 +1,7 @@
 ---
 description: Migrate from Wialon to Navixy with guides for users, geofences, trackers, and sensors. Each guide covers the export and import steps for that data type.
+tags:
+  - legacy
 ---
 
 # Migrating from Wialon

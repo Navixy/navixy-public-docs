@@ -1,6 +1,8 @@
 ---
 title: Route with Progorod
 description: Build a driving route with the Progorod router, and read back which point it rejected.
+tags:
+  - legacy
 ---
 
 # Route with Progorod

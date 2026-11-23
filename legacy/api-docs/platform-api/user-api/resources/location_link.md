@@ -1,6 +1,8 @@
 ---
 title: Geo links
 description: Shareable sessions that show the live location of chosen trackers to someone without an account.
+tags:
+  - legacy
 ---
 
 # Geo links

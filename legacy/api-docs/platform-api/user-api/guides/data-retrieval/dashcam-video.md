@@ -1,6 +1,8 @@
 ---
 title: Get dashcam video
 description: How to get event clips and memory card recordings from a dashcam through the API, and what limits apply.
+tags:
+  - legacy
 ---
 
 # Get dashcam video

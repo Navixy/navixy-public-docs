@@ -2,6 +2,8 @@
 description: >-
   Embed a Navixy geo link as an iframe in a third-party website or dashboard.
   Generate the embed code from the geo link settings and customize the display.
+tags:
+  - legacy
 ---
 
 # Embedding geo links

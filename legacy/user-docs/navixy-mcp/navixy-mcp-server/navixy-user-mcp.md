@@ -3,6 +3,8 @@ description: >-
   Monitor your fleet, check sensor readings, review track history, and inspect
   IoT Logic flows from your AI client, with a full reference of the tools
   available through Navixy User MCP.
+tags:
+  - legacy
 ---
 
 # Navixy User MCP (navixy-user)

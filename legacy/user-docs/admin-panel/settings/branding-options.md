@@ -2,6 +2,8 @@
 description: >-
   White-label the platform with custom login page settings,
   logos/backgrounds/favicon, and UI themes for web and mobile
+tags:
+  - legacy
 ---
 
 # Branding

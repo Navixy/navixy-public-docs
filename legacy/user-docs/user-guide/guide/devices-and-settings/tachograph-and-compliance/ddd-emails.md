@@ -1,5 +1,7 @@
 ---
 description: Add up to five email recipients so downloaded DDD files are delivered automatically after each tachograph download completes.
+tags:
+  - legacy
 ---
 
 # DDD files recipient email

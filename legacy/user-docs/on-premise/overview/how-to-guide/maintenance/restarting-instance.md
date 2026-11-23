@@ -2,6 +2,8 @@
 description: >-
   Restart Navixy on-premise on Linux using the restart-navixy command or on
   Windows via the services.msc console to manage Windows NT services.
+tags:
+  - legacy
 ---
 
 # Restarting instance

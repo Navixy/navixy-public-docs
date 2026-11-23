@@ -1,6 +1,8 @@
-﻿---
+---
 title: My Jimi JC tracker is configured but I can't see video playback
 description: Send three SMS commands to the Jimi JC tracker to enable video uploads, retrieve the list of stored recordings, and trigger the upload
+tags:
+  - legacy
 ---
 
 # My Jimi JC tracker is configured but I can't see video playback

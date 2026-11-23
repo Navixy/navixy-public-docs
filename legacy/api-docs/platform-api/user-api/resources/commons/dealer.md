@@ -1,6 +1,8 @@
 ---
 title: Dealer
 description: The interface configuration of the telematics service provider (TSP) and the platform-wide limits that constrain other operations.
+tags:
+  - legacy
 ---
 
 # Dealer

@@ -2,6 +2,8 @@
 description: >-
   GPS device certification covers safety, electromagnetic compliance, cellular
   operator approvals, and national security standards per region.
+tags:
+  - legacy
 ---
 
 # GPS device certification

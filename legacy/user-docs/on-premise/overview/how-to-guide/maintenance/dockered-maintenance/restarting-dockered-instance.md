@@ -1,5 +1,7 @@
 ---
 description: Restart Dockered Navixy containers using docker ps to list running services and docker restart to reload specific backend components.
+tags:
+  - legacy
 ---
 
 # Restarting dockered instance

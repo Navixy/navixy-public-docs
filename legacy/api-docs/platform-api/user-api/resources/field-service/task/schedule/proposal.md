@@ -1,6 +1,8 @@
 ---
 title: Schedule proposals
 description: A preview of the tasks and routes a schedule will create over a date range.
+tags:
+  - legacy
 ---
 
 # Schedule proposals

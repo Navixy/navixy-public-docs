@@ -3,6 +3,8 @@ description: >-
   Read the name of the geofence containing a device position inside IoT Logic
   formulas and conditions with geofenceName(), including its parameters, return
   values, and the account feature it requires.
+tags:
+  - legacy
 ---
 
 # Geofence name function

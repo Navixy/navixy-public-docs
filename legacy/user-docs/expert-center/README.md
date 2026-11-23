@@ -1,5 +1,8 @@
 ---
 description: Access vehicle telematics guides, FAQ troubleshooting steps, sensor configuration tutorials, and connectivity references to get the most from Navixy.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Expert Center

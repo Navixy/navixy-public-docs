@@ -1,6 +1,8 @@
 ---
 title: Delivery info
 description: Delivery states for courier apps, carrying the task being delivered, the tracker carrying it, and the driver.
+tags:
+  - legacy
 ---
 
 # Delivery info

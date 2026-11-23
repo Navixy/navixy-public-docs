@@ -2,6 +2,8 @@
 description: >-
   Add measurement sensors in Navixy to track fuel, temperature, voltage, or RPM.
   Set the input, units, calibration table, and filtering rules per sensor.
+tags:
+  - legacy
 ---
 
 # Measurement sensors

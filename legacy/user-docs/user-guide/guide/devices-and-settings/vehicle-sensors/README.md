@@ -3,6 +3,8 @@ description: >-
   Add and configure vehicle sensors in Navixy: discrete on/off states, fuel and
   temperature measurement, virtual derived values, and manufacturer-specific
   types.
+tags:
+  - legacy
 ---
 
 # Vehicle sensors

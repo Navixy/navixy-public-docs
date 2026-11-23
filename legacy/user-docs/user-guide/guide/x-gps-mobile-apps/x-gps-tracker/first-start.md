@@ -1,5 +1,7 @@
 ---
 description: Start X-GPS Tracker for the first time by entering the device ID from your invitation link. Follow the link from SMS or email to configure the ID automatically.
+tags:
+  - legacy
 ---
 
 # First launch

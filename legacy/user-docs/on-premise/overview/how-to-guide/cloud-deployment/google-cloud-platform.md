@@ -2,6 +2,8 @@
 description: >-
   Deploy Navixy on-premise on Google Cloud Platform. Create a virtual machine
   with required specs, configure SSH keys, and connect via browser or client.
+tags:
+  - legacy
 ---
 
 # Google Cloud Platform

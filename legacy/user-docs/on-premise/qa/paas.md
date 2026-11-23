@@ -3,6 +3,8 @@ description: >-
   Deploy Navixy as a PaaS cloud service by creating an instance through the
   customer portal. Manage the platform via the admin panel without managing
   server infrastructure.
+tags:
+  - legacy
 ---
 
 # PaaS

@@ -1,6 +1,8 @@
 ---
 title: Tracking profiles
 description: What each device model accepts as its tracking mode settings, model by model.
+tags:
+  - legacy
 ---
 
 # Tracking profiles

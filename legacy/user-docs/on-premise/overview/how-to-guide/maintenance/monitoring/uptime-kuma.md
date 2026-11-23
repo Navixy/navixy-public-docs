@@ -3,6 +3,8 @@ description: >-
   Install and configure Uptime Kuma for local Navixy on-premise monitoring. Set
   up website, API, and TCP port checks with notification alerts for service
   downtime.
+tags:
+  - legacy
 ---
 
 # Uptime Kuma

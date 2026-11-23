@@ -1,6 +1,8 @@
 ---
 title: Raw IoT Data API
 description: Overview of Navixy Raw IoT Data API.
+tags:
+  - legacy
 ---
 
 # Raw IoT Data API

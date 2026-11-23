@@ -1,6 +1,8 @@
 ---
 title: LED
 description: Read and switch a tracker's indicator LED, on models that expose it.
+tags:
+  - legacy
 ---
 
 # LED

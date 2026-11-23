@@ -1,6 +1,8 @@
 ---
 title: Trips report shows No driver key
 description: "The Trips report shows No driver key for trips made while no driver was assigned to the object. A key touch assigns a driver until the next change."
+tags:
+  - legacy
 ---
 
 # Trips report shows No driver key

@@ -1,6 +1,8 @@
 ---
 title: Entity search conditions
 description: The filter expression that narrows an entity list by built-in and custom fields.
+tags:
+  - legacy
 ---
 
 # Entity search conditions

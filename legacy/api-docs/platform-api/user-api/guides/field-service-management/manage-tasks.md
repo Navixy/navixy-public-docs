@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # How to create and assign tasks
 
 Tasks in Navixy are a feature used to plan and monitor the activities of field workers. They help in organizing and managing various operations such as service, delivery, transportation, merchandising, and trade. Tasks provide employees with detailed information including date, time, addresses, task descriptions, and contact numbers.

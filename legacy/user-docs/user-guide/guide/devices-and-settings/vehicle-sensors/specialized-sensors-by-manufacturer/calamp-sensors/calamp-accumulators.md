@@ -1,5 +1,7 @@
 ---
 description: Map CalAmp accumulator variables in Navixy to retrieve board voltage and external temperature data from supported CalAmp GPS devices.
+tags:
+  - legacy
 ---
 
 # CalAmp accumulators

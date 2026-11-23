@@ -1,6 +1,8 @@
 ---
 title: User UI settings
 description: A key-value store for client application state, kept per user but not guaranteed.
+tags:
+  - legacy
 ---
 
 # User UI settings

@@ -1,6 +1,9 @@
 ---
 title: Dashboard Studio
 description: Build interactive fleet dashboards and reports from SQL queries without external BI tools. Self-service analytics with drag-and-drop visualization
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Dashboard Studio

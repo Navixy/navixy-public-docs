@@ -1,5 +1,7 @@
 ---
 description: "Virtual sensors in Navixy convert raw telemetry into plain labels, derive ignition from voltage, and map multi-value device states to readable indicators."
+tags:
+  - legacy
 ---
 
 # Virtual sensors

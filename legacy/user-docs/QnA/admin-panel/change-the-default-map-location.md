@@ -1,6 +1,8 @@
 ---
 title: Change the default map location
 description: "Configure the default map location, zoom, and type in Admin Panel Maps preferences to customize user experience"
+tags:
+  - legacy
 ---
 
 # Change the default map location

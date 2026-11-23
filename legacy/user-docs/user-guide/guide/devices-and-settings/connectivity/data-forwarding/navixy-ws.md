@@ -2,6 +2,8 @@
 description: >-
   Let a third-party system query historical GPS data from Navixy over SOAP,
   requesting up to 100 devices and one day of data per call.
+tags:
+  - legacy
 ---
 
 # Navixy Web Service

@@ -1,6 +1,8 @@
 ---
 title: APN settings
 description: Mobile-internet settings a SIM needs before a device on it can reach the Navixy platform, looked up by phone number.
+tags:
+  - legacy
 ---
 
 # APN settings

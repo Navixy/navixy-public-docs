@@ -2,6 +2,8 @@
 description: >-
   Run the Ubuntu configuration wizard for Navixy on-premise to set domains, SSL,
   SMS and email gateways, Google Maps API keys, and license key.
+tags:
+  - legacy
 ---
 
 # Configuration wizard

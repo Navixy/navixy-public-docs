@@ -1,5 +1,7 @@
 ---
 description: "Select an SMS gateway for Navixy on-premise: cloud providers, SMPP-compatible SMS centers, or Yeastar hardware VoIP gateways for device activation and notifications."
+tags:
+  - legacy
 ---
 
 # SMS gateway

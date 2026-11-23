@@ -2,6 +2,8 @@
 description: >-
   Run the Ubuntu installation wizard for Navixy on-premise on a single or
   two-server setup. Configure server roles, domain names, and SSL certificates.
+tags:
+  - legacy
 ---
 
 # Installation wizard

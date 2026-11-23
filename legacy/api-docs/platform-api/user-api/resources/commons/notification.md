@@ -1,6 +1,8 @@
 ---
 title: Notification
 description: Platform announcements shown to the current user.
+tags:
+  - legacy
 ---
 
 # Notification

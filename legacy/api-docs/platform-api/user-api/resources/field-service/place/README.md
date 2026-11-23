@@ -1,6 +1,8 @@
 ---
 title: Place
 description: Business locations that employees visit, called points of interest in the interface.
+tags:
+  - legacy
 ---
 
 # Place

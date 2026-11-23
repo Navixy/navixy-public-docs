@@ -3,6 +3,8 @@ description: >-
   Deploy a local map tile server for Navixy on-premise to serve custom map data.
   Prepare tiles, launch the server, and integrate it into the platform map
   panel.
+tags:
+  - legacy
 ---
 
 # Map tile servers

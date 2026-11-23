@@ -2,6 +2,8 @@
 description: >-
   Edit or share an existing geo link in Navixy. Updating a link preserves its
   URL; to generate a new URL, create a new geo link from scratch.
+tags:
+  - legacy
 ---
 
 # Updating and sharing geo links

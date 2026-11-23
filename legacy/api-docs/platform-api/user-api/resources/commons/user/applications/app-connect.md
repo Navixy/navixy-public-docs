@@ -1,5 +1,7 @@
 ---
 description: Integrate custom applications with Navixy authentication
+tags:
+  - legacy
 ---
 
 # App Connect

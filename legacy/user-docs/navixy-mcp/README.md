@@ -2,6 +2,9 @@
 description: >-
   Connect your AI client to your Navixy account with Navixy MCP Server and ask
   about your fleet or your business in plain language.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Overview

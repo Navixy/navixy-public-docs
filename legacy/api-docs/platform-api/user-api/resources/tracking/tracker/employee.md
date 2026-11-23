@@ -1,6 +1,8 @@
 ---
 title: Employee
 description: Assign an employee as the driver of a tracker, and read who is assigned now.
+tags:
+  - legacy
 ---
 
 # Employee

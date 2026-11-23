@@ -2,6 +2,8 @@
 description: >-
   Configure Galileosky-specific sensors in Navixy: map user-defined Easy Logic
   tags and set up the passenger counter for public transport tracking.
+tags:
+  - legacy
 ---
 
 # Galileosky sensors

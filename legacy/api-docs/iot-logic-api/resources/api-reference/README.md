@@ -1,5 +1,8 @@
 ---
 description: Browse IoT Logic API endpoints for flow and endpoint management. Covers authentication, regional base URLs, and the full OpenAPI specification.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # API reference

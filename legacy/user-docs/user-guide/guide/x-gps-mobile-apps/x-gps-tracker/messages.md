@@ -3,6 +3,8 @@ description: >-
   Exchange real-time messages between field employees and office staff via X-GPS
   Tracker. Report task results, signal difficulties, or notify about new
   assignments.
+tags:
+  - legacy
 ---
 
 # Messages

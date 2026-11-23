@@ -2,6 +2,8 @@
 description: >-
   Integrate Lightmetrics AI video telematics with Navixy to add edge-AI video
   analysis and driver safety monitoring to your fleet management workflow.
+tags:
+  - legacy
 ---
 
 # LightMetrics

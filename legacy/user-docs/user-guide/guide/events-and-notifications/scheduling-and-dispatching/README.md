@@ -1,5 +1,7 @@
 ---
 description: "Alert rules for fleet dispatch: route deviation, driving time limits, driver identification and absence, task performance, and work status changes."
+tags:
+  - legacy
 ---
 
 # Scheduling and dispatching

@@ -1,5 +1,7 @@
 ---
 description: SQL query templates for banking and leasing analytics, covering asset lifecycle, contract compliance, maintenance scheduling, and usage limit tracking
+tags:
+  - legacy
 ---
 
 # Leasing

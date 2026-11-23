@@ -2,6 +2,8 @@
 description: >-
   Manage a device's identity and admin settings: label, group, tags, SIM and
   trusted numbers, service plan, working statuses, and data export.
+tags:
+  - legacy
 ---
 
 # Object management

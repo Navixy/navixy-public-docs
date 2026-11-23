@@ -1,5 +1,7 @@
 ---
 description: Configure the Twilio SMS gateway in Navixy on-premise for global connectivity. Add credentials using the SQL configuration example for the sms_gates table.
+tags:
+  - legacy
 ---
 
 # Twilio

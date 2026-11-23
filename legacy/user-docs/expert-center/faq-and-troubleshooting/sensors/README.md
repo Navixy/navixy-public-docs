@@ -1,5 +1,7 @@
 ---
 description: "Configure and troubleshoot sensors in Navixy: temperature, fuel, environmental, and OBD sensors across device models with setup and calibration guides."
+tags:
+  - legacy
 ---
 
 # Sensors

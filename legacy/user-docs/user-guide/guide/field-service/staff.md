@@ -2,6 +2,8 @@
 description: >-
   Manage field service employee profiles in Navixy. View contact details,
   current work status, assigned tasks, and link staff to GPS devices.
+tags:
+  - legacy
 ---
 
 # Staff

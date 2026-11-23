@@ -2,6 +2,8 @@
 description: >-
   Clone a tracker into other user accounts for shared monitoring. Clone owners
   get read-only access, while the original account retains full control.
+tags:
+  - legacy
 ---
 
 # Tracker clones

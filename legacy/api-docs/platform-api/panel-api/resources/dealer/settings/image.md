@@ -1,6 +1,8 @@
 ---
 title: Image
 description: API calls for interaction with images that used for branding of the panel.
+tags:
+  - legacy
 ---
 
 # Branding Customization

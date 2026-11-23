@@ -2,6 +2,8 @@
 description: >-
   Integrate Streamax MDVR devices with Navixy to combine 24/7 video recording,
   ADAS, and driver safety monitoring with full fleet management capabilities.
+tags:
+  - legacy
 ---
 
 # Streamax

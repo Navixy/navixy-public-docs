@@ -1,5 +1,7 @@
 ---
 description: Configure the Tyntec cloud communications gateway for Navixy on-premise SMS messaging. Add the JSON configuration parameters for messaging and voice integration.
+tags:
+  - legacy
 ---
 
 # Tyntec

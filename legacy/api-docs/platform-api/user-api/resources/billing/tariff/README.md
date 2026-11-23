@@ -1,6 +1,8 @@
 ---
 title: Tariff (plan)
 description: The service plans a device can be on, and what each one allows.
+tags:
+  - legacy
 ---
 
 # Tariff (plan)

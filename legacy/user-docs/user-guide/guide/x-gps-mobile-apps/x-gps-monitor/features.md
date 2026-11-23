@@ -2,6 +2,8 @@
 description: >-
   Explore all tools in X-GPS Monitor: object list, map controls, task
   management, trip history, notifications, and telematics data panels.
+tags:
+  - legacy
 ---
 
 # Features

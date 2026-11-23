@@ -2,6 +2,8 @@
 description: >-
   Browse all Navixy report categories: trips and mileage, fuel analysis, driver
   safety, sensor readings, and events. Find the right report for any use case.
+tags:
+  - legacy
 ---
 
 # Report types

@@ -1,6 +1,8 @@
 ---
 title: Newly added tracker is blocked right after activation
 description: Fix a newly blocked tracker by topping up user balance, adjusting plan fee, enabling free days, or adding a sign-up bonus
+tags:
+  - legacy
 ---
 
 # Newly added tracker is blocked right after activation

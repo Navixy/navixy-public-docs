@@ -1,5 +1,7 @@
 ---
 description: Set up the ERM Efuel Dome fuel sensor in Navixy. Covers physical installation, platform configuration, sensor mapping, and alert setup.
+tags:
+  - legacy
 ---
 
 # Configuring ERM Efuel Dome sensor in Navixy

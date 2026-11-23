@@ -2,6 +2,8 @@
 description: >-
   Create roles in Navixy to decide what users can do, from device settings and
   rules to reports, and how far back they can view object history.
+tags:
+  - legacy
 ---
 
 # Roles

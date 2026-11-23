@@ -1,5 +1,7 @@
 ---
 description: Configure device-side thresholds for harsh driving events that feed into Navixy Notifications and Eco-driving reports for fleet safety monitoring.
+tags:
+  - legacy
 ---
 
 # Driver safety

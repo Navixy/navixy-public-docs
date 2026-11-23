@@ -2,6 +2,8 @@
 description: >-
   Set up Jimi JC400 and JC261 dashcams for Navixy by updating firmware,
   activating via SMS, and configuring platform and traffic settings.
+tags:
+  - legacy
 ---
 
 # Jimi IoT dashcam configuration

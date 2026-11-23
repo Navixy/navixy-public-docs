@@ -1,6 +1,8 @@
 ---
 title: User commons
 description: Account-level resources shared across the API, covering authentication, sub-users, history, tags, and platform metadata.
+tags:
+  - legacy
 ---
 
 # User commons

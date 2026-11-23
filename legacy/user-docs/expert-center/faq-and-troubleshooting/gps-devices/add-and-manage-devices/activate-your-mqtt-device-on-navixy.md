@@ -2,6 +2,8 @@
 description: >-
   Connect an MQTT device to Navixy by configuring the publish/subscribe
   protocol. Includes setup examples for Xirgo, Globalmatix, and similar devices.
+tags:
+  - legacy
 ---
 
 # Activate your MQTT device on Navixy

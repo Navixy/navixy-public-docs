@@ -1,6 +1,8 @@
 ---
 title: Connecting Grafana
 description: Connect Grafana to IoT Query via the PostgreSQL data source. Build time series charts and dashboards for live and historical telematics monitoring
+tags:
+  - legacy
 ---
 
 # Connecting Grafana

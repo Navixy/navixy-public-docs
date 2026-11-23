@@ -3,6 +3,8 @@ description: >-
   Install Zabbix on a dedicated server to monitor Navixy on-premise resources,
   web accessibility, and advanced infrastructure metrics without internet access
   requirements.
+tags:
+  - legacy
 ---
 
 # Zabbix

@@ -3,6 +3,8 @@ title: SMS commands are not delivered
 description: >-
   Check SMS gateway and customer balances, verify Service SMS is enabled, and
   review SIM card compatibility for command delivery
+tags:
+  - legacy
 ---
 
 # SMS commands are not delivered

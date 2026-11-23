@@ -3,6 +3,8 @@ description: >-
   Configure Dockered Navixy using the .env file. Set database credentials,
   domain names, SSL certificate paths, Let's Encrypt options, and MySQL
   parameters.
+tags:
+  - legacy
 ---
 
 # .env file

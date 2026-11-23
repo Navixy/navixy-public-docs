@@ -1,5 +1,7 @@
 ---
 description: Get notified when the call button on a GPS device is pressed. For devices equipped with a built-in phone call or radio function to enable rapid communication.
+tags:
+  - legacy
 ---
 
 # Call button pressed

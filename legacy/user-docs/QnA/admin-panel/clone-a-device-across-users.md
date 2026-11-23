@@ -1,6 +1,8 @@
 ---
 title: Clone a device across users
 description: Clone devices across multiple users in Admin Panel Trackers without additional charges or licensing fees
+tags:
+  - legacy
 ---
 
 # Clone a device across users

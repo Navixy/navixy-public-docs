@@ -1,6 +1,8 @@
 ---
 title: File
 description: How much of the account's file storage quota is in use.
+tags:
+  - legacy
 ---
 
 # File

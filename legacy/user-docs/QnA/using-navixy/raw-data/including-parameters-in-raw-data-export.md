@@ -1,6 +1,8 @@
 ---
 title: Including parameters in raw data export
 description: "Select any integrated parameters for your GPS tracker model when exporting raw data; the export supports up to 1,000 parameter columns"
+tags:
+  - legacy
 ---
 
 # Including parameters in raw data export

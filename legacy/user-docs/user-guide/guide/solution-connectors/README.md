@@ -1,5 +1,7 @@
 ---
 description: "Connect Navixy to video telematics providers: Howen, Lightmetrics, Streamax, and MettaX. Access AI-powered dashcam video alongside GPS fleet tracking data."
+tags:
+  - legacy
 ---
 
 # Video telematics

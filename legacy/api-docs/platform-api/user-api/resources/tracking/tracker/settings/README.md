@@ -1,6 +1,8 @@
 ---
 title: Settings
 description: A tracker's display label and the group it belongs to.
+tags:
+  - legacy
 ---
 
 # Settings

@@ -1,5 +1,7 @@
 ---
 description: Set up an SMTP server to enable email notifications, invites, and reports in Navixy on-premise. Configure SPF and DKIM records to improve delivery reliability.
+tags:
+  - legacy
 ---
 
 # Email gateway

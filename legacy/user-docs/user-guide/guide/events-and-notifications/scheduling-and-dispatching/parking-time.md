@@ -1,5 +1,7 @@
 ---
 description: Get notified when a vehicle remains parked beyond a configured time limit. Bind to geofences to monitor dwell time in specific locations.
+tags:
+  - legacy
 ---
 
 # Parking time

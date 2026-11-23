@@ -1,6 +1,8 @@
 ---
 title: Places
 description: Worked examples of geofences and points of interest, the two ways a location gets a name.
+tags:
+  - legacy
 ---
 
 # Places

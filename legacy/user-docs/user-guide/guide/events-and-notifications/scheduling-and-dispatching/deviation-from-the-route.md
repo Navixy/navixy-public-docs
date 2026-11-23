@@ -1,5 +1,7 @@
 ---
 description: Get notified when a vehicle deviates from a planned route. Uses route-type geofences to define the permitted path and alerts when the object moves outside it.
+tags:
+  - legacy
 ---
 
 # Deviation from the route

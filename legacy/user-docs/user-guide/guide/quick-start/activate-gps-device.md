@@ -2,6 +2,8 @@
 description: >-
   Add a GPS device to Navixy with automatic or manual activation, or activate
   many devices of one model at once from an Excel or CSV file.
+tags:
+  - legacy
 ---
 
 # Activate GPS device

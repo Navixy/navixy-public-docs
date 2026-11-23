@@ -2,6 +2,8 @@
 description: >-
   H.265 compresses fleet video more efficiently than H.264 but increases thermal
   load and licensing cost. Compare both codecs for dashcam deployment decisions.
+tags:
+  - legacy
 ---
 
 # H.264 vs H.265 in fleet telematics: cracking the codec puzzle

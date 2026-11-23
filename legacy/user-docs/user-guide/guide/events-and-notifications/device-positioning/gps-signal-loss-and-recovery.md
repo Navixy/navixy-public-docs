@@ -1,5 +1,7 @@
 ---
 description: Get notified when a GPS device loses satellite signal and when it recovers, helping you monitor assets in tunnels, warehouses, or low-coverage areas.
+tags:
+  - legacy
 ---
 
 # GPS signal loss and recovery

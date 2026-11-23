@@ -1,6 +1,8 @@
 ---
 title: Contact
 description: Deprecated. The account's trackers grouped by the contacts that share them.
+tags:
+  - legacy
 ---
 
 # Contact

@@ -1,6 +1,8 @@
 ---
 title: Engine immobilizer
 description: Read whether a vehicle's engine immobilizer is engaged, and engage or release it.
+tags:
+  - legacy
 ---
 
 # Engine immobilizer

@@ -1,6 +1,8 @@
 ---
 title: Parking detection
 description: How the Navixy platform decides a tracker has stopped, which is what splits a trajectory into trips.
+tags:
+  - legacy
 ---
 
 # Parking detection

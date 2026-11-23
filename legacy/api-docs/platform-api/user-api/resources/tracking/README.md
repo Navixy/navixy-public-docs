@@ -1,6 +1,8 @@
 ---
 title: Tracking
 description: Devices, where they have been, and the map areas and rules that give their movement meaning.
+tags:
+  - legacy
 ---
 
 # Tracking

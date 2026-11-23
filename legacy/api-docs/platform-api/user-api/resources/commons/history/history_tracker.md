@@ -1,6 +1,8 @@
 ---
 title: Tracker events
 description: The event history of one or more trackers over a period.
+tags:
+  - legacy
 ---
 
 # Tracker events

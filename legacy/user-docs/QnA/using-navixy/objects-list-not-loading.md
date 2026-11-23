@@ -1,6 +1,8 @@
 ---
 title: Objects list not loading
 description: "Clear filters and search first. If only some devices appear, a service plan limit is usually the cause."
+tags:
+  - legacy
 ---
 
 # Objects list not loading

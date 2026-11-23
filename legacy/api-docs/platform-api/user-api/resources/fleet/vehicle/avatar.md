@@ -1,6 +1,8 @@
 ---
 title: Vehicle avatar
 description: The icon shown for a vehicle, assigned from the built-in set or uploaded.
+tags:
+  - legacy
 ---
 
 # Vehicle avatar

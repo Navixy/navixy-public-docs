@@ -1,6 +1,8 @@
 ---
 title: Change SMS gateway
 description: Contact Support to configure an SMS gateway for your reseller panel using Twilio or generic SMPP v3.4 credentials
+tags:
+  - legacy
 ---
 
 # Change SMS gateway

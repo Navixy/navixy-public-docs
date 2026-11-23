@@ -1,6 +1,8 @@
 ---
 title: User authentication code
 description: The second step of multi-factor authentication, verifying or resending the emailed code.
+tags:
+  - legacy
 ---
 
 # User authentication code

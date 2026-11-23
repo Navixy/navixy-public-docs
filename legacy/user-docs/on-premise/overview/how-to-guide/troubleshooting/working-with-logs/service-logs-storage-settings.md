@@ -1,5 +1,7 @@
 ---
 description: Configure log storage location, compression archiving, and retention period for Navixy on-premise backend services. Edit logback.xml in each service directory.
+tags:
+  - legacy
 ---
 
 # Service logs storage settings

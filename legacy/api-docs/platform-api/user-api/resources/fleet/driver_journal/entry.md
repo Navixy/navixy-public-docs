@@ -1,6 +1,8 @@
 ---
 title: Driver journal entry
 description: A trip that has been categorised, so transport use can be split between business and private.
+tags:
+  - legacy
 ---
 
 # Driver journal entry

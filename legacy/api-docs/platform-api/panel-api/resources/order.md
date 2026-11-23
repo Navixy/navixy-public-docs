@@ -1,6 +1,8 @@
 ---
 title: Order
 description: API call to read the order by its ID.
+tags:
+  - legacy
 ---
 
 # Order

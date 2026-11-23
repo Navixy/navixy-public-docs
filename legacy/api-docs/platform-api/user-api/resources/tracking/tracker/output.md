@@ -1,6 +1,8 @@
 ---
 title: Digital output
 description: Switch a device's built-in digital outputs, one at a time or all at once.
+tags:
+  - legacy
 ---
 
 # Digital output

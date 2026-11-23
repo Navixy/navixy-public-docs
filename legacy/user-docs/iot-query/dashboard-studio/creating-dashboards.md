@@ -1,6 +1,8 @@
 ---
 title: Creating dashboards
 description: Add visualization panels to a canvas, configure SQL queries, and arrange layouts for real-time fleet monitoring and operational decision-making
+tags:
+  - legacy
 ---
 
 # Creating dashboards

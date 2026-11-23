@@ -1,3 +1,9 @@
+---
+tags:
+  - legacy
+noIndex: true
+---
+
 # Errors
 
 This section provides detailed information on error handling in the Navixy API, including example error responses and descriptions of error codes.

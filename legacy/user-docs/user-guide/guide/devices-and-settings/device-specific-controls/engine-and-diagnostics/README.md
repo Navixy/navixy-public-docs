@@ -2,6 +2,8 @@
 description: >-
   Device-side engine and diagnostics blocks in Navixy: engine state detection,
   OBD data acquisition, and fuel consumption calculation.
+tags:
+  - legacy
 ---
 
 # Engine and diagnostics

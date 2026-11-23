@@ -2,6 +2,8 @@
 description: >-
   Receive alerts when a discrete GPS device input changes state, such as a door
   sensor opening, ignition turning on, or an emergency button being pressed.
+tags:
+  - legacy
 ---
 
 # Input triggering

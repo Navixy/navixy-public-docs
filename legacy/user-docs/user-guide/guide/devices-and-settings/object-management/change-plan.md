@@ -1,5 +1,7 @@
 ---
 description: Switch the service plan for a GPS device in Navixy. Review available plan options and select the one that matches your operational and data needs.
+tags:
+  - legacy
 ---
 
 # Change plan

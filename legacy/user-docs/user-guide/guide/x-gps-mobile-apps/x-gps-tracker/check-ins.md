@@ -1,5 +1,7 @@
 ---
 description: Use Check-ins in X-GPS Tracker to record your location with photos and comments. Report on checkpoint visits, completed work, or field events with timestamps.
+tags:
+  - legacy
 ---
 
 # Check-ins

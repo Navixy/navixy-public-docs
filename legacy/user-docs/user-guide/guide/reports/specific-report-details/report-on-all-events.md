@@ -2,6 +2,8 @@
 description: >-
   Filter platform events by type and date in the Report on all events. Review
   timestamps, locations, and event details in tables, timelines, and summaries.
+tags:
+  - legacy
 ---
 
 # Report on all events

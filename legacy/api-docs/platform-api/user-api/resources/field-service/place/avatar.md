@@ -1,6 +1,8 @@
 ---
 title: Place avatar
 description: The icon shown for a place, assigned from the built-in set or uploaded.
+tags:
+  - legacy
 ---
 
 # Place avatar

@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Changing employee statuses
 
 Employee statuses track the current activity of employees via their tracking devices. Examples include "busy" and "not busy." Each tracker can have a different status list assigned.

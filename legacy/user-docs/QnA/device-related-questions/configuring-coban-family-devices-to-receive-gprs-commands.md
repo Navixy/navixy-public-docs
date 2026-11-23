@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Configuring COBAN Family Devices to Receive GPRS Commands
 
 ### Question

@@ -2,6 +2,8 @@
 description: >-
   Factory-fitted level sensors measure tank fuel through resistance variation
   and transmit data via CAN/OBD-II or analog inputs to the GPS device.
+tags:
+  - legacy
 ---
 
 # OEM fuel level sensors

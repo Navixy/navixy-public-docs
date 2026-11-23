@@ -1,6 +1,8 @@
 ---
 title: Route
 description: Driving routes between points, built by an external routing provider.
+tags:
+  - legacy
 ---
 
 # Route

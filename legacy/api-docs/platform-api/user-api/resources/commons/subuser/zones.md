@@ -1,6 +1,8 @@
 ---
 title: Sub-user geofences
 description: Which of the master account's geofences a sub-user can see.
+tags:
+  - legacy
 ---
 
 # Sub-user geofences

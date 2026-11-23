@@ -1,5 +1,7 @@
 ---
 description: Prevent drivers or unauthorized users from powering off a GPS device by disabling its physical button in Navixy. The device can only be switched off remotely.
+tags:
+  - legacy
 ---
 
 # Switch off button

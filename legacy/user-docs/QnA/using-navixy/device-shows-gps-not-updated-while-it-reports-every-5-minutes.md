@@ -3,6 +3,8 @@ title: Device shows "GPS not updated" while it reports every 5 minutes
 description: >-
   GPS not updated status appears when a device sends heartbeats without
   coordinates or when a time zone mismatch exists on the platform
+tags:
+  - legacy
 ---
 
 # Device shows "GPS not updated" while it reports every 5 minutes

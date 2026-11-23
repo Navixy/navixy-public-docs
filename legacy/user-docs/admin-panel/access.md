@@ -1,5 +1,8 @@
 ---
 description: Manage Admin Panel access for your team. Set up Employee accounts with restricted rights to protect sensitive data while enabling efficient delegation.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Access

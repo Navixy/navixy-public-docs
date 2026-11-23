@@ -1,5 +1,7 @@
 ---
 description: Map the motion ignition input for Suntech ST4315, ST4410, and ST4215 models in Navixy. Shows how physical inputs map to platform input channels.
+tags:
+  - legacy
 ---
 
 # Mapping the ignition motion input for Suntech devices in Navixy

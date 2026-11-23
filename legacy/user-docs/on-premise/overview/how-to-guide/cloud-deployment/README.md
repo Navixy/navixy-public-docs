@@ -1,5 +1,7 @@
 ---
 description: Deploy Navixy on-premise on a cloud virtual server. Guides for AWS, Google Cloud, and Microsoft Azure cover network setup, VM provisioning, and SSH access.
+tags:
+  - legacy
 ---
 
 # Cloud deployment

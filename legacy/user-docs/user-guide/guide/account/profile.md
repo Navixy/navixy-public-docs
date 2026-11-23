@@ -2,6 +2,8 @@
 description: >-
   Customize your Navixy account preferences: set language, time zone,
   measurement system, date format, and manage local file storage settings.
+tags:
+  - legacy
 ---
 
 # Profile

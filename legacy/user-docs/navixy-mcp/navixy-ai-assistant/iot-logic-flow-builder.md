@@ -2,6 +2,8 @@
 description: >-
   Use the Navixy AI Assistant to design an IoT Logic flow through a guided
   conversation, then import the generated file into your account.
+tags:
+  - legacy
 ---
 
 # IoT Logic Flow Builder

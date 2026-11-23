@@ -1,6 +1,8 @@
 ---
 title: Delivery session
 description: A restricted session that lets an external system follow order and task tracking.
+tags:
+  - legacy
 ---
 
 # Delivery session

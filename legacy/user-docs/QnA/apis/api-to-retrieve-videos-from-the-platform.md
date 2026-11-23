@@ -1,5 +1,7 @@
 ---
 description: Get event clips and memory card recordings from Jimi and Howen cameras through the Navixy API, with the video_monitoring right. Each upload uses the camera's mobile data
+tags:
+  - legacy
 ---
 
 # API to retrieve videos from the platform

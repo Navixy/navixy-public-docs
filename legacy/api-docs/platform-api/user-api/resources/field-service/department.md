@@ -1,6 +1,8 @@
 ---
 title: Departments
 description: A group of employees, used to organise them into teams.
+tags:
+  - legacy
 ---
 
 # Departments

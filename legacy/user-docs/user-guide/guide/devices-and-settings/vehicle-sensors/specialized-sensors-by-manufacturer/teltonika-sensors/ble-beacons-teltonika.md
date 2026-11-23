@@ -1,5 +1,7 @@
 ---
 description: Configure Teltonika BLE beacons in Navixy as temperature, magnet detection, or driver ID sensors. Works without wiring, with battery life up to 19 years.
+tags:
+  - legacy
 ---
 
 # BLE beacons (Teltonika)

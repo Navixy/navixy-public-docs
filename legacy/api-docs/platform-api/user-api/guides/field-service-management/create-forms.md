@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Using task forms
 
 Task forms are versatile tools that can be utilized across various business functions such as delivery, sales, inspections, customer surveys, and field reports. The data collected through these forms can be instrumental in enhancing different aspects of your business, focusing on specific areas, or conducting market analysis. Employees can fill out these forms using the X-GPS tracker application during task completion or check-ins.

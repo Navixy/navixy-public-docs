@@ -1,5 +1,7 @@
 ---
 description: Configure the OBD data acquisition block in Navixy to enable PID reports on an OBD device and set the collection interval and upload batch size.
+tags:
+  - legacy
 ---
 
 # OBD data acquisition

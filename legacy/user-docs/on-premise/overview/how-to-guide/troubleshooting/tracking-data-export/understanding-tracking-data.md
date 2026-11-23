@@ -1,5 +1,7 @@
 ---
 description: Interpret exported Navixy tracking data columns including status codes, event IDs, and binary input/output values from the on-premise database.
+tags:
+  - legacy
 ---
 
 # Understanding tracking data

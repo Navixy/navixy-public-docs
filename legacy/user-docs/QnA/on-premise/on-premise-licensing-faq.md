@@ -1,5 +1,7 @@
 ---
 description: Navixy On-Premise license authorizes one platform instance; request additional instances from sales and understand how the license key is validated
+tags:
+  - legacy
 ---
 
 # On-Premise licensing FAQ

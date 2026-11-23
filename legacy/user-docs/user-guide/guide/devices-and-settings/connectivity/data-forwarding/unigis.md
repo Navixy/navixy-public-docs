@@ -2,6 +2,8 @@
 description: >-
   Forward GPS and telematics data from Navixy to the Unigis TMS platform,
   sending one position per minute per vehicle over HTTP.
+tags:
+  - legacy
 ---
 
 # Unigis

@@ -2,6 +2,8 @@
 description: >-
   Analyze engine-on time, idling, and movement with the Engine hours report.
   Understand how values are calculated and which parameters affect the output.
+tags:
+  - legacy
 ---
 
 # Engine hours report

@@ -3,6 +3,8 @@ description: >-
   Create and manage driver profiles in Navixy, assign hardware keys for
   automatic identification, and link drivers to vehicles for accurate fleet
   reporting.
+tags:
+  - legacy
 ---
 
 # Drivers

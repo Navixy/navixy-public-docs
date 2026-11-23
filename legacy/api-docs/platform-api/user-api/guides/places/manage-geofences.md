@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Managing geofences
 
 Geofences are virtual perimeters for real geographic areas. The Navixy platform can monitor whether an object equipped with a GPS tracker crosses a geofence border (either entering or exiting). All such events are logged, enabling users to obtain geofence reports and receive alerts. Furthermore, various rules can be assigned to events related to specific geofences. For instance, you might want to receive speeding alerts only within a certain area, such as a city or along a specific route.

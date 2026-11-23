@@ -2,6 +2,8 @@
 description: >-
   Use WebSockets for real-time GPS data streaming without polling overhead. Use
   get_states only if WebSockets unavailable in your environment
+tags:
+  - legacy
 ---
 
 # WebSockets vs get\_states API for real-time tracking data

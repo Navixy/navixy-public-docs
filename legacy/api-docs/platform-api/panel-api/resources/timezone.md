@@ -3,6 +3,8 @@ title: Timezone
 description: >-
   API call to get information about all supported timezones for the specified
   locale.
+tags:
+  - legacy
 ---
 
 # Timezone

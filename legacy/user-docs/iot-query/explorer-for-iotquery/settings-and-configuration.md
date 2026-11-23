@@ -1,6 +1,8 @@
 ---
 title: Settings and configuration
 description: Manage Explorer for IoT Query data processing categories, system health monitoring, and historical data loading from the settings panel
+tags:
+  - legacy
 ---
 
 # Settings and configuration

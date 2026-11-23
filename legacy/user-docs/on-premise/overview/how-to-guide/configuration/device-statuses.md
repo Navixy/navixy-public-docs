@@ -3,6 +3,8 @@ description: >-
   Adjust online, GPS-not-updated, and offline timeout thresholds for device
   status indicators in Navixy on-premise. Edit the tcp-server configuration
   file.
+tags:
+  - legacy
 ---
 
 # Device statuses

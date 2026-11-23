@@ -1,6 +1,8 @@
 ---
 title: Billing
 description: The account's invoices, payments, and the service plans its devices are on.
+tags:
+  - legacy
 ---
 
 # Billing

@@ -1,6 +1,8 @@
 ---
 title: Login redirect
 description: GET parameters that send a user straight to a chosen section of the login page, in a chosen language.
+tags:
+  - legacy
 ---
 
 # Login redirect

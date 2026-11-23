@@ -1,6 +1,8 @@
 ---
 title: Settings
 description: An account's own preferences for timezone, formats, balance alerts, and file storage.
+tags:
+  - legacy
 ---
 
 # Settings

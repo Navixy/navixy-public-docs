@@ -3,6 +3,8 @@ title: Specifying Teltonika AVL parameters in raw data export
 description: >-
   Specify individual Teltonika AVL parameter IDs, comma-separated lists, or
   hyphen-delimited ranges in the raw data export filter
+tags:
+  - legacy
 ---
 
 # Specifying Teltonika AVL parameters in raw data export

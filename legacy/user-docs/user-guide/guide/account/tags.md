@@ -2,6 +2,8 @@
 description: >-
   Create and assign tags to Places, Employees, Vehicles, and Tasks in Navixy for
   fast search and filtering across the platform.
+tags:
+  - legacy
 ---
 
 # Tags

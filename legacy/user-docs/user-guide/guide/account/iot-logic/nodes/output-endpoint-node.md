@@ -3,6 +3,8 @@ description: >-
   Output Endpoint node transmits processed device data from IoT Logic flows to
   external systems using the Navixy Generic Protocol for standardized data
   delivery.
+tags:
+  - legacy
 ---
 
 # Output Endpoint

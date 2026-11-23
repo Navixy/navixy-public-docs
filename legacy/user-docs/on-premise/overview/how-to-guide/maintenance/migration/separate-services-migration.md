@@ -1,5 +1,7 @@
 ---
 description: Migrate individual Navixy services to a custom directory or separate server. Update configuration files to reconnect the database, web server, and other dependencies.
+tags:
+  - legacy
 ---
 
 # Separate services migration

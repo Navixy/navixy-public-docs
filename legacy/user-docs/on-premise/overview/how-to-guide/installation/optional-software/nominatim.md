@@ -1,5 +1,7 @@
 ---
 description: Install Nominatim for unlimited local geocoding in Navixy on-premise. Review hardware requirements and follow the official OpenStreetMap installation process.
+tags:
+  - legacy
 ---
 
 # Nominatim

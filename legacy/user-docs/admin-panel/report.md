@@ -2,6 +2,9 @@
 description: >-
   Generate platform usage reports for active devices by date range, filter by
   owner, and export to CSV
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Report

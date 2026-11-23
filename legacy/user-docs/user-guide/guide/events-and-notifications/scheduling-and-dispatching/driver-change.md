@@ -1,5 +1,7 @@
 ---
 description: Track driver changes on shared vehicles by detecting when a new hardware key (iButton, RFID, or BLE) is used. Logs and reports each change for accountability.
+tags:
+  - legacy
 ---
 
 # Driver change

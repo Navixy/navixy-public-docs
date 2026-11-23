@@ -1,6 +1,8 @@
 ---
 title: Service task file
 description: Reserve and upload a file to attach to a service task.
+tags:
+  - legacy
 ---
 
 # Service task file

@@ -1,5 +1,7 @@
 ---
 description: Customize Navixy on-premise to meet specific operational needs. Guides cover Nginx, SMS gateways, SSL certificates, maps, device lists, and system limits.
+tags:
+  - legacy
 ---
 
 # Configuration

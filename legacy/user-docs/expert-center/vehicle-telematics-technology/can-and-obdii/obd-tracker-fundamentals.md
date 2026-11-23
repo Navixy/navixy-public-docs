@@ -3,6 +3,8 @@ description: >-
   Plug-and-play OBD devices connect to the vehicle diagnostic port to read
   engine data without extra wiring. Covers data types and fleet management use
   cases.
+tags:
+  - legacy
 ---
 
 # OBD device fundamentals

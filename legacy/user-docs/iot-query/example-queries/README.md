@@ -1,6 +1,9 @@
 ---
 title: SQL Recipe Book
 description: Ready-made SQL templates for frequent fleet management and telematics analyses. Customize and execute queries directly against your data warehouse
+tags:
+  - legacy
+noIndex: true
 ---
 
 # SQL Recipe Book

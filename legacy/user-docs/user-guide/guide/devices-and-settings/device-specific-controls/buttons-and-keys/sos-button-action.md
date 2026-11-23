@@ -1,5 +1,7 @@
 ---
 description: Configure the SOS button action in Navixy so an SOS press sends an alert, or makes a call to a phone number and sends an alert.
+tags:
+  - legacy
 ---
 
 # SOS button action

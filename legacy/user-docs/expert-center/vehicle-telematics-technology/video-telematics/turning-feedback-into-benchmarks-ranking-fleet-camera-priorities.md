@@ -2,6 +2,8 @@
 description: >-
   Driver monitoring, incident detection, and real-time alerts rank as top fleet
   camera priorities. Analysis includes ROI data and cost-benefit breakdowns.
+tags:
+  - legacy
 ---
 
 # Turning feedback into benchmarks: ranking fleet camera priorities

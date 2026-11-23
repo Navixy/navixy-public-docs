@@ -1,5 +1,7 @@
 ---
 description: Get notified when a vehicle's car alarm triggers. Detected by the GPS device's connected input, the alert is sent immediately to your monitoring dashboard.
+tags:
+  - legacy
 ---
 
 # Car alarm

@@ -2,6 +2,8 @@
 description: >-
   Export geofences from Wialon as KML or KMZ files and import them into Navixy.
   Covers polygon and circle geofence handling with custom radius configuration.
+tags:
+  - legacy
 ---
 
 # Geofences migration from Wialon

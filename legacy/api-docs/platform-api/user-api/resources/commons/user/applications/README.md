@@ -1,6 +1,8 @@
 ---
 title: User applications
 description: Third-party applications embedded into the Navixy platform interface, and how to manage them through the API.
+tags:
+  - legacy
 ---
 
 # User applications

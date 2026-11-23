@@ -3,6 +3,8 @@ description: >-
   Create and manage places of interest for key locations like offices and
   warehouses. Import them from Excel and use them in route planning or task
   assignments.
+tags:
+  - legacy
 ---
 
 # Places (POIs)

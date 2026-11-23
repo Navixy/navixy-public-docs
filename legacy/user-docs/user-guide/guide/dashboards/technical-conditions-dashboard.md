@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Technical conditions dashboard
 
 **Conditions** is the third tab of the Dashboards app, and it answers "how well is the fleet's hardware performing, and what needs attention?" (the [Live status dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?" and the [Trips dashboard](trips-dashboard.md) covers "what did the fleet do over the past week?"). It pulls GPS quality, power supply, mileage, fault codes, engine RPM, and safety events into a single view. That way, you can spot deteriorating devices and vehicles before they cause downtime.

@@ -1,6 +1,8 @@
 ---
 title: Connection setup
 description: Establish a PostgreSQL connection to IoT Query, configure credentials, understand the data schema architecture, and apply connection security settings
+tags:
+  - legacy
 ---
 
 # Connection setup

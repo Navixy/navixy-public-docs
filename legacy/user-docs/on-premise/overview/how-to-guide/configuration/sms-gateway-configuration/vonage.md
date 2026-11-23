@@ -1,5 +1,7 @@
 ---
 description: Configure the Vonage SMS gateway in Navixy on-premise for IoT-compatible messaging. Add API key and secret credentials using the JSON configuration example.
+tags:
+  - legacy
 ---
 
 # Vonage

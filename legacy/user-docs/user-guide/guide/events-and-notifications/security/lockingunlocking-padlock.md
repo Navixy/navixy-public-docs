@@ -1,5 +1,7 @@
 ---
 description: Receive real-time notifications when a GPS-enabled smart lock is locked or unlocked. Monitor secure areas and cargo containers for all lock interactions.
+tags:
+  - legacy
 ---
 
 # Locking and unlocking padlock

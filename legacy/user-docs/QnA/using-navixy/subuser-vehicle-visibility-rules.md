@@ -3,6 +3,8 @@ title: Subuser vehicle visibility rules
 description: >-
   Subusers see only tracked vehicles assigned within their account and
   unassigned vehicles; they do not have access to the full fleet view
+tags:
+  - legacy
 ---
 
 # Subuser vehicle visibility rules

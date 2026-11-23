@@ -1,5 +1,7 @@
 ---
 description: Assign tasks to mobile employees, track their completion on a map or timeline, and analyze field performance with the Navixy Field Service module.
+tags:
+  - legacy
 ---
 
 # Field service

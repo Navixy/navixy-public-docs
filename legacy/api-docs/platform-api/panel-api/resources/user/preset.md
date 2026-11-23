@@ -1,6 +1,8 @@
 ---
 title: Menu preset
 description: API calls to work with user menu presets.
+tags:
+  - legacy
 ---
 
 # Menu preset

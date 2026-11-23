@@ -3,6 +3,8 @@ description: >-
   Evaluate fuel sensor data quality and calibration accuracy in Navixy.
   Identifies reading anomalies and suggests improvements for measurement
   reliability.
+tags:
+  - legacy
 ---
 
 # Fuel sensor readings analysis and assessment

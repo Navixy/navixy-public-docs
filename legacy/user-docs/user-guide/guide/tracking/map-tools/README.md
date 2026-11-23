@@ -1,5 +1,7 @@
 ---
 description: Access map search, geofences, places of interest, custom layers, route planning, and distance measuring tools from the Tracking module's map toolbar.
+tags:
+  - legacy
 ---
 
 # Map tools

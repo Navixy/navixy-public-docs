@@ -1,5 +1,7 @@
 ---
 description: Technical guides on dashcam hardware, codec selection, and video quality benchmarking for evaluating and deploying fleet camera systems.
+tags:
+  - legacy
 ---
 
 # Video telematics 101

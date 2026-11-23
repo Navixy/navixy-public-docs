@@ -2,6 +2,8 @@
 description: >-
   Bind external Bluetooth channels on the device side in Navixy so the platform
   reads their data. Covers the Bluetooth and Bluetooth sensors blocks.
+tags:
+  - legacy
 ---
 
 # External sensors

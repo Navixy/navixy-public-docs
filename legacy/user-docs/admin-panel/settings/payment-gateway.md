@@ -2,6 +2,8 @@
 description: >-
   Enable online payments via Stripe (webhooks and API keys) or connect a custom
   gateway using a payment URL
+tags:
+  - legacy
 ---
 
 # Payment gateway

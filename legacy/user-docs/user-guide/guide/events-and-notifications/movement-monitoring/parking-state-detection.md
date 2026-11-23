@@ -1,5 +1,7 @@
 ---
 description: Receive notifications when a vehicle starts or ends a parking period. Monitor off-duty vehicle use or bind the rule to geofences to track dwell time.
+tags:
+  - legacy
 ---
 
 # Parking state detection

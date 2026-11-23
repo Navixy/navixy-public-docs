@@ -2,6 +2,8 @@
 description: >-
   BLE and UHF sensors transmit TPMS, temperature, and environmental data to GPS
   devices using GATT/ATT protocols for wireless fleet monitoring.
+tags:
+  - legacy
 ---
 
 # Wireless telematics sensors

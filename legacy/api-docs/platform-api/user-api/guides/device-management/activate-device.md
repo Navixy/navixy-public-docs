@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Activate device
 
 This guide offers detailed, step-by-step instructions on using the Navixy API to activate GPS tracking devices and X-GPS Mobile Apps on the Navixy platform.

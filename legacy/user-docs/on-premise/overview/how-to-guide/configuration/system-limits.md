@@ -1,5 +1,7 @@
 ---
 description: Adjust report and alert device limits in Navixy on-premise to prevent server overload. Edit configuration files on Linux or Windows to set date range caps.
+tags:
+  - legacy
 ---
 
 # System limits

@@ -1,5 +1,7 @@
 ---
 description: Create an IoT Logic flow with an embedded MQTT output node in a single API request. Includes the full request body, curl example, and response structure.
+tags:
+  - legacy
 ---
 
 # Sending device data to an external system

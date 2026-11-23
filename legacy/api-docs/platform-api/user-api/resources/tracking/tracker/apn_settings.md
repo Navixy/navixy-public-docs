@@ -1,6 +1,8 @@
 ---
 title: APN settings by tracker
 description: Look up the mobile-internet settings for a registered tracker, by its ID rather than its phone number.
+tags:
+  - legacy
 ---
 
 # APN settings by tracker

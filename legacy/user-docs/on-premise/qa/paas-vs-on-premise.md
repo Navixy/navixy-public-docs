@@ -3,6 +3,8 @@ description: >-
   Compare Navixy PaaS and on-premise deployment across 18 criteria including
   updates, hosting, security, support, video telematics, and data warehouse
   capabilities.
+tags:
+  - legacy
 ---
 
 # PaaS vs. On-Premise

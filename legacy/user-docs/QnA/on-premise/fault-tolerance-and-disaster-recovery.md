@@ -1,6 +1,8 @@
 ---
 title: Fault tolerance and disaster recovery
 description: Back up and replicate the database to separate servers. Maintain a standby application copy and DB replica in remote infrastructure
+tags:
+  - legacy
 ---
 
 # Fault tolerance and disaster recovery

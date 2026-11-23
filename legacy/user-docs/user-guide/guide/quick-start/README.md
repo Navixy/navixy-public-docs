@@ -1,5 +1,7 @@
 ---
 description: Get started with Navixy by creating your account, activating a GPS device or the X-GPS Tracker app, and connecting with your service provider.
+tags:
+  - legacy
 ---
 
 # Quick start

@@ -1,5 +1,7 @@
 ---
 description: Get notified when a GPS device goes offline beyond your configured timeout. Covers the Offline time setting, reset behavior, and supported device combinations.
+tags:
+  - legacy
 ---
 
 # Device lost connection

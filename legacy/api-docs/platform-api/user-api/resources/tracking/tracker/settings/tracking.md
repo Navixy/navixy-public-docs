@@ -1,6 +1,8 @@
 ---
 title: Tracking mode
 description: How often and under what conditions a device transmits its data.
+tags:
+  - legacy
 ---
 
 # Tracking mode

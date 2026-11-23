@@ -1,3 +1,9 @@
+---
+tags:
+  - legacy
+noIndex: true
+---
+
 # User guide
 
 Welcome to the Navixy User Guide, your comprehensive resource for mastering our cloud telematics platform. Navixy is a robust solution that simplifies the development and scaling of high-performance GPS and telematics applications. It offers a rich set of features including real-time asset tracking, fleet management, video telematics, and field service management, all accessible through our intuitive web interface and dedicated mobile apps.

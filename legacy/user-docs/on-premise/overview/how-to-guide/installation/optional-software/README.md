@@ -1,5 +1,7 @@
 ---
 description: "Extend Navixy on-premise with optional GIS tools: map tile servers, Nominatim geocoding, and OSRM routing. Each runs locally to reduce external API dependency."
+tags:
+  - legacy
 ---
 
 # Optional software

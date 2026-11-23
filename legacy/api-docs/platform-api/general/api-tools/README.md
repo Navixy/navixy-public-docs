@@ -1,5 +1,8 @@
 ---
 description: API automation tools for the Navixy platform.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # API automation tools

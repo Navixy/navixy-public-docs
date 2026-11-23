@@ -1,6 +1,8 @@
 ---
 title: Creating reports
 description: Generate exportable reports with coordinated data tables, charts, and location maps from a single SQL query. Export to HTML, Excel, or PDF
+tags:
+  - legacy
 ---
 
 # Creating reports

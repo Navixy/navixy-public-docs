@@ -3,6 +3,8 @@ title: How to match icon colors with group colors
 description: >-
   Enable the Use group color option in the Change Icon menu to synchronize
   object icon color with the assigned group color automatically
+tags:
+  - legacy
 ---
 
 # How to match icon colors with group colors

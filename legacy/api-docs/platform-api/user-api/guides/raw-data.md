@@ -3,6 +3,8 @@ title: Requesting Raw IoT Data
 description: >-
   How to request raw tracker data from Navixy Raw IoT Data API and typical use
   cases.
+tags:
+  - legacy
 ---
 
 # Requesting Raw IoT Data

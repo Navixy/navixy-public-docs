@@ -1,5 +1,7 @@
 ---
 description: X-GPS Tracker and X-GPS Monitor mobile apps provide real-time GPS location tracking for vehicles and personal use with an accessible interface.
+tags:
+  - legacy
 ---
 
 # Mobile apps

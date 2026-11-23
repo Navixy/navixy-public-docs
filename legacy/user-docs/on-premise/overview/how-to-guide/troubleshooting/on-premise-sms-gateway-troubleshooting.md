@@ -1,5 +1,7 @@
 ---
 description: Troubleshoot SMS gateway failures on Navixy on-premise. Check activation status, verify service operation, and resolve connection and authentication errors.
+tags:
+  - legacy
 ---
 
 # On-Premise SMS gateway troubleshooting

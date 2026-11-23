@@ -3,6 +3,8 @@ description: >-
   Manage GPS device configuration in Navixy through settings blocks for
   tracking, sensors, connectivity, driver safety, tachograph, and hardware
   controls.
+tags:
+  - legacy
 ---
 
 # Devices and settings

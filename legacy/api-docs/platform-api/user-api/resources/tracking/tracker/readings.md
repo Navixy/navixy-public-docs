@@ -1,6 +1,8 @@
 ---
 title: Sensor readings
 description: The last value of every sensor, state field and counter on a tracker, in one call.
+tags:
+  - legacy
 ---
 
 # Sensor readings

@@ -2,6 +2,8 @@
 description: >-
   Export raw IoT device data to CSV from Navixy with customizable parameters,
   timezone adjustment, and date range selection for analytics and diagnostics.
+tags:
+  - legacy
 ---
 
 # Save IoT data to CSV file

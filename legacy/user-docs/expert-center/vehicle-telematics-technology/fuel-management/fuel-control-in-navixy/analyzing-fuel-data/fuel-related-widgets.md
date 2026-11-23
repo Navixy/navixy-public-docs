@@ -2,6 +2,8 @@
 description: >-
   Device info panel widgets in Navixy display CAN/OBD2 fuel data including
   consumption rates, tank levels, and engine fault codes.
+tags:
+  - legacy
 ---
 
 # Fuel related widgets

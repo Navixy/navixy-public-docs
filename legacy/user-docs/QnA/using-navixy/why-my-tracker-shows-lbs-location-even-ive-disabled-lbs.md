@@ -3,6 +3,8 @@ title: Why does my tracker show LBS location even though I've disabled LBS?
 description: >-
   Old LBS location cached before the setting was disabled; the tracker must send
   new valid GPS points to replace the stored LBS data
+tags:
+  - legacy
 ---
 
 # Why does my tracker show LBS location even though I've disabled LBS?

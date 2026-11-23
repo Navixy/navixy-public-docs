@@ -2,6 +2,8 @@
 description: >-
   X-GPS Monitor displays real-time fleet locations, telemetry data, and track
   history on your mobile device. Supports task management and object monitoring.
+tags:
+  - legacy
 ---
 
 # X-GPS Monitor

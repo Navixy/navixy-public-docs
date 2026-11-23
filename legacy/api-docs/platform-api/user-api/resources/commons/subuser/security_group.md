@@ -1,6 +1,8 @@
 ---
 title: Sub-user security group
 description: Named sets of rights assigned to sub-users, deciding what each of them may change.
+tags:
+  - legacy
 ---
 
 # Sub-user security group

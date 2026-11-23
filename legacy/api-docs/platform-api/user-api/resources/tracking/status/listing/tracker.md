@@ -1,6 +1,8 @@
 ---
 title: Tracker's working status list
 description: Assign a working status list to a tracker, or remove the assignment.
+tags:
+  - legacy
 ---
 
 # Tracker's working status list

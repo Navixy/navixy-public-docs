@@ -3,6 +3,8 @@ title: Configuring sensors on Teltonika trackers
 description: >-
   Add measurement sensors to Teltonika devices using the configurator tool,
   parameter settings, and AVL IO mapping. Covers FMB920 sensor setup in Navixy
+tags:
+  - legacy
 ---
 
 # Configuring sensors on Teltonika trackers

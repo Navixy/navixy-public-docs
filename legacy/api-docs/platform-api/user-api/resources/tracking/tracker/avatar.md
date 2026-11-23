@@ -1,6 +1,8 @@
 ---
 title: Avatar
 description: Upload the image shown for a tracker in the interface.
+tags:
+  - legacy
 ---
 
 # Avatar

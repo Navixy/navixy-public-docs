@@ -2,6 +2,8 @@
 description: >-
   Evaluate dashcam reliability by benchmarking driver monitoring sensitivity,
   HDR performance, and low-light handling under real fleet conditions.
+tags:
+  - legacy
 ---
 
 # What makes dashcam video reliable for fleets? A benchmarking guide

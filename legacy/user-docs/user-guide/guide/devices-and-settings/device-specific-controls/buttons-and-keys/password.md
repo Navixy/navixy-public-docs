@@ -1,5 +1,7 @@
 ---
 description: Issue a time-limited unlock code for a GPS device in Navixy with the Password block. The code expires after the duration you set.
+tags:
+  - legacy
 ---
 
 # Password

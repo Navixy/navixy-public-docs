@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Using rules
 
 Rules are used to set up conditions according to which the system logs events and sends notifications to users.

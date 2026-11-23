@@ -2,6 +2,8 @@
 description: >-
   Choose which objects, POI, and geofences each user of your Navixy account
   can see. Give every team or customer access to its own vehicles only.
+tags:
+  - legacy
 ---
 
 # Restricting access

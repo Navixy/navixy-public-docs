@@ -1,5 +1,7 @@
 ---
 description: Build IoT Logic flows from the JSON schema template. Includes the full flow object model with property names, types, and constraints for API-based creation.
+tags:
+  - legacy
 ---
 
 # JSON-schema template

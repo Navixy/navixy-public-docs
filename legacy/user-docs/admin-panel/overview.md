@@ -2,6 +2,9 @@
 description: >-
   Monitor your account health in Admin Panel with six KPI cards for
   active trackers, users, and resellers, plus six-month growth trend charts
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Overview

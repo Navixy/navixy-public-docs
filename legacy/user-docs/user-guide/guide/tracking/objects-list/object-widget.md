@@ -3,6 +3,8 @@ description: >-
   View GPS location, sensor readings, OBD2 data, engine hours, and driver
   details for any device. Pin data blocks as Favorites to show them in the
   Objects list.
+tags:
+  - legacy
 ---
 
 # Object widget

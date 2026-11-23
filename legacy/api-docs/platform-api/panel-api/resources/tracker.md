@@ -1,6 +1,8 @@
 ---
 title: Tracker
 description: API calls to interact with trackers in the admin panel.
+tags:
+  - legacy
 ---
 
 # Tracker

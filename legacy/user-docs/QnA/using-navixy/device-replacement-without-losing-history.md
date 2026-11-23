@@ -1,6 +1,8 @@
 ---
 title: Device replacement without losing history
 description: "Use Replace device in Devices and settings to keep the configuration, settings and history of the old device."
+tags:
+  - legacy
 ---
 
 # Device replacement without losing history

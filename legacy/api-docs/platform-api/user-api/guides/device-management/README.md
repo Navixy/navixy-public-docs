@@ -1,6 +1,8 @@
 ---
 title: Device management
 description: Registering devices, configuring them remotely, and tracking things that carry no device of their own.
+tags:
+  - legacy
 ---
 
 # Device management

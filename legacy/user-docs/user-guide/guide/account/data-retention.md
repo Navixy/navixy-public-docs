@@ -2,6 +2,8 @@
 description: >-
   How long Navixy keeps your tracking history, events, and video recordings, and
   how far back you can request a recording from a camera.
+tags:
+  - legacy
 ---
 
 # Data retention

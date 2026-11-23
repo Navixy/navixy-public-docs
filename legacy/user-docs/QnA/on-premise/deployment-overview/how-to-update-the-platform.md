@@ -1,6 +1,8 @@
 ---
 title: How to update the platform?
 description: Run automated update scripts on Linux or perform manual updates on Windows. Back up database before starting to enable rollback if needed
+tags:
+  - legacy
 ---
 
 # How to update the platform?

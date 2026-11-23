@@ -2,6 +2,8 @@
 description: >-
   Create, edit, and delete attributes in the Initiate Attribute node. Use
   autofill to build formula expressions quickly from available telemetry fields.
+tags:
+  - legacy
 ---
 
 # Managing attributes

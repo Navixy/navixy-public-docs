@@ -1,5 +1,7 @@
 ---
 description: Locate and analyze Navixy on-premise backend service logs for API-server, SMS-server, and TCP-server. Use command-line tools to search and filter log entries.
+tags:
+  - legacy
 ---
 
 # Working with logs

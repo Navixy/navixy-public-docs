@@ -1,6 +1,8 @@
 ---
 title: Delete plans
 description: "Delete billing plans by contacting Support with the plan name or ID, ensuring the plan has no associated devices"
+tags:
+  - legacy
 ---
 
 # Delete plans

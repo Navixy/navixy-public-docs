@@ -1,5 +1,7 @@
 ---
 description: Access trip and event history for tracked objects. Review past routes with mileage and stops, or analyze geofence breaches, speeding, and sensor alerts.
+tags:
+  - legacy
 ---
 
 # History view

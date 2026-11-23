@@ -1,5 +1,7 @@
 ---
 description: Navixy stores fuel sensor readings with flexible reconstruction options. Reports, widgets, and alerts help monitor consumption and detect anomalies.
+tags:
+  - legacy
 ---
 
 # Analyzing fuel data

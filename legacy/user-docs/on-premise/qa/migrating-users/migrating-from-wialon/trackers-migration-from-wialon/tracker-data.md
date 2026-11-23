@@ -3,6 +3,8 @@ description: >-
   Transfer Wialon tracker data history and sensor calibration to Navixy using
   the Wialon Retranslator tool. Configure retranslation and handle trip history
   import.
+tags:
+  - legacy
 ---
 
 # Tracker data

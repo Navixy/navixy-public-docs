@@ -2,6 +2,8 @@
 description: >-
   Integrate MettaX dashcam video telematics with Navixy to use third-party video
   features alongside Navixy's GPS tracking and telematics functionality.
+tags:
+  - legacy
 ---
 
 # MettaX

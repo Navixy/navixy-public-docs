@@ -1,6 +1,8 @@
 ---
 title: Historical reports
 description: Analyze sensor, activity, driving behavior, shifts, mileage, trips, and downtime patterns across defined time periods for fleet optimization insights
+tags:
+  - legacy
 ---
 
 # Historical reports

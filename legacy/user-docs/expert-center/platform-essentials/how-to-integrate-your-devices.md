@@ -1,5 +1,8 @@
 ---
 description: Connect GPS and IoT devices of any brand or protocol to Navixy using the Navixy Generic Protocol. Compatible with Teltonika, Queclink, and custom sensors.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # How to integrate your devices

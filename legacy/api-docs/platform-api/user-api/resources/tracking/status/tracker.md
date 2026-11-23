@@ -1,6 +1,8 @@
 ---
 title: Tracker's working status
 description: Read and set the working status a particular tracker is currently in.
+tags:
+  - legacy
 ---
 
 # Tracker's working status

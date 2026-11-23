@@ -1,5 +1,7 @@
 ---
 description: Manage credentials for Navixy on-premise servers. Covers password policies, admin panel access, SSH key authentication, and support team access requirements.
+tags:
+  - legacy
 ---
 
 # Server credentials

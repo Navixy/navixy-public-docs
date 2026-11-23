@@ -1,6 +1,8 @@
 ---
 title: Incomplete track or missing points
 description: "Sparse tracks usually come from missing GPS points, filtered invalid coordinates, or parking and trip settings."
+tags:
+  - legacy
 ---
 
 # Incomplete track or missing points

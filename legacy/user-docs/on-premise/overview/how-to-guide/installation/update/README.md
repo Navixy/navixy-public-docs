@@ -1,5 +1,7 @@
 ---
 description: Update Navixy on-premise to the latest version on Linux or Windows. Covers update frequency, delivery methods, and links to OS-specific update procedures.
+tags:
+  - legacy
 ---
 
 # Update

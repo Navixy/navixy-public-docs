@@ -2,6 +2,8 @@
 description: >-
   Configure ADAS, DMS, and input-triggered event alerts on Howen MDVR devices
   using state field value rules with a full event code table.
+tags:
+  - legacy
 ---
 
 # Event configuration on Howen MDVR

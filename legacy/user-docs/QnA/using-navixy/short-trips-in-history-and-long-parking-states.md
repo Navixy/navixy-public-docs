@@ -3,6 +3,8 @@ title: Short trips in history and long parking states
 description: >-
   Disable Consider ignition state in Parking Detection to prevent inconsistent
   ignition signal from fragmenting trips into short segments
+tags:
+  - legacy
 ---
 
 # Short trips in history and long parking states

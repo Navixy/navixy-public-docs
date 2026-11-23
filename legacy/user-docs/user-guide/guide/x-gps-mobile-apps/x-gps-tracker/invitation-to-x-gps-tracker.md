@@ -3,6 +3,8 @@ description: >-
   Send an invitation to install X-GPS Tracker on an employee's iOS or Android
   device, turning their smartphone into a GPS tracker linked to your Navixy
   account.
+tags:
+  - legacy
 ---
 
 # Invitation to X-GPS Tracker

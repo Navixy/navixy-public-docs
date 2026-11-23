@@ -2,6 +2,8 @@
 description: >-
   Retransmit GPS, sensor, and event data to Wialon-based monitoring servers or
   to a second Navixy server using the Gurtam Wialon IPS protocol over TCP.
+tags:
+  - legacy
 ---
 
 # Wialon IPS

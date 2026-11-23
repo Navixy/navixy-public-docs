@@ -2,6 +2,9 @@
 description: >-
   Connect Navixy MCP Server's User API to Claude Desktop in about five minutes
   and ask your first question about your fleet.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Getting started

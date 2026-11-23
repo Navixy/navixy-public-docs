@@ -1,6 +1,8 @@
 ---
 title: Form
 description: Structured information collected from a field employee when they complete a task or check in.
+tags:
+  - legacy
 ---
 
 # Form

@@ -1,5 +1,7 @@
 ---
 description: Assign phone numbers to the device's hardware buttons in Navixy so the device places a voice call to the right contact when a button is pressed.
+tags:
+  - legacy
 ---
 
 # Call buttons

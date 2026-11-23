@@ -1,6 +1,8 @@
 ---
 title: Real-time dashboards
 description: "Monitor fleet operations in real time with four pre-built dashboards: object status, asset intelligence, sensor readings, and geozone activity"
+tags:
+  - legacy
 ---
 
 # Real-time dashboards

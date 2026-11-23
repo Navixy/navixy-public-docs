@@ -1,6 +1,8 @@
 ---
 title: Employee avatar
 description: The icon shown for an employee, assigned from the built-in set or uploaded.
+tags:
+  - legacy
 ---
 
 # Employee avatar

@@ -2,6 +2,8 @@
 description: >-
   Permanently delete a user account in Admin Panel, removing all associated
   devices, sub-users, and historical data. This action cannot be undone.
+tags:
+  - legacy
 ---
 
 # Deleting users

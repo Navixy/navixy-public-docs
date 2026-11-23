@@ -3,6 +3,8 @@ description: >-
   Monitor all connected GPS devices in real time, filter by movement status,
   sort by name or distance, and access trip history or alert rules for any
   object.
+tags:
+  - legacy
 ---
 
 # Objects list

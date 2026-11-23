@@ -3,6 +3,8 @@ description: >-
   Diagnose IoT device data flows in real time using the Data Stream Analyzer.
   Validate attribute values, check data integrity, and access TCP dumps and node
   logs.
+tags:
+  - legacy
 ---
 
 # Data Stream Analyzer

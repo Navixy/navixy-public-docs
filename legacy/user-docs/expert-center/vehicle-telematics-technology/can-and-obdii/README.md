@@ -1,5 +1,7 @@
 ---
 description: GPS devices read engine data and fault codes via CAN bus and OBD-II. Covers DTC decoding, communication protocols, and OBD device fundamentals.
+tags:
+  - legacy
 ---
 
 # CAN and OBDII

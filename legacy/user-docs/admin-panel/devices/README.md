@@ -2,6 +2,9 @@
 description: >-
   Manage GPS trackers in Admin Panel: search, filter, and view details for each
   device. Edit, clone, delete, or change pricing plans from the tracker list.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Trackers

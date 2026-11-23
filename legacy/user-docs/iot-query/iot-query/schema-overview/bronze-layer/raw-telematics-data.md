@@ -1,6 +1,8 @@
 ---
 description: >-
   raw_telematics_data holds tracking points, inputs, states, and events sent by devices. Browse the schema definition and key table descriptions for SQL analysis
+tags:
+  - legacy
 ---
 
 # `raw_telematics_data` schema

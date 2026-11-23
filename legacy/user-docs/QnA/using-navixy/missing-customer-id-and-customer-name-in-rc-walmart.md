@@ -3,6 +3,8 @@ title: Missing Customer ID and Customer Name in RC-Walmart
 description: >-
   Configure the External ID field with the full Recurso Confiable customer
   format to include Customer ID and Customer Name in RC-Walmart exports
+tags:
+  - legacy
 ---
 
 # Missing Customer ID and Customer Name in RC-Walmart

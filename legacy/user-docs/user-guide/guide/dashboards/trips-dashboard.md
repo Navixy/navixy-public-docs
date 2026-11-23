@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Trips dashboard
 
 **Trips** is the second tab of the Dashboards app, and it answers "what did the fleet do over the past week?" (the [Live status dashboard](fleet-live-status-dashboard.md) covers "what is the fleet doing right now?"). It pulls completed trips together into a single view of utilization, distance, duration, and per-object performance. That way, you can spot under-used vehicles, over-worked ones, and unusual driving behavior without building a report.

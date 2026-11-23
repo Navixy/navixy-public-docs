@@ -3,6 +3,8 @@ title: Howen Device ID Configuration - Navixy Activation
 description: >-
   Configure Device ID in Howen iTools via System > Terminal, then verify it
   matches the activation ID requested in Navixy. Not related to IMEI or S/N
+tags:
+  - legacy
 ---
 
 # Howen Device ID Configuration - Navixy Activation

@@ -1,5 +1,7 @@
 ---
 description: Configure external Bluetooth sensors on a GPS device in Navixy by MAC address and type, so the platform interprets their values correctly.
+tags:
+  - legacy
 ---
 
 # Bluetooth sensors

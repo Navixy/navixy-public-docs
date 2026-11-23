@@ -1,6 +1,8 @@
 ---
 title: Subscription
 description: Recurring payments taken through 2Checkout, listed and cancelled.
+tags:
+  - legacy
 ---
 
 # Subscription

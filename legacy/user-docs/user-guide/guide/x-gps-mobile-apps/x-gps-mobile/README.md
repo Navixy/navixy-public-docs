@@ -2,6 +2,8 @@
 description: >-
   X-GPS Mobile is a fleet monitoring app for real-time asset tracking. Monitor
   GPS device locations, sensor readings, and object status from iOS or Android.
+tags:
+  - legacy
 ---
 
 # X-GPS Mobile

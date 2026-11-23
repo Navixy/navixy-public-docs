@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Managing vehicles and service works
 
 In the Navixy API, the vehicle object stores comprehensive information about a vehicle, such as its VIN, chassis number, license plate, type, dimensions, load capacity, fuel consumption, insurance details, and more. You can link a vehicle to a tracker to monitor various parameters like fuel consumption per trip and schedule timely maintenance based on mileage or engine hours.

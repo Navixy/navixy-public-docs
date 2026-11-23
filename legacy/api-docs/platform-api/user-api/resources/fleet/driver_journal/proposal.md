@@ -1,6 +1,8 @@
 ---
 title: Trip proposals
 description: The raw trips over a period that a driver journal entry can be created from.
+tags:
+  - legacy
 ---
 
 # Trip proposals

@@ -1,6 +1,8 @@
 ---
 title: Base
 description: A health check that does nothing and reports success.
+tags:
+  - legacy
 ---
 
 # Base

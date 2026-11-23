@@ -2,6 +2,8 @@
 description: >-
   Integrate Howen video telematics with Navixy to combine AI-enhanced video
   surveillance, facial recognition, and driver monitoring with fleet management.
+tags:
+  - legacy
 ---
 
 # Howen

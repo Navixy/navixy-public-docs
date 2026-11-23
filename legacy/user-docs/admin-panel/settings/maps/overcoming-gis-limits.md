@@ -1,5 +1,7 @@
 ---
 description: Avoid GIS API rate limits by using Premium GIS, enabling paid Google services, or self-hosting Nominatim
+tags:
+  - legacy
 ---
 
 # Overcoming GIS limits

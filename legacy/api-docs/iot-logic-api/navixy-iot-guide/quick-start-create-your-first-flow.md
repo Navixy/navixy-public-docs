@@ -1,5 +1,7 @@
 ---
 description: Create your first IoT Logic flow with a single API request. Builds a four-node flow that detects a speed violation, sends a device command, and forwards data to Navixy.
+tags:
+  - legacy
 ---
 
 # Quick start: create your first flow

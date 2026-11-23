@@ -1,5 +1,7 @@
 ---
 description: Diagnose and resolve issues in Navixy on-premise deployments. Covers system architecture, service components, and guides for web interface, devices, reports, and logs.
+tags:
+  - legacy
 ---
 
 # Troubleshooting

@@ -3,6 +3,9 @@ title: Navixy Developer Documentation
 description: >-
   The Navixy Platform API and Admin Panel API: what each one is for, how to tell
   which you need, and where to start.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy Developer Documentation

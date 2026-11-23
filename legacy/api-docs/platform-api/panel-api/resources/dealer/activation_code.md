@@ -1,6 +1,8 @@
 ---
 title: Activation code
 description: API calls for interacting with activation codes used for device registration.
+tags:
+  - legacy
 ---
 
 # Activation code

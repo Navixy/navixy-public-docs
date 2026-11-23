@@ -2,6 +2,8 @@
 description: >-
   Download parsed telemetry data from any GPS device as a CSV file. Useful for
   device diagnostics, data analysis, and integration with AI or analytics tools.
+tags:
+  - legacy
 ---
 
 # Raw data

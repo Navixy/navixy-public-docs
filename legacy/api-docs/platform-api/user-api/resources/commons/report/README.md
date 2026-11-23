@@ -1,6 +1,8 @@
 ---
 title: Report
 description: Generating tracker reports and delivering them on a schedule.
+tags:
+  - legacy
 ---
 
 # Report

@@ -1,6 +1,8 @@
 ---
 title: Form templates
 description: The reusable definition a single-use form is created from.
+tags:
+  - legacy
 ---
 
 # Form templates

@@ -1,6 +1,8 @@
 ---
 title: Common queries
 description: Sample SQL patterns for object information, device locations, vehicle activity, driver assignments, sensor data, and geospatial zone analysis
+tags:
+  - legacy
 ---
 
 # Common queries

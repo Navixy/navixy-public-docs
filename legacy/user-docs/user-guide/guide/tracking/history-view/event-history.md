@@ -3,6 +3,8 @@ description: >-
   View a detailed log of fleet events by object and date range. Filter by type,
   review timestamps and locations, and play back event-triggered video
   recordings.
+tags:
+  - legacy
 ---
 
 # Event history

@@ -1,6 +1,8 @@
 ---
 title: Event type
 description: Every event type the history can contain, with localized descriptions.
+tags:
+  - legacy
 ---
 
 # Event type

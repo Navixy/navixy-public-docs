@@ -1,6 +1,8 @@
 ---
 title: Task history
 description: The record of how a task's fields and state changed over its life.
+tags:
+  - legacy
 ---
 
 # Task history

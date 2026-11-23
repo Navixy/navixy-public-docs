@@ -3,6 +3,8 @@ description: >-
   Analyze measurement and virtual sensor readings with the Measuring sensors
   report. Configure parameters and review sensor graphs, statistics, and data
   tables.
+tags:
+  - legacy
 ---
 
 # Measuring sensors report

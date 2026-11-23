@@ -2,6 +2,8 @@
 description: >-
   Enable the device to treat its current position as a parking reference and
   report to Navixy when the vehicle leaves the set radius after ignition off.
+tags:
+  - legacy
 ---
 
 # Unauthorized movement

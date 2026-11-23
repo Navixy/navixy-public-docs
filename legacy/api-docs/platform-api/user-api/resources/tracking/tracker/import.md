@@ -1,6 +1,8 @@
 ---
 title: Tracker import
 description: Activate many devices of one model at once from a spreadsheet, through a background import process.
+tags:
+  - legacy
 ---
 
 # Tracker import

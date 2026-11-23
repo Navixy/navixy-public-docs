@@ -1,6 +1,8 @@
 ---
 title: Report schedule
 description: Deliver a report to a user's mailbox on a repeating schedule.
+tags:
+  - legacy
 ---
 
 # Report schedule

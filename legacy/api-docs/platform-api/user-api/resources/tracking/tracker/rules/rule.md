@@ -1,6 +1,8 @@
 ---
 title: Rule
 description: Conditions that make the Navixy platform log an event and notify someone when a tracker meets them.
+tags:
+  - legacy
 ---
 
 # Rule

@@ -1,5 +1,7 @@
 ---
 title: Fuel data resampling
+tags:
+  - legacy
 ---
 
 # Fuel data resampling

@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Sending commands to a GPS tracker via IP protocol (OTA)
 
 Most modern GPS tracking devices can be reconfigured remotely using IP commands sent over-the-air (OTA). With the Navixy API, you can easily change device configurations or develop applications that allow users to send commands directly from the UI. These commands can also be integrated into automation rules, status changes, or parameter triggers, offering extensive flexibility and customization for managing your telematics solutions.

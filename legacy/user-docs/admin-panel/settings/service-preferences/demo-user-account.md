@@ -2,6 +2,8 @@
 description: >-
   Create a limited-rights demo user account, clone trackers into it, and share
   it via the login page or a direct link to showcase the platform
+tags:
+  - legacy
 ---
 
 # Demo user account

@@ -1,6 +1,8 @@
 ---
 title: Garage (depot)
 description: The premises a fleet is maintained from, with its address and the people responsible.
+tags:
+  - legacy
 ---
 
 # Garage (depot)

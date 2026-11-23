@@ -1,5 +1,7 @@
 ---
 description: API calls to interact with Subpaases.
+tags:
+  - legacy
 ---
 
 # Subpaas

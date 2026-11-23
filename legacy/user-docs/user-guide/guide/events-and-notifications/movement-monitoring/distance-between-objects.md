@@ -3,6 +3,8 @@ description: >-
   Track the distance between fleet assets and receive alerts when objects
   approach, move away, or exceed a defined separation range, from 5 to 200,000
   meters.
+tags:
+  - legacy
 ---
 
 # Distance between objects

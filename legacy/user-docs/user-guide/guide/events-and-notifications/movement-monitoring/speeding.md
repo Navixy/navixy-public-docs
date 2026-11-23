@@ -1,5 +1,7 @@
 ---
 description: Alert when a vehicle exceeds a speed limit using GPS data analyzed by the platform, or based on events reported directly by the GPS device.
+tags:
+  - legacy
 ---
 
 # Speeding

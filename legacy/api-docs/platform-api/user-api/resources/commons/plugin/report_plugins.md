@@ -1,6 +1,8 @@
 ---
 title: Report plugins
 description: Every report the Navixy platform can generate, with the plugin-specific parameters each one takes.
+tags:
+  - legacy
 ---
 
 # Report plugins

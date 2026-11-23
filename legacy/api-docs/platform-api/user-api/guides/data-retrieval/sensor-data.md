@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Retrieving sensor and counter data
 
 This guide provides comprehensive instructions on retrieving and manipulating sensor data and counter information using the Navixy API. It includes detailed steps on working with various sensors, generating reports, and setting up rules based on sensor data.

@@ -2,6 +2,8 @@
 description: >-
   Forward vehicle positions from Navixy to the Startrack SOAP service, used by
   fleet operators in Guatemala, El Salvador, and Honduras.
+tags:
+  - legacy
 ---
 
 # Startrack

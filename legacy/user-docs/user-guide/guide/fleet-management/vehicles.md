@@ -1,5 +1,7 @@
 ---
 description: Add fleet vehicle profiles with specs, fuel consumption rates, and insurance data. Link vehicles to GPS devices and import multiple profiles from Excel files.
+tags:
+  - legacy
 ---
 
 # Vehicles

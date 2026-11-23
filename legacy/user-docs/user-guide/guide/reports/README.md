@@ -2,6 +2,8 @@
 description: >-
   Create and schedule fleet reports in Navixy. Select from standard report
   types, configure date ranges and object filters, and export to XLSX or PDF.
+tags:
+  - legacy
 ---
 
 # Reports

@@ -2,6 +2,8 @@
 description: >-
   Control remote outputs in Navixy to activate locks, immobilizers, and engine
   cutoff. Covers safety logic, command methods, and device troubleshooting.
+tags:
+  - legacy
 ---
 
 # Outputs control

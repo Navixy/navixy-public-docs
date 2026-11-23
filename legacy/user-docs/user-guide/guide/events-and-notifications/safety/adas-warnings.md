@@ -1,5 +1,7 @@
 ---
 description: 'Get ADAS alerts from video telematics devices: lane departure, forward collision, headway monitoring, pedestrian detection, and traffic sign recognition.'
+tags:
+  - legacy
 ---
 
 # ADAS warnings

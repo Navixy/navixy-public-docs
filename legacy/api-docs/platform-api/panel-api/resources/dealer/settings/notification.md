@@ -1,6 +1,8 @@
 ---
 title: Notification
 description: API calls to read and update notification settings.
+tags:
+  - legacy
 ---
 
 # Notification Settings

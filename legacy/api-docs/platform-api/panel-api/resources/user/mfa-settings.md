@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Multi-factor authentication settings
 
 > **Work in progress!**\

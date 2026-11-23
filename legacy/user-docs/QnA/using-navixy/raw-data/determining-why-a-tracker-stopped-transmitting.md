@@ -1,6 +1,8 @@
 ---
 title: Determining why a tracker stopped transmitting
 description: Export 30 days of raw data to review battery voltage and signal strength trends in the period before a device stopped transmitting
+tags:
+  - legacy
 ---
 
 # Determining why a tracker stopped transmitting

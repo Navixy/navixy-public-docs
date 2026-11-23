@@ -1,6 +1,8 @@
 ---
 title: Vehicle
 description: The vehicle behind a tracker, carrying its VIN, consumption figures, and other details a device cannot report.
+tags:
+  - legacy
 ---
 
 # Vehicle

@@ -1,6 +1,8 @@
 ---
 title: Employee
 description: The people working for an account, linked to the trackers, vehicles, and places they work with.
+tags:
+  - legacy
 ---
 
 # Employee

@@ -2,6 +2,8 @@
 description: >-
   Locate configuration files and logs for Dockered Navixy services: API-server,
   SMS-server, and TCP-server. Access container files via the WORKDIR path.
+tags:
+  - legacy
 ---
 
 # Dockered solution configurations and logs

@@ -1,5 +1,7 @@
 ---
 description: Set and use the digital unlock password for a GPS device in Navixy with the Unlocking block. Availability depends on the device model.
+tags:
+  - legacy
 ---
 
 # Unlocking

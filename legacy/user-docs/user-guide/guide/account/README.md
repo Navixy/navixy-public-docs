@@ -1,5 +1,7 @@
 ---
 description: "Manage your Navixy account settings: update your profile, view your balance, configure API keys, set up 2FA, manage users, and customize the platform."
+tags:
+  - legacy
 ---
 
 # User account

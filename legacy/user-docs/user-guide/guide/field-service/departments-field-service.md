@@ -2,6 +2,8 @@
 description: >-
   Organize field service employees into named departments in Navixy. Assign
   staff to departments and use them to filter task assignments and reports.
+tags:
+  - legacy
 ---
 
 # Departments

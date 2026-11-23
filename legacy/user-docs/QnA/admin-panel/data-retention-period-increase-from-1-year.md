@@ -1,6 +1,8 @@
 ---
 title: Data retention period (increase from 1 year)
 description: Extend data retention from 1 year to 3 years for device history by requesting an increase from your Customer Success Manager
+tags:
+  - legacy
 ---
 
 # Data retention period (increase from 1 year)

@@ -1,6 +1,8 @@
 ---
 title: Payment system
 description: The payment providers an account can pay through, and what a given payment would cost.
+tags:
+  - legacy
 ---
 
 # Payment system

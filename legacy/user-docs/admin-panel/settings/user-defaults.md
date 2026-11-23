@@ -2,6 +2,8 @@
 description: >-
   Set default profile settings for new users, including time zone, date/time
   formats, units, menu preset, and whether device IMEIs are shown
+tags:
+  - legacy
 ---
 
 # User defaults

@@ -1,5 +1,8 @@
 ---
 description: Contact Navixy Team
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Contact Us

@@ -2,6 +2,8 @@
 description: >-
   Navixy processes all device data through the default flow when no custom IoT
   Logic flow is assigned, ensuring no telemetry is lost or dropped.
+tags:
+  - legacy
 ---
 
 # Default data processing

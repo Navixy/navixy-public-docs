@@ -2,6 +2,8 @@
 description: >-
   Track all user actions in your Navixy account, including logins, configuration
   changes, and data access. Available to account owners in Account settings.
+tags:
+  - legacy
 ---
 
 # Activity log

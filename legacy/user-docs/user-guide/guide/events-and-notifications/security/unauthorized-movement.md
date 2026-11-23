@@ -1,5 +1,7 @@
 ---
 description: Get alerted when a stationary vehicle starts moving without authorization. Uses the GPS tracker's accelerometer to detect potential theft or unauthorized use.
+tags:
+  - legacy
 ---
 
 # Unauthorized movement

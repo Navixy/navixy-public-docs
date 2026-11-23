@@ -2,6 +2,8 @@
 description: >-
   Set up the Teltonika Eye sensor in three steps: configure the mobile app, set
   parameters in the desktop configurator, and map readings in Navixy.
+tags:
+  - legacy
 ---
 
 # Configuring the Eye sensor on a Teltonika device

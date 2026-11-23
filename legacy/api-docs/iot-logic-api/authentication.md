@@ -2,6 +2,8 @@
 description: IoT Logic uses your Navixy Platform credential. Which credential type to use, and how to send it with a request.
 tags:
   - auth
+  - legacy
+noIndex: true
 ---
 
 # Authentication

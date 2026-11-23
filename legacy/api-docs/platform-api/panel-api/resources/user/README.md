@@ -1,5 +1,7 @@
 ---
 description: API calls on work with users in the admin panel.
+tags:
+  - legacy
 ---
 
 # User

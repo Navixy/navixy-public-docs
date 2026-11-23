@@ -2,6 +2,8 @@
 description: >-
   Create and configure Google Maps API keys for Navixy on-premise. Set up
   separate keys for UI maps, GIS services, and email notifications.
+tags:
+  - legacy
 ---
 
 # Google maps and geocoding

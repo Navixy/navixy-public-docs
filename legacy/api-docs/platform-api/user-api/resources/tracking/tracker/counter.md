@@ -1,6 +1,8 @@
 ---
 title: Counters
 description: Odometer and engine-hour counters on a tracker, and the values they hold.
+tags:
+  - legacy
 ---
 
 # Counters

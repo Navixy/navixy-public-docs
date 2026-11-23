@@ -2,6 +2,8 @@
 description: >-
   A black screen during live streaming from Jimi JC cameras is expected
   behavior, not a fault. Covers the single-session RTMP limit and best practices.
+tags:
+  - legacy
 ---
 
 # Why does a black screen appear during live streaming on Jimi JC cameras?

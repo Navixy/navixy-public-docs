@@ -1,5 +1,7 @@
 ---
 description: "Configure fuel level sensors in Navixy: set calibration data, accuracy, smoothing, and tank details for reliable fuel monitoring and consumption analysis."
+tags:
+  - legacy
 ---
 
 # Fuel level sensor

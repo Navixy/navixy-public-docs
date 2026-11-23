@@ -1,6 +1,8 @@
 ---
 title: Asset groups
 description: Group assets of different types so they are tracked and reported on together.
+tags:
+  - legacy
 ---
 
 # Asset groups

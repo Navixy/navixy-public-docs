@@ -2,6 +2,9 @@
 description: >-
   Conventions shared by the Navixy Platform API and the Navixy Admin Panel API:
   base URLs, data types, date and time format, and request rate limits.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # API conventions

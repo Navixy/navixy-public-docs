@@ -1,6 +1,8 @@
 ---
 title: Getting started with the app
 description: Configure Explorer for IoT Query via User Applications and verify connection. Navigate the interface to access dashboards, reports, and analytics tools
+tags:
+  - legacy
 ---
 
 # Getting started with the app

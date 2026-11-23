@@ -1,6 +1,8 @@
 ---
 title: Form fields and values
 description: The field types a form can hold, with the parameters each takes and the shape of the value it produces.
+tags:
+  - legacy
 ---
 
 # Form fields and values

@@ -1,6 +1,8 @@
 ---
 title: Task form files
 description: Reserve and upload a file before submitting it as a form field value.
+tags:
+  - legacy
 ---
 
 # Task form files

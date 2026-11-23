@@ -3,6 +3,8 @@ description: >-
   Register vehicles and drivers, organize garages and departments, schedule
   vehicle maintenance, and review driver safety scores in the Eco Driving
   report.
+tags:
+  - legacy
 ---
 
 # Fleet management

@@ -1,5 +1,7 @@
 ---
 description: Register a Navixy account, confirm your email, and get help if self-registration is unavailable or the confirmation email didn't arrive.
+tags:
+  - legacy
 ---
 
 # Sign up

@@ -2,6 +2,8 @@
 description: >-
   Run the NavixyUpdater PowerShell script to update Navixy on Windows. Select
   the update type, apply changes, and verify admin panel and UI functionality.
+tags:
+  - legacy
 ---
 
 # Automatic update - Windows

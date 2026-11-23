@@ -2,6 +2,8 @@
 description: >-
   Set up a Howen MDVR device by configuring startup settings, network
   parameters, time zone, and platform registration to connect it to Navixy.
+tags:
+  - legacy
 ---
 
 # Howen MDVR configuration

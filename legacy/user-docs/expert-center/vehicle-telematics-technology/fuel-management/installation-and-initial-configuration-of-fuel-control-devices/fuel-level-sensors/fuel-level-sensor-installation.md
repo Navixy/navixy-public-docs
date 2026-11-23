@@ -2,6 +2,8 @@
 description: >-
   Install ultrasonic and capacitive fuel level sensors. Covers CAN bus
   connections, output interface types, and specialized sensor probe designs.
+tags:
+  - legacy
 ---
 
 # Fuel level sensor installation

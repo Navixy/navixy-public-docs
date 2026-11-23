@@ -1,6 +1,8 @@
 ---
 title: Status
 description: The individual activity states, such as busy or not busy, that a tracker can be set to.
+tags:
+  - legacy
 ---
 
 # Status

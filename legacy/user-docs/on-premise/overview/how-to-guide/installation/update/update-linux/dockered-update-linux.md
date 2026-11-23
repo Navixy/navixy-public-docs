@@ -1,5 +1,7 @@
 ---
 description: Update Dockered Navixy on-premise on Linux. Prepare the environment, stop containers, unpack the update package, and restore configuration files.
+tags:
+  - legacy
 ---
 
 # Dockered update - Linux

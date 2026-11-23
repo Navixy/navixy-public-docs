@@ -1,5 +1,7 @@
 ---
 description: Auto-create a geofence around a parked vehicle and get alerted if it moves without the ignition on. A device-dependent anti-theft protection rule.
+tags:
+  - legacy
 ---
 
 # Auto-geofencing

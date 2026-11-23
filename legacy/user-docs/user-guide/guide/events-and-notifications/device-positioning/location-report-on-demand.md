@@ -1,5 +1,7 @@
 ---
 description: Request the current GPS device location via SMS when standard IP connections are unavailable. Get notified as soon as the location update arrives.
+tags:
+  - legacy
 ---
 
 # Location report on demand

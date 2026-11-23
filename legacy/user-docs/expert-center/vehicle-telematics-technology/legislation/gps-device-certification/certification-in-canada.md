@@ -2,6 +2,8 @@
 description: >-
   Canadian GPS device certification requires ISED wireless approval, RoHS
   compliance, and PTCRB and carrier certifications from Rogers, Telus, and Bell.
+tags:
+  - legacy
 ---
 
 # Certification in Canada

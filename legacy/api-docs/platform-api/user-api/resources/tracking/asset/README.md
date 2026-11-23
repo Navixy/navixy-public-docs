@@ -1,6 +1,8 @@
 ---
 title: Asset
 description: Tracks for an asset, resolved across every tracker the asset was attached to over the period.
+tags:
+  - legacy
 ---
 
 # Asset

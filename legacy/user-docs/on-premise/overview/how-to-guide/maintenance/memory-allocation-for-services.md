@@ -3,6 +3,8 @@ description: >-
   Adjust RAM allocation for Navixy Java services and MySQL on systemd, runit,
   Docker, and Windows deployments. Edit service configuration files to set
   memory limits.
+tags:
+  - legacy
 ---
 
 # Memory allocation for services

@@ -1,6 +1,8 @@
 ---
 title: Sub-user session
 description: Open a session as one of your sub-users, without knowing their password.
+tags:
+  - legacy
 ---
 
 # Sub-user session

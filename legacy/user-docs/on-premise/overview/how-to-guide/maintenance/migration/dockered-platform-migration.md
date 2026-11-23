@@ -1,5 +1,7 @@
 ---
 description: Migrate the Dockered Navixy platform to a new server by copying the navixy-package directory, updating network access configuration, and restarting containers.
+tags:
+  - legacy
 ---
 
 # Dockered platform migration

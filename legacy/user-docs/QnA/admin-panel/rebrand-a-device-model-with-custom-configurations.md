@@ -1,6 +1,8 @@
 ---
 title: Rebrand a device model with custom configurations
 description: Clone device models and customize UI blocks, settings, and defaults by providing requirements to Navixy Support
+tags:
+  - legacy
 ---
 
 # Rebrand a device model with custom configurations

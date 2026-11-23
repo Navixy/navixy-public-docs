@@ -1,6 +1,8 @@
 ---
 title: FMC150 (QJIBO/QKIBO) Input and Output Capabilities
 description: Compare FMC150-QJIB0 (3 digital inputs, 2 outputs) and FMC150-QKIB0 (2 digital inputs, 3 outputs) specifications and select during device activation
+tags:
+  - legacy
 ---
 
 # FMC150 (QJIBO/QKIBO) Input and Output Capabilities

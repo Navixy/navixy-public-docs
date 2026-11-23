@@ -3,6 +3,8 @@ title: WebSocket Subscription
 description: >-
   Information about WebSocket subscription and how to subscribe to every type of
   event.
+tags:
+  - legacy
 ---
 
 # WebSocket subscription

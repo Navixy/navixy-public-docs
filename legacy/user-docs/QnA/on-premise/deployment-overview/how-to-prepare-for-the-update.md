@@ -1,6 +1,8 @@
 ---
 title: How to prepare for the update?
 description: Verify Java and MySQL versions meet current requirements. Upgrade software components before platform updates to prevent service failure
+tags:
+  - legacy
 ---
 
 # How to prepare for the update?

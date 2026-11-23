@@ -1,5 +1,7 @@
 ---
 description: "Add Teltonika BLE fuel sensors to Navixy: select the LLS level input, configure calibration, and monitor fuel, temperature, humidity, and battery charge."
+tags:
+  - legacy
 ---
 
 # BLE fuel level sensors (Teltonika)

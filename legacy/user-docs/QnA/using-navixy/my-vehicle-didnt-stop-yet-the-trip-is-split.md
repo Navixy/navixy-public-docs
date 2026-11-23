@@ -3,6 +3,8 @@ title: My vehicle didn't stop, yet the trip is split
 description: >-
   Review Parking Detection settings and inspect raw data to find the cause;
   disable Split by stops in History to view the full track
+tags:
+  - legacy
 ---
 
 # My vehicle didn't stop, yet the trip is split

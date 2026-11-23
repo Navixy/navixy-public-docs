@@ -1,6 +1,8 @@
 ---
 title: Schedule
 description: Schedule entries that create tasks automatically, each day they are due.
+tags:
+  - legacy
 ---
 
 # Schedule

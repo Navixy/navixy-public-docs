@@ -1,6 +1,8 @@
 ---
 title: Stop device reconfiguration after activation
 description: Disable default settings in Service preferences to prevent automatic configuration commands after device activation
+tags:
+  - legacy
 ---
 
 # Stop device reconfiguration after activation

@@ -2,6 +2,8 @@
 description: >-
   View tracker status and run core actions like edit/assign, clone, export,
   activation, plan changes, and Air Console.
+tags:
+  - legacy
 ---
 
 # Tracker details and operations

@@ -2,6 +2,8 @@
 description: >-
   How the Rule-based driver events table turns your alert rules into driving
   violation records, and how to query it.
+tags:
+  - legacy
 ---
 
 # Rule-based driver events

@@ -1,6 +1,8 @@
 ---
 title: Alarm mode
 description: Turn a tracker's alarm mode on or off, and read whether it is currently on.
+tags:
+  - legacy
 ---
 
 # Alarm mode

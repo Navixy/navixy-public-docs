@@ -1,6 +1,8 @@
 ---
 title: Waybill settings
 description: The waybill number stored by the last download, ready for the next document in the sequence.
+tags:
+  - legacy
 ---
 
 # Waybill settings

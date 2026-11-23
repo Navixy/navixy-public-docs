@@ -1,6 +1,8 @@
 ---
 title: Rule types
 description: Every rule type a tracker can carry, with the parameters each one takes.
+tags:
+  - legacy
 ---
 
 # Rule types

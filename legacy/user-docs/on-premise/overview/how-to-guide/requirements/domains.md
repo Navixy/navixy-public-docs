@@ -1,5 +1,7 @@
 ---
 description: Configure domain names and DNS A-records for Navixy on-premise. Set up records for the API, admin panel, and monitoring service to enable platform access.
+tags:
+  - legacy
 ---
 
 # Domains

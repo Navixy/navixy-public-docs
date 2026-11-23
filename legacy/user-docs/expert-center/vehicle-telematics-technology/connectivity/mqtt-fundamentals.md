@@ -3,6 +3,8 @@ description: >-
   Publish/subscribe protocol powering lightweight IoT device communication.
   Covers MQTT broker setup, message formats, QoS levels, and telematics use
   cases.
+tags:
+  - legacy
 ---
 
 # MQTT fundamentals

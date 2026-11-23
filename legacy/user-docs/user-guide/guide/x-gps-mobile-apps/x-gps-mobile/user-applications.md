@@ -3,6 +3,8 @@ description: >-
   Access custom third-party applications embedded in Navixy through X-GPS
   Mobile. Applications are configured in the web platform and available in the
   mobile app.
+tags:
+  - legacy
 ---
 
 # User applications

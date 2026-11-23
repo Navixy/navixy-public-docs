@@ -1,6 +1,8 @@
 ---
 title: Does Navixy support the JC450?
 description: "Navixy supports JC450 via Lightmetrics integration; GPS telematics on Navixy, video events managed in Lightmetrics with limitations"
+tags:
+  - legacy
 ---
 
 # Does Navixy support the JC450?

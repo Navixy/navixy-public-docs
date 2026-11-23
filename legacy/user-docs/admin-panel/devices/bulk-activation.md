@@ -2,6 +2,8 @@
 description: >-
   Activate many GPS trackers at once: users import files of up to 1,000
   trackers of one model, and Navixy support uploads mixed lists for you.
+tags:
+  - legacy
 ---
 
 # Bulk activation

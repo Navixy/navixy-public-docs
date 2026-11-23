@@ -1,6 +1,8 @@
 ---
 title: Tag
 description: Labels applied across entity types, used to group and find things that belong together.
+tags:
+  - legacy
 ---
 
 # Tag

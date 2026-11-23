@@ -2,6 +2,8 @@
 description: >-
   Overview of X-GPS Tracker's five main sections: Map, Statuses, Chat, Tasks,
   and Settings. Learn how each section supports field employee productivity.
+tags:
+  - legacy
 ---
 
 # Main features

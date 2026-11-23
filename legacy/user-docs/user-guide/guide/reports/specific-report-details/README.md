@@ -1,5 +1,7 @@
 ---
 description: "Find detailed guidance for key Navixy reports: how each report calculates its data, which parameters you can configure, and how to interpret the output."
+tags:
+  - legacy
 ---
 
 # Report details

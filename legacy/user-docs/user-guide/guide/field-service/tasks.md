@@ -2,6 +2,8 @@
 description: >-
   Create and assign field tasks to employees, set locations, deadlines, and
   forms. Monitor task status on a map, table, or timeline view in real time.
+tags:
+  - legacy
 ---
 
 # Tasks

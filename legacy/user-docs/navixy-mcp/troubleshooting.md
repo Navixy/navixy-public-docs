@@ -2,6 +2,9 @@
 description: >-
   Fix common Navixy MCP Server problems across AI clients, including
   disconnected servers, missing tools, 401 errors, and account switching.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Troubleshooting

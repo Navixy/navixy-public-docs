@@ -1,5 +1,8 @@
 ---
 description: Base URLs, authentication, and the resource family index for the Admin Panel API, with a quick endpoint reference for every operation.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Resources

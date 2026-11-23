@@ -1,5 +1,7 @@
 ---
 description: Detect and get alerted when GSM cellular signals are jammed on a GPS tracking device, preventing real-time data transmission to the platform.
+tags:
+  - legacy
 ---
 
 # GSM jamming

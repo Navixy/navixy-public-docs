@@ -2,6 +2,8 @@
 description: >-
   Forward vehicle positions and security alarms from Navixy to ILSP monitoring
   centers in Mexico, using an OAuth-authenticated JSON API.
+tags:
+  - legacy
 ---
 
 # ILSP

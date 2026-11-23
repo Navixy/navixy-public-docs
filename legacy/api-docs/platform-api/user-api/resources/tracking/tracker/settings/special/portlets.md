@@ -1,6 +1,8 @@
 ---
 title: Manufacturer-specific settings
 description: Special settings objects that exist only for ATrack, Yatut, and Suntech device models.
+tags:
+  - legacy
 ---
 
 # Manufacturer-specific settings

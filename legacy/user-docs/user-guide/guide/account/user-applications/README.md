@@ -2,6 +2,8 @@
 description: >-
   Embed third-party tools and custom add-ons directly into the Navixy interface
   to extend functionality and create a personalized workspace for your team.
+tags:
+  - legacy
 ---
 
 # User applications

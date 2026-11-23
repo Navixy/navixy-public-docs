@@ -1,5 +1,7 @@
 ---
 description: Call tracker/get_state to retrieve GPS position, speed, connection status, battery, inputs, outputs, and other telemetry data
+tags:
+  - legacy
 ---
 
 # Get relevant telemetry in one API call (get\_state)

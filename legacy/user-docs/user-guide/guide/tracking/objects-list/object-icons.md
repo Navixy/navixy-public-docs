@@ -3,6 +3,8 @@ description: >-
   Each tracked object's icon indicates movement status: moving, stopped, or
   parked. Browse the curated library and assign a custom icon from the Objects
   list.
+tags:
+  - legacy
 ---
 
 # Object icons

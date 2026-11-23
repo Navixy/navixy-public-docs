@@ -1,5 +1,7 @@
 ---
 description: Install and manage SSL certificates for Navixy on-premise. Guides cover initial certificate installation and the process for renewing expired certificates.
+tags:
+  - legacy
 ---
 
 # SSL certificates

@@ -1,6 +1,8 @@
 ---
 title: User
 description: Authenticating, reading who the session belongs to, and ending it.
+tags:
+  - legacy
 ---
 
 # User

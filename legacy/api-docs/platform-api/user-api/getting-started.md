@@ -1,6 +1,9 @@
 ---
 title: Navixy platform API
 description: What the Platform API covers, its core concepts, and how to use this documentation.
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Navixy platform API

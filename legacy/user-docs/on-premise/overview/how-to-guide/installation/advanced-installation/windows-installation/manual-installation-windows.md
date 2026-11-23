@@ -3,6 +3,8 @@ description: >-
   Manually install Navixy on-premise on Windows Server. Configure MySQL,
   environment variables, Nginx frontend, and Java backend services as Windows
   services.
+tags:
+  - legacy
 ---
 
 # Manual installation - Windows

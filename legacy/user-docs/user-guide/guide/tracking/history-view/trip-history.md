@@ -2,6 +2,8 @@
 description: >-
   Review past trips for any object, with mileage, fuel, stops, and duration.
   Replay routes on the map, color-code by speed, and export trips as KML files.
+tags:
+  - legacy
 ---
 
 # Trip history

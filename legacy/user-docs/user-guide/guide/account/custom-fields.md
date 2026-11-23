@@ -2,6 +2,8 @@
 description: >-
   Add custom fields to Places, Employees, Vehicles, and Tasks in Navixy to store
   additional data and improve filtering in field service workflows.
+tags:
+  - legacy
 ---
 
 # Custom fields

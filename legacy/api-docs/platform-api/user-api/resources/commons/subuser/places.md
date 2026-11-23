@@ -1,6 +1,8 @@
 ---
 title: Sub-user places
 description: Which of the master account's places a sub-user can see.
+tags:
+  - legacy
 ---
 
 # Sub-user places

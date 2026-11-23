@@ -2,6 +2,8 @@
 description: >-
   Control how a GPS device reports position: tracking mode, parking detection,
   LBS radius, odometer, engine hours, ignition source, and towing.
+tags:
+  - legacy
 ---
 
 # Location and movement

@@ -2,6 +2,8 @@
 description: >-
   Analyze CAN, OBD, and virtual sensor readings with the Vehicle sensors report.
   Configure parameters and interpret sensor graphs, statistics, and data tables.
+tags:
+  - legacy
 ---
 
 # Vehicle sensors report

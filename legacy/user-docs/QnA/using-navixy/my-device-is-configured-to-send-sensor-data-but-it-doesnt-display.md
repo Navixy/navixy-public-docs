@@ -1,6 +1,8 @@
 ---
 title: My device is configured to send sensor data, but it doesn't display
 description: Create a measurement sensor in Devices and Settings to map the incoming sensor parameter to a named field and enable display in the platform
+tags:
+  - legacy
 ---
 
 # My device is configured to send sensor data, but it doesn't display

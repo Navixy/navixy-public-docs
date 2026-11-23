@@ -2,6 +2,8 @@
 description: >-
   The seven statuses of a Field service task, from Unassigned to Completed with
   errors, and when Navixy sets each one for tasks, route tasks, and checkpoints.
+tags:
+  - legacy
 ---
 
 # Task statuses

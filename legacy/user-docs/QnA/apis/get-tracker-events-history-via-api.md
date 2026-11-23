@@ -2,6 +2,8 @@
 description: >-
   Retrieve tracker event history by calling unread events endpoints or filtering
   by event type codes and time period. Supports geofence, bracelet removal
+tags:
+  - legacy
 ---
 
 # Get tracker events history via API

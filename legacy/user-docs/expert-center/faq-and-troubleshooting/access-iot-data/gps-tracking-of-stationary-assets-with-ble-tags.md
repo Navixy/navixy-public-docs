@@ -2,6 +2,8 @@
 description: >-
   Track stationary assets using BLE tags attached to GPS devices. Set up device
   configuration and API integration to monitor trailers and equipment.
+tags:
+  - legacy
 ---
 
 # GPS tracking of stationary assets with BLE tags

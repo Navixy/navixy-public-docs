@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # How to Control and Read Digital Inputs/Outputs on Starlink Devices
 
 ### Question

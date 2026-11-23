@@ -1,5 +1,7 @@
 ---
 description: Troubleshoot device activation failures on Navixy on-premise. Check SMS gateway configuration, backend service status, network settings, and platform version compatibility.
+tags:
+  - legacy
 ---
 
 # Device activation

@@ -1,5 +1,7 @@
 ---
 description: "Monitor GPS device power events: track when devices are switched on or off, detect external power cuts, OBDII plug or unplug events, and low battery alerts."
+tags:
+  - legacy
 ---
 
 # Device power

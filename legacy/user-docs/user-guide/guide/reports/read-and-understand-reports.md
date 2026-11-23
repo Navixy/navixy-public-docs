@@ -2,6 +2,8 @@
 description: >-
   Interpret Navixy report graphs and tables, apply common parameters like date
   range and object filters, and export or share generated reports.
+tags:
+  - legacy
 ---
 
 # How to read reports

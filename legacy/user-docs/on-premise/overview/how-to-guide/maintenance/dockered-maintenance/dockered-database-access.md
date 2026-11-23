@@ -1,5 +1,7 @@
 ---
 description: Access the MySQL database inside the Dockered Navixy platform using docker exec. Retrieve credentials from the .env file and connect to the navixy database.
+tags:
+  - legacy
 ---
 
 # Dockered database access

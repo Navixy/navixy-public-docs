@@ -1,6 +1,8 @@
 ---
 title: Custom analysis & SQL Configurator
 description: Write PostgreSQL queries against fleet data, browse the full database schema, and create custom visualizations in the SQL Configurator
+tags:
+  - legacy
 ---
 
 # Custom analysis & SQL Configurator

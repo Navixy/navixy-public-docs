@@ -1,6 +1,8 @@
 ---
 title: Fleet management
 description: Worked examples of vehicle records, maintenance, driver journals, and tags.
+tags:
+  - legacy
 ---
 
 # Fleet management

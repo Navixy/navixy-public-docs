@@ -1,5 +1,7 @@
 ---
 description: Access board voltage, temperature, mileage, and analog sensor data from CalAmp devices in Navixy by configuring the Accumulators block.
+tags:
+  - legacy
 ---
 
 # CalAmp sensors

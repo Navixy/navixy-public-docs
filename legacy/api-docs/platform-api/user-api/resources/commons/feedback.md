@@ -1,6 +1,8 @@
 ---
 title: Feedback
 description: Send a message from the user to platform support by email.
+tags:
+  - legacy
 ---
 
 # Feedback

@@ -1,5 +1,7 @@
 ---
 description: "Configure each device connection in Navixy: set the offline detection timeout and route live tracking data to external servers via data forwarding."
+tags:
+  - legacy
 ---
 
 # Connectivity

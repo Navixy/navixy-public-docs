@@ -1,5 +1,7 @@
 ---
 description: Service providers handle GPS hardware supply, installation, and support for Navixy. Contact them from the built-in Help section in the web or mobile app.
+tags:
+  - legacy
 ---
 
 # Service provider

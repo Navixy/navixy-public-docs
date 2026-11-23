@@ -2,6 +2,8 @@
 description: >-
   Connect Navixy MCP Server to ChatGPT as a plugin or to Codex as a local MCP
   server, then check that the connection returns current data.
+tags:
+  - legacy
 ---
 
 # How to configure Navixy MCP in ChatGPT and Codex

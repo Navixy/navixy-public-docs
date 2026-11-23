@@ -1,6 +1,8 @@
 ---
 title: Session
 description: Extend the life of the current user session.
+tags:
+  - legacy
 ---
 
 # Session

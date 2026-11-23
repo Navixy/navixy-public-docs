@@ -1,6 +1,8 @@
 ---
 title: Application
 description: API calls to create and manage the web applications that a TSP places in the menu of its end users.
+tags:
+  - legacy
 ---
 
 # Application

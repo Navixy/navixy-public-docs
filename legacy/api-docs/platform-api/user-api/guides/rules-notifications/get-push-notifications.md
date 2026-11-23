@@ -1,4 +1,10 @@
+---
+tags:
+  - legacy
+---
+
 # Receiving push notifications in your app
+
 Push notifications enable your app to receive new events instantly without requiring continuous polling via API calls. These notifications can be used to trigger actions such as updates to trackers, configurations, tasks, or even to send alerts to platforms like Telegram.
 
 Whether your app is mobile or web-based, the subscription process for push notifications varies. Below, we outline the specific steps for each case.

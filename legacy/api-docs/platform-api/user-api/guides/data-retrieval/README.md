@@ -1,6 +1,8 @@
 ---
 title: Data retrieval
 description: Worked examples of getting trackers, tracks, sensor readings, and reports out of the Navixy platform.
+tags:
+  - legacy
 ---
 
 # Data retrieval

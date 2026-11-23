@@ -2,6 +2,9 @@
 description: >-
   Manage activation codes that restrict tracker registration and link codes to
   device plans for automated setup
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Activation codes

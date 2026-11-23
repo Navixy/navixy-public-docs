@@ -3,6 +3,8 @@ description: >-
   Color-coded connection statuses in Navixy indicate whether each device is
   Online, Offline, or GPS not updated. Covers all states and their transition
   sequence.
+tags:
+  - legacy
 ---
 
 # Connection state

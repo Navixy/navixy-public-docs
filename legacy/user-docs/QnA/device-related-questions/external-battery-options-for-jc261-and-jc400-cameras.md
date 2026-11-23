@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # External Battery Options for JC261 and JC400 Cameras
 
 ### Question

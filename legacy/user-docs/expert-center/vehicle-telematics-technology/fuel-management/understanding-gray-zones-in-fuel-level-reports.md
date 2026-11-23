@@ -2,6 +2,8 @@
 description: >-
   Gray zones in fuel level reports come from data continuity logic, not missing
   readings. Covers GPS versus sensor validity and how to reduce reporting gaps.
+tags:
+  - legacy
 ---
 
 # Understanding gray zones in fuel level reports

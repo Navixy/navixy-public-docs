@@ -3,6 +3,8 @@ description: >-
   Receive notifications when a tracked object enters or exits any of the
   configured geofences. Apply the rule to multiple vehicles or assets
   simultaneously.
+tags:
+  - legacy
 ---
 
 # Geofence entrance or exit

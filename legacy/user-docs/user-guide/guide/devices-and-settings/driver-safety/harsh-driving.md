@@ -2,6 +2,8 @@
 description: >-
   Set harsh-driving thresholds on the GPS device in Navixy. Events generated
   here power Notifications and Eco-driving reports. Units vary by device family.
+tags:
+  - legacy
 ---
 
 # Harsh driving

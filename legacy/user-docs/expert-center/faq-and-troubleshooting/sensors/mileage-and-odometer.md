@@ -2,6 +2,8 @@
 description: >-
   Odometer and GPS distance use different calculation methods in Navixy. Compare
   accuracy, choose the right approach, and apply automatic correction.
+tags:
+  - legacy
 ---
 
 # Mileage and odometer

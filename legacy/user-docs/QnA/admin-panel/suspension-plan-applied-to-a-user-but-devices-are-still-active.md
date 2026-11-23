@@ -1,6 +1,8 @@
 ---
 title: Suspension plan applied to a user but devices are still active
 description: "Apply suspension plan to individual devices; assigning it only to a user account does not affect already-registered devices"
+tags:
+  - legacy
 ---
 
 # Suspension plan applied to a user but devices are still active

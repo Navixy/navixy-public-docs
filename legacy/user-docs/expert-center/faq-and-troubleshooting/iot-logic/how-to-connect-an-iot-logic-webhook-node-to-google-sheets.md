@@ -2,6 +2,8 @@
 description: >-
   Send telematics parameters from an IoT Logic flow to Google Sheets using the
   Webhook node. Covers node setup, Apps Script, and deployment access levels.
+tags:
+  - legacy
 ---
 
 # How to connect an IoT Logic Webhook node to Google Sheets

@@ -1,6 +1,8 @@
 ---
 title: Plugin
 description: Software modules that change how API calls behave, and which of them an account may use.
+tags:
+  - legacy
 ---
 
 # Plugin

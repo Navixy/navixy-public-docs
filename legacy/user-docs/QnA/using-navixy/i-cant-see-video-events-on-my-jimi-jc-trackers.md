@@ -1,6 +1,8 @@
 ---
 title: I can't see video events on my Jimi JC trackers
 description: Send the UPLOADSW command to the device to configure event-based video uploads, then create a corresponding alert rule in the platform
+tags:
+  - legacy
 ---
 
 # I can't see video events on my Jimi JC trackers

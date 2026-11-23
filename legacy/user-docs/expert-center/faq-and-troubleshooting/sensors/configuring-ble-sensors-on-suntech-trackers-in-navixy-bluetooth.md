@@ -3,6 +3,8 @@ description: >-
   Pair Minew BLE sensors with Suntech GPS devices and show the values in Navixy.
   Covers BeaconSET+ and MSensor setup, SyncTrak pairing and report mapping, and
   the BLE event codes for panic, door, and threshold alerts.
+tags:
+  - legacy
 ---
 
 # Configuring BLE sensors on Suntech devices

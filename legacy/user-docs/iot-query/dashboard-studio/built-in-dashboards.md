@@ -1,6 +1,8 @@
 ---
 title: Built-in dashboards
 description: Browse the 14 ready-made dashboards that ship with Dashboard Studio, covering fleet safety, driver performance, asset health, and compliance
+tags:
+  - legacy
 ---
 
 # Built-in dashboards

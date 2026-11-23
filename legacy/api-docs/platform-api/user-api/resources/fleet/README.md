@@ -1,6 +1,8 @@
 ---
 title: Fleet management
 description: The vehicles behind the trackers, where they are maintained, and how their trips are categorised.
+tags:
+  - legacy
 ---
 
 # Fleet management

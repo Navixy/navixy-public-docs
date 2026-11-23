@@ -1,5 +1,7 @@
 ---
 description: Manage tachograph compliance for your fleet by downloading DDD files on demand and routing them automatically to the right recipients.
+tags:
+  - legacy
 ---
 
 # Tachograph and compliance

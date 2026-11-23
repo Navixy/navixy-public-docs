@@ -1,6 +1,8 @@
 ---
 title: Stats
 description: Engine hours and distance travelled, counted per day over a period.
+tags:
+  - legacy
 ---
 
 # Stats

@@ -1,6 +1,8 @@
 ---
 title: Mobile app register
 description: Deprecated. Register a mobile application as a tracker.
+tags:
+  - legacy
 ---
 
 # Mobile app register

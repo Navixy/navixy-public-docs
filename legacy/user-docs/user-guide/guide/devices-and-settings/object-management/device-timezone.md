@@ -1,5 +1,7 @@
 ---
 description: Correct the timezone offset for GPS devices that report timestamps in local time. Prevents tracking data misalignment when the device clock doesn't match UTC.
+tags:
+  - legacy
 ---
 
 # Device timezone

@@ -2,6 +2,8 @@
 description: >-
   Set up virtual sensors in Navixy for Teltonika Eye accessories to expose
   motion state, temperature, humidity, and magnet data collected over Bluetooth.
+tags:
+  - legacy
 ---
 
 # Eye sensor configuration

@@ -1,6 +1,8 @@
 ---
 title: Listing
 description: The set of working statuses a tracker can be set to, assigned per tracker.
+tags:
+  - legacy
 ---
 
 # Listing

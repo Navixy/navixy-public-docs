@@ -1,5 +1,7 @@
 ---
 description: Install Navixy on-premise with automatic or advanced methods. Covers operational responsibilities, update eligibility, and system scalability for larger deployments.
+tags:
+  - legacy
 ---
 
 # Platform installation

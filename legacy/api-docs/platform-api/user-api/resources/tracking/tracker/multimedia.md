@@ -1,6 +1,8 @@
 ---
 title: Video
 description: "List, download and stream video from a tracker's cameras: event clips, memory card recordings, and live video."
+tags:
+  - legacy
 ---
 
 # Video

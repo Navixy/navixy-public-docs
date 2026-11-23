@@ -1,2 +1,7 @@
+---
+tags:
+  - legacy
+---
+
 # guide
 

@@ -1,5 +1,7 @@
 ---
 description: Dashcam testing checklist for Navixy covering video quality, GPS accuracy, streaming stability, compression, and AI recognition rates.
+tags:
+  - legacy
 ---
 
 # Test framework checklist for videocameras in Navixy

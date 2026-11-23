@@ -1,5 +1,7 @@
 ---
 description: Alert when a vehicle idles for longer than a set threshold, using platform logic or hardware events. Helps identify fuel waste and unnecessary engine running.
+tags:
+  - legacy
 ---
 
 # Excessive idling

@@ -3,6 +3,8 @@ title: Scheduling a valid geo link
 description: >-
   Set the validity timeframe in geo link settings to restrict the access window
   and ensure the link is only accessible during the set period
+tags:
+  - legacy
 ---
 
 # Scheduling a valid geo link

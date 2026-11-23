@@ -1,6 +1,8 @@
 ---
 title: No livestreaming video on the platform (JC261)
 description: "Verify RSERVICE is set to rtmp.x-gpsmail.com:1935/encoder and SIM has active data plan with stable connectivity. Check signal strength"
+tags:
+  - legacy
 ---
 
 # No livestreaming video on the platform (JC261)

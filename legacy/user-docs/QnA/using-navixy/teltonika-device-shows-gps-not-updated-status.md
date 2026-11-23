@@ -3,6 +3,8 @@ title: Teltonika device shows "GPS not updated" status
 description: >-
   Device operates in static navigation mode; review the relevant parameters and
   voltage thresholds to resume GPS position updates
+tags:
+  - legacy
 ---
 
 # Teltonika device shows "GPS not updated" status

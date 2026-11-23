@@ -2,6 +2,8 @@
 description: >-
   Connect any MCP client that supports Streamable HTTP or SSE transport to
   Navixy MCP Server, with endpoint addresses and authentication requirements.
+tags:
+  - legacy
 ---
 
 # Connecting other AI tools

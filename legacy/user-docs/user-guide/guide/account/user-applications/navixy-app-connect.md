@@ -2,6 +2,8 @@
 description: >-
   Navixy App Connect is an authentication middleware that lets third-party
   applications integrate with Navixy using your existing credentials.
+tags:
+  - legacy
 ---
 
 # Navixy App Connect

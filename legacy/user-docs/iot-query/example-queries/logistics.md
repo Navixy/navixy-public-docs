@@ -1,5 +1,7 @@
 ---
 description: SQL query templates for logistics and transportation analytics, covering route optimization, cargo monitoring, fleet utilization, and delivery performance
+tags:
+  - legacy
 ---
 
 # Logistics

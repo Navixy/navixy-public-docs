@@ -1,6 +1,8 @@
 ---
 title: Sub-user trackers
 description: Which of the master account's trackers a sub-user can see.
+tags:
+  - legacy
 ---
 
 # Sub-user trackers

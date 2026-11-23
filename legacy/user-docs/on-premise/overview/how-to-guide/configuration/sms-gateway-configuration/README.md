@@ -1,5 +1,7 @@
 ---
 description: Configure SMS gateways for Navixy on-premise. Add supported provider settings via SQL queries and manage multiple gateways in the database configuration table.
+tags:
+  - legacy
 ---
 
 # SMS gateway configuration

@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Using tags
 
 Tags in the Navixy system are labels that facilitate quick and convenient searches for places, geofences, employees, tasks, trackers, and vehicles. You can create custom tags according to your needs, and each object can have multiple tags assigned.

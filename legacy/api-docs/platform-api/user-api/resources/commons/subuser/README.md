@@ -1,6 +1,8 @@
 ---
 title: Sub-user
 description: Additional users with their own rights and their own subset of the account's trackers.
+tags:
+  - legacy
 ---
 
 # Sub-user

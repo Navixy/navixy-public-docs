@@ -2,6 +2,8 @@
 description: >-
   View the full transaction history for any user account and manually adjust
   their balance and bonus credits directly from Admin Panel
+tags:
+  - legacy
 ---
 
 # Billing operations

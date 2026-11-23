@@ -1,6 +1,8 @@
 ---
 title: Account
 description: API calls on getting the panel's hash, getting permissions and logout.
+tags:
+  - legacy
 ---
 
 # Account

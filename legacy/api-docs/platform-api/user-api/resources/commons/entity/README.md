@@ -1,6 +1,8 @@
 ---
 title: Entity
 description: Classes of object whose fields and layout an account can customize.
+tags:
+  - legacy
 ---
 
 # Entity

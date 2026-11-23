@@ -1,6 +1,8 @@
 ---
 title: Technician admin accounts for On-Premise
 description: Create unlimited technician accounts via SQL INSERT. Change login, title, and password post-creation via Admin Panel. No additional charge
+tags:
+  - legacy
 ---
 
 # Technician admin accounts for On-Premise

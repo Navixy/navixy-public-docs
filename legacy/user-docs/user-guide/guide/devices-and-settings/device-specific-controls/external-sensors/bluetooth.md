@@ -1,5 +1,7 @@
 ---
 description: Manage the Bluetooth connection on a GPS device in Navixy with the Bluetooth block, used to pair accessories such as a driver-ID key.
+tags:
+  - legacy
 ---
 
 # Bluetooth

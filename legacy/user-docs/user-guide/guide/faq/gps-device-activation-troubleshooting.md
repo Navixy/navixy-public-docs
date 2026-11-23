@@ -1,5 +1,7 @@
 ---
 description: Resolve common GPS device activation issues in Navixy. Covers required device configuration, timezone settings, and steps when devices fail to appear online.
+tags:
+  - legacy
 ---
 
 # GPS device activation troubleshooting

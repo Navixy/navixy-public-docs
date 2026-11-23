@@ -2,6 +2,8 @@
 description: >-
   Create menu presets to rename/reorder items, add/remove tabs, add your own
   applications, and assign custom menus to specific users
+tags:
+  - legacy
 ---
 
 # Menu editor

@@ -2,6 +2,8 @@
 description: >-
   Add team members to your Navixy account, decide what each can do with roles,
   and choose which objects, POI, and geofences each can see.
+tags:
+  - legacy
 ---
 
 # Users and roles

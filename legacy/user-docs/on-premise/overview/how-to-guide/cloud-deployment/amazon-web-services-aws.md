@@ -2,6 +2,8 @@
 description: >-
   Deploy Navixy on-premise on Amazon Web Services. Set up VPC networking,
   provision an EC2 instance, configure Elastic IPs, and establish SSH access.
+tags:
+  - legacy
 ---
 
 # Amazon Web Services (AWS)

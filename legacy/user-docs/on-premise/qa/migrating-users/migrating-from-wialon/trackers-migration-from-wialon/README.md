@@ -3,6 +3,8 @@ description: >-
   Migrate devices from Wialon to Navixy in bulk using exported device
   information. Map Wialon fields to Navixy fields and choose whether to send
   configuration commands.
+tags:
+  - legacy
 ---
 
 # Trackers migration from Wialon

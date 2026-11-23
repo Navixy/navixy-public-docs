@@ -1,6 +1,8 @@
 ---
 title: Service task
 description: Scheduled maintenance on a vehicle, due by date, mileage, or engine hours.
+tags:
+  - legacy
 ---
 
 # Service task

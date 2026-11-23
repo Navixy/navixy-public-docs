@@ -1,6 +1,8 @@
 ---
 title: Places (POI)
 description: Business locations that employees visit, called points of interest in the interface and places in the API.
+tags:
+  - legacy
 ---
 
 # Places (POI)

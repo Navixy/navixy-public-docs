@@ -1,5 +1,7 @@
 ---
 description: Monitor proximity between GPS-enabled devices and BLE tags using Bluetooth. Useful for detecting dangerous equipment proximity and enforcing safety distances.
+tags:
+  - legacy
 ---
 
 # Proximity monitoring

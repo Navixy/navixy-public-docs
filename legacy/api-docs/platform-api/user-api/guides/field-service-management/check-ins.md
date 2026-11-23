@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Working with check-ins
 
 In Navixy, check-ins are a feature used to record and report the location and status of employees in the field. They allow employees to send real-time updates about their location, accompanied by additional data such as forms, photos, and comments. These check-ins can be used for various purposes, including verifying task completion, providing updates on job progress, and collecting field data. Check-ins are typically created using the X-GPS Tracker mobile app and can be integrated into workflows to ensure accurate and timely information from field employees.

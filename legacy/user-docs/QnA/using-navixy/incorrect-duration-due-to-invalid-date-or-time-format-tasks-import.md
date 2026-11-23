@@ -3,6 +3,8 @@ title: Incorrect duration due to invalid date or time format (Tasks import)
 description: >-
   Correct the date and time format in the task import file; unsupported symbols
   or AM/PM notation prevent the platform from parsing duration
+tags:
+  - legacy
 ---
 
 # Incorrect duration due to invalid date or time format (Tasks import)

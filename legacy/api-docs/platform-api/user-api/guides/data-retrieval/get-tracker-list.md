@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Getting list of GPS trackers
 
 This guide describes how to obtain a list of GPS devices linked to a user account via the Navixy API. Accessing this information is fundamental for efficiently managing and monitoring multiple devices in the Navixy system.

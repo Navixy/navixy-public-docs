@@ -2,6 +2,8 @@
 description: >-
   Recover access to your Navixy account by requesting a password reset link to
   your registered email address from the login page.
+tags:
+  - legacy
 ---
 
 # Password recovery

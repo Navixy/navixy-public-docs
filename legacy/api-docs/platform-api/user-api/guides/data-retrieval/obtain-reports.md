@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # Obtaining report information
 
 Reports offer essential insights to effectively manage your fleet or mobile workforce. At times, you may need to extract report data for use in external applications or to generate custom business reports, such as those detailing trip information alongside fuel consumption, drains, and refills. Follow these steps to obtain report information using the Navixy API.

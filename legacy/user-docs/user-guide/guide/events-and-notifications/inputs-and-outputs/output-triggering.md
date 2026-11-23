@@ -1,5 +1,7 @@
 ---
 description: Monitor GPS device output state changes such as engine block activation or alarm engagement. Receive alerts whenever a configured output switches on or off.
+tags:
+  - legacy
 ---
 
 # Output triggering

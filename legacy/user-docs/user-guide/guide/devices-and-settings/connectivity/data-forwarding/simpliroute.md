@@ -2,6 +2,8 @@
 description: >-
   Forward vehicle positions from Navixy to SimpliRoute over HTTP, linking live
   location data to the delivery orders managed in SimpliRoute.
+tags:
+  - legacy
 ---
 
 # SimpliRoute

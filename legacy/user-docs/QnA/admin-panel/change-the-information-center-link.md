@@ -1,6 +1,8 @@
 ---
 title: Change the Information Center link
 description: Customize Information Center URLs in Admin Panel Service preferences to point to your support or help resources
+tags:
+  - legacy
 ---
 
 # Change the Information Center link

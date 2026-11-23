@@ -1,5 +1,7 @@
 ---
 description: Set up door, trunk, and hood sensors for vehicles that transmit this data via the CAN bus. The platform logs open status events as they arrive from the device.
+tags:
+  - legacy
 ---
 
 # Doors, trunk, and hood sensor

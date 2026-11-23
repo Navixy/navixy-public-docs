@@ -1,3 +1,8 @@
+---
+tags:
+  - legacy
+---
+
 # IoT Logic dashboard
 
 **IoT Logic** is the fourth tab of the Dashboards app, and it answers "how is IoT Logic being used across the fleet?" (the [Conditions dashboard](technical-conditions-dashboard.md) covers "how well is the fleet's hardware performing, and what needs attention?"). It pulls flow and node execution activity into a single view. That way, you can see which devices, flows, and nodes are actually processing data without opening [IoT Logic](../account/iot-logic/README.md) itself.

@@ -1,5 +1,7 @@
 ---
 description: Configure impact force thresholds on the device so it detects and reports collisions to Navixy. Some models support separate weak and strong impact levels.
+tags:
+  - legacy
 ---
 
 # Accelerometer

@@ -1,6 +1,8 @@
 ---
 title: Geofence import
 description: Create many circle geofences at once from a spreadsheet, through a background import process.
+tags:
+  - legacy
 ---
 
 # Geofence import

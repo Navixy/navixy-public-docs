@@ -3,6 +3,8 @@ description: >-
   Test one geofence by ID inside IoT Logic formulas and conditions with
   inGeofence(), enterGeofence(), and leaveGeofence(), including their
   parameters, return values, and the cases that return null.
+tags:
+  - legacy
 ---
 
 # Geofence functions

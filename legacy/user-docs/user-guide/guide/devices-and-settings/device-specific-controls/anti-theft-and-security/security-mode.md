@@ -1,5 +1,7 @@
 ---
 description: Guard a parked vehicle by arming the device's motion sensor and perimeter detection. Set time windows, sensitivity thresholds, and a parking radius in Navixy.
+tags:
+  - legacy
 ---
 
 # Security mode

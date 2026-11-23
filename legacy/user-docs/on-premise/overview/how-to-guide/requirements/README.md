@@ -1,5 +1,7 @@
 ---
 description: Review hardware, software, and service requirements before installing Navixy on-premise. Covers server specs, OS, GIS, SMS gateway, SSL, domain, and network prerequisites.
+tags:
+  - legacy
 ---
 
 # Requirements

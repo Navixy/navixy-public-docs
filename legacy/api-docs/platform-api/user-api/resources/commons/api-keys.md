@@ -1,6 +1,8 @@
 ---
 title: API keys
 description: Long-lived credentials for integrations, used in place of a user session hash.
+tags:
+  - legacy
 ---
 
 # API keys

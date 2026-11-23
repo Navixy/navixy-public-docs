@@ -1,6 +1,8 @@
 ---
 title: Rules and notifications
 description: Worked examples of setting conditions, reading the events they log, and delivering them to an app.
+tags:
+  - legacy
 ---
 
 # Rules and notifications

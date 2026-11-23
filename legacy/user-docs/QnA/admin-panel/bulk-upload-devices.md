@@ -1,6 +1,8 @@
 ---
 title: Bulk upload devices
 description: "Activate many devices at once by importing a file in the web interface, by sending a file to Navixy support, or through the API."
+tags:
+  - legacy
 ---
 
 # Bulk upload devices

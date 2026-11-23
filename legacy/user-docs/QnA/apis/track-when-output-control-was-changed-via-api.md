@@ -2,6 +2,8 @@
 description: >-
   Query audit logs via user/audit/log/list to track output control changes, or
   create state change alerts and read notification history
+tags:
+  - legacy
 ---
 
 # Track when output control was changed via API

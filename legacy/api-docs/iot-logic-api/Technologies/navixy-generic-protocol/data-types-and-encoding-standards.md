@@ -1,5 +1,7 @@
 ---
 description: Map JSON types to NGP fields, format timestamps as ISO 8601 UTC, and encode binary values as Base64. Covers size limits and constraints for each data type.
+tags:
+  - legacy
 ---
 
 # Data types and encoding standards

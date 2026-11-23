@@ -1,5 +1,7 @@
 ---
 description: Configure the Engine state detection block in Navixy so the device reports engine on and off based on on-board voltage levels and durations.
+tags:
+  - legacy
 ---
 
 # Engine state detection

@@ -3,6 +3,8 @@ description: >-
   Configure Nginx as the Navixy on-premise web server on Linux or Windows. Set
   up HTTP and HTTPS virtual hosts, SSL certificates, and domain-based proxy
   rules.
+tags:
+  - legacy
 ---
 
 # Nginx web server

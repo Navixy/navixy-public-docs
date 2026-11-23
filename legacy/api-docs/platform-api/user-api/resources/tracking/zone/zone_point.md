@@ -1,6 +1,8 @@
 ---
 title: Geofence point
 description: The points that give a polygon or sausage geofence its shape, read and replaced separately from the geofence.
+tags:
+  - legacy
 ---
 
 # Geofence point

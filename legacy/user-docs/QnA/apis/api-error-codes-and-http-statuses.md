@@ -3,6 +3,8 @@ description: >-
   Find platform error codes with their HTTP status equivalents in the Error
   codes reference. Includes endpoint-specific error codes for detailed
   troubleshooting
+tags:
+  - legacy
 ---
 
 # API error codes and HTTP statuses

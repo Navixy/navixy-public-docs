@@ -2,6 +2,8 @@
 description: >-
   Core concepts for connecting devices and data sources to Navixy, including
   supported protocols and the available integration paths.
+tags:
+  - legacy
 ---
 
 # Platform essentials

@@ -2,6 +2,8 @@
 description: >-
   GPS device certification in Mexico and Latin America involves IFT, NOM,
   ICONTEC, INACAL, and other regional certification bodies.
+tags:
+  - legacy
 ---
 
 # Certification in Mexico and Latin America

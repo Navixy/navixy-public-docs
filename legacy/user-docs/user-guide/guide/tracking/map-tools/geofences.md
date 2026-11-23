@@ -2,6 +2,8 @@
 description: >-
   Create circular, polygon, or route geofences, import them from Excel or KML
   files, and link them to alert rules for entrance and exit monitoring.
+tags:
+  - legacy
 ---
 
 # Geofences

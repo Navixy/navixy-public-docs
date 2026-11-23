@@ -3,6 +3,8 @@ title: Download DDD files from trackers
 description: >-
   Download tachograph DDD files from supported trackers using Navixy Tacho Auth
   Client; vehicle ignition and active company card are required
+tags:
+  - legacy
 ---
 
 # Download DDD files from trackers

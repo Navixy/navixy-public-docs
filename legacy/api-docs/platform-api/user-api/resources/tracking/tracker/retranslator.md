@@ -1,6 +1,8 @@
 ---
 title: Retranslator binding
 description: Which retranslators forward a given tracker's data, and how to change that.
+tags:
+  - legacy
 ---
 
 # Retranslator binding

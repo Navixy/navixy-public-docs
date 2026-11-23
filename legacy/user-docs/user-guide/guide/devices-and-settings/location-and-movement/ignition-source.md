@@ -2,6 +2,8 @@
 description: >-
   Set the ignition source on a GPS device so Navixy can accurately detect engine
   on/off when the ignition wire isn't directly connected.
+tags:
+  - legacy
 ---
 
 # Ignition source

@@ -2,6 +2,8 @@
 description: >-
   Tune idle time and speed thresholds to control trip and stop boundaries in
   reports, with optional ignition or motion sensor confirmation.
+tags:
+  - legacy
 ---
 
 # Parking detection

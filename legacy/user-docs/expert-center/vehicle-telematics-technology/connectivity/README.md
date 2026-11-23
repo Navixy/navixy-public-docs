@@ -1,5 +1,7 @@
 ---
 description: Publish/subscribe messaging for IoT device connectivity in fleet telematics. MQTT protocol guides cover broker setup, message formats, and QoS levels.
+tags:
+  - legacy
 ---
 
 # Connectivity

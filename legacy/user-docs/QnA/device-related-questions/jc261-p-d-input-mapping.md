@@ -3,6 +3,8 @@ title: JC261(P/D) Input Mapping
 description: >-
   JC261 maps 3 logical inputs in Navixy: Input 1 is SOS button (event only),
   Input 2 is ignition, Input 3 is input voltage. Device has 2 physical inputs
+tags:
+  - legacy
 ---
 
 # JC261(P/D) Input Mapping

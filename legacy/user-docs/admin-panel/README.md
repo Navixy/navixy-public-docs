@@ -1,5 +1,8 @@
 ---
 description: "Run Navixy for your customers: configure the GPS tracking platform, create user accounts, manage devices, and set up billing and reseller plans"
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Admin Panel

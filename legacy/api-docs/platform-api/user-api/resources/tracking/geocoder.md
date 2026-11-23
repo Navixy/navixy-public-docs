@@ -1,6 +1,8 @@
 ---
 title: Geocoder
 description: Turn an address into map locations, and a location back into an address.
+tags:
+  - legacy
 ---
 
 # Geocoder

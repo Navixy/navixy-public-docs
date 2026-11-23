@@ -1,5 +1,7 @@
 ---
 description: Add custom measurement sensors in Navixy for Galileosky devices using Easy Logic scripts to capture any parameter the standard device data set does not include.
+tags:
+  - legacy
 ---
 
 # User-defined tags (Galileosky)

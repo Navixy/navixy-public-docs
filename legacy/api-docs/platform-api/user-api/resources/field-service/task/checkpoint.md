@@ -1,6 +1,8 @@
 ---
 title: Checkpoints
 description: The individual stops that make up a route, each essentially a task.
+tags:
+  - legacy
 ---
 
 # Checkpoints

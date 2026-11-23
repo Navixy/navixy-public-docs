@@ -2,6 +2,8 @@
 description: >-
   Set up GPS alert rules to detect geofence breaches, driver safety events, fuel
   changes, and device status. Get notified via SMS, email, push, or in-app.
+tags:
+  - legacy
 ---
 
 # Rules and alerts

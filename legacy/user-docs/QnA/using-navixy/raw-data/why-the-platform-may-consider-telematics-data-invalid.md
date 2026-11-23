@@ -1,6 +1,8 @@
 ---
 title: Why the platform may consider telematics data invalid
 description: "Platform filters data with zero satellites or invalid coordinates (0,0) to prevent inaccurate location display and track quality issues"
+tags:
+  - legacy
 ---
 
 # Why the platform may consider telematics data invalid

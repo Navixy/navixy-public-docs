@@ -2,6 +2,8 @@
 description: >-
   Status indicators in Navixy show device activation and connection health.
   Color codes diagnose online, offline, and transitional device states.
+tags:
+  - legacy
 ---
 
 # Device connection status

@@ -1,6 +1,8 @@
 ---
 title: Troubleshoot custom domain issues
 description: "Verify DNS records point to saas.navixy.com with CNAME type; use MXToolbox or dig to validate your domain configuration"
+tags:
+  - legacy
 ---
 
 # Troubleshoot custom domain issues

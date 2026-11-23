@@ -4,6 +4,8 @@ description: >-
   Fix JC400 video streaming: verify IMEI, SIM connectivity, firmware version,
   APN settings, and server configuration. Includes manual command setup for EU
   and US
+tags:
+  - legacy
 ---
 
 # How to troubleshoot Jimi JC400 video streaming and playback

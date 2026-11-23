@@ -3,6 +3,8 @@ title: Lock down device activation
 description: >-
   Restrict device activation to specific devices using activation codes, or
   remove the activation option entirely via Menu Editor for end users
+tags:
+  - legacy
 ---
 
 # Lock down device activation

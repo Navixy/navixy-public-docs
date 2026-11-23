@@ -2,6 +2,9 @@
 description: >-
   Create and manage resellers, configure permissions, and control
   activation and suspension statuses
+tags:
+  - legacy
+noIndex: true
 ---
 
 # Resellers

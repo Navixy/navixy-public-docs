@@ -2,6 +2,8 @@
 description: >-
   Cell towers and Wi-Fi access points locate devices without GPS in LBS
   tracking. Covers Cell of Origin, E-OTD, and Wi-Fi positioning accuracy.
+tags:
+  - legacy
 ---
 
 # What is LBS tracking: Cell ID and WPS

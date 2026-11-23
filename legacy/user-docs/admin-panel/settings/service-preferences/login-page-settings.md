@@ -2,6 +2,8 @@
 description: >-
   Configure login page behavior, including self-registration, mobile app
   download prompts, and demo user credentials
+tags:
+  - legacy
 ---
 
 # Login page settings

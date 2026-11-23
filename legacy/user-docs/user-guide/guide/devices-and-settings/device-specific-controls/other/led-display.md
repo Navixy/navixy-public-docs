@@ -1,5 +1,7 @@
 ---
 description: Control the status LED on a GPS device in Navixy with the LED display block, choosing between always on and switching off after a timeout.
+tags:
+  - legacy
 ---
 
 # LED display
