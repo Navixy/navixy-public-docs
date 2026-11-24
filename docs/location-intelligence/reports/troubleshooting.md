@@ -1,8 +1,8 @@
 ---
 description: >-
   Fix an empty report, a missing or repeated trip, a missing asset or sensor, a
-  trip on the wrong day, and messages when a report or Ask AI doesn't run or
-  open.
+  trip on the wrong day, violations that show no number, and messages when a
+  report or Ask AI doesn't run or open.
 tags:
   - troubleshooting
   - beta
@@ -20,7 +20,7 @@ Reports shows one of the following messages:
 * Sensor readings shows "No sensor reported a reading in this period."
 * Sensor readings shows "No sensor matches the filters."
 * Sensor readings shows "Choose the assets whose readings to show, then Run." when you open it.
-* Either report shows **No data yet** with "This report will show your fleet's data once it is available for your workspace."
+* A report shows **No data yet** with "This report will show your fleet's data once it is available for your workspace."
 
 Check the following, in this order:
 
@@ -117,6 +117,18 @@ Navixy can't change how a sensor is read. It has no sensor settings, such as a d
 * For a fuel level sensor, the tilt of the tank
 
 Some fuel level sensors send a fixed value, such as 65454 or 65455, when the sensor is disconnected or has failed. Navixy shows such a value as a normal number, and it counts in **Average**, **Min**, and **Max**. Check the documentation of the sensor for the values that it uses to report a fault.
+
+## Driver performance shows no number of violations
+
+In **Driver performance**, a violation cell shows **No rule**, **Not calculated**, or **Not supported** instead of a number. The value says why:
+
+| Value | What it means |
+| --- | --- |
+| **No rule** | There was no rule for this violation type when Navixy calculated the trips and stops. A rule added later applies only to the trips and stops that Navixy calculates after that. |
+| **Not calculated** | Navixy hasn't calculated the trips and stops yet. Violations appear up to about 5 hours after a trip or stop ends, so run the report again later. Trips and stops from before Navixy started to calculate violations stay **Not calculated**. |
+| **Not supported** | The GPS device doesn't send the ignition state that **Idling** needs. Navixy can't count idling for the device. |
+
+An asterisk (\*) next to a value means that some trips and stops aren't calculated yet. A number with an asterisk counts only the trips and stops that Navixy has calculated so far. To see the full count, run the report again after about 5 hours. For details, see [When a violation type shows a number](driver-performance.md#when-a-violation-type-shows-a-number).
 
 ## A report doesn't run
 

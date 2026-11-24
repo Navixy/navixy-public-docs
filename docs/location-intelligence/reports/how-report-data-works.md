@@ -9,7 +9,7 @@ tags:
 
 # How report data is prepared
 
-Reports doesn't read your GPS devices directly. Navixy prepares trips, stops, and sensor readings from device data and stores them. When you run a report, Navixy combines this stored data with trips, stops, and readings that it calculates from the newest device data. This page explains when data appears, how long it is kept, and which data a report includes. These rules apply to Trips and stops and to Sensor readings, except where a section names a single report type.
+Reports doesn't read your GPS devices directly. Navixy prepares trips, stops, and sensor readings from device data and stores them. When you run a report, Navixy combines this stored data with trips, stops, and readings that it calculates from the newest device data. This page explains when data appears, how long it is kept, and which data a report includes. These rules apply to every report type, except where a section names a single report type. Driver performance uses the same trips and stops as Trips and stops.
 
 ## When new data appears in a report
 
@@ -18,6 +18,8 @@ A report shows trips, stops, and sensor readings up to the moment when you run i
 Navixy adds a trip to report data only after the trip ends. A trip ends when the asset stands still for at least 5 minutes. As a result, a trip that is in progress isn't in any report.
 
 When the GPS device sends no data for more than 15 minutes, the trip ends at the last position before the gap. Navixy adds this trip when the GPS device sends data again, or about 32 hours after the trip started. To see where an asset is now, use [Tracking](../tracking/).
+
+Driver performance counts the violations of a trip or a stop only after Navixy calculates them. Navixy calculates violations every 4 hours, so they appear up to about 5 hours after the trip or stop ends. See [When a violation type shows a number](driver-performance.md#when-a-violation-type-shows-a-number).
 
 ## How far back report data goes
 
@@ -47,7 +49,7 @@ A report includes only the trips and readings that Navixy prepared while the GPS
 
 When you move a GPS device to another asset, the earlier trips and readings stay with the old asset. New trips and readings go to the new asset. The change applies within about 30 minutes.
 
-Both report types include every GPS device of the asset. Trips and stops includes the trips and stops of each device, and Sensor readings shows the readings of each device. When two GPS devices of one asset record the same trip, [Trips and stops](trips-and-stops.md) shows the trip twice, once for each device.
+Every report type includes every GPS device of the asset. Trips and stops and Driver performance include the trips and stops of each device, and Sensor readings shows the readings of each device. When two GPS devices of one asset record the same trip, [Trips and stops](trips-and-stops.md) shows the trip twice, once for each device.
 
 ## Which time zone a report uses
 
@@ -73,7 +75,7 @@ Stops follow the same rule. Under the **By asset** table, Reports states it as "
 
 ## Which units a report uses
 
-Reports shows distance in kilometers and speed in km/h. On screen, a duration shows as hours and minutes, such as "2 h 05 m". In a downloaded file, a duration is a decimal number of hours, such as 1.25 for 1 hour 15 minutes. Sensor values use the unit that the GPS device reports.
+Reports shows distance in kilometers, speed in km/h, and engine speed in rpm. On screen, a duration shows as hours and minutes, such as "2 h 05 m". In a downloaded file, a duration is a decimal number of hours, such as 1.25 for 1 hour 15 minutes. Sensor values use the unit that the GPS device reports.
 
 ## See also
 

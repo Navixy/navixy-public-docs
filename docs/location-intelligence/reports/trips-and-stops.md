@@ -21,7 +21,7 @@ This page describes what the report shows and how its values are calculated. To 
 
 ## What the report shows
 
-<figure><img src="../.gitbook/assets/reports-trips-and-stops.png" alt="The Trips and stops report on the Summary tab, next to the Reports menu. The menu lists the report types in four groups: Fleet activities, Sensors and equipment, Safety and security, and Employee activities. Trips and stops and Sensor readings have no lock, and the other report types show a lock. The Ask AI button is at the top of the page. At the top of the report are the All assets button, the period button for yesterday, and the Run button, with the time zone of the report under them. Six tiles show the totals: Trips, Distance, Driving time, Stops, Stop time, and Max speed. The By asset table has one row for the asset of the report. Under it, the Trip and stop log lists trips and stops with their start, end, duration, distance, driving time, speeds, and coordinates."><figcaption><p>Trips and stops on the Summary tab: the totals in the tiles, a row for each asset, and the log of trips and stops</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/reports-trips-and-stops.png" alt="The Trips and stops report on the Summary tab, next to the Reports menu. The menu lists the report types in four groups: Fleet activities, Sensors and equipment, Safety and security, and Employee activities. Trips and stops, Sensor readings, and Driver performance have no lock, and the other report types show a lock. The Ask AI button is at the top of the page. At the top of the report are the button with the asset of the report, the period button for yesterday, and the Run button. Under them are the time zone of the report and the line Data up to. Six tiles show the totals: Trips, Distance, Driving time, Stops, Stop time, and Max speed. The By asset table has one row for the asset of the report. Under it, the Trip and stop log lists trips and stops with their start, end, duration, distance, driving time, speeds, and coordinates."><figcaption><p>Trips and stops on the Summary tab: the totals in the tiles, a row for each asset, and the log of trips and stops</p></figcaption></figure>
 
 Here's what you can do in the report:
 
@@ -77,7 +77,7 @@ Each trip has these values:
 Two of these values are often misread:
 
 * **Avg speed** uses the driving time, not the duration. A trip with long traffic jams has a higher average speed than its distance divided by its duration.
-* **Driving time** leaves out the standstills shorter than 5 minutes inside the trip. It isn't engine time. When the asset stands still during a trip, that time counts in **Duration** but not in **Driving time**, whether the engine runs or not. Reports doesn't calculate engine idling.
+* **Driving time** leaves out the standstills shorter than 5 minutes inside the trip. It isn't engine time. When the asset stands still during a trip, that time counts in **Duration** but not in **Driving time**, whether the engine runs or not. Trips and stops doesn't calculate engine idling. [Driver performance](driver-performance.md#violation-types) counts idling on stops.
 
 The trip distance can differ from a distance calculated from the GPS positions, because Navixy uses the odometer when it's available.
 

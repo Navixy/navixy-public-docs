@@ -32,6 +32,7 @@
   * [How report data is prepared](reports/how-report-data-works.md)
   * [Trips and stops](reports/trips-and-stops.md)
   * [Sensor readings](reports/sensor-readings.md)
+  * [Driver performance](reports/driver-performance.md)
   * [Troubleshooting reports](reports/troubleshooting.md)
 * [Notification rules](rules-and-notifications/README.md)
   * [How rules work](rules-and-notifications/how-rules-work.md)

@@ -23,9 +23,9 @@ Reports shows one report type at a time. You choose it in the Reports menu.
 To open a report, follow these steps:
 
 1. Click **Reports** on the sidebar.
-2. In the Reports menu, click **Trips and stops** or **Sensor readings**.
+2. In the Reports menu, click **Trips and stops**, **Sensor readings**, or **Driver performance**.
 
-**Trips and stops** opens for **All assets** and **Yesterday** and runs immediately. **Sensor readings** opens for **Yesterday** with no assets and asks you to choose them. Choose the assets, then click **Run**. See [Run a report](#run-a-report).
+**Trips and stops** opens for **All assets** and **Yesterday** and runs immediately. **Driver performance** opens for **All assets** and **Last week** and runs immediately. **Sensor readings** opens for **Yesterday** with no assets and asks you to choose them. Choose the assets, then click **Run**. See [Run a report](#run-a-report).
 
 To make the Reports menu narrow, click **Collapse menu**. The menu then shows only icons. To show the names again, click **Expand menu**.
 
@@ -81,7 +81,7 @@ A report's dates and times are in your computer's time zone. The report names th
 
 ## Share a report by its link
 
-A report's page address keeps the assets, the dates, the open tabs, and the filters. It also keeps the interval of **Sensor readings** and the trip panel, stop panel, or reading panel that is open. A link to the page or a bookmark opens the same report.
+A report's page address keeps the assets, the dates, the open tabs, and the filters. It also keeps the interval of **Sensor readings** and the violation types of **Driver performance**. It keeps the open panel too, such as a trip panel or a reading panel. A link to the page or a bookmark opens the same report.
 
 To share a report, follow these steps:
 
@@ -95,7 +95,7 @@ When another person opens the link, Reports uses that person's own access. To se
 
 ## Show and hide columns
 
-Each report table has its own columns menu. Some columns always show: **Asset** in the **By asset** table, **Day** in the **By day** table, and **Sensor** in **Sensor readings**.
+Each report table has its own columns menu. Some columns always show: **Asset** in the **By asset** table, **Day** in the **By day** table, and **Sensor** in **Sensor readings**. In **Driver performance**, **Asset** and **Total** always show in the **Summary by asset** table. Its violation type columns follow the violation types that you choose in the report.
 
 To show or hide columns, follow these steps:
 
@@ -121,6 +121,9 @@ The file contains the table as it shows on screen. Hidden columns are left out. 
 
 * The file of the **Trip and stop log** starts with **Asset** and **Day**. In place of **Position**, it has **Start latitude**, **Start longitude**, **End latitude**, and **End longitude**.
 * On the tab of an asset, the file of the **By day** table starts with **Asset**.
+* In **Driver performance**, the file of the **Summary by asset** table ends with a column that counts the trips and stops not calculated yet.
+* In **Driver performance**, the file of the **Violations** table adds the **Unit**, **Zone**, and **Trip or stop start** columns. The file gives the duration of a violation in seconds.
+* In the files of **Driver performance**, a cell without a number has the same words as on screen, such as **No rule**. A row with **No data for period** has empty violation cells.
 
 The column headings name the unit and the time zone, for example **Distance (km)** and **Start (Europe/Berlin)**. Durations are in decimal hours: 1 hour 15 minutes is 1.25. Excel shows two decimals, and the CSV file has up to six, such as 2.083333 for 2 hours 5 minutes.
 
@@ -134,7 +137,7 @@ If the file isn't saved, the menu shows "The file could not be written. Try agai
 
 ## Report types with a lock
 
-Besides **Trips and stops** and **Sensor readings**, the Reports menu shows other report types with <picture><source srcset="../.gitbook/assets/icons/reports-lock-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-lock.svg" alt="Locked" data-size="line"></picture>. Click one of them to see what it reports.
+Besides **Trips and stops**, **Sensor readings**, and **Driver performance**, the Reports menu shows other report types with <picture><source srcset="../.gitbook/assets/icons/reports-lock-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/reports-lock.svg" alt="Locked" data-size="line"></picture>. Click one of them to see what it reports.
 
 These report types are offered as paid options. Contact Navixy to add them to your workspace.
 
