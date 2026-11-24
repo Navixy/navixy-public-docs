@@ -45,6 +45,7 @@ Clicking a person's name opens a side panel titled with their name or email. Its
 | **Products** | The products that the person's roles give access to. |
 | **Roles** | The person's roles. <picture><source srcset="../.gitbook/assets/icons/add-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/add.svg" alt="Assign role" data-size="line"></picture> opens the **Assigned roles** window, where you assign and revoke roles. |
 | **MFA** | Whether the person uses multi-factor authentication. You can't change it here. |
+| **Sign out everywhere** | **Sign out** ends the person's sessions on every device. See [Sign out a member everywhere](manage-users.md#sign-out-a-member-everywhere). |
 | **Remove member from organization** | **Remove** takes the person out of the organization. See [Remove a member](manage-users.md#remove-a-member). |
 
 A person invited to the organization has the status **Invited** until they accept the invitation, and **Active** after that. A member whose last role is revoked stays in the organization without a role. You can assign them a role later without inviting them again.

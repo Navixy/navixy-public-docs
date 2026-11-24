@@ -182,7 +182,6 @@ type ConsoleActionAffordance {
 type ConsoleWorkspaceProduct {
   "Billing's id for the product, relayed by Console: the same value as `BillingProductDomain.id`."
   productId: ID!
-  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
   code: String!
   "Human-readable product name."
   displayName: String!
@@ -240,7 +239,6 @@ type ConsoleWorkspaceProduct {
 type ConsoleProductCatalogEntry {
   "Billing's id for the product, relayed by Console: the same value as `BillingProductDomain.id`."
   id: ID!
-  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
   code: String!
   "Human-readable product name. Null when Console has none."
   displayName: String
@@ -253,15 +251,11 @@ type ConsoleProductCatalogEntry {
   "Whether the default plan requires this product."
   isRequired: Boolean!
   """
-  The product's user-facing URL, read from nvx4 billing's product domain of this id
-  (BillingProductDomain.productUrl) rather than from Console. Null when billing has none or has no
-  product domain of this id.
+  Null when billing has none or has no product domain of this id.
   """
   productUrl: String
   """
-  The product's internal path, read from nvx4 billing's product domain of this id
-  (BillingProductDomain.internalPath) rather than from Console. Null when billing has none or has no
-  product domain of this id.
+  Null when billing has none or has no product domain of this id.
   """
   internalPath: String
 }
@@ -312,7 +306,6 @@ input ConsoleWorkspaceProductEnableInput {
   workspace id is refused with VALIDATION_ERROR.
   """
   workspaceId: ID!
-  "nvx4 billing's own product code (BillingProductDomain.code), relayed by Console, e.g. \"bdr\"."
   productCode: Code!
 }
 

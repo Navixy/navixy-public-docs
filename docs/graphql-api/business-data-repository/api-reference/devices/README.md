@@ -976,7 +976,7 @@ Input for activating a device: creates it with the given identifier, records SIM
 | `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
 | `title` | `String` | The device display name. For a new device, `<model title> <identifier>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
-| `identifier` | `String!` | The identifier the model's protocol names a device by: the IMEI (15 digits) for most models, the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the namespace of its protocol (`suntech`). Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
+| `identifier` | `String!` | The identifier that the model's protocol names a device by: the IMEI (15 digits) for most models and the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the `suntech` namespace. Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
 | `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 
@@ -2065,7 +2065,7 @@ Input for activating a device: creates it with the given identifier, records SIM
 | `setup` | [DeviceSetup](#devicesetup)! | How the device receives its server settings. |
 | `modelId` | `ID!` | The device model. Must be `supported`. |
 | `title` | `String` | The device display name. For a new device, `<model title> <identifier>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank. |
-| `identifier` | `String!` | The identifier the model's protocol names a device by: the IMEI (15 digits) for most models, the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the namespace of its protocol (`suntech`). Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
+| `identifier` | `String!` | The identifier that the model's protocol names a device by: the IMEI (15 digits) for most models and the serial number (6 to 10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER` identifier, the serial number in the `suntech` namespace. Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise. |
 | `phone` | `String` | The SIM phone number the activation SMS is sent to: 5 to 20 digits, globally unique across the installation. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 | `apn` | [ApnSettingsInput](#apnsettingsinput) | The APN settings pushed to the device. Required for `AUTOMATIC` setup, optional for `MANUAL`. |
 

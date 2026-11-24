@@ -26,6 +26,8 @@ To invite a user, follow these steps:
 
 The page shows the result for each address. An address that already belongs to a member or already has a pending invitation can't be invited. The people that you invited appear under **Recently invited**. To invite more people, repeat steps 2 to 6. When you finish, click **Done**.
 
+If you leave the page while an address that you entered has no sent invitation, Console asks whether to discard it. Click **Keep editing** to return to the page or **Discard invitations** to leave.
+
 The invitation appears on the **Invitations** tab with the status **Pending**, and the person appears on the **Users** tab with the status **Invited**. Navixy sends the person an email with a link to accept the invitation. When they accept, their status changes to **Active**.
 
 An invitation has an expiration date, shown under **Sent** on the **Invitations** tab. If the person doesn't accept it in time, its status changes to **Expired**. To give them access, invite them again.
@@ -92,6 +94,21 @@ To revoke a role, follow these steps:
 You can also revoke a role on the role's page: under **Assign to users**, clear the person, save the role, and confirm.
 
 The person loses access rights within about 5 minutes. A member whose last role is revoked stays in the organization without a role. To give them access again, assign them a role. You don't need to invite them again. The Owner role can't be revoked.
+
+## Sign out a member everywhere
+
+Signing out a member ends their sessions on every device and in every organization that they belong to. Use it, for example, when the person loses a device that is signed in. The person keeps all their roles and can sign in again immediately. To sign out a member, you need the Owner role or a role that includes the **Console** product. You can sign out only a member with the **Active** status. You can also sign out yourself.
+
+To sign out a member, follow these steps:
+
+1. Go to **Users and roles** and open the **Users** tab.
+2. Click the person's name to open their details.
+3. Under **Sign out everywhere**, click **Sign out**.
+4. In the confirmation window, click **Sign out everywhere**.
+
+The sign-out can take up to 1 hour to reach every device. If Console can't get the result, it tells you that the person may or may not be signed out. You can then sign them out again.
+
+**Audit log** records the sign-out. See [Audit log](../audit-log/README.md) to learn how to find the event.
 
 ## Remove a member
 

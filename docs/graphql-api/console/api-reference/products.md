@@ -94,7 +94,7 @@ One entry of Console's own product catalog.
 | `isActive` | `Boolean!` | Whether the product is currently offered. productCatalog(activeOnly: true) excludes the rest. |
 | `isDefault` | `Boolean!` | Whether the default plan turns this product on when a workspace is created. |
 | `isRequired` | `Boolean!` | Whether the default plan requires this product. |
-| `productUrl` | `String` | The product's user-facing URL, read from nvx4 billing's product domain of this id (BillingProductDomain.productUrl) rather than from Console. Null when billing has none or has no product domain of this id. |
+| `productUrl` | `String` | The product's user-facing URL, the same value as `BillingProductDomain.productUrl` in Billing. Null when Billing has no URL for the product. |
 | `internalPath` | `String` | The product's internal path, the same value as `BillingProductDomain.internalPath` in Billing: an absolute http or https URL, or a path that starts with a single `/`. Null when Billing has no path for the product. |
 
 </details>
@@ -339,7 +339,7 @@ One entry of Console's own product catalog.
 | `isActive` | `Boolean!` | Whether the product is currently offered. productCatalog(activeOnly: true) excludes the rest. |
 | `isDefault` | `Boolean!` | Whether the default plan turns this product on when a workspace is created. |
 | `isRequired` | `Boolean!` | Whether the default plan requires this product. |
-| `productUrl` | `String` | The product's user-facing URL, read from nvx4 billing's product domain of this id (BillingProductDomain.productUrl) rather than from Console. Null when billing has none or has no product domain of this id. |
+| `productUrl` | `String` | The product's user-facing URL, the same value as `BillingProductDomain.productUrl` in Billing. Null when Billing has no URL for the product. |
 | `internalPath` | `String` | The product's internal path, the same value as `BillingProductDomain.internalPath` in Billing: an absolute http or https URL, or a path that starts with a single `/`. Null when Billing has no path for the product. |
 
 ---

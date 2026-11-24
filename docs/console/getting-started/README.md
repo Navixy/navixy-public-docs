@@ -29,11 +29,19 @@ Go to the [Navixy registration page](https://account.navixy.com/signup?utm_sourc
 {% endstep %}
 
 {% step %}
-**Enter your email address and select a region**
+**Select a region**
 
-Enter your email address. In the **Data region** field, select where your organization's data is stored: **United States** or **European Union**. Navixy preselects the region of the country you connect from, or **United States** when it can't tell. You can change it. Click **Continue**.
+In **Region**, select where your organization's data is stored: **United States** or **European Union**. No region is selected until you choose one. Click **Continue**.
 
 The region applies to your organization and to every workspace in it. You can't change it after registration. Your developers need it to connect to [Navixy GraphQL API](https://app.gitbook.com/s/eaPUYn5ATRhY1fALtOkq/graphql-basics#endpoint-and-region).
+{% endstep %}
+
+{% step %}
+**Enter your email address**
+
+Enter your email address in **Email** and click **Register**.
+
+If your email address already has an account in another region, the page links to that region's sign-in page. To create a separate organization in the region that you selected, click **Register** again.
 {% endstep %}
 
 {% step %}
@@ -80,6 +88,8 @@ Registration is complete. Now you have:
 * A subscription for that workspace to the default tariff plan.
 
 The address of Navixy Console shows your region, for example `console.eu.navixy.com` or `console.us.navixy.com`.
+
+Your account belongs to one region. To open Navixy Console in another region, click your initials to open the **Account** menu. Under **Region**, another region shows **Sign in** when your email address has an account there. It shows **Create account** when your email address has no account there.
 
 If you want to create another workspace, see [Create a workspace](../organization/manage-workspaces.md#create-a-workspace).
 

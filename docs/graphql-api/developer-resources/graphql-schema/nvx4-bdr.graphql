@@ -1,4 +1,4 @@
-# Version: 0.17.23
+# Version: 0.17.24
 
 # @category: bdr/schedules
 """
@@ -2022,10 +2022,7 @@ input DeviceActivateInput {
   "The device display name. For a new device, `<model title> <identifier>` when omitted or blank. For an existing device this activation attaches to, replaces its title when given and keeps it when omitted or blank."
   title: String @trim
   """
-  The identifier the model's protocol names a device by: the IMEI (15 digits) for most models, the serial number (6 to
-  10 digits, not all zeros, leading zeros kept) for Suntech models. Becomes the device's `IMEI` or `SERIAL_NUMBER`
-  identifier, the serial number in the namespace of its protocol (`suntech`). Checked against the model:
-  `VALIDATION_ERROR` on `identifier` otherwise.
+  Checked against the model: `VALIDATION_ERROR` on `identifier` otherwise.
   """
   identifier: String! @trim
   """
