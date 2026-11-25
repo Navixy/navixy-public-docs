@@ -18,10 +18,12 @@ A device needs two settings before it can send data: the address of the Navixy s
 
 Choose automatic setup when the SIM card can receive SMS. Choose manual setup when you configure devices before you install them, or when the SIM card can't receive SMS.
 
+If Navixy doesn't decode the protocol of your device, you can still connect it with the Navixy Generic Protocol (NGP). NGP also connects your own system that sends on data from devices, such as your own server. See [Enter the details of an NGP device](#enter-the-details-of-an-ngp-device).
+
 **Before you start**, prepare the following:
 
 - A GPS device of a supported model, with its SIM card installed and the device powered on
-- The IMEI of the device, or the device factory ID of a Suntech device
+- The IMEI of the device, the device factory ID of a Suntech device, or the device identifier of an NGP device
 - A SIM card with mobile data
 - The APN of the mobile carrier of the SIM card, with the APN username and password if the carrier uses them
 - For automatic setup: the phone number of the SIM card, which must be able to receive SMS
@@ -70,7 +72,7 @@ If you click **Next** without a model, the page shows "Select a device model".
 
 If the list of models doesn't load, the page shows "Failed to load devices." Click **Retry** to load it again.
 
-If no model matches your search, the list shows "No models match your search." Check the model name on the device label or on its box, and try the vendor name instead. If your model isn't in the list, Navixy can't activate it yet.
+If no model matches your search, the list shows "No models match your search." Check the model name on the device label or on its box, and try the vendor name instead. If your model isn't in the list, Navixy doesn't decode its protocol yet. To connect the device in another way, see [Enter the details of an NGP device](#enter-the-details-of-an-ngp-device).
 
 Select the exact model of the device. Navixy uses the model that you select to read the data of the device.
 
@@ -120,9 +122,31 @@ A Suntech device reports its device factory ID instead of the IMEI. For a Suntec
 - In **Device factory ID**, enter the factory ID of the device: 6 to 10 digits, for example `205952162`. The device factory ID is printed on the device label.
 - If you leave **Name (optional)** empty, Navixy names the device after its model and device factory ID.
 
+### Enter the details of an NGP device
+
+NGP is an open protocol for sending device data to Navixy. Navixy receives data in NGP 4.0, a version of this protocol. Use the **NGP device** model of the vendor **Navixy** in the following cases:
+
+- Navixy doesn't decode the protocol of your device, and you don't want to wait until it does. You make the device, or your own server, send the data in NGP 4.0.
+- Your own system receives data from devices and sends it on to Navixy, for example your own server or another tracking platform.
+
+Activate one NGP device for each device whose data you send. [Protocol overview](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/overview) explains how NGP 4.0 works.
+
+Use manual setup for an NGP device. Navixy sends no configuration SMS to an NGP device, so automatic setup doesn't configure it. An NGP device needs no SIM card, phone number, or APN.
+
+For an NGP device, the **Details** step has a **Device identifier** field in place of **IMEI**. The other fields are the same.
+
+- In **Device identifier**, enter the identifier of the device: up to 64 characters, in any format. Your device or system sends this identifier with all its NGP 4.0 data, in the `device_id` field.
+  The field and `device_id` must have exactly the same value, character for character, including letter case and leading zeros. Navixy removes spaces at the start and at the end of the field.
+- Choose an identifier that other people can't guess, and don't use the IMEI of the device. NGP has no password: the identifier alone tells Navixy which device the data belongs to. See [Device identifiers instead of credentials](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/protocol-specification/transport-layer#device-identifiers-instead-of-credentials).
+- If you leave **Name (optional)** empty, Navixy names the device after its model and identifier, for example `NGP device fleet7-3f9c2a81`.
+
+After the activation, set up your device or system to send the data. The NGP 4.0 pages give the connection settings and the message format. Start with [Getting started](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/getting-started).
+
+If your device or system sent data before the activation, wait a minute before you send again. Navixy ignores data with an identifier that no device has. It keeps ignoring that identifier for up to 45 seconds, even if you activate the device in that time.
+
 ### Check the IMEI
 
-Check the IMEI, or the device factory ID of a Suntech device, before you click **Activate**. To correct a wrong IMEI later, you cancel the activation and activate the device again: see [Cancel the activation](#cancel-the-activation).
+Check the IMEI, the device factory ID of a Suntech device, or the device identifier of an NGP device before you click **Activate**. To correct a wrong IMEI or identifier later, you cancel the activation and activate the device again: see [Cancel the activation](#cancel-the-activation).
 
 ## 4. Activate the device
 
@@ -130,19 +154,21 @@ Check the IMEI, or the device factory ID of a Suntech device, before you click *
    The device page opens, with **Awaiting connection** next to the name of the device. With automatic setup, Navixy shows "Activation started. Configuration SMS queued." With manual setup, it shows "Activation started. Waiting for the device to connect."
 2. With manual setup, set the server address, the port, and the APN of the mobile carrier on the device.
    Use the configuration tool or the SMS commands of the manufacturer, for example Teltonika Configurator. The device page shows the server address and the port under **Manual setup**.
+   For an NGP device, set up your device or system as the [NGP 4.0 pages](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/getting-started) describe.
 
 If you started from an asset, Navixy shows the same message and closes the panel. No device page opens, and the **Device** field of the asset shows the new device. If the field already had a device, the new device replaces it. Click **Save** to save the asset. To follow the activation, go to **Device management** and click the device.
 
-If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device. For example, an IMEI that doesn't have 15 digits shows "Use 15 digits", and a device factory ID that doesn't have 6 to 10 digits shows "Use 6 to 10 digits". A phone number that is too short or too long shows "Use 5 to 20 digits". If an APN field has an error, **GPRS settings** expands so you can see it.
+If a field is missing or has the wrong format, the form shows the error under the field and doesn't activate the device. For example, an IMEI that doesn't have 15 digits shows "Use 15 digits". A device factory ID that doesn't have 6 to 10 digits shows "Use 6 to 10 digits". The **Device identifier** field accepts no more than 64 characters. A phone number that is too short or too long shows "Use 5 to 20 digits". If an APN field has an error, **GPRS settings** expands so you can see it.
 
 {% hint style="warning" %}
 **If Navixy refuses the activation**
 
-Two messages mean that the phone number or the device is already in use. Each shows under its field:
+The following messages mean that the phone number or the device is already in use. Each shows under its field:
 
 - "This phone number is already in use": a device already uses this SIM card, in this workspace or in any other. Check the phone number. If the SIM card moved from another device in your workspace, deactivate that device or cancel its activation first. The form checks the number when you leave the **Phone number** or the **IMEI** field, so this message can show before you click **Activate**.
 - "A device with this IMEI is already on the platform": the IMEI belongs to a device that is already connected, or to a device in another workspace. Check the IMEI on the device label.
 - "A device with this factory ID is already on the platform": the device factory ID of a Suntech device belongs to a device that is already on the platform, in any workspace and with any status, also one that is still awaiting connection. Check the device factory ID on the device label.
+- "A device with this identifier is already on the platform": another NGP device already has this identifier. That device can be in any workspace and have any status, also awaiting connection. Check the identifier against the `device_id` that your device or system sends.
 {% endhint %}
 
 ## 5. Wait for the device to connect
@@ -177,6 +203,8 @@ The device takes the model you selected and the details you entered. It also tak
 
 If Navixy hasn't sent the configuration SMS of the earlier activation yet, it cancels that SMS.
 
+The dialog opens only for an IMEI. A Suntech or an NGP device can't be activated a second time. Instead, the form shows the message about the device factory ID or the identifier. To activate such a device again, for example with the other setup, [cancel the activation](#cancel-the-activation) first.
+
 ## If the device doesn't connect
 
 If the device sends no data within 2 minutes of the activation, its page shows "Device not connected". Under it, the page lists possible causes in groups. Expand each group to see its causes.
@@ -199,6 +227,8 @@ The page shows two groups of causes, **Device** and **SIM card**. Navixy can't c
 - **Carrier:** The carrier blocks connections to the platform server.
 
 Fix the causes that apply. You don't need to activate the device again: when the device connects, the activation completes.
+
+For an NGP device, check what your device or system sends: see [Error handling](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/getting-started#error-handling) in the NGP 4.0 guide.
 
 ### If a device with automatic setup doesn't connect
 
@@ -245,7 +275,7 @@ If the device still doesn't connect, you can cancel the activation. **Cancel act
 2. Select the **I understand that this action can't be undone** check box.
 3. Click **Cancel activation**.
 
-Navixy shows "Activation canceled" and returns you to the **Devices** list. Navixy removes the device from the **Devices** list, and the device stops reporting to the platform. Its phone number and its IMEI, or the device factory ID of a Suntech device, become available again. You can activate the device later, in this workspace or in any other. If the device is in an optional device field of an asset, Navixy clears that field. You can't undo the cancellation.
+Navixy shows "Activation canceled" and returns you to the **Devices** list. Navixy removes the device from the **Devices** list, and the device stops reporting to the platform. Its phone number and its IMEI, the device factory ID of a Suntech device, or the device identifier of an NGP device become available again. You can activate the device later, in this workspace or in any other. If the device is in an optional device field of an asset, Navixy clears that field. You can't undo the cancellation.
 
 You can't cancel the activation of a device that an IoT Logic flow uses. Remove the device from every **Data Source** node that has it, or delete the flow, and then cancel the activation. If you try while a flow still uses the device, canceling fails with the message "Failed to complete the action. Try again." You also can't cancel the activation while the device is in a required device field of an asset or a geo object: assign another device to the field first.
 

@@ -13,7 +13,7 @@ A GPS device that you install in a vehicle sends nothing to your workspace until
 
 ## What you can do here
 
-**Connect a device in one form, by SMS or by hand.** You choose the model and enter the identifier of the device: the IMEI, or the device factory ID of a Suntech device. With automatic setup, you also enter the phone number of the SIM card and the APN of the mobile carrier. Navixy then sends the device an SMS with its settings. With manual setup, Navixy shows the server address and the port, and you set them on the device yourself, together with the APN.
+**Connect a device in one form, by SMS or by hand.** You choose the model and enter the identifier of the device. It's the IMEI, the device factory ID of a Suntech device, or the identifier that an NGP device sends. With automatic setup, you also enter the phone number of the SIM card and the APN of the mobile carrier. Navixy then sends the device an SMS with its settings. With manual setup, Navixy shows the server address and the port, and you set them on the device yourself, together with the APN.
 
 **Follow each activation until the device connects.** The device page shows the activation progress, and the device list marks each device that is still awaiting connection. If the device doesn't connect, the page lists the possible causes. For a device with automatic setup, you can also send the configuration SMS again from the page.
 
@@ -31,7 +31,7 @@ A device is the hardware. The thing that the device is fitted to, such as a vehi
 
 * **Device:** a piece of tracking hardware, such as a GPS device, a sensor, or a beacon.
 * **Device model:** the product of one vendor, such as Teltonika FMB920. The model defines how Navixy reads the data of the device and which settings the configuration SMS sends.
-* **Device identifier:** the number that the device reports to Navixy, printed on its label. For most GPS devices, the identifier is the IMEI, a 15-digit number. For a Suntech device, it's the device factory ID, 6 to 10 digits. Two devices can't have the same identifier, because Navixy uses it to recognize which device sent the data.
+* **Device identifier:** the value that the device reports to Navixy. For most GPS devices, the identifier is the IMEI, a 15-digit number printed on the device label. For a Suntech device, it's the device factory ID, 6 to 10 digits. For an NGP device, which sends its data in the Navixy Generic Protocol, it's the identifier that you choose, up to 64 characters. Two devices can't have the same identifier, because Navixy uses it to recognize which device sent the data.
 * **Activation:** connecting a device to Navixy. Navixy registers the device and waits for its first data. The device gets its settings in one of two ways. With automatic setup, Navixy sends them in a configuration SMS. With manual setup, you set them on the device. You activate a device once.
 
 ## How device data reaches Navixy

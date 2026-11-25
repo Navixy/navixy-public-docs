@@ -45,7 +45,7 @@ After a device with automatic setup has connected, Navixy can't change its phone
 
 ## Deactivate a device
 
-Deactivate a device when you stop using it, for example when you take it out of a vehicle permanently. A deactivated device is removed from the device list and stops reporting to the Navixy platform. Its phone number and its IMEI, or the device factory ID of a Suntech device, become available again. You can activate the device later, in this workspace or in any other.
+Deactivate a device when you stop using it, for example when you take it out of a vehicle permanently. A deactivated device is removed from the device list and stops reporting to the Navixy platform. Its phone number and its IMEI, the device factory ID of a Suntech device, or the device identifier of an NGP device become available again. You can activate the device later, in this workspace or in any other.
 
 **Deactivate** shows on the page of a device that was activated and isn't awaiting connection.
 

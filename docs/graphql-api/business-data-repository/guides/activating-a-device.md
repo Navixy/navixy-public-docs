@@ -16,7 +16,7 @@ Every operation on this page reads or changes the data of the workspace named by
 
 ## Prerequisites
 
-You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its identifier: the IMEI or, for a Suntech model, the serial number. For automatic setup, which the scenario below uses, you also need the phone number of its SIM card and the APN settings of the carrier.
+You need an access token for the workspace, with a role that creates and updates devices. See [Authentication](../../authentication/README.md) for how to get a token and what your roles allow. For each device you also need its identifier: the IMEI, the serial number for a Suntech model, or the identifier that an NGP device sends. For automatic setup, which the scenario below uses, you also need the phone number of its SIM card and the APN settings of the carrier.
 
 Activation needs the ID of a supported device model. List the supported models, narrowed to the model you hold:
 
@@ -104,9 +104,12 @@ Save the ID of `awaiting_connection`. Status IDs are the same in every workspace
 | Model | `identifier` | Stored as |
 | --- | --- | --- |
 | Suntech models | The serial number that the device sends: 6 to 10 digits, not all zeros. Leading zeros are kept. | The `SERIAL_NUMBER` identifier of the device, in the `suntech` namespace |
+| NGP device (`ngp-device`) | The identifier that the device sends in the `device_id` field of its NGP 4.0 packets: 1 to 64 characters in any format. It must match `device_id` exactly, including letter case and leading zeros. | The `CUSTOM` identifier of the device, in the `nvx3` namespace |
 | Every other model | The IMEI: exactly 15 digits | The `IMEI` identifier of the device |
 
-The API checks the value against the model. The examples on this page activate Teltonika devices, so they send an IMEI.
+The API checks the value against the model. For the NGP device, it checks only the length, after it removes spaces at the start and the end. The examples on this page activate Teltonika devices, so they send an IMEI.
+
+An NGP device sends its data in NGP 4.0, the Navixy Generic Protocol. Activate it with `setup: MANUAL`, and set up the sender as the [NGP 4.0 pages](https://app.gitbook.com/s/8Ti8OItwJGZAFzK8jsG6/navixy-generic-protocol/getting-started) describe. With `setup: AUTOMATIC`, `deviceActivate` still creates the device as `awaiting_connection`, but it sends no SMS and returns `activationSms: MODEL_NOT_SUPPORTED`.
 
 Before the device can send data, it needs two settings: the address of the Navixy server and the APN of the carrier. The `setup` field of the input says how the device gets them:
 
@@ -160,7 +163,7 @@ Response:
 
 The device was activated 2 minutes and 21 seconds ago by the server clock. Each request reads the clock again, so `serverTime` changes with every request. If a device with automatic setup is still `awaiting_connection` after 2 minutes, the app offers **Retry activation**. The retry sends `deviceActivate` again with the same IMEI, as the [correction](#correct-a-wrong-phone-number) and [resend](#resend-a-lost-sms) steps of the scenario below do.
 
-A second activation with the serial number of a Suntech device always fails with `DUPLICATE` on `input.identifier`, whatever the status of the device. Three rules decide what happens to a second activation with the same IMEI:
+A second activation with the serial number of a Suntech device, or with the identifier of an NGP device, always fails with `DUPLICATE` on `input.identifier`. The status of the existing device doesn't matter. Such an activation never attaches to the existing device, even when the identifier of an NGP device has 15 digits, like an IMEI. Three rules decide what happens to a second activation with the same IMEI:
 
 * While the device is `not_activated` or `awaiting_connection`, the call attaches to it. It replaces the setup, the phone number, the APN settings, and the model, and it replaces the title when you send a title that isn't blank. If the SMS of the earlier activation is still waiting to be sent, the call cancels it. With automatic setup, it then queues a new SMS. Use it to correct a typo, to resend a lost SMS, or to change the setup of a device that hasn't connected yet.
 * Once the device is `active` or `inactive`, the IMEI is taken, and the call fails with `DUPLICATE` on `input.identifier`.
@@ -646,9 +649,9 @@ The activation operations return errors in the shared format. See [Error handlin
 | Code                | When it occurs                                                                                                                                                                                                | Resolution                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `PERMISSION_DENIED` | The API couldn't tell which workspace the request acts in, or your roles don't allow creating devices. Attaching to an existing device also needs the right to update it. `deviceActivationPhoneAvailable` needs the right to read devices too. `deviceActivationServer` needs the right to create devices. | Request a token issued for the workspace, or ask an administrator of your organization for a role that reads, creates, and updates devices.             |
-| `VALIDATION_ERROR`  | `identifier` doesn't fit the model (15 digits for an IMEI, 6 to 10 digits for the serial number of a Suntech model), `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. Or `setup` is `AUTOMATIC`, the default, and the input has no `phone` (`input.phone`) or no `apn` (`input.apn.name`). `field` names the argument. | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`. To activate without a phone number or APN, send `setup: MANUAL`. |
+| `VALIDATION_ERROR`  | `identifier` doesn't fit the model (15 digits for an IMEI, 6 to 10 digits for the serial number of a Suntech model, 1 to 64 characters for an NGP device), `phone` isn't 5 to 20 digits, `apn.name` breaks its format, or the model isn't supported. Or `setup` is `AUTOMATIC`, the default, and the input has no `phone` (`input.phone`) or no `apn` (`input.apn.name`). `field` names the argument. | Read `field` and `detail` and correct the value. Pick the model from `deviceModels(filter: { supported: true })`. To activate without a phone number or APN, send `setup: MANUAL`. |
 | `NOT_FOUND`         | `modelId` names no model.                                                                                                                                                                                     | Send the `id` as `deviceModels` returned it.                                                                                                           |
-| `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the serial number of a Suntech model belongs to any device (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
+| `DUPLICATE`         | The IMEI belongs to a device that is `active` or `inactive`, to a deleted device, or to a device of another workspace (`input.identifier`). Or the serial number of a Suntech model, or the identifier of an NGP device, belongs to any device (`input.identifier`). Or the phone number belongs to another device (`input.phone`).   | Check the IMEI and the phone number against the SIM card and the device label. For a wrong IMEI on an existing record, delete that record first.       |
 
 Activating with a model that the platform doesn't support returns this error:
 
