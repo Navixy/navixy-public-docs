@@ -24,7 +24,7 @@ Any program that can open a TCP connection can send NGP data. Typical senders ar
 * Your own hubs or servers that collect several devices' data and forward it to Navixy
 * Your own servers that convert another telematics system's data into NGP
 
-Use NGP when Navixy doesn't decode your device's own protocol. GPS devices whose protocol Navixy decodes send data in their own protocol, not in NGP, as [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device) describes.
+Use NGP when Navixy doesn't decode your device's own protocol. GPS devices whose protocol Navixy decodes send data in their own protocol, not in NGP.
 
 ## Key concepts
 
@@ -54,7 +54,7 @@ The NGP pages use the following terms:
 
 ## How a sender works with Navixy
 
-Before a sender sends data, you activate the device in Location Intelligence with the **NGP device** model. Then the sender works with Navixy in the following order:
+Before a sender sends data, you activate the device in Location Intelligence with the **NGP device** model: see [Enter the details of an NGP device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device#enter-the-details-of-an-ngp-device). Then the sender works with Navixy in the following order:
 
 1. Open a TCP connection to your region's data gateway, port `30006`.
 2. Encode the device's readings as packets in a batch.

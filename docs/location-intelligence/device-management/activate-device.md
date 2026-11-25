@@ -16,7 +16,7 @@ A device needs two settings before it can send data: the address of the Navixy s
 - **Automatic setup:** Navixy sends the settings to the device in a configuration SMS. You enter the phone number of the SIM card and the APN, and you don't configure the device by hand.
 - **Manual setup:** You set the server address, the port, and the APN on the device yourself, for example in the configuration tool of the manufacturer. Navixy sends nothing to the device.
 
-Choose automatic setup when the SIM card can receive SMS. Choose manual setup when you configure devices before you install them, or when the SIM card can't receive SMS.
+Choose automatic setup when the SIM card can receive SMS. Choose manual setup when you configure devices before you install them, or when the SIM card can't receive SMS. For an NGP device, always choose manual setup.
 
 If Navixy doesn't decode the protocol of your device, you can still connect it with the Navixy Generic Protocol (NGP). NGP also connects your own system that sends on data from devices, such as your own server. See [Enter the details of an NGP device](#enter-the-details-of-an-ngp-device).
 
@@ -29,6 +29,8 @@ If Navixy doesn't decode the protocol of your device, you can still connect it w
 - For automatic setup: the phone number of the SIM card, which must be able to receive SMS
 - For manual setup: access to the configuration of the device
 - A role that lets you create devices in the workspace, as described in [Access to Device management](README.md#access-to-device-management)
+
+An NGP device needs only its device identifier and the role. It needs no SIM card, APN, or phone number.
 
 ## 1. Start activation
 

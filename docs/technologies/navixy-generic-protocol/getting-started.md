@@ -14,7 +14,7 @@ In this guide, you send one Navixy Generic Protocol (NGP) packet to Navixy from 
 
 Before you start, make sure that you have the following:
 
-* An NGP device for tests: a device activated in Location Intelligence with the vendor **Navixy** and the model **NGP device**. [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device) describes the activation. Note the device identifier, because the script uses it. The following rules apply to this device:
+* An NGP device for tests: a device activated in Location Intelligence with the vendor **Navixy** and the model **NGP device**. [Enter the details of an NGP device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device#enter-the-details-of-an-ngp-device) describes the activation. Note the device identifier, because the script uses it. The following rules apply to this device:
   * Activate a new device. Don't use a device whose older data you still need to send. After Navixy saves a packet with the current time, it doesn't save packets with an earlier time that it receives afterward. See [In which order Navixy saves packets](protocol-specification/how-navixy-saves-packets.md#in-which-order-navixy-saves-packets).
   * When you activate the device, choose an identifier that other people can't guess. Don't use the identifier from the examples on these pages. See [Device identifiers instead of credentials](protocol-specification/transport-layer.md#device-identifiers-instead-of-credentials).
 * Access to Location Intelligence, the Navixy web app where you manage devices. To open it, sign in at [account.navixy.com](https://account.navixy.com/?utm_source=navixy-docs&utm_campaign=ngp-getting-started).

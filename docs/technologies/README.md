@@ -22,4 +22,4 @@ The space has the following sections:
 ## See also
 
 * [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic): Write formulas in the IoT Logic interface of Location Intelligence.
-* [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device): Connect a GPS device, including an NGP device.
+* [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device#enter-the-details-of-an-ngp-device): Connect a GPS device, including an NGP device.
