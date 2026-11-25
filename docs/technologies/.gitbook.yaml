@@ -6,4 +6,11 @@ structure:
 
 # Add a redirect whenever a published page moves or is renamed.
 # Keys are old published paths; values are current files. Read the gitbook skill first.
-redirects: {}
+redirects:
+  # 2026-11-24 (TD-510): the section describes NGP 4.0 only. These NGP 1.x pages stay in the legacy IoT Logic API space.
+  navixy-generic-protocol/predefined-event-identifiers: navixy-generic-protocol/overview.md
+  navixy-generic-protocol/ngp-mapper-skill: navixy-generic-protocol/overview.md
+  # 2026-11-25 (TD-510): the reference pages moved into the Protocol specification group.
+  navixy-generic-protocol/transport-layer: navixy-generic-protocol/protocol-specification/transport-layer.md
+  navixy-generic-protocol/message-structure-and-attributes: navixy-generic-protocol/protocol-specification/message-structure-and-attributes.md
+  navixy-generic-protocol/data-types-and-encoding-standards: navixy-generic-protocol/protocol-specification/data-types-and-encoding-standards.md

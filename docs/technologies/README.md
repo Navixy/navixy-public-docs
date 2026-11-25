@@ -1,23 +1,25 @@
 ---
 description: >-
-  Two technologies that developers build against: the Navixy Generic Protocol,
-  for sending data from your own devices and systems to the Navixy tracking
-  servers, and the expression language that IoT Logic flows calculate with.
+  This space documents Navixy Generic Protocol, for sending device data, and
+  Navixy IoT Logic Expression Language, for formulas in IoT Logic flows.
 tags:
   - overview
 ---
 
 # Technologies
 
-This space documents technologies that developers build against, rather than any one product's interface. A technology lands here when more than one product uses it, or when the people who need it are building against Navixy rather than working in it.
+This space documents technologies that developers build with: a protocol for device data and a formula language. A technology is documented here when more than one Navixy product uses it.
 
-It is written for developers: firmware engineers connecting a device, integrators moving data between systems, and anyone writing the formulas inside an IoT Logic flow. It assumes you can read JSON and a code example, and it does not explain the platform's interface. For that, start with the product documentation.
+The space is for developers: firmware engineers, integrators who move data between systems, and anyone who writes formulas in an IoT Logic flow. It assumes that you can read JSON and a code example. It doesn't explain the Navixy platform's interface. For the interface, start with the [Location Intelligence documentation](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/).
 
-## What is here
+## Section contents
 
-* [Navixy Generic Protocol](navixy-generic-protocol/overview.md): an open, JSON-based protocol for sending telematics data to the Navixy tracking servers over HTTP/HTTPS or MQTT, from your own devices or from another system. Covers the transport layer, message structure, data types, and the standard event identifiers. The GPS devices that you activate in Location Intelligence don't use it: they connect through [Device management](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device), with the protocol of their manufacturer.
-* [Navixy IoT Logic Expression Language](navixy-iot-logic-expression-language/overview.md): the full syntax of the formulas IoT Logic evaluates, with the operator and function tables and a reference of every formula error.
+The space has the following sections:
 
-## Related documentation
+* [Navixy Generic Protocol](navixy-generic-protocol/overview.md): An open protocol for sending telematics data to Navixy from your own devices or systems. In Navixy Generic Protocol (NGP) 4.0, your device or server sends Protocol Buffers (protobuf) packets over TCP. Navixy saves the data for devices that you activate in Location Intelligence with the **NGP device** model. The section has guides, a migration page for NGP 1.2 senders, and the protocol specification.
+* [Navixy IoT Logic Expression Language](navixy-iot-logic-expression-language/overview.md): The full syntax of IoT Logic formulas, with operator and function tables and all formula errors.
 
-To write formulas in the platform's own interface, see [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic) in the Location Intelligence documentation. To connect a GPS device, see [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device).
+## See also
+
+* [IoT Logic](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/iot-logic): Write formulas in the IoT Logic interface of Location Intelligence.
+* [Activate a device](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/device-management/activate-device): Connect a GPS device, including an NGP device.
