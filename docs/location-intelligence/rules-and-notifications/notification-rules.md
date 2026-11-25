@@ -16,7 +16,7 @@ This page describes the **Notification rules** page and the rule editor. To lear
 {% hint style="info" %}
 **Access**
 
-**Notification rules** is on the sidebar only when your workspace has the Rules product. Your role decides whether you see rules on this page and whether you can create, edit, or delete them. A role gives access to all the workspace's rules or to none of them. See [Access to Notification rules](README.md#access-to-notification-rules) to learn which products and permissions you need.
+**Notification rules** is on the sidebar only when your workspace has the [Rules product](README.md#rules-and-notifications-products). Your role decides whether you see rules on this page and whether you can create, edit, or delete them. A role gives access to all the workspace's rules or to none of them. See [Access to Notification rules](README.md#access-to-notification-rules) to learn which products and permissions you need.
 {% endhint %}
 
 ## Rule list

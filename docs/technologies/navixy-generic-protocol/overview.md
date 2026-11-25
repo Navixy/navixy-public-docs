@@ -68,7 +68,7 @@ The sender sends no credentials. Navixy reads `device_id` in each packet and sav
 
 ## Protocol versions
 
-The Navixy platform that these pages describe accepts only NGP 4.0. The `navixy3.proto` file on the [Message structure and attributes](protocol-specification/message-structure-and-attributes.md#message-definition) page defines its messages. The file and message names start with `navixy3` for a historical reason: Navixy first used this format to move data from the previous Navixy platform. The names don't change the data that you send.
+The Navixy platform that these pages describe accepts only NGP 4.0. The `navixy3.proto` file on the [Message structure and attributes](protocol-specification/message-structure-and-attributes.md#message-definition) page defines its messages. The file and message names start with `navixy3` for a historical reason: Navixy first designed this format to move data from the previous Navixy platform. The names don't change the data that you send.
 
 The earlier versions, NGP 1.0 to 1.2, send JSON over HTTP, HTTPS, or MQTT to Navixy 3, the previous generation of the Navixy platform. NGP has no versions 2 or 3. The [NGP documentation for Navixy 3](https://app.gitbook.com/s/tx3J5BxnWyPV0nP2xr0z/technologies/navixy-generic-protocol) describes the earlier versions. If your sender already sends NGP 1.2, see [Migration from NGP 1.2](migration-from-ngp-1-2.md) to learn how to convert its messages.
 

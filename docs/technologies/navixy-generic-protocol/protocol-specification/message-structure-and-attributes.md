@@ -167,7 +167,7 @@ message Navixy3Ack {
 ```
 {% endcode %}
 
-The message names start with `Navixy3` for a historical reason: Navixy first used this format to move data from the previous Navixy platform. The names aren't part of the bytes that you send, so they don't affect the data. Keep the names and the package as they are, so that your code matches these pages.
+The message names start with `Navixy3` for a historical reason: Navixy first designed this format to move data from the previous Navixy platform. The names aren't part of the bytes that you send, so they don't affect the data. Keep the names and the package as they are, so that your code matches these pages.
 
 ## Batch fields
 

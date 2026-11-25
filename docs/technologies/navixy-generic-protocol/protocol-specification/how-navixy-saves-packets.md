@@ -26,7 +26,7 @@ Navixy doesn't save a packet in the following cases:
 
 | Check | Navixy doesn't save the packet when |
 | --- | --- |
-| Device | `device_id` is empty, has more than 64 characters, or belongs to no NGP device in the region of the host that you connect to. |
+| Device | `device_id` is empty, has more than 64 characters, or belongs to no NGP device in the region of the host that you connect to. After a packet with an unknown identifier, Navixy treats this identifier as unknown for 45 seconds, even if you activate the device. So wait a minute after the activation before you send again. |
 | Position values | The packet has a position, and a position field is outside its range in the [Packet fields](message-structure-and-attributes.md#packet-fields) table. This check applies to `latitude`, `longitude`, `altitude`, `speed`, `heading`, `satellites`, `hdop`, and `accuracy`. |
 | Finite numbers | A `double_value` is NaN or infinite. |
 | Text | A `string_value` has the character U+0000. |

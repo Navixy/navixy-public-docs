@@ -127,6 +127,7 @@ query DeviceData($deviceIds: [ID!]!) {
         value {
           ... on TrackingBoolValue { boolValue }
           ... on TrackingIntValue { intValue }
+          ... on TrackingUIntValue { uintValue }
           ... on TrackingFloatValue { floatValue }
           ... on TrackingStringValue { stringValue }
         }
@@ -155,12 +156,12 @@ curl -L \
   --header 'Authorization: Bearer <ACCESS_TOKEN>' \
   --header 'Content-Type: application/json' \
   --data '{
-    "query": "query DeviceData($deviceIds: [ID!]!) { tracking { deviceStates(deviceIds: $deviceIds) { updatedAt position { point { lat lng } speed fixType } readings { code channel value { ... on TrackingBoolValue { boolValue } ... on TrackingIntValue { intValue } ... on TrackingFloatValue { floatValue } ... on TrackingStringValue { stringValue } } } lastEvents { vendorCode occurredAt } } } }",
+    "query": "query DeviceData($deviceIds: [ID!]!) { tracking { deviceStates(deviceIds: $deviceIds) { updatedAt position { point { lat lng } speed fixType } readings { code channel value { ... on TrackingBoolValue { boolValue } ... on TrackingIntValue { intValue } ... on TrackingUIntValue { uintValue } ... on TrackingFloatValue { floatValue } ... on TrackingStringValue { stringValue } } } lastEvents { vendorCode occurredAt } } } }",
     "variables": { "deviceIds": ["01a20e36-8953-8000-8001-44455643b575"] }
   }'
 ```
 
-In the response, each reading has the attribute name in `code` and the channel in `channel`. For example, `temperature_2` returns `code` `temperature` and `channel` 2. `lastEvents` returns the latest events, and `vendorCode` shows an NGP event as `nvx3.<event_id>`. The API returns the fix type without the `FIX_TYPE_` prefix, such as `FIX_3D`.
+In the response, each reading has the attribute name in `code` and the channel in `channel`. For example, `temperature_2` returns `code` `temperature` and `channel` 2. A whole number comes back in `intValue` or `uintValue`, depending on the attribute. `uintValue` is a string, such as `"68"`. `lastEvents` returns the latest events, and `vendorCode` shows an NGP event as `nvx3.<event_id>`. The API returns the fix type without the `FIX_TYPE_` prefix, such as `FIX_3D`.
 
 In this example, the device sent a packet with `event_id` 406 at 09:58. Then the Getting started script sent a packet at 10:00. The response is the following:
 
@@ -177,7 +178,7 @@ In this example, the device sent a packet with `event_id` 406 at 09:58. Then the
             "fixType": "FIX_3D"
           },
           "readings": [
-            { "code": "battery_level", "channel": null, "value": { "intValue": 68 } },
+            { "code": "battery_level", "channel": null, "value": { "uintValue": "68" } },
             { "code": "board_voltage", "channel": null, "value": { "floatValue": 13.9 } },
             { "code": "ignition", "channel": null, "value": { "boolValue": true } }
           ],

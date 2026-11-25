@@ -84,7 +84,7 @@ The rule is cleared when its equations are false for all of the asset's GPS devi
 
 Navixy triggers a rule for each asset separately. When the equations become true for two of an asset's GPS devices, the asset gets one notification. When the equations become true for two assets, each asset gets its own notification.
 
-The notification shows the rule's name, the asset's name, and the rule's notification text. When the rule has no notification text, the notification shows the rule's name in its place.
+With the Notifications product, every user who can see the asset gets the notification on the screen that they have open. Some screens don't show notifications: see [Rules and Notifications products](README.md#rules-and-notifications-products) for the list. The notification contains the rule's name, the asset's name, and the rule's notification text. When the rule has no notification text, the notification shows the rule's name in its place.
 
 ## Data that arrives late
 

@@ -101,7 +101,7 @@ The map will draw their shapes and move to show all of them. Clear a geo object 
 
 ## Go to where a notification happened
 
-A notification from a [notification rule](../rules-and-notifications/README.md) appears on every Location Intelligence screen. On **Tracking**, a notification that has a position can also move the map to the place where the event happened.
+A notification from a [notification rule](../rules-and-notifications/README.md) appears on the **Tracking**, **Assets**, **Geo objects**, **Schedules**, **Device management**, **IoT Logic**, and **Notification rules** screens. On **Tracking**, a notification that has a position can also move the map to the place where the event happened.
 
 1. Click **Tracking** on the sidebar.
 2. When a notification appears, click its text.
