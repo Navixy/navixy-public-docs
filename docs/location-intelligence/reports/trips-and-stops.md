@@ -102,7 +102,7 @@ The tiles and both tables show the same figures. The tiles show them for everyth
 | **Stop time** | The total duration of the stops. |
 | **Max speed** | The highest maximum speed of the trips. |
 
-The **By asset** table starts with the **Asset** column, and the **By day** table starts with the **Day** column. Every asset of the report has a row in **By asset**, including an asset with no trip or stop in the period. Every day of the period has a row in **By day**, including a day with no trip or stop. To sort a table, click a column heading.
+The **By asset** table starts with the **Asset** column, and the **By day** table starts with the **Day** column. Every asset of the report has a row in **By asset**, including an asset with no trip or stop in the period. Every day of the period has a row in **By day**, including a day with no trip or stop. A day before the earliest report data shows **No data**, and a day after the time in "Data up to …" shows **Not loaded yet**. To sort a table, click a column heading.
 
 Distances are in kilometers, speeds are in km/h, and durations are in hours and minutes. Times and days are in your browser's time zone. See [Which time zone a report uses](how-report-data-works.md#which-time-zone-a-report-uses).
 

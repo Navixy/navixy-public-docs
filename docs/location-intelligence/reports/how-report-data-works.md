@@ -9,11 +9,11 @@ tags:
 
 # How report data is prepared
 
-Reports doesn't read your GPS devices directly. Navixy prepares trips, stops, and sensor readings from device data and stores them. When you run a report, Navixy combines this stored data with trips, stops, and readings that it calculates from the newest device data. This page explains when data appears, how long it is kept, and which data a report includes. These rules apply to every report type, except where a section names a single report type. Driver performance uses the same trips and stops as Trips and stops.
+Reports doesn't read your GPS devices directly. Navixy prepares trips, stops, and sensor readings from device data and stores them. When you run a report, Reports reads this stored data. This page explains when data appears, how long it is kept, and which data a report includes. These rules apply to every report type, except where a section names a single report type. Driver performance uses the same trips and stops as Trips and stops.
 
 ## When new data appears in a report
 
-A report shows trips, stops, and sensor readings up to the moment when you run it. The report doesn't update by itself while it is open. To see newer data, [run the report again](manage-reports.md#run-a-report).
+A report shows trips, stops, and sensor readings up to the time that Navixy has loaded. The report names this time under the period, in the line "Data up to …". When your period goes past this time, the line ends with "Later data is not loaded yet." When your period starts before the earliest report data, the line starts with "No data before …". The report doesn't update by itself while it is open. To see newer data, [run the report again](manage-reports.md#run-a-report) later.
 
 Navixy adds a trip to report data only after the trip ends. A trip ends when the asset stands still for at least 5 minutes. As a result, a trip that is in progress isn't in any report.
 
@@ -63,7 +63,7 @@ The period that you choose, the times in the tables, and the days of a report al
 
 A downloaded file names the time zone in its column headings, for example "Start (Europe/Berlin)".
 
-In Sensor readings, an **Interval** of 1 day is a day in UTC. It starts and ends at midnight UTC, not at midnight in your time zone.
+In Sensor readings, the intervals use this time zone too. An **Interval** of 1 day starts and ends at midnight in this time zone.
 
 A trip that crosses midnight is one trip. It appears in full on the day when it started.
 

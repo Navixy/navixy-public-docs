@@ -20,12 +20,13 @@ Reports shows one of the following messages:
 * Sensor readings shows "No sensor reported a reading in this period."
 * Sensor readings shows "No sensor matches the filters."
 * Sensor readings shows "Choose the assets whose readings to show, then Run." when you open it.
+* A report shows **No data for this period** with "The data starts on … Choose a later period." or "Data is loaded up to … Run the report again later."
 * A report shows **No data yet** with "This report will show your fleet's data once it is available for your workspace."
 
 Check the following, in this order:
 
 1. **The period.** A trip or a stop belongs to the period in which it started. Choose a longer period, such as **Last week**, and click **Run**.
-2. **The time of the report.** A report shows data up to the moment when you ran it. Click **Run** to run the report again and see newer data.
+2. **The time of the report.** A report shows data up to the time in the line "Data up to …" under the period. Later data isn't loaded yet. Run the report again later to see newer data.
 3. **The GPS device.** An asset without a GPS device has no trips and no readings. Assign a GPS device to the asset in [Manage assets](../bdr/assets/manage-assets.md). Data from before the assignment isn't added.
 4. **The age of the data.** Navixy keeps trips for 6 months, sensor readings in 5- to 30-minute steps for 3 months, and sensor readings in 1-hour steps for 12 months. A period older than these limits has no data. For details, see [How far back report data goes](how-report-data-works.md#how-far-back-report-data-goes).
 5. **The filters.** In Sensor readings, the **Sensors** and **Devices** filters can leave no rows. The report then shows "No sensor matches the filters." Click **Clear filters** to show every sensor again.

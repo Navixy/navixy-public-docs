@@ -83,7 +83,7 @@ Until you choose an interval, the report uses the shortest interval that splits 
 
 When you choose another interval, the report runs again. The interval that you chose stays when you run the report for another period, as long as that period offers it.
 
-A 1-day interval runs from midnight to midnight UTC. For this reason, a 1-day interval can start and end at a different time than your local day.
+Intervals use the [time zone of the report](how-report-data-works.md#which-time-zone-a-report-uses). A 1-day interval runs from midnight to midnight, and a 4 hr interval starts at 00:00, 04:00, 08:00, 12:00, 16:00, or 20:00. On a day when the clock changes for daylight saving time, a 1-day interval lasts 23 or 25 hours.
 
 ## How the values are calculated
 
@@ -104,7 +104,7 @@ For a value that is only 0 or 1, such as an on or off state, **Average** is the 
 
 For a sensor that counts up, such as mileage, **Change** shows how much the counter grew over the period. When the counter was reset during the period, **Change** is smaller than the real growth.
 
-**Coverage** leaves out the intervals that haven't started yet. The interval in progress when you run the report counts only when it already has a reading. **Coverage** is rounded down to a whole percent. A coverage above 0 and under 1% shows as <1%.
+**Coverage** leaves out the intervals with no report data and the intervals that aren't loaded yet. The interval in which the report data ends counts only when it already has a reading. **Coverage** is rounded down to a whole percent. A coverage above 0 and under 1% shows as <1%.
 
 Values are rounded to at most 2 decimals and are in the unit that the device reports.
 

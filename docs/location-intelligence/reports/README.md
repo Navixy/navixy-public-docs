@@ -66,7 +66,7 @@ A report is about your assets, not about GPS devices. Reports combines two thing
 * **What the GPS devices send**: Positions, speed, and sensor values.
 * **Your assets in** [**Business Data Repository**](../bdr/): A report covers the vehicles, people, or containers that the GPS devices are assigned to.
 
-A report shows data up to the moment when you run it. See [How report data is prepared](how-report-data-works.md) to learn when data appears, how far back it goes, and which time zone a report uses.
+A report shows data up to the time that it names under the period, in the line "Data up to …". See [How report data is prepared](how-report-data-works.md) to learn when data appears, how far back it goes, and which time zone a report uses.
 
 ## Before you start
 
