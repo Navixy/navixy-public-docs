@@ -25,9 +25,7 @@ When your organization is a channel partner, you can create child organizations:
 
 ## 2. Set up tariff plans with Navixy
 
-Every new workspace starts on the default plan. As a channel partner, you can build custom plans with Navixy for your own workspaces and your customers' workspaces.
-
-To discuss plans, contact <sales@navixy.com>. All plans are in US dollars. The option to set other currencies for child organizations is planned and coming soon. Your own organization always receives its invoices in US dollars.
+Every new workspace starts on the default plan. As a channel partner, you can build custom plans with Navixy for your own workspaces and your customers' workspaces. To discuss plans, contact <sales@navixy.com>.
 
 You can't choose or switch a workspace's tariff plan in Console, including on the [Billing](../billing/README.md) page. Contact Navixy to switch your workspaces to the plans that you set up. When you create a workspace for a customer, contact Navixy to switch that workspace too.
 
@@ -59,15 +57,8 @@ On the sidebar, click **Organization**, then click **Create organization**.
 Select **Child organization** and enter an **Organization name** of up to 128 characters. Use your customer's company name. The window title changes to **Create child organization**.
 
 If **Child organization** can't be selected, your organization isn't a channel partner yet. See [Become a channel partner](#id-1.-become-a-channel-partner).
-{% endstep %}
 
-{% step %}
-
-### Decide whether the customer can create organizations
-
-A channel partner can grant the channel partner status to a child organization without asking Navixy. A large channel partner uses it to add more levels: an organization for each branch, and under each branch, their customers' organizations.
-
-Select **Channel partner** if the customer needs more levels under their organization. Leave it blank for end customers without child organizations.
+When **Channel partner** is selected, the new organization will also be a channel partner capable of creating child organizations. When **Channel partner** is blank, the new organization can't create child organizations.
 
 Click **Continue**.
 {% endstep %}
