@@ -139,7 +139,8 @@ The `rules` operations return these errors besides the validation errors:
 | --- | --- | --- |
 | `NOT_FOUND` | `ruleUpdate` or `ruleDelete` names an ID with no rule in the workspace. `rule(id:)` returns `null` instead. | Refresh your list of rules. |
 | `CONFLICT` | `ruleUpdate` or `ruleDelete` sends an older `version`. `extensions` has `expectedVersion` and `currentVersion`. | Read the rule again, apply the change to it, and send it with the current version. See [Optimistic locking](../optimistic-locking.md). |
-| `PERMISSION_DENIED` | Your roles don't have the action on `bdr.rule`, or your workspace doesn't have Business Data Repository. | Ask your organization's administrator for the action. `node(id:)` returns `null` instead. |
+| `PRODUCT_DISABLED` | Your workspace doesn't have the Rules product. `productCode` is `rules`. | Ask your organization's administrator to turn on the product in Navixy Console, then get a new token. |
+| `PERMISSION_DENIED` | Your roles don't have the action on `rules.rule`. Navixy checks the product first, so in a workspace without Rules this case returns `PRODUCT_DISABLED`. | Ask your organization's administrator for the action. `node(id:)` returns `null` instead. |
 | `SERVICE_UNAVAILABLE` | `parameterFields` can't read the device data. | Wait before you retry, and wait longer after each refusal. |
 | `IN_USE` | A delete of an asset, a geo object, or a schedule is refused because a rule refers to it. The `blockers` list has an entry with `entityType` `RULES_RULE`. | Remove the reference from the rule, or delete the rule. See [Deleting records](../deletion.md). |
 

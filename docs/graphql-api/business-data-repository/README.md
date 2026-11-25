@@ -51,7 +51,11 @@ Three parties share the work on the business data of a workspace:
 
 Business Data Repository stores schedules but doesn't act on them. What a schedule means, such as whether a vehicle may move outside a shift, is up to the product that reads it.
 
-A record that other records point at can't be deleted. The link can be one of their own fields, such as the type of an asset or the inventory of a device. It can also be a custom field value, such as an asset that names a schedule, or a custom field definition that names the record. In a workspace that has IoT Logic, a device also can't be deleted while a flow lists it, whether the flow is enabled or not. The delete is refused with `IN_USE`, and the error names the records to change first. When a device is deleted, the custom fields that don't require a device lose it; a field that requires one refuses the delete instead.
+A record that other records point at can't be deleted. The link can be one of their own fields, such as the type of an asset or the inventory of a device. It can also be a custom field value, such as an asset that names a schedule, or a custom field definition that names the record.
+
+In a workspace that has IoT Logic, a device also can't be deleted while a flow lists it, whether the flow is enabled or not. In a workspace that has Rules, a rule also blocks the delete of each asset, geo object, and schedule that it names. A rule that is off blocks the delete too. The delete is refused with `IN_USE`, and the error names the records to change first.
+
+When a device is deleted, the custom fields that don't require a device lose it. A field that requires one refuses the delete instead.
 
 ## Navigation
 

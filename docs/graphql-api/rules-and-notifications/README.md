@@ -1,7 +1,8 @@
 ---
 description: >-
-  Rules and notifications in Navixy GraphQL API: set conditions for your
-  assets, read the history of each rule, and receive notifications live.
+  The Rules and Notifications products in Navixy GraphQL API: set conditions
+  for your assets, read the history of each rule, and receive notifications
+  live.
 tags:
   - overview
   - beta
@@ -9,17 +10,21 @@ tags:
 
 # Rules and notifications overview
 
-**Rules and notifications** tell the users of a workspace when something happens to an asset. It's one of the products served by [Navixy GraphQL API](../). A rule is a set of equations for some or all of the workspace's assets. An example is "speed over 90 km/h inside the depot during working hours". Navixy checks every message from the devices of those assets. When the equations become true for an asset, Navixy records the change and sends one notification to the users who can read that asset.
+This section covers 2 products served by [Navixy GraphQL API](../), Rules and Notifications. Together, they tell the users of a workspace when something happens to an asset.
 
-The API has two namespaces for the product. A namespace is a field that groups related operations. The `rules` field of the `Query` and `Mutation` types has the operations that create, change, list, and delete rules. It also has the query that reads each rule's history. The `notifications` field has the query that lists stored notifications and the mutation that marks them as read. The `notificationsEvents` subscription, the notification stream, delivers each notification live.
+Rules checks your assets. A rule is a set of equations for some or all of the workspace's assets. An example is "speed over 90 km/h inside the depot during working hours." Navixy checks every message from the devices of those assets. When the equations become true for an asset, Rules records the change and sends one notification to Notifications.
+
+Notifications is a separate product that doesn't need Rules. It receives each notification, stores it for 30 days, and sends it to the users who can read the asset.
+
+The API has one namespace for each product. A namespace is a field that groups related operations. The `rules` field of the `Query` and `Mutation` types has the operations that create, change, list, and delete rules. It also has the query that reads each rule's history. The `notifications` field has the query that lists stored notifications and the mutation that marks them as read. The `notificationsEvents` subscription, the notification stream, delivers each notification live.
 
 Every operation reads or changes the data of the workspace named by your access token, so no operation has a workspace ID argument. The shared pages of this space cover the request format, [authentication](../authentication/README.md), [pagination](../pagination.md), and [error handling](../error-handling.md). For your first request, see [Getting started](../getting-started.md).
 
-Users of Location Intelligence create the same rules in the **Notification rules** screen and see the notifications on the map. See [Notification rules](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/rules-and-notifications) in the Location Intelligence documentation to learn how users work with rules.
+In Location Intelligence, both products have one interface, **Notification rules**. Users create the same rules there and see the notifications on the screens where they work with their assets. See [Notification rules](https://app.gitbook.com/s/6RLA9o0EecKpLxHiaeR4/products/rules-and-notifications#rules-and-notifications-products) in the Location Intelligence documentation to learn how users work with both products.
 
 ## Purpose and capabilities
 
-Rules and notifications enable you to:
+Rules and Notifications enable you to:
 
 * List the parameters that the devices of your assets report, to offer them in a rule editor
 * Create a rule with up to 16 equations, for some assets or for every asset of the workspace
@@ -50,24 +55,26 @@ See [How rules work](how-rules-work.md) to learn the behavior behind each step. 
 
 Three parties share the work on the rules of a workspace:
 
-<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Create and change rules, turn them on and off, read their history, and show notifications to your users. Every call reads or changes the data of the workspace named by the token.</td></tr><tr><td><strong>Business Data Repository</strong></td><td>Stores the assets, geo objects, and schedules that a rule refers to by ID. While a rule refers to an asset, a geo object, or a schedule, the API refuses to delete that record.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Turns on the Notifications product for your workspace and gives you your roles. An administrator of your organization does both.</td></tr></tbody></table>
+<table><thead><tr><th width="200">Who</th><th>Does</th></tr></thead><tbody><tr><td><strong>You</strong></td><td>Create and change rules, turn them on and off, read their history, and show notifications to your users. Every call reads or changes the data of the workspace named by the token.</td></tr><tr><td><strong>Business Data Repository</strong></td><td>Stores the assets, geo objects, and schedules that a rule refers to by ID. While a rule refers to an asset, a geo object, or a schedule, and the workspace has Rules, the API refuses to delete that record.</td></tr><tr><td><strong>Navixy Console</strong></td><td>Turns on the Rules and Notifications products for your workspace and gives you your roles. An administrator of your organization does both.</td></tr></tbody></table>
 
-Your roles decide what you can do with rules. Rules use the Business Data Repository resource `bdr.rule`:
+Your roles decide what you can do with rules. The Rules product has one resource, `rules.rule`. The following table lists the actions on `rules.rule` that each operation needs:
 
-| Operation | Actions needed on `bdr.rule` |
+| Operation | Actions needed |
 | --- | --- |
 | `rule`, `rules`, `events`, `parameterFields` | `read` |
 | `ruleCreate` | `create` |
 | `ruleUpdate`, including turning a rule on and off | `update` and `read` |
 | `ruleDelete` | `delete` and `read` |
 
-A role with one of these actions has it on every rule of the workspace. Without the action, the operation fails with `PERMISSION_DENIED`. Rules don't need a Navixy Console product of their own. Like every `bdr` operation, they need Business Data Repository. You can create rules and read their history without the Notifications product. The workspace needs Notifications only for the notification stream and the stored notifications.
+A role with one of these actions has it on every rule of the workspace. Without the action, the operation fails with `PERMISSION_DENIED`. Every Rules operation also needs the Rules product. Without it, the operation fails with `PRODUCT_DISABLED`, and `productCode` is `rules`. An administrator of your organization turns on each product for the workspace in Navixy Console. See [Enable or disable a product](https://app.gitbook.com/s/9BfYVQ80Aby5RbZ9vQVj/organization/manage-workspaces#enable-or-disable-a-product) in the Console documentation.
+
+You can create rules and read their history without the Notifications product. The workspace needs Notifications only for the notification stream and the stored notifications. While the workspace doesn't have Notifications, rules still send notifications, and Navixy stores each one for 30 days. After an administrator turns on Notifications and your app gets a new token, the stored list returns the notifications of the last 30 days.
 
 What you see of a rule's assets, geo objects, and schedules depends on your access to them in Business Data Repository. A rule shows only the covered assets that your roles let you read, and the history lists only the events of those assets. The other assets stay covered.
 
-Notifications are for users. A user receives the notifications about the assets that their roles let them read: on the map in Location Intelligence, and on the notification stream of your app. The workspace also needs the Notifications product. See [Rules and notifications](../authentication/roles-and-products.md#rules-and-notifications) in Roles and products.
+Notifications are for users. A user receives the notifications about the assets that their roles let them read. The notifications appear in Location Intelligence and on the notification stream of your app. The workspace also needs the Notifications product. See [Rules and Notifications](../authentication/roles-and-products.md#rules-and-notifications) in Roles and products.
 
-An API key can't open the stream or read the stored notifications. An app that works with an API key confirms that a rule activated by reading the rule's history, which needs only `read` on `bdr.rule`. See [Reading rule history](guides/reading-rule-history.md).
+An API key can't open the stream or read the stored notifications. An app that works with an API key confirms that a rule activated by reading the rule's history, which needs only `read` on `rules.rule`. See [Reading rule history](guides/reading-rule-history.md).
 
 ## Navigation
 

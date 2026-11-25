@@ -9,7 +9,7 @@ tags:
 
 # Guides
 
-This section contains step-by-step guides for the basic scenarios of using Rules and notifications, a product served by Navixy GraphQL API.
+This section contains step-by-step guides for the basic scenarios of using the Rules and Notifications products of Navixy GraphQL API.
 
 ### Guides in this section
 

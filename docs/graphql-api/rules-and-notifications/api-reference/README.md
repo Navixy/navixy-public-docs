@@ -19,7 +19,7 @@ All rules queries are nested under the `rules` field of the `Query` type, and al
 
 The notification stream is the `notificationsEvents` field of the `Subscription` type. A subscription can't be nested under a namespace, so the stream has its own top-level field, like `trackingAssetStates` of Tracking.
 
-Every operation reads or changes the data of the workspace named by your access token, so no operation has a workspace ID argument. For what the product covers and how to start, see the [product overview](../README.md).
+Every operation reads or changes the data of the workspace named by your access token, so no operation has a workspace ID argument. For what both products cover and how to start, see the [overview](../README.md).
 
 A rule, a rule event, and a notification are also a `Node`, so the common [`node` and `nodes`](../../core-api-reference/common.md) queries return them by ID.
 
@@ -29,7 +29,7 @@ A rule, a rule event, and a notification are also a `Node`, so the common [`node
 
 ## Shared types
 
-The scalars, interfaces, and pagination types that Rules and notifications share with the other products are on the [Common resources](../../core-api-reference/common.md) page. A rule refers to assets, geo objects, and schedules of Business Data Repository by ID. They're documented on the [Assets](../../business-data-repository/api-reference/assets/), [Geo objects](../../business-data-repository/api-reference/geo-objects.md), and [Schedules](../../business-data-repository/api-reference/schedules.md) pages. The [Core API reference](../../core-api-reference/README.md) indexes the reference pages of every product.
+The scalars, interfaces, and pagination types that Rules and Notifications share with the other products are on the [Common resources](../../core-api-reference/common.md) page. A rule refers to assets, geo objects, and schedules of Business Data Repository by ID. They're documented on the [Assets](../../business-data-repository/api-reference/assets/), [Geo objects](../../business-data-repository/api-reference/geo-objects.md), and [Schedules](../../business-data-repository/api-reference/schedules.md) pages. The [Core API reference](../../core-api-reference/README.md) indexes the reference pages of every product.
 
 ## How the reference pages are structured
 
@@ -42,7 +42,7 @@ Every page lists its content in the same order as the other reference pages. Que
 
 ## See also
 
-* [Rules and notifications overview](../README.md): Learn what the product covers and how its concepts fit together.
+* [Rules and notifications overview](../README.md): Learn what both products cover and how their concepts fit together.
 * [How rules work](../how-rules-work.md): Learn which messages a rule checks and when it sends a notification.
 * [Rule errors](../rule-errors.md): Read every violation code that a rule save can return.
 * [Optimistic locking](../../optimistic-locking.md): Learn about the version check that every rule update and delete makes.

@@ -11,7 +11,7 @@ tags:
 
 When a rule activates for an asset, Navixy sends one notification to every user who can read that asset. The `notificationsEvents` subscription delivers each notification live, to every open session. A session is one open subscription, such as the subscription of one browser tab. The `notifications` query lists the stored notifications, so a client finds there what it missed while it wasn't connected.
 
-This guide shows how to open the stream, what a client receives, how the stream ends and how to subscribe again, and how to list, count, and mark notifications as read. It's for developers who show notifications in their own app, as Location Intelligence does with a pop-up message on the map. When a rule activates is explained in [How rules work](../how-rules-work.md#when-a-rule-activates-and-deactivates).
+This guide shows how to open the stream, what a client receives, how the stream ends, and how to subscribe again. It also shows how to list, count, and mark notifications as read. It's for developers who show notifications in their own app, as Location Intelligence does. When a rule activates is explained in [How rules work](../how-rules-work.md#when-a-rule-activates-and-deactivates).
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ The stream is served over a WebSocket at `wss://nvx4.<REGION>.navixy.com/api/gra
 A notification goes to the users of the workspace who can read its asset. These conditions decide who receives it:
 
 * The token sets the workspace. The stream receives the notifications of the workspace named by the access token. A token for another workspace opens another stream.
-* The workspace has the Notifications product. An administrator of your organization turns it on in Navixy Console. Without it, the subscription and the list return `PRODUCT_DISABLED`.
+* The workspace has the Notifications product. An administrator of your organization turns it on in Navixy Console. Without it, the subscription and the list return `PRODUCT_DISABLED`. Your rules still send notifications meanwhile, and Navixy stores each one for 30 days. After the product is turned on and you get a new token, the list returns the notifications of the last 30 days.
 * The token belongs to a user. An API key receives nothing: its subscription and its list return `PERMISSION_DENIED`. Navixy checks the product first, so in a workspace without Notifications, every caller gets `PRODUCT_DISABLED`.
 * The user can read the asset. A user whose roles allow reading only some assets receives the notifications of those assets only. A user without `read` on `bdr.asset` gets `PERMISSION_DENIED`. While the stream is open, Navixy checks the user's access again from time to time. A user who loses access to an asset stops receiving its notifications without reconnecting.
 * Every open session gets its own copy. A user with three open browser tabs receives three copies. Navixy doesn't know whether another session already showed the notification.

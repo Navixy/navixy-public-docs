@@ -11,7 +11,7 @@ tags:
 
 A delete in Navixy GraphQL API is final for you: no operation returns or restores a deleted record. While other records still refer to a record, the API refuses to delete it with an [`IN_USE`](error-handling.md#in-use-409) error. This page explains both rules and the few operations that work differently.
 
-The rules apply to Business Data Repository, to IoT Logic flows, and to rules of Rules and notifications. Tracking stores no records of its own, and Billing and Console have no delete operations. For the IAM operations that delete roles and revoke them, see [Roles](iam/api-reference/roles.md) and [Role assignments](iam/api-reference/role-assignments.md).
+This page applies to Business Data Repository records, IoT Logic flows, and the rules that you create in the Rules product. Tracking stores no records of its own, and Billing and Console have no delete operations. For the IAM operations that delete roles and revoke them, see [Roles](iam/api-reference/roles.md) and [Role assignments](iam/api-reference/role-assignments.md).
 
 ## What a delete does
 
@@ -61,8 +61,8 @@ The list has at most five entries. They come in a fixed order: the record's own 
 | Device | A relation from another device to this device | `relationsFrom` |
 | Device | A required `DEVICE` custom field that holds the device | `customFields.<code>` |
 | Device | An IoT Logic flow that lists the device in its data source node, in a workspace that has IoT Logic | `nodes.devices` |
-| Asset | A rule that lists the asset in `assetIds` | `assetIds` |
-| Geo object, schedule | A rule with an equation that names the geo object or the schedule | `equations` |
+| Asset | A rule that lists the asset in `assetIds`, in a workspace that has Rules | `assetIds` |
+| Geo object, schedule | A rule with an equation that names the geo object or the schedule, in a workspace that has Rules | `equations` |
 | Any record that a `REFERENCE` custom field can name | An asset or a geo object whose `REFERENCE` field holds it | `customFields.<code>` |
 | Any record that a custom field definition can name | The asset type or geo object type that owns a field whose `refSubtypeIds` or `defaultRefIds` name it | `customFieldDefinitions.<code>.params.refSubtypes`, `customFieldDefinitions.<code>.params.defaultRefs` |
 
@@ -73,7 +73,7 @@ These rules apply to every row of the table:
 * A record doesn't block its own delete. An asset that names itself in a `REFERENCE` field can be deleted, and a field definition never blocks the delete of the type that owns it.
 * An IoT Logic flow counts whether it's enabled or disabled. The flow IDs appear in `ids` only when your role can read IoT Logic flows.
 * `flowDelete` succeeds even while the flow lists devices.
-* A rule counts whether it's on or off. A rule that covers every asset names no asset, so it blocks no asset's delete. The rule IDs appear in `ids` only when your role has `read` on `bdr.rule`.
+* A rule counts whether it's on or off. A rule that covers every asset names no asset, so it blocks no asset's delete. The rule IDs appear in `ids` only when your role has `read` on `rules.rule`.
 * `ruleDelete` succeeds even while the rule names assets, geo objects, and schedules.
 * When a delete and a change that adds a reference to the same record run at the same time, only one of them succeeds. If the delete runs first, the change fails with `VALIDATION_ERROR` or `NOT_FOUND`, because the record that it refers to no longer exists. If the change runs first, the delete fails with `IN_USE`. This doesn't apply to IoT Logic flows and rules. A flow saved at the same moment as a device delete can still list the deleted device. A rule saved at the same moment as the delete of its asset, geo object, or schedule can still name the deleted record.
 

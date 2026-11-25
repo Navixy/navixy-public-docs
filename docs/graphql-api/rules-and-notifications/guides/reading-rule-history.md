@@ -15,7 +15,7 @@ The guide is for developers who build support tools or a history screen, and for
 
 ## Prerequisites
 
-You need an access token with the `read` action on `bdr.rule`, and the ID of the rule. A token issued for an API key works too. An API key can't read notifications, so the history is how a script confirms that a rule activated. Send every request as described in [Creating and managing rules](creating-and-managing-rules.md#prerequisites): an HTTP POST request to `https://nvx4.<REGION>.navixy.com/api/graphql` with the access token. Replace `<REGION>` with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region).
+You need an access token for a workspace that has the Rules product, with the `read` action on `rules.rule`, and the ID of the rule. A token issued for an API key works too. An API key can't read notifications, so the history is how a script confirms that a rule activated. Send every request as described in [Creating and managing rules](creating-and-managing-rules.md#prerequisites): an HTTP POST request to `https://nvx4.<REGION>.navixy.com/api/graphql` with the access token. Replace `<REGION>` with the region of your organization, `eu` or `us`. See [Endpoint and region](../../graphql-basics/#endpoint-and-region).
 
 You see the events of the assets that your roles let you read. The events of other assets aren't listed or counted.
 

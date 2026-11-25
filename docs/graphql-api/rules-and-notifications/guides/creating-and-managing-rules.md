@@ -15,7 +15,7 @@ The guide is for developers who are comfortable with GraphQL and who build a rul
 
 ## Prerequisites
 
-You need an access token for the workspace that you work in, with a role that has the `read`, `create`, `update`, and `delete` actions on `bdr.rule`. The API reads the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) to learn how to get a token and how the API chooses the workspace.
+You need an access token for a workspace that has the Rules product. Your roles need the `read`, `create`, `update`, and `delete` actions on `rules.rule`. The API reads the workspace from the token, so no operation on this page asks for a workspace ID. See [Authentication](../../authentication/README.md) to learn how to get a token and how the API chooses the workspace.
 
 A rule checks a device only through the asset that the device is assigned to. Before you create a rule, assign each device to an asset. See [Creating assets and assigning devices](../../business-data-repository/guides/creating-assets-and-assigning-devices.md).
 
@@ -704,7 +704,7 @@ The following error is the response to `assetDelete` for Truck 12:
 }
 ```
 
-Each entry in `blockers` has a `path`, which is the rule field to change: `assetIds` for an asset, and `equations` for a geo object or a schedule. `ids` lists the rules only when your roles have `read` on `bdr.rule`. Otherwise it's empty.
+Each entry in `blockers` has a `path`, which is the rule field to change: `assetIds` for an asset, and `equations` for a geo object or a schedule. `ids` lists the rules only when your roles have `read` on `rules.rule`. Otherwise it's empty.
 
 ### How to handle a delete blocked by a rule
 
@@ -730,7 +730,8 @@ This guide's operations return these errors:
 | `VALIDATION_ERROR` | A malformed field (`extensions.field`), or a rule that fails validation (`extensions.violations`). See [Rule errors](../rule-errors.md). |
 | `NOT_FOUND` | `ruleUpdate` or `ruleDelete` names an ID with no rule in your workspace. |
 | `CONFLICT` | `ruleUpdate` or `ruleDelete` sends an older `version`. See [Handle version conflicts](#handle-version-conflicts). |
-| `PERMISSION_DENIED` | Your roles don't have the action on `bdr.rule`. |
+| `PRODUCT_DISABLED` | Your workspace doesn't have the Rules product. `productCode` is `rules`. |
+| `PERMISSION_DENIED` | Your roles don't have the action on `rules.rule`. |
 | `SERVICE_UNAVAILABLE` | `parameterFields` can't read the device data. |
 
 `rules` can't be `null`, and neither can its fields `rules`, `events`, and `parameterFields`. An error on any of them, or on a rules mutation, sets the whole `data` to `null`, including other fields of the same request. Send `parameterFields` in a request of its own, apart from your Business Data Repository lookups. For the error format, see [Error handling](../../error-handling.md).

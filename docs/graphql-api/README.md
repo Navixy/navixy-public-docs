@@ -30,7 +30,7 @@ These terms apply to every part of the API. Each product and platform service de
 
 A product works only in a workspace that has access to it. Your access token lists your workspace's products, and the API rejects operations with a product not on the list. See [Roles and products](authentication/roles-and-products.md).
 
-Products are billed separately, but they can use each other's records. Tracking, IoT Logic, and Rules and notifications work with the records stored by Business Data Repository. Tracking can use its assets and devices, IoT Logic can use its devices, and rules can use its assets, geo objects, and schedules.
+Products are billed separately, but they can use each other's records. Tracking, IoT Logic, Rules, and Notifications work with the records stored by Business Data Repository. Tracking can use its assets and devices, and IoT Logic can use its devices. Rules can use its assets, geo objects, and schedules, and Notifications can use its assets.
 
 ### Business Data Repository
 
@@ -46,7 +46,7 @@ Products are billed separately, but they can use each other's records. Tracking,
 
 ### Rules and notifications
 
-[Rules and notifications](rules-and-notifications/) tell your users when something happens to an asset. A rule sets conditions for your assets, such as a speed limit inside a geo object, and Navixy sends a notification when the conditions start to hold. You can create and change rules, read when each rule turned on and off, and receive the notifications live or from a stored list.
+[Rules and Notifications](rules-and-notifications/) are 2 products that tell your users when something happens to an asset. A rule sets conditions for your assets, such as a speed limit inside a geo object. When the conditions become true for an asset, Rules sends a notification to Notifications. You can create and change rules, read when each rule turned on and off, and receive the notifications live or from a stored list.
 
 ## Platform services
 
