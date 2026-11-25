@@ -24,7 +24,7 @@ The raw data layer stores the data as it arrives. The transformation layer conta
 | --- | --- | --- | --- |
 | [Raw data layer](raw-data-layer/) | `core_bdr` | Business data from Business Data Repository | Names, types, groups, and custom fields of your assets, devices, and geo objects |
 | [Raw data layer](raw-data-layer/) | `telemetry` | Positions and sensor values from your GPS devices | Every data point and the values that no calculated table has |
-| [Transformation layer](transformation-layer/) | `report`, `agg` | Trips and stops in `report`; sensor values and digital inputs per minute, and positions in geo objects, in `agg` | Common questions, such as distance per day or time in a geo object |
+| [Transformation layer](transformation-layer/) | `report`, `agg` | Trips and stops in `report`; sensor values in 5-minute periods, digital inputs per minute, and positions in geo objects, in `agg` | Common questions, such as distance per day or time in a geo object |
 
 A typical query reads a table of the transformation layer and joins `core_bdr` to get the names of assets, devices, and geo objects.
 

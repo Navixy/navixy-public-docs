@@ -1,7 +1,7 @@
 ---
 description: >-
-  The agg database of IoT Query Premium: sensor values and digital inputs and
-  outputs per minute, and the positions of devices in geo objects, with their
+  The agg database of IoT Query Premium: sensor values in 5-minute periods,
+  digital inputs and outputs per minute, and the positions of devices in geo objects, with their
   columns and example queries.
 tags:
   - reference
@@ -14,11 +14,11 @@ tags:
 IoT Query Premium is coming soon. This page describes how it works at release. To learn when it becomes available for your organization, [contact Navixy](https://navixy.com/en/contact?utm_source=navixy-docs\&utm_campaign=iot-query-premium).
 {% endhint %}
 
-The `agg` database has tables that Navixy calculates from the messages in `telemetry`: sensor values per minute, the state of digital inputs and outputs per minute, and the positions of devices inside geo objects. It belongs to the [transformation layer](./), together with the [report database](report.md). This page describes each table and its columns, and ends with example queries. It is for developers and analysts who build charts of sensor values and reports on geo objects.
+The `agg` database has tables that Navixy calculates from the messages in `telemetry`: sensor values in 5-minute periods, the state of digital inputs and outputs per minute, and the positions of devices inside geo objects. It belongs to the [transformation layer](./), together with the [report database](report.md). This page describes each table and its columns, and ends with example queries. It is for developers and analysts who build charts of sensor values and reports on geo objects.
 
 ## How agg tables are updated
 
-Navixy updates the sensor and digital input tables every 5 minutes, and the geo object table every 15 minutes. Each update calculates the last 14 days again, so a value that a device sends late is added to its minute.
+Navixy updates the sensor table every 4 hours, the digital input table every 5 minutes, and the geo object table every 15 minutes. Each update of the sensor table reads the values that Navixy received since the previous update, so a value that a device sends late is added to its 5-minute period.
 
 A table can keep more than one version of a row until ClickHouse merges them. Read every `agg` table with `FINAL`, as described in [Data schema](../#read-the-current-version-of-each-row).
 
@@ -26,26 +26,26 @@ Each row has the asset and the device that the value comes from. `asset_id` and 
 
 ## Sensor values
 
-`agg.sensor_readings_5m` groups the values of each signal into 1-minute periods. The table name ends in `_5m`, but each row covers 1 minute. Each row covers one asset, device, signal, and minute. The row has the lowest, highest, first, and last value, the sum of the values, and the number of values. The average of a minute is `val_sum / sample_count`.
+`agg.sensor_readings_5m` groups the values of each signal into 5-minute periods. Each row covers one asset, device, signal, and 5-minute period. The row has the lowest, highest, first, and last value, the sum of the values, and the number of values. The average of a period is `val_sum / sample_count`.
 
-The table has the numeric values and the on/off values that a device sends. An on/off value is `1` or `0`. A row belongs to one device, signal, and unit, so an asset with two devices that send the same signal has two rows for each minute. To combine them, add up `val_sum` and `sample_count`.
+The table has the numeric values and the on/off values that a device sends. An on/off value is `1` or `0`. A row belongs to one device, signal, and unit, so an asset with two devices that send the same signal has two rows for each period. To combine them, add up `val_sum` and `sample_count`.
 
 | Column | Type | What it contains |
 | --- | --- | --- |
-| `bucket_time` | `DateTime64(3, 'UTC')` | The start of the minute |
-| `raw_key` | `String` | The name of the signal, as the GPS device sends it, such as `lls_level_0` |
+| `bucket_time` | `DateTime64(3, 'UTC')` | The start of the 5-minute period |
+| `raw_key` | `String` | The name of the signal, as the GPS device sends it, such as `lls_level_0`. Also `battery_level`, `battery_voltage_mv`, `board_voltage_mv`, and `hw_mileage_m`, the values of the columns of the same name in `telemetry.records` |
 | `field_unit` | `String` | The unit of the signal, such as `L` |
 | `field_type` | `String` | The type of the signal, such as `FLOAT64` or `BOOL` |
 | `sensor_type` | `String` | The kind of sensor. Contains `custom` |
-| `val_min`, `val_max` | `Float64` | The lowest and the highest value in the minute |
-| `val_first`, `val_last` | `Float64` | The first and the last value in the minute |
-| `val_sum` | `Float64` | The sum of the values in the minute |
-| `sample_count` | `UInt32` | The number of values in the minute |
+| `val_min`, `val_max` | `Float64` | The lowest and the highest value in the period |
+| `val_first`, `val_last` | `Float64` | The first and the last value in the period |
+| `val_sum` | `Float64` | The sum of the values in the period |
+| `sample_count` | `UInt32` | The number of values in the period |
 | `computed_at` | `DateTime64(3, 'UTC')` | When Navixy calculated the row |
 
 ## Digital inputs and outputs
 
-`agg.digital_io_5m` has one row for each asset, device, digital input or output, and minute. Like the sensor table, each row covers 1 minute.
+`agg.digital_io_5m` has one row for each asset, device, digital input or output, and minute. Each row covers 1 minute.
 
 | Column | Type | What it contains |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ GROUP BY asset_id, hour
 ORDER BY asset_id, hour
 ```
 
-The query combines the minutes of every device of an asset that sends the signal. The result has one row per asset and hour:
+The query combines the 5-minute periods of every device of an asset that sends the signal. The result has one row per asset and hour:
 
 | asset_id | hour | average_level | lowest_level | highest_level |
 | --- | --- | --- | --- | --- |

@@ -38,7 +38,7 @@ One connection reads four ClickHouse databases. In ClickHouse, a database is a n
 | `core_bdr` | Raw data | Business data from Business Data Repository: workspaces, devices, assets, geo objects, schedules, and custom fields |
 | `telemetry` | Raw data | Positions and sensor values that your GPS devices send |
 | `report` | Transformation | Trips and stops, calculated by Navixy |
-| `agg` | Transformation | Sensor values and digital inputs per minute, and positions in geo objects, calculated by Navixy |
+| `agg` | Transformation | Sensor values in 5-minute periods, digital inputs per minute, and positions in geo objects, calculated by Navixy |
 
 See [Data schema](data-schema/) to find the tables of each database.
 

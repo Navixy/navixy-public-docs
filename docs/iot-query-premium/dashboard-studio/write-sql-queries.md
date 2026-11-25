@@ -223,7 +223,7 @@ A pie chart shows the 10 largest slices. Dashboard Studio adds the rest together
 
 <summary>Line chart and time series</summary>
 
-A line chart reads the time from the first column and the value from the second. A third column draws one line for each of its values. The following query returns the average fuel level of each asset for each hour of the last day. It reads sensor values that the `agg` database already groups by minute, and adds the minutes up to hours:
+A line chart reads the time from the first column and the value from the second. A third column draws one line for each of its values. The following query returns the average fuel level of each asset for each hour of the last day. It reads sensor values that the `agg` database already groups by 5 minutes, and adds the 5-minute periods up to hours:
 
 ```sql
 SELECT
@@ -463,7 +463,7 @@ The result has one row per hour that has trips:
 An hour without trips has no row in the result.
 
 
-For sensor values, don't group `telemetry` yourself. The `agg` database already groups the values of each signal by minute in `agg.sensor_readings_5m`. Group these minutes into longer periods with `toStartOfHour` or `toStartOfDay`, as in the line chart query in [Match the result to the panel type](#id-2.-match-the-result-to-the-panel-type). Choose the longest period that still gives the chart enough points. The [agg database](../data-access/data-schema/transformation-layer/agg.md#sensor-values) page describes the table.
+For sensor values, don't group `telemetry` yourself. The `agg` database already groups the values of each signal by 5 minutes in `agg.sensor_readings_5m`. Group these periods into longer periods with `toStartOfHour` or `toStartOfDay`, as in the line chart query in [Match the result to the panel type](#id-2.-match-the-result-to-the-panel-type). Choose the longest period that still gives the chart enough points. The [agg database](../data-access/data-schema/transformation-layer/agg.md#sensor-values) page describes the table.
 
 ## 6. Convert units in the query
 

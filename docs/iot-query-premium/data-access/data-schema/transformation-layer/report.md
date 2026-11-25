@@ -32,7 +32,7 @@ Trip counts in IoT Query Premium can differ slightly from [Reports](https://app.
 
 If the device sends an odometer, the distance of a trip is the difference between the odometer values at the start and at the end of the trip. Otherwise, it is the sum of the straight-line distances between consecutive positions.
 
-Navixy calculates trips and stops every 4 hours, from the positions of the last 14 days. A trip or a stop is added to `report.trips_stops` after it ends: when the next trip or stop has started, or 24 hours after it started. A row doesn't change after it is added, so a trip in progress isn't in the table. The `id` of a row is calculated from the asset, `kind`, and the start time, so you can store it in your own systems.
+Navixy calculates trips and stops every 4 hours, from the positions that Navixy received since the previous run. A trip or a stop is added to `report.trips_stops` after it ends: when the next trip or stop has started, or 24 hours after it started. A row doesn't change after it is added, so a trip in progress isn't in the table. The `id` of a row is calculated from the asset, `kind`, and the start time, so you can store it in your own systems.
 
 `report.trips_stops` doesn't need `FINAL`: Navixy adds each trip or stop once.
 

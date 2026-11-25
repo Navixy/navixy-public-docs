@@ -99,7 +99,7 @@ ORDER BY time
 The parts of the query that are specific to Grafana and IoT Query Premium are:
 
 * `$__timeFilter(bucket_time)` is a macro of the plugin. Grafana replaces it with a filter for the time range of the dashboard.
-* `agg.sensor_readings_5m` has the values of each signal per minute. `toStartOfHour` and `GROUP BY` add the minutes up to hours. For a range of several weeks, use `toStartOfDay` for one point per day.
+* `agg.sensor_readings_5m` has the values of each signal per 5 minutes. `toStartOfHour` and `GROUP BY` add the 5-minute periods up to hours. For a range of several weeks, use `toStartOfDay` for one point per day.
 * `toString(id)` converts the `UUID` of `core_bdr` to text, because the `agg` tables store `asset_id` as text.
 
 For the last 3 hours, the result is:

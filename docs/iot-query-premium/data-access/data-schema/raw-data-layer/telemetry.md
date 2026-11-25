@@ -128,10 +128,10 @@ The result has one row per message that has the sensor:
 | 2026-09-27 14:06:12.000 | 182.1 | L |
 | 2026-09-27 14:07:12.000 | 181.9 | L |
 
-For values grouped by minute, read `agg.sensor_readings_5m` in the [agg database](../transformation-layer/agg.md) instead. Navixy calculates it from the same messages.
+For values grouped by 5 minutes, read `agg.sensor_readings_5m` in the [agg database](../transformation-layer/agg.md) instead. Navixy calculates it from the same messages.
 
 ## See also
 
 * [core_bdr database](core-bdr.md): Find the devices and assets that telemetry belongs to.
 * [report database](../transformation-layer/report.md): Find the trips and stops that Navixy calculates from telemetry.
-* [agg database](../transformation-layer/agg.md): Find the sensor values, digital inputs and outputs, and positions in geo objects per minute.
+* [agg database](../transformation-layer/agg.md): Find the sensor values per 5 minutes, digital inputs and outputs per minute, and positions in geo objects.
