@@ -78,7 +78,7 @@ You can't grant more access rights than you have yourself. Console refuses to sa
 
 Navixy creates two roles in every new organization: Owner and Admin.
 
-The Owner role is a system role. Navixy assigns it to the person who created the organization. It has full access to the organization and all its workspaces. Only one person can have it, so it isn't offered when you invite people or assign roles. Nobody can edit, copy, delete, or revoke it. Transferring the Owner role in Console is planned and coming soon. Until then, contact Navixy to transfer it.
+The Owner role is a system role. Navixy assigns it to the person who created the organization. It has full access to the organization and all its workspaces. Only one person can have it, so it isn't offered when you invite people or assign roles. Nobody can edit, copy, delete, or revoke it. The Owner can't be changed.
 
 The Admin role has the same full access as the Owner role: every product and every workspace. It's an ordinary role, so you can give it in an invitation, assign it, edit it, copy it, and delete it. Navixy doesn't assign it to anyone, and doesn't create it again after you delete it. Use it for the people who manage the organization with you.
 

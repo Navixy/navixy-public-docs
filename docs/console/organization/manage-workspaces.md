@@ -13,16 +13,16 @@ tags:
 
 Create another workspace when a fleet, a team, or a department needs its own business data, products, or tariff plan. A workspace belongs to one organization, and its data isn't visible from that organization's other workspaces. To create a workspace, you need the Owner role or a role that includes the **Console** product.
 
-The **Create workspace** window has two steps: **Deployment** and **Products**. Click **Continue** to move to the next step, and **Launch** on the last one.
+A new workspace starts with the products that the default tariff plan includes. To use another product that the plan covers, enable it after you create the workspace. See [Enable or disable a product](#enable-or-disable-a-product).
 
 To create a workspace, follow these steps:
 
 1. In the top navigation bar, select your organization from the left dropdown menu.
-2. On the sidebar, click **Organization**, then click **Create workspace**.
-3. Keep the selected **Deployment** option.
-4. Select the **Products** that the workspace needs. The products marked as **Included** are always selected.
-5. On the same step, enter a **Workspace name** of up to 128 characters.
-6. Click **Launch**.
+2. On the sidebar, click **Organization**, then click **Create workspace**. The **Create workspace** page opens.
+3. Enter a **Workspace name** of up to 128 characters.
+4. Click **Launch workspace**.
+
+If you leave the page after you enter a name, Console asks whether to discard the workspace. To stay on the page, click **Keep editing**.
 
 The workspace is in the region of its organization. The workspace starts on the default tariff plan. On the **Workspaces** tab of the **Organization** page, its status reads **Requested**, then **Creating** while Navixy sets it up, and **Active** when it's ready to use. If you need a different plan, contact <sales@navixy.com>.
 
@@ -46,6 +46,7 @@ To enable a product, follow these steps:
 1. In the top navigation bar, select the workspace from the right dropdown menu.
 2. On the sidebar, click **Console hub**.
 3. Under **My products**, click **Enable** next to the product.
+4. If the product has a price, a confirmation window shows its period fee and usage prices. Click **Enable**.
 
 The product shows **Enabling** while Navixy sets it up, which takes a few minutes, and **Enabled** when it's ready.
 

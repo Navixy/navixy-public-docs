@@ -358,7 +358,7 @@ The activation operations return errors in the shared format. See [Error handlin
 | `PERMISSION_DENIED` | The API can't choose the workspace of the request, or the key's role doesn't allow creating devices. Activating an existing device also requires the right to update it. | Check `navixy_workspace_id` in the exchange or ask your organization's administrator for a key with a role that creates and updates devices. See [Roles and products](authentication/roles-and-products.md). |
 | `VALIDATION_ERROR` | `identifier` isn't 15 digits, `phone` isn't 5 to 20 digits, `apn.name` has characters or a length outside its rules, or the model isn't supported. `field` names the argument, for example, `input.identifier` or `input.apn.name`. | Read `field` and `detail` and correct the value. Choose a model from `deviceModels(filter: { supported: true })`. |
 | `NOT_FOUND` | `modelId` names no model. | Send the `id` as `deviceModels` returned it. |
-| `DUPLICATE` | The IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device from another workspace. Or the phone number belongs to another device. `field` is `input.identifier` or `input.phone`. | Check the IMEI and the phone number. A deleted device keeps its IMEI reserved, so the same GPS device can't be activated again with a new record. |
+| `DUPLICATE` | The IMEI belongs to a device that is `active` or `inactive`, or to a device from another workspace. Or the phone number belongs to another device. `field` is `input.identifier` or `input.phone`. | Check the IMEI and the phone number. To activate the same GPS device again with a new record, delete the old record first. |
 
 Activation with an IMEI that another device already has returns this error:
 
@@ -385,7 +385,7 @@ Activation with an IMEI that another device already has returns this error:
 
 ### How to handle a duplicate IMEI or phone number
 
-Read `field`. When `field` is `input.identifier`, another device already has this IMEI. A device in your workspace that is `not_activated` or `awaiting_connection` doesn't cause this error, because the activation attaches to that device. So the IMEI belongs to a device that is `active` or `inactive`, a deleted device, or a device in another workspace. To find it in your workspace, look up the device with `devices(filter: { identifierContains: "<IMEI>" })`. When `field` is `input.phone`, another device already has this phone number: correct the number or delete the other device first.
+Read `field`. When `field` is `input.identifier`, another device already has this IMEI. A device in your workspace that is `not_activated` or `awaiting_connection` doesn't cause this error, because the activation attaches to that device. So the IMEI belongs to a device that is `active` or `inactive`, or a device in another workspace. To find it in your workspace, look up the device with `devices(filter: { identifierContains: "<IMEI>" })`. When `field` is `input.phone`, another device already has this phone number: correct the number or delete the other device first.
 
 ## Next steps
 

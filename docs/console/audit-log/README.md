@@ -25,7 +25,7 @@ Here's what you can do in **Audit log**:
 * Export events: Select the events and click **Export to CSV** or **Export to JSON** in the bar that appears. See [Export](./#export).
 * Hide columns: <picture><source srcset="../.gitbook/assets/icons/visibility_off-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/visibility_off.svg" alt="Hide columns" data-size="line"></picture> hides any column except **Time**. The choice is saved in your browser.
 
-The list shows the 1,000 most recent events for each product. To see older events, narrow down the list with a filter or a search, which looks through every event.
+The list shows the events of the period selected in the period menu, by default the last 30 days. To see other events, select another period, such as **All time**, or select **Custom range…** and choose the dates. In the period, the list shows at most the 1,000 most recent events for each product. To find older events in the period, narrow down the list with a filter or a search.
 
 ## What the audit log records
 
@@ -53,13 +53,13 @@ The details panel shows everything that was recorded about one change. Its title
 
 ## Search and filters
 
-The search finds events based on the member or API key name, record ID or type, or trace ID. It looks through every event of the organization, not only the events shown on screen. The search also finds the names of the removed members. Navixy staff and services are found only when one of their events is already in the list.
+The search finds events based on the member or API key name, record ID or type, or trace ID. It looks through every event of the organization in the selected period, not only the events shown on screen. The search also finds the names of the removed members. Navixy staff and services are found only when one of their events is already in the list.
 
 The filters narrow the list by one or several of these fields:
 
-<table><thead><tr><th width="161.4000244140625">Filter</th><th>Value</th></tr></thead><tbody><tr><td><strong>Date</strong></td><td>A period in whole days, in your browser's time zone. Select one day to see only that day.</td></tr><tr><td><strong>Product</strong></td><td>One or more of the three products (Console, IAM, Billing).</td></tr><tr><td><strong>Action</strong></td><td>One or more actions, such as <strong>Role assigned</strong>.</td></tr><tr><td><strong>Record type</strong></td><td>One or more types. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Record ID</strong></td><td>An ID, or part of one. Copy it from the page of a workspace or a person, or from another event.</td></tr><tr><td><strong>Source</strong></td><td>One or more sources. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Performed by</strong></td><td>One or more members, API keys, or services. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Trace ID</strong></td><td>A trace ID or part of one.</td></tr></tbody></table>
+<table><thead><tr><th width="161.4000244140625">Filter</th><th>Value</th></tr></thead><tbody><tr><td><strong>Product</strong></td><td>One or more of the three products (Console, IAM, Billing).</td></tr><tr><td><strong>Action</strong></td><td>One or more actions, such as <strong>Role assigned</strong>.</td></tr><tr><td><strong>Record type</strong></td><td>One or more types. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Record ID</strong></td><td>An ID, or part of one. Copy it from the page of a workspace or a person, or from another event.</td></tr><tr><td><strong>Source</strong></td><td>One or more sources. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Performed by</strong></td><td>One or more members, API keys, or services. The list shows only those that belong to already loaded events.</td></tr><tr><td><strong>Trace ID</strong></td><td>A trace ID or part of one.</td></tr></tbody></table>
 
-Each filter can be used once. The filters combine: an event must match every filter you set. A text value takes up to 255 characters, with no tabs or line breaks. When nothing matches the search and the filters, the list says so, and **Clear filters** removes all of them.
+Each filter can be used once. The filters combine: an event must match every filter you set. A text value takes up to 255 characters, with no tabs or line breaks. When nothing matches the search and the filters, the list says so. **Clear filters** removes all of them and sets the period to **All time**.
 
 ## Export
 

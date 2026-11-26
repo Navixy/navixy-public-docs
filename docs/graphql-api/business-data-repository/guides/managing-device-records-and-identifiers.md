@@ -627,7 +627,7 @@ For a full explanation of how versioning works, see [Optimistic locking](../../o
 
 ## Deleting a device
 
-When a tracker reaches end of life and needs to be permanently removed, use `deviceDelete`. It hides the device from every query. Its identifiers stay reserved, so a new device can't reuse the same `type`, `value` and `namespace`.
+When a tracker reaches end of life and needs to be permanently removed, use `deviceDelete`. It hides the device from every query. Its identifiers are freed, so a new device in this workspace or another one can use the same `type`, `value`, and `namespace`.
 
 `deviceDelete` doesn't close an active inventory assignment either. Unlink the device from its inventory first with `deviceInventoryUnlink` (see [Managing device inventory](managing-device-inventory.md)), then delete it.
 

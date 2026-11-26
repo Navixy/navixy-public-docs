@@ -73,9 +73,11 @@ To set a role expiration date, follow these steps:
 1. Go to **Users and roles** and open the **Roles** tab.
 2. Click <picture><source srcset="../.gitbook/assets/icons/edit-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/edit.svg" alt="Edit" data-size="line"></picture> next to the role. The role's page opens.
 3. Under **Assign to users**, select the person.
-4. Click **No expiration** next to the person and select the date. The earliest date that you can select is tomorrow.
-5. Click **Save changes**.
-6. In the confirmation window, click **Save changes**.
+4. Click <picture><source srcset="../.gitbook/assets/icons/calendar_month-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/calendar_month.svg" alt="No expiration" data-size="line"></picture> next to the person. The **Set expiration date** window opens.
+5. Select a preset, such as **In 30 days**, or select a date in the calendar. The earliest date is tomorrow.
+6. Click **Confirm**.
+7. Click **Save changes**.
+8. In the confirmation window, click **Save changes**.
 
 The **Expiration date** column on the **Users** tab shows the date. **Never** means that the assignment has no expiration date. To remove the date, click <picture><source srcset="../.gitbook/assets/icons/close-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/close.svg" alt="Clear expiration" data-size="line"></picture> next to it on the role's page and save the role.
 
@@ -93,7 +95,7 @@ To revoke a role, follow these steps:
 
 You can also revoke a role on the role's page: under **Assign to users**, clear the person, save the role, and confirm.
 
-The person loses access rights within about 5 minutes. A member whose last role is revoked stays in the organization without a role. To give them access again, assign them a role. You don't need to invite them again. The Owner role can't be revoked.
+The person can keep the access rights for up to 1 hour. A member whose last role is revoked stays in the organization without a role. To give them access again, assign them a role. You don't need to invite them again. The Owner role can't be revoked.
 
 ## Sign out a member everywhere
 

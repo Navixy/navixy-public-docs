@@ -23,7 +23,7 @@ To create a role, follow these steps:
 4. Under **Workspaces**, keep **All**, or select **Specific** and select at least one workspace. **All** also covers workspaces created later.
 5. Under **Products**, select each product that the role gives access to.
 6. (Optional) Narrow the access to each product. See [Configure what a role allows](#configure-what-a-role-allows).
-7. (Optional) Under **Assign to users**, select the people who receive the role. To end a person's access on a set date, click **No expiration** next to them and select the date.
+7. (Optional) Under **Assign to users**, select the people who receive the role. To end a person's access on a set date, see [Set role expiration date](manage-users.md#set-role-expiration-date).
 8. Click **Save role**. If you selected people under **Assign to users**, click **Save changes** in the confirmation window.
 
 The role becomes active immediately. There is no separate publishing step.

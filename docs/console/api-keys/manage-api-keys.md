@@ -20,7 +20,7 @@ To create an API key, follow these steps:
 3. Under **Role**, select the key's role. The list shows only active roles that cover the workspace selected in the top navigation bar and give no more access rights than your own roles.
 4. (Optional) Under **Expiration date (optional)**, click **Never**. The **Set expiration date** window opens.
 5. Select a date or a preset, such as **In 30 days**. The earliest date is tomorrow, and the key stops working at the start of the selected day. Without a date, the key never expires.
-6. Click **Set date**.
+6. Click **Confirm**.
 7. Click **Create API key**. The window shows the key and an example request.
 8. Click **Copy**.
 9. Store the key where the app reads it, such as a secrets store or an environment variable.

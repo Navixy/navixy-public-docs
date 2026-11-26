@@ -47,7 +47,7 @@ If your email address already has an account in another region, the page links t
 {% step %}
 **Verify your email address**
 
-Navixy sends a message to the address you entered. Open it and click the link. The **Email verification** page tells you where the message went and lets you send it again.
+Navixy sends a message to the address you entered. Open it and click the link. The **Email verification** page tells you where the message went and lets you send it again. The link works for 24 hours.
 {% endstep %}
 
 {% step %}
@@ -221,7 +221,7 @@ To assign a role, follow these steps:
 To revoke a role, click **Revoke** next to it under **Assigned roles**, then click **Revoke** in the confirmation window.
 
 {% hint style="info" %}
-Console records a revocation straight away. The person loses the access rights within about 5 minutes.
+Console records a revocation straight away. The person can keep the access rights for up to 1 hour.
 {% endhint %}
 
 A member whose last role is revoked stays in the organization without a role, so you can assign them a role later without inviting them again.

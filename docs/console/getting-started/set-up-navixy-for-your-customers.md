@@ -119,9 +119,7 @@ When your colleague accepts the invitation, they are a member of both organizati
 
 ## 6. Hand over the organization to the customer
 
-When you create a child organization, you become its Owner. You can stay the Owner if the customer agrees. The customer's administrator then works with the role that you gave them.
-
-If the customer wants to own their organization, contact Navixy to transfer the Owner role to the customer's administrator. Transferring the Owner role in Console is planned and coming soon.
+When you create a child organization, you become its Owner. The Owner can't be changed. The customer's administrator works with the role that you gave them.
 
 ## 7. Give temporary access for one-time support
 
@@ -134,7 +132,7 @@ To give temporary access, follow these steps:
 3. Invite the person with this role. Under **Security profile**, select **Limited** or **Protected**. For the steps, see [Invite a user](../users-and-roles/manage-users.md#invite-a-user).
 4. After the person accepts the invitation, open the role's page and set an expiration date for them under **Assign to users**. For the steps, see [Set role expiration date](../users-and-roles/manage-users.md#set-role-expiration-date).
 
-On that date, the role stops applying, and the person loses access without any action from you. If the work ends earlier, revoke the role. For the steps, see [Revoke a role](../users-and-roles/manage-users.md#revoke-a-role). The person loses access within about 5 minutes.
+On that date, the role stops applying, and the person loses access without any action from you. If the work ends earlier, revoke the role. For the steps, see [Revoke a role](../users-and-roles/manage-users.md#revoke-a-role). The person can keep access for up to 1 hour.
 
 People with a stricter security profile will see a notice in Console that they work in another company's organization. This notice is planned and coming soon.
 
