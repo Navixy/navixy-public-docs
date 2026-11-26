@@ -20,7 +20,7 @@ This document describes the **API keys** page, what a key can do, and when a key
 
 **API keys** lists the organization's keys with their attributes. To open it, click **API keys** on the sidebar. The page shows the keys of the organization that you selected in the top navigation bar.
 
-<figure><img src="../.gitbook/assets/api-keys-page.png" alt="The API keys page of Console. The top navigation bar has the organization and workspace dropdown menus and a search field. Below the title and its description is the Create API key button. The list has a search icon, a filter icon, and the columns Name, Role, Expiration, Created, Last sign-in, and Key. One key is listed. It never expires, and Created shows the date and who created the key. The key hasn&#x27;t signed in yet, so Last sign-in shows a dash. The row has a Delete action. Under the list are the Export to CSV and View API request icons."><figcaption><p>The API keys page</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/api-keys-page.png" alt="The API keys page of Console. The top navigation bar has the organization and workspace dropdown menus and a search field. Below the title and its description is the Create API key button. The list has the search, filter, and hide columns icons, a checkbox in each row, and the columns Name, Role, Expiration, Created, Last sign-in, and Key. One key is listed. It never expires, and Created shows the date and who created the key. The key hasn&#x27;t signed in yet, so Last sign-in shows a dash. The row has a Delete action. Under the list are the number of selected keys and the page controls, and below them the Export to CSV and View API request icons."><figcaption><p>The API keys page</p></figcaption></figure>
 
 Here's what you can do:
 
@@ -30,6 +30,7 @@ Here's what you can do:
 * Export keys: <picture><source srcset="../.gitbook/assets/icons/download-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/download.svg" alt="Export to CSV" data-size="line"></picture> under the list downloads the keys that match the filters as a CSV file.
 * View the API request: **View API request**, the **{}** button under the list, shows the request that lists the organization's keys through the Navixy GraphQL API, with links to the authentication guide and the Console API reference. The request needs an access token issued to a person. Only people manage keys, so a token that an app got with an API key can't list, create, or delete keys.
 * Delete keys: You can delete one key or several keys at once. A deleted key can't be restored. See [Delete an API key](manage-api-keys.md#delete-an-api-key).
+* Hide columns: <picture><source srcset="../.gitbook/assets/icons/visibility_off-dark.svg" media="(prefers-color-scheme: dark)"><img src="../.gitbook/assets/icons/visibility_off.svg" alt="Hide columns" data-size="line"></picture> hides any column except **Name**. The choice is saved in your browser.
 
 
 | Column           | Description                                                                                                                                                                                |
