@@ -9,7 +9,7 @@ tags:
 
 Some device models expose a kind of control that others do not: an electronic lock, a panic button, a power-off key. Which one, if any, a model has is reported by the `special_control` field of its [model](../../README.md#post-tracker-list_models). A value of `none` means the model has no such control.
 
-When a model does have one, `special_control` names the settings `type` that goes with it, such as `pwr_off_key` or `sos_key`. That type is what decides the shape of the settings object, and every shape is catalogued in [Settings object structures by type](#settings-object-structures-by-type) below.
+When a model does have one, `special_control` names the settings `type` that goes with it, such as `pwr_off_key` or `sos_key`. That type is what decides the shape of the settings object, and every shape is catalogued in [Settings object structures by type](#settings-object-structures-by-type) below. One type, `device_status_settings`, doesn't depend on the model: every device has it.
 
 Three operations act on a model's special control:
 
@@ -272,6 +272,23 @@ These errors come in addition to the [general error codes](../../../../../../gen
 ```
 
 * `emails` - string array. Valid emails. Maximum size 5.
+
+**`device_status_settings`**
+
+Sets how long the platform waits for data from a device before it marks the device as offline. Every device has this type, whatever its model. The [Connection state](https://app.gitbook.com/s/446mKak1zDrGv70ahuYZ/guide/devices-and-settings/connectivity/connection-state) block of the web interface saves its value with `tracker/settings/special/update`.
+
+```json
+{
+  "type": "device_status_settings",
+  "offline_timeout_seconds": 7200
+}
+```
+
+* `offline_timeout_seconds` - int. Nullable. The number of seconds without data from the device after which the platform marks it as offline. Can be 60 - 259200000 (3000 days). `null` means that no value was saved, and the platform uses its built-in timeout, which depends on the device and its connection type. Send `null` to go back to the built-in timeout.
+
+The platform stores this value and doesn't send it to the device. A device that is online gets the new timeout within seconds. A device that is already offline stays offline until it sends data again, even when the new timeout is longer.
+
+To change many devices, call `tracker/settings/special/update` once for each device. The copy button of the Connection state block does the same.
 
 **`digital_password`**
 

@@ -20,10 +20,10 @@ For real-time monitoring of device power status, use the [Device switch ON/OFF](
 
 The **Offline time more than** setting allows users to define a custom timer that starts counting down after the GPS device goes into a red status (indicating loss of connection). The total disconnection period is calculated as follows:
 
-- **Default timeout (10 minutes)**: This is the standard period after which a GPS device is considered to have lost connection if no data is received from the device.
+- **Connection timeout**: The period without data after which the GPS device is marked offline. It's the time set in the device's [Connection state](../../devices-and-settings/connectivity/connection-state.md) settings. If no time was saved there, the platform uses a built-in timeout that depends on the device and its connection type.
 - **Your custom offline timeout**: The additional time specified by the user in the **Offline time more than** field.
 
-For example, if a device loses connection at 10:10 AM, after the default timeout of 10 minutes, it is marked with a red status at 10:20 AM. If the user sets the custom offline timeout to 7 minutes, the notification is triggered at 10:27 AM.
+For example, a device sends its last data at 10:10 AM, and its connection timeout is 10 minutes. The device is marked with a red status at 10:20 AM. If the user sets the custom offline timeout to 7 minutes, the notification is triggered at 10:27 AM.
 
 For common rule settings, see [Rules and Alerts](../README.md).
 
@@ -31,6 +31,6 @@ For common rule settings, see [Rules and Alerts](../README.md).
 
 - The **Device lost connection** alert has a 10-second reset timer, which means the alert doesn't trigger more often than once every 10 seconds. If an event occurs while the rule is waiting for the reset, it is omitted by the platform, including in reports.
 - This rule is processed in the cloud and is not tied to any specific hardware, making it applicable to multiple GPS devices simultaneously. This flexibility allows you to manage several GPS devices within a single rule.
-- Different device models have varying transport-level timeouts. If you include multiple GPS device models in the same rule, the notification periods may differ based on the device's specific timeout settings. This variation occurs because the notification is triggered by a combination of the GPS device's default timeout and the custom offline timeout specified in the rule configuration.
+- Different device models have varying built-in timeouts. If you include multiple GPS device models in the same rule and haven't set a connection timeout for them, the notification periods may differ. This variation occurs because the notification time is the device's connection timeout plus the custom offline timeout from the rule.
 
 By using this rule, users can ensure they are promptly informed of any disruptions in GPS device connectivity, enabling them to take swift action to address potential issues.

@@ -24602,7 +24602,7 @@
           "Trackers"
         ],
         "summary": "Read special settings",
-        "description": "Get the model-specific special settings for a tracker. Available to demo accounts.\n\n**The response shape depends on whether you pass `type`.** With it, the settings object comes back under `value`; without it, every special-settings object the tracker has comes back under `list`.",
+        "description": "Get the special settings for a tracker. Available to demo accounts.\n\n**The response shape depends on whether you pass `type`.** With it, the settings object comes back under `value`; without it, every special-settings object the tracker has comes back under `list`. The list always includes `device_status_settings`, which every tracker has, whatever its model.",
         "operationId": "trackerSettingsSpecialRead",
         "requestBody": {
           "required": true,
@@ -24689,7 +24689,7 @@
           "Trackers"
         ],
         "summary": "Change special settings",
-        "description": "Replace one special-settings object on a tracker.\n\n**This reaches the hardware.** The `value` object must carry the `type` that identifies which settings are being written.\n\nRequires the `tracker_configure` right.",
+        "description": "Replace one special-settings object on a tracker.\n\n**For most types this reaches the hardware.** `device_status_settings` doesn't: the platform stores it and sends nothing to the device. The `value` object must include the `type` that identifies which settings are being written.\n\nRequires the `tracker_configure` right.",
         "operationId": "trackerSettingsSpecialUpdate",
         "requestBody": {
           "required": true,
@@ -37337,7 +37337,7 @@
       },
       "SpecialSettings": {
         "type": "object",
-        "description": "One special-settings object. Its `type` decides which further fields it carries, and the full catalogue of types is on the special settings page rather than here, because the set is long and model-specific.\n\nNote that `device_status_settings`, carrying `offline_timeout_seconds`, is returned by the API but is missing from that catalogue.",
+        "description": "One special-settings object. Its `type` decides which further fields it carries, and the full catalogue of types is on the special settings page rather than here, because the set is long and most types are model-specific.",
         "properties": {
           "type": {
             "type": "string",
