@@ -64,5 +64,5 @@ Use the Analytics API to read what Reports and Dashboards calculate: report runs
 
 * [Reports API reference](reports/api-reference.md) and [Dashboards API reference](dashboards/api-reference.md): every API operation and response model.
 * [Reports tools](reports/tools/README.md) and [Dashboards tools](dashboards/tools/README.md): every tool and response model.
-* The OpenAPI specifications: [Reports](https://openapi.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/spec/analytics-reports.json) and [Dashboards](https://openapi.gitbook.com/o/YVLWhgAwCZPoU5vlRsCs/spec/analytics-dashboards.json), to load into an API client or a code generator.
+* The OpenAPI specifications: [Reports](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/docs/analytics-api/reference/Reports.json) and [Dashboards](https://raw.githubusercontent.com/Navixy/navixy-public-docs/refs/heads/main/docs/analytics-api/reference/Dashboards.json), to load into an API client or a code generator.
 * [Contact Navixy](https://www.navixy.com/en/contact?utm_source=navixy-docs&utm_campaign=analytics-api) for help with the Analytics API.
