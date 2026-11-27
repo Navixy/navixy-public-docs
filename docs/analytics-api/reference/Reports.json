@@ -1,0 +1,1362 @@
+{
+  "openapi": "3.1.0",
+  "x-enable-proxy": true,
+  "info": {
+    "title": "Navixy Reports API",
+    "version": "1.0.0",
+    "summary": "Report types and assets, report summaries, and links to reports of Navixy Reports",
+    "description": "The Reports API returns the data of Navixy Reports. It runs a report for a period and a set of assets and returns its summary. It also returns the report types and assets that your token can use, and a link that opens a report in Location Intelligence.\n\n**Requests.** Every operation is a `POST` request with a JSON body. Every body includes `timeZone`, an IANA time zone such as `Europe/Madrid`. The API reads the days of a period on the calendar of that time zone and writes every date and time in it.\n\n**Authentication.** Send an access token in the `Authorization` header: the word `Bearer`, a space, and the token. Your app gets the token by exchanging a Navixy API key. The token gives access to one workspace, and every response has the data of that workspace only.\n\n**Errors.** An error response has an HTTP status other than 2xx and a JSON body with a `code`, a `message`, and sometimes `details`. Check the `code` field: `message` is text for a person and can change. HTTP 401 has no body.",
+    "contact": {
+      "name": "Navixy support",
+      "email": "support@navixy.com",
+      "url": "https://www.navixy.com/en/contact?utm_source=navixy-docs&utm_campaign=analytics-api"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "identifier": "Apache-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://reports.{region}.navixy.com/api",
+      "description": "Navixy production server of your region",
+      "variables": {
+        "region": {
+          "default": "eu",
+          "enum": [
+            "eu",
+            "us"
+          ],
+          "description": "The region of your organization: `eu` for the European Union, `us` for the United States."
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Report types and assets",
+      "description": "The report types that your token can run, the assets that it can see, and the dates of common periods. Operation `POST /api/tools/context`."
+    },
+    {
+      "name": "Report summary",
+      "description": "The summary figures of a report for a period, for all assets and for each asset or sensor. Operation `POST /api/tools/run_report_totals`."
+    },
+    {
+      "name": "Links to reports",
+      "description": "A link that opens a report in Location Intelligence, with the period, the assets, and the view that you chose. Operation `POST /api/tools/propose_report`."
+    }
+  ],
+  "paths": {
+    "/tools/context": {
+      "post": {
+        "tags": [
+          "Report types and assets"
+        ],
+        "summary": "List report types and assets",
+        "operationId": "reportTypesList",
+        "description": "Returns what your token can read in the workspace: the report types that the role lets you run and the assets that you can see. It also returns today's date and the dates of 6 common periods in `timeZone`. Call it first, and take the report type IDs and the asset IDs for the other operations from it.\n\nThe response lists the assets only when there are at most 200 of them. With more, `assets` is missing and `assetCount` has the number: name `all` in the other operations, or take the IDs from Navixy GraphQL API.\n\nThe body accepts no field but `timeZone`. This operation doesn't count as a report run.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportTypesRequest"
+              },
+              "examples": {
+                "time_zone": {
+                  "summary": "The report types and assets in the time zone of Berlin",
+                  "value": {
+                    "timeZone": "Europe/Berlin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The report types and assets that your token can use.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportTypesAndAssets"
+                },
+                "examples": {
+                  "report_types_and_assets": {
+                    "summary": "The report types and assets of a workspace with 3 assets, with the descriptions of the report types shortened",
+                    "value": {
+                      "today": "2026-11-27",
+                      "timeZone": "Europe/Berlin",
+                      "periods": {
+                        "today": {
+                          "from": "2026-11-27",
+                          "to": "2026-11-27"
+                        },
+                        "yesterday": {
+                          "from": "2026-11-26",
+                          "to": "2026-11-26"
+                        },
+                        "this_week": {
+                          "from": "2026-11-23",
+                          "to": "2026-11-27"
+                        },
+                        "last_week": {
+                          "from": "2026-11-16",
+                          "to": "2026-11-22"
+                        },
+                        "this_month": {
+                          "from": "2026-11-01",
+                          "to": "2026-11-27"
+                        },
+                        "last_month": {
+                          "from": "2026-10-01",
+                          "to": "2026-10-31"
+                        }
+                      },
+                      "templates": [
+                        {
+                          "code": "driver_performance",
+                          "name": "Driver performance",
+                          "description": "Each asset's driving violations over a period."
+                        },
+                        {
+                          "code": "sensor_readings",
+                          "name": "Sensor readings",
+                          "description": "What each sensor on each asset read over a period, in the unit its device reports."
+                        },
+                        {
+                          "code": "trips_and_stops",
+                          "name": "Trips and stops",
+                          "description": "Each asset's trips and stops over a period."
+                        }
+                      ],
+                      "assets": [
+                        {
+                          "id": "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01",
+                          "title": "Van 01 (FMB920)"
+                        },
+                        {
+                          "id": "019a7f3e-5c21-7a10-8000-0b2c4d6e8f02",
+                          "title": "Truck 02 (FMC130)"
+                        },
+                        {
+                          "id": "019a7f3e-5c21-7a10-8000-0b2c4d6e8f03",
+                          "title": "Bus 03 (FMB125)"
+                        }
+                      ],
+                      "assetCount": 3
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body is wrong. With `invalid_tool_call`, `details` names each wrong field and says what it must be. With `bad_request`, the body isn't JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "time_zone": {
+                    "summary": "A fixed offset in timeZone",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "timeZone": "the user's IANA time zone, such as Europe/Madrid, not an offset"
+                      }
+                    }
+                  },
+                  "no_body": {
+                    "summary": "A request without a body",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "body": "a JSON object of the tool's arguments"
+                      }
+                    }
+                  },
+                  "extra_field": {
+                    "summary": "A field that the operation doesn't accept",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "workspace_id": "not a parameter of this tool"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ReportDataUnavailable"
+          }
+        }
+      }
+    },
+    "/tools/run_report_totals": {
+      "post": {
+        "tags": [
+          "Report summary"
+        ],
+        "summary": "Get report summary",
+        "operationId": "reportSummaryGet",
+        "description": "Runs a report for a period and a set of assets and returns its summary: the figures of the report for the period, never individual trips, stops or readings. `trips_and_stops` returns the figures of all assets in `totals` and the same figures for each asset. `sensor_readings` returns one line for each sensor. `driver_performance` has no summary and returns HTTP 400.\n\nEach request counts as one report run against the limit of about 250 runs in 24 hours, once Reports accepts it. A request that returns HTTP 400 for a wrong field doesn't count.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SummaryRequest"
+              },
+              "examples": {
+                "trips_and_stops": {
+                  "summary": "Trips and stops of one asset for one day",
+                  "value": {
+                    "timeZone": "Europe/Berlin",
+                    "report": "trips_and_stops",
+                    "from": "2026-11-26",
+                    "to": "2026-11-26",
+                    "assets": [
+                      "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The summary of the report. Its shape depends on the report type.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TripsSummary"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SensorSummary"
+                    }
+                  ]
+                },
+                "examples": {
+                  "trips_and_stops": {
+                    "summary": "The Trips and stops summary of one asset for one day",
+                    "value": {
+                      "totals": {
+                        "trips": 16,
+                        "distanceM": 186300,
+                        "drivingS": 48600,
+                        "stops": 17,
+                        "stopS": 5520,
+                        "maxSpeedKmh": 40.0
+                      },
+                      "assetsInScope": 1,
+                      "assets": [
+                        {
+                          "assetId": "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01",
+                          "title": "Van 01 (FMB920)",
+                          "figures": {
+                            "trips": 16,
+                            "distanceM": 186300,
+                            "drivingS": 48600,
+                            "stops": 17,
+                            "stopS": 5520,
+                            "maxSpeedKmh": 40.0
+                          }
+                        }
+                      ],
+                      "assetsOmitted": 0
+                    }
+                  },
+                  "empty": {
+                    "summary": "The Trips and stops summary of a workspace without assets",
+                    "value": {
+                      "totals": {
+                        "trips": 0,
+                        "distanceM": 0,
+                        "drivingS": 0,
+                        "stops": 0,
+                        "stopS": 0,
+                        "maxSpeedKmh": null
+                      },
+                      "assetsInScope": 0,
+                      "assets": [],
+                      "assetsOmitted": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body is wrong. With `invalid_tool_call`, `details` names each wrong field and says what it must be. With `bad_request`, the body isn't JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "time_zone": {
+                    "summary": "A fixed offset in timeZone",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "timeZone": "the user's IANA time zone, such as Europe/Madrid, not an offset"
+                      }
+                    }
+                  },
+                  "no_body": {
+                    "summary": "A request without a body",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "body": "a JSON object of the tool's arguments"
+                      }
+                    }
+                  },
+                  "fields": {
+                    "summary": "A report type that you can't run, and missing fields",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "report": "one of driver_performance, sensor_readings, trips_and_stops",
+                        "from": "required",
+                        "to": "required",
+                        "assets": "required: \"all\", or a list of asset ids"
+                      }
+                    }
+                  },
+                  "no_summary": {
+                    "summary": "A report type without a summary",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "report": "no totals for this report yet"
+                      }
+                    }
+                  },
+                  "too_large": {
+                    "summary": "The report is too large for one run",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "size": "more data than one run reads: a shorter period or fewer assets"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "429": {
+            "$ref": "#/components/responses/RunLimitReached"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/RunUnavailable"
+          }
+        }
+      }
+    },
+    "/tools/propose_report": {
+      "post": {
+        "tags": [
+          "Links to reports"
+        ],
+        "summary": "Create link to report",
+        "operationId": "reportLinkCreate",
+        "description": "Checks a report, its period, its assets, and its view options as Location Intelligence opens them. Returns the checked report with `link`, the address that opens it there. The link names no time zone: Reports reads the period in the time zone of the browser that opens it. So send the time zone of the person who opens the link.\n\nWhen `view.step` gives too many points for the period, the response raises it to the shortest step that fits and says so in `adjusted`. Any other wrong field returns HTTP 400. This operation doesn't count as a report run.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportLinkRequest"
+              },
+              "examples": {
+                "trips": {
+                  "summary": "The trips of one asset for one day",
+                  "value": {
+                    "timeZone": "Europe/Berlin",
+                    "report": "trips_and_stops",
+                    "from": "2026-11-26",
+                    "to": "2026-11-26",
+                    "assets": [
+                      "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+                    ],
+                    "view": {
+                      "kind": "trip"
+                    }
+                  }
+                },
+                "sensors_step": {
+                  "summary": "Sensor readings for 31 days with a step that is too short",
+                  "value": {
+                    "timeZone": "Europe/Berlin",
+                    "report": "sensor_readings",
+                    "from": "2026-10-27",
+                    "to": "2026-11-26",
+                    "assets": "all",
+                    "view": {
+                      "step": 300
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The checked report and its link.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportLink"
+                },
+                "examples": {
+                  "trips": {
+                    "summary": "A link to the trips of one asset, on the EU address of Location Intelligence Reports",
+                    "value": {
+                      "report": "trips_and_stops",
+                      "from": "2026-11-26",
+                      "to": "2026-11-26",
+                      "assets": [
+                        "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+                      ],
+                      "view": {
+                        "kind": "trip"
+                      },
+                      "link": "https://reports.eu.navixy.com/reports/trips_and_stops?from=2026-11-26&to=2026-11-26&assets=019a7f3e-5c21-7a10-8000-0b2c4d6e8f01&kind=trip&organization_id=019a7f3e-0a1b-7c2d-8000-4f52474e0001&workspace_id=019a7f3e-0a1b-7c2d-8000-575350430001"
+                    }
+                  },
+                  "sensors_step": {
+                    "summary": "A step raised to fit the period",
+                    "value": {
+                      "report": "sensor_readings",
+                      "from": "2026-10-27",
+                      "to": "2026-11-26",
+                      "assets": "all",
+                      "view": {
+                        "step": 1800
+                      },
+                      "adjusted": {
+                        "view.step": "300 is over 2016 points per series for this period; raised to 1800, the smallest that fits"
+                      },
+                      "link": "https://reports.eu.navixy.com/reports/sensor_readings?from=2026-10-27&to=2026-11-26&assets=all&step=1800&organization_id=019a7f3e-0a1b-7c2d-8000-4f52474e0001&workspace_id=019a7f3e-0a1b-7c2d-8000-575350430001"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body is wrong. With `invalid_tool_call`, `details` names each wrong field and says what it must be. With `bad_request`, the body isn't JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "time_zone": {
+                    "summary": "A fixed offset in timeZone",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "timeZone": "the user's IANA time zone, such as Europe/Madrid, not an offset"
+                      }
+                    }
+                  },
+                  "no_body": {
+                    "summary": "A request without a body",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "body": "a JSON object of the tool's arguments"
+                      }
+                    }
+                  },
+                  "view": {
+                    "summary": "A view that isn't an object",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "view": "an object of the report's view options"
+                      }
+                    }
+                  },
+                  "assets": {
+                    "summary": "An asset that you can't see",
+                    "value": {
+                      "code": "invalid_tool_call",
+                      "message": "The tool call cannot be run as it is.",
+                      "details": {
+                        "assets": "not among the assets this user may name: 019a7f3e-5c21-7a10-8000-0b2c4d6e8f03"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "$ref": "#/components/responses/ReportDataUnavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "The access token that your app gets by exchanging a Navixy API key."
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "The request has no token, or the token is invalid or expired. The token of an API key also gets HTTP 401 on any path outside `/api/tools/`. The response has no body. Exchange the API key again and repeat the request. When HTTP 401 repeats with the new token, check the path.",
+        "headers": {
+          "WWW-Authenticate": {
+            "description": "The word `Bearer` and the address of the description of this API's authentication.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Bearer resource_metadata=\"https://reports.eu.navixy.com/.well-known/oauth-protected-resource/api\""
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "The token is valid, but it doesn't give access. `product_not_enabled`: the workspace doesn't have Reports, or the role gives no access to it. `insufficient_rights`: the role gives access to Reports, but lacks its `reports-standard` feature. `roles_unresolved` and `token_incomplete`: Navixy couldn't read the role or the workspace from the token.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "insufficient_rights": {
+                "summary": "Your role doesn't give access to the report types",
+                "value": {
+                  "code": "insufficient_rights",
+                  "message": "You do not have the rights for this — contact your administrator."
+                }
+              },
+              "product_not_enabled": {
+                "summary": "The workspace doesn't have Reports",
+                "value": {
+                  "code": "product_not_enabled",
+                  "message": "The Reports product is not enabled."
+                }
+              }
+            }
+          }
+        }
+      },
+      "UnsupportedMediaType": {
+        "description": "The request has a body, but its `Content-Type` is missing or isn't `application/json`.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "unsupported_media_type": {
+                "summary": "The body isn't sent as JSON",
+                "value": {
+                  "code": "unsupported_media_type",
+                  "message": "This address does not accept this content type."
+                }
+              }
+            }
+          }
+        }
+      },
+      "RunLimitReached": {
+        "description": "The token's API key has made about 250 report runs in this workspace in the last 24 hours. The request isn't run and isn't counted. Try again later: each run stops counting 24 hours after it was made.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "tool_rate_limited": {
+                "summary": "The limit of report runs is reached",
+                "value": {
+                  "code": "tool_rate_limited",
+                  "message": "You have run as many reports as a day allows. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Reports couldn't process the request. Repeat the request later.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "internal_error": {
+                "summary": "An error on the Navixy side",
+                "value": {
+                  "code": "internal_error",
+                  "message": "Something went wrong on our side. Please try again."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ReportDataUnavailable": {
+        "description": "Report data can't be read. `report_source_unavailable`: repeat the request later. `report_source_not_configured`: Reports has no report data in this Navixy environment.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "report_source_unavailable": {
+                "summary": "Report data can't be read",
+                "value": {
+                  "code": "report_source_unavailable",
+                  "message": "Report data cannot be read right now. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      },
+      "RunUnavailable": {
+        "description": "The report can't be run now. `tool_unavailable`: Reports is running as many reports as it can at once, and the request isn't counted. `report_source_unavailable`: report data can't be read. `report_source_not_configured`: Reports has no report data in this Navixy environment. Repeat the request later.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "tool_unavailable": {
+                "summary": "Too many reports run at once",
+                "value": {
+                  "code": "tool_unavailable",
+                  "message": "A report cannot be run right now. Please try again later."
+                }
+              },
+              "report_source_unavailable": {
+                "summary": "Report data can't be read",
+                "value": {
+                  "code": "report_source_unavailable",
+                  "message": "Report data cannot be read right now. Please try again later."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "description": "The body of every error response except HTTP 401.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "What went wrong. Your app checks this field to decide what to do.",
+            "enum": [
+              "invalid_tool_call",
+              "bad_request",
+              "unsupported_media_type",
+              "product_not_enabled",
+              "insufficient_rights",
+              "roles_unresolved",
+              "token_incomplete",
+              "tool_rate_limited",
+              "tool_unavailable",
+              "report_source_not_configured",
+              "report_source_unavailable",
+              "internal_error",
+              "not_found",
+              "method_not_allowed"
+            ],
+            "examples": [
+              "invalid_tool_call"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "The error in English, for a person to read. It can change, so don't check it in code.",
+            "examples": [
+              "The tool call cannot be run as it is."
+            ]
+          },
+          "details": {
+            "type": "object",
+            "description": "More about the error, when the code has more to say. For `invalid_tool_call`, each key is a wrong field of the request, and its value says what the field must be. `size` means that the report is too large for one run. For `token_incomplete`, `claim` names the missing claim of the token.",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "examples": [
+              {
+                "to": "not after today, 2026-11-27"
+              }
+            ]
+          }
+        }
+      },
+      "TimeZone": {
+        "type": "string",
+        "description": "Required. The IANA time zone of the person who reads the result, such as `Europe/Madrid`. The API reads the days of the period and writes every date and time in this time zone. `UTC` is accepted, and a fixed offset such as `+01:00` or `Etc/GMT+2` isn't.",
+        "examples": [
+          "Europe/Berlin"
+        ]
+      },
+      "ReportTypesRequest": {
+        "type": "object",
+        "required": [
+          "timeZone"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timeZone": {
+            "$ref": "#/components/schemas/TimeZone"
+          }
+        }
+      },
+      "ReportTypesAndAssets": {
+        "type": "object",
+        "description": "What your token can read in the workspace.",
+        "required": [
+          "today",
+          "timeZone",
+          "periods",
+          "templates",
+          "assetCount"
+        ],
+        "properties": {
+          "today": {
+            "type": "string",
+            "format": "date",
+            "description": "Today in `timeZone`. A period can't end after it.",
+            "examples": [
+              "2026-11-27"
+            ]
+          },
+          "timeZone": {
+            "type": "string",
+            "description": "The `timeZone` of the request.",
+            "examples": [
+              "Europe/Berlin"
+            ]
+          },
+          "periods": {
+            "type": "object",
+            "description": "6 common periods, each with its first and last day, both included: `today`, `yesterday`, `this_week`, `last_week`, `this_month`, and `last_month`. A week starts on Monday, and this week and this month end today.",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Period"
+            }
+          },
+          "templates": {
+            "type": "array",
+            "description": "The report types that the role lets you run, ordered by code. Empty when you may run none.",
+            "items": {
+              "$ref": "#/components/schemas/ReportTypeInfo"
+            }
+          },
+          "assets": {
+            "type": "array",
+            "description": "The assets that you can see and that Reports has GPS device data for, ordered by ID, when there are at most 200 of them. Missing when there are more. The other operations return HTTP 400 for the ID of any other asset.",
+            "items": {
+              "$ref": "#/components/schemas/AssetInfo"
+            }
+          },
+          "assetCount": {
+            "type": "integer",
+            "description": "The number of assets that you can see and that Reports has GPS device data for. 0 when `templates` is empty.",
+            "examples": [
+              3
+            ]
+          }
+        }
+      },
+      "Period": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date",
+            "description": "The first day of the period.",
+            "examples": [
+              "2026-11-23"
+            ]
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "description": "The last day of the period.",
+            "examples": [
+              "2026-11-27"
+            ]
+          }
+        }
+      },
+      "ReportTypeInfo": {
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The ID of the report type, for `report` in the other operations.",
+            "examples": [
+              "trips_and_stops"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the report type, in English.",
+            "examples": [
+              "Trips and stops"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "What the report type returns and which operations read it, in English."
+          }
+        }
+      },
+      "AssetInfo": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the asset, for `assets` in the other operations.",
+            "examples": [
+              "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the asset. Missing when Reports has no title for it.",
+            "examples": [
+              "Van 01 (FMB920)"
+            ]
+          }
+        }
+      },
+      "SummaryRequest": {
+        "type": "object",
+        "required": [
+          "timeZone",
+          "report",
+          "from",
+          "to",
+          "assets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timeZone": {
+            "$ref": "#/components/schemas/TimeZone"
+          },
+          "report": {
+            "type": "string",
+            "description": "The ID of the report type, from `templates` in the list of report types and assets (`POST /api/tools/context`)."
+          },
+          "from": {
+            "type": "string",
+            "format": "date",
+            "description": "The first day of the period, included, on the calendar of `timeZone`. Not before 1900-01-02.",
+            "examples": [
+              "2026-11-26"
+            ]
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "description": "The last day of the period, included. Not before `from`, not after today in `timeZone`, and at most 31 days with `from`.",
+            "examples": [
+              "2026-11-26"
+            ]
+          },
+          "assets": {
+            "description": "`all` for every asset that you can see, or a list of 1 to 500 asset IDs. Each ID is a UUID in lowercase and must be one of the assets in the list of report types and assets (`POST /api/tools/context`).",
+            "oneOf": [
+              {
+                "type": "string",
+                "const": "all"
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 500,
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            ],
+            "examples": [
+              [
+                "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+              ]
+            ]
+          }
+        }
+      },
+      "ReportLinkRequest": {
+        "type": "object",
+        "required": [
+          "timeZone",
+          "report",
+          "from",
+          "to",
+          "assets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timeZone": {
+            "$ref": "#/components/schemas/TimeZone"
+          },
+          "report": {
+            "type": "string",
+            "description": "The ID of the report type, from `templates` in the list of report types and assets (`POST /api/tools/context`)."
+          },
+          "from": {
+            "type": "string",
+            "format": "date",
+            "description": "The first day of the period, included, on the calendar of `timeZone`. Not before 1900-01-02.",
+            "examples": [
+              "2026-11-26"
+            ]
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "description": "The last day of the period, included. Not before `from`, not after today in `timeZone`, and at most 31 days with `from`.",
+            "examples": [
+              "2026-11-26"
+            ]
+          },
+          "assets": {
+            "description": "`all` for every asset that you can see, or a list of 1 to 200 asset IDs. Each ID is a UUID in lowercase and must be one of the assets in the list of report types and assets (`POST /api/tools/context`).",
+            "oneOf": [
+              {
+                "type": "string",
+                "const": "all"
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 200,
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            ],
+            "examples": [
+              [
+                "019a7f3e-5c21-7a10-8000-0b2c4d6e8f01"
+              ]
+            ]
+          },
+          "view": {
+            "$ref": "#/components/schemas/View"
+          }
+        }
+      },
+      "View": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "The view options of the report page. `trips_and_stops` accepts `tab` and `kind`, `sensor_readings` accepts `step`, and `driver_performance` accepts none. Leave it out for the default view.",
+        "additionalProperties": false,
+        "properties": {
+          "tab": {
+            "type": "string",
+            "description": "`trips_and_stops` only. `days` opens the summary day by day, and an asset ID of the report opens the tab of that asset.",
+            "examples": [
+              "days"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "trip",
+              "stop"
+            ],
+            "description": "`trips_and_stops` only. Shows only trips or only stops in the log."
+          },
+          "step": {
+            "type": "integer",
+            "enum": [
+              300,
+              600,
+              1800,
+              3600,
+              14400,
+              86400
+            ],
+            "description": "`sensor_readings` only. The length of each point of the table and the chart, in seconds."
+          }
+        }
+      },
+      "TripFigures": {
+        "type": "object",
+        "description": "Trip and stop figures. `null` means no data, which isn't zero.",
+        "required": [
+          "trips",
+          "distanceM",
+          "drivingS",
+          "stops",
+          "stopS",
+          "maxSpeedKmh"
+        ],
+        "properties": {
+          "trips": {
+            "type": "integer",
+            "description": "The number of trips."
+          },
+          "distanceM": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The distance, in meters."
+          },
+          "drivingS": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "The time that the assets moved, in seconds."
+          },
+          "stops": {
+            "type": "integer",
+            "description": "The number of stops."
+          },
+          "stopS": {
+            "type": "integer",
+            "description": "The time of the stops, in seconds."
+          },
+          "maxSpeedKmh": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "The maximum speed, in kilometers per hour."
+          }
+        }
+      },
+      "AssetTrips": {
+        "type": "object",
+        "required": [
+          "assetId",
+          "title",
+          "figures"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the asset."
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The title of the asset, or `null` when Reports has none."
+          },
+          "figures": {
+            "$ref": "#/components/schemas/TripFigures"
+          }
+        }
+      },
+      "TripsSummary": {
+        "type": "object",
+        "title": "trips_and_stops",
+        "description": "The summary of a `trips_and_stops` report. `totals` has the figures of all assets.",
+        "required": [
+          "totals",
+          "assetsInScope",
+          "assets",
+          "assetsOmitted"
+        ],
+        "properties": {
+          "totals": {
+            "$ref": "#/components/schemas/TripFigures"
+          },
+          "assetsInScope": {
+            "type": "integer",
+            "description": "The number of assets in the report, including assets without trips or stops."
+          },
+          "assets": {
+            "type": "array",
+            "description": "One line for each asset with a trip or a stop, the longest distance first. At most 50.",
+            "items": {
+              "$ref": "#/components/schemas/AssetTrips"
+            }
+          },
+          "assetsOmitted": {
+            "type": "integer",
+            "description": "The number of assets with trips or stops after the first 50."
+          }
+        }
+      },
+      "SensorLine": {
+        "type": "object",
+        "description": "The readings of one sensor of one GPS device over the period, in the unit that the device sends.",
+        "required": [
+          "assetId",
+          "title",
+          "deviceId",
+          "key",
+          "unit",
+          "type",
+          "average",
+          "min",
+          "max",
+          "first",
+          "last",
+          "change",
+          "samples"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the asset."
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The title of the asset, or `null` when Reports has none."
+          },
+          "deviceId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the GPS device."
+          },
+          "key": {
+            "type": "string",
+            "description": "The name of the value that the device sends."
+          },
+          "unit": {
+            "type": "string",
+            "description": "The unit of measure. An empty string when the value has none."
+          },
+          "type": {
+            "type": "string",
+            "description": "The data type of the value as the device sends it."
+          },
+          "average": {
+            "type": "number",
+            "description": "The average of all readings."
+          },
+          "min": {
+            "type": "number",
+            "description": "The lowest reading."
+          },
+          "max": {
+            "type": "number",
+            "description": "The highest reading."
+          },
+          "first": {
+            "type": "number",
+            "description": "The first reading of the period."
+          },
+          "last": {
+            "type": "number",
+            "description": "The last reading of the period."
+          },
+          "change": {
+            "type": "number",
+            "description": "`last` minus `first`: how much a counter, such as mileage, grew. Less when the counter was reset."
+          },
+          "samples": {
+            "type": "integer",
+            "description": "The number of readings."
+          }
+        }
+      },
+      "SensorSummary": {
+        "type": "object",
+        "title": "sensor_readings",
+        "description": "The summary of a `sensor_readings` report.",
+        "required": [
+          "assets",
+          "devices",
+          "sensors",
+          "samples",
+          "series",
+          "seriesOmitted"
+        ],
+        "properties": {
+          "assets": {
+            "type": "integer",
+            "description": "The number of assets with readings."
+          },
+          "devices": {
+            "type": "integer",
+            "description": "The number of GPS devices with readings."
+          },
+          "sensors": {
+            "type": "integer",
+            "description": "The number of sensors with readings."
+          },
+          "samples": {
+            "type": "integer",
+            "description": "The number of readings."
+          },
+          "series": {
+            "type": "array",
+            "description": "One line for each sensor with readings, ordered by asset, device, key, unit, and type. At most 50.",
+            "items": {
+              "$ref": "#/components/schemas/SensorLine"
+            }
+          },
+          "seriesOmitted": {
+            "type": "integer",
+            "description": "The number of sensor lines after the first 50."
+          }
+        }
+      },
+      "ReportLink": {
+        "type": "object",
+        "required": [
+          "report",
+          "from",
+          "to",
+          "assets",
+          "view",
+          "link"
+        ],
+        "properties": {
+          "report": {
+            "type": "string",
+            "description": "The ID of the report type."
+          },
+          "from": {
+            "type": "string",
+            "format": "date",
+            "description": "The first day of the period."
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "description": "The last day of the period."
+          },
+          "assets": {
+            "description": "`all`, or the list of asset IDs.",
+            "oneOf": [
+              {
+                "type": "string",
+                "const": "all"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            ]
+          },
+          "view": {
+            "type": "object",
+            "description": "The view options of the report, as checked. Empty for the default view.",
+            "additionalProperties": true
+          },
+          "adjusted": {
+            "type": "object",
+            "description": "What the response changed from the request, one entry for each field, and why. Missing when nothing changed.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "link": {
+            "type": "string",
+            "format": "uri",
+            "description": "The address that opens the report in Location Intelligence, with the organization and the workspace of the token."
+          }
+        }
+      }
+    }
+  }
+}
