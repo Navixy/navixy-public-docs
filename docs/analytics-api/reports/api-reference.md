@@ -1,7 +1,7 @@
 ---
 description: >-
-  The complete reference of the Navixy Reports API: every operation with its
-  parameters and responses, and the main response models.
+  The complete reference of the API of Navixy Reports: every operation with its
+  request and responses, and the response models.
 tags:
   - reference
   - beta
@@ -9,67 +9,121 @@ tags:
 
 # Reports API reference
 
+{% hint style="info" %}
+**API, with a session token**
+
+The operations on this page are API operations. They accept the session token of a person signed in to Navixy Reports in a browser. See [API access](../authentication.md#api-access).
+{% endhint %}
+
 This page is the complete reference of the Reports API: every operation with its request and responses, then the response models.
 
-The base address is `https://reports.<REGION>.navixy.com/api`, where `<REGION>` is `eu` or `us`. Every request needs an access token, as [Authentication](../authentication.md) describes.
+The base address is `https://reports.<REGION>.navixy.com/api`, where `<REGION>` is `eu` or `us`. Every request needs the session token of a signed-in browser, as [API access](../authentication.md#api-access) describes.
 
-## API actions
+## Operations
 
-{% openapi-operation spec="analytics-reports" path="/tools/context" method="post" %}
+{% openapi-operation spec="analytics-reports" path="/reports" method="get" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-operation %}
 
-{% openapi-operation spec="analytics-reports" path="/tools/run_report_totals" method="post" %}
+{% openapi-operation spec="analytics-reports" path="/reports/{id}" method="get" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-operation %}
 
-{% openapi-operation spec="analytics-reports" path="/tools/propose_report" method="post" %}
+{% openapi-operation spec="analytics-reports" path="/reports/{id}/run" method="post" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-operation %}
+
+{% openapi-operation spec="analytics-reports" path="/reports/{id}/trips/{tripId}/track" method="get" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-operation %}
+
+{% openapi-operation spec="analytics-reports" path="/assets" method="get" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-operation %}
+
+{% openapi-operation spec="analytics-reports" path="/me/permissions" method="get" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-operation %}
 
 ## Response models
 
-{% openapi-schemas spec="analytics-reports" schemas="ReportTypesAndAssets" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="ReportType" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="Period" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="Actions" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="ReportTypeInfo" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="RunRequest" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="AssetInfo" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="TripsAndStopsResult" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="TripsSummary" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="Trip" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="TripFigures" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="Stop" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="AssetTrips" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="SensorReadingsResult" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="SensorSummary" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="SensorSeries" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="SensorLine" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="SensorPoint" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="ReportLink" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="DriverPerformanceResult" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 
-{% openapi-schemas spec="analytics-reports" schemas="View" grouped="false" %}
+{% openapi-schemas spec="analytics-reports" schemas="SegmentEvaluation" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="ViolationKind" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="ViolationEpisode" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="DataFrom" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="DataUntil" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="TripTrack" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="TrackPoint" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="Asset" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="Permissions" grouped="false" %}
+[OpenAPI analytics-reports](../reference/Reports.json)
+{% endopenapi-schemas %}
+
+{% openapi-schemas spec="analytics-reports" schemas="ReportTypePermissions" grouped="false" %}
 [OpenAPI analytics-reports](../reference/Reports.json)
 {% endopenapi-schemas %}
 

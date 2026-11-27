@@ -1,15 +1,15 @@
 ---
 description: >-
-  Make your first requests to the Analytics API: get an access token from an
-  API key, list report types, get a report summary, and read dashboard data.
+  Make your first requests with the tools of the Analytics API: get an access
+  token from an API key, get a report summary, and read dashboard data.
 tags:
   - guide
   - beta
 ---
 
-# Getting started
+# Tools with API key
 
-This guide takes you from an API key to your first data from Navixy Reports and Dashboards. You get an access token, list the report types of your workspace, get the summary of a report, and read the data of a dashboard. Every step is a `curl` request that you can run in a terminal.
+This guide takes you from an API key to your first data from the tools of Navixy Reports and Dashboards. The tools are for integrations and AI agents that run on their own. You get an access token, list the report types of your workspace, get the summary of a report, and read the data of a dashboard. Every step is a `curl` request that you can run in a terminal.
 
 ## Prerequisites
 
@@ -57,7 +57,7 @@ Parameters:
 * `navixy_agent_name`: a name for your app, 1 to 100 characters.
 * `navixy_workspace_id`: the ID of the workspace. Leave it out when the key's role covers one workspace.
 
-Save `access_token` in the `ACCESS_TOKEN` variable of your terminal. The token expires after the number of seconds in `expires_in`. Then exchange the key again. See [Authentication](authentication.md).
+Save `access_token` in the `ACCESS_TOKEN` variable of your terminal. The token expires after the number of seconds in `expires_in`. Then exchange the key again. See [Tools access](../authentication.md#tools-access).
 {% endstep %}
 
 {% step %}
@@ -95,9 +95,9 @@ Response, shortened to 2 periods and without the descriptions of the report type
 
 Parameters:
 
-* `timeZone`: the time zone of your app's user, such as `Europe/Berlin`. Every request includes it. See [Time zone](README.md#time-zone).
+* `timeZone`: the time zone of your app's user, such as `Europe/Berlin`. Every request includes it. See [Time zone](../README.md#time-zone).
 
-`templates` lists the report types by their `code`, which the next step names. `assets` lists the assets that you can see and that Reports has GPS device data for. This workspace has none yet. See [Report types and assets](reports/report-types-and-assets.md).
+`templates` lists the report types by their `code`, which the next step names. `assets` lists the assets that you can see and that Reports has GPS device data for. This workspace has none yet. See [Reports tools](../reports/tools/README.md).
 {% endstep %}
 
 {% step %}
@@ -143,7 +143,7 @@ Parameters:
 * `from` and `to`: the first and the last day of the period, both included.
 * `assets`: `"all"`, or a list of asset IDs.
 
-A report summary has the figures of the report's **Summary** tab in Location Intelligence. `totals` has them for all assets, and `assets` for each asset. Each request is one report run. An API key can make about 250 runs in a workspace in 24 hours. See [Report summary](reports/report-summary.md).
+A report summary has the figures of the report's **Summary** tab in Location Intelligence. `totals` has them for all assets, and `assets` for each asset. Each request is one report run. An API key can make about 250 runs in a workspace in 24 hours. See [Report summary](../reports/tools/report-summary.md).
 {% endstep %}
 
 {% step %}
@@ -187,12 +187,12 @@ Parameters:
 * `dashboard`: the code of the dashboard: `live_status`, `trips`, or `conditions`.
 * `range`: the period, such as `7d`. Live status shows the current state, so it has no period. For Trips and Conditions, add `"range": "7d"` to read the last 7 days.
 
-The response has every panel of the dashboard, with the same values that the panel shows in Location Intelligence. See [Dashboard data](dashboards/dashboard-data.md).
+The response has every panel of the dashboard, with the same values that the panel shows in Location Intelligence. See [Dashboard data](../dashboards/tools/dashboard-data.md).
 {% endstep %}
 {% endstepper %}
 
 {% hint style="success" %}
-Your app now gets an access token, reads the report types and assets, gets a report summary, and reads a dashboard. The same token works for both APIs until it expires.
+Your app now gets an access token, reads the report types and assets, gets a report summary, and reads a dashboard. The same token works for the tools of both products until it expires.
 {% endhint %}
 
 ## Error handling
@@ -203,10 +203,10 @@ The steps can return these errors:
 * HTTP 400 with `invalid_tool_call`: a field of the body is wrong. `details` names it. For example, an offset such as `+01:00` in `timeZone` returns `"timeZone": "the user's IANA time zone, such as Europe/Madrid, not an offset"`.
 * HTTP 403: the workspace doesn't have the product, or the key's role doesn't include it.
 
-For every code and how to handle it, see [Error handling](error-handling.md).
+For every code and how to handle it, see [Error handling](../error-handling.md).
 
 ## Next steps
 
-* [Reports API reference](reports/api-reference.md): every operation of the Reports API.
-* [Dashboards API reference](dashboards/api-reference.md): every operation of the Dashboards API.
-* [Limits](limits.md): how many requests you can make, and the limits of each request.
+* [Reports tools](../reports/tools/README.md): every tool of Reports.
+* [Dashboards tools](../dashboards/tools/README.md): every tool of Dashboards.
+* [Tools limits](../limits.md#tools-limits): how many requests you can make, and the limits of each request.

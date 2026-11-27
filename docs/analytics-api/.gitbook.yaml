@@ -6,4 +6,9 @@ structure:
 
 # Add a redirect whenever a published page moves or is renamed.
 # Keys are old published paths; values are current files. Read the gitbook skill first.
-redirects: {}
+redirects:
+  # 2026-11-27 (TD-536): the tools pages moved under the tools page of each product.
+  products/reports/report-types-and-assets: reports/tools/README.md
+  products/reports/report-summary: reports/tools/report-summary.md
+  products/reports/links-to-reports: reports/tools/links-to-reports.md
+  products/dashboards/dashboard-data: dashboards/tools/dashboard-data.md

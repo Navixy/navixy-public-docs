@@ -3,8 +3,8 @@
   "info": {
     "title": "Navixy Dashboards API",
     "version": "1.0.0",
-    "summary": "Read the dashboards of a workspace and what their panels show for a period.",
-    "description": "The Dashboards API returns the data of Navixy Dashboards. It lists the dashboards that an access token may read, with their periods, and returns what every panel of a dashboard shows for a period.\n\n**Requests.** Every operation is a `POST` request with a JSON body. Every body includes `timeZone`, an IANA time zone such as `Europe/Berlin`. The API writes every date and time of the response in that time zone.\n\n**Authentication.** Send an access token in the `Authorization` header: the word `Bearer`, a space, and the token. Your app gets the token by exchanging a Navixy API key. The token gives access to one workspace, and every response has the data of that workspace only.\n\n**Errors.** An error response has an HTTP status other than 2xx and a JSON body with a `code`, a `message`, and sometimes `details`. Check the `code` field in your app: `message` is text for a person and can change. HTTP 401 and HTTP 406 have no body.",
+    "summary": "Read the dashboards of a workspace and what their panels show, with a session token or an API key.",
+    "description": "The Dashboards API returns the data of Navixy Dashboards in 2 ways.\n\n**API.** The `GET` operations under `/dashboards` and `/me/permissions` return what the Dashboards web app reads: the dashboards, their definitions, the rows of one panel for a period, and the permissions of the session. They accept the session token of a signed-in browser.\n\n**Tools.** The `POST` operations under `/tools/` list the dashboards and their periods, and return what every panel of a dashboard shows for a period, with units. They accept the access token that your app gets by exchanging a Navixy Console API key. Every body includes `timeZone`, an IANA time zone such as `Europe/Berlin`, and the response writes every date and time in it.\n\n**Authentication.** Send the token in the `Authorization` header: the word `Bearer`, a space, and the token. A token gives access to one workspace, and every response has the data of that workspace only.\n\n**Errors.** An error response has an HTTP status other than 2xx and a JSON body with a `code`, a `message`, and sometimes `details`. Check the `code` field in your app: `message` is text for a person and can change. HTTP 401 and HTTP 406 have no body.",
     "contact": {
       "name": "Navixy support",
       "email": "support@navixy.com",
@@ -33,27 +33,792 @@
   ],
   "security": [
     {
-      "bearerAuth": []
+      "sessionToken": []
     }
   ],
   "tags": [
     {
-      "name": "Dashboards and periods",
-      "description": "The current time and the dashboards that the token may read, with their periods."
+      "name": "Dashboards",
+      "description": "API: the dashboards that the session may open, a dashboard's definition, and the permissions of the session."
     },
     {
-      "name": "Dashboard data",
-      "description": "What every panel of one dashboard shows for a period."
+      "name": "Panel data",
+      "description": "API: the rows of one panel of a dashboard, for a period of that dashboard."
+    },
+    {
+      "name": "Dashboards tools",
+      "description": "Tools: the dashboards and periods that an API key's token may read, and what every panel of a dashboard shows for a period."
     }
   ],
   "paths": {
+    "/dashboards": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "List dashboards",
+        "operationId": "dashboardList",
+        "description": "Returns the dashboards that the token's roles grant, in the order that Navixy Dashboards shows its tabs. The list is the same in every workspace, narrowed to the dashboards that the roles grant. When the roles grant no dashboard, the response is an empty list.",
+        "responses": {
+          "200": {
+            "description": "The dashboards that the token may open.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dashboard"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "live_status",
+                    "name": "Live status",
+                    "actions": [
+                      "view"
+                    ]
+                  },
+                  {
+                    "id": "trips",
+                    "name": "Trips",
+                    "actions": [
+                      "view"
+                    ]
+                  },
+                  {
+                    "id": "conditions",
+                    "name": "Conditions",
+                    "actions": [
+                      "view"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The token is valid, but the request is refused. `code` says why: `product_not_enabled` when the workspace or the token's roles don't include Dashboards, `insufficient_rights` when the roles don't grant the `dashboards-standard` feature, and `roles_unresolved` when Navixy couldn't read the roles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "product_not_enabled",
+                  "message": "The Dashboards product is not enabled."
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "security": [
+          {
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/dashboards/{id}": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Read dashboard",
+        "operationId": "dashboardRead",
+        "description": "Returns the definition of one dashboard: how often to read its panels again, its periods, and its panels with the fields of their rows. A definition is the same in every workspace. Read it once to learn the panel IDs and the period IDs that the panel data request accepts.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DashboardId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The definition of the dashboard. The example is the Trips dashboard.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardDefinition"
+                },
+                "example": {
+                  "id": "trips",
+                  "name": "Trips",
+                  "refreshSeconds": 90,
+                  "ranges": [
+                    {
+                      "id": "1h",
+                      "unit": "hour",
+                      "count": 1,
+                      "stepSeconds": 300
+                    },
+                    {
+                      "id": "6h",
+                      "unit": "hour",
+                      "count": 6,
+                      "stepSeconds": 300
+                    },
+                    {
+                      "id": "12h",
+                      "unit": "hour",
+                      "count": 12,
+                      "stepSeconds": 300
+                    },
+                    {
+                      "id": "24h",
+                      "unit": "hour",
+                      "count": 24,
+                      "stepSeconds": 300
+                    },
+                    {
+                      "id": "7d",
+                      "unit": "day",
+                      "count": 7,
+                      "stepSeconds": 3600
+                    },
+                    {
+                      "id": "14d",
+                      "unit": "day",
+                      "count": 14,
+                      "stepSeconds": 3600
+                    },
+                    {
+                      "id": "31d",
+                      "unit": "day",
+                      "count": 31,
+                      "stepSeconds": 3600
+                    }
+                  ],
+                  "defaultRange": "14d",
+                  "panels": [
+                    {
+                      "id": 1,
+                      "type": "kpi",
+                      "title": "Total assets",
+                      "description": "Total number of assets registered in your fleet.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 0,
+                        "w": 4,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "count"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 2,
+                      "type": "kpi",
+                      "title": "Assets with trips",
+                      "description": "Number of assets with at least one recorded trip over the selected period.",
+                      "gridPos": {
+                        "x": 4,
+                        "y": 0,
+                        "w": 4,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "count"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 3,
+                      "type": "kpi",
+                      "title": "Trips count",
+                      "description": "Total number of trips recorded across the fleet over the selected period.",
+                      "gridPos": {
+                        "x": 8,
+                        "y": 0,
+                        "w": 4,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "count"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 4,
+                      "type": "kpi",
+                      "title": "Average trips per asset",
+                      "description": "Average number of trips per asset (total trips divided by fleet size) over the selected period.",
+                      "gridPos": {
+                        "x": 12,
+                        "y": 0,
+                        "w": 4,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 9,
+                      "type": "kpi",
+                      "title": "Average distance per trip",
+                      "description": "Average distance per trip (total distance divided by total trips) over the selected period.",
+                      "gridPos": {
+                        "x": 16,
+                        "y": 0,
+                        "w": 4,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "distance"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 5,
+                      "type": "kpi",
+                      "title": "Total distance",
+                      "description": "Total distance traveled across the fleet over the selected period.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 3,
+                        "w": 5,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "distance"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 6,
+                      "type": "kpi",
+                      "title": "Average distance per asset",
+                      "description": "Average distance traveled per asset over the selected period.",
+                      "gridPos": {
+                        "x": 5,
+                        "y": 3,
+                        "w": 5,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "distance"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 7,
+                      "type": "kpi",
+                      "title": "Total duration",
+                      "description": "Total duration of all trips (hours) across the fleet over the selected period.",
+                      "gridPos": {
+                        "x": 10,
+                        "y": 3,
+                        "w": 5,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "duration"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 8,
+                      "type": "kpi",
+                      "title": "Average duration per trip",
+                      "description": "Average duration of a trip (hours) over the selected period.",
+                      "gridPos": {
+                        "x": 15,
+                        "y": 3,
+                        "w": 5,
+                        "h": 3
+                      },
+                      "fields": [
+                        {
+                          "key": "value",
+                          "kind": "duration"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 10,
+                      "type": "piechart",
+                      "title": "Assets with and without trips",
+                      "description": "Breakdown of assets with and without recorded trips over the selected period.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 6,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "trips",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "assets",
+                          "kind": "count",
+                          "label": "Assets"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 11,
+                      "type": "barchart",
+                      "title": "Top 10 assets by distance",
+                      "description": "Assets ranked by total distance traveled over the selected period.",
+                      "gridPos": {
+                        "x": 10,
+                        "y": 6,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "distance",
+                          "kind": "distance",
+                          "label": "Distance"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 12,
+                      "type": "barchart",
+                      "title": "Top 10 assets by trips",
+                      "description": "Assets ranked by total number of trips over the selected period.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 14,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "trips",
+                          "kind": "count",
+                          "label": "Trips"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 13,
+                      "type": "barchart",
+                      "title": "Top 10 assets by speed",
+                      "description": "Assets ranked by maximum speed over the selected period.",
+                      "gridPos": {
+                        "x": 10,
+                        "y": 14,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "max_speed",
+                          "kind": "speed",
+                          "label": "Max speed"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 14,
+                      "type": "barchart",
+                      "title": "Top 10 assets by idle time",
+                      "description": "Assets ranked by idle time over the selected period: the engine on while stopped or parked.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 22,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "idle",
+                          "kind": "duration",
+                          "label": "Idle time"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 15,
+                      "type": "barchart",
+                      "title": "Top 10 assets by engine hours",
+                      "description": "Assets ranked by engine hours over the selected period: the time the ignition was on.",
+                      "gridPos": {
+                        "x": 10,
+                        "y": 22,
+                        "w": 10,
+                        "h": 8
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text"
+                        },
+                        {
+                          "key": "engine",
+                          "kind": "duration",
+                          "label": "Engine hours"
+                        }
+                      ]
+                    },
+                    {
+                      "id": 16,
+                      "type": "table",
+                      "title": "Asset trip details",
+                      "description": "Detailed trip telemetry over the selected period, newest first, 1,000 trips at most.\nThe pipeline closes trips every 4 hours, so those of the last few hours may not be here yet. A trip is movement faster than 3 km/h, and a stop of 5 minutes or more ends it. A trip shorter than 100 m, or of fewer than 2 points, is not recorded.",
+                      "emptyMessage": "No trips found in the selected period.",
+                      "gridPos": {
+                        "x": 0,
+                        "y": 30,
+                        "w": 20,
+                        "h": 14
+                      },
+                      "fields": [
+                        {
+                          "key": "asset",
+                          "kind": "text",
+                          "label": "Asset label"
+                        },
+                        {
+                          "key": "start",
+                          "kind": "time",
+                          "label": "Starting time"
+                        },
+                        {
+                          "key": "end",
+                          "kind": "time",
+                          "label": "Ending time"
+                        },
+                        {
+                          "key": "distance",
+                          "kind": "distance",
+                          "label": "Distance"
+                        },
+                        {
+                          "key": "duration",
+                          "kind": "duration",
+                          "label": "Duration"
+                        },
+                        {
+                          "key": "start_latitude",
+                          "kind": "coordinate",
+                          "label": "Starting latitude"
+                        },
+                        {
+                          "key": "start_longitude",
+                          "kind": "coordinate",
+                          "label": "Starting longitude"
+                        },
+                        {
+                          "key": "end_latitude",
+                          "kind": "coordinate",
+                          "label": "Ending latitude"
+                        },
+                        {
+                          "key": "end_longitude",
+                          "kind": "coordinate",
+                          "label": "Ending longitude"
+                        },
+                        {
+                          "key": "points",
+                          "kind": "count",
+                          "label": "GPS points count"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The token is valid, but the request is refused. `code` says why: `product_not_enabled` when the workspace or the token's roles don't include Dashboards, `insufficient_rights` when the roles don't grant the `dashboards-standard` feature or this dashboard, and `roles_unresolved` when Navixy couldn't read the roles. A dashboard that the roles don't grant returns 403 whether it exists or not.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "insufficient_rights",
+                  "message": "You do not have the rights for this — contact your administrator."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The token's roles grant every dashboard, and no dashboard has this `id`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "dashboard_not_found",
+                  "message": "This dashboard does not exist."
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "security": [
+          {
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/dashboards/{id}/panels/{panelId}": {
+      "get": {
+        "tags": [
+          "Panel data"
+        ],
+        "summary": "Read panel data",
+        "operationId": "panelRead",
+        "description": "Returns the rows of one panel for the token's workspace. Each row is an object whose keys are the `key` values of the panel's `fields`, in the order of the fields.\n\nThe rows include only the assets, GPS devices, and geo objects that the token's roles may read in Business Data Repository. So 2 tokens of the same workspace can get different rows from the same panel.\n\nOn Trips and Conditions, the rows cover a period that ends when the request is made. Without `range`, the period is the dashboard's `defaultRange`. Live status has no periods, so its panels accept neither `range` nor `previous`.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DashboardId"
+          },
+          {
+            "name": "panelId",
+            "in": "path",
+            "required": true,
+            "description": "The `id` of a panel in the dashboard's definition.",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 11
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "required": false,
+            "description": "The `id` of one of the dashboard's `ranges`, such as `7d` for the last 7 days. Without it, the panel uses the dashboard's `defaultRange`. Only for a dashboard that has `ranges`.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "7d"
+          },
+          {
+            "name": "previous",
+            "in": "query",
+            "required": false,
+            "description": "`true` returns the rows of the period of the same length right before the period that `range` names, to compare 2 periods. For example, `range=7d&previous=true` returns the 7 days before the last 7 days. Requires `range`. `false` is the same as no value.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The rows of the panel. An empty `rows` list means that the panel has no data for this workspace and period. The example is Top 10 assets by distance on Trips, over the last 7 days, shortened to the first 3 rows.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PanelData"
+                },
+                "example": {
+                  "rows": [
+                    {
+                      "asset": "NV4-150 · FMC150 (D)",
+                      "distance": 12039682
+                    },
+                    {
+                      "asset": "NV4-300 - FMC130 (D)",
+                      "distance": 8801829
+                    },
+                    {
+                      "asset": "IST-02 Truck (FMM250)",
+                      "distance": 8732564
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The dashboard has no period with this `range` (`range_not_found`), or `previous` can't be applied (`invalid_panel_request`, with the reason in `details.previous`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "invalid_panel_request",
+                  "message": "This panel's data cannot be read as asked.",
+                  "details": {
+                    "previous": "only with range: the period it is the one before"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "description": "The token is valid, but the request is refused. `code` says why: `product_not_enabled` when the workspace or the token's roles don't include Dashboards, `insufficient_rights` when the roles don't grant the `dashboards-standard` feature or this dashboard, `roles_unresolved` when Navixy couldn't read the roles, and `token_incomplete` when the token's organization or workspace is missing or invalid. A dashboard that the roles don't grant returns 403 whether it exists or not.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "insufficient_rights",
+                  "message": "You do not have the rights for this — contact your administrator."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No dashboard has this `id` (`dashboard_not_found`), or the dashboard has no panel with this `panelId` (`panel_not_found`).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "panel_not_found",
+                  "message": "This dashboard has no such panel."
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          },
+          "503": {
+            "description": "The panel's data can't be read now: the query took too long, used too much memory, or returned more than 10,000 rows, or the data store returned no response. Retry later, or read a shorter period. A slow panel can also fail with a gateway error that has no JSON body, so retry any 5xx response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "code": "panel_data_unavailable",
+                  "message": "This panel's data cannot be read right now. Please try again later."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sessionToken": []
+          }
+        ]
+      }
+    },
+    "/me/permissions": {
+      "get": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Read permissions",
+        "operationId": "permissionsRead",
+        "description": "Returns what the token's roles allow in Dashboards: whether the product is available, the features, and the dashboards with the actions on each. Any valid token can call it, so an app can check access before it lists the dashboards. A token without access gets a 200 response with `enabled` set to `false` or with empty lists, not an error.",
+        "responses": {
+          "200": {
+            "description": "What the token may do in Dashboards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permissions"
+                },
+                "example": {
+                  "enabled": true,
+                  "features": [
+                    "dashboards-standard"
+                  ],
+                  "dashboards": [
+                    {
+                      "id": "live_status",
+                      "actions": [
+                        "view"
+                      ]
+                    },
+                    {
+                      "id": "trips",
+                      "actions": [
+                        "view"
+                      ]
+                    },
+                    {
+                      "id": "conditions",
+                      "actions": [
+                        "view"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        },
+        "security": [
+          {
+            "sessionToken": []
+          }
+        ]
+      }
+    },
     "/tools/context": {
       "post": {
         "tags": [
-          "Dashboards and periods"
+          "Dashboards tools"
         ],
         "summary": "List dashboards and periods",
-        "operationId": "dashboardsList",
+        "operationId": "dashboardPeriodsList",
         "description": "Returns the current time in your time zone and the dashboards that the token may read, each with the IDs of its periods. Call it first: the dashboard codes and the period IDs are the values that Get dashboard data accepts. It reads no panel data, so it doesn't count toward the daily limit of dashboard reads.",
         "requestBody": {
           "required": true,
@@ -134,10 +899,10 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/ToolsUnauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/ToolsForbidden"
           },
           "415": {
             "$ref": "#/components/responses/UnsupportedMediaType"
@@ -145,13 +910,18 @@
           "500": {
             "$ref": "#/components/responses/InternalError"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyToken": []
+          }
+        ]
       }
     },
     "/tools/read_dashboard": {
       "post": {
         "tags": [
-          "Dashboard data"
+          "Dashboards tools"
         ],
         "summary": "Get dashboard data",
         "operationId": "dashboardDataRead",
@@ -266,10 +1036,10 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/ToolsUnauthorized"
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/ToolsForbidden"
           },
           "415": {
             "$ref": "#/components/responses/UnsupportedMediaType"
@@ -305,22 +1075,45 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyToken": []
+          }
+        ]
       }
     }
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
+      "sessionToken": {
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "description": "The access token that your app gets by exchanging a Navixy API key. It's the same token that Navixy GraphQL API accepts."
+        "description": "For the API operations: the session token of a person signed in to Navixy Dashboards in a browser. See [API access](https://navixy.com/docs/analytics-api/authentication#api-access)."
+      },
+      "apiKeyToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "For the tools: the access token that your app gets by exchanging a Navixy Console API key. It's the same token that Navixy GraphQL API accepts. See [Tools access](https://navixy.com/docs/analytics-api/authentication#tools-access)."
+      }
+    },
+    "parameters": {
+      "DashboardId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "The `id` of the dashboard: `live_status`, `trips`, or `conditions`.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "trips"
       }
     },
     "responses": {
       "Unauthorized": {
-        "description": "The request has no token, or the token is invalid or expired. The response has no body. Exchange the API key again and repeat the request with the new token.",
+        "description": "The request has no session token, or the token is invalid or expired. The access token of an API key gets 401 here too, because the API operations accept only the session token of a signed-in browser. The response has no body.",
         "headers": {
           "WWW-Authenticate": {
             "description": "Starts with the word `Bearer`.",
@@ -330,7 +1123,32 @@
           }
         }
       },
-      "Forbidden": {
+      "ToolsUnauthorized": {
+        "description": "The request has no token, or the token is invalid or expired. The tools accept the access token of a Navixy Console API key. Exchange the API key again and repeat the request with the new token. The response has no body.",
+        "headers": {
+          "WWW-Authenticate": {
+            "description": "Starts with the word `Bearer`.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "The request failed in Navixy. Retry it later.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "code": "internal_error",
+              "message": "Something went wrong on our side. Please try again."
+            }
+          }
+        }
+      },
+      "ToolsForbidden": {
         "description": "The token is valid, but the request is refused. `code` says why: `product_not_enabled` when the workspace or the token's role doesn't include Dashboards, `insufficient_rights` when the role doesn't grant the `dashboards-standard` feature, `roles_unresolved` when Navixy couldn't read the roles, and `token_incomplete` when the token's organization, workspace, or API key is missing or invalid.",
         "content": {
           "application/json": {
@@ -357,23 +1175,400 @@
             }
           }
         }
-      },
-      "InternalError": {
-        "description": "The request failed in Navixy. Retry it later.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "example": {
-              "code": "internal_error",
-              "message": "Something went wrong on our side. Please try again."
-            }
-          }
-        }
       }
     },
     "schemas": {
+      "Dashboard": {
+        "type": "object",
+        "description": "A dashboard that the token may open.",
+        "required": [
+          "id",
+          "name",
+          "actions"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The dashboard's ID, which the other requests accept in the path. It never changes.",
+            "example": "trips"
+          },
+          "name": {
+            "type": "string",
+            "description": "The dashboard's name, in English.",
+            "example": "Trips"
+          },
+          "actions": {
+            "type": "array",
+            "description": "What the token may do with the dashboard. `view` is the only action.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "view"
+              ]
+            }
+          }
+        }
+      },
+      "DashboardDefinition": {
+        "type": "object",
+        "description": "What a dashboard shows: its periods and its panels.",
+        "required": [
+          "id",
+          "name",
+          "refreshSeconds",
+          "panels"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The dashboard's ID.",
+            "example": "trips"
+          },
+          "name": {
+            "type": "string",
+            "description": "The dashboard's name, in English.",
+            "example": "Trips"
+          },
+          "refreshSeconds": {
+            "type": "integer",
+            "description": "How often Navixy Dashboards reads the panels again while the dashboard is open, in seconds.",
+            "example": 90
+          },
+          "ranges": {
+            "type": "array",
+            "description": "The periods that the panels can cover, in the order of the period menu. Absent on Live status, which has no periods.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardRange"
+            }
+          },
+          "defaultRange": {
+            "type": "string",
+            "description": "The `id` of the period that a panel covers when the request has no `range`. Absent when `ranges` is absent.",
+            "example": "14d"
+          },
+          "panels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PanelDefinition"
+            }
+          }
+        }
+      },
+      "DashboardRange": {
+        "type": "object",
+        "description": "A period that ends when the panel is read: the last `count` hours or days.",
+        "required": [
+          "id",
+          "unit",
+          "count",
+          "stepSeconds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The value of the `range` parameter for this period.",
+            "example": "7d"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "hour",
+              "day"
+            ],
+            "description": "What `count` counts."
+          },
+          "count": {
+            "type": "integer",
+            "description": "How many hours or days the period covers.",
+            "example": 7
+          },
+          "stepSeconds": {
+            "type": "integer",
+            "description": "The time between 2 rows of a line chart over this period, in seconds: 300 for periods in hours, 3600 for periods in days.",
+            "example": 3600
+          }
+        }
+      },
+      "PanelDefinition": {
+        "type": "object",
+        "description": "One panel in a dashboard's definition, as the API returns it. Its texts are in English.",
+        "required": [
+          "id",
+          "type",
+          "title",
+          "gridPos",
+          "fields"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The panel's ID, unique in its dashboard. The `panelId` of the panel data request.",
+            "example": 11
+          },
+          "type": {
+            "type": "string",
+            "description": "How Navixy Dashboards draws the panel: `kpi` (one number), `piechart`, `barchart`, `linechart`, `table`, or `map`. Treat it as text, because a later version can add types.",
+            "example": "barchart"
+          },
+          "title": {
+            "type": "string",
+            "description": "The panel's title.",
+            "example": "Top 10 assets by distance"
+          },
+          "description": {
+            "type": "string",
+            "description": "What the panel shows and how Navixy calculates it. Absent when the panel has no description."
+          },
+          "emptyMessage": {
+            "type": "string",
+            "description": "The text that Navixy Dashboards shows when the panel has no rows. Absent when the panel has none of its own."
+          },
+          "gridPos": {
+            "$ref": "#/components/schemas/GridPos"
+          },
+          "cardOnly": {
+            "type": "boolean",
+            "description": "`true`: Navixy Dashboards doesn't show this panel on the dashboard. Absent on the other panels."
+          },
+          "fields": {
+            "type": "array",
+            "description": "The values in each row of the panel's data, in the order of the row's keys.",
+            "items": {
+              "$ref": "#/components/schemas/PanelFieldDefinition"
+            }
+          },
+          "stepSeconds": {
+            "type": "integer",
+            "description": "For a line chart, the time between 2 rows, in seconds. When it's absent, a line chart uses the period's `stepSeconds`."
+          }
+        }
+      },
+      "GridPos": {
+        "type": "object",
+        "description": "The panel's place on a grid 20 columns wide, counted in columns and rows from the top left corner.",
+        "required": [
+          "x",
+          "y",
+          "w",
+          "h"
+        ],
+        "properties": {
+          "x": {
+            "type": "integer",
+            "description": "The first column."
+          },
+          "y": {
+            "type": "integer",
+            "description": "The first row."
+          },
+          "w": {
+            "type": "integer",
+            "description": "The width, in columns."
+          },
+          "h": {
+            "type": "integer",
+            "description": "The height, in rows."
+          }
+        }
+      },
+      "PanelFieldDefinition": {
+        "type": "object",
+        "description": "One value in each row of a panel's data, as the API returns it.",
+        "required": [
+          "key",
+          "kind"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the value in each row.",
+            "example": "distance"
+          },
+          "kind": {
+            "type": "string",
+            "description": "What the value is, and its unit.",
+            "enum": [
+              "text",
+              "time",
+              "count",
+              "number",
+              "distance",
+              "duration",
+              "speed",
+              "voltage",
+              "percent",
+              "altitude",
+              "coordinate",
+              "heading",
+              "status"
+            ],
+            "x-enumDescriptions": {
+              "text": "Text, such as an asset label or a category.",
+              "time": "A date and time in UTC, as RFC 3339 text.",
+              "count": "A whole number.",
+              "number": "A number.",
+              "distance": "Meters.",
+              "duration": "Seconds.",
+              "speed": "Kilometers per hour.",
+              "voltage": "Volts.",
+              "percent": "Percent, where 100 is the whole.",
+              "altitude": "Meters above sea level.",
+              "coordinate": "A latitude or a longitude, in degrees.",
+              "heading": "Degrees clockwise from north.",
+              "status": "The result of a health check: `critical`, `warning`, `normal`, or `no_fix` when the GPS has no position."
+            }
+          },
+          "label": {
+            "type": "string",
+            "description": "The name of the value in a table header or a chart legend. Absent when the panel shows no name for it."
+          },
+          "signed": {
+            "type": "boolean",
+            "description": "`true` when the value is a difference, such as a current value minus its average, which can be negative. Absent otherwise."
+          }
+        }
+      },
+      "PanelData": {
+        "type": "object",
+        "description": "The rows of a panel.",
+        "required": [
+          "rows"
+        ],
+        "properties": {
+          "rows": {
+            "type": "array",
+            "description": "The rows, each an object with one value for each of the panel's `fields`. A value is a number in the unit of its `kind`, text, or `null` when the row has no value. A `kpi` panel returns one row with the key `value`.",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "Permissions": {
+        "type": "object",
+        "description": "What the token may do in Dashboards.",
+        "required": [
+          "enabled",
+          "features",
+          "dashboards"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "`true` when the workspace has Dashboards and the token's roles include it."
+          },
+          "features": {
+            "type": "array",
+            "description": "The Dashboards features that the roles grant. `dashboards-standard` is the only feature, and every dashboard request needs it.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dashboards": {
+            "type": "array",
+            "description": "The dashboards that the roles grant, each with its actions. Empty when `features` is empty.",
+            "items": {
+              "$ref": "#/components/schemas/DashboardPermissions"
+            }
+          }
+        }
+      },
+      "DashboardPermissions": {
+        "type": "object",
+        "required": [
+          "id",
+          "actions"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The dashboard's ID.",
+            "example": "live_status"
+          },
+          "actions": {
+            "type": "array",
+            "description": "What the token may do with the dashboard.",
+            "items": {
+              "type": "string",
+              "enum": [
+                "view"
+              ]
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "description": "The body of every error response except 401 and 406.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "What went wrong. Check this value in your app.",
+            "enum": [
+              "invalid_tool_call",
+              "range_not_found",
+              "invalid_panel_request",
+              "bad_request",
+              "product_not_enabled",
+              "insufficient_rights",
+              "roles_unresolved",
+              "token_incomplete",
+              "not_found",
+              "dashboard_not_found",
+              "panel_not_found",
+              "method_not_allowed",
+              "unsupported_media_type",
+              "tool_rate_limited",
+              "internal_error",
+              "panel_data_unavailable",
+              "tool_unavailable"
+            ],
+            "x-enumDescriptions": {
+              "invalid_tool_call": "400, tools. A field of the body is missing or wrong. `details` names the wrong fields. A wrong `timeZone` is reported alone, before the other fields are checked.",
+              "range_not_found": "400, API. The dashboard has no period with this `range`, or has no periods at all.",
+              "invalid_panel_request": "400, API. The `previous` parameter can't be applied. `details.previous` says why.",
+              "bad_request": "400. The request can't be accepted for another reason, such as a body that isn't valid JSON.",
+              "product_not_enabled": "403. The workspace or the token's role doesn't include Dashboards.",
+              "insufficient_rights": "403. The role doesn't grant the `dashboards-standard` feature, or, in the API, this dashboard.",
+              "roles_unresolved": "403. Navixy couldn't read the token's roles. Contact Navixy support.",
+              "token_incomplete": "403. The token's organization, workspace, or API key is missing or invalid. `details.claim` names which. Get a new token, and contact Navixy support if the error repeats.",
+              "not_found": "404. No operation has this path.",
+              "dashboard_not_found": "404, API. No dashboard has this ID.",
+              "panel_not_found": "404, API. The dashboard has no panel with this ID.",
+              "method_not_allowed": "405. The path exists, but not with this HTTP method.",
+              "unsupported_media_type": "415, tools. The body isn't sent as `application/json`.",
+              "tool_rate_limited": "429, tools. The API key has read about 250 dashboards in this workspace in the last 24 hours.",
+              "internal_error": "500. The request failed in Navixy.",
+              "panel_data_unavailable": "503, API. The panel's data can't be read now: the query took too long, used too much memory, or returned more than 10,000 rows, or the data store returned no response.",
+              "tool_unavailable": "503, tools. The dashboard can't be read now."
+            },
+            "example": "panel_not_found"
+          },
+          "message": {
+            "type": "string",
+            "description": "What went wrong, in English, for a person to read. Don't check it in code, because it can change.",
+            "example": "This dashboard has no such panel."
+          },
+          "details": {
+            "type": "object",
+            "description": "More about the error. On `invalid_tool_call`, each wrong field and what it must be. On `invalid_panel_request`, why `previous` can't be applied. On `token_incomplete`, the missing or invalid token claim, in `claim`. Absent on the other codes.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "TimeZone": {
         "type": "string",
         "description": "Your time zone, as an IANA time zone name such as `Europe/Madrid`. The response writes every time in it. `UTC` is accepted, and its times end in `Z`. Fixed offsets such as `+01:00`, `UTC+2`, or `Etc/GMT+2` aren't, because they don't follow daylight saving time.",
@@ -717,61 +1912,6 @@
                 "number",
                 "null"
               ]
-            }
-          }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "description": "The body of every error response except 401 and 406.",
-        "required": [
-          "code",
-          "message"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "What went wrong. Check this value in your app.",
-            "enum": [
-              "invalid_tool_call",
-              "bad_request",
-              "product_not_enabled",
-              "insufficient_rights",
-              "roles_unresolved",
-              "token_incomplete",
-              "not_found",
-              "method_not_allowed",
-              "unsupported_media_type",
-              "tool_rate_limited",
-              "internal_error",
-              "tool_unavailable"
-            ],
-            "x-enumDescriptions": {
-              "invalid_tool_call": "400. A field of the body is missing or wrong. `details` names the wrong fields. A wrong `timeZone` is reported alone, before the other fields are checked.",
-              "bad_request": "400. The body isn't valid JSON.",
-              "product_not_enabled": "403. The workspace or the token's role doesn't include Dashboards.",
-              "insufficient_rights": "403. The role doesn't grant the `dashboards-standard` feature.",
-              "roles_unresolved": "403. Navixy couldn't read the token's roles. Contact Navixy support.",
-              "token_incomplete": "403. The token's organization, workspace, or API key is missing or invalid. `details.claim` names which. Exchange the API key again, and contact Navixy support if the error repeats.",
-              "not_found": "404. The path starts with `/api/tools/`, but no operation has this name.",
-              "method_not_allowed": "405. The path exists, but not with this HTTP method. Both operations are `POST` requests.",
-              "unsupported_media_type": "415. The body isn't sent as `application/json`.",
-              "tool_rate_limited": "429. The API key has read about 250 dashboards in this workspace in the last 24 hours.",
-              "internal_error": "500. The request failed in Navixy.",
-              "tool_unavailable": "503. The dashboard can't be read now."
-            },
-            "example": "invalid_tool_call"
-          },
-          "message": {
-            "type": "string",
-            "description": "What went wrong, in English, for a person to read. Don't check it in code, because it can change.",
-            "example": "The tool call cannot be run as it is."
-          },
-          "details": {
-            "type": "object",
-            "description": "More about the error. On `invalid_tool_call`, each wrong field and what it must be. On `token_incomplete`, the missing or invalid token claim, in `claim`. Absent on the other codes.",
-            "additionalProperties": {
-              "type": "string"
             }
           }
         }
